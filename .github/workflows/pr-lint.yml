@@ -11,4 +11,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check branch name confirms to requirements
-      - run: echo ${{ github.base_ref }} | grep -i -E -q "(((feature|bug))/(NIAD)-[0-9]+-[a-zA-Z]+)"
+        run: echo ${{ github.base_ref }} | grep -i -E -q "(((feature|bug))/(NIAD)-[0-9]+-[a-zA-Z]+)"
