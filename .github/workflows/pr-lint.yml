@@ -8,7 +8,7 @@ jobs:
         run: echo ${{ github.event.pull_request.head.ref }} | grep -i -E -q "((apm|niad)-[0-9]+)|(dependabot\/)"
 
   check-name:
-    runs-on:
-      steps:
-        - name: Check branch name confirms to requirements
-          run: echo ${{ github.base_ref }} | grep -i -E -q "(((feature|bug))/(NIAD)-[0-9]+-[a-zA-Z]+)"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branch name confirms to requirements
+      - run: echo ${{ github.base_ref }} | grep -i -E -q "(((feature|bug))/(NIAD)-[0-9]+-[a-zA-Z]+)"
