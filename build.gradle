@@ -9,9 +9,7 @@ group = 'uk.nhs.digital.nhsconnect'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
-application {
-	mainClass.set('uk.nhs.digital.nhsconnect.lab.results.IntegrationAdapterLabResultsApplication')
-}
+mainClassName = 'uk.nhs.digital.nhsconnect.lab.results.IntegrationAdapterLabResultsApplication'
 
 sourceSets {
 	intTest {
