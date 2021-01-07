@@ -115,10 +115,10 @@ services:
       - "8161:8161"
       - "5672:5672"
 
-#  fake-mesh:
-#    image: nhsdev/fake-mesh:0.2.0
-#    ports:
-#      - "8829:8829"
+  fake-mesh:
+    image: nhsdev/fake-mesh:0.2.0
+    ports:
+      - "8829:8829"
   # Enable if you need to inspect the fake-mesh database for any reason
   #    volumes:
   #      - ./fake_mesh_dir:/tmp/fake_mesh_dir
