@@ -81,7 +81,7 @@ The adaptor configuration has sensible defaults for local development. Some over
 * [rmohr/activemq](https://hub.docker.com/r/rmohr/activemq): ActiveMQ Docker images
 * [nhsdev/fake-mesh](https://hub.docker.com/r/nhsdev/fake-mesh): fake-mesh (mock MESH API server) Docker images
 
-Run `docker-compose up activemq fake-mesh`
+Run `docker-compose up mongodb activemq fake-mesh`
 
 ### Running
 
