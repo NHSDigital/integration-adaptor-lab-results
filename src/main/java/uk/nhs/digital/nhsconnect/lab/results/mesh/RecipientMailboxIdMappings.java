@@ -11,7 +11,6 @@ import java.util.stream.Stream;
 
 @Component
 public class RecipientMailboxIdMappings {
-    @Value("${labresults.mesh.recipientToMailboxIdMappings}")
     private final String recipientToMailboxIdMappings;
 
     @Autowired
