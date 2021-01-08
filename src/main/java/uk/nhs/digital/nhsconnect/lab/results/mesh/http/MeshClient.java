@@ -173,12 +173,10 @@ public class MeshClient {
         // log as INFO - these are useful for normal operation to trace requests and error reports
         LOGGER.info("MESH '{}' response status line: {}", type, response.getStatusLine());
         LOGGER.info("MESH '{}' response headers: {}", type, response.getAllHeaders());
-        if (LOGGER.isDebugEnabled()) {
-            if (response.getEntity() != null) {
-                var entity = response.getEntity();
-                LOGGER.debug("MESH '{}' response content encoding: {}, content type: {}, content length: {}", type, entity.getContentEncoding(), entity.getContentType(), entity.getContentLength());
-                // response is usually not "repeatable" so we can only decode it once. Log response content separately.
-            }
+        if (LOGGER.isDebugEnabled() && response.getEntity() != null) {
+            var entity = response.getEntity();
+            LOGGER.debug("MESH '{}' response content encoding: {}, content type: {}, content length: {}", type, entity.getContentEncoding(), entity.getContentType(), entity.getContentLength());
+            // response is usually not "repeatable" so we can only decode it once. Log response content separately.
         }
     }
 }
