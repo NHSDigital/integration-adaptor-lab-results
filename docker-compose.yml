@@ -105,7 +105,14 @@ services:
         +yLvICQmVjHWsNWD3uuT3gEGdeKDIzEnovXUmqhQE7N/YDupTv5hkh8hMKl12XGs
         3WJ4bVSmp3MOQ2EF4zrAl4fXEd4lS3JxKtzbHFbSogAmPFnuP8wIDWTDgfEq
         -----END RSA PRIVATE KEY-----
-      # check mailbox name
+      - LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS=XX11=lab_results_mailbox
+        TES5=lab_results_mailbox
+        YY21=lab_results_mailbox
+        KC01=lab_results_mailbox
+        WHI5=lab_results_mailbox
+        SO01=lab_results_mailbox
+        UNY5=lab_results_mailbox
+        BAA1=lab_results_mailbox
       - LAB_RESULTS_MESH_POLLING_CYCLE_MINIMUM_INTERVAL_IN_SECONDS=300
       - LAB_RESULTS_MESH_CLIENT_WAKEUP_INTERVAL_IN_MILLISECONDS=60000
       - LAB_RESULTS_SCHEDULER_ENABLED=true
