@@ -76,7 +76,7 @@ public abstract class IntegrationBaseTest {
      * This MeshClient is "inverted" so that it can act as a Lab Results system.
      * It receives messages on the labresults mailbox and sends them to the gp mailbox.
      */
-    @SneakyThrows
+    @SneakyThrows(IllegalAccessException.class)
     private MeshClient buildMeshClientForLabResultsMailbox() {
         // getting this from config is
         String labResultsMailboxId = recipientMailboxIdMappings.getRecipientMailboxId(new MeshMessage().setHaTradingPartnerCode("XX11"));
