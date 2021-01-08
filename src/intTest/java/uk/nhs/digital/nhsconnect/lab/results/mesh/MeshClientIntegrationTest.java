@@ -39,7 +39,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @SpringBootTest
 @Slf4j
 @DirtiesContext
-public class MeshClientIntegrationTest extends IntegrationBaseTest {
+class MeshClientIntegrationTest extends IntegrationBaseTest {
 
     private static final String RECIPIENT = "XX11";
     private static final String CONTENT = "test_message";

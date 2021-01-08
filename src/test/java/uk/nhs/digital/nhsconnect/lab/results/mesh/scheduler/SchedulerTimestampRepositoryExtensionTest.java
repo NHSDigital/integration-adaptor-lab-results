@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 import static uk.nhs.digital.nhsconnect.lab.results.mesh.scheduler.SchedulerTimestampRepositoryExtensionsImpl.MESH_TIMESTAMP_COLLECTION_NAME;
 
 @ExtendWith(MockitoExtension.class)
-public class SchedulerTimestampRepositoryExtensionTest {
+class SchedulerTimestampRepositoryExtensionTest {
 
     private static final String SCHEDULER_TYPE = "meshTimestamp";
 
@@ -42,7 +42,7 @@ public class SchedulerTimestampRepositoryExtensionTest {
     private TimestampService timestampService;
 
     @Test
-    public void whenCollectionDoesNotExistCreateDocumentAndReturnFalse() {
+    void whenCollectionDoesNotExistCreateDocumentAndReturnFalse() {
         when(mongoOperations.count(any(Query.class), eq(MESH_TIMESTAMP_COLLECTION_NAME))).thenReturn(0L);
         Instant timestamp = Instant.now();
         when(timestampService.getCurrentTimestamp()).thenReturn(timestamp);
@@ -55,7 +55,7 @@ public class SchedulerTimestampRepositoryExtensionTest {
     }
 
     @Test
-    public void whenUnableToCreateInitialDocument_mongoException_thenReturnFalse() {
+    void whenUnableToCreateInitialDocument_mongoException_thenReturnFalse() {
         when(mongoOperations.count(any(Query.class), eq(MESH_TIMESTAMP_COLLECTION_NAME))).thenReturn(0L);
         when(timestampService.getCurrentTimestamp()).thenReturn(Instant.now());
         MongoWriteException exception = mock(MongoWriteException.class);
@@ -67,7 +67,7 @@ public class SchedulerTimestampRepositoryExtensionTest {
     }
 
     @Test
-    public void whenUnableToCreateInitialDocument_springException_thenReturnFalse() {
+    void whenUnableToCreateInitialDocument_springException_thenReturnFalse() {
         when(mongoOperations.count(any(Query.class), eq(MESH_TIMESTAMP_COLLECTION_NAME))).thenReturn(0L);
         when(timestampService.getCurrentTimestamp()).thenReturn(Instant.now());
         DuplicateKeyException exception = mock(DuplicateKeyException.class);
@@ -79,7 +79,7 @@ public class SchedulerTimestampRepositoryExtensionTest {
     }
 
     @Test
-    public void whenUpdatedThenReturnTrue() {
+    void whenUpdatedThenReturnTrue() {
         when(mongoOperations.count(any(Query.class), eq(MESH_TIMESTAMP_COLLECTION_NAME))).thenReturn(1L);
 
         when(mongoOperations.updateFirst(isA(Query.class), isA(UpdateDefinition.class), isA(String.class))).thenReturn(updateResult);
@@ -92,7 +92,7 @@ public class SchedulerTimestampRepositoryExtensionTest {
     }
 
     @Test
-    public void whenNotUpdatedThenReturnFalse() {
+    void whenNotUpdatedThenReturnFalse() {
         when(mongoOperations.count(any(Query.class), eq(MESH_TIMESTAMP_COLLECTION_NAME))).thenReturn(1L);
 
         when(mongoOperations.updateFirst(isA(Query.class), isA(UpdateDefinition.class), isA(String.class))).thenReturn(updateResult);

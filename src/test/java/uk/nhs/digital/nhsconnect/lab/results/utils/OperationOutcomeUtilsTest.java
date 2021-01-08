@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class OperationOutcomeUtilsTest {
+class OperationOutcomeUtilsTest {
 
     @Test
-    public void testCreateUnknownError() {
+    void testCreateUnknownError() {
         OperationOutcome operationOutcome = OperationOutcomeUtils.createFromMessage("unknown error");
         OperationOutcome.OperationOutcomeIssueComponent issue = operationOutcome.getIssueFirstRep();
         assertEquals(OperationOutcome.IssueSeverity.ERROR, issue.getSeverity());
@@ -17,7 +17,7 @@ public class OperationOutcomeUtilsTest {
     }
 
     @Test
-    public void testCreateErrorWithSpecificType() {
+    void testCreateErrorWithSpecificType() {
         OperationOutcome operationOutcome =
                 OperationOutcomeUtils.createFromMessage("structure error", OperationOutcome.IssueType.STRUCTURE);
         OperationOutcome.OperationOutcomeIssueComponent issue = operationOutcome.getIssueFirstRep();

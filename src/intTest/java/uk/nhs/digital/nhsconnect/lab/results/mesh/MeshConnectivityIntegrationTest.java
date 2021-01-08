@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Slf4j
 @DirtiesContext
-public class MeshConnectivityIntegrationTest {
+class MeshConnectivityIntegrationTest {
 
     @Autowired
     private MeshConfig meshConfig;

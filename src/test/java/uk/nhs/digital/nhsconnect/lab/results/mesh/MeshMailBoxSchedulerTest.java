@@ -20,7 +20,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class MeshMailBoxSchedulerTest {
+class MeshMailBoxSchedulerTest {
 
     @InjectMocks
     private MeshMailBoxScheduler meshMailBoxScheduler;
@@ -35,7 +35,7 @@ public class MeshMailBoxSchedulerTest {
     private ApplicationContext applicationContext;
 
     @Test
-    public void when_CollectionIsEmpty_Then_SingleDocumentIsCreatedAndTheJobIsNotExecuted() {
+    void when_CollectionIsEmpty_Then_SingleDocumentIsCreatedAndTheJobIsNotExecuted() {
         when(schedulerTimestampRepository.updateTimestamp(anyString(), isA(Instant.class), anyLong())).thenReturn(false);
         when(timestampService.getCurrentTimestamp()).thenReturn(Instant.now());
 
@@ -45,7 +45,7 @@ public class MeshMailBoxSchedulerTest {
     }
 
     @Test
-    public void when_DocumentExistsAndTimestampIsBeforeProvidedTime_Then_DocumentIsUpdateAndTheJobIsExecuted() {
+    void when_DocumentExistsAndTimestampIsBeforeProvidedTime_Then_DocumentIsUpdateAndTheJobIsExecuted() {
         when(schedulerTimestampRepository.updateTimestamp(anyString(), isA(Instant.class), anyLong())).thenReturn(true);
         when(timestampService.getCurrentTimestamp()).thenReturn(Instant.now());
 
@@ -55,7 +55,7 @@ public class MeshMailBoxSchedulerTest {
     }
 
     @Test
-    public void when_DocumentExistsAndTimestampIsAfterProvidedTime_Then_DocumentIsNotUpdateAndTheJobIsNotExecuted() {
+    void when_DocumentExistsAndTimestampIsAfterProvidedTime_Then_DocumentIsNotUpdateAndTheJobIsNotExecuted() {
         when(schedulerTimestampRepository.updateTimestamp(anyString(), isA(Instant.class), anyLong())).thenReturn(false);
         when(timestampService.getCurrentTimestamp()).thenReturn(Instant.now());
 
