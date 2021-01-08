@@ -6,12 +6,23 @@ logging:
     uk.nhs.digital.nhsconnect.lab.results: ${LAB_RESULTS_LOGGING_LEVEL:INFO}
 
 labresults:
+  mongodb:
+    uri: ${LAB_RESULTS_MONGO_URI:mongodb://localhost:27017}
+    database: ${LAB_RESULTS_MONGO_DATABASE_NAME:labresults}
+    host: ${LAB_RESULTS_MONGO_HOST:}
+    port: ${LAB_RESULTS_MONGO_PORT:}
+    username: ${LAB_RESULTS_MONGO_USERNAME:}
+    password: ${LAB_RESULTS_MONGO_PASSWORD:}
+    options: ${LAB_RESULTS_MONGO_OPTIONS:}
+    autoIndexCreation: ${LAB_RESULTS_MONGO_AUTO_INDEX_CREATION:true}
+    ttl: ${LAB_RESULTS_MONGO_TTL:P30D}
+    cosmosDbEnabled: ${LAB_RESULTS_COSMOS_DB_ENABLED:false}
   mesh: # sensible defaults for local development using fake-mesh
     mailboxId: ${LAB_RESULTS_MESH_MAILBOX_ID:gp_mailbox}
     mailboxPassword: ${LAB_RESULTS_MESH_MAILBOX_PASSWORD:password}
     sharedKey: ${LAB_RESULTS_MESH_SHARED_KEY:SharedKey}
     host: ${LAB_RESULTS_MESH_HOST:https://localhost:8829/messageexchange/} #local fake-mesh default endpoint
-    certValidation: ${LAB_RESULTS_MESH_CERT_VALIDATION:true}
+    certValidation: ${LAB_RESULTS_MESH_CERT_VALIDATION:false}
     endpointCert: ${LAB_RESULTS_MESH_ENDPOINT_CERT:-----BEGIN CERTIFICATE-----
       MIIFXzCCA0egAwIBAgIJALRbCSor9bEbMA0GCSqGSIb3DQEBCwUAMEUxCzAJBgNV
       BAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBX

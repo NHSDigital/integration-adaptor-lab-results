@@ -6,6 +6,17 @@ logging:
     uk.nhs.digital.nhsconnect.lab.results: ${LAB_RESULTS_LOGGING_LEVEL:DEBUG}
 
 labresults:
+  mongodb:
+    uri: ${LAB_RESULTS_MONGO_URI}
+    database: ${LAB_RESULTS_MONGO_DATABASE_NAME:labresults}
+    host: ${LAB_RESULTS_MONGO_HOST:}
+    port: ${LAB_RESULTS_MONGO_PORT:}
+    username: ${LAB_RESULTS_MONGO_USERNAME:}
+    password: ${LAB_RESULTS_MONGO_PASSWORD:}
+    options: ${LAB_RESULTS_MONGO_OPTIONS:}
+    autoIndexCreation: ${LAB_RESULTS_MONGO_AUTO_INDEX_CREATION:true}
+    ttl: ${LAB_RESULTS_MONGO_TTL:PT87600H} # long duration (10 years) because the timestamps used in tests are hardcoded. prevent deletion of data during tests
+    cosmosDbEnabled: ${LAB_RESULTS_COSMOS_DB_ENABLED:false}
   mesh:
     mailboxId: ${LAB_RESULTS_MESH_MAILBOX_ID:gp_mailbox} #defaults below are used by fake-mesh
     mailboxPassword: ${LAB_RESULTS_MESH_MAILBOX_PASSWORD:password}
