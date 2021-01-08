@@ -18,7 +18,6 @@ class PemFormatterTest {
             "-----END CERTIFICATE-----";
         String formatted = PemFormatter.format(withWhitespace);
         assertThat(formatted).isEqualTo(trimmed);
-        assertThat(formatted).isEqualTo(trimmed);
     }
 
     @Test
@@ -33,7 +32,6 @@ class PemFormatterTest {
             "-----END RSA PRIVATE KEY-----";
         String formatted = PemFormatter.format(withoutNewlines);
         assertThat(formatted).isEqualTo(trimmed);
-        assertThat(formatted).isEqualTo(trimmed);
     }
 
     @Test
@@ -43,7 +41,6 @@ class PemFormatterTest {
             "M0d/fLCFruu5dU3PWKoU2rTzUkflj5XOzu2xAftYi3KDMzRR2sByxjjxb/qMIybG\n" +
             "-----END PRIVATE KEY-----";
         String formatted = PemFormatter.format(pem);
-        assertThat(formatted).isEqualTo(pem);
         assertThat(formatted).isEqualTo(pem);
     }
 
