@@ -10,7 +10,7 @@ class TimestampServiceTest {
     @Test
     void whenGettingTimestamp_thenPrecisionIsMilliseconds() {
         var instant = new TimestampService().getCurrentTimestamp();
-        long remainder = instant.getNano() % 1000000; // nanoseconds per millisecond
+        long remainder = instant.getNano() % 1_000_000; // nanoseconds per millisecond
 
         assertThat(remainder).isEqualTo(0);
     }
