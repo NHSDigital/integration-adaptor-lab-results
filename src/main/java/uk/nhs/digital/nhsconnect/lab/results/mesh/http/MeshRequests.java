@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
 
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class MeshRequests {
 
     private final MeshConfig meshConfig;

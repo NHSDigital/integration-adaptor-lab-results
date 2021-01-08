@@ -29,7 +29,7 @@ import java.util.List;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class MeshClient {
 
     private final MeshRequests meshRequests;

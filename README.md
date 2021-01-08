@@ -87,7 +87,7 @@ Run `docker-compose up mongodb activemq fake-mesh`
 
 **From IntelliJ***
 
-Navigate to: IntegrationAdapterLabResultsApplicationTests -> right click -> Run
+Navigate to: IntegrationAdapterLabResultsApplication -> right click -> Run
 
 **Inside a container**
 

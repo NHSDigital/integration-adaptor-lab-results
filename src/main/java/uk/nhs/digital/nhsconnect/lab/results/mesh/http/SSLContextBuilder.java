@@ -22,7 +22,7 @@ import java.security.SecureRandom;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class SSLContextBuilder {
     private static final String KEY_MANAGER_FACTORY_TYPE = "Sunx509";
 
