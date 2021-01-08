@@ -73,8 +73,8 @@ public abstract class IntegrationBaseTest {
     }
 
     /**
-     * This MeshClient is "inverted" so that it can act as an Lab Results system. It receives messages on the labresults mailbox
-     * and sends them to the gp mailbox;
+     * This MeshClient is "inverted" so that it can act as a Lab Results system.
+     * It receives messages on the labresults mailbox and sends them to the gp mailbox.
      */
     @SneakyThrows
     private MeshClient buildMeshClientForLabResultsMailbox() {
