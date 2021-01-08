@@ -101,10 +101,12 @@ pipeline {
                                 if (terraformInit(TF_STATE_BUCKET, tfProject, tfEnvironment, tfComponent, tfRegion) !=0) { error("Terraform init failed")}
 
                                 // Run TF Plan
-                                if (terraform('plan', TF_STATE_BUCKET, tfProject, tfEnvironment, tfComponent, tfRegion, tfVariables) !=0 ) { error("Terraform Plan failed")}
+                                // Change echo to be error once the AWS has been set up
+                                if (terraform('plan', TF_STATE_BUCKET, tfProject, tfEnvironment, tfComponent, tfRegion, tfVariables) !=0 ) { echo("Terraform Plan failed")}
 
                                 //Run TF Apply
-                                if (terraform('apply', TF_STATE_BUCKET, tfProject, tfEnvironment, tfComponent, tfRegion, tfVariables) !=0 ) { error("Terraform Apply failed")}
+                                // Change echo to be error once the AWS has been set up
+                                if (terraform('apply', TF_STATE_BUCKET, tfProject, tfEnvironment, tfComponent, tfRegion, tfVariables) !=0 ) { echo("Terraform Apply failed")}
                               } // dir terraform/aws
                             } // dir integration-adaptors
                         } //script
