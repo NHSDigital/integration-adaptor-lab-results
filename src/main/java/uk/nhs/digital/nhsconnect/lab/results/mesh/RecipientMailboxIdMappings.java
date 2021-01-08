@@ -29,7 +29,7 @@ public class RecipientMailboxIdMappings {
     }
 
     private Map<String, String> createMappings() {
-        return Stream.of(recipientToMailboxIdMappings.replaceAll(" ", "\n").split("\n"))
+        return Stream.of(recipientToMailboxIdMappings.split(" "))
             .map(row -> row.split("="))
             .peek(this::validateMappings)
             .collect(Collectors.toMap(row -> row[0].strip(), row -> row[1].strip()));
