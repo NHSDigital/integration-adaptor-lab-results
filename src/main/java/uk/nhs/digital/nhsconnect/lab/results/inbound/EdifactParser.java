@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Component
@@ -136,13 +137,10 @@ public class EdifactParser {
     }
 
     private List<Integer> findAllIndexesOfSegment(List<String> list, String key) {
-        var indexes = new ArrayList<Integer>();
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).startsWith(key)) {
-                indexes.add(i);
-            }
-        }
-        return indexes;
+        return IntStream.range(0, list.size())
+                .filter(i -> list.get(i).startsWith(key))
+                .mapToObj(Integer::valueOf)
+                .collect(Collectors.toList());
     }
 
 }
