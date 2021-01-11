@@ -32,6 +32,7 @@ public class Message extends Section {
     @Getter
     @Setter
     private Interchange interchange;
+
     @Getter
     @Setter
     private List<Transaction> transactions;
