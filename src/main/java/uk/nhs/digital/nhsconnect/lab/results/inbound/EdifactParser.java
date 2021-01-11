@@ -23,6 +23,7 @@ import java.util.stream.Stream;
 
 @Component
 public class EdifactParser {
+
     private final String TRANSACTION_START_SEGMENT = ReferenceTransactionNumber.KEY_QUALIFIER;
 
     public Interchange parse(String edifact) {
