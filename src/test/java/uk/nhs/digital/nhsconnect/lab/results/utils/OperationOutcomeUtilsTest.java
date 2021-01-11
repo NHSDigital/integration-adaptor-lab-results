@@ -9,8 +9,8 @@ class OperationOutcomeUtilsTest {
 
     @Test
     void testCreateUnknownError() {
-        OperationOutcome operationOutcome = OperationOutcomeUtils.createFromMessage("unknown error");
-        OperationOutcome.OperationOutcomeIssueComponent issue = operationOutcome.getIssueFirstRep();
+        final OperationOutcome operationOutcome = OperationOutcomeUtils.createFromMessage("unknown error");
+        final OperationOutcome.OperationOutcomeIssueComponent issue = operationOutcome.getIssueFirstRep();
         assertEquals(OperationOutcome.IssueSeverity.ERROR, issue.getSeverity());
         assertEquals(OperationOutcome.IssueType.UNKNOWN, issue.getCode());
         assertEquals("unknown error", issue.getDetails().getText());
@@ -18,9 +18,9 @@ class OperationOutcomeUtilsTest {
 
     @Test
     void testCreateErrorWithSpecificType() {
-        OperationOutcome operationOutcome =
+        final OperationOutcome operationOutcome =
                 OperationOutcomeUtils.createFromMessage("structure error", OperationOutcome.IssueType.STRUCTURE);
-        OperationOutcome.OperationOutcomeIssueComponent issue = operationOutcome.getIssueFirstRep();
+        final OperationOutcome.OperationOutcomeIssueComponent issue = operationOutcome.getIssueFirstRep();
         assertEquals(OperationOutcome.IssueSeverity.ERROR, issue.getSeverity());
         assertEquals(OperationOutcome.IssueType.STRUCTURE, issue.getCode());
         assertEquals("structure error", issue.getDetails().getText());

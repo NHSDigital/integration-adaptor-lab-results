@@ -19,15 +19,15 @@ public class PemFormatter {
      * @return the reformatted certificate or key
      */
     public static String format(String value) {
-        Matcher matcher = PEM_PATTERN.matcher(value.strip());
+        final Matcher matcher = PEM_PATTERN.matcher(value.strip());
 
         if (!matcher.matches()) {
             throw new RuntimeException("Invalid certificate or key format");
         }
 
-        String header = matcher.group(1).strip();
+        final String header = matcher.group(1).strip();
         String body = matcher.group(2);
-        String footer = matcher.group(3).strip();
+        final String footer = matcher.group(3).strip();
 
         body = Arrays.stream(body.split("\\s+"))
             .map(String::strip)

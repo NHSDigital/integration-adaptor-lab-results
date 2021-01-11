@@ -15,6 +15,6 @@ class TokenTimestamp {
     private final Instant datetime;
 
     public String getValue() {
-        return DateTimeFormatter.ofPattern(TIMESTAMP_FORMAT).withZone(TimestampService.UKZone).format(datetime);
+        return DateTimeFormatter.ofPattern(TIMESTAMP_FORMAT).withZone(TimestampService.UK_ZONE).format(datetime);
     }
 }

@@ -4,8 +4,7 @@ import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.exception.MeshWorkflowUnknownException;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class WorkflowIdTest {
 
@@ -22,6 +21,8 @@ class WorkflowIdTest {
 
     @Test
     void testFromStringThrowsExceptionForInvalidWorkflowIdString() {
-        assertThrows(MeshWorkflowUnknownException.class, () -> WorkflowId.fromString("INVALID"));
+        final MeshWorkflowUnknownException exception = assertThrows(MeshWorkflowUnknownException.class,
+                () -> WorkflowId.fromString("INVALID"));
+        assertEquals("Unsupported workflow id INVALID", exception.getMessage());
     }
 }

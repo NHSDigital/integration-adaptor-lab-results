@@ -14,10 +14,9 @@ public class ConversationIdService {
         MDC.put(MDC_KEY, id);
     }
 
-    public String applyRandomConversationId() {
+    public void applyRandomConversationId() {
         var id = UUID.randomUUID().toString().toUpperCase().replace("-", "");
         applyConversationId(id);
-        return id;
     }
 
     public void resetConversationId() {
