@@ -19,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -120,9 +121,9 @@ class MeshServiceTest {
         assertThatThrownBy(meshService::scanMeshInboxForMessages).isExactlyInstanceOf(MeshApiConnectionException.class);
 
         verify(meshClient).authenticate();
-        verify(meshClient, times(0)).getEdifactMessage(any());
-//        verify(inboundQueueService, times(0)).publish(any());
-        verify(meshClient, times(0)).acknowledgeMessage(any());
+        verify(meshClient, never()).getEdifactMessage(any());
+//        verify(inboundQueueService, never()).publish(any());
+        verify(meshClient, never()).acknowledgeMessage(any());
 
         verifyNoInteractions(conversationIdService);
     }
@@ -138,8 +139,8 @@ class MeshServiceTest {
 
         verify(meshClient).authenticate();
         verify(meshClient).getEdifactMessage(ERROR_MESSAGE_ID);
-//        verify(inboundQueueService, times(0)).publish(any());
-        verify(meshClient, times(0)).acknowledgeMessage(MESSAGE_ID1);
+//        verify(inboundQueueService, never()).publish(any());
+        verify(meshClient, never()).acknowledgeMessage(MESSAGE_ID1);
 
         verify(conversationIdService).applyRandomConversationId();
         verify(conversationIdService).resetConversationId();
@@ -206,7 +207,7 @@ class MeshServiceTest {
         verify(meshClient).authenticate();
         verify(meshClient).getEdifactMessage(MESSAGE_ID1);
 //        verify(inboundQueueService).publish(meshMessage1);
-        verify(meshClient, times(0)).acknowledgeMessage(MESSAGE_ID1);
+        verify(meshClient, never()).acknowledgeMessage(MESSAGE_ID1);
 
         verify(conversationIdService).applyRandomConversationId();
         verify(conversationIdService).resetConversationId();
@@ -233,7 +234,7 @@ class MeshServiceTest {
         meshService.scanMeshInboxForMessages();
 
         verify(meshClient).authenticate();
-        verify(meshClient, times(0)).getEdifactMessage(MESSAGE_ID1);
+        verify(meshClient, never()).getEdifactMessage(MESSAGE_ID1);
 //        verifyNoInteractions(inboundQueueService);
     }
 
@@ -257,8 +258,8 @@ class MeshServiceTest {
 
         meshService.scanMeshInboxForMessages();
 
-        verify(meshMailBoxScheduler, times(0)).hasTimePassed(scanDelayInSeconds);
-        verify(meshClient, times(0)).getEdifactMessage(MESSAGE_ID1);
+        verify(meshMailBoxScheduler, never()).hasTimePassed(scanDelayInSeconds);
+        verify(meshClient, never()).getEdifactMessage(MESSAGE_ID1);
 //        verifyNoInteractions(inboundQueueService);
     }
 
