@@ -13,7 +13,7 @@ public class Message extends Section {
 
     @Getter(lazy = true)
     private final uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageHeader messageHeader =
-        uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageHeader.fromString(extractSegment(uk.nhs.digital.nhsconnect.nhais.model.edifact.MessageHeader.KEY));
+        uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageHeader.fromString(extractSegment(MessageHeader.KEY));
     @Getter(lazy = true)
     private final HealthAuthorityNameAndAddress healthAuthorityNameAndAddress =
         HealthAuthorityNameAndAddress.fromString(extractSegment(HealthAuthorityNameAndAddress.KEY_QUALIFIER));
