@@ -20,9 +20,9 @@ public class IntegrationTestsExtension implements BeforeAllCallback, BeforeEachC
 
     @Override
     public void beforeEach(ExtensionContext context) {
-        var applicationContext = SpringExtension.getApplicationContext(context);
+        final var applicationContext = SpringExtension.getApplicationContext(context);
 
-        var schedulerTimestampRepository = applicationContext.getBean(SchedulerTimestampRepository.class);
+        final var schedulerTimestampRepository = applicationContext.getBean(SchedulerTimestampRepository.class);
         schedulerTimestampRepository.deleteAll();
     }
 }

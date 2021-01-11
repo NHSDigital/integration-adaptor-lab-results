@@ -9,7 +9,7 @@ import java.nio.file.Path;
 @Slf4j
 public class FakeMeshContainer extends GenericContainer<FakeMeshContainer> {
 
-    public static final int FAKE_MESH_PORT = 8829;
+    private static final int FAKE_MESH_PORT = 8829;
     private static FakeMeshContainer container;
 
     private FakeMeshContainer() {

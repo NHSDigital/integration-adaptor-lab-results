@@ -1,10 +1,10 @@
-package uk.nhs.digital.nhsconnect.lab.results.mesh;
+package uk.nhs.digital.nhsconnect.lab.results.mesh.message;
 
 import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.exception.MeshWorkflowUnknownException;
-import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class WorkflowIdTest {
 

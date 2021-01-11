@@ -79,19 +79,19 @@ public abstract class IntegrationBaseTest {
     @SneakyThrows(IllegalAccessException.class)
     private MeshClient buildMeshClientForLabResultsMailbox() {
         // getting this from config is
-        String labResultsMailboxId = recipientMailboxIdMappings.getRecipientMailboxId(new MeshMessage().setHaTradingPartnerCode("XX11"));
-        String gpMailboxId = meshConfig.getMailboxId();
-        RecipientMailboxIdMappings mockRecipientMailboxIdMappings = mock(RecipientMailboxIdMappings.class);
+        final String labResultsMailboxId = recipientMailboxIdMappings.getRecipientMailboxId(new MeshMessage().setHaTradingPartnerCode("XX11"));
+        final String gpMailboxId = meshConfig.getMailboxId();
+        final RecipientMailboxIdMappings mockRecipientMailboxIdMappings = mock(RecipientMailboxIdMappings.class);
         when(mockRecipientMailboxIdMappings.getRecipientMailboxId(any(OutboundMeshMessage.class))).thenReturn(gpMailboxId);
         // getters perform a transformation
-        String endpointCert = (String) FieldUtils.readField(meshConfig, "endpointCert", true);
-        String endpointPrivateKey = (String) FieldUtils.readField(meshConfig, "endpointPrivateKey", true);
-        String subCaCert = (String) FieldUtils.readField(meshConfig, "subCAcert", true);
-        MeshConfig labResultsMailboxConfig = new MeshConfig(labResultsMailboxId, meshConfig.getMailboxPassword(),
+        final String endpointCert = (String) FieldUtils.readField(meshConfig, "endpointCert", true);
+        final String endpointPrivateKey = (String) FieldUtils.readField(meshConfig, "endpointPrivateKey", true);
+        final String subCaCert = (String) FieldUtils.readField(meshConfig, "subCAcert", true);
+        final MeshConfig labResultsMailboxConfig = new MeshConfig(labResultsMailboxId, meshConfig.getMailboxPassword(),
                 meshConfig.getSharedKey(), meshConfig.getHost(), meshConfig.getCertValidation(), endpointCert,
                 endpointPrivateKey, subCaCert);
-        MeshHeaders meshHeaders = new MeshHeaders(labResultsMailboxConfig);
-        MeshRequests meshRequests = new MeshRequests(labResultsMailboxConfig, meshHeaders);
+        final MeshHeaders meshHeaders = new MeshHeaders(labResultsMailboxConfig);
+        final MeshRequests meshRequests = new MeshRequests(labResultsMailboxConfig, meshHeaders);
         return new MeshClient(meshRequests, mockRecipientMailboxIdMappings, meshHttpClientBuilder);
     }
 }
