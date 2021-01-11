@@ -139,7 +139,7 @@ public class EdifactParser {
     private List<Integer> findAllIndexesOfSegment(List<String> list, String key) {
         return IntStream.range(0, list.size())
                 .filter(i -> list.get(i).startsWith(key))
-                .mapToObj(Integer::valueOf)
+                .boxed()
                 .collect(Collectors.toList());
     }
 
