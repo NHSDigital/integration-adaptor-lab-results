@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import uk.nhs.digital.nhsconnect.lab.results.mesh.exception.MeshWorkflowUnknownException;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshClient;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.InboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ConversationIdService;
@@ -50,19 +51,19 @@ public class MeshService {
 
     @Scheduled(fixedRateString = "${labresults.mesh.wakeupIntervalInMilliseconds}")
     public void scanMeshInboxForMessages() {
-        if (!meshMailBoxScheduler.isEnabled()){
+        if (!meshMailBoxScheduler.isEnabled()) {
             LOGGER.warn("Not running the MESH mailbox polling cycle because it is disabled. Set variable " +
-                "LAB_RESULTS_SCHEDULER_ENABLED to true to enable it.");
+                    "LAB_RESULTS_SCHEDULER_ENABLED to true to enable it.");
             return;
         }
         LOGGER.info("Requesting lock from database to run MESH mailbox polling cycle");
-        StopWatch pollingCycleElapsedTime = new StopWatch();
+        final StopWatch pollingCycleElapsedTime = new StopWatch();
         pollingCycleElapsedTime.start();
         if (meshMailBoxScheduler.hasTimePassed(pollingCycleMinimumIntervalInSeconds)) {
-            List<String> inboxMessageIds = authenticateAndGetInboxMessageIds();
+            final List<String> inboxMessageIds = authenticateAndGetInboxMessageIds();
             for (int i = 0; i < inboxMessageIds.size(); i++) {
-                String messageId = inboxMessageIds.get(i);
-                if(sufficientTimeRemainsInPollingCycle(pollingCycleElapsedTime)) {
+                final String messageId = inboxMessageIds.get(i);
+                if (sufficientTimeRemainsInPollingCycle(pollingCycleElapsedTime)) {
                     processSingleMessage(messageId);
                 } else {
                     LOGGER.warn("Insufficient time remains to complete the polling cycle. Processed {} of {} messages from inbox.", i + 1, inboxMessageIds.size());
@@ -72,8 +73,8 @@ public class MeshService {
             LOGGER.info("Completed MESH mailbox polling cycle. Processed all messages from inbox.");
         } else {
             LOGGER.info("Could not obtain database lock to run MESH mailbox polling cycle: insufficient time has elapsed " +
-                "since the previous polling cycle or another adaptor instance has already started the polling cycle. " +
-                "Next scan in {} seconds", TimeUnit.SECONDS.convert(wakeupIntervalInMilliseconds, TimeUnit.MILLISECONDS));
+                    "since the previous polling cycle or another adaptor instance has already started the polling cycle. " +
+                    "Next scan in {} seconds", TimeUnit.SECONDS.convert(wakeupIntervalInMilliseconds, TimeUnit.MILLISECONDS));
         }
     }
 
@@ -81,7 +82,7 @@ public class MeshService {
         LOGGER.info("Starting MESH mailbox polling cycle");
         meshClient.authenticate();
         LOGGER.info("Authenticated with MESH API at start of polling cycle");
-        List<String> inboxMessageIds = meshClient.getInboxMessageIds();
+        final List<String> inboxMessageIds = meshClient.getInboxMessageIds();
         LOGGER.info("There are {} messages in the MESH mailbox", inboxMessageIds.size());
         return inboxMessageIds;
     }
@@ -94,7 +95,7 @@ public class MeshService {
         try {
             conversationIdService.applyRandomConversationId();
             LOGGER.debug("Downloading MeshMessageId={}", messageId);
-            InboundMeshMessage meshMessage = meshClient.getEdifactMessage(messageId);
+            final InboundMeshMessage meshMessage = meshClient.getEdifactMessage(messageId);
             LOGGER.debug("Publishing content of MeshMessageId={} to inbound mesh MQ", messageId);
 //            inboundQueueService.publish(meshMessage);
             LOGGER.debug("Acknowledging MeshMessageId={} on MESH API", messageId);

@@ -3,7 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.mesh.message;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import uk.nhs.digital.nhsconnect.lab.results.mesh.MeshWorkflowUnknownException;
+import uk.nhs.digital.nhsconnect.lab.results.mesh.exception.MeshWorkflowUnknownException;
 
 import java.util.Arrays;
 

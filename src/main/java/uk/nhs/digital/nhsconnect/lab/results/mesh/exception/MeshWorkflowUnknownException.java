@@ -1,4 +1,4 @@
-package uk.nhs.digital.nhsconnect.lab.results.mesh;
+package uk.nhs.digital.nhsconnect.lab.results.mesh.exception;
 
 import lombok.Getter;
 import uk.nhs.digital.nhsconnect.lab.results.rest.exception.LabResultsBaseException;

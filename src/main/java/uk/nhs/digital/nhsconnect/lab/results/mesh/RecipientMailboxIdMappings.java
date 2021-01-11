@@ -3,6 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.mesh;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import uk.nhs.digital.nhsconnect.lab.results.mesh.exception.MeshRecipientUnknownException;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
 
 import java.util.Map;

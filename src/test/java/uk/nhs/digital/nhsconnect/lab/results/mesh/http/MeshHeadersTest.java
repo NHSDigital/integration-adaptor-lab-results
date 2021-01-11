@@ -1,11 +1,9 @@
-package uk.nhs.digital.nhsconnect.lab.results.mesh;
+package uk.nhs.digital.nhsconnect.lab.results.mesh.http;
 
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
-import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshConfig;
-import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshHeaders;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
 
 import java.util.Arrays;

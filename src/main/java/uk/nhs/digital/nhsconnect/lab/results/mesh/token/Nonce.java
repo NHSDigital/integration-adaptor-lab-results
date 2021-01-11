@@ -6,11 +6,11 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.UUID;
 
+/**
+ * Used in MESH authorization token - can by used only once per API request.
+ */
 @Getter
 @RequiredArgsConstructor
-/**
- * Used in MESH authorization token - can by used only once per API request
- */
 class Nonce {
     @NonNull
     final String value;

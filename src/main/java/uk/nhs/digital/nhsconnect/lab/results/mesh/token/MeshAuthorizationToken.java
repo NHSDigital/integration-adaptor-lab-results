@@ -10,14 +10,14 @@ import java.time.Instant;
  */
 public class MeshAuthorizationToken {
 
-    private final static String MESSAGE_TYPE = "NHSMESH ";
+    private static final String MESSAGE_TYPE = "NHSMESH ";
 
     private final String data;
     private final String hash;
 
     public MeshAuthorizationToken(MeshConfig meshConfig, Instant timestamp, Nonce nonce, AuthorizationHashGenerator authorizationHashGenerator) {
-        String prefix = MESSAGE_TYPE + meshConfig.getMailboxId();
-        String currentTimeFormatted = new TokenTimestamp(timestamp).getValue();
+        final String prefix = MESSAGE_TYPE + meshConfig.getMailboxId();
+        final String currentTimeFormatted = new TokenTimestamp(timestamp).getValue();
         this.data = String.join(":", prefix, nonce.value, nonce.count, currentTimeFormatted);
         this.hash = authorizationHashGenerator.computeHash(meshConfig, nonce, currentTimeFormatted);
     }
@@ -26,7 +26,7 @@ public class MeshAuthorizationToken {
         this(meshConfig, Instant.now(), new Nonce(), new AuthorizationHashGenerator());
     }
 
-    public String getValue(){
+    public String getValue() {
         return String.join(":", data, hash);
     }
 

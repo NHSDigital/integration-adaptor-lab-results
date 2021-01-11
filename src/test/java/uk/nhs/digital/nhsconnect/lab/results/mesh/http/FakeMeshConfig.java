@@ -1,6 +1,4 @@
-package uk.nhs.digital.nhsconnect.lab.results.mesh;
-
-import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshConfig;
+package uk.nhs.digital.nhsconnect.lab.results.mesh.http;
 
 public class FakeMeshConfig extends MeshConfig {
     public FakeMeshConfig() {
