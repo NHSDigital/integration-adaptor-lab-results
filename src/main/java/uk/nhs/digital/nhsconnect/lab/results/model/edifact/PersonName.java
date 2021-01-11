@@ -81,33 +81,31 @@ public class PersonName extends Segment {
 
     @Override
     public String getValue() {
-        List<String> values = new ArrayList<>();
-        values.add(QUALIFIER);
-
-        values.add(Optional.ofNullable(this.nhsNumber)
-            .map(value -> value + ":" + this.patientIdentificationType.getCode())
-            .orElse(StringUtils.EMPTY));
-        values.add(StringUtils.EMPTY);
-        values.add(StringUtils.EMPTY);
-        values.add(Optional.ofNullable(this.surname)
-            .map(value -> "SU:" + value)
-            .orElse(StringUtils.EMPTY));
-        values.add(Optional.ofNullable(this.firstForename)
-            .map(value -> "FO:" + value)
-            .orElse(StringUtils.EMPTY));
-        values.add(Optional.ofNullable(this.title)
-            .map(value -> "TI:" + value)
-            .orElse(StringUtils.EMPTY));
-        values.add(Optional.ofNullable(this.secondForename)
-            .map(value -> "MI:" + value)
-            .orElse(StringUtils.EMPTY));
-        values.add(Optional.ofNullable(this.otherForenames)
-            .map(value -> "FS:" + value)
-            .orElse(StringUtils.EMPTY));
-
+        var values = List.of(
+                QUALIFIER,
+                extractNhsNumber(),
+                StringUtils.EMPTY,
+                StringUtils.EMPTY,
+                extractValue(this.surname, "SU"),
+                extractValue(this.firstForename, "FO"),
+                extractValue(this.title, "TI"),
+                extractValue(this.secondForename, "MI"),
+                extractValue(this.otherForenames, "FS")
+        );
         values = removeEmptyTrailingFields(values, StringUtils::isNotBlank);
-
         return String.join(PLUS_SEPARATOR, values);
+    }
+
+    private String extractNhsNumber() {
+        return Optional.ofNullable(this.nhsNumber)
+                .map(v -> this.nhsNumber + ":" + this.patientIdentificationType.getCode())
+                .orElse(StringUtils.EMPTY);
+    }
+
+    private String extractValue(String field, String header) {
+        return Optional.ofNullable(field)
+                .map(value -> header + ":" + value)
+                .orElse(StringUtils.EMPTY);
     }
 
     @Override
