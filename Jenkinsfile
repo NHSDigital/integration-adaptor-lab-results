@@ -174,9 +174,9 @@ String getSecretValue(String secretName, String region) {
 }
 
 Map<String,Object> decodeSecretKeyValue(String rawSecret) {
-  List<String> secretsSplitted = rawSecret.replace("{","").replace("}","").split(",")
+  List<String> secretsSplit = rawSecret.replace("{","").replace("}","").split(",")
   Map<String,Object> secretsDecoded = [:]
-  secretsSplitted.each {
+  secretsSplit.each {
     String key = it.split(":")[0].trim().replace("\"","")
     Object value = it.split(":")[1]
     secretsDecoded.put(key,value)
