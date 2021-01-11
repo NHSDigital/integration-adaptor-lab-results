@@ -12,6 +12,7 @@ public abstract class Segment {
     protected final static String COLON_SEPARATOR = ":";
     private static final String TERMINATOR = "'";
 
+    // TODO rename as per https://github.com/nhsconnect/integration-adaptor-lab-results/pull/6#discussion_r555038977
     protected static <T> List<T> removeEmptyTrailingFields(List<T> list, Predicate<T> predicate) {
         var result = new ArrayList<T>();
         Collections.reverse(list);
