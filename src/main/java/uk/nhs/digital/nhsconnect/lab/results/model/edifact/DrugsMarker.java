@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
+import java.util.Objects;
+
 /**
  * Example HEA+DM+Y:ZZZ'
  */
@@ -49,14 +51,14 @@ public class DrugsMarker extends Segment {
     }
 
     public static DrugsMarker fromString(String edifactString) {
-        if (!edifactString.startsWith(DrugsMarker.KEY_PREFIX)) {
+        if (edifactString == null || !edifactString.startsWith(DrugsMarker.KEY_PREFIX)) {
             throw new IllegalArgumentException("Can't create " + DrugsMarker.class.getSimpleName() + " from " + edifactString);
         }
         String[] plusSplit = Split.byPlus(edifactString);
         String marker = Split.byColon(plusSplit[2])[0];
-        if (marker.equals("Y")) {
+        if (Objects.equals(marker, "Y")) {
             return new DrugsMarker(true);
-        } else if (marker.equals("%")) {
+        } else if (Objects.equals(marker, "%")) {
             return new DrugsMarker(false);
         } else {
             throw new EdifactValidationException("Value: '" + marker + "' of drug marker provided in edifact is not permitted");
