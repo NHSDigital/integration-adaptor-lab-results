@@ -1,7 +1,12 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
 import com.google.common.collect.ImmutableMap;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+
 import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.r4.model.Enumerations;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
