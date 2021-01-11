@@ -1,0 +1,41 @@
+package uk.nhs.digital.nhsconnect.lab.results.inbound.fhir.mapper;
+
+import org.hl7.fhir.r4.model.Parameters;
+import org.hl7.fhir.r4.model.StringType;
+import org.springframework.stereotype.Component;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PersonName;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceTransactionType;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Transaction;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
+import uk.nhs.digital.nhsconnect.lab.results.model.fhir.NhsIdentifier;
+import uk.nhs.digital.nhsconnect.lab.results.model.fhir.ParameterNames;
+import uk.nhs.digital.nhsconnect.lab.results.model.fhir.ParametersExtension;
+
+import java.util.List;
+
+@Component
+public class DeductionRejectionTransactionMapper implements FhirTransactionMapper {
+
+    @Override
+    public Parameters map(Transaction transaction) {
+        var parameters = uk.nhs.digital.nhsconnect.nhais.inbound.fhir.mapper.FhirTransactionMapper.createParameters(transaction);
+        var nhsIdentifier = transaction.getPersonName()
+            .map(PersonName::getNhsNumber)
+            .map(NhsIdentifier::new)
+            .orElseThrow(() -> new EdifactValidationException("NHS Number is mandatory for inbound deduction request rejection"));
+         ParametersExtension.extractPatient(parameters).setIdentifier(List.of(nhsIdentifier));
+
+        var freeText = transaction
+            .getFreeText()
+            .orElseThrow(() -> new EdifactValidationException("HA Notes (Free Text) are mandatory for inbound deduction request rejection"));
+        parameters.addParameter()
+            .setName(ParameterNames.FREE_TEXT)
+            .setValue(new StringType(freeText.getFreeTextValue()));
+        return parameters;
+    }
+
+    @Override
+    public ReferenceTransactionType.TransactionType getTransactionType() {
+        return ReferenceTransactionType.Inbound.DEDUCTION_REJECTION;
+    }
+}
