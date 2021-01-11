@@ -18,7 +18,7 @@ public class DeductionRejectionTransactionMapper implements FhirTransactionMappe
 
     @Override
     public Parameters map(Transaction transaction) {
-        var parameters = uk.nhs.digital.nhsconnect.nhais.inbound.fhir.mapper.FhirTransactionMapper.createParameters(transaction);
+        var parameters = FhirTransactionMapper.createParameters(transaction);
         var nhsIdentifier = transaction.getPersonName()
             .map(PersonName::getNhsNumber)
             .map(NhsIdentifier::new)

@@ -2,11 +2,16 @@ package uk.nhs.digital.nhsconnect.lab.results.inbound.fhir.mapper;
 
 import org.hl7.fhir.r4.model.Parameters;
 import org.springframework.stereotype.Component;
-import uk.nhs.digital.nhsconnect.nhais.model.edifact.*;
-import uk.nhs.digital.nhsconnect.nhais.model.edifact.message.EdifactValidationException;
-import uk.nhs.digital.nhsconnect.nhais.model.fhir.NhsIdentifier;
-import uk.nhs.digital.nhsconnect.nhais.model.fhir.ParameterNames;
-import uk.nhs.digital.nhsconnect.nhais.model.fhir.ParametersExtension;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DeductionDate;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DeductionReasonCode;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.NewHealthAuthorityName;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PersonName;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceTransactionType;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Transaction;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
+import uk.nhs.digital.nhsconnect.lab.results.model.fhir.NhsIdentifier;
+import uk.nhs.digital.nhsconnect.lab.results.model.fhir.ParameterNames;
+import uk.nhs.digital.nhsconnect.lab.results.model.fhir.ParametersExtension;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
