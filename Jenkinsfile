@@ -142,7 +142,6 @@ int terraform(String action, String tfStateBucket, String project, String enviro
     variablesMap.put('tf_state_bucket',tfStateBucket)
     parametersList = parameters
     parametersList.add("-no-color")
-    //parametersList.add("-compact-warnings")  /TODO update terraform to have this working
 
     // Get the secret variables for global
     String secretsFile = "etc/secrets.tfvars"
