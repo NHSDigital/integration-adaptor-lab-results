@@ -6,6 +6,8 @@ logging:
     uk.nhs.digital.nhsconnect.lab.results: ${LAB_RESULTS_LOGGING_LEVEL:INFO}
 
 labresults:
+  amqp:
+    meshInboundQueueName: ${LAB_RESULTS_MESH_INBOUND_QUEUE_NAME:lab_results_mesh_inbound}
   mongodb:
     uri: ${LAB_RESULTS_MONGO_URI:mongodb://localhost:27017}
     database: ${LAB_RESULTS_MONGO_DATABASE_NAME:labresults}

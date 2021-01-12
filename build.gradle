@@ -50,6 +50,8 @@ dependencies {
 
 	implementation 'ca.uhn.hapi.fhir:hapi-fhir-base:5.2.0'
 	implementation 'ca.uhn.hapi.fhir:hapi-fhir-structures-r4:5.2.0'
+	implementation 'org.springframework:spring-jms:5.2.6.RELEASE'
+	implementation 'org.apache.qpid:qpid-jms-client:0.51.0'
 
 	implementation 'org.projectlombok:lombok'
 	testImplementation 'org.projectlombok:lombok'
