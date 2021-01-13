@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NonNull;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hl7.fhir.r4.model.Enumerations;
+import org.hl7.fhir.dstu3.model.Enumerations;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 
 import java.util.Arrays;
