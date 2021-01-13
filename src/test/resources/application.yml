@@ -18,7 +18,7 @@ labresults:
     username: ${LAB_RESULTS_MONGO_USERNAME:}
     password: ${LAB_RESULTS_MONGO_PASSWORD:}
     options: ${LAB_RESULTS_MONGO_OPTIONS:}
-    autoIndexCreation: true
+    autoIndexCreation: false
     ttl: ${LAB_RESULTS_MONGO_TTL:P30D}
     cosmosDbEnabled: ${LAB_RESULTS_COSMOS_DB_ENABLED:false}
   mesh:
