@@ -1,10 +1,10 @@
 package uk.nhs.digital.nhsconnect.lab.results.mesh;
 
 import lombok.Getter;
-import uk.nhs.digital.nhsconnect.lab.results.rest.exception.NhaisBaseException;
+import uk.nhs.digital.nhsconnect.lab.results.rest.exception.LabResultsBaseException;
 
 @Getter
-public class MeshWorkflowUnknownException extends NhaisBaseException {
+public class MeshWorkflowUnknownException extends LabResultsBaseException {
 
     private final String workflowId;
 
