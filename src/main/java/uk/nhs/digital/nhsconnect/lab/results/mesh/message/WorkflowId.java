@@ -3,14 +3,15 @@ package uk.nhs.digital.nhsconnect.lab.results.mesh.message;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import uk.nhs.digital.nhsconnect.lab.results.mesh.MeshWorkflowUnknownException;
+import uk.nhs.digital.nhsconnect.lab.results.mesh.exception.MeshWorkflowUnknownException;
 
 import java.util.Arrays;
 
-@RequiredArgsConstructor @Getter
+@RequiredArgsConstructor
+@Getter
 public enum WorkflowId {
-    REGISTRATION("NHAIS_REG"),
-    RECEP("NHAIS_RECEP");
+    REGISTRATION("LAB_RESULTS_REG"),
+    RECEP("LAB_RESULTS_RECEP");
 
     @JsonValue
     private final String workflowId;

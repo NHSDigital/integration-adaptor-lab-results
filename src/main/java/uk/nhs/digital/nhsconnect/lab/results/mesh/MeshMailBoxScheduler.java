@@ -12,7 +12,7 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
 
 @Component
 @Slf4j
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class MeshMailBoxScheduler {
 
     private final SchedulerTimestampRepository schedulerTimestampRepository;
@@ -27,7 +27,7 @@ public class MeshMailBoxScheduler {
     }
 
     public boolean isEnabled() {
-        return BooleanUtils.toBoolean(applicationContext.getEnvironment().getProperty("nhais.scheduler.enabled"));
+        return BooleanUtils.toBoolean(applicationContext.getEnvironment().getProperty("labresults.scheduler.enabled"));
     }
 
     private boolean updateTimestamp(long seconds) {

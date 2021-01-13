@@ -2,10 +2,9 @@ package uk.nhs.digital.nhsconnect.lab.results.rest.exception;
 
 import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
 import org.hl7.fhir.r4.model.OperationOutcome;
-import org.springframework.http.HttpStatus;
 import uk.nhs.digital.nhsconnect.lab.results.utils.OperationOutcomeUtils;
 
-public abstract class BadRequestException extends NhaisBaseException implements OperationOutcomeError {
+public abstract class BadRequestException extends LabResultsBaseException {
 
     private final IBaseOperationOutcome operationOutcome;
 
@@ -24,17 +23,7 @@ public abstract class BadRequestException extends NhaisBaseException implements 
         operationOutcome = OperationOutcomeUtils.createFromMessage(cause.getMessage(), getIssueType());
     }
 
-    @Override
-    final public IBaseOperationOutcome getOperationOutcome() {
-        return operationOutcome;
-    }
-
     public OperationOutcome.IssueType getIssueType() {
         return OperationOutcome.IssueType.INVALID;
-    }
-
-    @Override
-    final public HttpStatus getStatusCode() {
-        return HttpStatus.BAD_REQUEST;
     }
 }
