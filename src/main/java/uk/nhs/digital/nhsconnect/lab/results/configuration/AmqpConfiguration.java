@@ -28,9 +28,7 @@ public class AmqpConfiguration {
     @Bean
     public JmsConnectionFactory jmsConnectionFactory(AmqpProperties properties) {
         JmsConnectionFactory factory = new JmsConnectionFactory();
-        System.out.println("yolo");
-        System.out.println("yolo:" + properties.getUsername());
-        System.out.println("yolo:" + properties.getBrokers());
+
         factory.setRemoteURI(properties.getBrokers());
 
         if (!StringUtils.isEmpty(properties.getUsername())) {
