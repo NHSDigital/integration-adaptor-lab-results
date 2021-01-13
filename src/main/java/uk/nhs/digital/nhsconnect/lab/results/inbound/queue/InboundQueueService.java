@@ -32,7 +32,6 @@ public class InboundQueueService {
 
     @SneakyThrows
     public void publish(InboundMeshMessage messageContent) {
-        String meshInboundQueueName = "lab";
         messageContent.setMessageSentTimestamp(timestampService.formatInISO(timestampService.getCurrentTimestamp()));
         jmsTemplate.send(meshInboundQueueName, session -> {
             var message = session.createTextMessage(serializeMeshMessage(messageContent));
