@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
@@ -43,7 +43,7 @@ public class ResidentialInstituteNameAndAddress extends Segment {
 
     @Override
     public void preValidate() throws EdifactValidationException {
-        if (StringUtils.isEmpty(identifier)) {
+        if (StringUtils.isBlank(identifier)) {
             throw new EdifactValidationException(getKey() + ": Attribute identifier is required");
         }
     }
