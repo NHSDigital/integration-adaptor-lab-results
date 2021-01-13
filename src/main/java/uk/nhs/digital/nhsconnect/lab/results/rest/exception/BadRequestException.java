@@ -1,7 +1,7 @@
 package uk.nhs.digital.nhsconnect.lab.results.rest.exception;
 
 import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
-import org.hl7.fhir.r4.model.OperationOutcome;
+import org.hl7.fhir.dstu3.model.OperationOutcome;
 import uk.nhs.digital.nhsconnect.lab.results.utils.OperationOutcomeUtils;
 
 public abstract class BadRequestException extends LabResultsBaseException {

@@ -1,6 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.utils;
 
-import org.hl7.fhir.r4.model.OperationOutcome;
+import org.hl7.fhir.dstu3.model.OperationOutcome;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
