@@ -48,12 +48,12 @@ public class InboundUserAcceptanceTest extends IntegrationBaseTest {
     void beforeEach() {
         clearMeshMailboxes();
         clearGpSystemInboundQueue();
-        System.setProperty("NHAIS_SCHEDULER_ENABLED", "true"); //enable scheduling
+        System.setProperty("LAB_RESULTS_SCHEDULER_ENABLED", "true"); //enable scheduling
     }
 
     @AfterEach
     void tearDown() {
-        System.setProperty("NHAIS_SCHEDULER_ENABLED", "false");
+        System.setProperty("LAB_RESULTS_SCHEDULER_ENABLED", "false");
     }
 
     @ParameterizedTest(name = "[{index}] - {0}")
