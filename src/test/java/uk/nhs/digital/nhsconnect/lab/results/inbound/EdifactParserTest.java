@@ -3,6 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.inbound;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -54,7 +55,7 @@ class EdifactParserTest {
 
     private static final List<String> TRAILER_BEFORE_HEADER = List.of(
             EDIFACT_HEADER + "'",
-            "UNT+24+00000004'",
+            "UNT+24+00000004'", // message_trailer
             "BGM+++507'",
             "NAD+FHS+XX1:954'",
             "DTM+137:199201141619:203'",
@@ -77,7 +78,7 @@ class EdifactParserTest {
             "DTM+329:19911209:102'",
             "PDI+2'",
             "NAD+PAT++??:26 FARMSIDE CLOSE:ST PAULS CRAY:ORPINGTON:KENT+++++BR6  7ET'",
-            "UNH+00000004+FHSREG:0:1:FH:FHS001'",
+            "UNH+00000004+FHSREG:0:1:FH:FHS001'", // message_header
             EDIFACT_TRAILER + "'"
     );
 
@@ -106,8 +107,10 @@ class EdifactParserTest {
     void testParsePropagatesExceptionWhenPassedTrailerBeforeHeader() {
         when(interchangeFactory.createInterchange(any())).thenReturn(interchange);
 
-        assertThrows(ToEdifactParsingException.class,
+        ToEdifactParsingException toEdifactParsingException = assertThrows(ToEdifactParsingException.class,
                 () -> edifactParser.parse(String.join("\n", TRAILER_BEFORE_HEADER)));
+
+        assertEquals("Message trailer before message header", toEdifactParsingException.getMessage());
     }
 
     @Test
