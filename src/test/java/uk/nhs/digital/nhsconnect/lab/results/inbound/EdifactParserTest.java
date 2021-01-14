@@ -53,7 +53,7 @@ class EdifactParserTest {
             EDIFACT_TRAILER + "'"
     );
 
-    private static final List<String> TRAILER_BEFORE_HEADER = List.of(
+    private static final List<String> TRAILER_BEFORE_HEADER_EDIFACT = List.of(
             EDIFACT_HEADER + "'",
             "UNT+24+00000004'", // message_trailer
             "BGM+++507'",
@@ -79,6 +79,37 @@ class EdifactParserTest {
             "PDI+2'",
             "NAD+PAT++??:26 FARMSIDE CLOSE:ST PAULS CRAY:ORPINGTON:KENT+++++BR6  7ET'",
             "UNH+00000004+FHSREG:0:1:FH:FHS001'", // message_header
+            EDIFACT_TRAILER + "'"
+    );
+
+
+    private static final List<String> MISMATCH_MESSAGE_TRAILER_HEADER_EDIFACT = List.of(
+            EDIFACT_HEADER + "'",
+            "UNH+00000004+FHSREG:0:1:FH:FHS001'", // message_header
+            "BGM+++507'",
+            "NAD+FHS+XX1:954'",
+            "DTM+137:199201141619:203'",
+            "RFF+950:F4'",
+            "RFF+TN:18'",
+            "S01+1'",
+            "NAD+GP+2750922,295:900'",
+            "NAD+RIC+RT:956'",
+            "UNT+24+00000004'", // message_trailer
+            "QTY+951:6'",
+            "QTY+952:3'",
+            "HEA+ACD+A:ZZZ'",
+            "HEA+ATP+2:ZZZ'",
+            "HEA+BM+S:ZZZ'",
+            "HEA+DM+Y:ZZZ'",
+            "DTM+956:19920114:102'",
+            "LOC+950+GLASGOW'",
+            "FTX+RGI+++BABY AT THE REYNOLDS-THORPE CENTRE'",
+            "S02+2'",
+            "PNA+PAT+NHS123:OPI+++SU:KENNEDY+FO:SARAH+TI:MISS+MI:ANGELA'",
+            "DTM+329:19911209:102'",
+            "PDI+2'",
+            "NAD+PAT++??:26 FARMSIDE CLOSE:ST PAULS CRAY:ORPINGTON:KENT+++++BR6  7ET'",
+            "UNT+24+00000004'", // message_trailer
             EDIFACT_TRAILER + "'"
     );
 
@@ -108,9 +139,20 @@ class EdifactParserTest {
         when(interchangeFactory.createInterchange(any())).thenReturn(interchange);
 
         ToEdifactParsingException toEdifactParsingException = assertThrows(ToEdifactParsingException.class,
-                () -> edifactParser.parse(String.join("\n", TRAILER_BEFORE_HEADER)));
+                () -> edifactParser.parse(String.join("\n", TRAILER_BEFORE_HEADER_EDIFACT)));
 
         assertEquals("Message trailer before message header", toEdifactParsingException.getMessage());
+    }
+
+    @Test
+    void testParsePropagatesExceptionWhenThereIsAMismatchOfHeadersAndTrailers() {
+        when(interchangeFactory.createInterchange(any())).thenReturn(interchange);
+
+        ToEdifactParsingException toEdifactParsingException = assertThrows(ToEdifactParsingException.class,
+                () -> edifactParser.parse(String.join("\n", MISMATCH_MESSAGE_TRAILER_HEADER_EDIFACT)));
+
+
+        assertEquals("Message header-trailer count mismatch: 1-2", toEdifactParsingException.getMessage());
     }
 
     @Test
