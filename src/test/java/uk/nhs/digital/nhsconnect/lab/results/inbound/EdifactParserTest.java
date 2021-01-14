@@ -62,14 +62,10 @@ class EdifactParserTest {
     @InjectMocks
     private EdifactParser edifactParser;
 
-    @BeforeEach
-    void trainInterchangeFactory() {
-        when(interchangeFactory.createInterchange(any()))
-                .thenReturn(interchange);
-    }
-
     @Test
     void testParseCreatesInterchangeWithSameMessage() {
+        when(interchangeFactory.createInterchange(any())).thenReturn(interchange);
+
         Interchange interchange = edifactParser.parse(String.join("\n", SAMPLE_EDIFACT));
 
         assertNotNull(interchange);
