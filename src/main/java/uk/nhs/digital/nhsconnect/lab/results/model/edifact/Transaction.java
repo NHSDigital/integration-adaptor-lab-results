@@ -10,6 +10,8 @@ public class Transaction extends Section {
     @Getter(lazy = true)
     private final ReferenceTransactionNumber referenceTransactionNumber =
         ReferenceTransactionNumber.fromString(extractSegment(ReferenceTransactionNumber.KEY_QUALIFIER));
+
+    /*
     @Getter(lazy = true)
     private final GpNameAndAddress gpNameAndAddress =
         GpNameAndAddress.fromString(extractSegment(GpNameAndAddress.KEY_QUALIFIER));
@@ -53,6 +55,7 @@ public class Transaction extends Section {
     private final Optional<ResidentialInstituteNameAndAddress> residentialInstitution =
         extractOptionalSegment(ResidentialInstituteNameAndAddress.KEY_QUALIFIER)
             .map(ResidentialInstituteNameAndAddress::fromString);
+    */
 
     @Getter
     @Setter
