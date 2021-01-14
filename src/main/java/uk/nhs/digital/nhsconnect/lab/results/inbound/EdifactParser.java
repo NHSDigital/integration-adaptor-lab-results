@@ -3,6 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.inbound;
 import com.google.common.collect.Comparators;
 import com.google.common.collect.Streams;
 import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
@@ -10,6 +11,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageTrailer;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceTransactionNumber;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Transaction;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeFactory;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.ToEdifactParsingException;
 
@@ -27,13 +29,22 @@ public class EdifactParser {
 
     private static final String TRANSACTION_START_SEGMENT = ReferenceTransactionNumber.KEY_QUALIFIER;
 
+    private final InterchangeFactory interchangeFactory;
+
+    @Autowired
+    public EdifactParser(InterchangeFactory interchangeFactory) {
+        this.interchangeFactory = interchangeFactory;
+    }
+
     public Interchange parse(String edifact) {
         var allEdifactSegments = Arrays.asList(Split.bySegmentTerminator(edifact.replaceAll("\\n", "").strip()));
+
         return parseInterchange(allEdifactSegments);
     }
 
     private Interchange parseInterchange(List<String> allEdifactSegments) {
-        Interchange interchange = new Interchange(extractInterchangeEdifactSegments(allEdifactSegments));
+        Interchange interchange = interchangeFactory.createInterchange(
+                extractInterchangeEdifactSegments(allEdifactSegments));
 
         var messages = parseAllMessages(allEdifactSegments);
         messages.forEach(message -> message.setInterchange(interchange));
