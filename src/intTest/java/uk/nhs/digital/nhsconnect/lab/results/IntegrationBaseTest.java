@@ -6,7 +6,9 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.RecipientMailboxIdMappings;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshClient;
@@ -18,6 +20,9 @@ import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.jms.Message;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -32,10 +37,16 @@ import static org.mockito.Mockito.when;
 @Slf4j
 public abstract class IntegrationBaseTest {
 
+    public static final String DLQ_PREFIX = "DLQ.";
     protected static final int WAIT_FOR_IN_SECONDS = 10;
     protected static final int POLL_INTERVAL_MS = 100;
     protected static final int POLL_DELAY_MS = 10;
+    private static final int JMS_RECEIVE_TIMEOUT = 500;
+    @Value("${labresults.amqp.meshInboundQueueName}")
+    protected String meshInboundQueueName;
 
+    @Autowired
+    protected JmsTemplate jmsTemplate;
     @Autowired
     protected MeshClient meshClient;
     @Autowired
@@ -44,14 +55,20 @@ public abstract class IntegrationBaseTest {
     private RecipientMailboxIdMappings recipientMailboxIdMappings;
     @Autowired
     private MeshHttpClientBuilder meshHttpClientBuilder;
-
+    private long originalReceiveTimeout;
     protected MeshClient labResultsMeshClient;
 
     @PostConstruct
     private void postConstruct() {
+        originalReceiveTimeout = this.jmsTemplate.getReceiveTimeout();
+        this.jmsTemplate.setReceiveTimeout(JMS_RECEIVE_TIMEOUT);
         labResultsMeshClient = buildMeshClientForLabResultsMailbox();
     }
 
+    @PreDestroy
+    private void preDestroy() {
+        this.jmsTemplate.setReceiveTimeout(originalReceiveTimeout);
+    }
 
     protected void waitForCondition(Supplier<Boolean> supplier) {
         await()
@@ -93,5 +110,32 @@ public abstract class IntegrationBaseTest {
         final MeshHeaders meshHeaders = new MeshHeaders(labResultsMailboxConfig);
         final MeshRequests meshRequests = new MeshRequests(labResultsMailboxConfig, meshHeaders);
         return new MeshClient(meshRequests, mockRecipientMailboxIdMappings, meshHttpClientBuilder);
+    }
+
+    @SneakyThrows
+    protected Message getInboundQueueMessage() {
+        return waitFor(() -> jmsTemplate.receive(meshInboundQueueName));
+    }
+
+    protected <T> T waitFor(Supplier<T> supplier) {
+        var dataToReturn = new AtomicReference<T>();
+        await()
+                .atMost(WAIT_FOR_IN_SECONDS, SECONDS)
+                .pollInterval(POLL_INTERVAL_MS, MILLISECONDS)
+                .pollDelay(POLL_DELAY_MS, MILLISECONDS)
+                .until(() -> {
+                    var data = supplier.get();
+                    if (data != null) {
+                        dataToReturn.set(data);
+                        return true;
+                    }
+                    return false;
+                });
+
+        return dataToReturn.get();
+    }
+
+    protected void clearInboundQueue() {
+        waitForCondition(() -> jmsTemplate.receive(meshInboundQueueName) == null);
     }
 }
