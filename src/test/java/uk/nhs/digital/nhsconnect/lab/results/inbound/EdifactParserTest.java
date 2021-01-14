@@ -2,6 +2,7 @@ package uk.nhs.digital.nhsconnect.lab.results.inbound;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 
 public class EdifactParserTest {
@@ -34,13 +35,13 @@ public class EdifactParserTest {
             "UNZ+1+00000003'";
 
     @Test
-    void testInterchangeHeader() {
+    void whenPassedAValidEdifactMessage_expectAValidInterchangeHeader() {
         Interchange interchange = new EdifactParser().parse(edifactString);
         assertEquals("UNOA:2+TES5+XX11+020114:1619+00000003", interchange.getInterchangeHeader().getValue());
     }
 
     @Test
-    void testInterchangeTrailer() {
+    void whenPassedAValidEdifactMessage_expectAValidInterchangeTrailer() {
         Interchange interchange = new EdifactParser().parse(edifactString);
         assertEquals("1+00000003", interchange.getInterchangeTrailer().getValue());
     }
