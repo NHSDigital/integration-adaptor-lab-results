@@ -91,7 +91,6 @@ pipeline {
                             String tfCodeBranch  = "develop"
                             String tfCodeRepo    = "https://github.com/nhsconnect/integration-adaptors"
                             String tfRegion      = "${TF_STATE_BUCKET_REGION}"
-                            List<String> tfParams = []
                             Map<String,String> tfVariables = ["${tfComponent}_build_id": BUILD_TAG]
                             dir ("integration-adaptors") {
                               // Clone repository with terraform
@@ -143,7 +142,6 @@ int terraform(String action, String tfStateBucket, String project, String enviro
     variablesMap.put('tf_state_bucket',tfStateBucket)
     parametersList = parameters
     parametersList.add("-no-color")
-    //parametersList.add("-compact-warnings")  /TODO update terraform to have this working
 
     // Get the secret variables for global
     String secretsFile = "etc/secrets.tfvars"
@@ -175,9 +173,9 @@ String getSecretValue(String secretName, String region) {
 }
 
 Map<String,Object> decodeSecretKeyValue(String rawSecret) {
-  List<String> secretsSplitted = rawSecret.replace("{","").replace("}","").split(",")
+  List<String> secretsSplit = rawSecret.replace("{","").replace("}","").split(",")
   Map<String,Object> secretsDecoded = [:]
-  secretsSplitted.each {
+  secretsSplit.each {
     String key = it.split(":")[0].trim().replace("\"","")
     Object value = it.split(":")[1]
     secretsDecoded.put(key,value)
