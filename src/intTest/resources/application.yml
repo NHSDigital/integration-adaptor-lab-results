@@ -26,7 +26,7 @@ labresults:
     ttl: ${LAB_RESULTS_MONGO_TTL:PT87600H} # long duration (10 years) because the timestamps used in tests are hardcoded. prevent deletion of data during tests
     cosmosDbEnabled: ${LAB_RESULTS_COSMOS_DB_ENABLED:false}
   mesh:
-    mailboxId: ${LAB_RESULTS_MESH_MAILBOX_ID:gp_mailbox} #defaults below are used by fake-mesh
+    mailboxId: ${LAB_RESULTS_MESH_MAILBOX_ID:lab_results_mailbox} #defaults below are used by fake-mesh
     mailboxPassword: ${LAB_RESULTS_MESH_MAILBOX_PASSWORD:password}
     sharedKey: ${LAB_RESULTS_MESH_SHARED_KEY:SharedKey}
     host: ${LAB_RESULTS_MESH_HOST:https://localhost:8829/messageexchange/} #local fake-mesh default endpoint

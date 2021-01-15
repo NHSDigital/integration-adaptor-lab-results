@@ -10,17 +10,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.InboundQueueService;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.RecipientMailboxIdMappings;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshClient;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshConfig;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshHeaders;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshHttpClientBuilder;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshRequests;
+import uk.nhs.digital.nhsconnect.lab.results.mesh.message.InboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
+import uk.nhs.digital.nhsconnect.lab.results.utils.JmsReader;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.jms.JMSException;
 import javax.jms.Message;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
@@ -42,9 +46,6 @@ public abstract class IntegrationBaseTest {
     protected static final int POLL_INTERVAL_MS = 100;
     protected static final int POLL_DELAY_MS = 10;
     private static final int JMS_RECEIVE_TIMEOUT = 500;
-    @Value("${labresults.amqp.meshInboundQueueName}")
-    protected String meshInboundQueueName;
-
     @Autowired
     protected JmsTemplate jmsTemplate;
     @Autowired
@@ -55,6 +56,8 @@ public abstract class IntegrationBaseTest {
     private RecipientMailboxIdMappings recipientMailboxIdMappings;
     @Autowired
     private MeshHttpClientBuilder meshHttpClientBuilder;
+    @Value("${labresults.amqp.meshInboundQueueName}")
+    protected String meshInboundQueueName;
     private long originalReceiveTimeout;
     protected MeshClient labResultsMeshClient;
 
@@ -87,6 +90,13 @@ public abstract class IntegrationBaseTest {
         // acknowledge message will remove it from MESH
         meshClient.getInboxMessageIds().forEach(meshClient::acknowledgeMessage);
         return meshClient.getInboxMessageIds().isEmpty();
+    }
+
+    protected String parseTextMessage(Message message) throws JMSException {
+        if (message == null) {
+            return null;
+        }
+        return JmsReader.readMessage(message);
     }
 
     /**
