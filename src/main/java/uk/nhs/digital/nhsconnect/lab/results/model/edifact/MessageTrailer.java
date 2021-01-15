@@ -12,7 +12,9 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
  * takes in specific values required to generate a message trailer
  * example: UNT+18+00000003'
  */
-@Getter @Setter @RequiredArgsConstructor
+@Getter
+@Setter
+@RequiredArgsConstructor
 public class MessageTrailer extends Segment{
 
     public static final String KEY = "UNT";
@@ -49,7 +51,7 @@ public class MessageTrailer extends Segment{
     }
 
     public static MessageTrailer fromString(String edifactString) {
-        if(!edifactString.startsWith(MessageTrailer.KEY)){
+        if (!edifactString.startsWith(MessageTrailer.KEY)) {
             throw new IllegalArgumentException("Can't create " + MessageTrailer.class.getSimpleName() + " from " + edifactString);
         }
         String[] split = Split.byPlus(

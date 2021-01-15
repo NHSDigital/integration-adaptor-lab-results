@@ -12,7 +12,10 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
  * takes in specific values required to generate an message header
  * example: UNH+00000003+FHSREG:0:1:FH:FHS001'
  */
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class MessageHeader extends Segment {
 
     public static final String KEY = "UNH";
@@ -47,7 +50,7 @@ public class MessageHeader extends Segment {
     }
 
     public static MessageHeader fromString(String edifactString) {
-        if(!edifactString.startsWith(MessageHeader.KEY)){
+        if (!edifactString.startsWith(MessageHeader.KEY)) {
             throw new IllegalArgumentException("Can't create " + MessageHeader.class.getSimpleName() + " from " + edifactString);
         }
         String[] split = Split.byPlus(edifactString);
