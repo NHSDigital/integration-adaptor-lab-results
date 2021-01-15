@@ -7,10 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ReferenceTransactionNumberTest {
+class ReferenceTransactionNumberTest {
 
     @Test
-    void testToEdifactForValidTransactionNumber() throws EdifactValidationException {
+    void testToEdifactForValidTransactionNumber() {
         final ReferenceTransactionNumber referenceTransactionNumber = new ReferenceTransactionNumber(1_234L);
 
         final String edifact = referenceTransactionNumber.toEdifact();
@@ -19,7 +19,7 @@ public class ReferenceTransactionNumberTest {
     }
 
     @Test
-    void testToEdifactForInvalidTransactionNumberThrowsException() throws EdifactValidationException {
+    void testToEdifactForInvalidTransactionNumberThrowsException() {
         final ReferenceTransactionNumber referenceTransactionNumber = new ReferenceTransactionNumber();
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
@@ -29,7 +29,7 @@ public class ReferenceTransactionNumberTest {
     }
 
     @Test
-    void testValidateStatefulTransactionNumberNullThrowsException() throws EdifactValidationException {
+    void testValidateStatefulTransactionNumberNullThrowsException() {
         final ReferenceTransactionNumber referenceTransactionNumber = new ReferenceTransactionNumber();
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
@@ -39,7 +39,7 @@ public class ReferenceTransactionNumberTest {
     }
 
     @Test
-    void testValidateStatefulTransactionNumberLessThanMinimumValueThrowsException() throws EdifactValidationException {
+    void testValidateStatefulTransactionNumberLessThanMinimumValueThrowsException() {
         final ReferenceTransactionNumber referenceTransactionNumber = new ReferenceTransactionNumber(0L);
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
@@ -49,7 +49,7 @@ public class ReferenceTransactionNumberTest {
     }
 
     @Test
-    void testValidateStatefulTransactionNumberMoreThanMaxValueThrowsException() throws EdifactValidationException {
+    void testValidateStatefulTransactionNumberMoreThanMaxValueThrowsException() {
         final ReferenceTransactionNumber referenceTransactionNumber = new ReferenceTransactionNumber(10_000_000L);
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
@@ -59,7 +59,7 @@ public class ReferenceTransactionNumberTest {
     }
 
     @Test
-    void testValidateStatefulTransactionNumberWithinMinMaxDoesNotThrowException() throws EdifactValidationException {
+    void testValidateStatefulTransactionNumberWithinMinMaxDoesNotThrowException() {
         final ReferenceTransactionNumber referenceTransactionNumber = new ReferenceTransactionNumber(9_999_999L);
 
         assertDoesNotThrow(referenceTransactionNumber::validateStateful);

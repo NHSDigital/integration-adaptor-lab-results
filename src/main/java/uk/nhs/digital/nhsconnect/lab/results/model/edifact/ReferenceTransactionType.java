@@ -1,7 +1,12 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 @Getter
 @Setter
@@ -9,9 +14,9 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 @NoArgsConstructor
 public class ReferenceTransactionType extends Segment {
 
-    public static final String KEY = "RFF";
-    public static final String QUALIFIER = "950";
-    public static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
+    private static final String KEY = "RFF";
+    private static final String QUALIFIER = "950";
+    protected static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
     private @NonNull TransactionType transactionType;
 
     public static ReferenceTransactionType fromString(final String edifactString) {

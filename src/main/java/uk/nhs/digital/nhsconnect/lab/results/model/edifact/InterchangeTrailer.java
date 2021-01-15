@@ -5,11 +5,12 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 /**
  * A specialisation of a segment for the specific use case of an interchange trailer
  * takes in specific values required to generate an interchange trailer
- * example: UNZ+1+00000002'
+ * example: UNZ+1+00000002'.
  */
 @Getter
 @Setter

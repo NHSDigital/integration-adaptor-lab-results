@@ -7,6 +7,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
 
 import java.time.Instant;
@@ -16,7 +17,7 @@ import java.time.format.DateTimeFormatter;
 /**
  * A specialisation of a segment for the specific use case of an interchange header
  * takes in specific values required to generate an interchange header
- * example: UNB+UNOA:2+TES5+XX11+920113:1317+00000002'
+ * example: UNB+UNOA:2+TES5+XX11+920113:1317+00000002'.
  */
 @Getter
 @Setter
@@ -25,7 +26,7 @@ import java.time.format.DateTimeFormatter;
 @AllArgsConstructor
 public class InterchangeHeader extends Segment {
 
-    public static final String KEY = "UNB";
+    protected static final String KEY = "UNB";
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyMMdd:HHmm").withZone(TimestampService.UK_ZONE);
     private static final long MAX_INTERCHANGE_SEQUENCE = 99_999_999L;
     private static final String RECEP_ENDING = "+RECEP+++EDIFACT TRANSFER";
@@ -64,7 +65,7 @@ public class InterchangeHeader extends Segment {
         }
         if (sequenceNumber < 1 || sequenceNumber > MAX_INTERCHANGE_SEQUENCE) {
             throw new EdifactValidationException(
-                getKey() + ": Attribute sequenceNumber must be between 1 and " + MAX_INTERCHANGE_SEQUENCE);
+                    getKey() + ": Attribute sequenceNumber must be between 1 and " + MAX_INTERCHANGE_SEQUENCE);
         }
     }
 

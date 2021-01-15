@@ -6,10 +6,10 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ReferenceTransactionTypeTest {
+class ReferenceTransactionTypeTest {
 
     @Test
-    void testToEdifactForValidTransactionType() throws EdifactValidationException {
+    void testToEdifactForValidTransactionType() {
         final ReferenceTransactionType referenceTransactionType = new ReferenceTransactionType(Inbound.STUB);
 
         final String edifact = referenceTransactionType.toEdifact();
@@ -18,7 +18,7 @@ public class ReferenceTransactionTypeTest {
     }
 
     @Test
-    void testToEdifactForInvalidTransactionTypeThrowsException() throws EdifactValidationException {
+    void testToEdifactForInvalidTransactionTypeThrowsException() {
         final ReferenceTransactionType referenceTransactionType = new ReferenceTransactionType();
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
@@ -43,6 +43,5 @@ public class ReferenceTransactionTypeTest {
 
         assertEquals("Can't create ReferenceTransactionType from wrong value", exception.getMessage());
     }
-
 
 }

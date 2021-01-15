@@ -3,7 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 
 public abstract class Segment {
-    protected static final String PLUS_SEPARATOR = "+";
+    private static final String PLUS_SEPARATOR = "+";
     private static final String TERMINATOR = "'";
 
     /**
@@ -17,12 +17,12 @@ public abstract class Segment {
     public abstract String getValue();
 
     /**
-     * Validates the stateful portions of message (sequence numbers, transaction id) only
+     * Validates the stateful portions of message (sequence numbers, transaction id) only.
      */
     protected abstract void validateStateful() throws EdifactValidationException;
 
     /**
-     * Validates non-stateful data items of the segment (excludes things like sequence numbers)
+     * Validates non-stateful data items of the segment (excludes things like sequence numbers).
      */
     public abstract void preValidate() throws EdifactValidationException;
 

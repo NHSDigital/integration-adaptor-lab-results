@@ -1,4 +1,4 @@
-package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
+package uk.nhs.digital.nhsconnect.lab.results.model.edifact.message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,19 +9,19 @@ public class Split {
     private static final char FIELD_TERMINATOR = '+';
     private static final char SUB_FIELD_TERMINATOR = ':';
 
-    public static String[] bySegmentTerminator(String input) {
+    public static String[] bySegmentTerminator(final String input) {
         return splitString(input, SEGMENT_TERMINATOR);
     }
 
-    public static String[] byPlus(String input) {
+    public static String[] byPlus(final String input) {
         return splitString(input, FIELD_TERMINATOR);
     }
 
-    public static String[] byColon(String input) {
+    public static String[] byColon(final String input) {
         return splitString(input, SUB_FIELD_TERMINATOR);
     }
 
-    private static String[] splitString(String input, char separator) {
+    private static String[] splitString(final String input, final char separator) {
         List<String> parts = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
 

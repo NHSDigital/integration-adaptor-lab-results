@@ -6,6 +6,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 @Getter
 @Setter
@@ -13,9 +14,9 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 @NoArgsConstructor
 public class ReferenceTransactionNumber extends Segment {
 
-    public static final String KEY = "RFF";
-    public static final String QUALIFIER = "TN";
-    public static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
+    private static final String KEY = "RFF";
+    private static final String QUALIFIER = "TN";
+    protected static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
     private static final long MAX_TRANSACTION_NUMBER = 9_999_999L;
 
     private @NonNull Long transactionNumber;
