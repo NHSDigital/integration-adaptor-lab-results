@@ -15,26 +15,6 @@ public class Message extends Section {
     private final MessageHeader messageHeader =
         MessageHeader.fromString(extractSegment(MessageHeader.KEY));
 
-    /*
-    @Getter(lazy = true)
-    private final HealthAuthorityNameAndAddress healthAuthorityNameAndAddress =
-        HealthAuthorityNameAndAddress.fromString(extractSegment(HealthAuthorityNameAndAddress.KEY_QUALIFIER));
-
-    @Getter(lazy = true)
-    private final ReferenceTransactionType referenceTransactionType =
-        ReferenceTransactionType.fromString(extractSegment(ReferenceTransactionType.KEY_QUALIFIER));
-
-    @Getter(lazy = true)
-    private final List<ReferenceMessageRecep> referenceMessageReceps =
-        extractSegments(ReferenceMessageRecep.KEY_QUALIFIER).stream()
-            .map(ReferenceMessageRecep::fromString)
-            .collect(Collectors.toList());
-
-    @Getter(lazy = true)
-    private final ReferenceInterchangeRecep referenceInterchangeRecep =
-        ReferenceInterchangeRecep.fromString(extractSegment(ReferenceInterchangeRecep.KEY_QUALIFIER));
-    */
-
     @Getter
     @Setter
     private Interchange interchange;
@@ -54,17 +34,4 @@ public class Message extends Section {
             getMessageHeader().getSequenceNumber());
     }
 
-    /*
-    public String findFirstGpCode() {
-        return getTransactions()
-            .stream()
-            .limit(1)
-            .map(transaction -> transaction.extractOptionalSegment(GpNameAndAddress.KEY_QUALIFIER))
-            .flatMap(Optional::stream)
-            .map(GpNameAndAddress::fromString)
-            .map(GpNameAndAddress::getIdentifier)
-            .findFirst()
-            .orElse(DEFAULT_GP_CODE);
-    }
-     */
 }
