@@ -34,10 +34,7 @@ public class InterchangeTrailer extends Segment {
 
     @Override
     protected void validateStateful() throws EdifactValidationException {
-        if (sequenceNumber == null) {
-            throw new EdifactValidationException(getKey() + ": Attribute sequenceNumber is required");
-        }
-        if (sequenceNumber <= 0) {
+        if (sequenceNumber == null || sequenceNumber <= 0) {
             throw new EdifactValidationException(getKey() + ": Attribute sequenceNumber is required");
         }
     }
