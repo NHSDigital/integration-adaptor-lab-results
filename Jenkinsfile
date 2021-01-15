@@ -22,54 +22,58 @@ pipeline {
     }
 
     stages {
-        stage('Build and Test Locally') {
-            stages {
-                stage('Run Tests') {
-                    steps {
-                        script {
-                            sh label: 'Create logs directory', script: 'mkdir -p logs build'
-                            if (sh(label: 'Build lab-results', script: 'docker build -t local/lab-results-tests:${BUILD_TAG} -f Dockerfile.tests .', returnStatus: true) != 0) {error("Failed to build docker image for tests")}
-                            if (sh(label: 'Running tests', script: 'docker run -v /var/run/docker.sock:/var/run/docker.sock --name lab-results-tests local/lab-results-tests:${BUILD_TAG} gradle check -i', returnStatus: true) != 0) {error("Some tests failed, check the logs")}
-                        }
-                    }
-                    post {
-                        always {
-                            sh "docker cp lab-results-tests:/home/gradle/src/build ."
-                            junit '**/build/test-results/**/*.xml'
-                            step([
+        stage("CI"){
+            stage('Build'){
+                steps {
+                    sh label: 'Create logs directory', script: 'mkdir -p logs build'
+                    if (sh(label: 'Build lab-results', script: 'docker build -t local/lab-results-tests:${BUILD_TAG} -f Dockerfile.tests .', returnStatus: true) != 0) {error("Failed to build docker image for tests")}
+                    /*
+                    TODO: Add checkStyle and spotBugs after discussion about standards with team
+                    recordIssues(
+                        enabledForFailure: true,
+                        tools: [
+                            checkStyle(pattern: 'build/reports/checkstyle/*.xml'),
+                            spotBugs(pattern: 'build/reports/spotbugs/*.xml')
+                        ]
+                    )
+                    */
+                }
+            }
+            stage('Test'){
+                steps {
+                    if (sh(label: 'Running tests', script: 'docker run -v /var/run/docker.sock:/var/run/docker.sock --name lab-results-tests local/lab-results-tests:${BUILD_TAG} gradle check -i', returnStatus: true) != 0) {error("Some tests failed, check the logs")}
+                }
+                post {
+                    always {
+                        sh "docker cp lab-results-tests:/home/gradle/src/build ."
+                        junit '**/build/test-results/**/*.xml'
+                        step([
                                 $class : 'JacocoPublisher',
                                 execPattern : '**/build/jacoco/*.exec',
                                 classPattern : '**/build/classes/java',
                                 sourcePattern : 'src/main/java',
                                 exclusionPattern : '**/*Test.class'
-                            ])
-                            sh "rm -rf build"
-                        }
-                    }
-                }
-                stage('Build Docker Images') {
-                    steps {
-                        script {
-                            sh label: 'Running docker build', script: 'docker build -t ${DOCKER_IMAGE} .'
-                        }
-                    }
-                }
-                stage('Push image') {
-                    when {
-                        expression { currentBuild.resultIsBetterOrEqualTo('SUCCESS') }
-                    }
-                    steps {
-                        script {
-                            if (ecrLogin(TF_STATE_BUCKET_REGION) != 0 )  { error("Docker login to ECR failed") }
-                            String dockerPushCommand = "docker push ${DOCKER_IMAGE}"
-                            // Change echo to be an error once the AWS has been set up
-                            if (sh (label: "Pushing image", script: dockerPushCommand, returnStatus: true) !=0) { echo("Docker push image failed") }
-                        }
+                        ])
+                        sh "rm -rf build"
                     }
                 }
             }
-            post {
-                always {
+            stage('Build Docker Image') {
+                when {
+                    expression { currentBuild.resultIsBetterOrEqualTo('SUCCESS') }
+                }
+                steps {
+                    script {
+                        sh label: 'Running docker build', script: 'docker build -t ${DOCKER_IMAGE} .'
+                        if (ecrLogin(TF_STATE_BUCKET_REGION) != 0 )  { error("Docker login to ECR failed") }
+                        String dockerPushCommand = "docker push ${DOCKER_IMAGE}"
+                        // Change echo to be an error once the AWS has been set up
+                        if (sh (label: "Pushing image", script: dockerPushCommand, returnStatus: true) !=0) { echo("Docker push image failed") }
+                    }
+                }
+            }
+            post{
+                always{
                     sh label: 'Copy lab-results container logs', script: 'docker-compose logs lab-results > logs/lab-results.log'
                     sh label: 'Copy activemq logs', script: 'docker-compose logs activemq > logs/inbound.log'
                     archiveArtifacts artifacts: 'logs/*.log', fingerprint: true
