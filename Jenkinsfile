@@ -49,6 +49,14 @@ pipeline {
                         }
                     }
                 }
+                stage('Test') {
+                    steps {
+                        script {
+                            if (sh(label: 'Running unit tests', script: 'docker run -v /var/run/docker.sock:/var/run/docker.sock --name lab-results-tests local/lab-results-tests:${BUILD_TAG} gradle test -i', returnStatus: true) != 0) {error("Some tests failed, check the logs")}
+                            //if (sh(label: 'Running integration tests', script: 'docker run -v /var/run/docker.sock:/var/run/docker.sock --name lab-results-tests local/lab-results-tests:${BUILD_TAG} gradle integrationTest -i', returnStatus: true) != 0) {error("Some tests failed, check the logs")}
+                        }
+                    }
+                }
                 stage('Build Docker Images') {
                     steps {
                         script {
