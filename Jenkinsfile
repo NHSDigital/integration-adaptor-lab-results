@@ -47,6 +47,13 @@ pipeline {
                         script {
                             if (sh(label: 'Running tests', script: 'docker run -v /var/run/docker.sock:/var/run/docker.sock --name lab-results-tests local/lab-results-tests:${BUILD_TAG} gradle check -i', returnStatus: true) != 0) {error("Some tests failed, check the logs")}
                         }
+                        recordIssues(
+                                enabledForFailure: true,
+                                tools: [
+                                        checkStyle(pattern: 'build/reports/checkstyle/*.xml'),
+                                        spotBugs(pattern: 'build/reports/spotbugs/*.xml')
+                                ]
+                        )
                     }
                     post {
                         always {
