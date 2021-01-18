@@ -1,6 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.configuration;
 
-
+import org.apache.commons.lang3.StringUtils;
 import org.apache.qpid.jms.JmsConnectionFactory;
 import org.apache.qpid.jms.JmsDestination;
 import org.apache.qpid.jms.message.JmsMessageSupport;
@@ -11,10 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
-import org.springframework.util.StringUtils;
 
 import javax.jms.ConnectionFactory;
-
 
 @Configuration
 @ConditionalOnMissingBean(ConnectionFactory.class)
@@ -31,15 +29,15 @@ public class AmqpConfiguration {
 
         factory.setRemoteURI(properties.getBrokers());
 
-        if (!StringUtils.isEmpty(properties.getUsername())) {
+        if (!StringUtils.isBlank(properties.getUsername())) {
             factory.setUsername(properties.getUsername());
         }
 
-        if (!StringUtils.isEmpty(properties.getPassword())) {
+        if (!StringUtils.isBlank(properties.getPassword())) {
             factory.setPassword(properties.getPassword());
         }
 
-        if (!StringUtils.isEmpty(properties.getClientId())) {
+        if (!StringUtils.isBlank(properties.getClientId())) {
             factory.setClientID(properties.getClientId());
         }
 
@@ -61,12 +59,12 @@ public class AmqpConfiguration {
         JmsDefaultDeserializationPolicy deserializationPolicy =
             (JmsDefaultDeserializationPolicy) factory.getDeserializationPolicy();
 
-        if (StringUtils.hasLength(properties.getDeserializationPolicy().getWhiteList())) {
-            deserializationPolicy.setWhiteList(properties.getDeserializationPolicy().getWhiteList());
+        if (org.springframework.util.StringUtils.hasLength(properties.getDeserializationPolicy().getWhiteList())) {
+            deserializationPolicy.setAllowList(properties.getDeserializationPolicy().getWhiteList());
         }
 
-        if (StringUtils.hasLength(properties.getDeserializationPolicy().getBlackList())) {
-            deserializationPolicy.setBlackList(properties.getDeserializationPolicy().getBlackList());
+        if (org.springframework.util.StringUtils.hasLength(properties.getDeserializationPolicy().getBlackList())) {
+            deserializationPolicy.setDenyList(properties.getDeserializationPolicy().getBlackList());
         }
     }
 
