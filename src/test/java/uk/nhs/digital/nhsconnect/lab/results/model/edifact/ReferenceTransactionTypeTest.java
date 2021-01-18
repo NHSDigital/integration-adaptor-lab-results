@@ -10,11 +10,11 @@ class ReferenceTransactionTypeTest {
 
     @Test
     void testToEdifactForValidTransactionType() {
-        final ReferenceTransactionType referenceTransactionType = new ReferenceTransactionType(Inbound.STUB);
+        final ReferenceTransactionType referenceTransactionType = new ReferenceTransactionType(Inbound.APPROVAL);
 
         final String edifact = referenceTransactionType.toEdifact();
 
-        assertEquals("RFF+950:123'", edifact);
+        assertEquals("RFF+950:F4'", edifact);
     }
 
     @Test
@@ -29,11 +29,11 @@ class ReferenceTransactionTypeTest {
 
     @Test
     void testFromStringWithValidEdifactStringReturnsReferenceTransactionType() {
-        final ReferenceTransactionType referenceTransactionType = ReferenceTransactionType.fromString("RFF+950:123");
+        final ReferenceTransactionType referenceTransactionType = ReferenceTransactionType.fromString("RFF+950:F4");
 
         assertEquals("RFF", referenceTransactionType.getKey());
-        assertEquals("950:123", referenceTransactionType.getValue());
-        assertEquals(TransactionType.fromCode("123"), referenceTransactionType.getTransactionType());
+        assertEquals("950:F4", referenceTransactionType.getValue());
+        assertEquals(TransactionType.fromCode("F4"), referenceTransactionType.getTransactionType());
     }
 
     @Test

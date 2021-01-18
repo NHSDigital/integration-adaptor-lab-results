@@ -7,7 +7,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Transaction;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.TransactionType;
 
 @Component
-public class StubMapper implements FhirTransactionMapper {
+public class ApprovalTransactionMapper implements FhirTransactionMapper {
 
     @Override
     public Parameters map(Transaction transaction) {
@@ -16,6 +16,6 @@ public class StubMapper implements FhirTransactionMapper {
 
     @Override
     public TransactionType getTransactionType() {
-        return Inbound.STUB;
+        return Inbound.APPROVAL;
     }
 }

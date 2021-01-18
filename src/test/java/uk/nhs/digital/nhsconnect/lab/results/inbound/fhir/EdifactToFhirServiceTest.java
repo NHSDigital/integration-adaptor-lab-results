@@ -1,13 +1,12 @@
-package uk.nhs.digital.nhsconnect.lab.results.inbound;
+package uk.nhs.digital.nhsconnect.lab.results.inbound.fhir;
 
 import org.hl7.fhir.dstu3.model.Parameters;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.nhs.digital.nhsconnect.lab.results.inbound.fhir.EdifactToFhirService;
+import uk.nhs.digital.nhsconnect.lab.results.inbound.fhir.mapper.ApprovalTransactionMapper;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.fhir.mapper.FhirTransactionMapper;
-import uk.nhs.digital.nhsconnect.lab.results.inbound.fhir.mapper.StubMapper;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Inbound;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceTransactionType;
@@ -33,11 +32,11 @@ class EdifactToFhirServiceTest {
     @Test
     void testConvertEdifactToFhir() {
 
-        final Map<TransactionType, FhirTransactionMapper> transactionMapper = Collections.singletonMap(Inbound.STUB, new StubMapper());
+        final Map<TransactionType, FhirTransactionMapper> transactionMapper = Collections.singletonMap(Inbound.APPROVAL, new ApprovalTransactionMapper());
         final EdifactToFhirService service = new EdifactToFhirService(transactionMapper);
 
         when(transaction.getMessage()).thenReturn(message);
-        when(message.getReferenceTransactionType()).thenReturn(new ReferenceTransactionType(Inbound.STUB));
+        when(message.getReferenceTransactionType()).thenReturn(new ReferenceTransactionType(Inbound.APPROVAL));
 
         final Parameters parameters = service.convertToFhir(transaction);
 
@@ -50,12 +49,12 @@ class EdifactToFhirServiceTest {
         final EdifactToFhirService service = new EdifactToFhirService(Map.of());
 
         when(transaction.getMessage()).thenReturn(message);
-        when(message.getReferenceTransactionType()).thenReturn(new ReferenceTransactionType(Inbound.STUB));
+        when(message.getReferenceTransactionType()).thenReturn(new ReferenceTransactionType(Inbound.APPROVAL));
 
         final UnsupportedOperationException exception = assertThrows(UnsupportedOperationException.class,
                 () -> service.convertToFhir(transaction));
 
-        assertEquals("Transaction type STUB is not supported", exception.getMessage());
+        assertEquals("Transaction type APPROVAL is not supported", exception.getMessage());
     }
 
 }

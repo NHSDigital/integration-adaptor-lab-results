@@ -10,7 +10,7 @@ public class TransactionTypeTest {
 
     @Test
     void testFromCodeForValidCodeReturnsTransactionType() {
-        final ImmutableMap<String, TransactionType> codeMap = ImmutableMap.of("123", Inbound.STUB);
+        final ImmutableMap<String, TransactionType> codeMap = ImmutableMap.of("F4", Inbound.APPROVAL);
 
         assertEquals(Inbound.values().length, codeMap.size());
 
