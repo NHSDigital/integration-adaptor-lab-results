@@ -9,9 +9,6 @@ plugins {
 	id 'jacoco'
 }
 
-apply plugin: 'checkstyle'
-apply plugin: 'com.github.spotbugs'
-
 group = 'uk.nhs.digital.nhsconnect'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
