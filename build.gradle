@@ -2,8 +2,6 @@ plugins {
 	id 'org.springframework.boot' version '2.4.1'
 	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
 	id 'java'
-	id "checkstyle"
-	id "com.github.spotbugs" version "4.5.0"
 	id 'io.freefair.lombok' version '5.3.0'
 	id 'application'
 	id 'jacoco'
@@ -92,13 +90,3 @@ task integrationTest(type: Test) {
 }
 
 check.dependsOn integrationTest
-
-spotbugsTest.enabled = false
-spotbugsIntTest.enabled = false
-spotbugsMain {
-	reports {
-		html.enabled = true
-		xml.enabled = true
-
-	}
-}

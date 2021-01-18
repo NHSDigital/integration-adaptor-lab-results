@@ -24,14 +24,12 @@ pipeline {
     stages {
         stage('Build and Test Locally') {
             stages {
-                stage('Build') {
+                stage('Run Tests') {
                     steps {
                         script {
                             sh label: 'Create logs directory', script: 'mkdir -p logs build'
                             if (sh(label: 'Build lab-results', script: 'docker build -t local/lab-results-tests:${BUILD_TAG} -f Dockerfile.tests .', returnStatus: true) != 0) {error("Failed to build docker image for tests")}
-
-                            // TODO: Uncomment after checkstyle and spotbug errors are fixed
-                            //if (sh(label: 'Running tests', script: 'docker run -v /var/run/docker.sock:/var/run/docker.sock --name lab-results-tests local/lab-results-tests:${BUILD_TAG} gradle check -i', returnStatus: true) != 0) {error("Some tests failed, check the logs")}
+                            if (sh(label: 'Running tests', script: 'docker run -v /var/run/docker.sock:/var/run/docker.sock --name lab-results-tests local/lab-results-tests:${BUILD_TAG} gradle check -i', returnStatus: true) != 0) {error("Some tests failed, check the logs")}
                         }
                     }
                     post {
@@ -39,21 +37,13 @@ pipeline {
                             sh "docker cp lab-results-tests:/home/gradle/src/build ."
                             junit '**/build/test-results/**/*.xml'
                             step([
-                                    $class : 'JacocoPublisher',
-                                    execPattern : '**/build/jacoco/*.exec',
-                                    classPattern : '**/build/classes/java',
-                                    sourcePattern : 'src/main/java',
-                                    exclusionPattern : '**/*Test.class'
+                                $class : 'JacocoPublisher',
+                                execPattern : '**/build/jacoco/*.exec',
+                                classPattern : '**/build/classes/java',
+                                sourcePattern : 'src/main/java',
+                                exclusionPattern : '**/*Test.class'
                             ])
                             sh "rm -rf build"
-                        }
-                    }
-                }
-                stage('Test') {
-                    steps {
-                        script {
-                            if (sh(label: 'Running unit tests', script: 'docker run -v /var/run/docker.sock:/var/run/docker.sock --name lab-results-tests local/lab-results-tests:${BUILD_TAG} gradle test -i', returnStatus: true) != 0) {error("Some tests failed, check the logs")}
-                            //if (sh(label: 'Running integration tests', script: 'docker run -v /var/run/docker.sock:/var/run/docker.sock --name lab-results-tests local/lab-results-tests:${BUILD_TAG} gradle integrationTest -i', returnStatus: true) != 0) {error("Some tests failed, check the logs")}
                         }
                     }
                 }
@@ -92,7 +82,7 @@ pipeline {
                 expression { currentBuild.resultIsBetterOrEqualTo('SUCCESS') }
             }
             options {
-                lock("${tfProject}-${tfEnvironment}-${tfComponent}")
+              lock("${tfProject}-${tfEnvironment}-${tfComponent}")
             }
             stages {
                 stage('Deploy using Terraform') {
@@ -103,20 +93,20 @@ pipeline {
                             String tfRegion      = "${TF_STATE_BUCKET_REGION}"
                             Map<String,String> tfVariables = ["${tfComponent}_build_id": BUILD_TAG]
                             dir ("integration-adaptors") {
-                                // Clone repository with terraform
-                                git (branch: tfCodeBranch, url: tfCodeRepo)
-                                dir ("terraform/aws") {
-                                    // Run TF Init
-                                    if (terraformInit(TF_STATE_BUCKET, tfProject, tfEnvironment, tfComponent, tfRegion) !=0) { error("Terraform init failed")}
+                              // Clone repository with terraform
+                              git (branch: tfCodeBranch, url: tfCodeRepo)
+                              dir ("terraform/aws") {
+                                // Run TF Init
+                                if (terraformInit(TF_STATE_BUCKET, tfProject, tfEnvironment, tfComponent, tfRegion) !=0) { error("Terraform init failed")}
 
-                                    // Run TF Plan
-                                    // Change echo to be error once the AWS has been set up
-                                    if (terraform('plan', TF_STATE_BUCKET, tfProject, tfEnvironment, tfComponent, tfRegion, tfVariables) !=0 ) { echo("Terraform Plan failed")}
+                                // Run TF Plan
+                                // Change echo to be error once the AWS has been set up
+                                if (terraform('plan', TF_STATE_BUCKET, tfProject, tfEnvironment, tfComponent, tfRegion, tfVariables) !=0 ) { echo("Terraform Plan failed")}
 
-                                    //Run TF Apply
-                                    // Change echo to be error once the AWS has been set up
-                                    if (terraform('apply', TF_STATE_BUCKET, tfProject, tfEnvironment, tfComponent, tfRegion, tfVariables) !=0 ) { echo("Terraform Apply failed")}
-                                } // dir terraform/aws
+                                //Run TF Apply
+                                // Change echo to be error once the AWS has been set up
+                                if (terraform('apply', TF_STATE_BUCKET, tfProject, tfEnvironment, tfComponent, tfRegion, tfVariables) !=0 ) { echo("Terraform Apply failed")}
+                              } // dir terraform/aws
                             } // dir integration-adaptors
                         } //script
                     } //steps
@@ -136,11 +126,11 @@ pipeline {
 }
 
 int terraformInit(String tfStateBucket, String project, String environment, String component, String region) {
-    println("Terraform Init for Environment: ${environment} Component: ${component} in region: ${region} using bucket: ${tfStateBucket}")
-    String command = "terraform init -backend-config='bucket=${tfStateBucket}' -backend-config='region=${region}' -backend-config='key=${project}-${environment}-${component}.tfstate' -input=false -no-color"
-    dir("components/${component}") {
-        return( sh( label: "Terraform Init", script: command, returnStatus: true))
-    } // dir
+  println("Terraform Init for Environment: ${environment} Component: ${component} in region: ${region} using bucket: ${tfStateBucket}")
+  String command = "terraform init -backend-config='bucket=${tfStateBucket}' -backend-config='region=${region}' -backend-config='key=${project}-${environment}-${component}.tfstate' -input=false -no-color"
+  dir("components/${component}") {
+    return( sh( label: "Terraform Init", script: command, returnStatus: true))
+  } // dir
 } // int TerraformInit
 
 int terraform(String action, String tfStateBucket, String project, String environment, String component, String region, Map<String, String> variables=[:], List<String> parameters=[]) {
@@ -158,15 +148,15 @@ int terraform(String action, String tfStateBucket, String project, String enviro
     writeVariablesToFile(secretsFile,getAllSecretsForEnvironment(environment,"nia",region))
 
     List<String> variableFilesList = [
-            "-var-file=../../etc/global.tfvars",
-            "-var-file=../../etc/${region}_${environment}.tfvars",
-            "-var-file=../../${secretsFile}"
+      "-var-file=../../etc/global.tfvars",
+      "-var-file=../../etc/${region}_${environment}.tfvars",
+      "-var-file=../../${secretsFile}"
     ]
     if (action == "apply"|| action == "destroy") {parametersList.add("-auto-approve")}
     List<String> variablesList=variablesMap.collect { key, value -> "-var ${key}=${value}" }
     String command = "terraform ${action} ${variableFilesList.join(" ")} ${parametersList.join(" ")} ${variablesList.join(" ")} "
     dir("components/${component}") {
-        return sh(label:"Terraform: "+action, script: command, returnStatus: true)
+      return sh(label:"Terraform: "+action, script: command, returnStatus: true)
     } // dir
 } // int Terraform
 
@@ -178,56 +168,56 @@ int ecrLogin(String aws_region) {
 
 // Retrieving Secrets from AWS Secrets
 String getSecretValue(String secretName, String region) {
-    String awsCommand = "aws secretsmanager get-secret-value --region ${region} --secret-id ${secretName} --query SecretString --output text"
-    return sh(script: awsCommand, returnStdout: true).trim()
+  String awsCommand = "aws secretsmanager get-secret-value --region ${region} --secret-id ${secretName} --query SecretString --output text"
+  return sh(script: awsCommand, returnStdout: true).trim()
 }
 
 Map<String,Object> decodeSecretKeyValue(String rawSecret) {
-    List<String> secretsSplit = rawSecret.replace("{","").replace("}","").split(",")
-    Map<String,Object> secretsDecoded = [:]
-    secretsSplit.each {
-        String key = it.split(":")[0].trim().replace("\"","")
-        Object value = it.split(":")[1]
-        secretsDecoded.put(key,value)
-    }
-    return secretsDecoded
+  List<String> secretsSplit = rawSecret.replace("{","").replace("}","").split(",")
+  Map<String,Object> secretsDecoded = [:]
+  secretsSplit.each {
+    String key = it.split(":")[0].trim().replace("\"","")
+    Object value = it.split(":")[1]
+    secretsDecoded.put(key,value)
+  }
+  return secretsDecoded
 }
 
 List<String> getSecretsByPrefix(String prefix, String region) {
-    String awsCommand = "aws secretsmanager list-secrets --region ${region} --query SecretList[].Name --output text"
-    List<String> awsReturnValue = sh(script: awsCommand, returnStdout: true).split()
-    return awsReturnValue.findAll { it.startsWith(prefix) }
+  String awsCommand = "aws secretsmanager list-secrets --region ${region} --query SecretList[].Name --output text"
+  List<String> awsReturnValue = sh(script: awsCommand, returnStdout: true).split()
+  return awsReturnValue.findAll { it.startsWith(prefix) }
 }
 
 Map<String,Object> getAllSecretsForEnvironment(String environment, String secretsPrefix, String region) {
-    List<String> globalSecrets = getSecretsByPrefix("${secretsPrefix}-global",region)
-    println "global secrets:" + globalSecrets
-    List<String> environmentSecrets = getSecretsByPrefix("${secretsPrefix}-${environment}",region)
-    println "env secrets:" + environmentSecrets
-    Map<String,Object> secretsMerged = [:]
-    globalSecrets.each {
-        String rawSecret = getSecretValue(it,region)
-        if (it.contains("-kvp")) {
-            secretsMerged << decodeSecretKeyValue(rawSecret)
-        } else {
-            secretsMerged.put(it.replace("${secretsPrefix}-global-",""),rawSecret)
-        }
+  List<String> globalSecrets = getSecretsByPrefix("${secretsPrefix}-global",region)
+  println "global secrets:" + globalSecrets
+  List<String> environmentSecrets = getSecretsByPrefix("${secretsPrefix}-${environment}",region)
+  println "env secrets:" + environmentSecrets
+  Map<String,Object> secretsMerged = [:]
+  globalSecrets.each {
+    String rawSecret = getSecretValue(it,region)
+    if (it.contains("-kvp")) {
+      secretsMerged << decodeSecretKeyValue(rawSecret)
+    } else {
+      secretsMerged.put(it.replace("${secretsPrefix}-global-",""),rawSecret)
     }
-    environmentSecrets.each {
-        String rawSecret = getSecretValue(it,region)
-        if (it.contains("-kvp")) {
-            secretsMerged << decodeSecretKeyValue(rawSecret)
-        } else {
-            secretsMerged.put(it.replace("${secretsPrefix}-${environment}-",""),rawSecret)
-        }
+  }
+  environmentSecrets.each {
+    String rawSecret = getSecretValue(it,region)
+    if (it.contains("-kvp")) {
+      secretsMerged << decodeSecretKeyValue(rawSecret)
+    } else {
+      secretsMerged.put(it.replace("${secretsPrefix}-${environment}-",""),rawSecret)
     }
-    return secretsMerged
+  }
+  return secretsMerged
 }
 
 void writeVariablesToFile(String fileName, Map<String,Object> variablesMap) {
-    List<String> variablesList=variablesMap.collect { key, value -> "${key} = ${value}" }
-    sh (script: "touch ${fileName} && echo '\n' > ${fileName}")
-    variablesList.each {
-        sh (script: "echo '${it}' >> ${fileName}")
-    }
+  List<String> variablesList=variablesMap.collect { key, value -> "${key} = ${value}" }
+  sh (script: "touch ${fileName} && echo '\n' > ${fileName}")
+  variablesList.each {
+    sh (script: "echo '${it}' >> ${fileName}")
+  }
 }
