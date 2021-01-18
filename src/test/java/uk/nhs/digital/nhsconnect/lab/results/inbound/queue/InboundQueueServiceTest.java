@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class InboundQueueServiceTest {
 
-    public static final String CONVERSATION_ID = "CONV123";
+    private static final String CONVERSATION_ID = "CONV123";
 
     @Spy
     private ObjectMapper objectMapper;
