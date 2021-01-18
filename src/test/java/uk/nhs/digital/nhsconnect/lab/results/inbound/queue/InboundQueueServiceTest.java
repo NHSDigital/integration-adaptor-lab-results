@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class InboundQueueServiceTest {
+class InboundQueueServiceTest {
 
     public static final String CONVERSATION_ID = "CONV123";
 
