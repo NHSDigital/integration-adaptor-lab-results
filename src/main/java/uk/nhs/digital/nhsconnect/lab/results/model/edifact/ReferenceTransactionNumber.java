@@ -8,8 +8,10 @@ import lombok.Setter;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
-@Getter @Setter
-@RequiredArgsConstructor @NoArgsConstructor
+@Getter
+@Setter
+@RequiredArgsConstructor
+@NoArgsConstructor
 public class ReferenceTransactionNumber extends Segment {
 
     public static final String KEY = "RFF";
