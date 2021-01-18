@@ -94,10 +94,3 @@ task integrationTest(type: Test) {
 check.dependsOn integrationTest
 
 spotbugsTest.enabled = false
-// spotbugsIntegrationTest.enabled = false
-tasks.withType(Checkstyle) {
-	reports {
-		xml.enabled false
-		html.enabled true
-	}
-}
