@@ -4,12 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class Message extends Section {
-
-    private static final String DEFAULT_GP_CODE = "9999";
 
     @Getter(lazy = true)
     private final MessageHeader messageHeader =

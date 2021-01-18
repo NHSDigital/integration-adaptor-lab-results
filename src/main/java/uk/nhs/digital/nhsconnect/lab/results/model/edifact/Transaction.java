@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.Optional;
 
 public class Transaction extends Section {
     @Getter(lazy = true)

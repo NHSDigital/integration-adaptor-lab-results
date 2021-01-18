@@ -2,14 +2,8 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Predicate;
-
 public abstract class Segment {
     protected static final String PLUS_SEPARATOR = "+";
-    protected static final String COLON_SEPARATOR = ":";
     private static final String TERMINATOR = "'";
 
     /**
