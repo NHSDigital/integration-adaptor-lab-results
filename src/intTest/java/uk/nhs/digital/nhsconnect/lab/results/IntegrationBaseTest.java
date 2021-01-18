@@ -46,6 +46,7 @@ public abstract class IntegrationBaseTest {
     protected static final int POLL_INTERVAL_MS = 100;
     protected static final int POLL_DELAY_MS = 10;
     private static final int JMS_RECEIVE_TIMEOUT = 500;
+
     @Autowired
     protected JmsTemplate jmsTemplate;
     @Autowired
@@ -56,8 +57,10 @@ public abstract class IntegrationBaseTest {
     private RecipientMailboxIdMappings recipientMailboxIdMappings;
     @Autowired
     private MeshHttpClientBuilder meshHttpClientBuilder;
+
     @Value("${labresults.amqp.meshInboundQueueName}")
     protected String meshInboundQueueName;
+
     private long originalReceiveTimeout;
     protected MeshClient labResultsMeshClient;
 
