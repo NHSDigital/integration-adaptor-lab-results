@@ -23,7 +23,7 @@ pipeline {
 
     stages {
         stage("CI"){
-            stage('Build'){
+            stage('Build') {
                 steps {
                     sh label: 'Create logs directory', script: 'mkdir -p logs build'
                     if (sh(label: 'Build lab-results', script: 'docker build -t local/lab-results-tests:${BUILD_TAG} -f Dockerfile.tests .', returnStatus: true) != 0) {error("Failed to build docker image for tests")}
@@ -39,7 +39,7 @@ pipeline {
                     */
                 }
             }
-            stage('Test'){
+            stage('Test') {
                 steps {
                     if (sh(label: 'Running tests', script: 'docker run -v /var/run/docker.sock:/var/run/docker.sock --name lab-results-tests local/lab-results-tests:${BUILD_TAG} gradle check -i', returnStatus: true) != 0) {error("Some tests failed, check the logs")}
                 }
@@ -72,7 +72,7 @@ pipeline {
                     }
                 }
             }
-            post{
+            post {
                 always{
                     sh label: 'Copy lab-results container logs', script: 'docker-compose logs lab-results > logs/lab-results.log'
                     sh label: 'Copy activemq logs', script: 'docker-compose logs activemq > logs/inbound.log'
