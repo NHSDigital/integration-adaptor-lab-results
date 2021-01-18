@@ -15,7 +15,7 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
 
 @Component
 @Slf4j
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class InboundQueueService {
 
     private final ObjectMapper objectMapper;
