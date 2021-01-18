@@ -14,6 +14,8 @@ import org.springframework.jms.support.converter.MessageConverter;
 
 import javax.jms.ConnectionFactory;
 
+import static org.springframework.util.StringUtils.hasLength;
+
 @Configuration
 @ConditionalOnMissingBean(ConnectionFactory.class)
 public class AmqpConfiguration {
@@ -59,11 +61,11 @@ public class AmqpConfiguration {
         JmsDefaultDeserializationPolicy deserializationPolicy =
             (JmsDefaultDeserializationPolicy) factory.getDeserializationPolicy();
 
-        if (org.springframework.util.StringUtils.hasLength(properties.getDeserializationPolicy().getWhiteList())) {
+        if (hasLength(properties.getDeserializationPolicy().getWhiteList())) {
             deserializationPolicy.setAllowList(properties.getDeserializationPolicy().getWhiteList());
         }
 
-        if (org.springframework.util.StringUtils.hasLength(properties.getDeserializationPolicy().getBlackList())) {
+        if (hasLength(properties.getDeserializationPolicy().getBlackList())) {
             deserializationPolicy.setDenyList(properties.getDeserializationPolicy().getBlackList());
         }
     }
