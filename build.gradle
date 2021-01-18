@@ -95,8 +95,22 @@ check.dependsOn integrationTest
 
 // TODO: Add checkstyle and spotbugs plugins back after getting tests to work
 spotbugsTest.enabled = false
+spotbugsIntTest.enabled = false
+spotbugsMain.enabled = false
 
 spotbugs {
+	ignoreFailures = true
+}
+
+checkstyleIntTest {
+	ignoreFailures = true
+}
+
+checkstyleMain {
+	ignoreFailures = true
+}
+
+checkstyleTest {
 	ignoreFailures = true
 }
 
