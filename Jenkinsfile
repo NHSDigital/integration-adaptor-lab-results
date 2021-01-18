@@ -22,7 +22,7 @@ pipeline {
     }
 
     stages {
-        stage("CI"){
+        stages {
             stage('Build') {
                 steps {
                     sh label: 'Create logs directory', script: 'mkdir -p logs build'
