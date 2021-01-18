@@ -57,7 +57,7 @@ class InboundQueueServiceTest {
         // the method parameter is modified so another copy is needed. Timestamp set to expected value
         InboundMeshMessage expectedInboundMeshMessage = InboundMeshMessage.create(WorkflowId.REGISTRATION, "ASDF", messageSentTimestamp, "ID123");
         String expectedStringMessage = objectMapper.writeValueAsString(expectedInboundMeshMessage);
-        verify(jmsTemplate).send(org.mockito.Mockito.<String>isNull(), jmsMessageCreatorCaptor.capture());
+        verify(jmsTemplate).send((String) isNull(), jmsMessageCreatorCaptor.capture());
         MessageCreator messageCreator = jmsMessageCreatorCaptor.getValue();
         Session jmsSession = mock(Session.class);
         TextMessage textMessage = mock(TextMessage.class);
