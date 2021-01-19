@@ -9,8 +9,6 @@ import org.apache.qpid.jms.policy.JmsRedeliveryPolicy;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
-import org.springframework.jms.support.converter.MessageConverter;
 
 import javax.jms.ConnectionFactory;
 
@@ -19,11 +17,6 @@ import static org.springframework.util.StringUtils.hasLength;
 @Configuration
 @ConditionalOnMissingBean(ConnectionFactory.class)
 public class AmqpConfiguration {
-
-    @Bean
-    public MessageConverter jsonMessageConverter() {
-        return new MappingJackson2MessageConverter();
-    }
 
     @Bean
     public JmsConnectionFactory jmsConnectionFactory(AmqpProperties properties) {
