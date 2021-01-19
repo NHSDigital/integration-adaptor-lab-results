@@ -16,7 +16,7 @@ public class ReferenceTransactionNumber extends Segment {
 
     private static final String KEY = "RFF";
     private static final String QUALIFIER = "TN";
-    protected static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
+    public static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
     private static final long MAX_TRANSACTION_NUMBER = 9_999_999L;
 
     private @NonNull Long transactionNumber;
@@ -40,9 +40,7 @@ public class ReferenceTransactionNumber extends Segment {
     }
 
     @Override
-    public void preValidate() throws EdifactValidationException {
-        //NOP
-    }
+    public void preValidate() throws EdifactValidationException {}
 
     @Override
     protected void validateStateful() throws EdifactValidationException {

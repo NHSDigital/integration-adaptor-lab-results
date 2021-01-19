@@ -10,6 +10,7 @@ public class Message extends Section {
     @Getter(lazy = true)
     private final MessageHeader messageHeader =
         MessageHeader.fromString(extractSegment(MessageHeader.KEY));
+
     @Getter(lazy = true)
     private final ReferenceTransactionType referenceTransactionType =
         ReferenceTransactionType.fromString(extractSegment(ReferenceTransactionType.KEY_QUALIFIER));
@@ -17,6 +18,7 @@ public class Message extends Section {
     @Getter
     @Setter
     private Interchange interchange;
+
     @Getter
     @Setter
     private List<Transaction> transactions;
@@ -31,4 +33,5 @@ public class Message extends Section {
             getInterchange().getInterchangeHeader().getSequenceNumber(),
             getMessageHeader().getSequenceNumber());
     }
+
 }

@@ -65,7 +65,7 @@ public class InterchangeHeader extends Segment {
         }
         if (sequenceNumber < 1 || sequenceNumber > MAX_INTERCHANGE_SEQUENCE) {
             throw new EdifactValidationException(
-                    getKey() + ": Attribute sequenceNumber must be between 1 and " + MAX_INTERCHANGE_SEQUENCE);
+                getKey() + ": Attribute sequenceNumber must be between 1 and " + MAX_INTERCHANGE_SEQUENCE);
         }
     }
 
