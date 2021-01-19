@@ -46,9 +46,7 @@ public class MessageTrailer extends Segment{
     }
 
     @Override
-    public void preValidate() throws EdifactValidationException {
-        //Do nothing
-    }
+    public void preValidate() throws EdifactValidationException {}
 
     public static MessageTrailer fromString(String edifactString) {
         if (!edifactString.startsWith(MessageTrailer.KEY)) {
