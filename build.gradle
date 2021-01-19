@@ -93,9 +93,11 @@ task integrationTest(type: Test) {
 
 check.dependsOn integrationTest
 
+spotbugsTest.enabled = false
+spotbugsIntTest.enabled = false
 spotbugsMain {
 	reports {
-		xml.enabled = false
+		xml.enabled = true
 		html.enabled = true
 	}
 }
