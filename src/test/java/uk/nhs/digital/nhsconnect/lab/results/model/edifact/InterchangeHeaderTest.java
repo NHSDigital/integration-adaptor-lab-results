@@ -1,6 +1,5 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
-
 import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 
