@@ -39,7 +39,6 @@ import static org.mockito.Mockito.when;
 @Slf4j
 public abstract class IntegrationBaseTest {
 
-    public static final String DLQ_PREFIX = "DLQ.";
     protected static final int WAIT_FOR_IN_SECONDS = 10;
     protected static final int POLL_INTERVAL_MS = 100;
     protected static final int POLL_DELAY_MS = 10;
