@@ -71,5 +71,4 @@ class EdifactParserTest {
     void testParsePropagatesExceptionsFromInvalidContent() {
         assertThrows(IndexOutOfBoundsException.class, () -> edifactParser.parse("invalid edifact"));
     }
-
 }
