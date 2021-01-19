@@ -5,7 +5,20 @@ logging:
   level:
     uk.nhs.digital.nhsconnect.lab.results: ${LAB_RESULTS_LOGGING_LEVEL:INFO}
 
+spring:
+  jms:
+    listener:
+      acknowledge-mode: CLIENT
+
 labresults:
+  amqp:
+    brokers: ${LAB_RESULTS_AMQP_BROKERS:amqp://localhost:5672}
+    meshOutboundQueueName: ${LAB_RESULTS_OUTBOUND_QUEUE_NAME:lab_results_mesh_outbound}
+    meshInboundQueueName: ${LAB_RESULTS_MESH_INBOUND_QUEUE_NAME:lab_results_mesh_inbound}
+    exchange: amq.direct
+    username: ${LAB_RESULTS_AMQP_USERNAME:}
+    password: ${LAB_RESULTS_AMQP_PASSWORD:}
+    maxRedeliveries: ${LAB_RESULTS_AMQP_MAX_REDELIVERIES:3}
   mongodb:
     uri: ${LAB_RESULTS_MONGO_URI:mongodb://localhost:27017}
     database: ${LAB_RESULTS_MONGO_DATABASE_NAME:labresults}

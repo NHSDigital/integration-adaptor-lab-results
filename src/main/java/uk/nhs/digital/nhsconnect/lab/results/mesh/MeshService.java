@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.InboundQueueService;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.exception.MeshWorkflowUnknownException;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshClient;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.InboundMeshMessage;
@@ -20,7 +21,7 @@ public class MeshService {
 
     private final MeshClient meshClient;
 
-//    private final InboundQueueService inboundQueueService;
+    private final InboundQueueService inboundQueueService;
 
     private final MeshMailBoxScheduler meshMailBoxScheduler;
 
@@ -34,14 +35,14 @@ public class MeshService {
 
     @Autowired
     public MeshService(MeshClient meshClient,
-//                       InboundQueueService inboundQueueService,
+                       InboundQueueService inboundQueueService,
                        MeshMailBoxScheduler meshMailBoxScheduler,
                        ConversationIdService conversationIdService,
                        @Value("${labresults.mesh.pollingCycleMinimumIntervalInSeconds}") long pollingCycleMinimumIntervalInSeconds,
                        @Value("${labresults.mesh.wakeupIntervalInMilliseconds}") long wakeupIntervalInMilliseconds,
                        @Value("${labresults.mesh.pollingCycleDurationInSeconds}") long pollingCycleDurationInSeconds) {
         this.meshClient = meshClient;
-//        this.inboundQueueService = inboundQueueService;
+        this.inboundQueueService = inboundQueueService;
         this.meshMailBoxScheduler = meshMailBoxScheduler;
         this.conversationIdService = conversationIdService;
         this.pollingCycleMinimumIntervalInSeconds = pollingCycleMinimumIntervalInSeconds;
@@ -97,7 +98,7 @@ public class MeshService {
             LOGGER.debug("Downloading MeshMessageId={}", messageId);
             final InboundMeshMessage meshMessage = meshClient.getEdifactMessage(messageId);
             LOGGER.debug("Publishing content of MeshMessageId={} to inbound mesh MQ", messageId);
-//            inboundQueueService.publish(meshMessage);
+            inboundQueueService.publish(meshMessage);
             LOGGER.debug("Acknowledging MeshMessageId={} on MESH API", messageId);
             meshClient.acknowledgeMessage(meshMessage.getMeshMessageId());
             LOGGER.info("Published MeshMessageId={} for inbound processing", meshMessage.getMeshMessageId());

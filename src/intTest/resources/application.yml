@@ -6,6 +6,14 @@ logging:
     uk.nhs.digital.nhsconnect.lab.results: ${LAB_RESULTS_LOGGING_LEVEL:DEBUG}
 
 labresults:
+  amqp:
+    brokers: ${LAB_RESULTS_AMQP_BROKERS:amqp://localhost:5672}
+    meshOutboundQueueName: ${LAB_RESULTS_OUTBOUND_QUEUE_NAME:lab_results_mesh_outbound}
+    meshInboundQueueName: ${LAB_RESULTS_MESH_INBOUND_QUEUE_NAME:lab_results_mesh_inbound}
+    exchange: amq.direct
+    username: ${LAB_RESULTS_AMQP_USERNAME:}
+    password: ${LAB_RESULTS_AMQP_PASSWORD:}
+    maxRedeliveries: ${LAB_RESULTS_AMQP_MAX_REDELIVERIES:3}
   mongodb:
     uri: ${LAB_RESULTS_MONGO_URI}
     database: ${LAB_RESULTS_MONGO_DATABASE_NAME:labresults}
@@ -18,7 +26,7 @@ labresults:
     ttl: ${LAB_RESULTS_MONGO_TTL:PT87600H} # long duration (10 years) because the timestamps used in tests are hardcoded. prevent deletion of data during tests
     cosmosDbEnabled: ${LAB_RESULTS_COSMOS_DB_ENABLED:false}
   mesh:
-    mailboxId: ${LAB_RESULTS_MESH_MAILBOX_ID:gp_mailbox} #defaults below are used by fake-mesh
+    mailboxId: ${LAB_RESULTS_MESH_MAILBOX_ID:lab_results_mailbox} #defaults below are used by fake-mesh
     mailboxPassword: ${LAB_RESULTS_MESH_MAILBOX_PASSWORD:password}
     sharedKey: ${LAB_RESULTS_MESH_SHARED_KEY:SharedKey}
     host: ${LAB_RESULTS_MESH_HOST:https://localhost:8829/messageexchange/} #local fake-mesh default endpoint
