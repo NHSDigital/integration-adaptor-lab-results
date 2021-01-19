@@ -44,7 +44,7 @@ public class EdifactParser {
 
     private Interchange parseInterchange(List<String> allEdifactSegments) {
         Interchange interchange = interchangeFactory.createInterchange(
-                extractInterchangeEdifactSegments(allEdifactSegments));
+            extractInterchangeEdifactSegments(allEdifactSegments));
 
         var messages = parseAllMessages(allEdifactSegments);
         messages.forEach(message -> message.setInterchange(interchange));
@@ -153,5 +153,4 @@ public class EdifactParser {
                 .boxed()
                 .collect(Collectors.toList());
     }
-
 }
