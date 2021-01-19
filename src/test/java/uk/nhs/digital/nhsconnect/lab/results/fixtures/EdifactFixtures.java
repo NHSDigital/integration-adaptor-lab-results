@@ -1,5 +1,4 @@
 package uk.nhs.digital.nhsconnect.lab.results.fixtures;
-
 import java.util.List;
 
 public class EdifactFixtures {
@@ -64,7 +63,6 @@ public class EdifactFixtures {
             EDIFACT_TRAILER + "'"
     );
 
-
     public static final List<String> MISMATCH_MESSAGE_TRAILER_HEADER_EDIFACT = List.of(
             EDIFACT_HEADER + "'",
             "UNH+00000004+FHSREG:0:1:FH:FHS001'", // message_header
@@ -94,6 +92,4 @@ public class EdifactFixtures {
             "UNT+24+00000004'", // message_trailer
             EDIFACT_TRAILER + "'"
     );
-
-
 }
