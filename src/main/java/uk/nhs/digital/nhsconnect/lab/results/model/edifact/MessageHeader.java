@@ -45,9 +45,7 @@ public class MessageHeader extends Segment {
     }
 
     @Override
-    public void preValidate() {
-        // Do nothing
-    }
+    public void preValidate() {}
 
     public static MessageHeader fromString(String edifactString) {
         if (!edifactString.startsWith(MessageHeader.KEY)) {
@@ -56,6 +54,4 @@ public class MessageHeader extends Segment {
         String[] split = Split.byPlus(edifactString);
         return new MessageHeader(Long.valueOf(split[1]));
     }
-
 }
-
