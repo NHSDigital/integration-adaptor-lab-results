@@ -10,8 +10,5 @@ public enum Outbound implements TransactionType {
     // TO-DO
     ;
 
-    @Override
-    public String getCode() {
-        return null;
-    }
+    private final String code;
 }

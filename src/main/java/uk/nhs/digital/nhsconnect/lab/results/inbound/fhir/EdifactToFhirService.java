@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class EdifactToFhirService {
 
     private final Map<TransactionType, FhirTransactionMapper> transactionMappers;

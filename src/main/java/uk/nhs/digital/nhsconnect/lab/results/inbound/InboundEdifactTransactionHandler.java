@@ -9,7 +9,7 @@ import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.DataToSend;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Transaction;
 
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class InboundEdifactTransactionHandler {
 
     private final EdifactToFhirService edifactToFhirService;
