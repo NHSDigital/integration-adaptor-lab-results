@@ -99,7 +99,11 @@ spotbugsTest.enabled = false
 spotbugsIntTest.enabled = false
 spotbugsMain {
 	reports {
-		xml.enabled = true
-		html.enabled = true
+		html {
+			enabled = false
+		}
+		xml {
+			enabled = true
+		}
 	}
 }
