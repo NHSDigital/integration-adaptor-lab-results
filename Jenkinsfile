@@ -47,6 +47,27 @@ pipeline {
                         }
                     }
                 }
+                stage('Build') {
+                    steps {
+                        script {
+                            sh label: 'Create logs directory', script: 'mkdir -p logs build'
+                            if (sh(label: 'Running build', returnStdout: true, script: 'docker exec lab-results-tests /bin/bash -c "./gradlew check -x test -x integrationTest --continue"', returnStatus: true) != 0) {error("Build step failed")}
+                        }
+                    }
+                    post {
+                        always {
+                            sh "docker cp lab-results-tests:/home/gradle/src/build ."
+                            recordIssues(
+                                enabledForFailure: true,
+                                tools: [
+                                    checkStyle(pattern: 'build/reports/checkstyle/*.xml'),
+                                    spotBugs(pattern: 'build/reports/spotbugs/*.xml')
+                                ]
+                            )
+                            sh "rm -rf build"
+                        }
+                    }
+                }
                 stage('Build Docker Images') {
                     steps {
                         script {
