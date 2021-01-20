@@ -65,7 +65,7 @@ class InboundQueueServiceTest {
     private InboundQueueConsumerService inboundQueueConsumerService;
 
     @Test
-    void receiveRegistrationMessageIsHandledByRegistrationConsumerService() throws Exception {
+    void receiveInboundMessageIsHandledByInboundQueueConsumerService() throws Exception {
         when(message.getStringProperty(JmsHeaders.CONVERSATION_ID)).thenReturn(CONVERSATION_ID);
         when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"LAB_RESULTS_REG\"}");
 
@@ -82,7 +82,7 @@ class InboundQueueServiceTest {
     }
 
     @Test
-    void receiveRegistrationMessageWithInvalidWorkflowIdThrowsException() throws Exception {
+    void receiveInboundMessageWithInvalidWorkflowIdThrowsException() throws Exception {
         when(message.getStringProperty(JmsHeaders.CONVERSATION_ID)).thenReturn(CONVERSATION_ID);
         when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"INVALID\"}");
 
@@ -94,7 +94,7 @@ class InboundQueueServiceTest {
     }
 
     @Test
-    void receiveRegistrationMessageHandledByRegistrationConsumerServiceThrowsException() throws Exception {
+    void receiveInboundMessageHandledByInboundQueueConsumerServiceThrowsException() throws Exception {
         when(message.getStringProperty(JmsHeaders.CONVERSATION_ID)).thenReturn(CONVERSATION_ID);
         when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"LAB_RESULTS_REG\"}");
         doThrow(RuntimeException.class).when(inboundQueueConsumerService).handle(any(MeshMessage.class));
@@ -107,7 +107,7 @@ class InboundQueueServiceTest {
     }
 
     @Test
-    void receiveRegistrationMessageSetLoggingConversationHeaderThrowsExceptionCatchesAndContinues() throws Exception {
+    void receiveInboundMessageSetLoggingConversationHeaderThrowsExceptionCatchesAndContinues() throws Exception {
         doThrow(JMSException.class).when(message).getStringProperty(JmsHeaders.CONVERSATION_ID);
         when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"LAB_RESULTS_REG\"}");
 

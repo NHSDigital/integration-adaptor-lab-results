@@ -24,7 +24,7 @@ class InboundEdifactTransactionHandlerTest {
     private Transaction transaction;
 
     @Test
-    void testTranslateTransactionToFhir() {
+    void testTranslateEdifactTransactionToFhir() {
         final Parameters parameters = new Parameters();
 
         when(edifactToFhirService.convertToFhir(transaction)).thenReturn(parameters);

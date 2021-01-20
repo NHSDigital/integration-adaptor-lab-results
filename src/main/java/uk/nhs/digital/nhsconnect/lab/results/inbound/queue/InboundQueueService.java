@@ -60,7 +60,7 @@ public class InboundQueueService {
             LOGGER.info("Completed processing MeshMessageId={}", meshMessage.getMeshMessageId());
         } catch (Exception e) {
             LOGGER.error("Error while processing mesh inbound queue message", e);
-            throw e; //message will be sent to DLQ after few unsuccessful re-deliveries
+            throw e;
         } finally {
             conversationIdService.resetConversationId();
         }
