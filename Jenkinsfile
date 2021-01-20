@@ -24,6 +24,30 @@ pipeline {
     stages {
         stage('Build and Test Locally') {
             stages {
+                stage('Build') {
+                    steps {
+                        script {
+                            if (sh(label: 'Build docker image for static code analysis', script: 'docker build -t local/lab-results-static-code-analysis:${BUILD_TAG} -f Dockerfile.tests .', returnStatus: true) != 0) {error("Failed to build docker image for static code analysis")}
+                            if (sh(label: 'Running docker container', script: 'docker run -it -d --name lab-results-container-${BUILD_TAG} local/lab-results-static-code-analysis:${BUILD_TAG} /bin/bash', returnStatus: true) != 0) {error("Failed to run docker container")}
+                            if (sh(label: 'Running static code analysis', returnStdout: true, script: 'docker exec lab-results-container-${BUILD_TAG} /bin/bash -c "./gradlew check -x test -x integrationTest --continue"', returnStatus: true) != 0) {error("Static code analysis failed.")}
+                        }
+                    }
+                    post {
+                        always {
+                            sh label: 'Create reports directory', script: 'mkdir -p build/reports'
+                            sh label: 'Copy reports to jenkins', script: 'docker cp lab-results-container-${BUILD_TAG}:/home/gradle/service/build/reports/. ./build/reports'
+                            sh label: 'Stop docker container', script: 'docker stop lab-results-container-${BUILD_TAG}'
+                            sh label: 'Remove docker container', script: 'docker rm lab-results-container-${BUILD_TAG}'
+                            recordIssues(
+                                    enabledForFailure: true,
+                                    tools: [
+                                            checkStyle(pattern: 'build/reports/checkstyle/*.xml'),
+                                            spotBugs(pattern: 'build/reports/spotbugs/*.xml')
+                                    ]
+                            )
+                        }
+                    }
+                }
                 stage('Run Tests') {
                     steps {
                         script {
