@@ -57,7 +57,7 @@ pipeline {
                     }
                     post {
                         always {
-                            sh "docker cp lab-results-static-check:/home/gradle/src/build ."
+                            sh "docker cp lab-results-tests:/home/gradle/src/build ."
                             recordIssues(
                                 enabledForFailure: true,
                                 tools: [
