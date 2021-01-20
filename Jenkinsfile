@@ -51,7 +51,7 @@ pipeline {
                     steps {
                         script {
                             sh label: 'Create logs directory', script: 'mkdir -p logs build'
-                            if (sh(label: 'Running build', returnStdout: true, script: 'docker exec lab-results-tests /bin/bash -c "./gradlew check -x test -x integrationTest --continue"', returnStatus: true) != 0) {error("Build step failed")}
+                            if (sh(label: 'Running build', script: 'docker run -v /var/run/docker.sock:/var/run/docker.sock --name lab-results-tests local/lab-results-tests:${BUILD_TAG} gradle check -x test -x integrationTest -i', returnStatus: true) != 0) {error("Some tests failed, check the logs")}
                         }
                     }
                     post {
