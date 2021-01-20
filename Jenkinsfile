@@ -51,12 +51,12 @@ pipeline {
                     steps {
                         script {
                             sh label: 'Create logs directory', script: 'mkdir -p logs build'
-                            if (sh(label: 'Running build', script: 'docker run -v /var/run/docker.sock:/var/run/docker.sock --name lab-results-tests local/lab-results-tests:${BUILD_TAG} gradle check -x test -x integrationTest -i', returnStatus: true) != 0) {error("Some tests failed, check the logs")}
+                            if (sh(label: 'Running build', script: 'docker run -v /var/run/docker.sock:/var/run/docker.sock --name lab-results-static-check local/lab-results-static-check:${BUILD_TAG} gradle check -x test -x integrationTest -i', returnStatus: true) != 0) {error("Some tests failed, check the logs")}
                         }
                     }
                     post {
                         always {
-                            sh "docker cp lab-results-tests:/home/gradle/src/build ."
+                            sh "docker cp lab-results-static-check:/home/gradle/src/build ."
                             recordIssues(
                                 enabledForFailure: true,
                                 tools: [
