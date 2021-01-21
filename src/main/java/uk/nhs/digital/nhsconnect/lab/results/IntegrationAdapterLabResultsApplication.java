@@ -10,8 +10,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 public class IntegrationAdapterLabResultsApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(IntegrationAdapterLabResultsApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(IntegrationAdapterLabResultsApplication.class, args);
+    }
 
 }
