@@ -48,8 +48,7 @@ public class RecipientMailboxIdMappingsTest {
             () -> recipientMailboxIdMappings.getRecipientMailboxId(message));
 
         assertEquals("LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS env var doesn't contain valid "
-            +
-                "recipient to mailbox mapping", exception.getMessage());
+            + "recipient to mailbox mapping", exception.getMessage());
     }
 
 }

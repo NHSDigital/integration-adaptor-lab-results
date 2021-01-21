@@ -48,8 +48,7 @@ public class SchedulerTimestampRepositoryExtensionsImpl implements SchedulerTime
                 mongoOperations.save(schedulerTimestamp, MESH_TIMESTAMP_COLLECTION_NAME);
             } catch (MongoWriteException | DuplicateKeyException e) {
                 LOGGER.warn("Unable to create new document for scheduler type " + schedulerType
-                    +
-                    ". Most likely another instance already created the document.", e);
+                    + ". Most likely another instance already created the document.", e);
             }
             return false;
         }

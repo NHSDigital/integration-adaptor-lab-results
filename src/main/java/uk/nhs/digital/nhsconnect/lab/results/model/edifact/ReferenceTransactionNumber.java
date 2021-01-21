@@ -48,8 +48,7 @@ public class ReferenceTransactionNumber extends Segment {
     public static ReferenceTransactionNumber fromString(String edifactString) {
         if (!edifactString.startsWith(ReferenceTransactionNumber.KEY_QUALIFIER)) {
             throw new IllegalArgumentException("Can't create " + ReferenceTransactionNumber.class.getSimpleName()
-                +
-                " from " + edifactString);
+                + " from " + edifactString);
         }
         String[] split = Split.byColon(edifactString);
         return new ReferenceTransactionNumber(Long.valueOf(split[1]));

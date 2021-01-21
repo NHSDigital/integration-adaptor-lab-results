@@ -63,13 +63,11 @@ public class LabResultsMongoClientConfiguration extends AbstractMongoClientConfi
             return createConnectionStringFromProperties();
         } else if (!Strings.isNullOrEmpty(uri)) {
             LOGGER.info("A mongodb connection string provided in spring.data.mongodb.uri "
-                +
-                "and will be used to configure the database connection.");
+                + "and will be used to configure the database connection.");
             return uri;
         } else {
             LOGGER.error("Mongodb must be configured using a connection string or individual properties. "
-                +
-                "Both uri and host are null or empty");
+                + "Both uri and host are null or empty");
             throw new RuntimeException("Missing mongodb connection string and/or properties");
         }
     }
@@ -89,8 +87,7 @@ public class LabResultsMongoClientConfiguration extends AbstractMongoClientConfi
             cs += "/?" + options;
         } else {
             LOGGER.warn("No options for the mongodb connection string were provided. "
-                +
-                "If connecting to a cluster the driver may not work as expected.");
+                + "If connecting to a cluster the driver may not work as expected.");
         }
         return cs;
     }

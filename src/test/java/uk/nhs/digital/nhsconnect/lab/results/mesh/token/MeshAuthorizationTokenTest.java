@@ -50,8 +50,7 @@ class MeshAuthorizationTokenTest {
             softly.assertThat(values[4]).isEqualTo(AUTHORIZATION_HASH);
             softly.assertThat(meshToken.getValue())
                     .isEqualTo("NHSMESH mailbox_id:73eefd69-811f-44d0-81f8-a54ff352a991:1:199111061230:474c0634fd2267e41252bddfb40031d85e43"
-                        +
-                        "3599a8015c74546e95b05c2df569");
+                        + "3599a8015c74546e95b05c2df569");
         });
     }
 
