@@ -4,7 +4,9 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
+import org.junit.Rule;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.rules.Timeout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,7 +45,8 @@ public abstract class IntegrationBaseTest {
     protected static final int POLL_INTERVAL_MS = 100;
     protected static final int POLL_DELAY_MS = 10;
     private static final int JMS_RECEIVE_TIMEOUT = 500;
-
+    @Rule
+    public Timeout globalTimeout = Timeout.seconds(2);
     @Autowired
     protected JmsTemplate jmsTemplate;
     @Autowired
@@ -57,6 +60,9 @@ public abstract class IntegrationBaseTest {
 
     @Value("${labresults.amqp.meshInboundQueueName}")
     protected String meshInboundQueueName;
+
+    @Value("${labresults.amqp.meshOutboundQueueName}")
+    protected String meshOutboundQueueName;
 
     private long originalReceiveTimeout;
     protected MeshClient labResultsMeshClient;
@@ -127,6 +133,11 @@ public abstract class IntegrationBaseTest {
         return waitFor(() -> jmsTemplate.receive(meshInboundQueueName));
     }
 
+    @SneakyThrows
+    protected Message getOutboundQueueMessage() {
+        return waitFor(() -> jmsTemplate.receive(meshOutboundQueueName));
+    }
+
     protected <T> T waitFor(Supplier<T> supplier) {
         var dataToReturn = new AtomicReference<T>();
         await()
@@ -145,7 +156,7 @@ public abstract class IntegrationBaseTest {
         return dataToReturn.get();
     }
 
-    protected void clearInboundQueue() {
-        waitForCondition(() -> jmsTemplate.receive(meshInboundQueueName) == null);
+    protected void clearOutboundQueue() {
+        waitForCondition(() -> jmsTemplate.receive(meshOutboundQueueName) == null);
     }
 }
