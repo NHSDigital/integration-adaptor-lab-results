@@ -51,7 +51,7 @@ class EdifactParserTest {
         when(interchangeFactory.createInterchange(any())).thenReturn(interchange);
 
         ToEdifactParsingException toEdifactParsingException = assertThrows(ToEdifactParsingException.class,
-        () -> edifactParser.parse(String.join("\n", edifactFixtures.TRAILER_BEFORE_HEADER_EDIFACT)));
+            () -> edifactParser.parse(String.join("\n", edifactFixtures.TRAILER_BEFORE_HEADER_EDIFACT)));
 
         assertEquals("Message trailer before message header", toEdifactParsingException.getMessage());
     }
@@ -61,7 +61,7 @@ class EdifactParserTest {
         when(interchangeFactory.createInterchange(any())).thenReturn(interchange);
 
         ToEdifactParsingException toEdifactParsingException = assertThrows(ToEdifactParsingException.class,
-        () -> edifactParser.parse(String.join("\n", edifactFixtures.MISMATCH_MESSAGE_TRAILER_HEADER_EDIFACT)));
+            () -> edifactParser.parse(String.join("\n", edifactFixtures.MISMATCH_MESSAGE_TRAILER_HEADER_EDIFACT)));
 
 
         assertEquals("Message header-trailer count mismatch: 1-2", toEdifactParsingException.getMessage());
