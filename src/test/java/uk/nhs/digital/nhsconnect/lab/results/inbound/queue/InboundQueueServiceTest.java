@@ -75,7 +75,7 @@ class InboundQueueServiceTest {
 
         var actualTextMessage = messageCreator.createMessage(jmsSession);
         assertThat(actualTextMessage).isSameAs(textMessage);
-        verify(textMessage).setStringProperty(JmsHeaders.getConversationId(), CONVERSATION_ID);
+        verify(textMessage).setStringProperty(JmsHeaders.CONVERSATION_ID, CONVERSATION_ID);
     }
 
 }

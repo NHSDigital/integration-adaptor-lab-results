@@ -34,7 +34,7 @@ public class InboundQueueService {
         messageContent.setMessageSentTimestamp(timestampService.formatInISO(timestampService.getCurrentTimestamp()));
         jmsTemplate.send(meshInboundQueueName, session -> {
             var message = session.createTextMessage(serializeMeshMessage(messageContent));
-            message.setStringProperty(JmsHeaders.getConversationId(), conversationIdService.getCurrentConversationId());
+            message.setStringProperty(JmsHeaders.CONVERSATION_ID, conversationIdService.getCurrentConversationId());
             return message;
         });
     }
