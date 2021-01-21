@@ -11,10 +11,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MessageTrailerTest {
 
+    private static final int NUMBER_OF_SEGMENTS = 18;
+    private static final long SEQUENCE_NUMBER = 3L;
+
     @Test
     public void testValidMessageHeader() throws EdifactValidationException {
-        MessageTrailer messageTrailer = new MessageTrailer(18);
-        messageTrailer.setSequenceNumber(3L);
+        MessageTrailer messageTrailer = new MessageTrailer(NUMBER_OF_SEGMENTS);
+        messageTrailer.setSequenceNumber(SEQUENCE_NUMBER);
 
         String edifact = messageTrailer.toEdifact();
 
@@ -23,7 +26,7 @@ public class MessageTrailerTest {
 
     @Test
     public void testValidationStatefulNonSequenceNumber() {
-        MessageTrailer messageTrailer = new MessageTrailer(18);
+        MessageTrailer messageTrailer = new MessageTrailer(NUMBER_OF_SEGMENTS);
 
         Exception exception = assertThrows(EdifactValidationException.class, messageTrailer::validateStateful);
 
@@ -36,7 +39,7 @@ public class MessageTrailerTest {
     @Test
     public void testValidationStatefulInvalidNumberOfSegments() {
         MessageTrailer messageTrailer = new MessageTrailer(-1);
-        messageTrailer.setSequenceNumber(3L);
+        messageTrailer.setSequenceNumber(SEQUENCE_NUMBER);
 
         Exception exception = assertThrows(EdifactValidationException.class, messageTrailer::validateStateful);
 
@@ -48,7 +51,8 @@ public class MessageTrailerTest {
 
     @Test
     void testFromString() {
-        var expectedMessageTrailer = new MessageTrailer(18).setSequenceNumber(3L);
+        var expectedMessageTrailer = new MessageTrailer(NUMBER_OF_SEGMENTS)
+                .setSequenceNumber(SEQUENCE_NUMBER);
         var edifact = "UNT+18+00000003'";
 
         var messageTrailer = MessageTrailer.fromString(edifact);

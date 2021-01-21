@@ -9,6 +9,9 @@ import java.util.stream.Collectors;
 
 public class PemFormatter {
     private static final Pattern PEM_PATTERN = Pattern.compile("(-----[A-Z ]+-----)([^-]+)(-----[A-Z ]+-----)");
+    private static final int HEADER_GROUP = 1;
+    private static final int BODY_GROUP = 2;
+    private static final int FOOTER_GROUP = 3;
 
     /**
      * Different methods of importing the certificates (application.yml, ENV, Cloud secret) can affect whitespace
@@ -25,9 +28,9 @@ public class PemFormatter {
             throw new RuntimeException("Invalid certificate or key format");
         }
 
-        final String header = matcher.group(1).strip();
-        String body = matcher.group(2);
-        final String footer = matcher.group(3).strip();
+        final String header = matcher.group(HEADER_GROUP).strip();
+        String body = matcher.group(BODY_GROUP);
+        final String footer = matcher.group(FOOTER_GROUP).strip();
 
         body = Arrays.stream(body.split("\\s+"))
             .map(String::strip)
