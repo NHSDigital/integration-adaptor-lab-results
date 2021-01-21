@@ -16,11 +16,10 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.springframework.jms.support.destination.JmsDestinationAccessor.RECEIVE_TIMEOUT_NO_WAIT;
+import static uk.nhs.digital.nhsconnect.lab.results.IntegrationBaseTest.DLQ_PREFIX;
 
 @Slf4j
 public class IntegrationTestsExtension implements BeforeAllCallback, BeforeEachCallback {
-
-    private final String DLQ_PREFIX = "DLQ.";
 
     @Override
     public void beforeAll(ExtensionContext context) {

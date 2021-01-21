@@ -44,6 +44,7 @@ import static org.mockito.Mockito.when;
 @Slf4j
 public abstract class IntegrationBaseTest {
 
+    public static final String DLQ_PREFIX = "DLQ.";
     protected static final int WAIT_FOR_IN_SECONDS = 10;
     protected static final int POLL_INTERVAL_MS = 100;
     protected static final int POLL_DELAY_MS = 10;
@@ -151,6 +152,11 @@ public abstract class IntegrationBaseTest {
         return waitFor(() -> jmsTemplate.receive(gpOutboundQueueName));
     }
 
+    @SneakyThrows
+    protected Message getDeadLetterMeshInboundQueueMessage(String queueName) {
+        return waitFor(() -> jmsTemplate.receive(DLQ_PREFIX + queueName));
+    }
+
     protected <T> T waitFor(Supplier<T> supplier) {
         var dataToReturn = new AtomicReference<T>();
         await()
@@ -173,7 +179,16 @@ public abstract class IntegrationBaseTest {
         waitForCondition(() -> jmsTemplate.receive(gpOutboundQueueName) == null);
     }
 
+    @SneakyThrows
+    protected void clearDeadLetterQueue(String queueName) {
+        waitForCondition(() -> jmsTemplate.receive(DLQ_PREFIX + queueName) == null);
+    }
+
     protected void sendToMeshInboundQueue(InboundMeshMessage meshMessage) {
         inboundQueueService.publish(meshMessage);
+    }
+
+    protected void sendToMeshInboundQueue(String data) {
+        jmsTemplate.send(meshInboundQueueName, session -> session.createTextMessage(data));
     }
 }
