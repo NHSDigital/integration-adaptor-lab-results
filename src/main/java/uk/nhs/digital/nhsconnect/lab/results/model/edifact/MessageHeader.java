@@ -45,7 +45,7 @@ public class MessageHeader extends Segment {
     }
 
     @Override
-    public void preValidate() {}
+    public void preValidate() { }
 
     public static MessageHeader fromString(String edifactString) {
         if (!edifactString.startsWith(MessageHeader.KEY)) {

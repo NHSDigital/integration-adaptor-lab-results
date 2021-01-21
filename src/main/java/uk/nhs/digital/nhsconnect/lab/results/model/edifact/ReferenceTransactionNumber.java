@@ -32,7 +32,7 @@ public class ReferenceTransactionNumber extends Segment {
     }
 
     @Override
-    public void preValidate() throws EdifactValidationException {}
+    public void preValidate() throws EdifactValidationException { }
 
     @Override
     protected void validateStateful() throws EdifactValidationException {
