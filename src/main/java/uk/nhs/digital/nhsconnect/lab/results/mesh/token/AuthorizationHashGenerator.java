@@ -14,7 +14,7 @@ class AuthorizationHashGenerator {
 
     @SneakyThrows
     public String computeHash(MeshConfig meshConfig, Nonce nonce, String timestamp) {
-        final String hashInput = String.join(":", meshConfig.getMailboxId(), nonce.getValue(), nonce.getCount(),
+        final String hashInput = String.join(":", meshConfig.getMailboxId(), nonce.getValue(), Nonce.getCOUNT(),
             meshConfig.getMailboxPassword(), timestamp);
 
         final Mac sha256Hmac = Mac.getInstance(HMAC_SHA256_ALGORITHM_NAME);
