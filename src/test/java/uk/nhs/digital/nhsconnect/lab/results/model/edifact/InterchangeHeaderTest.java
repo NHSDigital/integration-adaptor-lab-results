@@ -13,16 +13,16 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class InterchangeHeaderTest {
 
     @SuppressWarnings("checkstyle:magicnumber")
-    private final Instant TRANSLATION_WINTER_DATE_TIME = ZonedDateTime
+    private final Instant translationWinterDateTime = ZonedDateTime
         .of(2019, 3, 23, 9, 0, 0, 0, ZoneOffset.UTC)
         .toInstant();
     @SuppressWarnings("checkstyle:magicnumber")
-    private final Instant TRANSLATION_SUMMER_DATE_TIME = ZonedDateTime
+    private final Instant translationSummerDateTime = ZonedDateTime
         .of(2019, 5, 23, 9, 0, 0, 0, ZoneOffset.UTC)
         .toInstant();
-    private final InterchangeHeader interchangeHeaderWinter = new InterchangeHeader("SNDR", "RECP", TRANSLATION_WINTER_DATE_TIME)
+    private final InterchangeHeader interchangeHeaderWinter = new InterchangeHeader("SNDR", "RECP", translationWinterDateTime)
         .setSequenceNumber(1L);
-    private final InterchangeHeader interchangeHeaderSummer = new InterchangeHeader("SNDR", "RECP", TRANSLATION_SUMMER_DATE_TIME)
+    private final InterchangeHeader interchangeHeaderSummer = new InterchangeHeader("SNDR", "RECP", translationSummerDateTime)
         .setSequenceNumber(1L);
 
     @Test
@@ -41,7 +41,7 @@ public class InterchangeHeaderTest {
 
     @Test
     public void testValidationStateful() {
-        InterchangeHeader emptySequenceNumber = new InterchangeHeader("SNDR", "RECP", TRANSLATION_SUMMER_DATE_TIME);
+        InterchangeHeader emptySequenceNumber = new InterchangeHeader("SNDR", "RECP", translationSummerDateTime);
         assertThatThrownBy(emptySequenceNumber::validateStateful)
             .isInstanceOf(EdifactValidationException.class)
             .hasMessage("UNB: Attribute sequenceNumber is required");
@@ -49,7 +49,7 @@ public class InterchangeHeaderTest {
 
     @Test
     public void testValidationStatefulMinMaxSequenceNumber() throws EdifactValidationException {
-        var interchangeHeader = new InterchangeHeader("SNDR", "RECP", TRANSLATION_SUMMER_DATE_TIME);
+        var interchangeHeader = new InterchangeHeader("SNDR", "RECP", translationSummerDateTime);
 
         interchangeHeader.setSequenceNumber(0L);
         assertThatThrownBy(interchangeHeader::validateStateful)
@@ -70,7 +70,7 @@ public class InterchangeHeaderTest {
 
     @Test
     public void testPreValidationSenderEmptyString() {
-        InterchangeHeader emptySender = new InterchangeHeader("", "RECP", TRANSLATION_SUMMER_DATE_TIME).setSequenceNumber(1L);
+        InterchangeHeader emptySender = new InterchangeHeader("", "RECP", translationSummerDateTime).setSequenceNumber(1L);
         assertThatThrownBy(emptySender::preValidate)
             .isInstanceOf(EdifactValidationException.class)
             .hasMessage("UNB: Attribute sender is required");
@@ -78,7 +78,7 @@ public class InterchangeHeaderTest {
 
     @Test
     public void testPreValidationRecipientEmptyString() {
-        InterchangeHeader emptyRecipient = new InterchangeHeader("SNDR", "", TRANSLATION_SUMMER_DATE_TIME).setSequenceNumber(1L);
+        InterchangeHeader emptyRecipient = new InterchangeHeader("SNDR", "", translationSummerDateTime).setSequenceNumber(1L);
         assertThatThrownBy(emptyRecipient::preValidate)
             .isInstanceOf(EdifactValidationException.class)
             .hasMessage("UNB: Attribute recipient is required");
