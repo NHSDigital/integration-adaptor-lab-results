@@ -16,7 +16,7 @@ class Nonce {
     final String value;
     final String count = "1"; //token should use Nonce only once
 
-    public Nonce() {
+    Nonce() {
         this.value = UUID.randomUUID().toString();
     }
 }
