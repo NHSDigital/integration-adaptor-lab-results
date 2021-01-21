@@ -15,6 +15,7 @@ import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ConversationIdService;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -96,8 +97,9 @@ class MeshServiceTest {
         when(meshMailBoxScheduler.hasTimePassed(scanDelayInSeconds)).thenReturn(true);
         when(meshMailBoxScheduler.isEnabled()).thenReturn(true);
         when(meshClient.getInboxMessageIds()).thenReturn(List.of(MESSAGE_ID1, MESSAGE_ID2));
-        when(meshClient.getEdifactMessage(any())).thenAnswer((invocation) -> {
-            Thread.sleep((pollingCycleMaximumDurationInSeconds + 1) * 1000L); // ensure first download exceeds duration
+        when(meshClient.getEdifactMessage(any())).thenAnswer(invocation -> {
+            // ensure first download exceeds duration
+            Thread.sleep(TimeUnit.SECONDS.toMillis(pollingCycleMaximumDurationInSeconds + 1));
             return meshMessage1;
         });
 

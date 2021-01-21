@@ -21,6 +21,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MeshMailBoxSchedulerTest {
+    private static final int MAX_WAIT = 5;
 
     @InjectMocks
     private MeshMailBoxScheduler meshMailBoxScheduler;
@@ -39,7 +40,7 @@ class MeshMailBoxSchedulerTest {
         when(schedulerTimestampRepository.updateTimestamp(anyString(), isA(Instant.class), anyLong())).thenReturn(false);
         when(timestampService.getCurrentTimestamp()).thenReturn(Instant.now());
 
-        boolean hasTimePassed = meshMailBoxScheduler.hasTimePassed(5);
+        boolean hasTimePassed = meshMailBoxScheduler.hasTimePassed(MAX_WAIT);
 
         assertThat(hasTimePassed).isFalse();
     }
@@ -49,7 +50,7 @@ class MeshMailBoxSchedulerTest {
         when(schedulerTimestampRepository.updateTimestamp(anyString(), isA(Instant.class), anyLong())).thenReturn(true);
         when(timestampService.getCurrentTimestamp()).thenReturn(Instant.now());
 
-        boolean hasTimePassed = meshMailBoxScheduler.hasTimePassed(5);
+        boolean hasTimePassed = meshMailBoxScheduler.hasTimePassed(MAX_WAIT);
 
         assertThat(hasTimePassed).isTrue();
     }
@@ -59,7 +60,7 @@ class MeshMailBoxSchedulerTest {
         when(schedulerTimestampRepository.updateTimestamp(anyString(), isA(Instant.class), anyLong())).thenReturn(false);
         when(timestampService.getCurrentTimestamp()).thenReturn(Instant.now());
 
-        boolean hasTimePassed = meshMailBoxScheduler.hasTimePassed(5);
+        boolean hasTimePassed = meshMailBoxScheduler.hasTimePassed(MAX_WAIT);
 
         assertThat(hasTimePassed).isFalse();
     }

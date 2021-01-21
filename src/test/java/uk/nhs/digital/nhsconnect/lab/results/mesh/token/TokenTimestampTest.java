@@ -10,6 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class TokenTimestampTest {
 
+    @SuppressWarnings("checkstyle:magicnumber")
     private static final Instant FIXED_TIME_LOCAL = ZonedDateTime.of(1991, 11, 6, 12, 30, 0, 0, TimestampService.UK_ZONE)
             .toInstant();
 

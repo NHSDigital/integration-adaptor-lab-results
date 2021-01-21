@@ -17,7 +17,7 @@ public class ReferenceTransactionNumber extends Segment {
     public static final String KEY = "RFF";
     public static final String QUALIFIER = "TN";
     public static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
-    private static final long MAX_TRANSACTION_NUMBER = 9_999_999L;
+    public static final long MAX_TRANSACTION_NUMBER = 9_999_999L;
 
     private @NonNull Long transactionNumber;
 

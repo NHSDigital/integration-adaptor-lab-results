@@ -3,6 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.utils;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -10,7 +11,7 @@ class TimestampServiceTest {
     @Test
     void whenGettingTimestamp_thenPrecisionIsMilliseconds() {
         final var instant = new TimestampService().getCurrentTimestamp();
-        final long remainder = instant.getNano() % 1_000_000; // nanoseconds per millisecond
+        final long remainder = instant.getNano() % TimeUnit.MILLISECONDS.toNanos(1);
 
         assertThat(remainder).isEqualTo(0);
     }

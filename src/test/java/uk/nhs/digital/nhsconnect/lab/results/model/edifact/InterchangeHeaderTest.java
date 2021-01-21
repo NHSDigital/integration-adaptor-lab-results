@@ -12,9 +12,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class InterchangeHeaderTest {
 
+    @SuppressWarnings("checkstyle:magicnumber")
     private final Instant TRANSLATION_WINTER_DATE_TIME = ZonedDateTime
         .of(2019, 3, 23, 9, 0, 0, 0, ZoneOffset.UTC)
         .toInstant();
+    @SuppressWarnings("checkstyle:magicnumber")
     private final Instant TRANSLATION_SUMMER_DATE_TIME = ZonedDateTime
         .of(2019, 5, 23, 9, 0, 0, 0, ZoneOffset.UTC)
         .toInstant();
@@ -52,7 +54,7 @@ public class InterchangeHeaderTest {
             .isInstanceOf(EdifactValidationException.class)
             .hasMessage("UNB: Attribute sequenceNumber must be between 1 and 99999999");
 
-        interchangeHeader.setSequenceNumber(100_000_000L);
+        interchangeHeader.setSequenceNumber(InterchangeHeader.MAX_INTERCHANGE_SEQUENCE + 1);
         assertThatThrownBy(interchangeHeader::validateStateful)
             .isInstanceOf(EdifactValidationException.class)
             .hasMessage("UNB: Attribute sequenceNumber must be between 1 and 99999999");
@@ -60,7 +62,7 @@ public class InterchangeHeaderTest {
         interchangeHeader.setSequenceNumber(1L);
         interchangeHeader.validateStateful();
 
-        interchangeHeader.setSequenceNumber(99_999_999L);
+        interchangeHeader.setSequenceNumber(InterchangeHeader.MAX_INTERCHANGE_SEQUENCE);
         interchangeHeader.validateStateful();
     }
 
