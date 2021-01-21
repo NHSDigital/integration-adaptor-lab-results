@@ -27,7 +27,7 @@ public class RecipientMailboxIdMappingsTest {
     }
 
     @Test
-    void testGetRecipientMailboxIdForMessage_recipientNotFound_throwsException() {
+    void testGetRecipientMailboxIdForMessageRecipientNotFoundThrowsException() {
 
         final OutboundMeshMessage message = new MeshMessage().setHaTradingPartnerCode("INVALID");
 
@@ -38,7 +38,7 @@ public class RecipientMailboxIdMappingsTest {
     }
 
     @Test
-    void testGetRecipientMailboxIdForMessage_noRecipientToMailboxMappings_throwsException() {
+    void testGetRecipientMailboxIdForMessageNoRecipientToMailboxMappingsThrowsException() {
 
         recipientMailboxIdMappings = new RecipientMailboxIdMappings("");
 

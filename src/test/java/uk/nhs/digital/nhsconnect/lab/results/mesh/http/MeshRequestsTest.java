@@ -29,7 +29,7 @@ class MeshRequestsTest {
     private final MeshHeaders meshHeaders = new MeshHeaders(meshConfig);
 
     @Test
-    void when_gettingMessage_then_expectHttpGetAndCorrectUri() {
+    void when_gettingMessage_expect_httpGetAndCorrectUri() {
         final MeshRequests meshRequests = new MeshRequests(meshConfig, meshHeaders);
 
         final var request = meshRequests.getMessage(MESSAGE_ID);
@@ -39,7 +39,7 @@ class MeshRequestsTest {
     }
 
     @Test
-    void when_sendingRegistrationMessage_then_expectHttpPostAndCorrectUri() {
+    void when_sendingRegistrationMessage_expect_httpPostAndCorrectUri() {
         final MeshRequests meshRequests = new MeshRequests(meshConfig, meshHeaders);
 
         final var request = meshRequests.sendMessage(MESSAGE_RECIPIENT, WorkflowId.REGISTRATION);
@@ -48,7 +48,7 @@ class MeshRequestsTest {
     }
 
     @Test
-    void when_sendingRecepMessage_then_expectHttpPostAndCorrectUri() {
+    void when_sendingRecepMessage_expect_httpPostAndCorrectUri() {
         final MeshRequests meshRequests = new MeshRequests(meshConfig, meshHeaders);
 
         final var request = meshRequests.sendMessage(MESSAGE_RECIPIENT, WorkflowId.RECEP);
@@ -57,7 +57,7 @@ class MeshRequestsTest {
     }
 
     @Test
-    void when_gettingMessageIds_then_expectHttpGetAndCorrectUri() {
+    void when_gettingMessageIds_expect_httpGetAndCorrectUri() {
         final MeshRequests meshRequests = new MeshRequests(meshConfig, meshHeaders);
 
         final var request = meshRequests.getMessageIds();
@@ -67,7 +67,7 @@ class MeshRequestsTest {
     }
 
     @Test
-    void when_acknowledgeMessage_then_expectHttpPutAndCorrectUri() {
+    void when_acknowledgeMessage_expect_httpPutAndCorrectUri() {
         final MeshRequests meshRequests = new MeshRequests(meshConfig, meshHeaders);
 
         final var request = meshRequests.acknowledge(MESSAGE_ID);
@@ -77,7 +77,7 @@ class MeshRequestsTest {
     }
 
     @Test
-    void when_authenticate_then_expectHttpPostAndCorrectUri() {
+    void when_authenticate_expect_httpPostAndCorrectUri() {
         final MeshRequests meshRequests = new MeshRequests(meshConfig, meshHeaders);
 
         final var request = meshRequests.authenticate();

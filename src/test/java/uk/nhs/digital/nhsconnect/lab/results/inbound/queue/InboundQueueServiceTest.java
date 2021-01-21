@@ -51,7 +51,7 @@ class InboundQueueServiceTest {
     private InboundQueueService inboundQueueService;
 
     @Test
-    void when_publish_inboundMessageFromMesh_thenTimestampAndConversationIdAreSet() throws Exception {
+    void when_publishInboundMessageFromMesh_expect_timestampAndConversationIdAreSet() throws Exception {
         final var now = Instant.now();
         when(timestampService.getCurrentTimestamp()).thenReturn(now);
         final var messageSentTimestamp = "2020-06-12T14:15:16Z";
