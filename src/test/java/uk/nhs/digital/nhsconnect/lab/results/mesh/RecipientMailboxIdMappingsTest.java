@@ -32,7 +32,7 @@ public class RecipientMailboxIdMappingsTest {
         final OutboundMeshMessage message = new MeshMessage().setHaTradingPartnerCode("INVALID");
 
         final MeshRecipientUnknownException exception = assertThrows(MeshRecipientUnknownException.class,
-                () -> recipientMailboxIdMappings.getRecipientMailboxId(message));
+            () -> recipientMailboxIdMappings.getRecipientMailboxId(message));
 
         assertEquals("Couldn't decode recipient: INVALID", exception.getMessage());
     }
@@ -45,7 +45,7 @@ public class RecipientMailboxIdMappingsTest {
         final OutboundMeshMessage message = new MeshMessage();
 
         final MeshRecipientUnknownException exception = assertThrows(MeshRecipientUnknownException.class,
-                () -> recipientMailboxIdMappings.getRecipientMailboxId(message));
+            () -> recipientMailboxIdMappings.getRecipientMailboxId(message));
 
         assertEquals("LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS env var doesn't contain valid "
             +
