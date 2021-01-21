@@ -31,7 +31,7 @@ public class MessageHeader extends Segment {
     @Override
     public String getValue() {
         String formattedSequenceNumber = String.format("%08d", sequenceNumber);
-        return formattedSequenceNumber+"+FHSREG:0:1:FH:FHS001";
+        return formattedSequenceNumber + "+FHSREG:0:1:FH:FHS001";
     }
 
     @Override

@@ -38,7 +38,9 @@ public class RecipientMailboxIdMappings {
 
     private void validateMappings(String[] rows) {
         if (rows.length < 2) {
-            throw new MeshRecipientUnknownException("LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS env var doesn't contain valid recipient to mailbox mapping");
+            throw new MeshRecipientUnknownException("LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS "
+                +
+                "env var doesn't contain valid recipient to mailbox mapping");
         }
     }
 }
