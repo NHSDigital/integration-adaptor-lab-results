@@ -10,14 +10,17 @@ import org.junit.rules.Timeout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.Resource;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.InboundQueueService;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.RecipientMailboxIdMappings;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshClient;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshConfig;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshHeaders;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshHttpClientBuilder;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshRequests;
+import uk.nhs.digital.nhsconnect.lab.results.mesh.message.InboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.utils.JmsReader;
@@ -57,6 +60,8 @@ public abstract class IntegrationBaseTest {
     private RecipientMailboxIdMappings recipientMailboxIdMappings;
     @Autowired
     private MeshHttpClientBuilder meshHttpClientBuilder;
+    @Autowired
+    private InboundQueueService inboundQueueService;
 
     @Value("${labresults.amqp.meshInboundQueueName}")
     protected String meshInboundQueueName;
@@ -66,6 +71,11 @@ public abstract class IntegrationBaseTest {
 
     @Value("${labresults.amqp.gpOutboundQueueName}")
     protected String gpOutboundQueueName;
+
+    @Value("classpath:edifact/registration.dat")
+    protected Resource edifactResource;
+    @Value("classpath:edifact/registration.json")
+    protected Resource fhirResource;
 
     private long originalReceiveTimeout;
     protected MeshClient labResultsMeshClient;
@@ -161,5 +171,9 @@ public abstract class IntegrationBaseTest {
 
     protected void clearGpOutboundQueue() {
         waitForCondition(() -> jmsTemplate.receive(gpOutboundQueueName) == null);
+    }
+
+    protected void sendToMeshInboundQueue(InboundMeshMessage meshMessage) {
+        inboundQueueService.publish(meshMessage);
     }
 }
