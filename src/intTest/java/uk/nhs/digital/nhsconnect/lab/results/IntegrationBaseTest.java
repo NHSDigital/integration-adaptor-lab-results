@@ -106,7 +106,8 @@ public abstract class IntegrationBaseTest {
     @SneakyThrows(IllegalAccessException.class)
     private MeshClient buildMeshClientForLabResultsMailbox() {
         // getting this from config is
-        final String labResultsMailboxId = recipientMailboxIdMappings.getRecipientMailboxId(new MeshMessage().setHaTradingPartnerCode("XX11"));
+        final String labResultsMailboxId = recipientMailboxIdMappings.getRecipientMailboxId(
+            new MeshMessage().setHaTradingPartnerCode("XX11"));
         final String gpMailboxId = meshConfig.getMailboxId();
         final RecipientMailboxIdMappings mockRecipientMailboxIdMappings = mock(RecipientMailboxIdMappings.class);
         when(mockRecipientMailboxIdMappings.getRecipientMailboxId(any(OutboundMeshMessage.class))).thenReturn(gpMailboxId);

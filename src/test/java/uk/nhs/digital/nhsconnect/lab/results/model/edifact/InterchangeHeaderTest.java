@@ -20,8 +20,10 @@ public class InterchangeHeaderTest {
     private final Instant TRANSLATION_SUMMER_DATE_TIME = ZonedDateTime
         .of(2019, 5, 23, 9, 0, 0, 0, ZoneOffset.UTC)
         .toInstant();
-    private final InterchangeHeader interchangeHeaderWinter = new InterchangeHeader("SNDR", "RECP", TRANSLATION_WINTER_DATE_TIME).setSequenceNumber(1L);
-    private final InterchangeHeader interchangeHeaderSummer = new InterchangeHeader("SNDR", "RECP", TRANSLATION_SUMMER_DATE_TIME).setSequenceNumber(1L);
+    private final InterchangeHeader interchangeHeaderWinter = new InterchangeHeader("SNDR", "RECP", TRANSLATION_WINTER_DATE_TIME)
+        .setSequenceNumber(1L);
+    private final InterchangeHeader interchangeHeaderSummer = new InterchangeHeader("SNDR", "RECP", TRANSLATION_SUMMER_DATE_TIME)
+        .setSequenceNumber(1L);
 
     @Test
     public void testValidInterchangeHeaderWithWinterTime() throws EdifactValidationException {
@@ -84,7 +86,8 @@ public class InterchangeHeaderTest {
 
     @Test
     void testFromString() {
-        assertThat(InterchangeHeader.fromString("UNB+UNOA:2+SNDR+RECP+190323:0900+00000001").getValue()).isEqualTo(interchangeHeaderWinter.getValue());
+        assertThat(InterchangeHeader.fromString("UNB+UNOA:2+SNDR+RECP+190323:0900+00000001").getValue())
+            .isEqualTo(interchangeHeaderWinter.getValue());
         assertThatThrownBy(() -> InterchangeHeader.fromString("wrong value")).isExactlyInstanceOf(IllegalArgumentException.class);
     }
 }

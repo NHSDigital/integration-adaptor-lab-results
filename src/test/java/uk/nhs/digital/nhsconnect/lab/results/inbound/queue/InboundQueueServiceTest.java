@@ -62,7 +62,8 @@ class InboundQueueServiceTest {
         inboundQueueService.publish(inboundMeshMessage);
 
         // the method parameter is modified so another copy is needed. Timestamp set to expected value
-        InboundMeshMessage expectedInboundMeshMessage = InboundMeshMessage.create(WorkflowId.REGISTRATION, "ASDF", messageSentTimestamp, "ID123");
+        InboundMeshMessage expectedInboundMeshMessage = InboundMeshMessage.create(WorkflowId.REGISTRATION, "ASDF", messageSentTimestamp,
+            "ID123");
         String expectedStringMessage = objectMapper.writeValueAsString(expectedInboundMeshMessage);
         verify(jmsTemplate).send((String) isNull(), jmsMessageCreatorCaptor.capture());
         MessageCreator messageCreator = jmsMessageCreatorCaptor.getValue();

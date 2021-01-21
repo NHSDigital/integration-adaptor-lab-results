@@ -52,7 +52,8 @@ public class InterchangeHeader extends Segment {
         final String translationTimeStr = split[TRANSLATION_TIME_INDEX];
         final Long sequenceNumber = Long.valueOf(split[SEQUENCE_NUMBER_INDEX]);
 
-        ZonedDateTime translationTime = ZonedDateTime.parse(translationTimeStr, DateTimeFormatter.ofPattern("yyMMdd:HHmm").withZone(TimestampService.UK_ZONE));
+        ZonedDateTime translationTime = ZonedDateTime.parse(translationTimeStr,
+            DateTimeFormatter.ofPattern("yyMMdd:HHmm").withZone(TimestampService.UK_ZONE));
 
         return new InterchangeHeader(sender, recipient, translationTime.toInstant(), sequenceNumber);
     }
