@@ -150,7 +150,7 @@ class MeshServiceTest {
     }
 
     @Test
-    void when_intervalHasPassedAndRequestToDownloadMeshMessageFails_withWorkflowUnknownException_expect_doNotPublishAndAcknowledgeMessage() {
+    void when_intervalHasPassedAndRequestToDownloadMeshMessageFail_withWorkflowUnknownException_expect_doNotPublishAndAcknowledgeMessage() {
         when(meshMailBoxScheduler.hasTimePassed(scanDelayInSeconds)).thenReturn(true);
         when(meshMailBoxScheduler.isEnabled()).thenReturn(true);
         when(meshClient.getInboxMessageIds()).thenReturn(List.of(ERROR_MESSAGE_ID));
@@ -262,7 +262,8 @@ class MeshServiceTest {
     void when_intervalHasPassedButAuthenticationFails_expect_stopProcessing() {
         when(meshMailBoxScheduler.hasTimePassed(scanDelayInSeconds)).thenReturn(true);
         when(meshMailBoxScheduler.isEnabled()).thenReturn(true);
-        doThrow(new MeshApiConnectionException("Auth fail", HttpStatus.OK, HttpStatus.INTERNAL_SERVER_ERROR)).when(meshClient).authenticate();
+        doThrow(new MeshApiConnectionException("Auth fail", HttpStatus.OK, HttpStatus.INTERNAL_SERVER_ERROR))
+            .when(meshClient).authenticate();
 
         Assertions.assertThatThrownBy(() -> meshService.scanMeshInboxForMessages())
             .isExactlyInstanceOf(MeshApiConnectionException.class);
