@@ -44,7 +44,7 @@ public class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
         labResultsMeshClient.sendEdifactMessage(OUTBOUND_MESH_MESSAGE);
 
-        final Message gpOutboundQueueMessage = getGpSystemInboundQueueMessage();
+        final Message gpOutboundQueueMessage = getGpOutboundQueueMessage();
         assertThat(gpOutboundQueueMessage).isNotNull();
         assertThat(parseTextMessage(gpOutboundQueueMessage)).isEqualTo("{\n  \"resourceType\": \"Parameters\"\n}");
     }

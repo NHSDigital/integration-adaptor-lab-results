@@ -39,11 +39,12 @@ public class IntegrationTestsExtension implements BeforeAllCallback, BeforeEachC
                 applicationContext.getEnvironment().getProperty("labresults.amqp.meshInboundQueueName"));
         var meshOutboundQueueName = Objects.requireNonNull(
                 applicationContext.getEnvironment().getProperty("labresults.amqp.meshOutboundQueueName"));
-
+        var gpOutboundQueueName = Objects.requireNonNull(
+                applicationContext.getEnvironment().getProperty("labresults.amqp.gpOutboundQueueName"));
 
         var receiveTimeout = jmsTemplate.getReceiveTimeout();
         jmsTemplate.setReceiveTimeout(RECEIVE_TIMEOUT_NO_WAIT);
-        List.of(meshInboundQueueName, meshOutboundQueueName)
+        List.of(meshInboundQueueName, meshOutboundQueueName, gpOutboundQueueName)
                 .stream()
                 .map(queueName -> List.of(queueName, DLQ_PREFIX + queueName))
                 .flatMap(Collection::stream)

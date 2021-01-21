@@ -137,7 +137,7 @@ public abstract class IntegrationBaseTest {
     }
 
     @SneakyThrows
-    protected Message getGpSystemInboundQueueMessage() {
+    protected Message getGpOutboundQueueMessage() {
         return waitFor(() -> jmsTemplate.receive(gpOutboundQueueName));
     }
 
