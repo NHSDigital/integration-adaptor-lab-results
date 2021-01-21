@@ -47,7 +47,8 @@ public class RecipientMailboxIdMappingsTest {
         final MeshRecipientUnknownException exception = assertThrows(MeshRecipientUnknownException.class,
                 () -> recipientMailboxIdMappings.getRecipientMailboxId(message));
 
-        assertEquals("LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS env var doesn't contain valid " +
+        assertEquals("LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS env var doesn't contain valid "
+            +
                 "recipient to mailbox mapping", exception.getMessage());
     }
 

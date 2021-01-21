@@ -53,7 +53,8 @@ public class MeshService {
     @Scheduled(fixedRateString = "${labresults.mesh.wakeupIntervalInMilliseconds}")
     public void scanMeshInboxForMessages() {
         if (!meshMailBoxScheduler.isEnabled()) {
-            LOGGER.warn("Not running the MESH mailbox polling cycle because it is disabled. Set variable " +
+            LOGGER.warn("Not running the MESH mailbox polling cycle because it is disabled. Set variable "
+                +
                     "LAB_RESULTS_SCHEDULER_ENABLED to true to enable it.");
             return;
         }
@@ -73,8 +74,10 @@ public class MeshService {
             }
             LOGGER.info("Completed MESH mailbox polling cycle. Processed all messages from inbox.");
         } else {
-            LOGGER.info("Could not obtain database lock to run MESH mailbox polling cycle: insufficient time has elapsed " +
-                    "since the previous polling cycle or another adaptor instance has already started the polling cycle. " +
+            LOGGER.info("Could not obtain database lock to run MESH mailbox polling cycle: insufficient time has elapsed "
+                +
+                    "since the previous polling cycle or another adaptor instance has already started the polling cycle. "
+                +
                     "Next scan in {} seconds", TimeUnit.SECONDS.convert(wakeupIntervalInMilliseconds, TimeUnit.MILLISECONDS));
         }
     }
