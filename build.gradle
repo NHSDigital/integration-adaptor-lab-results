@@ -107,3 +107,7 @@ spotbugsMain {
 		}
 	}
 }
+
+checkstyle {
+	configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+}
