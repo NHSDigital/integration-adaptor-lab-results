@@ -1,5 +1,9 @@
 package uk.nhs.digital.nhsconnect.lab.results.utils;
 
+import lombok.Getter;
+
 public final class JmsHeaders {
-    public static String conversationId = "ConversationId";
+    @Getter
+    private static String conversationId = "ConversationId";
+
 }

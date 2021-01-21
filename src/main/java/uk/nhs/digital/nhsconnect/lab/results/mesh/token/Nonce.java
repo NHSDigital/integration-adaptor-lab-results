@@ -12,9 +12,13 @@ import java.util.UUID;
 @Getter
 @RequiredArgsConstructor
 class Nonce {
+
+    @Getter
     @NonNull
-    final String value;
-    final String count = "1"; //token should use Nonce only once
+    private final String value;
+
+    @Getter
+    private final String count = "1"; //token should use Nonce only once
 
     Nonce() {
         this.value = UUID.randomUUID().toString();
