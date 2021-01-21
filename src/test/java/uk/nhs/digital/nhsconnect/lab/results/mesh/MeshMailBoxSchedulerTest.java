@@ -36,7 +36,7 @@ class MeshMailBoxSchedulerTest {
     private ApplicationContext applicationContext;
 
     @Test
-    void when_collectionIsEmpty_then_singleDocumentIsCreatedAndTheJobIsNotExecuted() {
+    void when_collectionIsEmpty_expect_singleDocumentIsCreatedAndTheJobIsNotExecuted() {
         when(schedulerTimestampRepository.updateTimestamp(anyString(), isA(Instant.class), anyLong())).thenReturn(false);
         when(timestampService.getCurrentTimestamp()).thenReturn(Instant.now());
 
@@ -46,7 +46,7 @@ class MeshMailBoxSchedulerTest {
     }
 
     @Test
-    void when_documentExistsAndTimestampIsBeforeProvidedTime_then_documentIsUpdateAndTheJobIsExecuted() {
+    void when_documentExistsAndTimestampIsBeforeProvidedTime_expect_documentIsUpdateAndTheJobIsExecuted() {
         when(schedulerTimestampRepository.updateTimestamp(anyString(), isA(Instant.class), anyLong())).thenReturn(true);
         when(timestampService.getCurrentTimestamp()).thenReturn(Instant.now());
 
@@ -56,7 +56,7 @@ class MeshMailBoxSchedulerTest {
     }
 
     @Test
-    void when_documentExistsAndTimestampIsAfterProvidedTime_then_documentIsNotUpdateAndTheJobIsNotExecuted() {
+    void when_documentExistsAndTimestampIsAfterProvidedTime_expect_documentIsNotUpdateAndTheJobIsNotExecuted() {
         when(schedulerTimestampRepository.updateTimestamp(anyString(), isA(Instant.class), anyLong())).thenReturn(false);
         when(timestampService.getCurrentTimestamp()).thenReturn(Instant.now());
 
@@ -66,7 +66,7 @@ class MeshMailBoxSchedulerTest {
     }
 
     @Test
-    void when_schedulerIsDisabled_then_returnFalse() {
+    void when_schedulerIsDisabled_expect_returnFalse() {
         Environment environment = mock(Environment.class);
         when(environment.getProperty("labresults.scheduler.enabled")).thenReturn("false");
         when(applicationContext.getEnvironment()).thenReturn(environment);
@@ -75,7 +75,7 @@ class MeshMailBoxSchedulerTest {
     }
 
     @Test
-    void when_schedulerIsEnabled_then_returnTrue() {
+    void when_schedulerIsEnabled_expect_returnTrue() {
         Environment environment = mock(Environment.class);
         when(environment.getProperty("labresults.scheduler.enabled")).thenReturn("true");
         when(applicationContext.getEnvironment()).thenReturn(environment);

@@ -25,7 +25,7 @@ public class JmsReaderTest {
 
     @SneakyThrows
     @Test
-    void When_MessageIsNotNull_Then_TheSameMessageIsReturned () {
+    void when_messageIsNotNull_expect_sameMessageIsReturned () {
         when(message.getBody(String.class)).thenReturn(CONTENT);
 
         String msg = JmsReader.readMessage(message);
@@ -39,7 +39,7 @@ public class JmsReaderTest {
 
     @SneakyThrows
     @Test
-    void When_MessageIsNull_Then_TheNullIsReturned () {
+    void when_messageIsNull_expect_nullIsReturned () {
         when(message.getBody(String.class)).thenReturn(null);
         String msg = JmsReader.readMessage(message);
 
