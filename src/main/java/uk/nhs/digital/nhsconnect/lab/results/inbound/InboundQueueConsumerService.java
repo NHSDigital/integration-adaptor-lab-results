@@ -10,7 +10,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Transaction;
-import uk.nhs.digital.nhsconnect.lab.results.outbound.queue.OutboundQueueService;
+import uk.nhs.digital.nhsconnect.lab.results.outbound.queue.GpOutboundQueueService;
 
 import java.util.Collection;
 import java.util.List;
@@ -23,7 +23,7 @@ public class InboundQueueConsumerService {
 
     private final InboundEdifactTransactionHandler inboundEdifactTransactionService;
     private final EdifactParser edifactParser;
-    private final OutboundQueueService outboundQueueService;
+    private final GpOutboundQueueService gpOutboundQueueService;
 
     public void handle(final InboundMeshMessage meshMessage) {
 
@@ -38,14 +38,14 @@ public class InboundQueueConsumerService {
 
         LOGGER.info("Interchange contains {} new transactions", transactionsToProcess.size());
 
-        final List<DataToSend> outboundQueueFhirDataToSend = transactionsToProcess.stream()
+        final List<DataToSend> gpOutboundQueueFhirDataToSend = transactionsToProcess.stream()
                 .map(transaction -> {
                     final DataToSend fhirDataToSend = inboundEdifactTransactionService.translate(transaction);
                     LOGGER.debug("Converted edifact message into {}", fhirDataToSend.getContent());
                     return fhirDataToSend.setTransactionType(transaction.getMessage().getReferenceTransactionType().getTransactionType());
                 }).collect(Collectors.toList());
 
-        outboundQueueFhirDataToSend.forEach(outboundQueueService::publish);
+        gpOutboundQueueFhirDataToSend.forEach(gpOutboundQueueService::publish);
 
         logSentFor(interchange);
     }

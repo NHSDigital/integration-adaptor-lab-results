@@ -30,7 +30,7 @@ public class InboundUserAcceptanceTest extends IntegrationBaseTest {
     @BeforeEach
     void beforeEach() {
         clearMeshMailboxes();
-        clearOutboundQueue();
+        clearGpOutboundQueue();
         System.setProperty("LAB_RESULTS_SCHEDULER_ENABLED", "true"); //enable scheduling
     }
 
@@ -40,13 +40,13 @@ public class InboundUserAcceptanceTest extends IntegrationBaseTest {
     }
 
     @Test
-    void testSendEdifactIsProcessedAndPushedToOutboundQueue() throws JMSException {
+    void testSendEdifactIsProcessedAndPushedToGpOutboundQueue() throws JMSException {
 
         labResultsMeshClient.sendEdifactMessage(OUTBOUND_MESH_MESSAGE);
 
-        final Message outboundQueueMessage = getOutboundQueueMessage();
-        assertThat(outboundQueueMessage).isNotNull();
-        assertThat(parseTextMessage(outboundQueueMessage)).isEqualTo("{\n  \"resourceType\": \"Parameters\"\n}");
+        final Message gpOutboundQueueMessage = getGpSystemInboundQueueMessage();
+        assertThat(gpOutboundQueueMessage).isNotNull();
+        assertThat(parseTextMessage(gpOutboundQueueMessage)).isEqualTo("{\n  \"resourceType\": \"Parameters\"\n}");
     }
 
     private static String getSampleEdifactContent() {

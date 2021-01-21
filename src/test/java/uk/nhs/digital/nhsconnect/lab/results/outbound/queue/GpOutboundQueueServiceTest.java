@@ -24,12 +24,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class OutboundQueueServiceTest {
+class GpOutboundQueueServiceTest {
 
     private static final String CONSERVATION_ID = "ABC123";
 
     @InjectMocks
-    private OutboundQueueService outboundQueueService;
+    private GpOutboundQueueService gpOutboundQueueService;
     @Mock
     private JmsTemplate jmsTemplate;
     @Mock
@@ -41,11 +41,11 @@ class OutboundQueueServiceTest {
     @Mock
     private TextMessage textMessage;
 
-    @Value("${labresults.amqp.meshOutboundQueueName}")
-    private String meshOutboundQueueName;
+    @Value("${labresults.amqp.gpOutboundQueueName}")
+    private String gpOutboundQueueName;
 
     @Test
-    void publishMessageToOutboundQueue() throws JMSException {
+    void publishMessageToGpOutboundQueue() throws JMSException {
         final Parameters parameters = new Parameters();
 
         final DataToSend dataToSend = new DataToSend()
@@ -58,13 +58,13 @@ class OutboundQueueServiceTest {
         when(serializer.serialize(parameters)).thenReturn(serializedData);
         when(conversationIdService.getCurrentConversationId()).thenReturn(CONSERVATION_ID);
 
-        outboundQueueService.publish(dataToSend);
+        gpOutboundQueueService.publish(dataToSend);
 
         verify(serializer).serialize(dataToSend.getContent());
 
         final ArgumentCaptor<MessageCreator> messageCreatorArgumentCaptor = ArgumentCaptor.forClass(MessageCreator.class);
 
-        verify(jmsTemplate).send(eq(meshOutboundQueueName), messageCreatorArgumentCaptor.capture());
+        verify(jmsTemplate).send(eq(gpOutboundQueueName), messageCreatorArgumentCaptor.capture());
 
         when(session.createTextMessage(serializedData)).thenReturn(textMessage);
 

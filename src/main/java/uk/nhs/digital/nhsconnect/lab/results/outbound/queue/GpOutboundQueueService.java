@@ -18,14 +18,14 @@ import javax.jms.TextMessage;
 @Component
 @Slf4j
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class OutboundQueueService {
+public class GpOutboundQueueService {
 
     private final JmsTemplate jmsTemplate;
     private final ObjectSerializer serializer;
     private final ConversationIdService conversationIdService;
 
-    @Value("${labresults.amqp.meshOutboundQueueName}")
-    private String meshOutboundQueueName;
+    @Value("${labresults.amqp.gpOutboundQueueName}")
+    private String gpOutboundQueueName;
 
     @SneakyThrows
     public void publish(DataToSend dataToSend) {
@@ -41,8 +41,8 @@ public class OutboundQueueService {
             return message;
         };
 
-        jmsTemplate.send(meshOutboundQueueName, messageCreator);
-        LOGGER.debug("Published message to outbound queue");
+        jmsTemplate.send(gpOutboundQueueName, messageCreator);
+        LOGGER.debug("Published message to GP Outbound Queue");
     }
 
 }

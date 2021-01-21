@@ -6,6 +6,7 @@ labresults:
     brokers: ${LAB_RESULTS_AMQP_BROKERS:amqp://localhost:5672}
     meshOutboundQueueName: ${LAB_RESULTS_OUTBOUND_QUEUE_NAME:lab_results_mesh_outbound}
     meshInboundQueueName: ${LAB_RESULTS_MESH_INBOUND_QUEUE_NAME:lab_results_mesh_inbound}
+    gpOutboundQueueName: ${LAB_RESULTS_GP_OUTBOUND_QUEUE_NAME:lab_results_gp_outbound}
     exchange: amq.direct
     username: ${LAB_RESULTS_AMQP_USERNAME:}
     password: ${LAB_RESULTS_AMQP_PASSWORD:}

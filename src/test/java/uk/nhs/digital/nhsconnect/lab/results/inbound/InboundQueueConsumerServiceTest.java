@@ -16,7 +16,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceTransactionType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Transaction;
-import uk.nhs.digital.nhsconnect.lab.results.outbound.queue.OutboundQueueService;
+import uk.nhs.digital.nhsconnect.lab.results.outbound.queue.GpOutboundQueueService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,7 +37,7 @@ class InboundQueueConsumerServiceTest {
     @Mock
     private EdifactParser edifactParser;
     @Mock
-    private OutboundQueueService outboundQueueService;
+    private GpOutboundQueueService gpOutboundQueueService;
     @Mock
     private Interchange interchange;
     @Mock
@@ -49,7 +49,7 @@ class InboundQueueConsumerServiceTest {
     }
 
     @Test
-    void handleInboundMeshMessageNoTransactionsDoesNotPublishToOutboundQueue() {
+    void handleInboundMeshMessageNoTransactionsDoesNotPublishToGpOutboundQueue() {
 
         final MeshMessage meshMessage = new MeshMessage();
 
@@ -59,11 +59,11 @@ class InboundQueueConsumerServiceTest {
 
         verify(edifactParser).parse(meshMessage.getContent());
         verify(inboundEdifactTransactionService, times(0)).translate(any(Transaction.class));
-        verify(outboundQueueService, times(0)).publish(any(DataToSend.class));
+        verify(gpOutboundQueueService, times(0)).publish(any(DataToSend.class));
     }
 
     @Test
-    void handleInboundMeshMessageWithTransactionAndPublishesToOutboundQueue() {
+    void handleInboundMeshMessageWithTransactionAndPublishesToGpOutboundQueue() {
 
         final MeshMessage meshMessage = new MeshMessage();
 
@@ -82,11 +82,11 @@ class InboundQueueConsumerServiceTest {
 
         verify(edifactParser).parse(meshMessage.getContent());
         verify(inboundEdifactTransactionService).translate(transaction);
-        verify(outboundQueueService).publish(dataToSend);
+        verify(gpOutboundQueueService).publish(dataToSend);
     }
 
     @Test
-    void handleInboundMeshMessageWithMultipleTransactionsAndPublishesToOutboundQueue() {
+    void handleInboundMeshMessageWithMultipleTransactionsAndPublishesToGpOutboundQueue() {
 
         final MeshMessage meshMessage = new MeshMessage();
 
@@ -109,7 +109,7 @@ class InboundQueueConsumerServiceTest {
         verify(edifactParser).parse(meshMessage.getContent());
         verify(inboundEdifactTransactionService).translate(transaction1);
         verify(inboundEdifactTransactionService).translate(transaction2);
-        verify(outboundQueueService, times(2)).publish(dataToSend);
+        verify(gpOutboundQueueService, times(2)).publish(dataToSend);
     }
 
 }

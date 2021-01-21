@@ -64,6 +64,9 @@ public abstract class IntegrationBaseTest {
     @Value("${labresults.amqp.meshOutboundQueueName}")
     protected String meshOutboundQueueName;
 
+    @Value("${labresults.amqp.gpOutboundQueueName}")
+    protected String gpOutboundQueueName;
+
     private long originalReceiveTimeout;
     protected MeshClient labResultsMeshClient;
 
@@ -134,8 +137,8 @@ public abstract class IntegrationBaseTest {
     }
 
     @SneakyThrows
-    protected Message getOutboundQueueMessage() {
-        return waitFor(() -> jmsTemplate.receive(meshOutboundQueueName));
+    protected Message getGpSystemInboundQueueMessage() {
+        return waitFor(() -> jmsTemplate.receive(gpOutboundQueueName));
     }
 
     protected <T> T waitFor(Supplier<T> supplier) {
@@ -156,7 +159,7 @@ public abstract class IntegrationBaseTest {
         return dataToReturn.get();
     }
 
-    protected void clearOutboundQueue() {
-        waitForCondition(() -> jmsTemplate.receive(meshOutboundQueueName) == null);
+    protected void clearGpOutboundQueue() {
+        waitForCondition(() -> jmsTemplate.receive(gpOutboundQueueName) == null);
     }
 }
