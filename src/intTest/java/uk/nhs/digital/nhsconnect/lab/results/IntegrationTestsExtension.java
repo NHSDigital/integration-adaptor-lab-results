@@ -20,7 +20,7 @@ import static org.springframework.jms.support.destination.JmsDestinationAccessor
 @Slf4j
 public class IntegrationTestsExtension implements BeforeAllCallback, BeforeEachCallback {
 
-    private final String dqlPrefix = "DLQ.";
+    private static final String DQL_PREFIX = "DLQ.";
 
     @Override
     public void beforeAll(ExtensionContext context) {
@@ -42,7 +42,7 @@ public class IntegrationTestsExtension implements BeforeAllCallback, BeforeEachC
         jmsTemplate.setReceiveTimeout(RECEIVE_TIMEOUT_NO_WAIT);
         List.of(meshInboundQueueName)
                 .stream()
-                .map(queueName -> List.of(queueName, dqlPrefix + queueName))
+                .map(queueName -> List.of(queueName, DQL_PREFIX + queueName))
                 .flatMap(Collection::stream)
                 .forEach(queueName -> {
                     while (jmsTemplate.receive(queueName) != null) {
