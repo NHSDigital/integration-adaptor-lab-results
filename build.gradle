@@ -100,12 +100,16 @@ spotbugsIntTest.enabled = false
 spotbugsMain {
 	reports {
 		html {
-			enabled = false
-		}
-		xml {
 			enabled = true
 		}
+		xml {
+			enabled = false
+		}
 	}
+}
+
+spotbugs {
+	excludeFilter = file("${rootDir}/config/spotbugs/exclude.xml")
 }
 
 checkstyle {
