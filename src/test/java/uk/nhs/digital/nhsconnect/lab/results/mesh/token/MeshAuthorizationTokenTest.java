@@ -15,6 +15,7 @@ import java.time.ZonedDateTime;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+@SuppressWarnings("checkstyle:magicnumber")
 @ExtendWith(MockitoExtension.class)
 class MeshAuthorizationTokenTest {
 
