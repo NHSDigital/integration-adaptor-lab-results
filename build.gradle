@@ -100,10 +100,10 @@ spotbugsIntTest.enabled = false
 spotbugsMain {
 	reports {
 		html {
-			enabled = true
+			enabled = false
 		}
 		xml {
-			enabled = false
+			enabled = true
 		}
 	}
 }
