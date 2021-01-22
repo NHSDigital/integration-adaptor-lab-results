@@ -6,6 +6,8 @@ import org.apache.qpid.jms.message.JmsTextMessage;
 import javax.jms.JMSException;
 import javax.jms.Message;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 public class JmsReader {
 
     public static String readMessage(Message message) throws JMSException {
@@ -24,7 +26,7 @@ public class JmsReader {
     private static String readBytesMessage(JmsBytesMessage message) throws JMSException {
         byte[] bytes = new byte[(int) message.getBodyLength()];
         message.readBytes(bytes);
-        return new String(bytes);
+        return new String(bytes, UTF_8);
     }
 
     private static String readTextMessage(JmsTextMessage message) throws JMSException {
