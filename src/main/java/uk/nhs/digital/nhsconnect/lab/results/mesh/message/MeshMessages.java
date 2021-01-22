@@ -12,6 +12,6 @@ public class MeshMessages {
 
     @JsonCreator
     public MeshMessages(@JsonProperty("messages") String[] messageIDs) {
-        this.messageIDs = messageIDs;
+        this.messageIDs = messageIDs.clone();
     }
 }
