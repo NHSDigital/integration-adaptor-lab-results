@@ -19,6 +19,7 @@ public class MeshConfig {
     private final String endpointPrivateKey;
     private final String subCAcert;
 
+    @SuppressWarnings("checkstyle:parameternumber")
     @Autowired
     public MeshConfig(
             @Value("${labresults.mesh.mailboxId}") String mailboxId,
