@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.fhir.mapper.ApprovalTransactionMapper;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.fhir.mapper.FhirTransactionMapper;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Inbound;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceTransactionType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Transaction;
@@ -32,11 +31,11 @@ class EdifactToFhirServiceTest {
     @Test
     void testConvertEdifactToFhir() {
 
-        final Map<TransactionType, FhirTransactionMapper> transactionMapper = Collections.singletonMap(Inbound.APPROVAL, new ApprovalTransactionMapper());
+        final Map<TransactionType, FhirTransactionMapper> transactionMapper = Collections.singletonMap(TransactionType.APPROVAL, new ApprovalTransactionMapper());
         final EdifactToFhirService service = new EdifactToFhirService(transactionMapper);
 
         when(transaction.getMessage()).thenReturn(message);
-        when(message.getReferenceTransactionType()).thenReturn(new ReferenceTransactionType(Inbound.APPROVAL));
+        when(message.getReferenceTransactionType()).thenReturn(new ReferenceTransactionType(TransactionType.APPROVAL));
 
         final Parameters parameters = service.convertToFhir(transaction);
 
@@ -49,7 +48,7 @@ class EdifactToFhirServiceTest {
         final EdifactToFhirService service = new EdifactToFhirService(Map.of());
 
         when(transaction.getMessage()).thenReturn(message);
-        when(message.getReferenceTransactionType()).thenReturn(new ReferenceTransactionType(Inbound.APPROVAL));
+        when(message.getReferenceTransactionType()).thenReturn(new ReferenceTransactionType(TransactionType.APPROVAL));
 
         final UnsupportedOperationException exception = assertThrows(UnsupportedOperationException.class,
                 () -> service.convertToFhir(transaction));

@@ -10,9 +10,9 @@ public class TransactionTypeTest {
 
     @Test
     void testFromCodeForValidCodeReturnsTransactionType() {
-        final ImmutableMap<String, TransactionType> codeMap = ImmutableMap.of("F4", Inbound.APPROVAL);
+        final ImmutableMap<String, TransactionType> codeMap = ImmutableMap.of("F4", TransactionType.APPROVAL);
 
-        assertEquals(Inbound.values().length, codeMap.size());
+        assertEquals(TransactionType.values().length, codeMap.size());
 
         codeMap.forEach((code, transactionType) -> assertEquals(transactionType, TransactionType.fromCode(code)));
     }

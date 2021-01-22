@@ -10,7 +10,7 @@ class ReferenceTransactionTypeTest {
 
     @Test
     void testToEdifactForValidTransactionType() {
-        final ReferenceTransactionType referenceTransactionType = new ReferenceTransactionType(Inbound.APPROVAL);
+        final ReferenceTransactionType referenceTransactionType = new ReferenceTransactionType(TransactionType.APPROVAL);
 
         final String edifact = referenceTransactionType.toEdifact();
 

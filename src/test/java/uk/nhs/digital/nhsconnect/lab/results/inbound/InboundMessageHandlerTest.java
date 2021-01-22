@@ -8,14 +8,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.DataToSend;
+import uk.nhs.digital.nhsconnect.lab.results.inbound.fhir.EdifactToFhirService;
+import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.FhirDataToSend;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Inbound;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceTransactionType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Transaction;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.TransactionType;
 import uk.nhs.digital.nhsconnect.lab.results.outbound.queue.GpOutboundQueueService;
 
 import java.util.ArrayList;
@@ -29,12 +30,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class InboundQueueConsumerServiceTest {
+class InboundMessageHandlerTest {
 
     @InjectMocks
-    private InboundQueueConsumerService inboundQueueConsumerService;
+    private InboundMessageHandler inboundMessageHandler;
     @Mock
-    private InboundEdifactTransactionHandler inboundEdifactTransactionService;
+    private EdifactToFhirService edifactToFhirService;
     @Mock
     private EdifactParser edifactParser;
     @Mock
@@ -56,11 +57,11 @@ class InboundQueueConsumerServiceTest {
 
         when(edifactParser.parse(meshMessage.getContent())).thenReturn(interchange);
 
-        inboundQueueConsumerService.handle(meshMessage);
+        inboundMessageHandler.handle(meshMessage);
 
         verify(edifactParser).parse(meshMessage.getContent());
-        verify(inboundEdifactTransactionService, never()).translate(any(Transaction.class));
-        verify(gpOutboundQueueService, never()).publish(any(DataToSend.class));
+        verify(edifactToFhirService, never()).convertToFhir(any(Transaction.class));
+        verify(gpOutboundQueueService, never()).publish(any(FhirDataToSend.class));
     }
 
     @Test
@@ -74,16 +75,16 @@ class InboundQueueConsumerServiceTest {
         final Transaction transaction = new Transaction(new ArrayList<>());
         transaction.setMessage(message);
         when(message.getTransactions()).thenReturn(Collections.singletonList(transaction));
-        when(message.getReferenceTransactionType()).thenReturn(new ReferenceTransactionType(Inbound.APPROVAL));
+        when(message.getReferenceTransactionType()).thenReturn(new ReferenceTransactionType(TransactionType.APPROVAL));
 
-        final DataToSend dataToSend = new DataToSend().setContent(new Parameters());
-        when(inboundEdifactTransactionService.translate(transaction)).thenReturn(dataToSend);
+        final Parameters parameters = new Parameters();
+        when(edifactToFhirService.convertToFhir(transaction)).thenReturn(parameters);
 
-        inboundQueueConsumerService.handle(meshMessage);
+        inboundMessageHandler.handle(meshMessage);
 
         verify(edifactParser).parse(meshMessage.getContent());
-        verify(inboundEdifactTransactionService).translate(transaction);
-        verify(gpOutboundQueueService).publish(dataToSend);
+        verify(edifactToFhirService).convertToFhir(transaction);
+        verify(gpOutboundQueueService).publish(any(FhirDataToSend.class));
     }
 
     @Test
@@ -99,18 +100,19 @@ class InboundQueueConsumerServiceTest {
         final Transaction transaction2 = new Transaction(new ArrayList<>());
         transaction2.setMessage(message);
         when(message.getTransactions()).thenReturn(List.of(transaction1, transaction2));
-        when(message.getReferenceTransactionType()).thenReturn(new ReferenceTransactionType(Inbound.APPROVAL));
+        when(message.getReferenceTransactionType()).thenReturn(new ReferenceTransactionType(TransactionType.APPROVAL));
 
-        final DataToSend dataToSend = new DataToSend().setContent(new Parameters());
-        when(inboundEdifactTransactionService.translate(transaction1)).thenReturn(dataToSend);
-        when(inboundEdifactTransactionService.translate(transaction2)).thenReturn(dataToSend);
+        final Parameters parameters = new Parameters();
 
-        inboundQueueConsumerService.handle(meshMessage);
+        when(edifactToFhirService.convertToFhir(transaction1)).thenReturn(parameters);
+        when(edifactToFhirService.convertToFhir(transaction2)).thenReturn(parameters);
+
+        inboundMessageHandler.handle(meshMessage);
 
         verify(edifactParser).parse(meshMessage.getContent());
-        verify(inboundEdifactTransactionService).translate(transaction1);
-        verify(inboundEdifactTransactionService).translate(transaction2);
-        verify(gpOutboundQueueService, times(2)).publish(dataToSend);
+        verify(edifactToFhirService).convertToFhir(transaction1);
+        verify(edifactToFhirService).convertToFhir(transaction2);
+        verify(gpOutboundQueueService, times(2)).publish(any(FhirDataToSend.class));
     }
 
 }

@@ -9,7 +9,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import uk.nhs.digital.nhsconnect.lab.results.IntegrationBaseTest;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Inbound;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.TransactionType;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -73,7 +73,7 @@ public class InboundMeshQueueMultiTransactionTest extends IntegrationBaseTest {
         softly.assertThat(conversationId).isEqualTo(previousConversationId);
 
         final String transactionType = message.getStringProperty("TransactionType");
-        softly.assertThat(transactionType).isEqualTo(Inbound.APPROVAL.name().toLowerCase());
+        softly.assertThat(transactionType).isEqualTo(TransactionType.APPROVAL.name().toLowerCase());
 
         final String messageBody = parseTextMessage(message);
         final String expectedMessageBody = new String(Files.readAllBytes(fhirResource.getFile().toPath()));

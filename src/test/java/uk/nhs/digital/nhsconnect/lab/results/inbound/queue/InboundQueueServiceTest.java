@@ -11,7 +11,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
-import uk.nhs.digital.nhsconnect.lab.results.inbound.InboundQueueConsumerService;
+import uk.nhs.digital.nhsconnect.lab.results.inbound.InboundMessageHandler;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.InboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
@@ -62,7 +62,7 @@ class InboundQueueServiceTest {
     private Message message;
 
     @Mock
-    private InboundQueueConsumerService inboundQueueConsumerService;
+    private InboundMessageHandler inboundMessageHandler;
 
     @Test
     void receiveInboundMessageIsHandledByInboundQueueConsumerService() throws Exception {
@@ -75,7 +75,7 @@ class InboundQueueServiceTest {
 
         final MeshMessage expectedMeshMessage = new MeshMessage();
         expectedMeshMessage.setWorkflowId(WorkflowId.REGISTRATION);
-        verify(inboundQueueConsumerService).handle(expectedMeshMessage);
+        verify(inboundMessageHandler).handle(expectedMeshMessage);
 
         verify(message).acknowledge();
         verify(conversationIdService).resetConversationId();
@@ -97,7 +97,7 @@ class InboundQueueServiceTest {
     void receiveInboundMessageHandledByInboundQueueConsumerServiceThrowsException() throws Exception {
         when(message.getStringProperty(JmsHeaders.CONVERSATION_ID)).thenReturn(CONVERSATION_ID);
         when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"LAB_RESULTS_REG\"}");
-        doThrow(RuntimeException.class).when(inboundQueueConsumerService).handle(any(MeshMessage.class));
+        doThrow(RuntimeException.class).when(inboundMessageHandler).handle(any(MeshMessage.class));
 
         assertThrows(RuntimeException.class, () -> inboundQueueService.receive(message));
 
@@ -117,7 +117,7 @@ class InboundQueueServiceTest {
 
         final MeshMessage expectedMeshMessage = new MeshMessage();
         expectedMeshMessage.setWorkflowId(WorkflowId.REGISTRATION);
-        verify(inboundQueueConsumerService).handle(expectedMeshMessage);
+        verify(inboundMessageHandler).handle(expectedMeshMessage);
 
         verify(message).acknowledge();
         verify(conversationIdService).resetConversationId();

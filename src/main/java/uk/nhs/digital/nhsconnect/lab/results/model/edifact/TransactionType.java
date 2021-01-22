@@ -1,20 +1,24 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 import java.util.Arrays;
-import java.util.stream.Stream;
 
-public interface TransactionType {
+@Getter
+@RequiredArgsConstructor
+public enum TransactionType {
 
-    static TransactionType fromCode(String code) {
-        return Stream.concat(Arrays.stream(Inbound.values()), Arrays.stream(Outbound.values()))
-                .filter(transactionType -> transactionType.getCode().equals(code))
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
+    APPROVAL("F4", "APF");
+
+    private final String code;
+    private final String abbreviation;
+
+    static TransactionType fromCode(final String code) {
+        return Arrays.stream(TransactionType.values())
+            .filter(transactionType -> transactionType.getCode().equals(code))
+            .findFirst()
+            .orElseThrow(IllegalArgumentException::new);
     }
 
-    String getCode();
-
-    default String name() {
-        return ((Enum) this).name();
-    }
 }

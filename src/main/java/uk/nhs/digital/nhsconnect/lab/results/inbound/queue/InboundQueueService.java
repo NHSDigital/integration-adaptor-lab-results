@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
-import uk.nhs.digital.nhsconnect.lab.results.inbound.InboundQueueConsumerService;
+import uk.nhs.digital.nhsconnect.lab.results.inbound.InboundMessageHandler;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.InboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ConversationIdService;
@@ -34,7 +34,7 @@ public class InboundQueueService {
 
     private final ConversationIdService conversationIdService;
 
-    private final InboundQueueConsumerService inboundQueueConsumerService;
+    private final InboundMessageHandler inboundMessageHandler;
 
     @Value("${labresults.amqp.meshInboundQueueName}")
     private String meshInboundQueueName;
@@ -54,7 +54,7 @@ public class InboundQueueService {
             LOGGER.info("Processing MeshMessageId={} with MeshWorkflowId={}", meshMessage.getMeshMessageId(),
                     workflowId);
 
-            inboundQueueConsumerService.handle(meshMessage);
+            inboundMessageHandler.handle(meshMessage);
 
             message.acknowledge();
             LOGGER.info("Completed processing MeshMessageId={}", meshMessage.getMeshMessageId());

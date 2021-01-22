@@ -10,8 +10,6 @@ public class Transaction extends Section {
     private final ReferenceTransactionNumber referenceTransactionNumber =
         ReferenceTransactionNumber.fromString(extractSegment(ReferenceTransactionNumber.KEY_QUALIFIER));
 
-    // TO-DO insert segments
-
     @Getter
     @Setter
     private Message message;

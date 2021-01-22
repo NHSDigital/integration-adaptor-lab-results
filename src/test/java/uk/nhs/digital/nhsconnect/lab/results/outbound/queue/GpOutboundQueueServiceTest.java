@@ -10,8 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
-import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.DataToSend;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Inbound;
+import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.FhirDataToSend;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.TransactionType;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ConversationIdService;
 import uk.nhs.digital.nhsconnect.lab.results.utils.JmsHeaders;
 
@@ -48,9 +48,9 @@ class GpOutboundQueueServiceTest {
     void publishMessageToGpOutboundQueue() throws JMSException {
         final Parameters parameters = new Parameters();
 
-        final DataToSend dataToSend = new DataToSend()
+        final FhirDataToSend fhirDataToSend = new FhirDataToSend()
                 .setOperationId("123")
-                .setTransactionType(Inbound.APPROVAL)
+                .setTransactionType(TransactionType.APPROVAL)
                 .setContent(parameters);
 
         final String serializedData = "some_serialized_data";
@@ -58,9 +58,9 @@ class GpOutboundQueueServiceTest {
         when(serializer.serialize(parameters)).thenReturn(serializedData);
         when(conversationIdService.getCurrentConversationId()).thenReturn(CONSERVATION_ID);
 
-        gpOutboundQueueService.publish(dataToSend);
+        gpOutboundQueueService.publish(fhirDataToSend);
 
-        verify(serializer).serialize(dataToSend.getContent());
+        verify(serializer).serialize(fhirDataToSend.getContent());
 
         final ArgumentCaptor<MessageCreator> messageCreatorArgumentCaptor = ArgumentCaptor.forClass(MessageCreator.class);
 
@@ -71,8 +71,8 @@ class GpOutboundQueueServiceTest {
         messageCreatorArgumentCaptor.getValue().createMessage(session);
 
         verify(session).createTextMessage(eq(serializedData));
-        verify(textMessage).setStringProperty(JmsHeaders.OPERATION_ID, dataToSend.getOperationId());
-        verify(textMessage).setStringProperty(JmsHeaders.TRANSACTION_TYPE, dataToSend.getTransactionType().name().toLowerCase());
+        verify(textMessage).setStringProperty(JmsHeaders.OPERATION_ID, fhirDataToSend.getOperationId());
+        verify(textMessage).setStringProperty(JmsHeaders.TRANSACTION_TYPE, fhirDataToSend.getTransactionType().name().toLowerCase());
         verify(textMessage).setStringProperty(JmsHeaders.CONVERSATION_ID, CONSERVATION_ID);
 
         verify(conversationIdService).getCurrentConversationId();
