@@ -31,7 +31,7 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.isNull;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -89,7 +89,7 @@ class InboundQueueServiceTest {
         assertThrows(Exception.class, () -> inboundQueueService.receive(message));
 
         verify(conversationIdService).applyConversationId(CONVERSATION_ID);
-        verify(message, times(0)).acknowledge();
+        verify(message, never()).acknowledge();
         verify(conversationIdService).resetConversationId();
     }
 
@@ -102,7 +102,7 @@ class InboundQueueServiceTest {
         assertThrows(RuntimeException.class, () -> inboundQueueService.receive(message));
 
         verify(conversationIdService).applyConversationId(CONVERSATION_ID);
-        verify(message, times(0)).acknowledge();
+        verify(message, never()).acknowledge();
         verify(conversationIdService).resetConversationId();
     }
 
@@ -113,7 +113,7 @@ class InboundQueueServiceTest {
 
         inboundQueueService.receive(message);
 
-        verify(conversationIdService, times(0)).applyConversationId(CONVERSATION_ID);
+        verify(conversationIdService, never()).applyConversationId(CONVERSATION_ID);
 
         final MeshMessage expectedMeshMessage = new MeshMessage();
         expectedMeshMessage.setWorkflowId(WorkflowId.REGISTRATION);

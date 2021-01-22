@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * The test EDIFACT message is sent to the MESH mailbox where the adaptor receives
  * inbound transactions. The test waits for the transaction to be processed and compares
- * the message from the inbound queue to be the same to the message which has been sent.
+ * the message from the GP Outbound queue to be the same to the message which has been sent.
  */
 
 @Slf4j

@@ -4,9 +4,8 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
-import org.junit.Rule;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.rules.Timeout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,6 +41,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith({SpringExtension.class, SoftAssertionsExtension.class, IntegrationTestsExtension.class})
 @SpringBootTest
 @Slf4j
+@Timeout(10)
 public abstract class IntegrationBaseTest {
 
     public static final String DLQ_PREFIX = "DLQ.";
@@ -49,8 +49,6 @@ public abstract class IntegrationBaseTest {
     protected static final int POLL_INTERVAL_MS = 100;
     protected static final int POLL_DELAY_MS = 10;
     private static final int JMS_RECEIVE_TIMEOUT = 500;
-    @Rule
-    public Timeout globalTimeout = Timeout.seconds(2);
     @Autowired
     protected JmsTemplate jmsTemplate;
     @Autowired

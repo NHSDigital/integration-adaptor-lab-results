@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -58,8 +59,8 @@ class InboundQueueConsumerServiceTest {
         inboundQueueConsumerService.handle(meshMessage);
 
         verify(edifactParser).parse(meshMessage.getContent());
-        verify(inboundEdifactTransactionService, times(0)).translate(any(Transaction.class));
-        verify(gpOutboundQueueService, times(0)).publish(any(DataToSend.class));
+        verify(inboundEdifactTransactionService, never()).translate(any(Transaction.class));
+        verify(gpOutboundQueueService, never()).publish(any(DataToSend.class));
     }
 
     @Test

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.outbound.fhir.FhirParser;
 
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ObjectSerializer {
     private final FhirParser fhirParser;
 

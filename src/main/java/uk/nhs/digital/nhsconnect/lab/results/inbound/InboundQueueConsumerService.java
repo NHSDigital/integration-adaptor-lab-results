@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Component
 @Slf4j
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class InboundQueueConsumerService {
 
     private final InboundEdifactTransactionHandler inboundEdifactTransactionService;
