@@ -7,7 +7,6 @@ public interface TransactionType {
 
     static TransactionType fromCode(String code) {
         return Stream.concat(Arrays.stream(Inbound.values()), Arrays.stream(Outbound.values()))
-                .map(TransactionType.class::cast)
                 .filter(transactionType -> transactionType.getCode().equals(code))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
