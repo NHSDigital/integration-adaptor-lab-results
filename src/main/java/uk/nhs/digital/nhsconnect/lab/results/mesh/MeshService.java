@@ -76,7 +76,7 @@ public class MeshService {
         } else {
             LOGGER.info("Could not obtain database lock to run MESH mailbox polling cycle: insufficient time has elapsed "
                 + "since the previous polling cycle or another adaptor instance has already started the polling cycle. "
-                + "Next scan in {} seconds", TimeUnit.SECONDS.convert(wakeupIntervalInMilliseconds, TimeUnit.MILLISECONDS));
+                + "Next scan in {} seconds", TimeUnit.MILLISECONDS.toSeconds(wakeupIntervalInMilliseconds));
         }
     }
 
