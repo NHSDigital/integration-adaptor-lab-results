@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * The test EDIFACT message (.dat file) is sent to the MESH mailbox where the adaptor receives inbound transactions.
  * The test waits for the transaction to be processed and compares the FHIR message published to the GP Outbound Queue
- * with the expected FHIR representation of the original message (.json file having the name name as the .dat)
+ * with the expected FHIR representation of the original message sent (.json file having the same name as the .dat)
  */
 @Slf4j
 public class InboundUserAcceptanceTest extends IntegrationBaseTest {
