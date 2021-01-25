@@ -11,8 +11,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SuppressWarnings("checkstyle:hideutilityclassconstructor")
 public class IntegrationAdapterLabResultsApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(IntegrationAdapterLabResultsApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(IntegrationAdapterLabResultsApplication.class, args);
+    }
 
 }

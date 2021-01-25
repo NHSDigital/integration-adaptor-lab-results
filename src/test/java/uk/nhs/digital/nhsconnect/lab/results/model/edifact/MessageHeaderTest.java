@@ -12,11 +12,11 @@ public class MessageHeaderTest {
     @Test
     public void testValidMessageHeader() throws EdifactValidationException {
         MessageHeader messageHeader = new MessageHeader();
-        messageHeader.setSequenceNumber(3L);
+        messageHeader.setSequenceNumber(2L);
 
         String edifact = messageHeader.toEdifact();
 
-        assertEquals("UNH+00000003+FHSREG:0:1:FH:FHS001'", edifact);
+        assertEquals("UNH+00000002+FHSREG:0:1:FH:FHS001'", edifact);
     }
 
     @Test
@@ -37,7 +37,7 @@ public class MessageHeaderTest {
             .isInstanceOf(EdifactValidationException.class)
             .hasMessage("UNH: Attribute sequenceNumber must be between 1 and 99999999");
 
-        messageHeader.setSequenceNumber(100_000_000L);
+        messageHeader.setSequenceNumber(MessageHeader.MAX_MESSAGE_SEQUENCE + 1);
         assertThatThrownBy(messageHeader::validateStateful)
             .isInstanceOf(EdifactValidationException.class)
             .hasMessage("UNH: Attribute sequenceNumber must be between 1 and 99999999");
@@ -45,16 +45,16 @@ public class MessageHeaderTest {
         messageHeader.setSequenceNumber(1L);
         messageHeader.validateStateful();
 
-        messageHeader.setSequenceNumber(99_999_999L);
+        messageHeader.setSequenceNumber(MessageHeader.MAX_MESSAGE_SEQUENCE);
         messageHeader.validateStateful();
     }
 
     @Test
     void testFromString() {
         MessageHeader messageHeader = new MessageHeader();
-        messageHeader.setSequenceNumber(3L);
+        messageHeader.setSequenceNumber(2L);
 
-        assertThat(MessageHeader.fromString("UNH+00000003+FHSREG:0:1:FH:FHS001").getValue()).isEqualTo(messageHeader.getValue());
+        assertThat(MessageHeader.fromString("UNH+00000002+FHSREG:0:1:FH:FHS001").getValue()).isEqualTo(messageHeader.getValue());
         assertThatThrownBy(() -> MessageHeader.fromString("wrong value")).isExactlyInstanceOf(IllegalArgumentException.class);
     }
 }

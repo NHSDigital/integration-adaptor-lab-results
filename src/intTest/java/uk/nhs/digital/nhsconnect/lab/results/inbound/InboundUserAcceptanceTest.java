@@ -42,7 +42,7 @@ public class InboundUserAcceptanceTest extends IntegrationBaseTest {
     @Test
     void testFetchMessageAndPushItToTheInboundQueue() throws JMSException {
         // Acting as an LAB_RESULTS system, send EDIFACT to adaptor's MESH mailbox
-        meshClient.sendEdifactMessage(OUTBOUND_MESH_MESSAGE);
+        getMeshClient().sendEdifactMessage(OUTBOUND_MESH_MESSAGE);
 
         Message inboundQueueMessage = getInboundQueueMessage();
 

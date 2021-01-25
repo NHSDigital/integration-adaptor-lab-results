@@ -3,11 +3,13 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact.message;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Split {
+public final class Split {
     private static final char ESC_CHAR = '?';
     private static final char SEGMENT_TERMINATOR = '\'';
     private static final char FIELD_TERMINATOR = '+';
     private static final char SUB_FIELD_TERMINATOR = ':';
+
+    private Split() { }
 
     public static String[] bySegmentTerminator(String input) {
         return splitString(input, SEGMENT_TERMINATOR);

@@ -1,5 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -45,21 +46,28 @@ public abstract class IntegrationBaseTest {
     private static final int JMS_RECEIVE_TIMEOUT = 500;
 
     @Autowired
-    protected JmsTemplate jmsTemplate;
+    private JmsTemplate jmsTemplate;
+
+    @Getter
     @Autowired
-    protected MeshClient meshClient;
+    private MeshClient meshClient;
+
     @Autowired
-    protected MeshConfig meshConfig;
+    private MeshConfig meshConfig;
+
+
     @Autowired
     private RecipientMailboxIdMappings recipientMailboxIdMappings;
     @Autowired
     private MeshHttpClientBuilder meshHttpClientBuilder;
 
     @Value("${labresults.amqp.meshInboundQueueName}")
-    protected String meshInboundQueueName;
+    private String meshInboundQueueName;
 
     private long originalReceiveTimeout;
-    protected MeshClient labResultsMeshClient;
+
+    @Getter
+    private MeshClient labResultsMeshClient;
 
     @PostConstruct
     private void postConstruct() {
@@ -106,7 +114,8 @@ public abstract class IntegrationBaseTest {
     @SneakyThrows(IllegalAccessException.class)
     private MeshClient buildMeshClientForLabResultsMailbox() {
         // getting this from config is
-        final String labResultsMailboxId = recipientMailboxIdMappings.getRecipientMailboxId(new MeshMessage().setHaTradingPartnerCode("XX11"));
+        final String labResultsMailboxId = recipientMailboxIdMappings.getRecipientMailboxId(
+            new MeshMessage().setHaTradingPartnerCode("XX11"));
         final String gpMailboxId = meshConfig.getMailboxId();
         final RecipientMailboxIdMappings mockRecipientMailboxIdMappings = mock(RecipientMailboxIdMappings.class);
         when(mockRecipientMailboxIdMappings.getRecipientMailboxId(any(OutboundMeshMessage.class))).thenReturn(gpMailboxId);

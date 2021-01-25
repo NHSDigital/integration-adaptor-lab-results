@@ -20,7 +20,7 @@ import static org.springframework.jms.support.destination.JmsDestinationAccessor
 @Slf4j
 public class IntegrationTestsExtension implements BeforeAllCallback, BeforeEachCallback {
 
-    private final String DLQ_PREFIX = "DLQ.";
+    private static final String DLQ_PREFIX = "DLQ.";
 
     @Override
     public void beforeAll(ExtensionContext context) {

@@ -108,6 +108,10 @@ spotbugsMain {
 	}
 }
 
+spotbugs {
+	excludeFilter = file("${rootDir}/config/spotbugs/exclude.xml")
+}
+
 checkstyle {
 	configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
 }

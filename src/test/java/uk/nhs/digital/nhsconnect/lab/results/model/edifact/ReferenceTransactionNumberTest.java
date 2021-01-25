@@ -9,6 +9,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ReferenceTransactionNumberTest {
+    private static final long VALID_TX_NUMBER = 1234L;
 
     private ReferenceTransactionNumber referenceTransactionNumber;
 
@@ -20,7 +21,7 @@ public class ReferenceTransactionNumberTest {
 
     @Test
     public void testValidReferenceTransactionType() throws EdifactValidationException {
-        referenceTransactionNumber.setTransactionNumber(1234L);
+        referenceTransactionNumber.setTransactionNumber(VALID_TX_NUMBER);
         String edifact = referenceTransactionNumber.toEdifact();
 
         assertEquals("RFF+TN:1234'", edifact);
@@ -33,7 +34,7 @@ public class ReferenceTransactionNumberTest {
             .isInstanceOf(EdifactValidationException.class)
             .hasMessage("RFF: Attribute transactionNumber must be between 1 and 9999999");
 
-        referenceTransactionNumber.setTransactionNumber(10_000_000L);
+        referenceTransactionNumber.setTransactionNumber(ReferenceTransactionNumber.MAX_TRANSACTION_NUMBER + 1);
         assertThatThrownBy(referenceTransactionNumber::validateStateful)
             .isInstanceOf(EdifactValidationException.class)
             .hasMessage("RFF: Attribute transactionNumber must be between 1 and 9999999");
@@ -41,13 +42,13 @@ public class ReferenceTransactionNumberTest {
         referenceTransactionNumber.setTransactionNumber(1L);
         referenceTransactionNumber.validateStateful();
 
-        referenceTransactionNumber.setTransactionNumber(9_999_999L);
+        referenceTransactionNumber.setTransactionNumber(ReferenceTransactionNumber.MAX_TRANSACTION_NUMBER);
         referenceTransactionNumber.validateStateful();
     }
 
     @Test
     void testFromString() {
-        referenceTransactionNumber.setTransactionNumber(1234L);
+        referenceTransactionNumber.setTransactionNumber(VALID_TX_NUMBER);
 
         assertThat(referenceTransactionNumber.fromString("RFF+TN:1234").getValue()).isEqualTo(referenceTransactionNumber.getValue());
         assertThatThrownBy(() -> referenceTransactionNumber.fromString("wrong value")).isExactlyInstanceOf(IllegalArgumentException.class);
