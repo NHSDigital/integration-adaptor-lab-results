@@ -6,31 +6,13 @@
 
     <Match>
         <Class name="uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshClient" />
-        <Method name="acknowledgeMessage" />
-        <Bug pattern="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE " />
-    </Match>
-
-    <Match>
-        <Class name="uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshClient" />
-        <Method name="authenticate" />
-        <Bug pattern="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE " />
-    </Match>
-
-    <Match>
-        <Class name="uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshClient" />
-        <Method name="getEdifactMessage" />
-        <Bug pattern="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE " />
-    </Match>
-
-    <Match>
-        <Class name="uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshClient" />
-        <Method name="getInboxMessageIds" />
-        <Bug pattern="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE " />
-    </Match>
-
-    <Match>
-        <Class name="uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshClient" />
-        <Method name="sendEdifactMessage" />
+        <Or>
+            <Method name="acknowledgeMessage" />
+            <Method name="authenticate" />
+            <Method name="getEdifactMessage"/>
+            <Method name="getInboxMessageIds"/>
+            <Method name="sendEdifactMessage"/>
+        </Or>
         <Bug pattern="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE " />
     </Match>
 
