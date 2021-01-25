@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableJms
 @EnableScheduling
 @SpringBootApplication
+@SuppressWarnings("checkstyle:hideutilityclassconstructor")
 public class IntegrationAdapterLabResultsApplication {
 
 	public static void main(String[] args) {
