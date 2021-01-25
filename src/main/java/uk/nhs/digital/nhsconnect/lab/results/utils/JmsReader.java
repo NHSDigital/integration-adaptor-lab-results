@@ -8,7 +8,9 @@ import javax.jms.Message;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-public class JmsReader {
+public final class JmsReader {
+
+    private JmsReader() { }
 
     public static String readMessage(Message message) throws JMSException {
         if (message instanceof JmsTextMessage) {

@@ -7,11 +7,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class PemFormatter {
+public final class PemFormatter {
     private static final Pattern PEM_PATTERN = Pattern.compile("(-----[A-Z ]+-----)([^-]+)(-----[A-Z ]+-----)");
     private static final int HEADER_GROUP = 1;
     private static final int BODY_GROUP = 2;
     private static final int FOOTER_GROUP = 3;
+
+    private PemFormatter() { }
 
     /**
      * Different methods of importing the certificates (application.yml, ENV, Cloud secret) can affect whitespace

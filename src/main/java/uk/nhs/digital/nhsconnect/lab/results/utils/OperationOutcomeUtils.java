@@ -3,7 +3,9 @@ package uk.nhs.digital.nhsconnect.lab.results.utils;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
 
-public class OperationOutcomeUtils {
+public final class OperationOutcomeUtils {
+
+    private OperationOutcomeUtils() { }
 
     public static OperationOutcome createFromMessage(String message) {
         return createFromMessage(message, OperationOutcome.IssueType.UNKNOWN);
