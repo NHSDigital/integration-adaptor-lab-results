@@ -21,8 +21,6 @@ import static uk.nhs.digital.nhsconnect.lab.results.IntegrationBaseTest.DLQ_PREF
 @Slf4j
 public class IntegrationTestsExtension implements BeforeAllCallback, BeforeEachCallback {
 
-    private static final String DLQ_PREFIX = "DLQ.";
-
     @Override
     public void beforeAll(ExtensionContext context) {
         ActiveMqContainer.getInstance().start();
