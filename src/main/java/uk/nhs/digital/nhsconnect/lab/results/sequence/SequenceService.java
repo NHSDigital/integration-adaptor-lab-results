@@ -13,30 +13,30 @@ public class SequenceService {
     @Autowired
     private SequenceRepository sequenceRepository;
 
-    public Long generateTransactionNumber(String generalPractitioner) {
+    public Long generateTransactionNumber(final String generalPractitioner) {
         validateSender(generalPractitioner);
         return sequenceRepository.getNextForTransaction(String.format(TRANSACTION_KEY_FORMAT, generalPractitioner));
     }
 
-    public Long generateInterchangeSequence(String sender, String recipient) {
+    public Long generateInterchangeSequence(final String sender, final String recipient) {
         validateSenderAndRecipient(sender, recipient);
         return getNextSequence(String.format(INTERCHANGE_FORMAT, sender, recipient));
     }
 
-    public Long generateMessageSequence(String sender, String recipient) {
+    public Long generateMessageSequence(final String sender, final String recipient) {
         validateSenderAndRecipient(sender, recipient);
         return getNextSequence(String.format(INTERCHANGE_MESSAGE_FORMAT, sender, recipient));
     }
 
-    private void validateSenderAndRecipient(String sender, String recipient) {
+    private void validateSenderAndRecipient(final String sender, final String recipient) {
         if (StringUtils.isBlank(sender) || StringUtils.isBlank(recipient)) {
             throw new SequenceException(
-                    String.format("Sender or recipient not valid. Sender: %s, recipient: %s", sender, recipient)
+                String.format("Sender or recipient not valid. Sender: %s, recipient: %s", sender, recipient)
             );
         }
     }
 
-    private void validateSender(String sender) {
+    private void validateSender(final String sender) {
         if (sender == null) {
             throw new SequenceException("Sender cannot be null");
         }
@@ -45,7 +45,7 @@ public class SequenceService {
         }
     }
 
-    private Long getNextSequence(String key) {
+    private Long getNextSequence(final String key) {
         return sequenceRepository.getNext(key);
     }
 }

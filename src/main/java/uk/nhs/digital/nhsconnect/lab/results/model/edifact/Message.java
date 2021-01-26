@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class Message extends Section {
-
     private static final String DEFAULT_GP_CODE = "9999";
 
     @Getter(lazy = true)
@@ -20,7 +19,7 @@ public class Message extends Section {
 
     @Getter(lazy = true)
     private final HealthAuthorityNameAndAddress healthAuthorityNameAndAddress =
-            HealthAuthorityNameAndAddress.fromString(extractSegment(HealthAuthorityNameAndAddress.KEY_QUALIFIER));
+        HealthAuthorityNameAndAddress.fromString(extractSegment(HealthAuthorityNameAndAddress.KEY_QUALIFIER));
 
     @Getter
     @Setter
@@ -35,15 +34,14 @@ public class Message extends Section {
     }
 
     public String findFirstGpCode() {
-        return getTransactions()
-                .stream()
-                .limit(1)
-                .map(transaction -> transaction.extractOptionalSegment(GpNameAndAddress.KEY_QUALIFIER))
-                .flatMap(Optional::stream)
-                .map(GpNameAndAddress::fromString)
-                .map(GpNameAndAddress::getIdentifier)
-                .findFirst()
-                .orElse(DEFAULT_GP_CODE);
+        return getTransactions().stream()
+            .limit(1)
+            .map(transaction -> transaction.extractOptionalSegment(GpNameAndAddress.KEY_QUALIFIER))
+            .flatMap(Optional::stream)
+            .map(GpNameAndAddress::fromString)
+            .map(GpNameAndAddress::getIdentifier)
+            .findFirst()
+            .orElse(DEFAULT_GP_CODE);
     }
 
     @Override
@@ -52,5 +50,4 @@ public class Message extends Section {
             getInterchange().getInterchangeHeader().getSequenceNumber(),
             getMessageHeader().getSequenceNumber());
     }
-
 }

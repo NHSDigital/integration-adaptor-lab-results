@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,12 +38,9 @@ class RecepProducerServiceTest {
     private static final String GP_CODE = "123456,123";
     private static final Long INTERCHANGE_SEQUENCE = 45L;
     private static final Long MESSAGE_SEQUENCE_1 = 56L;
-    @SuppressWarnings("checkstyle:magicnumber")
-    private static final Instant FIXED_TIME = ZonedDateTime
-            .of(2020, 4, 27, 17, 37, 0, 0, TimestampService.UK_ZONE)
-            .toInstant();
-    private static final long RECEP_INTERCHANGE_SEQUENCE = 123123;
-    private static final long RECEP_MESSAGE_SEQUENCE = 234234;
+    private static final Instant FIXED_TIME = Instant.parse("2020-04-27T16:37:00Z");
+    private static final long RECEP_INTERCHANGE_SEQUENCE = 123_123;
+    private static final long RECEP_MESSAGE_SEQUENCE = 234_234;
 
     @InjectMocks
     private RecepProducerService recepProducerService;
@@ -59,12 +55,12 @@ class RecepProducerServiceTest {
     void when_producingRecep_expect_validRecepIsCreated() throws IOException {
         when(timestampService.getCurrentTimestamp()).thenReturn(FIXED_TIME);
         when(sequenceService.generateInterchangeSequence(REF_SENDER, REF_RECIPIENT))
-                .thenReturn(RECEP_INTERCHANGE_SEQUENCE);
+            .thenReturn(RECEP_INTERCHANGE_SEQUENCE);
         when(sequenceService.generateMessageSequence(REF_SENDER, REF_RECIPIENT)).thenReturn(RECEP_MESSAGE_SEQUENCE);
-        var message = mock(Message.class);
+        final var message = mock(Message.class);
         when(message.findFirstGpCode()).thenReturn(GP_CODE);
 
-        var recep = recepProducerService.produceRecep(createInterchange(message));
+        final String recep = recepProducerService.produceRecep(createInterchange(message));
 
         assertEquals(recep, readFile());
 
@@ -74,17 +70,17 @@ class RecepProducerServiceTest {
         verifyNoMoreInteractions(sequenceService);
     }
 
-    private Interchange createInterchange(Message message) {
-        var interchange = mock(Interchange.class);
-        var healthAuthorityNameAndAddress = mock(HealthAuthorityNameAndAddress.class);
+    private Interchange createInterchange(final Message message) {
+        final var interchange = mock(Interchange.class);
+        final var healthAuthorityNameAndAddress = mock(HealthAuthorityNameAndAddress.class);
 
         when(interchange.getInterchangeHeader()).thenReturn(
-                new InterchangeHeader(SENDER, RECIPIENT, FIXED_TIME).setSequenceNumber(INTERCHANGE_SEQUENCE));
+            new InterchangeHeader(SENDER, RECIPIENT, FIXED_TIME).setSequenceNumber(INTERCHANGE_SEQUENCE));
         when(interchange.getInterchangeTrailer()).thenReturn(
-                new InterchangeTrailer(1));
+            new InterchangeTrailer(1));
         when(interchange.getMessages()).thenReturn(List.of(message));
         when(message.getMessageHeader()).thenReturn(
-                new MessageHeader().setSequenceNumber(MESSAGE_SEQUENCE_1));
+            new MessageHeader().setSequenceNumber(MESSAGE_SEQUENCE_1));
         when(message.getHealthAuthorityNameAndAddress()).thenReturn(healthAuthorityNameAndAddress);
         when(healthAuthorityNameAndAddress.getIdentifier()).thenReturn(HA_CIPHER);
 

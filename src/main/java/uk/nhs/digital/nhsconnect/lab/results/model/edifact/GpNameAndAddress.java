@@ -17,21 +17,24 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 @Builder
 @AllArgsConstructor
 public class GpNameAndAddress extends Segment {
-
     public static final String KEY = "NAD";
     public static final String QUALIFIER = "GP";
     public static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
-    private @NonNull String identifier;
-    private @NonNull String code;
 
-    public static GpNameAndAddress fromString(String edifactString) {
+    @NonNull
+    private String identifier;
+
+    @NonNull
+    private String code;
+
+    public static GpNameAndAddress fromString(final String edifactString) {
         if (!edifactString.startsWith(GpNameAndAddress.KEY_QUALIFIER)) {
             throw new IllegalArgumentException("Can't create " + GpNameAndAddress.class.getSimpleName()
                     + " from " + edifactString);
         }
-        String[] keySplit = Split.byPlus(edifactString);
-        String identifier = Split.byColon(keySplit[2])[0];
-        String code = Split.byColon(keySplit[2])[1];
+        final String[] keySplit = Split.byPlus(edifactString);
+        final String identifier = Split.byColon(keySplit[2])[0];
+        final String code = Split.byColon(keySplit[2])[1];
         return new GpNameAndAddress(identifier, code);
     }
 

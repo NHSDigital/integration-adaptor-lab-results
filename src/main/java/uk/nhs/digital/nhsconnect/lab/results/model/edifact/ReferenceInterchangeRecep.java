@@ -16,7 +16,6 @@ import java.util.Arrays;
 @Setter
 @RequiredArgsConstructor
 public class ReferenceInterchangeRecep extends Segment {
-
     public static final String KEY = "RFF";
     public static final String QUALIFIER = "RIS";
     public static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
@@ -57,9 +56,9 @@ public class ReferenceInterchangeRecep extends Segment {
             throw new IllegalArgumentException("Can't create " + ReferenceInterchangeRecep.class.getSimpleName()
                     + " from " + edifactString);
         }
-        String[] keySplit = Split.byPlus(edifactString);
-        String[] sequenceWithCodeAndCount = Split.byColon(keySplit[1]);
-        String[] sequenceWithCode = sequenceWithCodeAndCount[1].split("\\s");
+        final String[] keySplit = Split.byPlus(edifactString);
+        final String[] sequenceWithCodeAndCount = Split.byColon(keySplit[1]);
+        final String[] sequenceWithCode = sequenceWithCodeAndCount[1].split("\\s");
         return new ReferenceInterchangeRecep(
             Long.parseLong(sequenceWithCode[0]),
             RecepCode.fromCode(sequenceWithCode[1]),
@@ -76,7 +75,7 @@ public class ReferenceInterchangeRecep extends Segment {
         private final String code;
         private final String description;
 
-        public static RecepCode fromCode(@NonNull String code) {
+        public static RecepCode fromCode(final @NonNull String code) {
             return Arrays.stream(RecepCode.values())
                 .filter(rc -> code.equals(rc.getCode()))
                 .findFirst()

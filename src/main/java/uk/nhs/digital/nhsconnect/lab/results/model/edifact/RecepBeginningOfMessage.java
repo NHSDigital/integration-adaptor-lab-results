@@ -19,7 +19,8 @@ public class RecepBeginningOfMessage extends Segment {
     private static final String BGM_PREFIX = "+600+243:";
     private static final String BGM_SUFFIX = ":306+64";
 
-    private @NonNull Instant timestamp;
+    @NonNull
+    private Instant timestamp;
 
     @Override
     public String getKey() {

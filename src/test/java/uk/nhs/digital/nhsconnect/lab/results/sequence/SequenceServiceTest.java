@@ -33,37 +33,37 @@ class SequenceServiceTest {
     void when_generateInterchangeId_expect_correctValue() {
         when(sequenceRepository.getNext(INTERCHANGE_ID)).thenReturn(SEQ_VALUE);
         assertThat(sequenceService.generateInterchangeSequence("sender", "recipient"))
-                .isEqualTo(SEQ_VALUE);
+            .isEqualTo(SEQ_VALUE);
     }
 
     @Test
     void when_generateMessageId_expect_resetValue() {
         when(sequenceRepository.getNext(MESSAGE_ID)).thenReturn(SEQ_VALUE);
         assertThat(sequenceService.generateMessageSequence("sender", "recipient"))
-                .isEqualTo(SEQ_VALUE);
+            .isEqualTo(SEQ_VALUE);
     }
 
     @Test
     void when_generateIdsForInvalidSender_expect_exception() {
         assertThatThrownBy(() -> sequenceService.generateInterchangeSequence(null, "recipient"))
-                .isExactlyInstanceOf(SequenceException.class);
+            .isExactlyInstanceOf(SequenceException.class);
     }
 
     @Test
     void when_generateIdsForInvalidRecipient_expect_exception() {
         assertThatThrownBy(() -> sequenceService.generateInterchangeSequence("sender", ""))
-                .isExactlyInstanceOf(SequenceException.class);
+            .isExactlyInstanceOf(SequenceException.class);
     }
 
     @Test
     void when_generateTransactionIdsForNullSender_expect_exception() {
         assertThatThrownBy(() -> sequenceService.generateTransactionNumber(null))
-                .isExactlyInstanceOf(SequenceException.class);
+            .isExactlyInstanceOf(SequenceException.class);
     }
 
     @Test
     void when_generateTransactionIdsForEmptySender_expect_exception() {
         assertThatThrownBy(() -> sequenceService.generateTransactionNumber(""))
-                .isExactlyInstanceOf(SequenceException.class);
+            .isExactlyInstanceOf(SequenceException.class);
     }
 }

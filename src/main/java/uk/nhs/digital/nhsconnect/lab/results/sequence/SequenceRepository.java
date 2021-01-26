@@ -23,7 +23,7 @@ public class SequenceRepository {
     @Autowired
     private MongoOperations mongoOperations;
 
-    public Long getNext(String key) {
+    public Long getNext(final String key) {
         Long seqNumber = increment(key, MAX_SEQUENCE_NUMBER);
         if (seqNumber == 0) {
             seqNumber = increment(key, MAX_SEQUENCE_NUMBER);
@@ -31,7 +31,7 @@ public class SequenceRepository {
         return seqNumber;
     }
 
-    public Long getNextForTransaction(String key) {
+    public Long getNextForTransaction(final String key) {
         Long seqNumber = increment(key, MAX_TRANSACTION_SEQUENCE_NUMBER);
         if (seqNumber == 0) {
             seqNumber = increment(key, MAX_TRANSACTION_SEQUENCE_NUMBER);
@@ -39,12 +39,12 @@ public class SequenceRepository {
         return seqNumber;
     }
 
-    private Long increment(String key, Long maxSequenceNumber) {
+    private Long increment(final String key, final Long maxSequenceNumber) {
         return Objects.requireNonNull(mongoOperations.findAndModify(
-                query(where(KEY).is(key)),
-                new Update().inc(SEQUENCE_NUMBER, 1),
-                options().returnNew(true).upsert(true),
-                OutboundSequenceId.class
+            query(where(KEY).is(key)),
+            new Update().inc(SEQUENCE_NUMBER, 1),
+            options().returnNew(true).upsert(true),
+            OutboundSequenceId.class
         )).getSequenceNumber() % maxSequenceNumber;
     }
 }

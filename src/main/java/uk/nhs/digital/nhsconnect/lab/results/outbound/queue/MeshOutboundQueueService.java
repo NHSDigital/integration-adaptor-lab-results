@@ -26,7 +26,6 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class MeshOutboundQueueService {
-
     private final JmsTemplate jmsTemplate;
     private final ObjectMapper objectMapper;
     private final TimestampService timestampService;
@@ -37,31 +36,31 @@ public class MeshOutboundQueueService {
     @Setter(AccessLevel.PACKAGE)
     private String meshOutboundQueueName;
 
-    public void publish(OutboundMeshMessage message) {
+    public void publish(final OutboundMeshMessage message) {
         LOGGER.info("Publishing message to MESH outbound queue for asynchronous sending to MESH API "
                         + "OperationId={} recipient={} workflow={}",
                 message.getOperationId(), message.getHaTradingPartnerCode(), message.getWorkflowId());
         LOGGER.debug("Publishing message content to outbound mesh queue: {}", message);
         message.setMessageSentTimestamp(timestampService.formatInISO(timestampService.getCurrentTimestamp()));
         jmsTemplate.send(meshOutboundQueueName, session -> {
-            var textMessage = session.createTextMessage(serializeMeshMessage(message));
+            final var textMessage = session.createTextMessage(serializeMeshMessage(message));
             textMessage.setStringProperty(JmsHeaders.CONVERSATION_ID, conversationIdService.getCurrentConversationId());
             return textMessage;
         });
     }
 
     @SneakyThrows
-    private String serializeMeshMessage(OutboundMeshMessage meshMessage) {
+    private String serializeMeshMessage(final OutboundMeshMessage meshMessage) {
         return objectMapper.writeValueAsString(meshMessage);
     }
 
     @JmsListener(destination = "${labresults.amqp.meshOutboundQueueName}")
-    public void receive(Message message) throws IOException, JMSException {
+    public void receive(final Message message) throws IOException, JMSException {
         try {
             setLoggingConversationId(message);
             LOGGER.info("Consuming message from outbound MESH message queue");
-            String body = JmsReader.readMessage(message);
-            OutboundMeshMessage outboundMeshMessage = objectMapper.readValue(body, OutboundMeshMessage.class);
+            final String body = JmsReader.readMessage(message);
+            final OutboundMeshMessage outboundMeshMessage = objectMapper.readValue(body, OutboundMeshMessage.class);
             LOGGER.debug("Parsed message into object: {}", outboundMeshMessage);
             meshClient.authenticate();
             meshClient.sendEdifactMessage(outboundMeshMessage);
@@ -71,10 +70,11 @@ public class MeshOutboundQueueService {
         }
     }
 
-    private void setLoggingConversationId(Message message) {
+    private void setLoggingConversationId(final Message message) {
         try {
-            conversationIdService.applyConversationId(message.getStringProperty(JmsHeaders.CONVERSATION_ID));
-        } catch (JMSException e) {
+            final String conversationId = message.getStringProperty(JmsHeaders.CONVERSATION_ID);
+            conversationIdService.applyConversationId(conversationId);
+        } catch (final JMSException e) {
             LOGGER.error("Unable to read header " + JmsHeaders.CONVERSATION_ID + " from message", e);
         }
     }

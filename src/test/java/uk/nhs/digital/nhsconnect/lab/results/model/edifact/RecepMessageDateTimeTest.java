@@ -15,32 +15,32 @@ class RecepMessageDateTimeTest {
     @Test
     void when_toEdifact_and_instantInWinter_expect_edifactIsUTC() throws EdifactValidationException {
         assertThat(new RecepMessageDateTime(WINTER).toEdifact())
-                .isEqualTo("DTM+815:202003282058:306'");
+            .isEqualTo("DTM+815:202003282058:306'");
     }
 
     @Test
     void when_toEdifact_and_instantInSummer_expect_edifactIsBST() throws EdifactValidationException {
         // the translated times are UK local time / BST and one hour "ahead" of UTC
         assertThat(new RecepMessageDateTime(SUMMER).toEdifact())
-                .isEqualTo("DTM+815:202005282158:306'");
+            .isEqualTo("DTM+815:202005282158:306'");
     }
 
     @Test
     void when_fromString_and_edifactIsWinterUTC_expect_instantIsUTC() {
         assertThat(RecepMessageDateTime.fromString("DTM+815:202003282058:306'").getTimestamp())
-                .isEqualTo(WINTER);
+            .isEqualTo(WINTER);
     }
 
     @Test
     void when_fromString_and_edifactIsSummerBST_expect_instantIsUTC() {
-        // the internal Instant representation (UTC) is one hour "behind" the EDIFACT timestamp which is UK local time / BST
+        // the internal Instant representation (UTC) is one hour "behind" the UK local time / BST EDIFACT timestamp
         assertThat(RecepMessageDateTime.fromString("DTM+815:202005282158:306'").getTimestamp())
-                .isEqualTo(SUMMER);
+            .isEqualTo(SUMMER);
     }
 
     @Test
     void when_fromString_and_stringIsNotDTMSegment_expect_throwsException() {
         assertThatThrownBy(() -> RecepMessageDateTime.fromString("DTM+123:456:789'"))
-                .isExactlyInstanceOf(IllegalArgumentException.class);
+            .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 }

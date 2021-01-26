@@ -16,7 +16,6 @@ import java.util.Arrays;
 @Setter
 @RequiredArgsConstructor
 public class ReferenceMessageRecep extends Segment {
-
     public static final String KEY = "RFF";
     public static final String QUALIFIER = "MIS";
     public static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
@@ -48,15 +47,15 @@ public class ReferenceMessageRecep extends Segment {
         }
     }
 
-    public static ReferenceMessageRecep fromString(String edifactString) {
+    public static ReferenceMessageRecep fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException("Can't create " + ReferenceMessageRecep.class.getSimpleName()
                     + " from " + edifactString);
         }
-        String values = Split.byColon(
+        final String values = Split.byColon(
             Split.byPlus(edifactString)[1]
         )[1];
-        String[] elements = values.split("\\s");
+        final String[] elements = values.split("\\s");
         return new ReferenceMessageRecep(
             Long.parseLong(elements[0]),
             RecepCode.fromCode(elements[1]));
@@ -72,7 +71,7 @@ public class ReferenceMessageRecep extends Segment {
         private final String code;
         private final String description;
 
-        public static RecepCode fromCode(@NonNull String code) {
+        public static RecepCode fromCode(final @NonNull String code) {
             return Arrays.stream(RecepCode.values())
                 .filter(rc -> code.equals(rc.getCode()))
                 .findFirst()

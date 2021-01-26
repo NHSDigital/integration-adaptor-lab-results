@@ -13,13 +13,15 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
  */
 @Getter @Setter @RequiredArgsConstructor
 public class HealthAuthorityNameAndAddress extends Segment {
-
     public static final String KEY = "NAD";
     public static final String QUALIFIER = "FHS";
     public static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
-    private @NonNull String identifier;
-    private @NonNull String code;
 
+    @NonNull
+    private String identifier;
+
+    @NonNull
+    private String code;
 
     @Override
     public String getKey() {
@@ -38,22 +40,22 @@ public class HealthAuthorityNameAndAddress extends Segment {
 
     @Override
     public void preValidate() throws EdifactValidationException {
-        if (StringUtils.isEmpty(identifier)) {
+        if (!StringUtils.hasText(identifier)) {
             throw new EdifactValidationException(getKey() + ": Attribute identifier is required");
         }
-        if (StringUtils.isEmpty(code)) {
+        if (!StringUtils.hasText(code)) {
             throw new EdifactValidationException(getKey() + ": Attribute code is required");
         }
     }
 
-    public static HealthAuthorityNameAndAddress fromString(String edifactString) {
+    public static HealthAuthorityNameAndAddress fromString(final String edifactString) {
         if (!edifactString.startsWith(HealthAuthorityNameAndAddress.KEY_QUALIFIER)) {
             throw new IllegalArgumentException("Can't create " + HealthAuthorityNameAndAddress.class.getSimpleName()
                     + " from " + edifactString);
         }
-        String[] keySplit = Split.byPlus(edifactString);
-        String identifier = Split.byColon(keySplit[2])[0];
-        String code = Split.byColon(keySplit[2])[1];
+        final String[] keySplit = Split.byPlus(edifactString);
+        final String identifier = Split.byColon(keySplit[2])[0];
+        final String code = Split.byColon(keySplit[2])[1];
         return new HealthAuthorityNameAndAddress(identifier, code);
     }
 }

@@ -18,7 +18,7 @@ public class RecepMessageHeader extends Segment {
 
     @Override
     public String getValue() {
-        String formattedSequenceNumber = String.format("%08d", sequenceNumber);
+        final var formattedSequenceNumber = String.format("%08d", sequenceNumber);
         return formattedSequenceNumber + "+RECEP:0:2:FH";
     }
 
@@ -28,7 +28,8 @@ public class RecepMessageHeader extends Segment {
             throw new EdifactValidationException(getKey() + ": Attribute sequenceNumber is required");
         }
         if (sequenceNumber <= 0) {
-            throw new EdifactValidationException(getKey() + ": Attribute sequenceNumber must be greater than or equal to 1");
+            throw new EdifactValidationException(getKey()
+                + ": Attribute sequenceNumber must be greater than or equal to 1");
         }
     }
 
@@ -37,4 +38,3 @@ public class RecepMessageHeader extends Segment {
         // Do nothing
     }
 }
-

@@ -75,20 +75,20 @@ class MeshOutboundQueueServiceTest {
         @Test
         @SneakyThrows
         void testPublish() {
-            OutboundMeshMessage outboundMeshMessage = mock(OutboundMeshMessage.class);
+            final var outboundMeshMessage = mock(OutboundMeshMessage.class);
 
             meshOutboundQueueService.publish(outboundMeshMessage);
 
             verify(outboundMeshMessage).setMessageSentTimestamp(TIMESTAMP);
             verify(jmsTemplate).send(eq("queue"), messageCreatorCaptor.capture());
 
-            Session mockSession = mock(Session.class);
-            TextMessage mockTextMessage = mock(TextMessage.class);
+            final var mockSession = mock(Session.class);
+            final var mockTextMessage = mock(TextMessage.class);
 
             when(objectMapper.writeValueAsString(outboundMeshMessage)).thenReturn("Fake Text");
             when(mockSession.createTextMessage("Fake Text")).thenReturn(mockTextMessage);
 
-            Message result = messageCreatorCaptor.getValue().createMessage(mockSession);
+            final Message result = messageCreatorCaptor.getValue().createMessage(mockSession);
 
             verify(mockTextMessage).setStringProperty(JmsHeaders.CONVERSATION_ID, "ConversationID");
             assertEquals(mockTextMessage, result);
@@ -101,11 +101,11 @@ class MeshOutboundQueueServiceTest {
         @Test
         @SneakyThrows
         void testReceiveGoodCase() {
-            Message message = mock(Message.class);
+            final var message = mock(Message.class);
             when(message.getStringProperty(JmsHeaders.CONVERSATION_ID)).thenReturn("ConversationID");
             when(message.getBody(String.class)).thenReturn("Message Body");
 
-            OutboundMeshMessage outboundMeshMessage = mock(OutboundMeshMessage.class);
+            final var outboundMeshMessage = mock(OutboundMeshMessage.class);
             when(objectMapper.readValue("Message Body", OutboundMeshMessage.class)).thenReturn(outboundMeshMessage);
 
             meshOutboundQueueService.receive(message);
@@ -119,12 +119,12 @@ class MeshOutboundQueueServiceTest {
         @Test
         @SneakyThrows
         void testReceiveFailsToApplyConversationId() {
-            Message message = mock(Message.class);
+            final var message = mock(Message.class);
             when(message.getStringProperty(JmsHeaders.CONVERSATION_ID))
-                    .thenThrow(new JMSException("Expected exception"));
+                .thenThrow(new JMSException("Expected exception"));
             when(message.getBody(String.class)).thenReturn("Message Body");
 
-            OutboundMeshMessage outboundMeshMessage = mock(OutboundMeshMessage.class);
+            final var outboundMeshMessage = mock(OutboundMeshMessage.class);
             when(objectMapper.readValue("Message Body", OutboundMeshMessage.class)).thenReturn(outboundMeshMessage);
 
             meshOutboundQueueService.receive(message);
@@ -139,13 +139,13 @@ class MeshOutboundQueueServiceTest {
         @SneakyThrows
         @SuppressWarnings("deprecation")
         void testReceiveFailsToReadBody() {
-            Message message = mock(Message.class);
+            final var message = mock(Message.class);
             when(message.getStringProperty(JmsHeaders.CONVERSATION_ID)).thenReturn("ConversationID");
             when(message.getBody(String.class)).thenReturn("Message Body");
 
-            OutboundMeshMessage outboundMeshMessage = mock(OutboundMeshMessage.class);
+            final var outboundMeshMessage = mock(OutboundMeshMessage.class);
             when(objectMapper.readValue("Message Body", OutboundMeshMessage.class))
-                    .thenThrow(new JsonMappingException("Expected exception"));
+                .thenThrow(new JsonMappingException("Expected exception"));
 
             assertThrows(JsonMappingException.class, () -> meshOutboundQueueService.receive(message));
 

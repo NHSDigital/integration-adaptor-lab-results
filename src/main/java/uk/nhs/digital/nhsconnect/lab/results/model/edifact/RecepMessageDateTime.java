@@ -18,8 +18,8 @@ import java.time.format.DateTimeFormatter;
 /**
  * Representation of the timestamp DTM segment used in RECEP messages
  * <p>
- * WARNING: Due to a bug in NHAIS the value of this segment when received inbound may not be as expected. The timestamp
- * of the interchange header is a more reliable data point for translation timestamp.
+ * WARNING: Due to a bug the value of this segment when received inbound may not be as expected.
+ * The timestamp of the interchange header is a more reliable data point for translation timestamp.
  */
 @Getter
 @Setter
@@ -28,13 +28,13 @@ import java.time.format.DateTimeFormatter;
 @EqualsAndHashCode(callSuper = false)
 @ToString
 public class RecepMessageDateTime extends Segment {
-
     public static final String KEY = "DTM"; // Date/time/period
     private static final String TYPE_CODE = "815"; // receive date of interchange
     public static final String KEY_QUALIFIER = KEY + "+" + TYPE_CODE;
     private static final String FORMAT_CODE = "306";
     private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmm")
         .withZone(TimestampService.UK_ZONE);
+
     /**
      * When creating a new RecepTimestamp the timestamp is not provided. This is considered "stateful" and a value
      * that is shared across multiple segments. For outbound registration messages the RecepProducerService sets this
@@ -42,12 +42,13 @@ public class RecepMessageDateTime extends Segment {
      */
     private Instant timestamp;
 
-    public static RecepMessageDateTime fromString(String edifactString) {
+    public static RecepMessageDateTime fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {
-            throw new IllegalArgumentException("Can't create " + RecepMessageDateTime.class.getSimpleName() + " from " + edifactString);
+            throw new IllegalArgumentException("Can't create " + RecepMessageDateTime.class.getSimpleName()
+                + " from " + edifactString);
         }
-        String timestamp = Split.byColon(edifactString)[1];
-        Instant instant = ZonedDateTime.parse(timestamp, DATE_TIME_FORMAT).toInstant();
+        final String timestamp = Split.byColon(edifactString)[1];
+        final var instant = ZonedDateTime.parse(timestamp, DATE_TIME_FORMAT).toInstant();
         return new RecepMessageDateTime(instant);
     }
 

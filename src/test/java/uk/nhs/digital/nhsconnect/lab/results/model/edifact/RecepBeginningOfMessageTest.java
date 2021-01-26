@@ -26,5 +26,4 @@ class RecepBeginningOfMessageTest {
         recepBeginningOfMessage.setTimestamp(Instant.parse("2020-01-26T14:32:49Z"));
         assertEquals("+600+243:202001261432:306+64", recepBeginningOfMessage.getValue());
     }
-
 }

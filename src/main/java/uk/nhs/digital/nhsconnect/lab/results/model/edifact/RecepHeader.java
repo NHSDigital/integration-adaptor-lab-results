@@ -10,11 +10,15 @@ import java.time.Instant;
 @Setter
 public class RecepHeader extends InterchangeHeader {
 
-    public RecepHeader(@NonNull String sender, @NonNull String recipient, @NonNull Instant translationTime) {
+    public RecepHeader(
+        final @NonNull String sender,
+        final @NonNull String recipient,
+        final @NonNull Instant translationTime
+    ) {
         super(sender, recipient, translationTime);
     }
 
-    public RecepHeader setSequenceNumber(Long sequenceNumber) {
+    public RecepHeader setSequenceNumber(final long sequenceNumber) {
         return (RecepHeader) super.setSequenceNumber(sequenceNumber);
     }
 

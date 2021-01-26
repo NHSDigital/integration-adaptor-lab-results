@@ -9,9 +9,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class RecepHeaderTest {
     @Test
     void toEdifactTest() {
-        var dateTime = Instant.parse("2019-03-23T09:00:00Z");
-        var recepHeader = new RecepHeader("SNDR", "RECP", dateTime).setSequenceNumber(1L);
-        String edifact = recepHeader.toEdifact();
+        final var dateTime = Instant.parse("2019-03-23T09:00:00Z");
+        final var recepHeader = new RecepHeader("SNDR", "RECP", dateTime).setSequenceNumber(1L);
+
+        final String edifact = recepHeader.toEdifact();
 
         assertThat(edifact).isEqualTo("UNB+UNOA:2+SNDR+RECP+190323:0900+00000001++RECEP+++EDIFACT TRANSFER'");
     }
