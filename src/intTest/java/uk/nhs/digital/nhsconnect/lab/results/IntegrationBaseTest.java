@@ -60,8 +60,6 @@ public abstract class IntegrationBaseTest {
 
     @Autowired
     private MeshConfig meshConfig;
-
-
     @Autowired
     private RecipientMailboxIdMappings recipientMailboxIdMappings;
     @Autowired
@@ -154,11 +152,6 @@ public abstract class IntegrationBaseTest {
         final MeshHeaders meshHeaders = new MeshHeaders(labResultsMailboxConfig);
         final MeshRequests meshRequests = new MeshRequests(labResultsMailboxConfig, meshHeaders);
         return new MeshClient(meshRequests, mockRecipientMailboxIdMappings, meshHttpClientBuilder);
-    }
-
-    @SneakyThrows
-    protected Message getInboundQueueMessage() {
-        return waitFor(() -> jmsTemplate.receive(meshInboundQueueName));
     }
 
     @SneakyThrows
