@@ -13,14 +13,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class InterchangeHeaderTest {
 
-    private static final Instant TRANSLATION_WINTER_DATE_TIME = ZonedDateTime
-            .of(2019, 3, 23, 9, 0, 0, 0, ZoneOffset.UTC)
-            .toInstant();
-    private static final Instant TRANSLATION_SUMMER_DATE_TIME = ZonedDateTime
-            .of(2019, 5, 23, 9, 0, 0, 0, ZoneOffset.UTC)
-            .toInstant();
-    private final InterchangeHeader interchangeHeaderWinter = new InterchangeHeader("SNDR", "RECP", TRANSLATION_WINTER_DATE_TIME).setSequenceNumber(1L);
-    private final InterchangeHeader interchangeHeaderSummer = new InterchangeHeader("SNDR", "RECP", TRANSLATION_SUMMER_DATE_TIME).setSequenceNumber(1L);
+    private static final long LARGE_SEQUENCE_NUMBER = 100_000_000L;
+    @SuppressWarnings("checkstyle:magicnumber")
+    private final Instant translationWinterDateTime = ZonedDateTime
+        .of(2019, 3, 23, 9, 0, 0, 0, ZoneOffset.UTC)
+        .toInstant();
+    @SuppressWarnings("checkstyle:magicnumber")
+    private final Instant translationSummerDateTime = ZonedDateTime
+        .of(2019, 5, 23, 9, 0, 0, 0, ZoneOffset.UTC)
+        .toInstant();
+    private final InterchangeHeader interchangeHeaderWinter = new InterchangeHeader("SNDR", "RECP", translationWinterDateTime)
+        .setSequenceNumber(1L);
+    private final InterchangeHeader interchangeHeaderSummer = new InterchangeHeader("SNDR", "RECP", translationSummerDateTime)
+        .setSequenceNumber(1L);
 
     @Test
     void testToEdifactForValidInterchangeHeaderWithWinterTime() {
@@ -39,7 +44,7 @@ class InterchangeHeaderTest {
     @Test
     void testGetValueForValidInterchangeHeader() {
         final InterchangeHeader interchangeHeader =
-                new InterchangeHeader("SNDR", "RECP", TRANSLATION_SUMMER_DATE_TIME);
+                new InterchangeHeader("SNDR", "RECP", translationSummerDateTime);
         interchangeHeader.setSequenceNumber(1L);
 
         final String interchangeHeaderValue = interchangeHeader.getValue();
@@ -50,7 +55,7 @@ class InterchangeHeaderTest {
     @Test
     void testValidateStatefulSequenceNumberNullThrowsException() {
         final InterchangeHeader interchangeHeader =
-                new InterchangeHeader("SNDR", "RECP", TRANSLATION_SUMMER_DATE_TIME);
+                new InterchangeHeader("SNDR", "RECP", translationSummerDateTime);
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
                 interchangeHeader::validateStateful);
@@ -61,7 +66,7 @@ class InterchangeHeaderTest {
     @Test
     void testValidateStatefulSequenceNumberLessThanOneThrowsException() {
         final InterchangeHeader interchangeHeader =
-                new InterchangeHeader("SNDR", "RECP", TRANSLATION_SUMMER_DATE_TIME);
+                new InterchangeHeader("SNDR", "RECP", translationSummerDateTime);
         interchangeHeader.setSequenceNumber(0L);
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
@@ -73,8 +78,8 @@ class InterchangeHeaderTest {
     @Test
     void testValidateStatefulSequenceNumberMoreThanMaxThrowsException() {
         final InterchangeHeader interchangeHeader =
-                new InterchangeHeader("SNDR", "RECP", TRANSLATION_SUMMER_DATE_TIME);
-        interchangeHeader.setSequenceNumber(100_000_000L);
+                new InterchangeHeader("SNDR", "RECP", translationSummerDateTime);
+        interchangeHeader.setSequenceNumber(LARGE_SEQUENCE_NUMBER);
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
                 interchangeHeader::validateStateful);
@@ -85,7 +90,7 @@ class InterchangeHeaderTest {
     @Test
     void testValidateStatefulSequenceNumberWithinMinMaxDoesNotThrowException() {
         final InterchangeHeader interchangeHeader =
-                new InterchangeHeader("SNDR", "RECP", TRANSLATION_SUMMER_DATE_TIME);
+                new InterchangeHeader("SNDR", "RECP", translationSummerDateTime);
         interchangeHeader.setSequenceNumber(1L);
 
         assertDoesNotThrow(interchangeHeader::validateStateful);
@@ -93,7 +98,7 @@ class InterchangeHeaderTest {
 
     @Test
     void testPreValidationEmptySenderThrowsException() {
-        final InterchangeHeader interchangeHeader = new InterchangeHeader("", "RECP", TRANSLATION_SUMMER_DATE_TIME);
+        final InterchangeHeader interchangeHeader = new InterchangeHeader("", "RECP", translationSummerDateTime);
         interchangeHeader.setSequenceNumber(1L);
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
@@ -104,7 +109,7 @@ class InterchangeHeaderTest {
 
     @Test
     void testPreValidationEmptyRecipientThrowsException() {
-        final InterchangeHeader interchangeHeader = new InterchangeHeader("SNDR", "", TRANSLATION_SUMMER_DATE_TIME);
+        final InterchangeHeader interchangeHeader = new InterchangeHeader("SNDR", "", translationSummerDateTime);
         interchangeHeader.setSequenceNumber(1L);
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,

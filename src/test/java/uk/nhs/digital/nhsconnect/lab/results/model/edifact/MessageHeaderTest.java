@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MessageHeaderTest {
 
+    private static final long SEQUENCE_NUMBER = 3L;
+
     @Test
     void testToEdifactForValidMessageHeader() {
         final MessageHeader messageHeader = new MessageHeader(3L);
@@ -80,7 +82,7 @@ class MessageHeaderTest {
 
         assertEquals("UNH", messageHeader.getKey());
         assertEquals("00000003+FHSREG:0:1:FH:FHS001", messageHeader.getValue());
-        assertEquals(3L, messageHeader.getSequenceNumber());
+        assertEquals(SEQUENCE_NUMBER, messageHeader.getSequenceNumber());
     }
 
     @Test

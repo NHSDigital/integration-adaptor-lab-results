@@ -16,10 +16,10 @@ class DeadLetterQueueTest extends IntegrationBaseTest {
 
     @Test
     void whenSendingInvalidMessageToMeshInboundQueueThenMessageIsSentToDeadLetterQueue() throws JMSException {
-        clearDeadLetterQueue(meshInboundQueueName);
+        clearDeadLetterQueue(getMeshInboundQueueName());
         sendToMeshInboundQueue(MESSAGE_CONTENT);
 
-        final Message message = getDeadLetterMeshInboundQueueMessage(meshInboundQueueName);
+        final Message message = getDeadLetterMeshInboundQueueMessage(getMeshInboundQueueName());
         final String messageBody = parseTextMessage(message);
 
         assertThat(messageBody).isEqualTo(MESSAGE_CONTENT);

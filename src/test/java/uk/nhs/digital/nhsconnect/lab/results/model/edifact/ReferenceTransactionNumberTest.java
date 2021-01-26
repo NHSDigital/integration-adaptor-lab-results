@@ -9,9 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ReferenceTransactionNumberTest {
 
+    private static final long VALID_TX_NUMBER = 1234L;
+
     @Test
     void testToEdifactForValidTransactionNumber() {
-        final ReferenceTransactionNumber referenceTransactionNumber = new ReferenceTransactionNumber(1_234L);
+        final ReferenceTransactionNumber referenceTransactionNumber = new ReferenceTransactionNumber(VALID_TX_NUMBER);
 
         final String edifact = referenceTransactionNumber.toEdifact();
 
@@ -71,7 +73,7 @@ class ReferenceTransactionNumberTest {
 
         assertEquals("RFF", referenceTransactionNumber.getKey());
         assertEquals("TN:1234", referenceTransactionNumber.getValue());
-        assertEquals(1234L, referenceTransactionNumber.getTransactionNumber());
+        assertEquals(VALID_TX_NUMBER, referenceTransactionNumber.getTransactionNumber());
     }
 
     @Test

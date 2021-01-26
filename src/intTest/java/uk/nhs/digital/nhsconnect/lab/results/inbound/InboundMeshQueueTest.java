@@ -31,14 +31,14 @@ public class InboundMeshQueueTest extends IntegrationBaseTest {
     void whenMeshInboundQueueMessageIsReceivedThenMessageIsHandled(SoftAssertions softly) throws IOException, JMSException {
         final MeshMessage meshMessage = new MeshMessage()
                 .setWorkflowId(WorkflowId.REGISTRATION)
-                .setContent(new String(Files.readAllBytes(edifactResource.getFile().toPath())))
+                .setContent(new String(Files.readAllBytes(getEdifactResource().getFile().toPath())))
                 .setMeshMessageId("12345");
 
         sendToMeshInboundQueue(meshMessage);
 
         final Message message = getGpOutboundQueueMessage();
         final String content = parseTextMessage(message);
-        final String expectedContent = new String(Files.readAllBytes(fhirResource.getFile().toPath()));
+        final String expectedContent = new String(Files.readAllBytes(getFhirResource().getFile().toPath()));
 
         softly.assertThat(message.getStringProperty("TransactionType")).isEqualTo(TransactionType.APPROVAL.name().toLowerCase());
         softly.assertThat(content).isEqualTo(expectedContent);

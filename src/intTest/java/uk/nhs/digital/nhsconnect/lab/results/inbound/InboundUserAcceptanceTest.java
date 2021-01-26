@@ -42,12 +42,12 @@ public class InboundUserAcceptanceTest extends IntegrationBaseTest {
     @Test
     void testSendEdifactIsProcessedAndPushedToGpOutboundQueue() throws JMSException, IOException {
 
-        final String content = new String(Files.readAllBytes(edifactResource.getFile().toPath()));
+        final String content = new String(Files.readAllBytes(getEdifactResource().getFile().toPath()));
 
         final OutboundMeshMessage outboundMeshMessage = OutboundMeshMessage.create(RECIPIENT,
             WorkflowId.REGISTRATION, content, null, null);
 
-        labResultsMeshClient.sendEdifactMessage(outboundMeshMessage);
+        getLabResultsMeshClient().sendEdifactMessage(outboundMeshMessage);
 
         final Message gpOutboundQueueMessage = getGpOutboundQueueMessage();
         assertThat(gpOutboundQueueMessage).isNotNull();
@@ -58,7 +58,7 @@ public class InboundUserAcceptanceTest extends IntegrationBaseTest {
         final String conservationId = gpOutboundQueueMessage.getStringProperty(JmsHeaders.CONVERSATION_ID);
         assertThat(conservationId).isNotEmpty();
 
-        final String expectedMessageBody = new String(Files.readAllBytes(fhirResource.getFile().toPath()));
+        final String expectedMessageBody = new String(Files.readAllBytes(getFhirResource().getFile().toPath()));
         final String messageBody = parseTextMessage(gpOutboundQueueMessage);
         assertThat(messageBody).isEqualTo(expectedMessageBody);
     }

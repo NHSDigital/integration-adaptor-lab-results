@@ -19,7 +19,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 public class MessageHeader extends Segment {
 
     public static final String KEY = "UNH";
-    private static final long MAX_MESSAGE_SEQUENCE = 99_999_999L;
+    public static final long MAX_MESSAGE_SEQUENCE = 99_999_999L;
 
     private Long sequenceNumber;
 
@@ -45,7 +45,7 @@ public class MessageHeader extends Segment {
     }
 
     @Override
-    public void preValidate() {}
+    public void preValidate() { }
 
     public static MessageHeader fromString(final String edifactString) {
         if (!edifactString.startsWith(MessageHeader.KEY)) {

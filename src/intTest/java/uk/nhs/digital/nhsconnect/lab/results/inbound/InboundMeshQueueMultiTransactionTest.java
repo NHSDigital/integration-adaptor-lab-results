@@ -50,6 +50,7 @@ public class InboundMeshQueueMultiTransactionTest extends IntegrationBaseTest {
         assertGpOutboundQueueMessages(softly);
     }
 
+    @SuppressWarnings("checkstyle:magicnumber")
     private void assertGpOutboundQueueMessages(SoftAssertions softly) throws JMSException, IOException {
         final List<Message> gpOutboundQueueMessages = IntStream.range(0, 6)
                 .mapToObj(x -> getGpOutboundQueueMessage())
@@ -76,7 +77,7 @@ public class InboundMeshQueueMultiTransactionTest extends IntegrationBaseTest {
         softly.assertThat(transactionType).isEqualTo(TransactionType.APPROVAL.name().toLowerCase());
 
         final String messageBody = parseTextMessage(message);
-        final String expectedMessageBody = new String(Files.readAllBytes(fhirResource.getFile().toPath()));
+        final String expectedMessageBody = new String(Files.readAllBytes(getFhirResource().getFile().toPath()));
         softly.assertThat(messageBody).isEqualTo(expectedMessageBody);
     }
 

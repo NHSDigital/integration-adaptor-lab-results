@@ -130,12 +130,15 @@ class InboundQueueServiceTest {
         final var messageSentTimestamp = "2020-06-12T14:15:16Z";
         when(timestampService.formatInISO(now)).thenReturn(messageSentTimestamp);
 
-        final InboundMeshMessage inboundMeshMessage = InboundMeshMessage.create(WorkflowId.REGISTRATION, "ASDF", null, "ID123");
+        final InboundMeshMessage inboundMeshMessage = InboundMeshMessage.create(WorkflowId.REGISTRATION,
+            "ASDF", null, "ID123");
 
         inboundQueueService.publish(inboundMeshMessage);
 
         // the method parameter is modified so another copy is needed. Timestamp set to expected value
-        final InboundMeshMessage expectedInboundMeshMessage = InboundMeshMessage.create(WorkflowId.REGISTRATION, "ASDF", messageSentTimestamp, "ID123");
+        final InboundMeshMessage expectedInboundMeshMessage = InboundMeshMessage.create(WorkflowId.REGISTRATION,
+            "ASDF", messageSentTimestamp,
+            "ID123");
         final String expectedStringMessage = objectMapper.writeValueAsString(expectedInboundMeshMessage);
         verify(jmsTemplate).send((String) isNull(), jmsMessageCreatorCaptor.capture());
         final MessageCreator messageCreator = jmsMessageCreatorCaptor.getValue();

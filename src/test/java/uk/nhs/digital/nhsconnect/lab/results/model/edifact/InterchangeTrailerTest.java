@@ -9,6 +9,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class InterchangeTrailerTest {
 
+    private static final int NUMBER_OF_MESSAGES = 18;
+    private static final long SEQUENCE_NUMBER = 3L;
+
     @Test
     void testToEdifactForValidInterchangeTrailer() {
         final InterchangeTrailer interchangeTrailer = new InterchangeTrailer(1);
@@ -96,8 +99,8 @@ class InterchangeTrailerTest {
 
         assertEquals(InterchangeTrailer.KEY, interchangeTrailer.getKey());
         assertEquals("18+00000003", interchangeTrailer.getValue());
-        assertEquals(18, interchangeTrailer.getNumberOfMessages());
-        assertEquals(3L, interchangeTrailer.getSequenceNumber());
+        assertEquals(NUMBER_OF_MESSAGES, interchangeTrailer.getNumberOfMessages());
+        assertEquals(SEQUENCE_NUMBER, interchangeTrailer.getSequenceNumber());
     }
 
     @Test

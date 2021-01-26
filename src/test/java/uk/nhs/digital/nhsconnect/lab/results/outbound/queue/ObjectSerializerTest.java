@@ -33,7 +33,7 @@ class ObjectSerializerTest {
     @Test
     void serializeInvalidDataTypeToStringThrowsException() {
         final UnsupportedOperationException exception = assertThrows(UnsupportedOperationException.class,
-                () -> objectSerializer.serialize(new Object()));
+            () -> objectSerializer.serialize(new Object()));
 
         assertEquals("Data type Object is not supported", exception.getMessage());
     }

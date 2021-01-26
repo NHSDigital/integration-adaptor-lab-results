@@ -1,9 +1,11 @@
 package uk.nhs.digital.nhsconnect.lab.results.fixtures;
 import java.util.List;
 
-public class EdifactFixtures {
+public final class EdifactFixtures {
     public static final String EDIFACT_HEADER = "UNB+UNOA:2+TES5+XX11+020114:1619+00000003";
     public static final String EDIFACT_TRAILER = "UNZ+1+00000003";
+
+    private EdifactFixtures() { }
 
     public static final List<String> SAMPLE_EDIFACT = List.of(
             EDIFACT_HEADER + "'",

@@ -58,7 +58,8 @@ public class MeshClient {
     public MeshMessageId sendEdifactMessage(OutboundMeshMessage outboundMeshMessage) {
         final var loggingName = "Send a message";
         final String recipientMailbox = recipientMailboxIdMappings.getRecipientMailboxId(outboundMeshMessage);
-        LOGGER.info("Sending to MESH API: recipient: {}, MESH mailbox: {}, workflow: {}", outboundMeshMessage.getHaTradingPartnerCode(), recipientMailbox, outboundMeshMessage.getWorkflowId());
+        LOGGER.info("Sending to MESH API: recipient: {}, MESH mailbox: {}, workflow: {}",
+            outboundMeshMessage.getHaTradingPartnerCode(), recipientMailbox, outboundMeshMessage.getWorkflowId());
         try (CloseableHttpClient client = meshHttpClientBuilder.build()) {
             final var request = meshRequests.sendMessage(recipientMailbox, outboundMeshMessage.getWorkflowId());
             final String contentString = outboundMeshMessage.getContent();
@@ -176,7 +177,8 @@ public class MeshClient {
         LOGGER.info("MESH '{}' response headers: {}", type, response.getAllHeaders());
         if (LOGGER.isDebugEnabled() && response.getEntity() != null) {
             final var entity = response.getEntity();
-            LOGGER.debug("MESH '{}' response content encoding: {}, content type: {}, content length: {}", type, entity.getContentEncoding(), entity.getContentType(), entity.getContentLength());
+            LOGGER.debug("MESH '{}' response content encoding: {}, content type: {}, content length: {}",
+                type, entity.getContentEncoding(), entity.getContentType(), entity.getContentLength());
             // response is usually not "repeatable" so we can only decode it once. Log response content separately.
         }
     }

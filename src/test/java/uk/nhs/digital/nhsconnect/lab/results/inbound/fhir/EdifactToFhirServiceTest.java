@@ -31,7 +31,8 @@ class EdifactToFhirServiceTest {
     @Test
     void testConvertEdifactToFhir() {
 
-        final Map<TransactionType, FhirTransactionMapper> transactionMapper = Collections.singletonMap(TransactionType.APPROVAL, new ApprovalTransactionMapper());
+        final Map<TransactionType, FhirTransactionMapper> transactionMapper =
+            Collections.singletonMap(TransactionType.APPROVAL, new ApprovalTransactionMapper());
         final EdifactToFhirService service = new EdifactToFhirService(transactionMapper);
 
         when(transaction.getMessage()).thenReturn(message);
@@ -51,7 +52,7 @@ class EdifactToFhirServiceTest {
         when(message.getReferenceTransactionType()).thenReturn(new ReferenceTransactionType(TransactionType.APPROVAL));
 
         final UnsupportedOperationException exception = assertThrows(UnsupportedOperationException.class,
-                () -> service.convertToFhir(transaction));
+            () -> service.convertToFhir(transaction));
 
         assertEquals("Transaction type APPROVAL is not supported", exception.getMessage());
     }

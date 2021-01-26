@@ -1,5 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -41,7 +42,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith({SpringExtension.class, SoftAssertionsExtension.class, IntegrationTestsExtension.class})
 @SpringBootTest
 @Slf4j
-@Timeout(10)
+@Timeout(IntegrationBaseTest.TIMEOUT_SECONDS)
 public abstract class IntegrationBaseTest {
 
     public static final String DLQ_PREFIX = "DLQ.";
@@ -49,12 +50,18 @@ public abstract class IntegrationBaseTest {
     protected static final int POLL_INTERVAL_MS = 100;
     protected static final int POLL_DELAY_MS = 10;
     private static final int JMS_RECEIVE_TIMEOUT = 500;
+    protected static final int TIMEOUT_SECONDS = 10;
     @Autowired
-    protected JmsTemplate jmsTemplate;
+    private JmsTemplate jmsTemplate;
+
+    @Getter
     @Autowired
-    protected MeshClient meshClient;
+    private MeshClient meshClient;
+
     @Autowired
-    protected MeshConfig meshConfig;
+    private MeshConfig meshConfig;
+
+
     @Autowired
     private RecipientMailboxIdMappings recipientMailboxIdMappings;
     @Autowired
@@ -62,22 +69,30 @@ public abstract class IntegrationBaseTest {
     @Autowired
     private InboundQueueService inboundQueueService;
 
+    @Getter
     @Value("${labresults.amqp.meshInboundQueueName}")
-    protected String meshInboundQueueName;
+    private String meshInboundQueueName;
 
+    @Getter
     @Value("${labresults.amqp.meshOutboundQueueName}")
-    protected String meshOutboundQueueName;
+    private String meshOutboundQueueName;
 
+    @Getter
     @Value("${labresults.amqp.gpOutboundQueueName}")
-    protected String gpOutboundQueueName;
+    private String gpOutboundQueueName;
 
+    @Getter
     @Value("classpath:edifact/registration.dat")
-    protected Resource edifactResource;
+    private Resource edifactResource;
+
+    @Getter
     @Value("classpath:edifact/registration.json")
-    protected Resource fhirResource;
+    private Resource fhirResource;
 
     private long originalReceiveTimeout;
-    protected MeshClient labResultsMeshClient;
+
+    @Getter
+    private MeshClient labResultsMeshClient;
 
     @PostConstruct
     private void postConstruct() {
@@ -124,7 +139,8 @@ public abstract class IntegrationBaseTest {
     @SneakyThrows(IllegalAccessException.class)
     private MeshClient buildMeshClientForLabResultsMailbox() {
         // getting this from config is
-        final String labResultsMailboxId = recipientMailboxIdMappings.getRecipientMailboxId(new MeshMessage().setHaTradingPartnerCode("XX11"));
+        final String labResultsMailboxId = recipientMailboxIdMappings.getRecipientMailboxId(
+            new MeshMessage().setHaTradingPartnerCode("XX11"));
         final String gpMailboxId = meshConfig.getMailboxId();
         final RecipientMailboxIdMappings mockRecipientMailboxIdMappings = mock(RecipientMailboxIdMappings.class);
         when(mockRecipientMailboxIdMappings.getRecipientMailboxId(any(OutboundMeshMessage.class))).thenReturn(gpMailboxId);
