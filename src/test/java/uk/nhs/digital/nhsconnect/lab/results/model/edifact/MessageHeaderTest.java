@@ -61,7 +61,7 @@ class MessageHeaderTest {
 
     @Test
     void testValidateStatefulSequenceNumberMoreThanMaxValueThrowsException() {
-        final MessageHeader messageHeader = new MessageHeader(1_00_000_000L);
+        final MessageHeader messageHeader = new MessageHeader(100_000_000L);
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
                 messageHeader::validateStateful);
