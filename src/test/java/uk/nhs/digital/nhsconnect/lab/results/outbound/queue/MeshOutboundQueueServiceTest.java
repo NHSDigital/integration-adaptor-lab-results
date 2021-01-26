@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jms.core.JmsTemplate;
@@ -53,18 +54,12 @@ class MeshOutboundQueueServiceTest {
     @Captor
     private ArgumentCaptor<MessageCreator> messageCreatorCaptor;
 
+    @InjectMocks
     private MeshOutboundQueueService meshOutboundQueueService;
 
     @BeforeEach
     void setUp() {
-        meshOutboundQueueService = new MeshOutboundQueueService(
-                jmsTemplate,
-                objectMapper,
-                timestampService,
-                meshClient,
-                conversationIdService,
-                "queue"
-        );
+        meshOutboundQueueService.setMeshOutboundQueueName("queue");
     }
 
     @Nested

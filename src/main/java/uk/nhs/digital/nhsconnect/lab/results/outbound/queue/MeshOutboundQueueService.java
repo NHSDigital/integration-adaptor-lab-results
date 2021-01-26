@@ -1,7 +1,9 @@
 package uk.nhs.digital.nhsconnect.lab.results.outbound.queue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +34,8 @@ public class MeshOutboundQueueService {
     private final ConversationIdService conversationIdService;
 
     @Value("${labresults.amqp.meshOutboundQueueName}")
-    private final String meshOutboundQueueName;
+    @Setter(AccessLevel.PACKAGE)
+    private String meshOutboundQueueName;
 
     public void publish(OutboundMeshMessage message) {
         LOGGER.info("Publishing message to MESH outbound queue for asynchronous sending to MESH API "
