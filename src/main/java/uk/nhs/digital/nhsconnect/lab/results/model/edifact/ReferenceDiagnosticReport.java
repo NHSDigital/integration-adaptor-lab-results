@@ -1,17 +1,19 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 /**
- * Example RFF+SRI:15/CH000037K/200010191704'
+ * Example RFF+SRI:13/CH001137K/211010191093'
  */
+@EqualsAndHashCode(callSuper = false)
+@Builder
 @Getter
-@Setter
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class ReferenceDiagnosticReport extends Segment {
 
     public static final String KEY = "RFF";
@@ -27,9 +29,9 @@ public class ReferenceDiagnosticReport extends Segment {
         }
 
         String[] keySplit = Split.byPlus(edifactString);
-        String[] codeAndCount = Split.byColon(keySplit[1]);
+        String[] valueSplit = Split.byColon(keySplit[1]);
 
-        return new ReferenceDiagnosticReport(codeAndCount[1]);
+        return new ReferenceDiagnosticReport(valueSplit[1]);
     }
 
     @Override
@@ -50,7 +52,7 @@ public class ReferenceDiagnosticReport extends Segment {
     @Override
     public void preValidate() throws EdifactValidationException {
         if (referenceNumber.isBlank()) {
-            throw new EdifactValidationException(getKey() + "Diagnostic Report Code is required");
+            throw new EdifactValidationException(getKey() + ": Diagnostic Report Reference is required");
         }
     }
 }
