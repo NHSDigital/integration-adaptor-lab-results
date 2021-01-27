@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 public class DiagnosticReportCodeTest {
 
     @Test
-    void when_MappingToEdifact_Then_ReturnCorrectString() {
+    void testMappingToEdifact() {
         var expectedValue = "GIS+N'";
 
         var diagnosticReportCode = DiagnosticReportCode.builder()
