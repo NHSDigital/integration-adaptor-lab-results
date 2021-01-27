@@ -11,7 +11,9 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 /**
  * Example NAD+FHS+XX1:954'
  */
-@Getter @Setter @RequiredArgsConstructor
+@Getter
+@Setter
+@RequiredArgsConstructor
 public class HealthAuthorityNameAndAddress extends Segment {
     public static final String KEY = "NAD";
     public static final String QUALIFIER = "FHS";
