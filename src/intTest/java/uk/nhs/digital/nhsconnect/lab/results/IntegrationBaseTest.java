@@ -1,5 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import uk.nhs.digital.nhsconnect.lab.results.inbound.EdifactParser;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.InboundQueueService;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.RecipientMailboxIdMappings;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshClient;
@@ -66,6 +68,9 @@ public abstract class IntegrationBaseTest {
     private MeshHttpClientBuilder meshHttpClientBuilder;
     @Autowired
     private InboundQueueService inboundQueueService;
+    @Autowired
+    @Getter(AccessLevel.PROTECTED)
+    private EdifactParser edifactParser;
 
     @Getter
     @Value("${labresults.amqp.meshInboundQueueName}")
@@ -86,6 +91,10 @@ public abstract class IntegrationBaseTest {
     @Getter
     @Value("classpath:edifact/registration.json")
     private Resource fhirResource;
+
+    @Getter
+    @Value("classpath:edifact/registration_recep.dat")
+    private Resource recepResource;
 
     private long originalReceiveTimeout;
 
@@ -157,6 +166,11 @@ public abstract class IntegrationBaseTest {
     @SneakyThrows
     protected Message getGpOutboundQueueMessage() {
         return waitFor(() -> jmsTemplate.receive(gpOutboundQueueName));
+    }
+
+    @SneakyThrows
+    protected Message getMeshOutboundQueueMessage() {
+        return waitFor(() -> jmsTemplate.receive(meshOutboundQueueName));
     }
 
     @SneakyThrows
