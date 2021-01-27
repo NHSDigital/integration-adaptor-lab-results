@@ -39,7 +39,7 @@ class PersonDateOfBirthTest {
     void testFromStringWithValidEdifactStringReturnsPersonDateOfBirth() {
         final PersonDateOfBirth personDateOfBirth = PersonDateOfBirth.fromString(VALID_EDIFACT);
 
-        assertEquals("DTM", personDateOfBirth.getKey());
+        assertEquals(PersonDateOfBirth.KEY, personDateOfBirth.getKey());
         assertEquals(VALID_EDIFACT_VALUE, personDateOfBirth.getValue());
         assertEquals(FIXED_TIME, personDateOfBirth.getDateOfBirth());
     }
