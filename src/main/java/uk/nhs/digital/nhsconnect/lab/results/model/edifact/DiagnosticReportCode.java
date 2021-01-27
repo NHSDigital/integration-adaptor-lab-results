@@ -40,14 +40,13 @@ public class DiagnosticReportCode extends Segment {
 
     @Override
     protected void validateStateful() throws EdifactValidationException {
-        if (code.isBlank()) {
-            throw new EdifactValidationException(getKey() + ": Diagnostic Report Code is required");
-
-        }
     }
 
     @Override
     public void preValidate() throws EdifactValidationException {
+        if (code.isBlank()) {
+            throw new EdifactValidationException(getKey() + ": Diagnostic Report Code is required");
 
+        }
     }
 }
