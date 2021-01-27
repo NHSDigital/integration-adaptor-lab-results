@@ -18,7 +18,7 @@ class PersonNameTest {
 
 
     @Test
-    void testToEdifactReturnsCorrectString() {
+    void testToEdifactReturnsForValidPersonName() {
         final String expected = "PNA+PAT+1234567890:OPI+++SU:STEVENS+FO:CHARLES+TI:MR+MI:ANTHONY'";
 
         final PersonName personName = PersonName.builder()

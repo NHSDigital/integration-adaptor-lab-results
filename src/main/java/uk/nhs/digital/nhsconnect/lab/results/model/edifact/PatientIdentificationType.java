@@ -15,7 +15,7 @@ public enum PatientIdentificationType {
         this.code = code;
     }
 
-    public static PatientIdentificationType fromCode(String code) {
+    public static PatientIdentificationType fromCode(final String code) {
         return Arrays.stream(PatientIdentificationType.values())
             .filter(patientIdentificationType -> patientIdentificationType.getCode().equals(code))
             .findFirst()
