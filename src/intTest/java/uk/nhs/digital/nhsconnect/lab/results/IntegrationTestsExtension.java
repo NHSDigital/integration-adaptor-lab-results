@@ -10,6 +10,7 @@ import uk.nhs.digital.nhsconnect.lab.results.container.ActiveMqContainer;
 import uk.nhs.digital.nhsconnect.lab.results.container.FakeMeshContainer;
 import uk.nhs.digital.nhsconnect.lab.results.container.MongoDbContainer;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.scheduler.SchedulerTimestampRepository;
+import uk.nhs.digital.nhsconnect.lab.results.sequence.SequenceDao;
 
 import java.util.Collection;
 import java.util.List;
@@ -54,7 +55,9 @@ public class IntegrationTestsExtension implements BeforeAllCallback, BeforeEachC
                 });
         jmsTemplate.setReceiveTimeout(receiveTimeout);
 
+        final var sequenceRepository = applicationContext.getBean(SequenceDao.class);
         final var schedulerTimestampRepository = applicationContext.getBean(SchedulerTimestampRepository.class);
+        sequenceRepository.deleteAll();
         schedulerTimestampRepository.deleteAll();
     }
 }
