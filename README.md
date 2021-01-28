@@ -120,4 +120,7 @@ A mock implementation of the MESH API is available for local development. The la
 
 The [nhsdev Docker Hub](https://hub.docker.com/repository/docker/nhsdev/fake-mesh) hosts released fake-mesh images.
 
+### Coding Standards
 
+Ensure that you follow the agreed [Java Coding standards](https://gpitbjss.atlassian.net/wiki/spaces/NIA/pages/2108522539/Java+Coding+Standards) on the project when developing and code reviewing the adaptor.
+Feel free to update the documentation if you feel anything is incorrect or missing.

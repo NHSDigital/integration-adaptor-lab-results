@@ -7,6 +7,7 @@ plugins {
 	id 'jacoco'
 	id 'checkstyle'
 	id 'com.github.spotbugs' version '4.6.0'
+	id 'idea'
 }
 
 group = 'uk.nhs.digital.nhsconnect'
@@ -20,11 +21,6 @@ sourceSets {
 		compileClasspath += sourceSets.main.output
 		runtimeClasspath += sourceSets.main.output
 	}
-
-	recepResponder {
-		compileClasspath += sourceSets.main.output
-		runtimeClasspath += sourceSets.main.output
-	}
 }
 
 configurations {
@@ -34,10 +30,6 @@ configurations {
 	intTestImplementation.extendsFrom implementation
 	intTestImplementation.extendsFrom testImplementation
 	intTestRuntimeOnly.extendsFrom runtimeOnly
-
-	recepResponderImplementation.extendsFrom implementation
-	recepResponderImplementation.extendsFrom testImplementation
-	recepResponderRuntimeOnly.extendsFrom runtimeOnly
 }
 
 repositories {
@@ -114,4 +106,10 @@ spotbugs {
 
 checkstyle {
 	configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+}
+
+idea {
+	module {
+		testSourceDirs += file('src/intTest/java')
+	}
 }
