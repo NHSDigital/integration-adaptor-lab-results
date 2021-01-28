@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 @NoArgsConstructor
 public class RecepBeginningOfMessage extends Segment {
+    private static final String KEY = "BGM";
     private static final String DATE_TIME_FORMAT = "yyyyMMddHHmm";
     private static final String BGM_PREFIX = "+600+243:";
     private static final String BGM_SUFFIX = ":306+64";
@@ -24,7 +25,7 @@ public class RecepBeginningOfMessage extends Segment {
 
     @Override
     public String getKey() {
-        return "BGM";
+        return KEY;
     }
 
     @Override

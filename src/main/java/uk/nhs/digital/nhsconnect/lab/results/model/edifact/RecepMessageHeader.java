@@ -9,11 +9,12 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 @Setter
 @RequiredArgsConstructor
 public class RecepMessageHeader extends Segment {
+    private static final String KEY = "UNH";
     private Long sequenceNumber;
 
     @Override
     public String getKey() {
-        return "UNH";
+        return KEY;
     }
 
     @Override
