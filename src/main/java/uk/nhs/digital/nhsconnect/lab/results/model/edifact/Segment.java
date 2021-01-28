@@ -3,8 +3,9 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 
 public abstract class Segment {
-    private static final String PLUS_SEPARATOR = "+";
-    private static final String TERMINATOR = "'";
+    protected static final String PLUS_SEPARATOR = "+";
+    protected static final String TERMINATOR = "'";
+    protected static final String COLON_SEPARATOR = ":";
 
     /**
      * @return the key of the segment for example NAD, DTM
