@@ -10,11 +10,8 @@ import java.time.Instant;
 @Setter
 public class RecepHeader extends InterchangeHeader {
 
-    public RecepHeader(
-        final @NonNull String sender,
-        final @NonNull String recipient,
-        final @NonNull Instant translationTime
-    ) {
+    public RecepHeader(final @NonNull String sender, final @NonNull String recipient,
+                       final @NonNull Instant translationTime) {
         super(sender, recipient, translationTime);
     }
 

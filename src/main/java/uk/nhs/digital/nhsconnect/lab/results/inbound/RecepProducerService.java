@@ -78,24 +78,19 @@ public class RecepProducerService {
             .collect(Collectors.toList());
     }
 
-    private void setTimestamps(
-        final RecepHeader recepInterchangeHeader,
-        final RecepBeginningOfMessage recepBeginningOfMessage,
-        final RecepMessageDateTime recepTranslationDateTime
-    ) {
+    private void setTimestamps(final RecepHeader recepInterchangeHeader,
+                               final RecepBeginningOfMessage recepBeginningOfMessage,
+                               final RecepMessageDateTime recepTranslationDateTime) {
         final var currentTimestamp = timestampService.getCurrentTimestamp();
         recepInterchangeHeader.setTranslationTime(currentTimestamp);
         recepBeginningOfMessage.setTimestamp(currentTimestamp);
         recepTranslationDateTime.setTimestamp(currentTimestamp);
     }
 
-    private void setSequenceNumbers(
-        final List<Segment> recepMessageSegments,
-        final RecepHeader recepInterchangeHeader,
-        final RecepMessageHeader recepMessageHeader,
-        final MessageTrailer recepMessageTrailer,
-        final InterchangeTrailer recepInterchangeTrailer
-    ) {
+    private void setSequenceNumbers(final List<Segment> recepMessageSegments, final RecepHeader recepInterchangeHeader,
+                                    final RecepMessageHeader recepMessageHeader,
+                                    final MessageTrailer recepMessageTrailer,
+                                    final InterchangeTrailer recepInterchangeTrailer) {
         final var recepInterchangeSequence = sequenceService.generateInterchangeSequence(
             recepInterchangeHeader.getSender(),
             recepInterchangeHeader.getRecipient());
