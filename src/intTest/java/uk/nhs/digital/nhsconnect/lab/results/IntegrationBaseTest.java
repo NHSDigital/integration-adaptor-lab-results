@@ -169,11 +169,6 @@ public abstract class IntegrationBaseTest {
     }
 
     @SneakyThrows
-    protected Message getMeshOutboundQueueMessage() {
-        return waitFor(() -> jmsTemplate.receive(meshOutboundQueueName));
-    }
-
-    @SneakyThrows
     protected Message getDeadLetterMeshInboundQueueMessage(String queueName) {
         return waitFor(() -> jmsTemplate.receive(DLQ_PREFIX + queueName));
     }
