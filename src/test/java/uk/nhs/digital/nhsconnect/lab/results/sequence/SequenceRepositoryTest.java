@@ -16,7 +16,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@SuppressWarnings("checkstyle:magicnumber")
 class SequenceRepositoryTest {
     private static final String MAX_KEY = "max-key";
     private static final String NEW_KEY = "new-key";
@@ -44,9 +43,31 @@ class SequenceRepositoryTest {
             any(FindAndModifyOptions.class),
             eq(OutboundSequenceId.class)
         ))
-            .thenReturn(new OutboundSequenceId(MAX_KEY, 100000000L))
-            .thenReturn(new OutboundSequenceId(MAX_KEY, 100000001L));
+            .thenReturn(new OutboundSequenceId(MAX_KEY, SequenceRepository.MAX_SEQUENCE_NUMBER))
+            .thenReturn(new OutboundSequenceId(MAX_KEY, SequenceRepository.MAX_SEQUENCE_NUMBER + 1));
 
         assertThat(sequenceRepository.getNext(MAX_KEY)).isEqualTo(1L);
+    }
+
+    @Test
+    void when_getNextForTransaction_expect_correctValue() {
+        when(mongoOperations.findAndModify(any(Query.class), any(Update.class), any(FindAndModifyOptions.class),
+            eq(OutboundSequenceId.class))).thenReturn(SEQUENCE_ID);
+
+        assertThat(sequenceRepository.getNextForTransaction(NEW_KEY)).isEqualTo(1L);
+    }
+
+    @Test
+    void when_getMaxNextForTransaction_expect_valueReset() {
+        when(mongoOperations.findAndModify(
+            any(Query.class),
+            any(Update.class),
+            any(FindAndModifyOptions.class),
+            eq(OutboundSequenceId.class)
+        ))
+            .thenReturn(new OutboundSequenceId(MAX_KEY, SequenceRepository.MAX_TRANSACTION_SEQUENCE_NUMBER))
+            .thenReturn(new OutboundSequenceId(MAX_KEY, SequenceRepository.MAX_TRANSACTION_SEQUENCE_NUMBER + 1));
+
+        assertThat(sequenceRepository.getNextForTransaction(MAX_KEY)).isEqualTo(1L);
     }
 }

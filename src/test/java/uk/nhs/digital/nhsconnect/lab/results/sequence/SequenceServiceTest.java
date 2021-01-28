@@ -37,7 +37,7 @@ class SequenceServiceTest {
     }
 
     @Test
-    void when_generateMessageId_expect_resetValue() {
+    void when_generateMessageId_expect_correctValue() {
         when(sequenceRepository.getNext(MESSAGE_ID)).thenReturn(SEQ_VALUE);
         assertThat(sequenceService.generateMessageSequence("sender", "recipient"))
             .isEqualTo(SEQ_VALUE);
@@ -46,24 +46,28 @@ class SequenceServiceTest {
     @Test
     void when_generateIdsForInvalidSender_expect_exception() {
         assertThatThrownBy(() -> sequenceService.generateInterchangeSequence(null, "recipient"))
-            .isExactlyInstanceOf(SequenceException.class);
+            .isExactlyInstanceOf(SequenceException.class)
+            .hasMessage("Sender or recipient not valid. Sender: null, recipient: recipient");
     }
 
     @Test
     void when_generateIdsForInvalidRecipient_expect_exception() {
         assertThatThrownBy(() -> sequenceService.generateInterchangeSequence("sender", ""))
-            .isExactlyInstanceOf(SequenceException.class);
+            .isExactlyInstanceOf(SequenceException.class)
+            .hasMessage("Sender or recipient not valid. Sender: sender, recipient: ");
     }
 
     @Test
     void when_generateTransactionIdsForNullSender_expect_exception() {
         assertThatThrownBy(() -> sequenceService.generateTransactionNumber(null))
-            .isExactlyInstanceOf(SequenceException.class);
+            .isExactlyInstanceOf(SequenceException.class)
+            .hasMessage("Sender cannot be null");
     }
 
     @Test
     void when_generateTransactionIdsForEmptySender_expect_exception() {
         assertThatThrownBy(() -> sequenceService.generateTransactionNumber(""))
-            .isExactlyInstanceOf(SequenceException.class);
+            .isExactlyInstanceOf(SequenceException.class)
+            .hasMessage("Sender cannot be empty");
     }
 }

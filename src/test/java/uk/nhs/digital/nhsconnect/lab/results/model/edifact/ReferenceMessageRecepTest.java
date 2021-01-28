@@ -7,22 +7,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@SuppressWarnings("checkstyle:MagicNumber")
 class ReferenceMessageRecepTest {
+    private static final long SEQ = 123L;
 
     @Test
     void when_gettingKey_expect_returnsProperValue() {
-        String key = new ReferenceMessageRecep(
-            123L, ReferenceMessageRecep.RecepCode.ERROR)
+        String key = new ReferenceMessageRecep(SEQ, ReferenceMessageRecep.RecepCode.ERROR)
             .getKey();
 
-        assertThat(key).isEqualTo("RFF");
+        assertThat(key).isEqualTo(ReferenceMessageRecep.KEY);
     }
 
     @Test
     void when_gettingValue_expect_returnsProperValue() {
-        String value = new ReferenceMessageRecep(
-            123L, ReferenceMessageRecep.RecepCode.ERROR)
+        String value = new ReferenceMessageRecep(SEQ, ReferenceMessageRecep.RecepCode.ERROR)
             .getValue();
 
         assertThat(value).isEqualTo("MIS:00000123 CA");
@@ -40,38 +38,43 @@ class ReferenceMessageRecepTest {
     @Test
     void when_preValidatedDataNullRecepCode_expect_throwsException() {
         assertThatThrownBy(
-            () -> new ReferenceMessageRecep(123L, null)
-                .preValidate())
+            () -> new ReferenceMessageRecep(SEQ, null).preValidate())
             .isInstanceOf(EdifactValidationException.class)
             .hasMessage("RFF: Attribute recepCode is required");
     }
 
     @Test
     void when_parsingSuccess_expect_recepCreated() {
-        final var recepRow = ReferenceMessageRecep.fromString("RFF+MIS:00000005 CP");
+        final long seq = 5L;
+        final var recepRow = ReferenceMessageRecep.fromString(
+            String.format("RFF+MIS:%08d CP", seq));
 
         assertAll(
-            () -> assertThat(recepRow.getMessageSequenceNumber()).isEqualTo(5L),
+            () -> assertThat(recepRow.getMessageSequenceNumber()).isEqualTo(seq),
             () -> assertThat(recepRow.getRecepCode()).isEqualTo(ReferenceMessageRecep.RecepCode.SUCCESS)
         );
     }
 
     @Test
     void when_parsingError_expect_recepCreated() {
-        final var recepRow = ReferenceMessageRecep.fromString("RFF+MIS:10000006 CA:5:QWE+ASD");
+        final long seq = 10_000_006L;
+        final var recepRow = ReferenceMessageRecep.fromString(
+            String.format("RFF+MIS:%08d CA:5:QWE+ASD", seq));
 
         assertAll(
-            () -> assertThat(recepRow.getMessageSequenceNumber()).isEqualTo(10000006L),
+            () -> assertThat(recepRow.getMessageSequenceNumber()).isEqualTo(seq),
             () -> assertThat(recepRow.getRecepCode()).isEqualTo(ReferenceMessageRecep.RecepCode.ERROR)
         );
     }
 
     @Test
     void when_parsingIncomplete_expect_recepCreated() {
-        final var recepRow = ReferenceMessageRecep.fromString("RFF+MIS:99000006 CI+ASD++");
+        final long seq = 99_000_006L;
+        final var recepRow = ReferenceMessageRecep.fromString(
+            String.format("RFF+MIS:%08d CI+ASD++", seq));
 
         assertAll(
-            () -> assertThat(recepRow.getMessageSequenceNumber()).isEqualTo(99000006L),
+            () -> assertThat(recepRow.getMessageSequenceNumber()).isEqualTo(seq),
             () -> assertThat(recepRow.getRecepCode()).isEqualTo(ReferenceMessageRecep.RecepCode.INCOMPLETE)
         );
     }

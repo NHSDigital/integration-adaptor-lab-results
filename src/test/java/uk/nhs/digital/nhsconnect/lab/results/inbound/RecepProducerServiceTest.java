@@ -1,6 +1,7 @@
 package uk.nhs.digital.nhsconnect.lab.results.inbound;
 
 import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,6 +13,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeTrailer;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageHeader;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.sequence.SequenceService;
 import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
 
@@ -22,6 +24,7 @@ import java.time.Instant;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -51,16 +54,22 @@ class RecepProducerServiceTest {
     @Mock
     private TimestampService timestampService;
 
+    @Mock
+    private Message message;
+
+    @BeforeEach
+    void setUp() {
+        when(message.findFirstGpCode()).thenReturn(GP_CODE);
+    }
+
     @Test
     void when_producingRecep_expect_validRecepIsCreated() throws IOException {
         when(timestampService.getCurrentTimestamp()).thenReturn(FIXED_TIME);
         when(sequenceService.generateInterchangeSequence(REF_SENDER, REF_RECIPIENT))
             .thenReturn(RECEP_INTERCHANGE_SEQUENCE);
         when(sequenceService.generateMessageSequence(REF_SENDER, REF_RECIPIENT)).thenReturn(RECEP_MESSAGE_SEQUENCE);
-        final var message = mock(Message.class);
-        when(message.findFirstGpCode()).thenReturn(GP_CODE);
 
-        final String recep = recepProducerService.produceRecep(createInterchange(message));
+        final String recep = recepProducerService.produceRecep(createInterchange(message, SENDER));
 
         assertEquals(recep, readFile());
 
@@ -70,12 +79,18 @@ class RecepProducerServiceTest {
         verifyNoMoreInteractions(sequenceService);
     }
 
-    private Interchange createInterchange(final Message message) {
+    @Test
+    void when_producingRecepInvalid_expect_throwsEdifactValidationException() {
+        assertThrows(EdifactValidationException.class,
+            () -> recepProducerService.produceRecep(createInterchange(message, "")));
+    }
+
+    private Interchange createInterchange(final Message message, final String sender) {
         final var interchange = mock(Interchange.class);
         final var healthAuthorityNameAndAddress = mock(HealthAuthorityNameAndAddress.class);
 
         when(interchange.getInterchangeHeader()).thenReturn(
-            new InterchangeHeader(SENDER, RECIPIENT, FIXED_TIME).setSequenceNumber(INTERCHANGE_SEQUENCE));
+            new InterchangeHeader(sender, RECIPIENT, FIXED_TIME).setSequenceNumber(INTERCHANGE_SEQUENCE));
         when(interchange.getInterchangeTrailer()).thenReturn(
             new InterchangeTrailer(1));
         when(interchange.getMessages()).thenReturn(List.of(message));

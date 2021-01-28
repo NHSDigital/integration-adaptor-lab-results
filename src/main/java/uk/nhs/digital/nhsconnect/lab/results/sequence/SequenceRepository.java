@@ -17,8 +17,8 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 public class SequenceRepository {
     private static final String KEY = "key";
     private static final String SEQUENCE_NUMBER = "sequenceNumber";
-    private static final long MAX_SEQUENCE_NUMBER = 100_000_000L;
-    private static final long MAX_TRANSACTION_SEQUENCE_NUMBER = 10_000_000L;
+    protected static final long MAX_SEQUENCE_NUMBER = 100_000_000L;
+    protected static final long MAX_TRANSACTION_SEQUENCE_NUMBER = 10_000_000L;
 
     @Autowired
     private MongoOperations mongoOperations;
