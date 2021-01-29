@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
@@ -17,7 +16,6 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
  */
 @EqualsAndHashCode(callSuper = false)
 @Getter
-@ToString
 @AllArgsConstructor
 @Builder
 public class DiagnosticReportDateIssued extends Segment {

@@ -16,13 +16,13 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 @AllArgsConstructor
 public class ReferenceDiagnosticReport extends Segment {
 
-    public static final String KEY = "RFF";
-    public static final String QUALIFIER = "SRI";
-    public static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
+    private static final String KEY = "RFF";
+    private static final String QUALIFIER = "SRI";
+    private static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
 
     private final String referenceNumber;
 
-    public static ReferenceDiagnosticReport fromString(String edifactString) {
+    public static ReferenceDiagnosticReport fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException(
                 "Can't create " + ReferenceDiagnosticReport.class.getSimpleName() + " from " + edifactString);

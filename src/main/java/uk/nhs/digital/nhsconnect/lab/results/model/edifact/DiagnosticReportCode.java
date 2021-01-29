@@ -16,10 +16,10 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 @AllArgsConstructor
 public class DiagnosticReportCode extends Segment {
 
-    public static final String KEY = "GIS";
+    private static final String KEY = "GIS";
     private final String code;
 
-    public static DiagnosticReportCode fromString(String edifactString) {
+    public static DiagnosticReportCode fromString(final String edifactString) {
         if (!edifactString.startsWith(DiagnosticReportCode.KEY)) {
             throw new IllegalArgumentException("Can't create " + DiagnosticReportCode.class.getSimpleName() + " from " + edifactString);
         }
