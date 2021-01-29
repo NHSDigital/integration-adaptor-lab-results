@@ -41,7 +41,7 @@ public class ReferenceDiagnosticReport extends Segment {
 
     @Override
     public String getValue() {
-        return referenceNumber;
+        return QUALIFIER + ":" + referenceNumber;
     }
 
     @Override

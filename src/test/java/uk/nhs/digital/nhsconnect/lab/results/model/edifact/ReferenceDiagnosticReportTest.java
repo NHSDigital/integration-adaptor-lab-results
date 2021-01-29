@@ -10,9 +10,8 @@ public class ReferenceDiagnosticReportTest {
     @Test
     void testFromStringWithValidInput() {
         ReferenceDiagnosticReport referenceDiagnosticReport = ReferenceDiagnosticReport.fromString("RFF+SRI:13/CH001137K/211010191093");
-        ReferenceDiagnosticReport expectedReferenceDiagnosticReport = new ReferenceDiagnosticReport("13/CH001137K/211010191093");
 
-        assertThat(referenceDiagnosticReport.getValue()).isEqualTo(expectedReferenceDiagnosticReport.getValue());
+        assertThat(referenceDiagnosticReport.getValue()).isEqualTo("SRI:13/CH001137K/211010191093");
     }
 
 
