@@ -23,9 +23,4 @@ public enum Gender {
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("No gender name for '" + code + "'"));
     }
-
-    @Override
-    public String toString() {
-        return code;
-    }
 }

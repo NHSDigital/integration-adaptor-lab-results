@@ -3,11 +3,13 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
-import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
 
 import java.time.LocalDate;
+import java.time.Year;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -18,22 +20,15 @@ import java.time.format.DateTimeFormatter;
 @Data
 public class PersonDateOfBirth extends Segment {
 
-    private static final DateTimeFormatter DATE_TIME_FORMATTER =
-        DateTimeFormatter.ofPattern("yyyyMMdd").withZone(TimestampService.UK_ZONE);
     protected static final String KEY = "DTM";
     private static final String QUALIFIER = "329";
     private static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
-    private static final String DATE_FORMAT = "102";
-    private final LocalDate dateOfBirth;
+    private static final DateTimeFormatter DATE_FORMATTER_CCYY = DateTimeFormatter.ofPattern("yyyy");
+    private static final DateTimeFormatter DATE_FORMATTER_CCYYMM = DateTimeFormatter.ofPattern("yyyyMM");
+    private static final DateTimeFormatter DATE_FORMATTER_CCYYMMDD = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-    public static PersonDateOfBirth fromString(final String edifactString) {
-        if (!edifactString.startsWith(PersonDateOfBirth.KEY_QUALIFIER)) {
-            throw new IllegalArgumentException("Can't create " + PersonDateOfBirth.class.getSimpleName() + " from " + edifactString);
-        }
-        final String dateTime = Split.byColon(Split.byPlus(edifactString)[1])[1];
-        final LocalDate instant = LocalDate.parse(dateTime, DATE_TIME_FORMATTER);
-        return new PersonDateOfBirth(instant);
-    }
+    private final @NonNull String dateOfBirth;
+    private final @NonNull DateFormat dateFormat;
 
     @Override
     public String getKey() {
@@ -44,9 +39,9 @@ public class PersonDateOfBirth extends Segment {
     public String getValue() {
         return QUALIFIER
             .concat(COLON_SEPARATOR)
-            .concat(DATE_TIME_FORMATTER.format(dateOfBirth))
+            .concat(getFormattedEdifactDate(dateOfBirth, dateFormat))
             .concat(COLON_SEPARATOR)
-            .concat(DATE_FORMAT);
+            .concat(dateFormat.getCode());
     }
 
     @Override
@@ -55,8 +50,46 @@ public class PersonDateOfBirth extends Segment {
 
     @Override
     public void preValidate() throws EdifactValidationException {
-        if (dateOfBirth == null) {
+        if (dateOfBirth.isBlank()) {
             throw new EdifactValidationException(getKey() + ": Date of birth is required");
         }
+    }
+
+    public static PersonDateOfBirth fromString(final String edifactString) {
+        if (!edifactString.startsWith(PersonDateOfBirth.KEY_QUALIFIER)) {
+            throw new IllegalArgumentException("Can't create " + PersonDateOfBirth.class.getSimpleName() + " from " + edifactString);
+        }
+        final String input = Split.byPlus(edifactString)[1];
+        final String dateOfBirth = Split.byColon(input)[1];
+        final String format = Split.bySegmentTerminator(Split.byColon(input)[2])[0];
+
+        final DateFormat dateFormat = DateFormat.fromCode(format);
+
+        return PersonDateOfBirth.builder()
+            .dateOfBirth(getFormattedFhirDate(dateOfBirth, dateFormat))
+            .dateFormat(dateFormat)
+            .build();
+    }
+
+    private static String getFormattedFhirDate(final String dateOfBirth, final DateFormat dateFormat) {
+        if (dateFormat.equals(DateFormat.CCYY)) {
+            return Year.parse(dateOfBirth, DATE_FORMATTER_CCYY).toString();
+        } else if (dateFormat.equals(DateFormat.CCYYMM)) {
+            return YearMonth.parse(dateOfBirth, DATE_FORMATTER_CCYYMM).toString();
+        } else if (dateFormat.equals(DateFormat.CCYYMMDD)) {
+            return LocalDate.parse(dateOfBirth, DATE_FORMATTER_CCYYMMDD).toString();
+        }
+        return dateOfBirth;
+    }
+
+    private static String getFormattedEdifactDate(final String dateOfBirth, final DateFormat dateFormat) {
+        if (dateFormat.equals(DateFormat.CCYY)) {
+            return DATE_FORMATTER_CCYY.format(Year.parse(dateOfBirth));
+        } else if (dateFormat.equals(DateFormat.CCYYMM)) {
+            return DATE_FORMATTER_CCYYMM.format(YearMonth.parse(dateOfBirth));
+        } else if (dateFormat.equals(DateFormat.CCYYMMDD)) {
+            return DATE_FORMATTER_CCYYMMDD.format(LocalDate.parse(dateOfBirth));
+        }
+        return dateOfBirth;
     }
 }

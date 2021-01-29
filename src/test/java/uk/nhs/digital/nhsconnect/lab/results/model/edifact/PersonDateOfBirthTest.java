@@ -3,31 +3,63 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 
-import java.time.LocalDate;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PersonDateOfBirthTest {
 
-    private static final LocalDate FIXED_TIME = LocalDate.of(1991, 11, 6);
-    private static final String VALID_EDIFACT = "DTM+329:19911106:102'";
-    private static final String VALID_EDIFACT_VALUE = "329:19911106:102";
+    private static final String VALID_FHIR_DOB_CCYYMMDD = "1991-11-06";
+    private static final String VALID_FHIR_DOB_CCYYMM = "1991-11";
+    private static final String VALID_FHIR_DOB_CCYY = "1991";
+    private static final String VALID_EDIFACT_CCYYMMDD = "DTM+329:19911106:102'";
+    private static final String VALID_EDIFACT_CCYYMMDD_VALUE = "329:19911106:102";
+    private static final String VALID_EDIFACT_CCYYMM = "DTM+329:199111:610'";
+    private static final String VALID_EDIFACT_CCYYMM_VALUE = "329:199111:610";
+    private static final String VALID_EDIFACT_CCYY = "DTM+329:1991:602'";
+    private static final String VALID_EDIFACT_CCYY_VALUE = "329:1991:602";
 
     @Test
-    void testToEdifactForValidPersonDateOfBirth() {
+    void testToEdifactForValidPersonDateOfBirthInFormatCCYYMMDD() {
         final PersonDateOfBirth personDateOfBirth = PersonDateOfBirth.builder()
-            .dateOfBirth(FIXED_TIME)
+            .dateOfBirth(VALID_FHIR_DOB_CCYYMMDD)
+            .dateFormat(DateFormat.CCYYMMDD)
             .build();
 
         final String actual = personDateOfBirth.toEdifact();
 
-        assertEquals(VALID_EDIFACT, actual);
+        assertEquals(VALID_EDIFACT_CCYYMMDD, actual);
     }
 
     @Test
-    void testToEdifactForInvalidPersonDateOfBirthThrowsException() {
-        final PersonDateOfBirth personDateOfBirth = PersonDateOfBirth.builder().build();
+    void testToEdifactForValidPersonDateOfBirthInFormatCCYYMM() {
+        final PersonDateOfBirth personDateOfBirth = PersonDateOfBirth.builder()
+            .dateOfBirth(VALID_FHIR_DOB_CCYYMM)
+            .dateFormat(DateFormat.CCYYMM)
+            .build();
+
+        final String actual = personDateOfBirth.toEdifact();
+
+        assertEquals(VALID_EDIFACT_CCYYMM, actual);
+    }
+
+    @Test
+    void testToEdifactForValidPersonDateOfBirthInFormatCCYY() {
+        final PersonDateOfBirth personDateOfBirth = PersonDateOfBirth.builder()
+            .dateOfBirth(VALID_FHIR_DOB_CCYY)
+            .dateFormat(DateFormat.CCYY)
+            .build();
+
+        final String actual = personDateOfBirth.toEdifact();
+
+        assertEquals(VALID_EDIFACT_CCYY, actual);
+    }
+
+    @Test
+    void testToEdifactForEmptyPersonDateOfBirthThrowsException() {
+        final PersonDateOfBirth personDateOfBirth = PersonDateOfBirth.builder()
+            .dateOfBirth("")
+            .dateFormat(DateFormat.CCYYMMDD)
+            .build();
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
             personDateOfBirth::toEdifact);
@@ -36,12 +68,43 @@ class PersonDateOfBirthTest {
     }
 
     @Test
-    void testFromStringWithValidEdifactStringReturnsPersonDateOfBirth() {
-        final PersonDateOfBirth personDateOfBirth = PersonDateOfBirth.fromString(VALID_EDIFACT);
+    void testToEdifactForBlankPersonDateOfBirthThrowsException() {
+        final PersonDateOfBirth personDateOfBirth = PersonDateOfBirth.builder()
+            .dateOfBirth(" ")
+            .dateFormat(DateFormat.CCYYMMDD)
+            .build();
+
+        final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
+            personDateOfBirth::toEdifact);
+
+        assertEquals("DTM: Date of birth is required", exception.getMessage());
+    }
+
+    @Test
+    void testFromStringWithValidEdifactStringReturnsPersonDateOfBirthInFormatCCYY() {
+        final PersonDateOfBirth personDateOfBirth = PersonDateOfBirth.fromString(VALID_EDIFACT_CCYY);
 
         assertEquals(PersonDateOfBirth.KEY, personDateOfBirth.getKey());
-        assertEquals(VALID_EDIFACT_VALUE, personDateOfBirth.getValue());
-        assertEquals(FIXED_TIME, personDateOfBirth.getDateOfBirth());
+        assertEquals(VALID_EDIFACT_CCYY_VALUE, personDateOfBirth.getValue());
+        assertEquals(VALID_FHIR_DOB_CCYY, personDateOfBirth.getDateOfBirth());
+    }
+
+    @Test
+    void testFromStringWithValidEdifactStringReturnsPersonDateOfBirthInFormatCCYYMM() {
+        final PersonDateOfBirth personDateOfBirth = PersonDateOfBirth.fromString(VALID_EDIFACT_CCYYMM);
+
+        assertEquals(PersonDateOfBirth.KEY, personDateOfBirth.getKey());
+        assertEquals(VALID_EDIFACT_CCYYMM_VALUE, personDateOfBirth.getValue());
+        assertEquals(VALID_FHIR_DOB_CCYYMM, personDateOfBirth.getDateOfBirth());
+    }
+
+    @Test
+    void testFromStringWithValidEdifactStringReturnsPersonDateOfBirthInFormatCCYYMMDD() {
+        final PersonDateOfBirth personDateOfBirth = PersonDateOfBirth.fromString(VALID_EDIFACT_CCYYMMDD);
+
+        assertEquals(PersonDateOfBirth.KEY, personDateOfBirth.getKey());
+        assertEquals(VALID_EDIFACT_CCYYMMDD_VALUE, personDateOfBirth.getValue());
+        assertEquals(VALID_FHIR_DOB_CCYYMMDD, personDateOfBirth.getDateOfBirth());
     }
 
     @Test

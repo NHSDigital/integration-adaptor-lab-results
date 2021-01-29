@@ -15,7 +15,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 public class PersonSex extends Segment {
     protected static final String KEY = "PDI";
 
-    private Gender gender;
+    private final Gender gender;
 
     @Override
     public String getKey() {

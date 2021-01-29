@@ -37,44 +37,6 @@ public class PersonName extends Segment {
     private final String title;
     private final String secondForename;
 
-    public static PersonName fromString(final String edifactString) {
-        if (!edifactString.startsWith(PersonName.KEY_QUALIFIER)) {
-            throw new IllegalArgumentException("Can't create " + PersonName.class.getSimpleName() + " from " + edifactString);
-        }
-        return PersonName.builder()
-            .nhsNumber(extractNhsNumber(edifactString))
-            .patientIdentificationType(getPatientIdentificationType(edifactString))
-            .surname(extractNamePart(FAMILY_NAME_QUALIFIER, edifactString))
-            .firstForename(extractNamePart(FIRST_NAME_QUALIFIER, edifactString))
-            .title(extractNamePart(TITLE_QUALIFIER, edifactString))
-            .secondForename(extractNamePart(MIDDLE_NAME_QUALIFIER, edifactString))
-            .build();
-    }
-
-    private static String extractNhsNumber(final String edifactString) {
-        final String[] components = Split.byPlus(edifactString);
-        if (components.length > 2 && StringUtils.isNotBlank(components[2])) {
-            return Split.byColon(components[2])[0];
-        }
-        return null;
-    }
-
-    private static PatientIdentificationType getPatientIdentificationType(final String edifactString) {
-        final String[] components = Split.byPlus(edifactString);
-        if (StringUtils.isNotBlank(extractNhsNumber(edifactString)) && components.length > 1) {
-            return PatientIdentificationType.fromCode(Split.byColon(components[2])[1]);
-        }
-        return null;
-    }
-
-    private static String extractNamePart(final String qualifier, final String text) {
-        return Arrays.stream(Split.byPlus(text))
-            .filter(value -> value.startsWith(qualifier))
-            .map(value -> Split.byColon(value)[1])
-            .findFirst()
-            .orElse(null);
-    }
-
     @Override
     public String getKey() {
         return KEY;
@@ -114,6 +76,44 @@ public class PersonName extends Segment {
 
     @Override
     protected void validateStateful() throws EdifactValidationException {
+    }
+
+    public static PersonName fromString(final String edifactString) {
+        if (!edifactString.startsWith(PersonName.KEY_QUALIFIER)) {
+            throw new IllegalArgumentException("Can't create " + PersonName.class.getSimpleName() + " from " + edifactString);
+        }
+        return PersonName.builder()
+            .nhsNumber(extractNhsNumber(edifactString))
+            .patientIdentificationType(getPatientIdentificationType(edifactString))
+            .surname(extractNamePart(FAMILY_NAME_QUALIFIER, edifactString))
+            .firstForename(extractNamePart(FIRST_NAME_QUALIFIER, edifactString))
+            .title(extractNamePart(TITLE_QUALIFIER, edifactString))
+            .secondForename(extractNamePart(MIDDLE_NAME_QUALIFIER, edifactString))
+            .build();
+    }
+
+    private static String extractNhsNumber(final String edifactString) {
+        final String[] components = Split.byPlus(edifactString);
+        if (components.length > 2 && StringUtils.isNotBlank(components[2])) {
+            return Split.byColon(components[2])[0];
+        }
+        return null;
+    }
+
+    private static PatientIdentificationType getPatientIdentificationType(final String edifactString) {
+        final String[] components = Split.byPlus(edifactString);
+        if (StringUtils.isNotBlank(extractNhsNumber(edifactString)) && components.length > 1) {
+            return PatientIdentificationType.fromCode(Split.byColon(components[2])[1]);
+        }
+        return null;
+    }
+
+    private static String extractNamePart(final String qualifier, final String text) {
+        return Arrays.stream(Split.byPlus(text))
+            .filter(value -> value.startsWith(qualifier))
+            .map(value -> Split.byColon(value)[1])
+            .findFirst()
+            .orElse(null);
     }
 
 }
