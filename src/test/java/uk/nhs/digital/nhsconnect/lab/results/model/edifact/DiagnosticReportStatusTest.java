@@ -9,19 +9,21 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 
 public class DiagnosticReportStatusTest {
 
-    private static final String VALID_EDIFACT = "STS++UN'";
+    private static final String VALID_EDIFACT = "STS++UN";
     private static final String VALID_EDIFACT_VALUE = "UN";
 
 
     @Test
     void testToEdifactWithValidDiagnosticReportStatus() {
+        final String expected = "STS++UN'";
+
         final DiagnosticReportStatus diagnosticReportStatus = DiagnosticReportStatus.builder()
             .event("+UN")
             .build();
 
         final String actualValue = diagnosticReportStatus.toEdifact();
 
-        assertEquals(VALID_EDIFACT, actualValue);
+        assertEquals(expected, actualValue);
     }
 
     @Test

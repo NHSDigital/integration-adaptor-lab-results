@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NonNull;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
@@ -18,14 +17,15 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 public class DiagnosticReportCode extends Segment {
 
     public static final String KEY = "GIS";
-    private final @NonNull String code;
+    private final String code;
 
     public static DiagnosticReportCode fromString(String edifactString) {
         if (!edifactString.startsWith(DiagnosticReportCode.KEY)) {
             throw new IllegalArgumentException("Can't create " + DiagnosticReportCode.class.getSimpleName() + " from " + edifactString);
         }
-        String[] keySplit = Split.byPlus(edifactString);
-        return new DiagnosticReportCode(keySplit[1]);
+        final String[] keySplit = Split.byPlus(edifactString);
+        final String code = keySplit[1];
+        return new DiagnosticReportCode(code);
     }
 
     @Override

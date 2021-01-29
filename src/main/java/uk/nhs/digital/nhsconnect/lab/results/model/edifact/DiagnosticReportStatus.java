@@ -24,7 +24,7 @@ public class DiagnosticReportStatus extends Segment {
         if (!edifactString.startsWith(KEY)) {
             throw new IllegalArgumentException("Can't create " + DiagnosticReportStatus.class.getSimpleName() + " from " + edifactString);
         }
-        String value = Split.bySegmentTerminator(Split.byPlus(edifactString)[2])[0];
+        String value = Split.byPlus(edifactString)[2];
         return new DiagnosticReportStatus(value);
     }
 

@@ -2,6 +2,7 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
@@ -32,15 +33,15 @@ public class DiagnosticReportCodeTest {
     @Test
     void testFromStringWithValidInput() {
         DiagnosticReportCode diagnosticReportCode = DiagnosticReportCode.fromString("GIS+N");
-        DiagnosticReportCode expectedDiagnosticReportCode = new DiagnosticReportCode("N");
 
-        assertThat(diagnosticReportCode.getValue()).isEqualTo(expectedDiagnosticReportCode.getValue());
+        String actual = diagnosticReportCode.toEdifact();
 
+        assertEquals("GIS+N'", actual);
     }
 
     @Test
     void testFromStringWithInvalidInput() {
-        assertThatThrownBy(() -> DiagnosticReportCode.fromString("XXX+N"))
+        assertThatThrownBy(() -> DiagnosticReportCode.fromString("wrong value"))
             .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 }

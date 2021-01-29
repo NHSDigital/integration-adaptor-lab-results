@@ -27,7 +27,9 @@ public class DiagnosticReportDateIssuedTest {
 
     @Test
     void testToEdifactForInvalidDiagnosticReportIssued() {
-        final DiagnosticReportDateIssued diagnosticReportDateIssued = DiagnosticReportDateIssued.builder().build();
+        final DiagnosticReportDateIssued diagnosticReportDateIssued = DiagnosticReportDateIssued.builder()
+            .dateIssued(null)
+            .build();
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
             diagnosticReportDateIssued::toEdifact);
