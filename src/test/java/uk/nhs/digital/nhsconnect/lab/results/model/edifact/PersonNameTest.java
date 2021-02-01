@@ -3,6 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -60,9 +61,10 @@ class PersonNameTest {
 
     @Test
     void testFromString() {
-        assertEquals(IDENTIFICATION_ONLY_VALUE, PersonName.fromString(IDENTIFICATION_ONLY).getValue());
-        assertEquals(IDENTIFICATION_AND_NAMES_VALUE, PersonName.fromString(IDENTIFICATION_AND_NAMES).getValue());
-        assertEquals(NAMES_ONLY_VALUE, PersonName.fromString(NAMES_ONLY).getValue());
+        assertAll("fromString",
+            () -> assertEquals(IDENTIFICATION_ONLY_VALUE, PersonName.fromString(IDENTIFICATION_ONLY).getValue()),
+            () -> assertEquals(IDENTIFICATION_AND_NAMES_VALUE, PersonName.fromString(IDENTIFICATION_AND_NAMES).getValue()),
+            () -> assertEquals(NAMES_ONLY_VALUE, PersonName.fromString(NAMES_ONLY).getValue()));
     }
 
     @Test

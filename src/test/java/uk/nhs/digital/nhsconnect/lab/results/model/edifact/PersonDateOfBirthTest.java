@@ -3,6 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -84,27 +85,30 @@ class PersonDateOfBirthTest {
     void testFromStringWithValidEdifactStringReturnsPersonDateOfBirthInFormatCCYY() {
         final PersonDateOfBirth personDateOfBirth = PersonDateOfBirth.fromString(VALID_EDIFACT_CCYY);
 
-        assertEquals(PersonDateOfBirth.KEY, personDateOfBirth.getKey());
-        assertEquals(VALID_EDIFACT_CCYY_VALUE, personDateOfBirth.getValue());
-        assertEquals(VALID_FHIR_DOB_CCYY, personDateOfBirth.getDateOfBirth());
+        assertAll("fromString date of birth format CCYY",
+            () -> assertEquals(PersonDateOfBirth.KEY, personDateOfBirth.getKey()),
+            () -> assertEquals(VALID_EDIFACT_CCYY_VALUE, personDateOfBirth.getValue()),
+            () -> assertEquals(VALID_FHIR_DOB_CCYY, personDateOfBirth.getDateOfBirth()));
     }
 
     @Test
     void testFromStringWithValidEdifactStringReturnsPersonDateOfBirthInFormatCCYYMM() {
         final PersonDateOfBirth personDateOfBirth = PersonDateOfBirth.fromString(VALID_EDIFACT_CCYYMM);
 
-        assertEquals(PersonDateOfBirth.KEY, personDateOfBirth.getKey());
-        assertEquals(VALID_EDIFACT_CCYYMM_VALUE, personDateOfBirth.getValue());
-        assertEquals(VALID_FHIR_DOB_CCYYMM, personDateOfBirth.getDateOfBirth());
+        assertAll("fromString date of birth format CCYYMM",
+            () -> assertEquals(PersonDateOfBirth.KEY, personDateOfBirth.getKey()),
+            () -> assertEquals(VALID_EDIFACT_CCYYMM_VALUE, personDateOfBirth.getValue()),
+            () -> assertEquals(VALID_FHIR_DOB_CCYYMM, personDateOfBirth.getDateOfBirth()));
     }
 
     @Test
     void testFromStringWithValidEdifactStringReturnsPersonDateOfBirthInFormatCCYYMMDD() {
         final PersonDateOfBirth personDateOfBirth = PersonDateOfBirth.fromString(VALID_EDIFACT_CCYYMMDD);
 
-        assertEquals(PersonDateOfBirth.KEY, personDateOfBirth.getKey());
-        assertEquals(VALID_EDIFACT_CCYYMMDD_VALUE, personDateOfBirth.getValue());
-        assertEquals(VALID_FHIR_DOB_CCYYMMDD, personDateOfBirth.getDateOfBirth());
+        assertAll("fromString date of birth format CCYYMMDD",
+            () -> assertEquals(PersonDateOfBirth.KEY, personDateOfBirth.getKey()),
+            () -> assertEquals(VALID_EDIFACT_CCYYMMDD_VALUE, personDateOfBirth.getValue()),
+            () -> assertEquals(VALID_FHIR_DOB_CCYYMMDD, personDateOfBirth.getDateOfBirth()));
     }
 
     @Test

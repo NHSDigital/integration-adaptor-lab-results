@@ -2,6 +2,7 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -25,9 +26,10 @@ class PersonSexTest {
     void testFromStringWithValidEdifactStringReturnsPersonGender() {
         final PersonSex personSex = PersonSex.fromString(VALID_EDIFACT);
 
-        assertEquals(PersonSex.KEY, personSex.getKey());
-        assertEquals(VALID_EDIFACT_VALUE, personSex.getValue());
-        assertEquals(Gender.MALE, personSex.getGender());
+        assertAll("fromString",
+            () -> assertEquals(PersonSex.KEY, personSex.getKey()),
+            () -> assertEquals(VALID_EDIFACT_VALUE, personSex.getValue()),
+            () -> assertEquals(Gender.MALE, personSex.getGender()));
     }
 
     @Test
