@@ -3,6 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
@@ -15,6 +16,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 public class PersonSex extends Segment {
     protected static final String KEY = "PDI";
 
+    @NonNull
     private final Gender gender;
 
     @Override
@@ -33,9 +35,6 @@ public class PersonSex extends Segment {
 
     @Override
     public void preValidate() throws EdifactValidationException {
-        if (gender == null) {
-            throw new EdifactValidationException(getKey() + ": Gender code is required");
-        }
     }
 
     public static PersonSex fromString(final String edifactString) {
@@ -43,9 +42,12 @@ public class PersonSex extends Segment {
             throw new IllegalArgumentException("Can't create " + PersonSex.class.getSimpleName() + " from " + edifactString);
         }
         final String[] components = Split.byPlus(Split.bySegmentTerminator(edifactString)[0]);
-        return PersonSex.builder()
-            .gender(Gender.fromCode(components[1]))
-            .build();
+        final PersonSexBuilder builder = PersonSex.builder();
+        if (components.length > 0) {
+            final Gender gender = Gender.fromCode(components[1]);
+            builder.gender(gender);
+        }
+        return builder.build();
     }
 
 }

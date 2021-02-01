@@ -12,6 +12,8 @@ import java.time.Year;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 /**
  * Example DTM+329:19450730:102'
  */
@@ -63,23 +65,28 @@ public class PersonDateOfBirth extends Segment {
         final String dateOfBirth = Split.byColon(input)[1];
         final String format = Split.bySegmentTerminator(Split.byColon(input)[2])[0];
 
-        final DateFormat dateFormat = DateFormat.fromCode(format);
+        final PersonDateOfBirthBuilder dateOfBirthBuilder = PersonDateOfBirth.builder();
 
-        return PersonDateOfBirth.builder()
-            .dateOfBirth(getFormattedFhirDate(dateOfBirth, dateFormat))
-            .dateFormat(dateFormat)
-            .build();
+        if (isNotBlank(dateOfBirth) && isNotBlank(format)) {
+            final String formattedFhirDate = getFormattedFhirDate(dateOfBirth, format);
+
+            dateOfBirthBuilder
+                .dateOfBirth(formattedFhirDate)
+                .dateFormat(DateFormat.fromCode(format));
+        }
+
+        return dateOfBirthBuilder.build();
     }
 
-    private static String getFormattedFhirDate(final String dateOfBirth, final DateFormat dateFormat) {
-        if (dateFormat.equals(DateFormat.CCYY)) {
+    private static String getFormattedFhirDate(final String dateOfBirth, final String dateFormat) {
+        if (dateFormat.equals(DateFormat.CCYY.getCode())) {
             return Year.parse(dateOfBirth, DATE_FORMATTER_CCYY).toString();
-        } else if (dateFormat.equals(DateFormat.CCYYMM)) {
+        } else if (dateFormat.equals(DateFormat.CCYYMM.getCode())) {
             return YearMonth.parse(dateOfBirth, DATE_FORMATTER_CCYYMM).toString();
-        } else if (dateFormat.equals(DateFormat.CCYYMMDD)) {
+        } else if (dateFormat.equals(DateFormat.CCYYMMDD.getCode())) {
             return LocalDate.parse(dateOfBirth, DATE_FORMATTER_CCYYMMDD).toString();
         }
-        return dateOfBirth;
+        throw new UnsupportedOperationException("Date format code " + dateFormat + " is not supported");
     }
 
     private static String getFormattedEdifactDate(final String dateOfBirth, final DateFormat dateFormat) {
@@ -90,6 +97,6 @@ public class PersonDateOfBirth extends Segment {
         } else if (dateFormat.equals(DateFormat.CCYYMMDD)) {
             return DATE_FORMATTER_CCYYMMDD.format(LocalDate.parse(dateOfBirth));
         }
-        return dateOfBirth;
+        throw new UnsupportedOperationException("Date format " + dateFormat.name() + " is not supported");
     }
 }

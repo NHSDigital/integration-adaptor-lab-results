@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 /**
  * Example PNA+PAT+9435492908:OPI+++SU:KENNEDY+FO:SARAH+TI:MISS+MI:ANGELA'
  */
@@ -72,6 +74,9 @@ public class PersonName extends Segment {
 
     @Override
     public void preValidate() throws EdifactValidationException {
+        if (isBlank(nhsNumber) && patientIdentificationType == null && isBlank(surname)) {
+            throw new EdifactValidationException("At least one of patient identification and person name details are required");
+        }
     }
 
     @Override
@@ -82,10 +87,19 @@ public class PersonName extends Segment {
         if (!edifactString.startsWith(PersonName.KEY_QUALIFIER)) {
             throw new IllegalArgumentException("Can't create " + PersonName.class.getSimpleName() + " from " + edifactString);
         }
+
+        final String nhsNumber = extractNhsNumber(edifactString);
+        final PatientIdentificationType patientIdentificationType = getPatientIdentificationType(edifactString);
+        final String surname = extractNamePart(FAMILY_NAME_QUALIFIER, edifactString);
+
+        if (isBlank(nhsNumber) && patientIdentificationType == null && isBlank(surname)) {
+            throw new EdifactValidationException("At least one of patient identification and person name details are required");
+        }
+
         return PersonName.builder()
-            .nhsNumber(extractNhsNumber(edifactString))
-            .patientIdentificationType(getPatientIdentificationType(edifactString))
-            .surname(extractNamePart(FAMILY_NAME_QUALIFIER, edifactString))
+            .nhsNumber(nhsNumber)
+            .patientIdentificationType(patientIdentificationType)
+            .surname(surname)
             .firstForename(extractNamePart(FIRST_NAME_QUALIFIER, edifactString))
             .title(extractNamePart(TITLE_QUALIFIER, edifactString))
             .secondForename(extractNamePart(MIDDLE_NAME_QUALIFIER, edifactString))

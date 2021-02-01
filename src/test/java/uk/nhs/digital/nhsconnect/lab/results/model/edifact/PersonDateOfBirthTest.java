@@ -114,4 +114,12 @@ class PersonDateOfBirthTest {
 
         assertEquals("Can't create PersonDateOfBirth from wrong value", exception.getMessage());
     }
+
+    @Test
+    void testFromStringWithInvalidDateFormatCodeThrowsException() {
+        final UnsupportedOperationException exception =
+            assertThrows(UnsupportedOperationException.class, () -> PersonDateOfBirth.fromString("DTM+329:19911106:100'"));
+
+        assertEquals("Date format code 100 is not supported", exception.getMessage());
+    }
 }
