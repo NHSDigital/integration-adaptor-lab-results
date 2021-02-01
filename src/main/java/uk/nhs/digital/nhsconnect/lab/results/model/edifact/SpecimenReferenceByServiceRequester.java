@@ -8,31 +8,31 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 /**
- * Example RFF+STI:CH000064LX'
+ * Example RFF+RTI:CH000064LX'
  */
 @EqualsAndHashCode(callSuper = false)
 @Builder
 @Getter
 @AllArgsConstructor
-public class SpecimenReferenceByServiceProvider extends Segment {
+public class SpecimenReferenceByServiceRequester extends Segment {
 
     public static final String KEY = "RFF";
-    public static final String QUALIFIER = "STI";
+    public static final String QUALIFIER = "RTI";
     public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
 
     private final String referenceNumber;
 
-    public static SpecimenReferenceByServiceProvider fromString(String edifactString) {
+    public static SpecimenReferenceByServiceRequester fromString(String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException(
-                "Can't create " + SpecimenReferenceByServiceProvider.class.getSimpleName() + " from " + edifactString);
+                "Can't create " + SpecimenReferenceByServiceRequester.class.getSimpleName() + " from " + edifactString);
         }
 
         String[] split = Split.byColon(
             Split.bySegmentTerminator(edifactString)[0]
         );
 
-        return new SpecimenReferenceByServiceProvider(split[1]);
+        return new SpecimenReferenceByServiceRequester(split[1]);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class SpecimenReferenceByServiceProvider extends Segment {
     @Override
     public void preValidate() throws EdifactValidationException {
         if (referenceNumber.isBlank()) {
-            throw new EdifactValidationException(getKey() + ": Speciment Reference number by service provider is blank or missing");
+            throw new EdifactValidationException(getKey() + ": Speciment Reference number by service requester is blank or missing");
         }
     }
 }

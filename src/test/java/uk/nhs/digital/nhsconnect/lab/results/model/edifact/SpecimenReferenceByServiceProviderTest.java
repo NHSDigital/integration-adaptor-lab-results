@@ -20,7 +20,7 @@ public class SpecimenReferenceByServiceProviderTest {
         var parsedFreeText = SpecimenReferenceByServiceProvider.fromString("RFF+STI:CH000064LX'");
         Assertions.assertThat(parsedFreeText.getReferenceNumber()).isEqualTo("CH000064LX");
         Assertions.assertThat(parsedFreeText.toEdifact()).isEqualTo(edifact);
-        Assertions.assertThatThrownBy(() -> SpecimenCharacteristicType.fromString("wrong value")).isExactlyInstanceOf(IllegalArgumentException.class);
+        Assertions.assertThatThrownBy(() -> SpecimenReferenceByServiceProvider.fromString("wrong value")).isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -28,7 +28,7 @@ public class SpecimenReferenceByServiceProviderTest {
         SpecimenReferenceByServiceProvider emptyFreeText = new SpecimenReferenceByServiceProvider(StringUtils.EMPTY);
         Assertions.assertThatThrownBy(emptyFreeText::preValidate)
             .isInstanceOf(EdifactValidationException.class)
-            .hasMessage("RFF: Speciment Reference number is blank or missing");
+            .hasMessage("RFF: Speciment Reference number by service provider is blank or missing");
     }
 
     @Test
@@ -36,6 +36,6 @@ public class SpecimenReferenceByServiceProviderTest {
         SpecimenReferenceByServiceProvider emptyFreeText = new SpecimenReferenceByServiceProvider(" ");
         Assertions.assertThatThrownBy(emptyFreeText::preValidate)
             .isInstanceOf(EdifactValidationException.class)
-            .hasMessage("RFF: Speciment Reference number is blank or missing");
+            .hasMessage("RFF: Speciment Reference number by service provider is blank or missing");
     }
 }
