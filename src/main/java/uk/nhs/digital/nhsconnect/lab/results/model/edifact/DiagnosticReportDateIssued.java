@@ -51,10 +51,10 @@ public class DiagnosticReportDateIssued extends Segment {
     @Override
     public String getValue() {
         return QUALIFIER
-            .concat(COLON_SEPARATOR)
-            .concat(DATE_TIME_FORMATTER.format(dateIssued))
-            .concat(COLON_SEPARATOR)
-            .concat(DATE_FORMAT);
+            + COLON_SEPARATOR
+            + DATE_TIME_FORMATTER.format(dateIssued)
+            + COLON_SEPARATOR
+            + DATE_FORMAT;
     }
 
     @Override
