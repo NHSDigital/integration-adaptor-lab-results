@@ -3,7 +3,6 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 import lombok.Getter;
 
 import java.util.Arrays;
-import java.util.NoSuchElementException;
 
 public enum PatientIdentificationType {
     OFFICIAL_PATIENT_IDENTIFICATION("OPI");
@@ -19,6 +18,6 @@ public enum PatientIdentificationType {
         return Arrays.stream(PatientIdentificationType.values())
             .filter(patientIdentificationType -> patientIdentificationType.getCode().equals(code))
             .findFirst()
-            .orElseThrow(() -> new NoSuchElementException(String.format("%s element not found", code)));
+            .orElseThrow(() -> new IllegalArgumentException("No patientIdentificationType name for '" + code + "'"));
     }
 }
