@@ -18,7 +18,7 @@ public enum ReportStatusCode {
         return Arrays.stream(ReportStatusCode.values())
             .filter(c -> code.equals(c.getCode()))
             .findFirst()
-            .orElseThrow();
+            .orElseThrow(() -> new IllegalArgumentException("No Report Status Code for '" + code + "'"));
     }
 
 }
