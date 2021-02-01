@@ -1,15 +1,15 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-public class DiagnosticReportStatusTest {
+class DiagnosticReportStatusTest {
 
     private static final String VALID_EDIFACT = "STS++UN";
     private static final String VALID_EDIFACT_VALUE = "UN";
-
 
     @Test
     void testToEdifactWithValidDiagnosticReportStatus() {
@@ -40,16 +40,35 @@ public class DiagnosticReportStatusTest {
 
     @Test
     void testBuildWithNullEventThrowsException() {
-        assertThrows(NullPointerException.class, () -> DiagnosticReportStatus.builder().build());
+        final NullPointerException exception =
+            assertThrows(NullPointerException.class, () -> DiagnosticReportStatus.builder().build());
+
+        assertEquals("event is marked non-null but is null", exception.getMessage());
     }
 
     @Test
     void testFromStringWithValidEdifactStringReturnsDiagnosticReportStatus() {
         final DiagnosticReportStatus diagnosticReportStatus = DiagnosticReportStatus.fromString(VALID_EDIFACT);
 
-        assertEquals("STS", diagnosticReportStatus.getKey());
-        assertEquals(VALID_EDIFACT_VALUE, diagnosticReportStatus.getValue());
-        assertEquals("STS++UN'", diagnosticReportStatus.toEdifact());
+        assertAll(
+            () -> assertEquals("STS", diagnosticReportStatus.getKey()),
+            () -> assertEquals(VALID_EDIFACT_VALUE, diagnosticReportStatus.getValue()),
+            () -> assertEquals("STS++UN'", diagnosticReportStatus.toEdifact())
+
+        );
+    }
+
+    @Test
+    void testFromStringWithDetailsInDiagnosticReportStatusReturnsDiagnosticReportStatus() {
+        final DiagnosticReportStatus diagnosticReportStatus = DiagnosticReportStatus.fromString("STS+Details+UN");
+
+        assertAll(
+            () -> assertEquals("STS", diagnosticReportStatus.getKey()),
+            () -> assertEquals("Details+UN", diagnosticReportStatus.getValue()),
+            () -> assertEquals(ReportStatusCode.UNSPECIFIED, diagnosticReportStatus.getEvent()),
+            () -> assertEquals("Details", diagnosticReportStatus.getDetail()),
+            () -> assertEquals("STS+Details+UN'", diagnosticReportStatus.toEdifact())
+        );
     }
 
     @Test

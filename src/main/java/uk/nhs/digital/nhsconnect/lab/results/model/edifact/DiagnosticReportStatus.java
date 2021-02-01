@@ -1,6 +1,7 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
-import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,7 +15,6 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 @EqualsAndHashCode(callSuper = false)
 @Builder
 @Getter
-@AllArgsConstructor
 public class DiagnosticReportStatus extends Segment {
 
     private static final String KEY = "STS";
@@ -38,10 +38,10 @@ public class DiagnosticReportStatus extends Segment {
 
     @Override
     public String getValue() {
-        if (detailsEmpty()) {
+        if (StringUtils.isBlank(detail)) {
             return event.getCode();
         } else {
-            return detail + "+" + event.getCode();
+            return detail + PLUS_SEPARATOR + event.getCode();
         }
     }
 
@@ -60,14 +60,10 @@ public class DiagnosticReportStatus extends Segment {
     @Override
     public String toEdifact() throws EdifactValidationException {
         super.validate();
-        if (detailsEmpty()) {
+        if (StringUtils.isBlank(detail)) {
             return this.getKey() + PLUS_SEPARATOR + PLUS_SEPARATOR + this.getValue() + TERMINATOR;
         } else {
             return this.getKey() + PLUS_SEPARATOR + this.getValue() + TERMINATOR;
         }
-    }
-
-    private Boolean detailsEmpty() {
-        return this.getDetail() == null || this.getDetail().isEmpty();
     }
 }

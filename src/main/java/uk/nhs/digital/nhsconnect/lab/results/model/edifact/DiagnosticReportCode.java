@@ -1,6 +1,5 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,7 +13,6 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 @EqualsAndHashCode(callSuper = false)
 @Builder
 @Getter
-@AllArgsConstructor
 public class DiagnosticReportCode extends Segment {
 
     private static final String KEY = "GIS";

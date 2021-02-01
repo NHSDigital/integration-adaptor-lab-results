@@ -4,18 +4,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
-import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 public class ReportStatusCodeTest {
 
-    @Test
-    void testFromCodeForValidReportStatusCodeReturnsCode() {
-        final ImmutableMap<String, ReportStatusCode> codeMap = ImmutableMap.<String, ReportStatusCode>builder()
-            .put("UN", ReportStatusCode.UNSPECIFIED)
-            .build();
-
-        assertEquals(ReportStatusCode.values().length, codeMap.size());
-        codeMap.forEach((code, statusCode) -> assertEquals(statusCode, ReportStatusCode.fromCode(code)));
+    @ParameterizedTest
+    @EnumSource(ReportStatusCode.class)
+    void testFromCodeForValidReportStatusCodeReturnsCode(final ReportStatusCode reportStatusCode) {
+        assertEquals(reportStatusCode, ReportStatusCode.fromCode(reportStatusCode.getCode()));
     }
 
     @Test

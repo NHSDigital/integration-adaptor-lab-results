@@ -1,7 +1,5 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -9,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 
-public class DiagnosticReportCodeTest {
+class DiagnosticReportCodeTest {
 
     @Test
     void testMappingToEdifact() {
@@ -19,7 +17,7 @@ public class DiagnosticReportCodeTest {
             .code("N")
             .build();
 
-        assertThat(diagnosticReportCode.toEdifact()).isEqualTo(expectedValue);
+        assertEquals(expectedValue, diagnosticReportCode.toEdifact());
     }
 
     @Test
@@ -28,12 +26,19 @@ public class DiagnosticReportCodeTest {
             .code("")
             .build();
 
-        assertThatThrownBy(diagnosticReportCode::toEdifact).isInstanceOf(EdifactValidationException.class);
+        final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
+            () -> diagnosticReportCode.toEdifact());
+
+        assertEquals("GIS: Diagnostic Report Code is required", exception.getMessage());
     }
 
     @Test
     void testBuildWithNullCodeThrowsException() {
-        assertThrows(NullPointerException.class, () -> DiagnosticReportCode.builder().build());
+        final NullPointerException exception =
+            assertThrows(NullPointerException.class, () -> DiagnosticReportCode.builder().build());
+
+        assertEquals("code is marked non-null but is null", exception.getMessage());
+
     }
 
     @Test
@@ -47,7 +52,9 @@ public class DiagnosticReportCodeTest {
 
     @Test
     void testFromStringWithInvalidInput() {
-        assertThatThrownBy(() -> DiagnosticReportCode.fromString("wrong value"))
-            .isExactlyInstanceOf(IllegalArgumentException.class);
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            () -> DiagnosticReportCode.fromString("wrong value"));
+
+        assertEquals("Can't create DiagnosticReportCode from wrong value", exception.getMessage());
     }
 }

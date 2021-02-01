@@ -1,6 +1,5 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -20,11 +19,12 @@ public class ReferenceDiagnosticReportTest {
         assertEquals(VALID_EDIFACT_VALUE, referenceDiagnosticReport.getValue());
     }
 
-
     @Test
     void testFromStringWithInvalidInput() {
-        assertThatThrownBy(() -> ReferenceDiagnosticReport.fromString("RFF+ABC:13/CH001137K/211010191093"))
-            .isExactlyInstanceOf(IllegalArgumentException.class);
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            () -> ReferenceDiagnosticReport.fromString("RFF+ABC:13/CH001137K/211010191093"));
+
+        assertEquals("Can't create ReferenceDiagnosticReport from RFF+ABC:13/CH001137K/211010191093", exception.getMessage());
     }
 
     @Test

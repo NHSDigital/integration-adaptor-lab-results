@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class DiagnosticReportDateIssuedTest {
+class DiagnosticReportDateIssuedTest {
 
     private static final LocalDateTime FIXED_TIME = LocalDateTime.of(2020, 01, 28, 9, 57);
     private static final String VALID_EDIFACT = "DTM+ISR:202001280957:203'";
@@ -25,7 +25,10 @@ public class DiagnosticReportDateIssuedTest {
 
     @Test
     void testBuildWithEmptyTimestampThrowsException() {
-        assertThrows(NullPointerException.class, () -> DiagnosticReportDateIssued.builder().build());
+        final NullPointerException exception =
+            assertThrows(NullPointerException.class, () -> DiagnosticReportDateIssued.builder().build());
+
+        assertEquals("dateIssued is marked non-null but is null", exception.getMessage());
     }
 
     @Test

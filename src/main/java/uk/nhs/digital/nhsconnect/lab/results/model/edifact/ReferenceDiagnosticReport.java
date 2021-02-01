@@ -1,6 +1,5 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,7 +13,6 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 @EqualsAndHashCode(callSuper = false)
 @Builder
 @Getter
-@AllArgsConstructor
 public class ReferenceDiagnosticReport extends Segment {
 
     private static final String KEY = "RFF";
@@ -30,9 +28,8 @@ public class ReferenceDiagnosticReport extends Segment {
         }
 
         String[] keySplit = Split.byPlus(edifactString);
-        String[] valueSplit = Split.byColon(keySplit[1]);
-
-        return new ReferenceDiagnosticReport(valueSplit[1]);
+        final String referenceNumber = Split.byColon(keySplit[1])[1];
+        return new ReferenceDiagnosticReport(referenceNumber);
     }
 
     @Override
@@ -42,7 +39,7 @@ public class ReferenceDiagnosticReport extends Segment {
 
     @Override
     public String getValue() {
-        return QUALIFIER + ":" + referenceNumber;
+        return QUALIFIER + COLON_SEPARATOR + referenceNumber;
     }
 
     @Override

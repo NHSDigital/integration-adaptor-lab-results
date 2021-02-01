@@ -3,7 +3,6 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,20 +16,18 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
  */
 @EqualsAndHashCode(callSuper = false)
 @Getter
-@AllArgsConstructor
 @Builder
 public class DiagnosticReportDateIssued extends Segment {
 
     private static final String KEY = "DTM";
     private static final String QUALIFIER = "ISR";
-    private static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
+    private static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
     private static final String DATE_FORMAT = "203";
 
     private final @NonNull LocalDateTime dateIssued;
 
-    public static final DateTimeFormatter DATE_TIME_FORMATTER =
+    private static final DateTimeFormatter DATE_TIME_FORMATTER =
         DateTimeFormatter.ofPattern("yyyMMddHHmm").withZone(TimestampService.UK_ZONE);
-
 
     public static DiagnosticReportDateIssued fromString(final String edifactString) {
         if (!edifactString.startsWith(DiagnosticReportDateIssued.KEY_QUALIFIER)) {
@@ -63,9 +60,5 @@ public class DiagnosticReportDateIssued extends Segment {
     }
 
     @Override
-    public void preValidate() throws EdifactValidationException {
-        if (dateIssued == null) {
-            throw new EdifactValidationException(getKey() + ": Date issued is required");
-        }
-    }
+    public void preValidate() throws EdifactValidationException { }
 }
