@@ -29,8 +29,10 @@ public class PersonDateOfBirth extends Segment {
     private static final DateTimeFormatter DATE_FORMATTER_CCYYMM = DateTimeFormatter.ofPattern("yyyyMM");
     private static final DateTimeFormatter DATE_FORMATTER_CCYYMMDD = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-    private final @NonNull String dateOfBirth;
-    private final @NonNull DateFormat dateFormat;
+    @NonNull
+    private final String dateOfBirth;
+    @NonNull
+    private final DateFormat dateFormat;
 
     @Override
     public String getKey() {
@@ -86,7 +88,7 @@ public class PersonDateOfBirth extends Segment {
         } else if (dateFormat.equals(DateFormat.CCYYMMDD.getCode())) {
             return LocalDate.parse(dateOfBirth, DATE_FORMATTER_CCYYMMDD).toString();
         }
-        throw new UnsupportedOperationException("Date format code " + dateFormat + " is not supported");
+        throw new UnsupportedOperationException(KEY + ": Date format code " + dateFormat + " is not supported");
     }
 
     private static String getFormattedEdifactDate(final String dateOfBirth, final DateFormat dateFormat) {
@@ -97,6 +99,6 @@ public class PersonDateOfBirth extends Segment {
         } else if (dateFormat.equals(DateFormat.CCYYMMDD)) {
             return DATE_FORMATTER_CCYYMMDD.format(LocalDate.parse(dateOfBirth));
         }
-        throw new UnsupportedOperationException("Date format " + dateFormat.name() + " is not supported");
+        throw new UnsupportedOperationException(KEY + ": Date format " + dateFormat.name() + " is not supported");
     }
 }

@@ -120,6 +120,6 @@ class PersonDateOfBirthTest {
         final UnsupportedOperationException exception =
             assertThrows(UnsupportedOperationException.class, () -> PersonDateOfBirth.fromString("DTM+329:19911106:100'"));
 
-        assertEquals("Date format code 100 is not supported", exception.getMessage());
+        assertEquals("DTM: Date format code 100 is not supported", exception.getMessage());
     }
 }

@@ -54,7 +54,7 @@ class PersonNameTest {
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
             personName::toEdifact);
 
-        assertEquals("At least one of patient identification and person name details are required",
+        assertEquals("PNA: At least one of patient identification and person name details are required",
             exception.getMessage());
     }
 
@@ -76,7 +76,7 @@ class PersonNameTest {
     void testFromStringWithBlankIdentificationAndBlankNamesThrowsException() {
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
             () -> PersonName.fromString("PNA+PAT+ +++ "));
-        assertEquals("At least one of patient identification and person name details are required",
+        assertEquals("PNA: At least one of patient identification and person name details are required",
             exception.getMessage());
     }
 
