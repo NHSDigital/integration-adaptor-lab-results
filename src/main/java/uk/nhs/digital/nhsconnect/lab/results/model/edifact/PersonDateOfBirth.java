@@ -1,8 +1,8 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
@@ -17,9 +17,9 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 /**
  * Example DTM+329:19450730:102'
  */
+@Getter
 @EqualsAndHashCode(callSuper = false)
 @Builder
-@Data
 public class PersonDateOfBirth extends Segment {
 
     protected static final String KEY = "DTM";

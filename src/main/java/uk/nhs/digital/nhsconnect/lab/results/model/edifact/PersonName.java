@@ -3,7 +3,6 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
@@ -21,7 +20,6 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Getter
 @Builder
 @EqualsAndHashCode(callSuper = false)
-@ToString
 public class PersonName extends Segment {
 
     private static final String KEY = "PNA";
