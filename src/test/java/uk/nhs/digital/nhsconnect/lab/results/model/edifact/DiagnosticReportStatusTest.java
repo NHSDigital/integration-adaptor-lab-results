@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
-
 public class DiagnosticReportStatusTest {
 
     private static final String VALID_EDIFACT = "STS++UN";
@@ -18,7 +16,7 @@ public class DiagnosticReportStatusTest {
         final String expected = "STS++UN'";
 
         final DiagnosticReportStatus diagnosticReportStatus = DiagnosticReportStatus.builder()
-            .event("+UN")
+            .event(ReportStatusCode.UNSPECIFIED)
             .build();
 
         final String actualValue = diagnosticReportStatus.toEdifact();
@@ -27,15 +25,17 @@ public class DiagnosticReportStatusTest {
     }
 
     @Test
-    void testToEdifactWithInvalidDiagnosticReportStatus() {
+    void testToEdifactWithDetailsInDiagnosticReportStatus() {
+        final String expected = "STS+Details+UN'";
+
         final DiagnosticReportStatus diagnosticReportStatus = DiagnosticReportStatus.builder()
-            .event("")
+            .detail("Details")
+            .event(ReportStatusCode.UNSPECIFIED)
             .build();
 
-        final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
-            diagnosticReportStatus::toEdifact);
+        final String actualValue = diagnosticReportStatus.toEdifact();
 
-        assertEquals("STS: Status is required", exception.getMessage());
+        assertEquals(expected, actualValue);
     }
 
     @Test
@@ -49,6 +49,7 @@ public class DiagnosticReportStatusTest {
 
         assertEquals("STS", diagnosticReportStatus.getKey());
         assertEquals(VALID_EDIFACT_VALUE, diagnosticReportStatus.getValue());
+        assertEquals("STS++UN'", diagnosticReportStatus.toEdifact());
     }
 
     @Test

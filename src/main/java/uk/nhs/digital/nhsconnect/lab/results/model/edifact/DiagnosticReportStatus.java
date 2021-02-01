@@ -19,14 +19,16 @@ public class DiagnosticReportStatus extends Segment {
 
     private static final String KEY = "STS";
 
-    private final @NonNull String event;
+    private final String detail;
+    private final @NonNull ReportStatusCode event;
 
     public static DiagnosticReportStatus fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY)) {
             throw new IllegalArgumentException("Can't create " + DiagnosticReportStatus.class.getSimpleName() + " from " + edifactString);
         }
-        String value = Split.byPlus(edifactString)[2];
-        return new DiagnosticReportStatus(value);
+        String detail = Split.byPlus(edifactString)[1];
+        String event = Split.byPlus(edifactString)[2];
+        return new DiagnosticReportStatus(detail, ReportStatusCode.fromCode(event));
     }
 
     @Override
@@ -36,7 +38,11 @@ public class DiagnosticReportStatus extends Segment {
 
     @Override
     public String getValue() {
-        return event;
+        if (detailsEmpty()) {
+            return event.getCode();
+        } else {
+            return detail + "+" + event.getCode();
+        }
     }
 
     @Override
@@ -46,8 +52,22 @@ public class DiagnosticReportStatus extends Segment {
 
     @Override
     public void preValidate() throws EdifactValidationException {
-        if (event.isBlank()) {
+        if (event.getCode().isBlank()) {
             throw new EdifactValidationException(getKey() + ": Status is required");
         }
+    }
+
+    @Override
+    public String toEdifact() throws EdifactValidationException {
+        super.validate();
+        if (detailsEmpty()) {
+            return this.getKey() + PLUS_SEPARATOR + PLUS_SEPARATOR + this.getValue() + TERMINATOR;
+        } else {
+            return this.getKey() + PLUS_SEPARATOR + this.getValue() + TERMINATOR;
+        }
+    }
+
+    private Boolean detailsEmpty() {
+        return this.getDetail() == null || this.getDetail().isEmpty();
     }
 }
