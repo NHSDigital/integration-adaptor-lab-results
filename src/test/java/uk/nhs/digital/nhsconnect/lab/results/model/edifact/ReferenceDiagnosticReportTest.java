@@ -28,6 +28,11 @@ public class ReferenceDiagnosticReportTest {
     }
 
     @Test
+    void testBuildWithNullReferenceThrowsException() {
+        assertThrows(NullPointerException.class, () -> ReferenceDiagnosticReport.builder().build());
+    }
+
+    @Test
     void testToEdifactWithValidInput() {
         final String expected = "RFF+SRI:13/CH001137K/211010191093'";
 

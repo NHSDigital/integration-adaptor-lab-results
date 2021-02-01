@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
-
 public class DiagnosticReportDateIssuedTest {
 
     private static final LocalDateTime FIXED_TIME = LocalDateTime.of(2020, 01, 28, 9, 57);
@@ -26,15 +24,8 @@ public class DiagnosticReportDateIssuedTest {
     }
 
     @Test
-    void testToEdifactForInvalidDiagnosticReportIssued() {
-        final DiagnosticReportDateIssued diagnosticReportDateIssued = DiagnosticReportDateIssued.builder()
-            .dateIssued(null)
-            .build();
-
-        final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
-            diagnosticReportDateIssued::toEdifact);
-
-        assertEquals("DTM: Date issued is required", exception.getMessage());
+    void testBuildWithEmptyTimestampThrowsException() {
+        assertThrows(NullPointerException.class, () -> DiagnosticReportDateIssued.builder().build());
     }
 
     @Test

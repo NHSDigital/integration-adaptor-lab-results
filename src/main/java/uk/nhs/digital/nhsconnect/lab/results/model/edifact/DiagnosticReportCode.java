@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
@@ -17,7 +18,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 public class DiagnosticReportCode extends Segment {
 
     private static final String KEY = "GIS";
-    private final String code;
+    private final @NonNull String code;
 
     public static DiagnosticReportCode fromString(final String edifactString) {
         if (!edifactString.startsWith(DiagnosticReportCode.KEY)) {

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
@@ -20,7 +21,7 @@ public class ReferenceDiagnosticReport extends Segment {
     private static final String QUALIFIER = "SRI";
     private static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
 
-    private final String referenceNumber;
+    private final @NonNull String referenceNumber;
 
     public static ReferenceDiagnosticReport fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {

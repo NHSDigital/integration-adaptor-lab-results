@@ -3,6 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -28,6 +29,11 @@ public class DiagnosticReportCodeTest {
             .build();
 
         assertThatThrownBy(diagnosticReportCode::toEdifact).isInstanceOf(EdifactValidationException.class);
+    }
+
+    @Test
+    void testBuildWithNullCodeThrowsException() {
+        assertThrows(NullPointerException.class, () -> DiagnosticReportCode.builder().build());
     }
 
     @Test

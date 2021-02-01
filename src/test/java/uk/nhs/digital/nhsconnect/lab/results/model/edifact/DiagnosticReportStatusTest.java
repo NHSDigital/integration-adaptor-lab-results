@@ -39,6 +39,11 @@ public class DiagnosticReportStatusTest {
     }
 
     @Test
+    void testBuildWithNullEventThrowsException() {
+        assertThrows(NullPointerException.class, () -> DiagnosticReportStatus.builder().build());
+    }
+
+    @Test
     void testFromStringWithValidEdifactStringReturnsDiagnosticReportStatus() {
         final DiagnosticReportStatus diagnosticReportStatus = DiagnosticReportStatus.fromString(VALID_EDIFACT);
 
