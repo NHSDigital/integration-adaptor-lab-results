@@ -42,10 +42,10 @@ public class PersonDateOfBirth extends Segment {
     @Override
     public String getValue() {
         return QUALIFIER
-            .concat(COLON_SEPARATOR)
-            .concat(getFormattedEdifactDate(dateOfBirth, dateFormat))
-            .concat(COLON_SEPARATOR)
-            .concat(dateFormat.getCode());
+            + COLON_SEPARATOR
+            + getFormattedEdifactDate(dateOfBirth, dateFormat)
+            + COLON_SEPARATOR
+            + dateFormat.getCode();
     }
 
     @Override
