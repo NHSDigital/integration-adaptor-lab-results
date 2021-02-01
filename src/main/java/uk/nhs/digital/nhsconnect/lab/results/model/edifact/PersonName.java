@@ -75,8 +75,8 @@ public class PersonName extends Segment {
     @Override
     public void preValidate() throws EdifactValidationException {
         if (isBlank(nhsNumber) && patientIdentificationType == null && isBlank(surname)) {
-            throw new EdifactValidationException(getKey() + ": At least one of patient identification and person " +
-                "name details are required");
+            throw new EdifactValidationException(getKey() + ": At least one of patient identification and person "
+                + "name details are required");
         }
     }
 
@@ -94,8 +94,8 @@ public class PersonName extends Segment {
         final String surname = extractNamePart(FAMILY_NAME_QUALIFIER, edifactString);
 
         if (isBlank(nhsNumber) && patientIdentificationType == null && isBlank(surname)) {
-            throw new EdifactValidationException(KEY + ": At least one of patient identification and person name " +
-                "details are required");
+            throw new EdifactValidationException(KEY + ": At least one of patient identification and person name "
+                + "details are required");
         }
 
         return PersonName.builder()
