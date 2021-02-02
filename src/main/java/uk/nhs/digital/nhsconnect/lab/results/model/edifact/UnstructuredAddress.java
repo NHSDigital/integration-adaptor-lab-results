@@ -1,6 +1,7 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
@@ -11,6 +12,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
  * E.g. {@code ADR++US:FLAT1:12 BROWNBERRIE AVENUE::LEEDS:++LS18 5PN'} has no address parts 3 or 5.
  * {@code ADR++++LS18 5PN'} has only a postcode
  */
+@EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
 @AllArgsConstructor

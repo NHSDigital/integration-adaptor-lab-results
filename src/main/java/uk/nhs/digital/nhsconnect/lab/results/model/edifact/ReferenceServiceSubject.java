@@ -1,6 +1,7 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -12,6 +13,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 /**
  * E.g. {@code}RFF+SSI:X88442211'{@code}
  */
+@EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
 @AllArgsConstructor
