@@ -14,7 +14,7 @@ import java.math.BigDecimal;
  * {@code RND+U+170+1100'}: between 170 and 1100<br/>
  * {@code RND+U++999'}: less than 999<br/>
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Getter
 @AllArgsConstructor
 public class RangeDetail extends Segment {

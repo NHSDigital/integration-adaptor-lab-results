@@ -13,7 +13,7 @@ import java.util.Arrays;
 /**
  * Example: {@code FTX+RPD+++Equivocal'}
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Getter
 @AllArgsConstructor
 public class ReferencePopulationDefinitionFreeText extends Segment {
@@ -25,7 +25,7 @@ public class ReferencePopulationDefinitionFreeText extends Segment {
     private static final int MAXIMUM_FREE_TEXTS = 5;
 
     @NonNull
-    private String[] freeTexts;
+    private final String[] freeTexts;
 
     public static ReferencePopulationDefinitionFreeText fromString(final String edifact) {
         if (!edifact.startsWith(KEY_QUALIFIER)) {
