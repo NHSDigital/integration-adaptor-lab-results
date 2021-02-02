@@ -17,14 +17,14 @@ class ReferencePopulationDefinitionFreeTextTest {
 
     @Test
     void testWrongKey() {
-        assertThatThrownBy(() -> ReferencePopulationDefinitionFreeText.fromText("WRONG+RPD+++OK"))
+        assertThatThrownBy(() -> ReferencePopulationDefinitionFreeText.fromString("WRONG+RPD+++OK"))
             .isExactlyInstanceOf(IllegalArgumentException.class)
             .hasMessage("Can't create ReferencePopulationDefinitionFreeText from WRONG+RPD+++OK");
     }
 
     @Test
     void testNoTexts() {
-        var result = ReferencePopulationDefinitionFreeText.fromText("FTX+RPD+++");
+        var result = ReferencePopulationDefinitionFreeText.fromString("FTX+RPD+++");
         assertAll(
             () -> assertThat(result.getValue()).isEqualTo("RPD+++"),
             () -> assertThat(result.getFreeTexts()).isEmpty(),
@@ -37,7 +37,7 @@ class ReferencePopulationDefinitionFreeTextTest {
 
     @Test
     void testOneText() {
-        var result = ReferencePopulationDefinitionFreeText.fromText("FTX+RPD+++Okay");
+        var result = ReferencePopulationDefinitionFreeText.fromString("FTX+RPD+++Okay");
         assertAll(
             () -> assertThat(result.getValue()).isEqualTo("RPD+++Okay"),
             () -> assertThat(result.getFreeTexts()).containsExactly("Okay"),
@@ -50,7 +50,7 @@ class ReferencePopulationDefinitionFreeTextTest {
     @SuppressWarnings("checkstyle:MagicNumber")
     void testTooManyFreeTexts() {
         assertThatThrownBy(
-            () -> ReferencePopulationDefinitionFreeText.fromText("FTS+RPD+++A" + ":".repeat(10)))
+            () -> ReferencePopulationDefinitionFreeText.fromString("FTS+RPD+++A" + ":".repeat(10)))
             .isExactlyInstanceOf(IllegalArgumentException.class)
             .hasMessage("Can't create ReferencePopulationDefinitionFreeText from FTS+RPD+++A::::::::::");
     }

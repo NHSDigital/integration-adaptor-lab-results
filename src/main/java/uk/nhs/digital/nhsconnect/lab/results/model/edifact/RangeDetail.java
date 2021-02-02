@@ -3,7 +3,6 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
@@ -17,7 +16,6 @@ import java.math.BigDecimal;
  */
 @EqualsAndHashCode(callSuper = true)
 @Getter
-@Setter
 @AllArgsConstructor
 public class RangeDetail extends Segment {
     private static final String KEY = "RND";
@@ -27,8 +25,8 @@ public class RangeDetail extends Segment {
     private static final int INDEX_LOWER_LIMIT = 2;
     private static final int INDEX_UPPER_LIMIT = 3;
 
-    private BigDecimal lowerLimit;
-    private BigDecimal upperLimit;
+    private final BigDecimal lowerLimit;
+    private final BigDecimal upperLimit;
 
     public static RangeDetail fromString(final String edifact) {
         if (!edifact.startsWith(KEY_QUALIFIER)) {

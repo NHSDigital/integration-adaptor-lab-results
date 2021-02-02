@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
@@ -16,7 +15,6 @@ import java.util.Arrays;
  */
 @EqualsAndHashCode(callSuper = true)
 @Getter
-@Setter
 @AllArgsConstructor
 public class ReferencePopulationDefinitionFreeText extends Segment {
     private static final String KEY = "FTX";
@@ -29,7 +27,7 @@ public class ReferencePopulationDefinitionFreeText extends Segment {
     @NonNull
     private String[] freeTexts;
 
-    public static ReferencePopulationDefinitionFreeText fromText(final String edifact) {
+    public static ReferencePopulationDefinitionFreeText fromString(final String edifact) {
         if (!edifact.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException("Can't create "
                 + ReferencePopulationDefinitionFreeText.class.getSimpleName() + " from " + edifact);
