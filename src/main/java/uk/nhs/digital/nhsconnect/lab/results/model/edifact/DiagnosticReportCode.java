@@ -16,7 +16,9 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 public class DiagnosticReportCode extends Segment {
 
     private static final String KEY = "GIS";
-    private final @NonNull String code;
+
+    @NonNull
+    private final String code;
 
     public static DiagnosticReportCode fromString(final String edifactString) {
         if (!edifactString.startsWith(DiagnosticReportCode.KEY)) {

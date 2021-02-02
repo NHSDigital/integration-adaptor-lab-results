@@ -19,7 +19,8 @@ public class ReferenceDiagnosticReport extends Segment {
     private static final String QUALIFIER = "SRI";
     private static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
 
-    private final @NonNull String referenceNumber;
+    @NonNull
+    private final String referenceNumber;
 
     public static ReferenceDiagnosticReport fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {

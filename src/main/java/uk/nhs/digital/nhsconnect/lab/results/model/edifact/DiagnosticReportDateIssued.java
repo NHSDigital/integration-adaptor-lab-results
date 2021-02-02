@@ -24,7 +24,8 @@ public class DiagnosticReportDateIssued extends Segment {
     private static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
     private static final String DATE_FORMAT = "203";
 
-    private final @NonNull LocalDateTime dateIssued;
+    @NonNull
+    private final LocalDateTime dateIssued;
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER =
         DateTimeFormatter.ofPattern("yyyMMddHHmm").withZone(TimestampService.UK_ZONE);

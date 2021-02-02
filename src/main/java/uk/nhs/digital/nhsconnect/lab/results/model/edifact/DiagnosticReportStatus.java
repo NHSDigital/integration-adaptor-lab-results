@@ -20,7 +20,8 @@ public class DiagnosticReportStatus extends Segment {
     private static final String KEY = "STS";
 
     private final String detail;
-    private final @NonNull ReportStatusCode event;
+    @NonNull
+    private final ReportStatusCode event;
 
     public static DiagnosticReportStatus fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY)) {
