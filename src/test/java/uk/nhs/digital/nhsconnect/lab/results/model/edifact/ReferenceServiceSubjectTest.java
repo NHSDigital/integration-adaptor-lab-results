@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class ReferenceServiceSubjectTest {
     @Test
     void testGetKey() {
-        assertThat(new ReferenceServiceSubject().getKey()).isEqualTo("RFF");
+        assertThat(new ReferenceServiceSubject("").getKey()).isEqualTo("RFF");
     }
 
     @Test
@@ -31,7 +31,7 @@ class ReferenceServiceSubjectTest {
 
     @Test
     void testPreValidateMissingNumber() {
-        assertThatThrownBy(() -> new ReferenceServiceSubject().preValidate())
+        assertThatThrownBy(() -> new ReferenceServiceSubject("").preValidate())
             .isExactlyInstanceOf(EdifactValidationException.class)
             .hasMessage("RFF: Attribute number is required");
     }

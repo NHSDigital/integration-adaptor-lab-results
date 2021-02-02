@@ -3,7 +3,6 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
@@ -14,7 +13,6 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
  */
 @EqualsAndHashCode(callSuper = true)
 @Getter
-@Setter
 @AllArgsConstructor
 public class UnstructuredAddress extends Segment {
     private static final String KEY = "ADR";
@@ -24,9 +22,9 @@ public class UnstructuredAddress extends Segment {
     private static final int INDEX_ADDRESS = 2;
     private static final int INDEX_POSTCODE = 4;
 
-    private String format;
-    private String[] addressLines;
-    private String postCode;
+    private final String format;
+    private final String[] addressLines;
+    private final String postCode;
 
     public static UnstructuredAddress fromString(final String edifact) {
         if (!edifact.startsWith(KEY)) {
@@ -78,7 +76,7 @@ public class UnstructuredAddress extends Segment {
     @Override
     public void preValidate() throws EdifactValidationException {
         // if no postcode, there must be address lines
-        if (StringUtils.isEmpty(postCode)) {
+        if (StringUtils.isBlank(postCode)) {
             if (addressLines == null || addressLines.length <= 1) {
                 throw new EdifactValidationException(KEY
                     + ": attribute addressLines is required when postcode is missing");
@@ -91,7 +89,7 @@ public class UnstructuredAddress extends Segment {
                 throw new EdifactValidationException(KEY + ": format of '" + FORMAT
                     + "' is required when postCode is missing");
             }
-            if (StringUtils.isEmpty(addressLines[0])) {
+            if (StringUtils.isBlank(addressLines[0])) {
                 throw new EdifactValidationException(KEY + ": attribute addressLines[0] is required");
             }
         }
