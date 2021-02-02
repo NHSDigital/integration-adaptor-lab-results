@@ -43,7 +43,7 @@ public class UnstructuredAddress extends Segment {
         }
 
         final String postCode = splitByPlus[INDEX_POSTCODE];
-        final String qualifier = edifact.startsWith(KEY + "++" + FORMAT) ? FORMAT : "";
+        final String qualifier = edifact.startsWith(KEY + PLUS_SEPARATOR + PLUS_SEPARATOR + FORMAT) ? FORMAT : "";
 
         return new UnstructuredAddress(qualifier, addressLines, postCode);
     }
@@ -55,12 +55,17 @@ public class UnstructuredAddress extends Segment {
 
     @Override
     public String getValue() {
-        return getAddressValue() + "++" + postCode;
+        return getAddressValue()
+            + PLUS_SEPARATOR
+            + PLUS_SEPARATOR
+            + postCode;
     }
 
     private String getAddressValue() {
         if (FORMAT.equals(format)) {
-            return format + ":" + String.join(":", addressLines);
+            return format
+                + COLON_SEPARATOR
+                + String.join(COLON_SEPARATOR, addressLines);
         }
         return "";
     }
