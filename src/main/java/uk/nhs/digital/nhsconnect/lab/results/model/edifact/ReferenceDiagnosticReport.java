@@ -17,7 +17,7 @@ public class ReferenceDiagnosticReport extends Segment {
 
     private static final String KEY = "RFF";
     private static final String QUALIFIER = "SRI";
-    private static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
+    private static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
 
     @NonNull
     private final String referenceNumber;

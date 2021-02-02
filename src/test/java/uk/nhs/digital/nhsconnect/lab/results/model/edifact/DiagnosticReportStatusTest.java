@@ -8,26 +8,29 @@ import org.junit.jupiter.api.Test;
 
 class DiagnosticReportStatusTest {
 
-    private static final String VALID_EDIFACT = "STS++UN";
-    private static final String VALID_EDIFACT_VALUE = "UN";
+    private static final String VALID_EDIFACT_WITHOUT_DETAILS = "STS++UN";
+    private static final String EXPECTED_EDIFACT_STRING_WITHOUT_DETAILS = "STS++UN'";
+    private static final String VALID_EDIFACT_VALUE_WITHOUT_DETAILS = "UN";
+
+    private static final String VALID_EDIFACT = "STS+Details+UN";
+    private static final String EXPECTED_EDIFACT_STRING = "STS+Details+UN'";
+    private static final String VALID_EDIFACT_VALUE = "Details+UN";
+
+    private static final String KEY = "STS";
 
     @Test
     void testToEdifactWithValidDiagnosticReportStatus() {
-        final String expected = "STS++UN'";
-
         final DiagnosticReportStatus diagnosticReportStatus = DiagnosticReportStatus.builder()
             .event(ReportStatusCode.UNSPECIFIED)
             .build();
 
         final String actualValue = diagnosticReportStatus.toEdifact();
 
-        assertEquals(expected, actualValue);
+        assertEquals(EXPECTED_EDIFACT_STRING_WITHOUT_DETAILS, actualValue);
     }
 
     @Test
     void testToEdifactWithDetailsInDiagnosticReportStatus() {
-        final String expected = "STS+Details+UN'";
-
         final DiagnosticReportStatus diagnosticReportStatus = DiagnosticReportStatus.builder()
             .detail("Details")
             .event(ReportStatusCode.UNSPECIFIED)
@@ -35,7 +38,7 @@ class DiagnosticReportStatusTest {
 
         final String actualValue = diagnosticReportStatus.toEdifact();
 
-        assertEquals(expected, actualValue);
+        assertEquals(EXPECTED_EDIFACT_STRING, actualValue);
     }
 
     @Test
@@ -48,26 +51,26 @@ class DiagnosticReportStatusTest {
 
     @Test
     void testFromStringWithValidEdifactStringReturnsDiagnosticReportStatus() {
-        final DiagnosticReportStatus diagnosticReportStatus = DiagnosticReportStatus.fromString(VALID_EDIFACT);
+        final DiagnosticReportStatus diagnosticReportStatus = DiagnosticReportStatus.fromString(VALID_EDIFACT_WITHOUT_DETAILS);
 
         assertAll(
-            () -> assertEquals("STS", diagnosticReportStatus.getKey()),
-            () -> assertEquals(VALID_EDIFACT_VALUE, diagnosticReportStatus.getValue()),
-            () -> assertEquals("STS++UN'", diagnosticReportStatus.toEdifact())
+            () -> assertEquals(KEY, diagnosticReportStatus.getKey()),
+            () -> assertEquals(VALID_EDIFACT_VALUE_WITHOUT_DETAILS, diagnosticReportStatus.getValue()),
+            () -> assertEquals(EXPECTED_EDIFACT_STRING_WITHOUT_DETAILS, diagnosticReportStatus.toEdifact())
 
         );
     }
 
     @Test
     void testFromStringWithDetailsInDiagnosticReportStatusReturnsDiagnosticReportStatus() {
-        final DiagnosticReportStatus diagnosticReportStatus = DiagnosticReportStatus.fromString("STS+Details+UN");
+        final DiagnosticReportStatus diagnosticReportStatus = DiagnosticReportStatus.fromString(VALID_EDIFACT);
 
         assertAll(
-            () -> assertEquals("STS", diagnosticReportStatus.getKey()),
-            () -> assertEquals("Details+UN", diagnosticReportStatus.getValue()),
+            () -> assertEquals(KEY, diagnosticReportStatus.getKey()),
+            () -> assertEquals(VALID_EDIFACT_VALUE, diagnosticReportStatus.getValue()),
             () -> assertEquals(ReportStatusCode.UNSPECIFIED, diagnosticReportStatus.getEvent()),
             () -> assertEquals("Details", diagnosticReportStatus.getDetail()),
-            () -> assertEquals("STS+Details+UN'", diagnosticReportStatus.toEdifact())
+            () -> assertEquals(EXPECTED_EDIFACT_STRING, diagnosticReportStatus.toEdifact())
         );
     }
 

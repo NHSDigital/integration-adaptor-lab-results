@@ -27,7 +27,7 @@ class DiagnosticReportCodeTest {
             .build();
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
-            () -> diagnosticReportCode.toEdifact());
+            diagnosticReportCode::toEdifact);
 
         assertEquals("GIS: Diagnostic Report Code is required", exception.getMessage());
     }
