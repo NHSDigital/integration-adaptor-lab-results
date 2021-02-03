@@ -19,7 +19,7 @@ class ReferencePopulationDefinitionFreeTextTest {
     void testWrongKey() {
         assertThatThrownBy(() -> ReferencePopulationDefinitionFreeText.fromString("WRONG+RPD+++OK"))
             .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Can't create ReferencePopulationDefinitionFreeText from WRONG+RPD+++OK");
+            .hasMessage("Can't create ReferencePopulationDefinitionFreeText (FTX+RPD) from WRONG+RPD+++OK");
     }
 
     @Test
@@ -51,14 +51,15 @@ class ReferencePopulationDefinitionFreeTextTest {
     void testFromStringTooManyFreeTexts() {
         assertThatThrownBy(() -> ReferencePopulationDefinitionFreeText.fromString("FTX+RPD+++A" + ":A".repeat(10)))
             .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Can't create ReferencePopulationDefinitionFreeText from FTX+RPD+++A:A:A:A:A:A:A:A:A:A:A");
+            .hasMessage("Can't create ReferencePopulationDefinitionFreeText (FTX+RPD) "
+                + "from FTX+RPD+++A:A:A:A:A:A:A:A:A:A:A because too many free texts");
     }
 
     @Test
     @SuppressWarnings("checkstyle:MagicNumber")
     void testPreValidateTooManyFreeTexts() {
-        var texts = "A".repeat(10).split("");
-        var freeText = new ReferencePopulationDefinitionFreeText(texts);
+        final var texts = "A".repeat(10).split("");
+        final var freeText = new ReferencePopulationDefinitionFreeText(texts);
         assertThatThrownBy(freeText::preValidate)
             .isExactlyInstanceOf(EdifactValidationException.class)
             .hasMessage("FTX+RPD: At most 5 reference population definitions may be given.");

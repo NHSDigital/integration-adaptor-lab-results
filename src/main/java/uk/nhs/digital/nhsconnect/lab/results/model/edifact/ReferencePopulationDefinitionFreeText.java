@@ -29,8 +29,8 @@ public class ReferencePopulationDefinitionFreeText extends Segment {
 
     public static ReferencePopulationDefinitionFreeText fromString(final String edifact) {
         if (!edifact.startsWith(KEY_QUALIFIER)) {
-            throw new IllegalArgumentException("Can't create "
-                + ReferencePopulationDefinitionFreeText.class.getSimpleName() + " from " + edifact);
+            throw new IllegalArgumentException(String.format("Can't create %s (%s) from %s",
+                ReferencePopulationDefinitionFreeText.class.getSimpleName(), KEY_QUALIFIER, edifact));
         }
 
         final String[] split = Split.byPlus(edifact);
@@ -38,8 +38,8 @@ public class ReferencePopulationDefinitionFreeText extends Segment {
 
         final String[] freeTexts = Split.byColon(freeTextComponent);
         if (freeTexts.length > MAXIMUM_FREE_TEXTS) {
-            throw new IllegalArgumentException("Can't create "
-                + ReferencePopulationDefinitionFreeText.class.getSimpleName() + " from " + edifact);
+            throw new IllegalArgumentException(String.format("Can't create %s (%s) from %s because too many free texts",
+                ReferencePopulationDefinitionFreeText.class.getSimpleName(), KEY_QUALIFIER, edifact));
         }
 
         final String[] filteredFreeTexts = Arrays.stream(freeTexts)
