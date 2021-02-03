@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.fhir.EdifactToFhirService;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.FhirDataToSend;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
+import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
@@ -18,6 +19,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceTransactionT
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Transaction;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.TransactionType;
 import uk.nhs.digital.nhsconnect.lab.results.outbound.queue.GpOutboundQueueService;
+import uk.nhs.digital.nhsconnect.lab.results.outbound.queue.MeshOutboundQueueService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,6 +43,10 @@ class InboundMessageHandlerTest {
     @Mock
     private GpOutboundQueueService gpOutboundQueueService;
     @Mock
+    private RecepProducerService recepProducerService;
+    @Mock
+    private MeshOutboundQueueService meshOutboundQueueService;
+    @Mock
     private Interchange interchange;
     @Mock
     private Message message;
@@ -59,9 +65,11 @@ class InboundMessageHandlerTest {
 
         inboundMessageHandler.handle(meshMessage);
 
-        verify(edifactParser).parse(meshMessage.getContent());
+        verify(edifactParser, times(2)).parse(any());
         verify(edifactToFhirService, never()).convertToFhir(any(Transaction.class));
         verify(gpOutboundQueueService, never()).publish(any(FhirDataToSend.class));
+        verify(recepProducerService).produceRecep(interchange);
+        verify(meshOutboundQueueService).publish(any(OutboundMeshMessage.class));
     }
 
     @Test
@@ -82,9 +90,11 @@ class InboundMessageHandlerTest {
 
         inboundMessageHandler.handle(meshMessage);
 
-        verify(edifactParser).parse(meshMessage.getContent());
+        verify(edifactParser, times(2)).parse(any());
         verify(edifactToFhirService).convertToFhir(transaction);
         verify(gpOutboundQueueService).publish(any(FhirDataToSend.class));
+        verify(recepProducerService).produceRecep(interchange);
+        verify(meshOutboundQueueService).publish(any(OutboundMeshMessage.class));
     }
 
     @Test
@@ -109,10 +119,12 @@ class InboundMessageHandlerTest {
 
         inboundMessageHandler.handle(meshMessage);
 
-        verify(edifactParser).parse(meshMessage.getContent());
+        verify(edifactParser, times(2)).parse(any());
         verify(edifactToFhirService).convertToFhir(transaction1);
         verify(edifactToFhirService).convertToFhir(transaction2);
         verify(gpOutboundQueueService, times(2)).publish(any(FhirDataToSend.class));
+        verify(recepProducerService).produceRecep(interchange);
+        verify(meshOutboundQueueService).publish(any(OutboundMeshMessage.class));
     }
 
 }
