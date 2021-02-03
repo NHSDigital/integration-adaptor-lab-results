@@ -24,7 +24,7 @@ import java.io.IOException;
 @Component
 @Slf4j
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class InboundQueueService {
+public class MeshInboundQueueService {
 
     private final ObjectMapper objectMapper;
 

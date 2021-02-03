@@ -15,7 +15,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.EdifactParser;
-import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.InboundQueueService;
+import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.MeshInboundQueueService;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.RecipientMailboxIdMappings;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshClient;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshConfig;
@@ -67,7 +67,7 @@ public abstract class IntegrationBaseTest {
     @Autowired
     private MeshHttpClientBuilder meshHttpClientBuilder;
     @Autowired
-    private InboundQueueService inboundQueueService;
+    private MeshInboundQueueService meshInboundQueueService;
     @Autowired
     @Getter(AccessLevel.PROTECTED)
     private EdifactParser edifactParser;
@@ -201,7 +201,7 @@ public abstract class IntegrationBaseTest {
     }
 
     protected void sendToMeshInboundQueue(InboundMeshMessage meshMessage) {
-        inboundQueueService.publish(meshMessage);
+        meshInboundQueueService.publish(meshMessage);
     }
 
     protected void sendToMeshInboundQueue(String data) {
