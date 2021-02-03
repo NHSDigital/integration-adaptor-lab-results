@@ -48,10 +48,19 @@ class ReferencePopulationDefinitionFreeTextTest {
 
     @Test
     @SuppressWarnings("checkstyle:MagicNumber")
-    void testTooManyFreeTexts() {
-        assertThatThrownBy(
-            () -> ReferencePopulationDefinitionFreeText.fromString("FTS+RPD+++A" + ":".repeat(10)))
+    void testFromStringTooManyFreeTexts() {
+        assertThatThrownBy(() -> ReferencePopulationDefinitionFreeText.fromString("FTX+RPD+++A" + ":A".repeat(10)))
             .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Can't create ReferencePopulationDefinitionFreeText from FTS+RPD+++A::::::::::");
+            .hasMessage("Can't create ReferencePopulationDefinitionFreeText from FTX+RPD+++A:A:A:A:A:A:A:A:A:A:A");
+    }
+
+    @Test
+    @SuppressWarnings("checkstyle:MagicNumber")
+    void testPreValidateTooManyFreeTexts() {
+        var texts = "A".repeat(10).split("");
+        var freeText = new ReferencePopulationDefinitionFreeText(texts);
+        assertThatThrownBy(freeText::preValidate)
+            .isExactlyInstanceOf(EdifactValidationException.class)
+            .hasMessage("FTX+RPD: At most 5 reference population definitions may be given.");
     }
 }
