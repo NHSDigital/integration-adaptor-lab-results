@@ -7,7 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.InboundQueueService;
+import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.MeshInboundQueueService;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.exception.MeshApiConnectionException;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.exception.MeshWorkflowUnknownException;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshClient;
@@ -35,7 +35,7 @@ class MeshServiceTest {
     private MeshClient meshClient;
 
     @Mock
-    private InboundQueueService inboundQueueService;
+    private MeshInboundQueueService meshInboundQueueService;
 
     @Mock
     private MeshMailBoxScheduler meshMailBoxScheduler;
@@ -61,7 +61,7 @@ class MeshServiceTest {
         meshMessage2.setMeshMessageId(MESSAGE_ID2);
 
         meshService = new MeshService(meshClient,
-            inboundQueueService,
+            meshInboundQueueService,
             meshMailBoxScheduler,
             conversationIdService,
             scanDelayInSeconds,
@@ -81,11 +81,11 @@ class MeshServiceTest {
 
         verify(meshClient).authenticate();
         verify(meshClient).getEdifactMessage(MESSAGE_ID1);
-        verify(inboundQueueService).publish(meshMessage1);
+        verify(meshInboundQueueService).publish(meshMessage1);
         verify(meshClient).acknowledgeMessage(MESSAGE_ID1);
 
         verify(meshClient).getEdifactMessage(MESSAGE_ID2);
-        verify(inboundQueueService).publish(meshMessage1);
+        verify(meshInboundQueueService).publish(meshMessage1);
         verify(meshClient).acknowledgeMessage(MESSAGE_ID2);
 
         verify(conversationIdService, times(2)).applyRandomConversationId();
@@ -107,9 +107,9 @@ class MeshServiceTest {
 
         verify(meshClient).authenticate();
         verify(meshClient).getEdifactMessage(MESSAGE_ID1);
-        verify(inboundQueueService).publish(meshMessage1);
+        verify(meshInboundQueueService).publish(meshMessage1);
         verify(meshClient).acknowledgeMessage(MESSAGE_ID1);
-        verifyNoMoreInteractions(meshClient, inboundQueueService); // second message not downloaded and published
+        verifyNoMoreInteractions(meshClient, meshInboundQueueService); // second message not downloaded and published
 
         verify(conversationIdService).applyRandomConversationId();
         verify(conversationIdService).resetConversationId();
@@ -125,7 +125,7 @@ class MeshServiceTest {
 
         verify(meshClient).authenticate();
         verify(meshClient, never()).getEdifactMessage(any());
-        verify(inboundQueueService, never()).publish(any());
+        verify(meshInboundQueueService, never()).publish(any());
         verify(meshClient, never()).acknowledgeMessage(any());
 
         verifyNoInteractions(conversationIdService);
@@ -142,7 +142,7 @@ class MeshServiceTest {
 
         verify(meshClient).authenticate();
         verify(meshClient).getEdifactMessage(ERROR_MESSAGE_ID);
-        verify(inboundQueueService, never()).publish(any());
+        verify(meshInboundQueueService, never()).publish(any());
         verify(meshClient, never()).acknowledgeMessage(MESSAGE_ID1);
 
         verify(conversationIdService).applyRandomConversationId();
@@ -160,7 +160,7 @@ class MeshServiceTest {
 
         verify(meshClient).authenticate();
         verify(meshClient).getEdifactMessage(ERROR_MESSAGE_ID);
-        verify(inboundQueueService, never()).publish(any());
+        verify(meshInboundQueueService, never()).publish(any());
         verify(meshClient, never()).acknowledgeMessage(MESSAGE_ID1);
 
         verify(conversationIdService).applyRandomConversationId();
@@ -180,7 +180,7 @@ class MeshServiceTest {
         verify(meshClient).authenticate();
         verify(meshClient).getEdifactMessage(ERROR_MESSAGE_ID);
         verify(meshClient).getEdifactMessage(MESSAGE_ID1);
-        verify(inboundQueueService).publish(meshMessage1);
+        verify(meshInboundQueueService).publish(meshMessage1);
         verify(meshClient).acknowledgeMessage(MESSAGE_ID1);
 
         verify(conversationIdService, times(2)).applyRandomConversationId();
@@ -205,8 +205,8 @@ class MeshServiceTest {
         verify(meshClient).authenticate();
         verify(meshClient).getEdifactMessage(ERROR_MESSAGE_ID);
         verify(meshClient).getEdifactMessage(MESSAGE_ID1);
-        verify(inboundQueueService).publish(messageForAckError);
-        verify(inboundQueueService).publish(meshMessage1);
+        verify(meshInboundQueueService).publish(messageForAckError);
+        verify(meshInboundQueueService).publish(meshMessage1);
         verify(meshClient).acknowledgeMessage(ERROR_MESSAGE_ID);
         verify(meshClient).acknowledgeMessage(MESSAGE_ID1);
 
@@ -220,13 +220,13 @@ class MeshServiceTest {
         when(meshMailBoxScheduler.isEnabled()).thenReturn(true);
         when(meshClient.getInboxMessageIds()).thenReturn(List.of(MESSAGE_ID1));
         when(meshClient.getEdifactMessage(any())).thenReturn(meshMessage1);
-        doThrow(new RuntimeException("error")).when(inboundQueueService).publish(any());
+        doThrow(new RuntimeException("error")).when(meshInboundQueueService).publish(any());
 
         meshService.scanMeshInboxForMessages();
 
         verify(meshClient).authenticate();
         verify(meshClient).getEdifactMessage(MESSAGE_ID1);
-        verify(inboundQueueService).publish(meshMessage1);
+        verify(meshInboundQueueService).publish(meshMessage1);
         verify(meshClient, never()).acknowledgeMessage(MESSAGE_ID1);
 
         verify(conversationIdService).applyRandomConversationId();
@@ -241,7 +241,7 @@ class MeshServiceTest {
         meshService.scanMeshInboxForMessages();
 
         verifyNoInteractions(meshClient);
-        verifyNoInteractions(inboundQueueService);
+        verifyNoInteractions(meshInboundQueueService);
         verifyNoInteractions(conversationIdService);
     }
 
@@ -255,7 +255,7 @@ class MeshServiceTest {
 
         verify(meshClient).authenticate();
         verify(meshClient, never()).getEdifactMessage(MESSAGE_ID1);
-        verifyNoInteractions(inboundQueueService);
+        verifyNoInteractions(meshInboundQueueService);
     }
 
     @Test
@@ -270,7 +270,7 @@ class MeshServiceTest {
 
         verify(meshClient).authenticate();
         verifyNoMoreInteractions(meshClient);
-        verifyNoInteractions(inboundQueueService);
+        verifyNoInteractions(meshInboundQueueService);
     }
 
     @Test
@@ -281,7 +281,7 @@ class MeshServiceTest {
 
         verify(meshMailBoxScheduler, never()).hasTimePassed(scanDelayInSeconds);
         verify(meshClient, never()).getEdifactMessage(MESSAGE_ID1);
-        verifyNoInteractions(inboundQueueService);
+        verifyNoInteractions(meshInboundQueueService);
     }
 
 }

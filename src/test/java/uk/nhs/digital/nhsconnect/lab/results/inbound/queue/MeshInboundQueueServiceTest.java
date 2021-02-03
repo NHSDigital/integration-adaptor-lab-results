@@ -36,7 +36,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class InboundQueueServiceTest {
+class MeshInboundQueueServiceTest {
 
     private static final String CONVERSATION_ID = "CONV123";
 
@@ -50,7 +50,7 @@ class InboundQueueServiceTest {
     private ArgumentCaptor<MessageCreator> jmsMessageCreatorCaptor;
 
     @InjectMocks
-    private InboundQueueService inboundQueueService;
+    private MeshInboundQueueService meshInboundQueueService;
 
     @Mock
     private JmsTemplate jmsTemplate;
@@ -69,7 +69,7 @@ class InboundQueueServiceTest {
         when(message.getStringProperty(JmsHeaders.CONVERSATION_ID)).thenReturn(CONVERSATION_ID);
         when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"LAB_RESULTS_REG\"}");
 
-        inboundQueueService.receive(message);
+        meshInboundQueueService.receive(message);
 
         verify(conversationIdService).applyConversationId(CONVERSATION_ID);
 
@@ -86,7 +86,7 @@ class InboundQueueServiceTest {
         when(message.getStringProperty(JmsHeaders.CONVERSATION_ID)).thenReturn(CONVERSATION_ID);
         when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"INVALID\"}");
 
-        assertThrows(Exception.class, () -> inboundQueueService.receive(message));
+        assertThrows(Exception.class, () -> meshInboundQueueService.receive(message));
 
         verify(conversationIdService).applyConversationId(CONVERSATION_ID);
         verify(message, never()).acknowledge();
@@ -99,7 +99,7 @@ class InboundQueueServiceTest {
         when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"LAB_RESULTS_REG\"}");
         doThrow(RuntimeException.class).when(inboundMessageHandler).handle(any(MeshMessage.class));
 
-        assertThrows(RuntimeException.class, () -> inboundQueueService.receive(message));
+        assertThrows(RuntimeException.class, () -> meshInboundQueueService.receive(message));
 
         verify(conversationIdService).applyConversationId(CONVERSATION_ID);
         verify(message, never()).acknowledge();
@@ -111,7 +111,7 @@ class InboundQueueServiceTest {
         doThrow(JMSException.class).when(message).getStringProperty(JmsHeaders.CONVERSATION_ID);
         when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"LAB_RESULTS_REG\"}");
 
-        inboundQueueService.receive(message);
+        meshInboundQueueService.receive(message);
 
         verify(conversationIdService, never()).applyConversationId(CONVERSATION_ID);
 
@@ -133,7 +133,7 @@ class InboundQueueServiceTest {
         final InboundMeshMessage inboundMeshMessage = InboundMeshMessage.create(WorkflowId.REGISTRATION,
             "ASDF", null, "ID123");
 
-        inboundQueueService.publish(inboundMeshMessage);
+        meshInboundQueueService.publish(inboundMeshMessage);
 
         // the method parameter is modified so another copy is needed. Timestamp set to expected value
         final InboundMeshMessage expectedInboundMeshMessage = InboundMeshMessage.create(WorkflowId.REGISTRATION,
