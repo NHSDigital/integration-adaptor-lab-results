@@ -16,6 +16,8 @@ public class SpecimenQuantity extends Segment {
     private static final String KEY = "QTY";
     private static final String QUALIFIER = "SVO";
     private static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
+    private static final int THREE = 3;
+    private static final int FOUR = 4;
 
     private final int quantity;
     private final String quantityUnitOfMeasure;
@@ -29,7 +31,7 @@ public class SpecimenQuantity extends Segment {
             Split.bySegmentTerminator(edifactString)[0]
         );
         int quantity = Integer.parseInt(Split.byPlus(splitByColon[1])[0]);
-        return new SpecimenQuantity(quantity, splitByColon[4]);
+        return new SpecimenQuantity(quantity, splitByColon[FOUR]);
     }
 
     @Override
@@ -39,7 +41,7 @@ public class SpecimenQuantity extends Segment {
 
     @Override
     public String getValue() {
-        return QUALIFIER + COLON_SEPARATOR + quantity + PLUS_SEPARATOR + COLON_SEPARATOR.repeat(3) + quantityUnitOfMeasure;
+        return QUALIFIER + COLON_SEPARATOR + quantity + PLUS_SEPARATOR + COLON_SEPARATOR.repeat(THREE) + quantityUnitOfMeasure;
     }
 
     @Override

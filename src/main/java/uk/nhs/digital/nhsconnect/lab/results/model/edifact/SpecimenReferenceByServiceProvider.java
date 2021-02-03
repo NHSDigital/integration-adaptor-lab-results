@@ -15,10 +15,9 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 @Getter
 @AllArgsConstructor
 public class SpecimenReferenceByServiceProvider extends Segment {
-
-    public static final String KEY = "RFF";
-    public static final String QUALIFIER = "STI";
-    public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
+    private static final String KEY = "RFF";
+    private static final String QUALIFIER = "STI";
+    private static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
 
     private final String referenceNumber;
 

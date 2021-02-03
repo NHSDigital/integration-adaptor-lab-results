@@ -20,7 +20,8 @@ public class SpecimenReferenceByServiceProviderTest {
         var parsedFreeText = SpecimenReferenceByServiceProvider.fromString("RFF+STI:CH000064LX'");
         Assertions.assertThat(parsedFreeText.getReferenceNumber()).isEqualTo("CH000064LX");
         Assertions.assertThat(parsedFreeText.toEdifact()).isEqualTo(edifact);
-        Assertions.assertThatThrownBy(() -> SpecimenReferenceByServiceProvider.fromString("wrong value")).isExactlyInstanceOf(IllegalArgumentException.class);
+        Assertions.assertThatThrownBy(
+            () -> SpecimenReferenceByServiceProvider.fromString("wrong value")).isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

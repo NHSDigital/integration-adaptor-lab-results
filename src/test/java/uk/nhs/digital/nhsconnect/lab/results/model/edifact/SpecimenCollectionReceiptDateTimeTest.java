@@ -68,7 +68,8 @@ public class SpecimenCollectionReceiptDateTimeTest {
 
     @Test
     void testFromStringWithValidEdifactStringReturnsSpecimenCollectionReceiptDateTimeInFormatCCYYMMDD() {
-        final SpecimenCollectionReceiptDateTime specimenCollectionReceiptDateTime = SpecimenCollectionReceiptDateTime.fromString(VALID_EDIFACT_CCYYMMDD);
+        final SpecimenCollectionReceiptDateTime specimenCollectionReceiptDateTime =
+            SpecimenCollectionReceiptDateTime.fromString(VALID_EDIFACT_CCYYMMDD);
 
         assertAll("fromString specimen collection date format CCYYMMDD",
             () -> assertEquals(SpecimenCollectionDateTime.KEY, specimenCollectionReceiptDateTime.getKey()),
@@ -78,7 +79,8 @@ public class SpecimenCollectionReceiptDateTimeTest {
 
     @Test
     void testFromStringWithValidEdifactStringReturnsSpecimenCollectionReceiptDateTimeInFormatCCYYMMDDHHMM() {
-        final SpecimenCollectionReceiptDateTime specimenCollectionReceiptDateTime = SpecimenCollectionReceiptDateTime.fromString(VALID_EDIFACT_CCYYMMDDHHMM);
+        final SpecimenCollectionReceiptDateTime specimenCollectionReceiptDateTime =
+            SpecimenCollectionReceiptDateTime.fromString(VALID_EDIFACT_CCYYMMDDHHMM);
 
         assertAll("fromString specimen collection date format CCYYMMDDHHMM",
             () -> assertEquals(SpecimenCollectionDateTime.KEY, specimenCollectionReceiptDateTime.getKey()),

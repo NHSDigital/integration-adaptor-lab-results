@@ -16,7 +16,8 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 public class ServiceProviderComment extends Segment {
     private static final String KEY = "FTX";
     private static final String QUALIFIER = "SPC";
-    public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
+    private static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
+    private static final int FOUR = 4;
 
     private final String serviceProviderComment;
 
@@ -27,7 +28,7 @@ public class ServiceProviderComment extends Segment {
         String[] split = Split.byPlus(
             Split.bySegmentTerminator(edifactString)[0]
         );
-        return new ServiceProviderComment(split[4]);
+        return new ServiceProviderComment(split[FOUR]);
     }
 
     @Override

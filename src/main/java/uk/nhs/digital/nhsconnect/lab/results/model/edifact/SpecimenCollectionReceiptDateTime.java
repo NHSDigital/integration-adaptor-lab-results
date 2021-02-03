@@ -21,10 +21,9 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @EqualsAndHashCode(callSuper = false)
 @Builder
 public class SpecimenCollectionReceiptDateTime extends Segment {
-
-    protected final static String KEY = "DTM";
-    private final static String QUALIFIER = "SRI";
-    private final static String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
+    protected static final String KEY = "DTM";
+    private static final String QUALIFIER = "SRI";
+    private static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
     private static final DateTimeFormatter DATE_FORMATTER_CCYYMMDD = DateTimeFormatter.ofPattern("yyyyMMdd");
     private static final DateTimeFormatter DATE_FORMATTER_CCYYMMDDHHMM = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
 
@@ -35,12 +34,14 @@ public class SpecimenCollectionReceiptDateTime extends Segment {
 
     public static SpecimenCollectionReceiptDateTime fromString(final String edifactString) {
         if (!edifactString.startsWith(SpecimenCollectionReceiptDateTime.KEY_QUALIFIER)) {
-            throw new IllegalArgumentException("Can't create " + SpecimenCollectionReceiptDateTime.class.getSimpleName() + " from " + edifactString);
+            throw new IllegalArgumentException(
+                "Can't create " + SpecimenCollectionReceiptDateTime.class.getSimpleName() + " from " + edifactString);
         }
         final String input = Split.byPlus(edifactString)[1];
         final String collectionReceiptDateTime = Split.byColon(input)[1];
         final String format = Split.bySegmentTerminator(Split.byColon(input)[2])[0];
-        final SpecimenCollectionReceiptDateTime.SpecimenCollectionReceiptDateTimeBuilder collectionReceiptDateTimeBuilder = SpecimenCollectionReceiptDateTime.builder();
+        final SpecimenCollectionReceiptDateTime.SpecimenCollectionReceiptDateTimeBuilder
+            collectionReceiptDateTimeBuilder = SpecimenCollectionReceiptDateTime.builder();
 
         if (isNotBlank(collectionReceiptDateTime) && isNotBlank(format)) {
             final String formattedFhirDate = getFormattedFhirDate(collectionReceiptDateTime, format);

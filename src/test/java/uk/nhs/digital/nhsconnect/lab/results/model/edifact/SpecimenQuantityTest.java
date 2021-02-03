@@ -9,9 +9,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class SpecimenQuantityTest {
+
+    private static final String SPECIMEN_QUANTITY_UNIT_OF_MEASURE = "mL";
+    private static final int SPECIMEN_QUANTITY = 1750;
+
     @Test
     void toEdifactTest() {
-        var edifact = new SpecimenQuantity(1750, "mL").toEdifact();
+        var edifact = new SpecimenQuantity(SPECIMEN_QUANTITY, SPECIMEN_QUANTITY_UNIT_OF_MEASURE).toEdifact();
 
         assertThat(edifact).isEqualTo("QTY+SVO:1750+:::mL'");
     }
@@ -20,15 +24,15 @@ public class SpecimenQuantityTest {
     void testFromString() {
         var edifact = "QTY+SVO:1750+:::mL'";
         var parsedFreeText = SpecimenQuantity.fromString("QTY+SVO:1750+:::mL'");
-        assertThat(parsedFreeText.getQuantityUnitOfMeasure()).isEqualTo("mL");
-        assertThat(parsedFreeText.getQuantity()).isEqualTo(1750);
+        assertThat(parsedFreeText.getQuantityUnitOfMeasure()).isEqualTo(SPECIMEN_QUANTITY_UNIT_OF_MEASURE);
+        assertThat(parsedFreeText.getQuantity()).isEqualTo(SPECIMEN_QUANTITY);
         assertThat(parsedFreeText.toEdifact()).isEqualTo(edifact);
         assertThatThrownBy(() -> SpecimenQuantity.fromString("wrong value")).isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     public void testPreValidationQuantityUnitOfMeasureEmptyString() {
-        SpecimenQuantity emptyFreeText = new SpecimenQuantity(1750, StringUtils.EMPTY);
+        SpecimenQuantity emptyFreeText = new SpecimenQuantity(SPECIMEN_QUANTITY, StringUtils.EMPTY);
         Assertions.assertThatThrownBy(emptyFreeText::preValidate)
             .isInstanceOf(EdifactValidationException.class)
             .hasMessage("QTY: Unit of measure is required");
@@ -36,7 +40,7 @@ public class SpecimenQuantityTest {
 
     @Test
     public void testPreValidationQuantityUnitOfMeasureBlankString() {
-        SpecimenQuantity emptyFreeText = new SpecimenQuantity(1750," ");
+        SpecimenQuantity emptyFreeText = new SpecimenQuantity(SPECIMEN_QUANTITY, " ");
         Assertions.assertThatThrownBy(emptyFreeText::preValidate)
             .isInstanceOf(EdifactValidationException.class)
             .hasMessage("QTY: Unit of measure is required");

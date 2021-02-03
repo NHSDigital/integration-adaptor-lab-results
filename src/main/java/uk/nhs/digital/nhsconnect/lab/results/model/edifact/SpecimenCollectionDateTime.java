@@ -22,10 +22,9 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @EqualsAndHashCode(callSuper = false)
 @Builder
 public class SpecimenCollectionDateTime extends Segment {
-
-    protected final static String KEY = "DTM";
-    private final static String QUALIFIER = "SCO";
-    private final static String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
+    protected static final String KEY = "DTM";
+    private static final String QUALIFIER = "SCO";
+    private static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
     private static final DateTimeFormatter DATE_FORMATTER_CCYYMMDD = DateTimeFormatter.ofPattern("yyyyMMdd");
     private static final DateTimeFormatter DATE_FORMATTER_CCYYMMDDHHMM = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
 
@@ -36,7 +35,8 @@ public class SpecimenCollectionDateTime extends Segment {
 
     public static SpecimenCollectionDateTime fromString(final String edifactString) {
         if (!edifactString.startsWith(SpecimenCollectionDateTime.KEY_QUALIFIER)) {
-            throw new IllegalArgumentException("Can't create " + SpecimenCollectionDateTime.class.getSimpleName() + " from " + edifactString);
+            throw new IllegalArgumentException(
+                "Can't create " + SpecimenCollectionDateTime.class.getSimpleName() + " from " + edifactString);
         }
         final String input = Split.byPlus(edifactString)[1];
         final String collectionDateTime = Split.byColon(input)[1];
