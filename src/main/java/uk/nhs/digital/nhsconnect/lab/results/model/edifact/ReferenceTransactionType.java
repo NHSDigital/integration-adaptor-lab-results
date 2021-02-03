@@ -20,7 +20,7 @@ public class ReferenceTransactionType extends Segment {
     private @NonNull TransactionType transactionType;
 
     public static ReferenceTransactionType fromString(final String edifactString) {
-        if (!edifactString.startsWith(ReferenceTransactionType.KEY_QUALIFIER)) {
+        if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException("Can't create " + ReferenceTransactionType.class.getSimpleName() + " from " + edifactString);
         }
         final String[] split = Split.byColon(edifactString);

@@ -4,7 +4,8 @@ import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -91,14 +92,13 @@ class RequesterNameAndAddressTest {
                 "ABC", HealthcareRegistrationIdentificationCode.GP, ""
         );
 
-        assertSoftly(softly -> {
-            softly.assertThatThrownBy(emptyIdentifier::preValidate)
+        assertAll(
+            () -> assertThatThrownBy(emptyIdentifier::preValidate)
                     .isExactlyInstanceOf(EdifactValidationException.class)
-                    .hasMessage("NAD: Attribute identifier is required");
-
-            softly.assertThatThrownBy(emptyRequesterName::preValidate)
+                    .hasMessage("NAD: Attribute identifier is required"),
+            () -> assertThatThrownBy(emptyRequesterName::preValidate)
                     .isExactlyInstanceOf(EdifactValidationException.class)
-                    .hasMessage("NAD: Attribute requesterName is required");
-        });
+                    .hasMessage("NAD: Attribute requesterName is required")
+        );
     }
 }
