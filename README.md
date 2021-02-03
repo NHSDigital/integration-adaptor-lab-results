@@ -1,6 +1,21 @@
 # integration-adaptor-lab-results
 Integration Adaptor to simplify processing of Pathology and Screening results
 
+## Configuration
+
+The adaptor reads its configuration from environment variables. The following sections describe the environment variables
+ used to configure the adaptor. 
+ 
+Variables without a default value and not marked optional *MUST* be defined for the adaptor to run.
+
+### Message Queue Configuration
+
+| Environment Variable                 | Default                   | Description 
+| -------------------------------------|---------------------------|-------------
+| LAB_RESULTS_MESH_OUTBOUND_QUEUE_NAME | lab_results_mesh_outbound | The name of the outbound (to MESH) message queue
+| LAB_RESULTS_MESH_INBOUND_QUEUE_NAME  | lab_results_mesh_inbound  | The name of the inbound (from MESH) message queue
+| LAB_RESULTS_GP_OUTBOUND_QUEUE_NAME   | lab_results_gp_outbound   | The name of the outbound (to GP System) message queue
+
 ## MESH API
 
 ### MESH API Connection Configuration
