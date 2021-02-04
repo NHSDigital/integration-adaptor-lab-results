@@ -44,8 +44,8 @@ public class SpecimenCollectionReceiptDateTime extends Segment {
             collectionReceiptDateTimeBuilder = SpecimenCollectionReceiptDateTime.builder();
 
         if (isBlank(collectionReceiptDateTime) || isBlank(format)) {
-            throw new IllegalArgumentException("Can't create SpecimenCollectionReceiptDateTime from " + edifactString
-                + " because of missing date-time and/or format definition");
+            throw new IllegalArgumentException("Can't create " + SpecimenCollectionReceiptDateTime.class.getSimpleName()
+                + " from " + edifactString + " because of missing date-time and/or format definition");
         }
         final String formattedFhirDate = getFormattedFhirDate(collectionReceiptDateTime, format);
         collectionReceiptDateTimeBuilder
