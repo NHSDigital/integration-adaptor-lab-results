@@ -45,10 +45,9 @@ public class SpecimenCollectionDateTime extends Segment {
         final SpecimenCollectionDateTimeBuilder collectionDateTimeBuilder = SpecimenCollectionDateTime.builder();
 
         if (isBlank(collectionDateTime) || isBlank(format)) {
-            throw new IllegalArgumentException("Can't create " + SpecimenCollectionDateTime.class.getSimpleName()
-                + " from " + edifactString + ". Both the collection date time and the time format should be presented");
+            throw new IllegalArgumentException("Can't create SpecimenCollectionDateTime from " + edifactString
+                + " because of missing date-time and/or format definition");
         }
-
         final String formattedFhirDate = getFormattedFhirDate(collectionDateTime, format);
         collectionDateTimeBuilder
             .collectionDateTime(formattedFhirDate)
