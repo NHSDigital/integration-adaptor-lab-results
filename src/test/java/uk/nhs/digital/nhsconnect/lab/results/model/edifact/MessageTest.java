@@ -1,12 +1,11 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
-import org.junit.jupiter.api.Test;
-
-import java.util.Collections;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
 
 class MessageTest {
     @Test
