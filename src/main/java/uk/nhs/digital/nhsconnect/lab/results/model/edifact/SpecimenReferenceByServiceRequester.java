@@ -52,7 +52,7 @@ public class SpecimenReferenceByServiceRequester extends Segment {
     @Override
     public void preValidate() throws EdifactValidationException {
         if (referenceNumber.isBlank()) {
-            throw new EdifactValidationException(getKey() + ": Speciment Reference number by service requester is blank or missing");
+            throw new EdifactValidationException(getKey() + ": Specimen Reference number by service requester is blank or missing");
         }
     }
 }
