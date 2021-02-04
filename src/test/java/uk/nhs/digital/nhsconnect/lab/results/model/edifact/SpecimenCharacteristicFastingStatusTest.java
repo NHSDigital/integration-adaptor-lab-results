@@ -22,8 +22,12 @@ public class SpecimenCharacteristicFastingStatusTest {
         var parsedFreeText = SpecimenCharacteristicFastingStatus.fromString("SPC+FS+F'");
         assertThat(parsedFreeText.getFastingStatus()).isEqualTo("F");
         assertThat(parsedFreeText.toEdifact()).isEqualTo(edifact);
-        assertThatThrownBy(
-            () -> SpecimenCharacteristicFastingStatus.fromString("wrong value")).isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void testFromStringWithInvalidEdifactStringThrowsException() {
+        assertThatThrownBy(() -> SpecimenCharacteristicFastingStatus.fromString("wrong value"))
+            .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

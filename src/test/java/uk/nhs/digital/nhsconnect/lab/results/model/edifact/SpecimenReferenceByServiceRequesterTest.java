@@ -5,6 +5,8 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 public class SpecimenReferenceByServiceRequesterTest {
 
     @Test
@@ -20,8 +22,12 @@ public class SpecimenReferenceByServiceRequesterTest {
         var parsedFreeText = SpecimenReferenceByServiceRequester.fromString("RFF+RTI:CH000064LX'");
         Assertions.assertThat(parsedFreeText.getReferenceNumber()).isEqualTo("CH000064LX");
         Assertions.assertThat(parsedFreeText.toEdifact()).isEqualTo(edifact);
-        Assertions.assertThatThrownBy(
-            () -> SpecimenReferenceByServiceRequester.fromString("wrong value")).isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void testFromStringWithInvalidEdifactStringThrowsException() {
+        assertThatThrownBy(() -> SpecimenReferenceByServiceRequester.fromString("wrong value"))
+            .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

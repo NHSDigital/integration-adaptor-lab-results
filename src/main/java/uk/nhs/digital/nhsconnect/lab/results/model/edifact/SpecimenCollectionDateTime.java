@@ -13,7 +13,6 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * Example 1: DTM+SCO:20100223:102'
@@ -46,8 +45,8 @@ public class SpecimenCollectionDateTime extends Segment {
         final SpecimenCollectionDateTimeBuilder collectionDateTimeBuilder = SpecimenCollectionDateTime.builder();
 
         if (isBlank(collectionDateTime) || isBlank(format)) {
-            throw new IllegalArgumentException("Can't create " + SpecimenCollectionDateTime.class.getSimpleName() +
-                " from " + edifactString + ". Both the collection date time and the time format should be presented");
+            throw new IllegalArgumentException("Can't create " + SpecimenCollectionDateTime.class.getSimpleName()
+                + " from " + edifactString + ". Both the collection date time and the time format should be presented");
         }
 
         final String formattedFhirDate = getFormattedFhirDate(collectionDateTime, format);

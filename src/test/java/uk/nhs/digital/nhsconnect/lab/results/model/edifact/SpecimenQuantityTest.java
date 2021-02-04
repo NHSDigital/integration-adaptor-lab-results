@@ -27,7 +27,12 @@ public class SpecimenQuantityTest {
         assertThat(parsedFreeText.getQuantityUnitOfMeasure()).isEqualTo(SPECIMEN_QUANTITY_UNIT_OF_MEASURE);
         assertThat(parsedFreeText.getQuantity()).isEqualTo(SPECIMEN_QUANTITY);
         assertThat(parsedFreeText.toEdifact()).isEqualTo(edifact);
-        assertThatThrownBy(() -> SpecimenQuantity.fromString("wrong value")).isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void testFromStringWithInvalidEdifactStringThrowsException() {
+        assertThatThrownBy(() -> SpecimenQuantity.fromString("wrong value"))
+            .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

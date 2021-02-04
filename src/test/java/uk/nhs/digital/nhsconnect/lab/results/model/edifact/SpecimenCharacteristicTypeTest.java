@@ -22,6 +22,10 @@ public class SpecimenCharacteristicTypeTest {
         var parsedFreeText = SpecimenCharacteristicType.fromString("SPC+TSP+:::BLOOD & URINE'");
         assertThat(parsedFreeText.getTypeOfSpecimen()).isEqualTo("BLOOD & URINE");
         assertThat(parsedFreeText.toEdifact()).isEqualTo(edifact);
+    }
+
+    @Test
+    void testFromStringWithInvalidEdifactStringThrowsException() {
         assertThatThrownBy(() -> SpecimenCharacteristicType.fromString("wrong value")).isExactlyInstanceOf(IllegalArgumentException.class);
     }
 

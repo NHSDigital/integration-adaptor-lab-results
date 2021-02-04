@@ -107,7 +107,7 @@ public class SpecimenCollectionDateTimeTest {
         final IllegalArgumentException exception =
             assertThrows(IllegalArgumentException.class, () -> SpecimenCollectionDateTime.fromString("DTM+SCO:20100223:'"));
 
-        assertEquals("Can't create SpecimenCollectionDateTime from DTM+SCO:20100223:'." +
-            " Both the collection date time and the time format should be presented", exception.getMessage());
+        assertEquals("Can't create SpecimenCollectionDateTime from DTM+SCO:20100223:'."
+            + " Both the collection date time and the time format should be presented", exception.getMessage());
     }
 }
