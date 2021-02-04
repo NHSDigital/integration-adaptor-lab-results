@@ -7,11 +7,11 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class ServiceProviderCommentTest {
+class ServiceProviderCommentFreeTextTest {
 
     @Test
     void toEdifactTest() {
-        var edifact = new ServiceProviderComment("Something").toEdifact();
+        var edifact = new ServiceProviderCommentFreeText("Something").toEdifact();
 
         assertThat(edifact).isEqualTo("FTX+SPC+++Something'");
     }
@@ -19,15 +19,15 @@ class ServiceProviderCommentTest {
     @Test
     void testFromString() {
         var edifact = "FTX+SPC+++red blood cell seen, Note low platelets'";
-        var parsedFreeText = ServiceProviderComment.fromString("FTX+SPC+++red blood cell seen, Note low platelets");
+        var parsedFreeText = ServiceProviderCommentFreeText.fromString("FTX+SPC+++red blood cell seen, Note low platelets");
         assertThat(parsedFreeText.getServiceProviderComment()).isEqualTo("red blood cell seen, Note low platelets");
         assertThat(parsedFreeText.toEdifact()).isEqualTo(edifact);
-        assertThatThrownBy(() -> ServiceProviderComment.fromString("wrong value")).isExactlyInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> ServiceProviderCommentFreeText.fromString("wrong value")).isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     public void testPreValidationEmptyString() {
-        ServiceProviderComment emptyFreeText = new ServiceProviderComment(StringUtils.EMPTY);
+        ServiceProviderCommentFreeText emptyFreeText = new ServiceProviderCommentFreeText(StringUtils.EMPTY);
         assertThatThrownBy(emptyFreeText::preValidate)
             .isInstanceOf(EdifactValidationException.class)
             .hasMessage("FTX: Attribute freeTextValue is blank or missing");
@@ -35,7 +35,7 @@ class ServiceProviderCommentTest {
 
     @Test
     public void testPreValidationBlankString() {
-        ServiceProviderComment emptyFreeText = new ServiceProviderComment(" ");
+        ServiceProviderCommentFreeText emptyFreeText = new ServiceProviderCommentFreeText(" ");
         assertThatThrownBy(emptyFreeText::preValidate)
             .isInstanceOf(EdifactValidationException.class)
             .hasMessage("FTX: Attribute freeTextValue is blank or missing");
