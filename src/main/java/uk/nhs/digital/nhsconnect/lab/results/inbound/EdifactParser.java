@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 @Component
 public class EdifactParser {
 
-    private static final String MESSAGE_START_SEGMENT = MessageHeader.KEY;
+    private static final String MESSAGE_END_SEGMENT = MessageTrailer.KEY;
 
     private final InterchangeFactory interchangeFactory;
 
@@ -66,7 +66,7 @@ public class EdifactParser {
 
     private Message parseMessage(List<String> singleMessageEdifactSegments) {
         var messageTrailerIndex = singleMessageEdifactSegments.size() - 1;
-        var firstMessageStartIndex = findAllIndexesOfSegment(singleMessageEdifactSegments, MESSAGE_START_SEGMENT).stream()
+        var firstMessageStartIndex = findAllIndexesOfSegment(singleMessageEdifactSegments, MESSAGE_END_SEGMENT).stream()
                 .findFirst()
                 // there might be no transaction inside - RECEP - so all message lines belong to the message
                 .orElse(messageTrailerIndex);

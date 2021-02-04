@@ -36,7 +36,7 @@ public class GpOutboundQueueService {
         final MessageCreator messageCreator = (Session session) -> {
             final TextMessage message = session.createTextMessage(jsonMessage);
             message.setStringProperty(JmsHeaders.OPERATION_ID, fhirDataToSend.getOperationId());
-            message.setStringProperty(JmsHeaders.TRANSACTION_TYPE, fhirDataToSend.getTransactionType().name().toLowerCase());
+            //message.setStringProperty(JmsHeaders.TRANSACTION_TYPE, fhirDataToSend.getTransactionType().name().toLowerCase());
             message.setStringProperty(JmsHeaders.CONVERSATION_ID, conversationIdService.getCurrentConversationId());
             return message;
         };
