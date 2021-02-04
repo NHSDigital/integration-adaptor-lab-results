@@ -8,7 +8,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class SpecimenQuantityTest {
+class SpecimenQuantityTest {
 
     private static final String SPECIMEN_QUANTITY_UNIT_OF_MEASURE = "mL";
     private static final int SPECIMEN_QUANTITY = 1750;

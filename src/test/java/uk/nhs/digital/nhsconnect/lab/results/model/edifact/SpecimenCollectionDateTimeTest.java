@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class SpecimenCollectionDateTimeTest {
+class SpecimenCollectionDateTimeTest {
 
     private static final String VALID_FHIR_SCDT_CCYYMMDD = "2010-02-23";
     private static final String VALID_FHIR_SCDT_CCYYMMDDHHMM = "2010-02-23T15:41+00:00";

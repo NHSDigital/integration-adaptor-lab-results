@@ -7,7 +7,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class SpecimenCharacteristicTypeTest {
+class SpecimenCharacteristicTypeTest {
 
     @Test
     void toEdifactTest() {
