@@ -39,8 +39,8 @@ class SpecimenCharacteristicTypeTest {
 
     @Test
     public void testPreValidationBlankString() {
-        SpecimenCharacteristicType emptyFreeText = new SpecimenCharacteristicType(" ");
-        assertThatThrownBy(emptyFreeText::preValidate)
+        SpecimenCharacteristicType blankFreeText = new SpecimenCharacteristicType(" ");
+        assertThatThrownBy(blankFreeText::preValidate)
             .isInstanceOf(EdifactValidationException.class)
             .hasMessage("SPC: Attribute typeOfSpecimen is blank or missing");
     }
