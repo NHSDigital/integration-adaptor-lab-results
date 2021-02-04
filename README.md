@@ -100,7 +100,10 @@ Run `docker-compose up mongodb activemq fake-mesh`
 
 ### Running
 
-**From IntelliJ***
+**From IntelliJ**
+
+Running inside a container is recommended. 
+Variables not marked optional *MUST* be either set up as system environment variables or overridden temporarily in the `application.yml` for the adaptor to run.
 
 Navigate to: IntegrationAdapterLabResultsApplication -> right click -> Run
 

@@ -3,38 +3,38 @@ server:
 
 logging:
   level:
-    uk.nhs.digital.nhsconnect.lab.results: ${LAB_RESULTS_LOGGING_LEVEL:DEBUG}
+    uk.nhs.digital.nhsconnect.lab.results: DEBUG
   pattern:
     console: "-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} ConversationId=%X{ConversationId} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"
 
 labresults:
   amqp:
-    brokers: ${LAB_RESULTS_AMQP_BROKERS:amqp://localhost:5672}
-    meshOutboundQueueName: ${LAB_RESULTS_MESH_OUTBOUND_QUEUE_NAME:lab_results_mesh_outbound}
-    meshInboundQueueName: ${LAB_RESULTS_MESH_INBOUND_QUEUE_NAME:lab_results_mesh_inbound}
-    gpOutboundQueueName: ${LAB_RESULTS_GP_OUTBOUND_QUEUE_NAME:lab_results_gp_outbound}
+    brokers: ${LAB_RESULTS_AMQP_BROKERS}
+    meshOutboundQueueName: lab_results_mesh_outbound
+    meshInboundQueueName: lab_results_mesh_inbound
+    gpOutboundQueueName: lab_results_gp_outbound
     exchange: amq.direct
-    username: ${LAB_RESULTS_AMQP_USERNAME:}
-    password: ${LAB_RESULTS_AMQP_PASSWORD:}
-    maxRedeliveries: ${LAB_RESULTS_AMQP_MAX_REDELIVERIES:3}
+    username:
+    password:
+    maxRedeliveries: 3
   mongodb:
     uri: ${LAB_RESULTS_MONGO_URI}
-    database: ${LAB_RESULTS_MONGO_DATABASE_NAME:labresults}
-    host: ${LAB_RESULTS_MONGO_HOST:}
-    port: ${LAB_RESULTS_MONGO_PORT:}
-    username: ${LAB_RESULTS_MONGO_USERNAME:}
-    password: ${LAB_RESULTS_MONGO_PASSWORD:}
-    options: ${LAB_RESULTS_MONGO_OPTIONS:}
-    autoIndexCreation: ${LAB_RESULTS_MONGO_AUTO_INDEX_CREATION:true}
-    ttl: ${LAB_RESULTS_MONGO_TTL:PT87600H} # long duration (10 years) because the timestamps used in tests are hardcoded. prevent deletion of data during tests
-    cosmosDbEnabled: ${LAB_RESULTS_COSMOS_DB_ENABLED:false}
+    database: labresults
+    host:
+    port:
+    username:
+    password:
+    options:
+    autoIndexCreation: ${LAB_RESULTS_MONGO_AUTO_INDEX_CREATION}
+    ttl: PT87600H # long duration (10 years) because the timestamps used in tests are hardcoded. prevent deletion of data during tests
+    cosmosDbEnabled: false
   mesh:
-    mailboxId: ${LAB_RESULTS_MESH_MAILBOX_ID:lab_results_mailbox} #defaults below are used by fake-mesh
-    mailboxPassword: ${LAB_RESULTS_MESH_MAILBOX_PASSWORD:password}
-    sharedKey: ${LAB_RESULTS_MESH_SHARED_KEY:SharedKey}
-    host: ${LAB_RESULTS_MESH_HOST:https://localhost:8829/messageexchange/} #local fake-mesh default endpoint
-    certValidation: ${LAB_RESULTS_MESH_CERT_VALIDATION:false}
-    endpointCert: ${LAB_RESULTS_MESH_ENDPOINT_CERT:-----BEGIN CERTIFICATE-----
+    mailboxId: lab_results_mailbox #defaults below are used by fake-mesh
+    mailboxPassword: password
+    sharedKey: SharedKey
+    host: ${LAB_RESULTS_MESH_HOST} #local fake-mesh default endpoint
+    certValidation: false
+    endpointCert: -----BEGIN CERTIFICATE-----
       MIIFXzCCA0egAwIBAgIJALRbCSor9bEbMA0GCSqGSIb3DQEBCwUAMEUxCzAJBgNV
       BAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBX
       aWRnaXRzIFB0eSBMdGQwIBcNMTYwNDIwMTczOTA5WhgPMjIxNjAzMDMxNzM5MDla
@@ -64,8 +64,8 @@ labresults:
       lB6mv/JlORiEnDZjP6fO1L7yEvvc1vMlMMDCfNLbU5sdmp3LouR1Yf7uMzGzVL8r
       MsL1ds0kLcY9oQlduXOumM/bj+0hJTHxc06tr9ilzDAgQ+m48+xLxa6+X27m5pnl
       W/JNIRmhLoeFNGNh8HvhI2PwOCsFiqT1rrCaUtusTyH0Ggs=
-      -----END CERTIFICATE-----}
-    endpointPrivateKey: ${LAB_RESULTS_MESH_ENDPOINT_PRIVATE_KEY:-----BEGIN RSA PRIVATE KEY-----
+      -----END CERTIFICATE-----
+    endpointPrivateKey: -----BEGIN RSA PRIVATE KEY-----
       MIIJKQIBAAKCAgEA0x7V2cpEuXbLxb4TFigeN6e/TViXx4B9LMuHwwENX1P5V3O5
       M0d/fLCFruu5dU3PWKoU2rTzUkflj5XOzu2xAftYi3KDMzRR2sByxjjxb/qMIybG
       N1zC1azlDzqc0/oIGoniPhQccdDyA35XkYk3ZALaMwucCg8RCba6beG5TDIre1Wn
@@ -115,17 +115,17 @@ labresults:
       yIBNWf7N1eRRn5h4cVMolnvbulEppXYTlKDKqYgrNecIESiWd8WHPeudkWLmDcfy
       +yLvICQmVjHWsNWD3uuT3gEGdeKDIzEnovXUmqhQE7N/YDupTv5hkh8hMKl12XGs
       3WJ4bVSmp3MOQ2EF4zrAl4fXEd4lS3JxKtzbHFbSogAmPFnuP8wIDWTDgfEq
-      -----END RSA PRIVATE KEY-----}
-    subCAcert: ${LAB_RESULTS_MESH_SUB_CA:}
-    recipientToMailboxIdMappings: ${LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS:XX11=lab_results_mailbox
+      -----END RSA PRIVATE KEY-----
+    subCAcert:
+    recipientToMailboxIdMappings: XX11=lab_results_mailbox
       TES5=lab_results_mailbox
       YY21=lab_results_mailbox
       KC01=lab_results_mailbox
       WHI5=lab_results_mailbox
       SO01=lab_results_mailbox
-      UNY5=lab_results_mailbox}
-    wakeupIntervalInMilliseconds: ${LAB_RESULTS_MESH_CLIENT_WAKEUP_INTERVAL_IN_MILLISECONDS:500}
-    pollingCycleMinimumIntervalInSeconds: ${LAB_RESULTS_MESH_POLLING_CYCLE_MINIMUM_INTERVAL_IN_SECONDS:1}
-    pollingCycleDurationInSeconds: ${LAB_RESULTS_MESH_POLLING_CYCLE_DURATION_IN_SECONDS:1}
+      UNY5=lab_results_mailbox
+    wakeupIntervalInMilliseconds: 500
+    pollingCycleMinimumIntervalInSeconds: 1
+    pollingCycleDurationInSeconds: 1
   scheduler:
-    enabled: ${LAB_RESULTS_SCHEDULER_ENABLED:false}
+    enabled: ${LAB_RESULTS_SCHEDULER_ENABLED}
