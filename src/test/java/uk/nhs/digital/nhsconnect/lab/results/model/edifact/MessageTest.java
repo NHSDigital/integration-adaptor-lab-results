@@ -24,21 +24,6 @@ class MessageTest {
     }
 
     @Test
-    void testGetReferenceTransactionType() {
-        final Message msg = new Message(List.of(
-            "RFF+950:F4"
-        ));
-
-        ReferenceTransactionType type = msg.getReferenceTransactionType();
-
-        assertAll(
-            () -> assertEquals("RFF", type.getKey()),
-            () -> assertEquals("950:F4", type.getValue()),
-            () -> assertEquals(TransactionType.APPROVAL, type.getTransactionType())
-        );
-    }
-
-    @Test
     void testGetHealthAuthorityNameAndAddress() {
         final Message msg = new Message(List.of(
             "NAD+FHS+XX1:954'"
@@ -57,9 +42,6 @@ class MessageTest {
     @Test
     void testFindFirstGpCodeDefaultsTo9999() {
         final Message msg = new Message(List.of());
-        msg.setTransactions(List.of(
-            new Transaction(Collections.emptyList())
-        ));
 
         String firstGpCode = msg.findFirstGpCode();
 
@@ -68,12 +50,9 @@ class MessageTest {
 
     @Test
     void testFindFirstGpCodeReturnsCorrectly() {
-        final Message msg = new Message(List.of());
-        msg.setTransactions(List.of(
-            new Transaction(List.of(
-                "NAD+GP+2750922,295:900'",
-                "NAD+GP+1649811,184:899'"
-            ))
+        final Message msg = new Message(List.of(
+            "NAD+GP+2750922,295:900'",
+            "NAD+GP+1649811,184:899'"
         ));
 
         String firstGpCode = msg.findFirstGpCode();

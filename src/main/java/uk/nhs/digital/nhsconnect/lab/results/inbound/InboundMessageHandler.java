@@ -14,11 +14,9 @@ import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Transaction;
 import uk.nhs.digital.nhsconnect.lab.results.outbound.queue.GpOutboundQueueService;
 import uk.nhs.digital.nhsconnect.lab.results.outbound.queue.MeshOutboundQueueService;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,11 +37,11 @@ public class InboundMessageHandler {
 
         logInterchangeReceived(interchange);
 
-        final List<Transaction> transactions = getTransactions(interchange);
+        final List<Message> messages = getMessages(interchange);
 
-        LOGGER.info("Interchange contains {} new transactions", transactions.size());
+        LOGGER.info("Interchange contains {} new messages", messages.size());
 
-        final List<FhirDataToSend> fhirDataToSend = getFhirDataToSend(transactions);
+        final List<FhirDataToSend> fhirDataToSend = getFhirDataToSend(messages);
 
         fhirDataToSend.forEach(gpOutboundQueueService::publish);
 
@@ -52,21 +50,17 @@ public class InboundMessageHandler {
         logSentFor(interchange);
     }
 
-    private List<Transaction> getTransactions(Interchange interchange) {
-        return interchange.getMessages().stream()
-            .map(Message::getTransactions)
-            .flatMap(Collection::stream)
-            .collect(Collectors.toList());
+    private List<Message> getMessages(Interchange interchange) {
+        return interchange.getMessages();
     }
 
-    private List<FhirDataToSend> getFhirDataToSend(List<Transaction> transactionsToProcess) {
-        return transactionsToProcess.stream()
-            .map(transaction -> {
-                final Parameters parameters = edifactToFhirService.convertToFhir(transaction);
+    private List<FhirDataToSend> getFhirDataToSend(List<Message> messagesToProcess) {
+        return messagesToProcess.stream()
+            .map(message -> {
+                final Parameters parameters = edifactToFhirService.convertToFhir(message);
                 LOGGER.debug("Converted edifact message into {}", parameters);
                 return new FhirDataToSend()
-                    .setContent(parameters)
-                    .setTransactionType(transaction.getMessage().getReferenceTransactionType().getTransactionType());
+                    .setContent(parameters);
             }).collect(Collectors.toList());
     }
 

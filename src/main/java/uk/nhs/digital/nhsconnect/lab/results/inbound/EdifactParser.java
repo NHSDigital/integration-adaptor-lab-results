@@ -9,7 +9,6 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageTrailer;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Transaction;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeFactory;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.ToEdifactParsingException;
