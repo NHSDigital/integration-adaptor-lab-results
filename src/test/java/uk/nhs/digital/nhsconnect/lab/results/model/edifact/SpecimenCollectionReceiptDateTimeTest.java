@@ -98,8 +98,8 @@ class SpecimenCollectionReceiptDateTimeTest {
 
     @Test
     void testFromStringWithInvalidDateFormatCodeThrowsException() {
-        final UnsupportedOperationException exception =
-            assertThrows(UnsupportedOperationException.class, () -> SpecimenCollectionReceiptDateTime.fromString("DTM+SRI:20100223:100'"));
+        final IllegalArgumentException exception =
+            assertThrows(IllegalArgumentException.class, () -> SpecimenCollectionReceiptDateTime.fromString("DTM+SRI:20100223:100'"));
 
         assertEquals("DTM: Date format code 100 is not supported", exception.getMessage());
     }

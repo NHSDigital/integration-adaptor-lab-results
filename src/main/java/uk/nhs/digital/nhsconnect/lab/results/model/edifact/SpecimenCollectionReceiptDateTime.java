@@ -88,7 +88,7 @@ public class SpecimenCollectionReceiptDateTime extends Segment {
             LocalDateTime localDateTime = LocalDateTime.parse(collectionDateTime, DATE_FORMATTER_CCYYMMDDHHMM);
             return localDateTime.toString() + "+00:00";
         }
-        throw new UnsupportedOperationException(KEY + ": Date format code " + dateFormat + " is not supported");
+        throw new IllegalArgumentException(KEY + ": Date format code " + dateFormat + " is not supported");
     }
 
     private static String getFormattedEdifactDate(final String collectionDateTime, final DateFormat dateFormat) {
@@ -97,6 +97,6 @@ public class SpecimenCollectionReceiptDateTime extends Segment {
         } else if (dateFormat.equals(DateFormat.CCYYMMDDHHMM)) {
             return DATE_FORMATTER_CCYYMMDDHHMM.format(OffsetDateTime.parse(collectionDateTime));
         }
-        throw new UnsupportedOperationException(KEY + ": Date format " + dateFormat.name() + " is not supported");
+        throw new IllegalArgumentException(KEY + ": Date format " + dateFormat.name() + " is not supported");
     }
 }
