@@ -127,6 +127,10 @@ A separate source folder [src/intTest](./src/intTest) contains integration tests
     
 ### Debugging
 
+#### MESH API
+
+A `mesh.sh` bash script exists for testing or debugging MESH. For more information see: [mesh/README.md](/mesh/README.md)
+
 #### Fake MESH
 
 A mock implementation of the MESH API is available for local development. The latest version is in Github at
