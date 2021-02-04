@@ -23,7 +23,8 @@ public class ServiceProviderCommentFreeText extends Segment {
 
     public static ServiceProviderCommentFreeText fromString(String edifactString) {
         if (!edifactString.startsWith(ServiceProviderCommentFreeText.KEY_QUALIFIER)) {
-            throw new IllegalArgumentException("Can't create " + ServiceProviderCommentFreeText.class.getSimpleName() + " from " + edifactString);
+            throw new IllegalArgumentException(
+                "Can't create " + ServiceProviderCommentFreeText.class.getSimpleName() + " from " + edifactString);
         }
         String[] split = Split.byPlus(
             Split.bySegmentTerminator(edifactString)[0]

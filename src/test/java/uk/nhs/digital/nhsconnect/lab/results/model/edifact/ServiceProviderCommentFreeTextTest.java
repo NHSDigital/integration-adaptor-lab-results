@@ -22,7 +22,12 @@ class ServiceProviderCommentFreeTextTest {
         var parsedFreeText = ServiceProviderCommentFreeText.fromString("FTX+SPC+++red blood cell seen, Note low platelets");
         assertThat(parsedFreeText.getServiceProviderComment()).isEqualTo("red blood cell seen, Note low platelets");
         assertThat(parsedFreeText.toEdifact()).isEqualTo(edifact);
-        assertThatThrownBy(() -> ServiceProviderCommentFreeText.fromString("wrong value")).isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void testFromStringWithInvalidEdifactStringThrowsException() {
+        assertThatThrownBy(() -> ServiceProviderCommentFreeText.fromString("wrong value"))
+            .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
