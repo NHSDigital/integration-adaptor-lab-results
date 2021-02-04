@@ -3,57 +3,111 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class InterchangeTrailerTest {
+class InterchangeTrailerTest {
+
+    private static final int NUMBER_OF_MESSAGES = 18;
+    private static final long SEQUENCE_NUMBER = 3L;
 
     @Test
-    public void testValidInterchangeTrailer() throws EdifactValidationException {
-        InterchangeTrailer interchangeTrailer = new InterchangeTrailer(1);
+    void testToEdifactForValidInterchangeTrailer() {
+        final InterchangeTrailer interchangeTrailer = new InterchangeTrailer(1);
         interchangeTrailer.setSequenceNumber(1L);
 
-        String edifact = interchangeTrailer.toEdifact();
+        final String edifact = interchangeTrailer.toEdifact();
 
         assertEquals("UNZ+1+00000001'", edifact);
     }
 
     @Test
-    public void testPreValidationNumberOfMessagesZero() {
-        InterchangeTrailer interchangeTrailer = new InterchangeTrailer(0);
+    void testToEdifactForMissingSequenceNumberThrowsException() {
+        final InterchangeTrailer interchangeTrailer = new InterchangeTrailer(1);
+
+        final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
+                interchangeTrailer::toEdifact);
+
+        assertEquals("UNZ: Attribute sequenceNumber is required", exception.getMessage());
+    }
+
+    @Test
+    void testToEdifactForZeroNumberOfMessagesThrowsException() {
+        final InterchangeTrailer interchangeTrailer = new InterchangeTrailer(0);
         interchangeTrailer.setSequenceNumber(1L);
 
-        Exception exception = assertThrows(EdifactValidationException.class, interchangeTrailer::preValidate);
+        final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
+                interchangeTrailer::toEdifact);
 
-        String expectedMessage = "UNZ: Attribute numberOfMessages is required";
-        String actualMessage = exception.getMessage();
-
-        assertTrue(actualMessage.contains(expectedMessage));
+        assertEquals("UNZ: Attribute numberOfMessages is required", exception.getMessage());
     }
 
     @Test
-    public void testPreValidationSequenceNumberMissing() {
-        InterchangeTrailer interchangeTrailer = new InterchangeTrailer(1);
+    void testGetValueForValidInterchangeTrailer() {
+        final InterchangeTrailer interchangeTrailer = new InterchangeTrailer(1);
+        interchangeTrailer.setSequenceNumber(1L);
 
-        Exception exception = assertThrows(EdifactValidationException.class, interchangeTrailer::toEdifact);
+        final String interchangeTrailerValue = interchangeTrailer.getValue();
 
-        String expectedMessage = "UNZ: Attribute sequenceNumber is required";
-        String actualMessage = exception.getMessage();
-
-        assertTrue(actualMessage.contains(expectedMessage));
+        assertEquals("1+00000001", interchangeTrailerValue);
     }
 
     @Test
-    void testFromString() {
-        var expectedInterchangeTrailer = new InterchangeTrailer(18).setSequenceNumber(3L);
-        var edifact = "UNZ+18+00000003'";
+    void testValidateStatefulSequenceNumberNullThrowsException() {
+        final InterchangeTrailer interchangeTrailer = new InterchangeTrailer(1);
 
-        var interchangeTrailer = InterchangeTrailer.fromString(edifact);
+        final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
+                interchangeTrailer::validateStateful);
 
-        assertThat(interchangeTrailer).isExactlyInstanceOf(InterchangeTrailer.class);
-        assertThat(interchangeTrailer).isEqualToComparingFieldByField(expectedInterchangeTrailer);
-        assertThat(interchangeTrailer.toEdifact()).isEqualTo(edifact);
+        assertEquals("UNZ: Attribute sequenceNumber is required", exception.getMessage());
+    }
+
+    @Test
+    void testValidateStatefulSequenceNumberLessThanOrEqualToZeroThrowsException() {
+        final InterchangeTrailer interchangeTrailer = new InterchangeTrailer(1);
+        interchangeTrailer.setSequenceNumber(0L);
+
+        final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
+                interchangeTrailer::validateStateful);
+
+        assertEquals("UNZ: Attribute sequenceNumber is required", exception.getMessage());
+    }
+
+    @Test
+    void testValidateStatefulSequenceNumberWithinMinMaxDoesNotThrowException() {
+        final InterchangeTrailer interchangeTrailer = new InterchangeTrailer(1);
+        interchangeTrailer.setSequenceNumber(1L);
+
+        assertDoesNotThrow(interchangeTrailer::validateStateful);
+    }
+
+    @Test
+    void testPreValidationNumberOfMessagesZero() {
+        final InterchangeTrailer interchangeTrailer = new InterchangeTrailer(0);
+        interchangeTrailer.setSequenceNumber(1L);
+
+        final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
+                interchangeTrailer::preValidate);
+
+        assertEquals("UNZ: Attribute numberOfMessages is required", exception.getMessage());
+    }
+
+    @Test
+    void testFromStringWithValidEdifactStringReturnsInterchangeTrailer() {
+        final InterchangeTrailer interchangeTrailer = InterchangeTrailer.fromString("UNZ+18+00000003'");
+
+        assertEquals(InterchangeTrailer.KEY, interchangeTrailer.getKey());
+        assertEquals("18+00000003", interchangeTrailer.getValue());
+        assertEquals(NUMBER_OF_MESSAGES, interchangeTrailer.getNumberOfMessages());
+        assertEquals(SEQUENCE_NUMBER, interchangeTrailer.getSequenceNumber());
+    }
+
+    @Test
+    void testFromStringWithInvalidEdifactStringThrowsException() {
+        final IllegalArgumentException exception =
+                assertThrows(IllegalArgumentException.class, () -> InterchangeTrailer.fromString("wrong value"));
+
+        assertEquals("Can't create InterchangeTrailer from wrong value", exception.getMessage());
     }
 }

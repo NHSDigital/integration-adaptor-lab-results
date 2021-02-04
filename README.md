@@ -1,6 +1,21 @@
 # integration-adaptor-lab-results
 Integration Adaptor to simplify processing of Pathology and Screening results
 
+## Configuration
+
+The adaptor reads its configuration from environment variables. The following sections describe the environment variables
+ used to configure the adaptor. 
+ 
+Variables without a default value and not marked optional *MUST* be defined for the adaptor to run.
+
+### Message Queue Configuration
+
+| Environment Variable                 | Default                   | Description 
+| -------------------------------------|---------------------------|-------------
+| LAB_RESULTS_MESH_OUTBOUND_QUEUE_NAME | lab_results_mesh_outbound | The name of the outbound (to MESH) message queue
+| LAB_RESULTS_MESH_INBOUND_QUEUE_NAME  | lab_results_mesh_inbound  | The name of the inbound (from MESH) message queue
+| LAB_RESULTS_GP_OUTBOUND_QUEUE_NAME   | lab_results_gp_outbound   | The name of the outbound (to GP System) message queue
+
 ## MESH API
 
 ### MESH API Connection Configuration
@@ -85,7 +100,10 @@ Run `docker-compose up mongodb activemq fake-mesh`
 
 ### Running
 
-**From IntelliJ***
+**From IntelliJ**
+
+Running inside a container is recommended. 
+Variables not marked optional *MUST* be either set up as system environment variables or overridden temporarily in the `application.yml` for the adaptor to run.
 
 Navigate to: IntegrationAdapterLabResultsApplication -> right click -> Run
 
@@ -120,4 +138,7 @@ A mock implementation of the MESH API is available for local development. The la
 
 The [nhsdev Docker Hub](https://hub.docker.com/repository/docker/nhsdev/fake-mesh) hosts released fake-mesh images.
 
+### Coding Standards
 
+Ensure that you follow the agreed [Java Coding standards](https://gpitbjss.atlassian.net/wiki/spaces/NIA/pages/2108522539/Java+Coding+Standards) on the project when developing and code reviewing the adaptor.
+Feel free to update the documentation if you feel anything is incorrect or missing.

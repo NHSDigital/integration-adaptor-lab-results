@@ -24,12 +24,35 @@ pipeline {
     stages {
         stage('Build and Test Locally') {
             stages {
-                stage('Run Tests') {
+                stage('Build') {
+                    steps {
+                        script {
+                            sh label: 'Create logs directory', script: 'mkdir -p logs build'
+                            if (sh(label: 'Build lab-results-static-check', script: 'docker build -t local/lab-results-static-check:${BUILD_TAG} -f Dockerfile.tests .', returnStatus: true) != 0) {error("Failed to build docker image for static check")}
+                            if (sh(label: 'Running static checks', script: 'docker run -v /var/run/docker.sock:/var/run/docker.sock --name lab-results-static-check local/lab-results-static-check:${BUILD_TAG} gradle check -x test -x integrationTest --continue -i', returnStatus: true) != 0) {error("Some static checks failed, check the logs")}
+                        }
+                    }
+                    post {
+                        always {
+                            sh "docker cp lab-results-static-check:/home/gradle/src/build ."
+                            recordIssues(
+                                    enabledForFailure: true,
+                                    tools: [
+                                            checkStyle(pattern: 'build/reports/checkstyle/*.xml'),
+                                            spotBugs(pattern: 'build/reports/spotbugs/*.xml')
+                                    ]
+                            )
+                            sh "rm -rf build"
+                            sh "docker stop lab-results-static-check"
+                        }
+                    }
+                }
+                stage('Tests') {
                     steps {
                         script {
                             sh label: 'Create logs directory', script: 'mkdir -p logs build'
                             if (sh(label: 'Build lab-results', script: 'docker build -t local/lab-results-tests:${BUILD_TAG} -f Dockerfile.tests .', returnStatus: true) != 0) {error("Failed to build docker image for tests")}
-                            if (sh(label: 'Running tests', script: 'docker run -v /var/run/docker.sock:/var/run/docker.sock --name lab-results-tests local/lab-results-tests:${BUILD_TAG} gradle check -i', returnStatus: true) != 0) {error("Some tests failed, check the logs")}
+                            if (sh(label: 'Running tests', script: 'docker run -v /var/run/docker.sock:/var/run/docker.sock --name lab-results-tests local/lab-results-tests:${BUILD_TAG} gradle check -x checkstyleInTest -x checkstyleMain -x checkstyleTest -x spotbugsIntTest -x spotbugsMain -x spotbugsTest -i', returnStatus: true) != 0) {error("Some tests failed, check the logs")}
                         }
                     }
                     post {
@@ -44,6 +67,8 @@ pipeline {
                                 exclusionPattern : '**/*Test.class'
                             ])
                             sh "rm -rf build"
+                            sh "docker stop lab-results-tests"
+
                         }
                     }
                 }

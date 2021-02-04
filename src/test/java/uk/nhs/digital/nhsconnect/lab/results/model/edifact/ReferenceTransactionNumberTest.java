@@ -1,55 +1,86 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ReferenceTransactionNumberTest {
+class ReferenceTransactionNumberTest {
 
-    private ReferenceTransactionNumber referenceTransactionNumber;
-
-    @BeforeEach
-    public void setUp() {
-        referenceTransactionNumber = new ReferenceTransactionNumber();
-    }
-
+    private static final long VALID_TX_NUMBER = 1234L;
 
     @Test
-    public void testValidReferenceTransactionType() throws EdifactValidationException {
-        referenceTransactionNumber.setTransactionNumber(1234L);
-        String edifact = referenceTransactionNumber.toEdifact();
+    void testToEdifactForValidTransactionNumber() {
+        final ReferenceTransactionNumber referenceTransactionNumber = new ReferenceTransactionNumber(VALID_TX_NUMBER);
+
+        final String edifact = referenceTransactionNumber.toEdifact();
 
         assertEquals("RFF+TN:1234'", edifact);
     }
 
     @Test
-    public void testValidationStatefulMinMaxTransactionNumber() throws EdifactValidationException {
-        referenceTransactionNumber.setTransactionNumber(0L);
-        assertThatThrownBy(referenceTransactionNumber::validateStateful)
-            .isInstanceOf(EdifactValidationException.class)
-            .hasMessage("RFF: Attribute transactionNumber must be between 1 and 9999999");
+    void testToEdifactForInvalidTransactionNumberThrowsException() {
+        final ReferenceTransactionNumber referenceTransactionNumber = new ReferenceTransactionNumber();
 
-        referenceTransactionNumber.setTransactionNumber(10_000_000L);
-        assertThatThrownBy(referenceTransactionNumber::validateStateful)
-            .isInstanceOf(EdifactValidationException.class)
-            .hasMessage("RFF: Attribute transactionNumber must be between 1 and 9999999");
+        final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
+                referenceTransactionNumber::toEdifact);
 
-        referenceTransactionNumber.setTransactionNumber(1L);
-        referenceTransactionNumber.validateStateful();
-
-        referenceTransactionNumber.setTransactionNumber(9_999_999L);
-        referenceTransactionNumber.validateStateful();
+        assertEquals("RFF: Attribute transactionNumber is required", exception.getMessage());
     }
 
     @Test
-    void testFromString() {
-        referenceTransactionNumber.setTransactionNumber(1234L);
+    void testValidateStatefulTransactionNumberNullThrowsException() {
+        final ReferenceTransactionNumber referenceTransactionNumber = new ReferenceTransactionNumber();
 
-        assertThat(referenceTransactionNumber.fromString("RFF+TN:1234").getValue()).isEqualTo(referenceTransactionNumber.getValue());
-        assertThatThrownBy(() -> referenceTransactionNumber.fromString("wrong value")).isExactlyInstanceOf(IllegalArgumentException.class);
+        final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
+                referenceTransactionNumber::validateStateful);
+
+        assertEquals("RFF: Attribute transactionNumber is required", exception.getMessage());
+    }
+
+    @Test
+    void testValidateStatefulTransactionNumberLessThanMinimumValueThrowsException() {
+        final ReferenceTransactionNumber referenceTransactionNumber = new ReferenceTransactionNumber(0L);
+
+        final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
+                referenceTransactionNumber::validateStateful);
+
+        assertEquals("RFF: Attribute transactionNumber must be between 1 and 9999999", exception.getMessage());
+    }
+
+    @Test
+    void testValidateStatefulTransactionNumberMoreThanMaxValueThrowsException() {
+        final ReferenceTransactionNumber referenceTransactionNumber = new ReferenceTransactionNumber(10_000_000L);
+
+        final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
+                referenceTransactionNumber::validateStateful);
+
+        assertEquals("RFF: Attribute transactionNumber must be between 1 and 9999999", exception.getMessage());
+    }
+
+    @Test
+    void testValidateStatefulTransactionNumberWithinMinMaxDoesNotThrowException() {
+        final ReferenceTransactionNumber referenceTransactionNumber = new ReferenceTransactionNumber(9_999_999L);
+
+        assertDoesNotThrow(referenceTransactionNumber::validateStateful);
+    }
+
+    @Test
+    void testFromStringWithValidEdifactStringReturnsReferenceTransactionNumber() {
+        final ReferenceTransactionNumber referenceTransactionNumber = ReferenceTransactionNumber.fromString("RFF+TN:1234");
+
+        assertEquals("RFF", referenceTransactionNumber.getKey());
+        assertEquals("TN:1234", referenceTransactionNumber.getValue());
+        assertEquals(VALID_TX_NUMBER, referenceTransactionNumber.getTransactionNumber());
+    }
+
+    @Test
+    void testFromStringWithInvalidEdifactStringThrowsException() {
+        final IllegalArgumentException exception =
+                assertThrows(IllegalArgumentException.class, () -> ReferenceTransactionNumber.fromString("wrong value"));
+
+        assertEquals("Can't create ReferenceTransactionNumber from wrong value", exception.getMessage());
     }
 }

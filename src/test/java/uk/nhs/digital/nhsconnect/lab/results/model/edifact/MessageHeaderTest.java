@@ -3,58 +3,94 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class MessageHeaderTest {
+class MessageHeaderTest {
+
+    private static final long SEQUENCE_NUMBER = 3L;
 
     @Test
-    public void testValidMessageHeader() throws EdifactValidationException {
-        MessageHeader messageHeader = new MessageHeader();
-        messageHeader.setSequenceNumber(3L);
+    void testToEdifactForValidMessageHeader() {
+        final MessageHeader messageHeader = new MessageHeader(3L);
 
-        String edifact = messageHeader.toEdifact();
+        final String edifact = messageHeader.toEdifact();
 
         assertEquals("UNH+00000003+FHSREG:0:1:FH:FHS001'", edifact);
     }
 
     @Test
-    public void testValidationStateful() {
-        MessageHeader messageHeader = new MessageHeader();
+    void testToEdifactForInvalidMessageHeaderThrowsException() {
+        final MessageHeader messageHeader = new MessageHeader();
 
-        assertThatThrownBy(messageHeader::validateStateful)
-            .isInstanceOf(EdifactValidationException.class)
-            .hasMessage("UNH: Attribute sequenceNumber is required");
+        final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
+                messageHeader::toEdifact);
+
+        assertEquals("UNH: Attribute sequenceNumber is required", exception.getMessage());
     }
 
     @Test
-    public void testValidationStatefulMinMaxSequenceNumber() throws EdifactValidationException {
-        var messageHeader = new MessageHeader();
+    void testGetValueForValidMessageHeader() {
+        final MessageHeader messageHeader = new MessageHeader(3L);
 
-        messageHeader.setSequenceNumber(0L);
-        assertThatThrownBy(messageHeader::validateStateful)
-            .isInstanceOf(EdifactValidationException.class)
-            .hasMessage("UNH: Attribute sequenceNumber must be between 1 and 99999999");
+        final String headerValue = messageHeader.getValue();
 
-        messageHeader.setSequenceNumber(100_000_000L);
-        assertThatThrownBy(messageHeader::validateStateful)
-            .isInstanceOf(EdifactValidationException.class)
-            .hasMessage("UNH: Attribute sequenceNumber must be between 1 and 99999999");
-
-        messageHeader.setSequenceNumber(1L);
-        messageHeader.validateStateful();
-
-        messageHeader.setSequenceNumber(99_999_999L);
-        messageHeader.validateStateful();
+        assertEquals("00000003+FHSREG:0:1:FH:FHS001", headerValue);
     }
 
     @Test
-    void testFromString() {
-        MessageHeader messageHeader = new MessageHeader();
-        messageHeader.setSequenceNumber(3L);
+    void testValidateStatefulSequenceNumberNullThrowsException() {
+        final MessageHeader messageHeader = new MessageHeader();
 
-        assertThat(MessageHeader.fromString("UNH+00000003+FHSREG:0:1:FH:FHS001").getValue()).isEqualTo(messageHeader.getValue());
-        assertThatThrownBy(() -> MessageHeader.fromString("wrong value")).isExactlyInstanceOf(IllegalArgumentException.class);
+        final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
+                messageHeader::validateStateful);
+
+        assertEquals("UNH: Attribute sequenceNumber is required", exception.getMessage());
     }
+
+    @Test
+    void testValidateStatefulSequenceNumberLessThanMinimumValueThrowsException() {
+        final MessageHeader messageHeader = new MessageHeader(0L);
+
+        final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
+                messageHeader::validateStateful);
+
+        assertEquals("UNH: Attribute sequenceNumber must be between 1 and 99999999", exception.getMessage());
+    }
+
+    @Test
+    void testValidateStatefulSequenceNumberMoreThanMaxValueThrowsException() {
+        final MessageHeader messageHeader = new MessageHeader(100_000_000L);
+
+        final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
+                messageHeader::validateStateful);
+
+        assertEquals("UNH: Attribute sequenceNumber must be between 1 and 99999999", exception.getMessage());
+    }
+
+    @Test
+    void testValidateStatefulSequenceNumberWithinMinMaxDoesNotThrowException() {
+        final MessageHeader messageHeader = new MessageHeader(9_999_999L);
+
+        assertDoesNotThrow(messageHeader::validateStateful);
+    }
+
+    @Test
+    void testFromStringWithValidEdifactStringReturnsMessageHeader() {
+        final MessageHeader messageHeader = MessageHeader.fromString("UNH+00000003+FHSREG:0:1:FH:FHS001");
+
+        assertEquals("UNH", messageHeader.getKey());
+        assertEquals("00000003+FHSREG:0:1:FH:FHS001", messageHeader.getValue());
+        assertEquals(SEQUENCE_NUMBER, messageHeader.getSequenceNumber());
+    }
+
+    @Test
+    void testFromStringWithInvalidEdifactStringThrowsException() {
+        final IllegalArgumentException exception =
+                assertThrows(IllegalArgumentException.class, () -> MessageHeader.fromString("wrong value"));
+
+        assertEquals("Can't create MessageHeader from wrong value", exception.getMessage());
+    }
+
 }

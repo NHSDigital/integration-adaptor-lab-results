@@ -5,6 +5,9 @@ plugins {
 	id 'io.freefair.lombok' version '5.3.0'
 	id 'application'
 	id 'jacoco'
+	id 'checkstyle'
+	id 'com.github.spotbugs' version '4.6.0'
+	id 'idea'
 }
 
 group = 'uk.nhs.digital.nhsconnect'
@@ -18,11 +21,6 @@ sourceSets {
 		compileClasspath += sourceSets.main.output
 		runtimeClasspath += sourceSets.main.output
 	}
-
-	recepResponder {
-		compileClasspath += sourceSets.main.output
-		runtimeClasspath += sourceSets.main.output
-	}
 }
 
 configurations {
@@ -32,10 +30,6 @@ configurations {
 	intTestImplementation.extendsFrom implementation
 	intTestImplementation.extendsFrom testImplementation
 	intTestRuntimeOnly.extendsFrom runtimeOnly
-
-	recepResponderImplementation.extendsFrom implementation
-	recepResponderImplementation.extendsFrom testImplementation
-	recepResponderRuntimeOnly.extendsFrom runtimeOnly
 }
 
 repositories {
@@ -93,3 +87,30 @@ task integrationTest(type: Test) {
 }
 
 check.dependsOn integrationTest
+
+spotbugsTest.enabled = false
+spotbugsIntTest.enabled = false
+spotbugsMain {
+	reports {
+		html {
+			enabled = false
+		}
+		xml {
+			enabled = true
+		}
+	}
+}
+
+spotbugs {
+	excludeFilter = file("${rootDir}/config/spotbugs/exclude.xml")
+}
+
+checkstyle {
+	configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+}
+
+idea {
+	module {
+		testSourceDirs += file('src/intTest/java')
+	}
+}

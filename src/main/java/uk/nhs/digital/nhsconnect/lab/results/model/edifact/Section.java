@@ -11,23 +11,23 @@ public abstract class Section {
     @Getter
     private final List<String> edifactSegments;
 
-    public Section(List<String> edifactSegments) {
+    public Section(final List<String> edifactSegments) {
         this.edifactSegments = edifactSegments;
     }
 
-    protected List<String> extractSegments(String key) {
+    protected List<String> extractSegments(final String key) {
         return edifactSegments.stream()
             .map(String::strip)
             .filter(segment -> segment.startsWith(key))
             .collect(Collectors.toList());
     }
 
-    protected Optional<String> extractOptionalSegment(String key) {
+    protected Optional<String> extractOptionalSegment(final String key) {
         return extractSegments(key).stream()
             .findFirst();
     }
 
-    protected String extractSegment(String key) {
+    protected String extractSegment(final String key) {
         return extractOptionalSegment(key)
             .orElseThrow(() -> new MissingSegmentException("EDIFACT section is missing segment " + key));
     }

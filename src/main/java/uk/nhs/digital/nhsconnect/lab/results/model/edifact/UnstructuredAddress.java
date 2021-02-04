@@ -1,0 +1,97 @@
+package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
+
+/**
+ * E.g. {@code ADR++US:FLAT1:12 BROWNBERRIE AVENUE::LEEDS:++LS18 5PN'} has no address parts 3 or 5.
+ * {@code ADR++++LS18 5PN'} has only a postcode
+ */
+@EqualsAndHashCode(callSuper = true)
+@Getter
+@AllArgsConstructor
+public class UnstructuredAddress extends Segment {
+    private static final String KEY = "ADR";
+    private static final String FORMAT = "US";
+
+    private static final int ADDRESS_LINES = 5;
+    private static final int INDEX_ADDRESS = 2;
+    private static final int INDEX_POSTCODE = 4;
+
+    private final String format;
+    private final String[] addressLines;
+    private final String postCode;
+
+    public static UnstructuredAddress fromString(final String edifact) {
+        if (!edifact.startsWith(KEY)) {
+            throw new IllegalArgumentException("Can't create " + UnstructuredAddress.class.getSimpleName()
+                + " from " + edifact);
+        }
+        final String[] splitByPlus = Split.byPlus(edifact);
+        final String[] splitByColon = Split.byColon(splitByPlus[INDEX_ADDRESS]);
+
+        String[] addressLines = null;
+        if (splitByColon.length > ADDRESS_LINES) {
+            addressLines = new String[ADDRESS_LINES];
+            System.arraycopy(splitByColon, 1, addressLines, 0, ADDRESS_LINES);
+        }
+
+        final String postCode = splitByPlus[INDEX_POSTCODE];
+        final String qualifier = edifact.startsWith(KEY + PLUS_SEPARATOR + PLUS_SEPARATOR + FORMAT) ? FORMAT : "";
+
+        return new UnstructuredAddress(qualifier, addressLines, postCode);
+    }
+
+    @Override
+    public String getKey() {
+        return KEY;
+    }
+
+    @Override
+    public String getValue() {
+        return getAddressValue()
+            + PLUS_SEPARATOR
+            + PLUS_SEPARATOR
+            + postCode;
+    }
+
+    private String getAddressValue() {
+        if (FORMAT.equals(format)) {
+            return format
+                + COLON_SEPARATOR
+                + String.join(COLON_SEPARATOR, addressLines);
+        }
+        return "";
+    }
+
+    @Override
+    protected void validateStateful() throws EdifactValidationException {
+        // no op
+    }
+
+    @Override
+    public void preValidate() throws EdifactValidationException {
+        // if no postcode, there must be address lines
+        if (StringUtils.isBlank(postCode)) {
+            if (addressLines == null || addressLines.length <= 1) {
+                throw new EdifactValidationException(KEY
+                    + ": attribute addressLines is required when postcode is missing");
+            }
+        }
+
+        // if there are address lines, there must be a format and an address line 1
+        if (addressLines != null && addressLines.length > 0) {
+            if (!FORMAT.equals(format)) {
+                throw new EdifactValidationException(KEY + ": format of '" + FORMAT
+                    + "' is required when postCode is missing");
+            }
+            if (StringUtils.isBlank(addressLines[0])) {
+                throw new EdifactValidationException(KEY + ": attribute addressLines[0] is required");
+            }
+        }
+    }
+}

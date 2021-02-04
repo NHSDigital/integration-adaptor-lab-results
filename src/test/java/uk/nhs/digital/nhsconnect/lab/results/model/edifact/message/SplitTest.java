@@ -12,7 +12,7 @@ import static uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split.
 @ExtendWith(SoftAssertionsExtension.class)
 class SplitTest {
     @Test
-    void When_SplittingBySegmentTerminator_Expect_CorrectResult(SoftAssertions softly) {
+    void when_splittingBySegmentTerminator_expect_correctResult(SoftAssertions softly) {
         softly.assertThat(bySegmentTerminator("a'q")).containsExactly("a", "q");
         softly.assertThat(bySegmentTerminator("a?'q")).containsExactly("a?'q");
         softly.assertThat(bySegmentTerminator("a??'q")).containsExactly("a??", "q");
@@ -33,7 +33,7 @@ class SplitTest {
     }
 
     @Test
-    void When_SplittingByColon_Expect_CorrectResult(SoftAssertions softly) {
+    void when_splittingByColon_expect_correctResult(SoftAssertions softly) {
         softly.assertThat(byColon("asdf:test-string")).containsExactly("asdf", "test-string");
         softly.assertThat(byColon("asdf?:test-string")).containsExactly("asdf?:test-string");
         softly.assertThat(byColon("asdf??:test-string")).containsExactly("asdf??", "test-string");
@@ -42,7 +42,7 @@ class SplitTest {
     }
 
     @Test
-    void When_SplittingByPlus_Expect_CorrectResult(SoftAssertions softly) {
+    void when_splittingByPlus_expect_correctResult(SoftAssertions softly) {
         softly.assertThat(byPlus("asdf+test-string")).containsExactly("asdf", "test-string");
         softly.assertThat(byPlus("asdf?+test-string")).containsExactly("asdf?+test-string");
         softly.assertThat(byPlus("asdf??+test-string")).containsExactly("asdf??", "test-string");

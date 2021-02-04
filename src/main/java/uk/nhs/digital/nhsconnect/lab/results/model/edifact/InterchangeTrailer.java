@@ -10,7 +10,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 /**
  * A specialisation of a segment for the specific use case of an interchange trailer
  * takes in specific values required to generate an interchange trailer
- * example: UNZ+1+00000002'
+ * example: UNZ+1+00000002'.
  */
 @Getter
 @Setter
@@ -47,13 +47,13 @@ public class InterchangeTrailer extends Segment {
     }
 
     public static InterchangeTrailer fromString(String edifactString) {
-        if(!edifactString.startsWith(InterchangeTrailer.KEY)){
+        if (!edifactString.startsWith(InterchangeTrailer.KEY)) {
             throw new IllegalArgumentException("Can't create " + InterchangeTrailer.class.getSimpleName() + " from " + edifactString);
         }
         String[] split = Split.byPlus(
-            Split.bySegmentTerminator(edifactString)[0]
+                Split.bySegmentTerminator(edifactString)[0]
         );
         return new InterchangeTrailer(Integer.parseInt(split[1]))
-            .setSequenceNumber(Long.parseLong(split[2]));
+                .setSequenceNumber(Long.parseLong(split[2]));
     }
 }

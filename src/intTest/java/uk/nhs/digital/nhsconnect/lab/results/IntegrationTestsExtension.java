@@ -10,17 +10,17 @@ import uk.nhs.digital.nhsconnect.lab.results.container.ActiveMqContainer;
 import uk.nhs.digital.nhsconnect.lab.results.container.FakeMeshContainer;
 import uk.nhs.digital.nhsconnect.lab.results.container.MongoDbContainer;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.scheduler.SchedulerTimestampRepository;
+import uk.nhs.digital.nhsconnect.lab.results.sequence.SequenceDao;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
 import static org.springframework.jms.support.destination.JmsDestinationAccessor.RECEIVE_TIMEOUT_NO_WAIT;
+import static uk.nhs.digital.nhsconnect.lab.results.IntegrationBaseTest.DLQ_PREFIX;
 
 @Slf4j
 public class IntegrationTestsExtension implements BeforeAllCallback, BeforeEachCallback {
-
-    private final String DLQ_PREFIX = "DLQ.";
 
     @Override
     public void beforeAll(ExtensionContext context) {
@@ -37,10 +37,14 @@ public class IntegrationTestsExtension implements BeforeAllCallback, BeforeEachC
 
         var meshInboundQueueName = Objects.requireNonNull(
                 applicationContext.getEnvironment().getProperty("labresults.amqp.meshInboundQueueName"));
+        var meshOutboundQueueName = Objects.requireNonNull(
+                applicationContext.getEnvironment().getProperty("labresults.amqp.meshOutboundQueueName"));
+        var gpOutboundQueueName = Objects.requireNonNull(
+                applicationContext.getEnvironment().getProperty("labresults.amqp.gpOutboundQueueName"));
 
         var receiveTimeout = jmsTemplate.getReceiveTimeout();
         jmsTemplate.setReceiveTimeout(RECEIVE_TIMEOUT_NO_WAIT);
-        List.of(meshInboundQueueName)
+        List.of(meshInboundQueueName, meshOutboundQueueName, gpOutboundQueueName)
                 .stream()
                 .map(queueName -> List.of(queueName, DLQ_PREFIX + queueName))
                 .flatMap(Collection::stream)
@@ -51,7 +55,9 @@ public class IntegrationTestsExtension implements BeforeAllCallback, BeforeEachC
                 });
         jmsTemplate.setReceiveTimeout(receiveTimeout);
 
+        final var sequenceRepository = applicationContext.getBean(SequenceDao.class);
         final var schedulerTimestampRepository = applicationContext.getBean(SchedulerTimestampRepository.class);
+        sequenceRepository.deleteAll();
         schedulerTimestampRepository.deleteAll();
     }
 }

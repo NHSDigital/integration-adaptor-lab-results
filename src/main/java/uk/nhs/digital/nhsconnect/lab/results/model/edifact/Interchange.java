@@ -17,7 +17,7 @@ public class Interchange extends Section {
     @Setter
     private List<Message> messages;
 
-    public Interchange(List<String> edifactSegments) {
+    public Interchange(final List<String> edifactSegments) {
         super(edifactSegments);
     }
 

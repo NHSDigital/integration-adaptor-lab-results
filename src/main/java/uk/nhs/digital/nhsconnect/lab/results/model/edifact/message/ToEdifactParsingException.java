@@ -7,4 +7,5 @@ public class ToEdifactParsingException extends BadRequestException {
     public ToEdifactParsingException(String message) {
         super(message);
     }
+
 }

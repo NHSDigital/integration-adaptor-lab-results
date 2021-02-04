@@ -26,24 +26,36 @@ import java.time.format.DateTimeFormatter;
 @AllArgsConstructor
 public class InterchangeHeader extends Segment {
 
-    public static final String KEY = "UNB";
+    protected static final String KEY = "UNB";
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyMMdd:HHmm").withZone(TimestampService.UK_ZONE);
-    private static final long MAX_INTERCHANGE_SEQUENCE = 99_999_999L;
+    public static final long MAX_INTERCHANGE_SEQUENCE = 99_999_999L;
     private static final String RECEP_ENDING = "+RECEP+++EDIFACT TRANSFER";
+
+    private static final int SENDER_INDEX = 2;
+    private static final int RECIPIENT_INDEX = 3;
+    private static final int TRANSLATION_TIME_INDEX = 4;
+    private static final int SEQUENCE_NUMBER_INDEX = 5;
 
     private @NonNull String sender;
     private @NonNull String recipient;
     private @NonNull Instant translationTime;
     private Long sequenceNumber;
 
-    public static InterchangeHeader fromString(String edifactString) {
+    public static InterchangeHeader fromString(final String edifactString) {
         if (!edifactString.startsWith(InterchangeHeader.KEY)) {
             throw new IllegalArgumentException("Can't create " + InterchangeHeader.class.getSimpleName() + " from " + edifactString);
         }
-        String[] split = Split.byPlus(edifactString);
 
-        ZonedDateTime translationTime = ZonedDateTime.parse(split[4], DateTimeFormatter.ofPattern("yyMMdd:HHmm").withZone(TimestampService.UK_ZONE));
-        return new InterchangeHeader(split[2], split[3], translationTime.toInstant(), Long.valueOf(split[5]));
+        String[] split = Split.byPlus(edifactString);
+        final String sender = split[SENDER_INDEX];
+        final String recipient = split[RECIPIENT_INDEX];
+        final String translationTimeStr = split[TRANSLATION_TIME_INDEX];
+        final Long sequenceNumber = Long.valueOf(split[SEQUENCE_NUMBER_INDEX]);
+
+        ZonedDateTime translationTime = ZonedDateTime.parse(translationTimeStr,
+            DateTimeFormatter.ofPattern("yyMMdd:HHmm").withZone(TimestampService.UK_ZONE));
+
+        return new InterchangeHeader(sender, recipient, translationTime.toInstant(), sequenceNumber);
     }
 
     @Override
