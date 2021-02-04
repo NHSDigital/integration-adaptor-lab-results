@@ -58,20 +58,3 @@ Copy `env.fake-mesh.sh` to `env.sh`
     
 Note the value of MAILBOX_ID. This should be changed for the scenario being tested to reflect the mailbox id that the 
 application uses to send or receive messages.
-
-### Benchmarking
-
-Silence curl
-
-    CURL_FLAGS="-s -i -k -o /dev/null"
-
-Use xargs to run in parallel
-
-     $ time echo {0..1000} | xargs -n 1 -P 4 ./mesh.sh send @GPHA_SAMPLE.dat
-       echo {0..1000}  0.00s user 0.00s system 63% cpu 0.001 total
-       xargs -n 1 -P 4 ./mesh.sh send @GPHA_SAMPLE.dat  35.40s user 18.87s system 164% cpu 32.905 total
-
-Shows 1000 / 32.905 ~= 30 writes per second using 4 parallel processes. Note that the fake-mesh database 
-(LMDB) does not support parallel writes.
-
-Setting the option lock=False in the database driver doubles throughput, but I'm unsure if this is a good idea.
