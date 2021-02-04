@@ -5,6 +5,17 @@ logging:
   level:
     uk.nhs.digital.nhsconnect.lab.results: ${LAB_RESULTS_LOGGING_LEVEL:DEBUG}
 
+management:
+  endpoints:
+    web:
+      base-path: /
+      path-mapping.health: healthcheck
+      exposure:
+        include: info, health, metrics
+  health:
+    mongo:
+      enabled: true
+
 labresults:
   amqp:
     brokers: ${LAB_RESULTS_AMQP_BROKERS:amqp://localhost:5672}
