@@ -15,11 +15,9 @@ import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Transaction;
 import uk.nhs.digital.nhsconnect.lab.results.outbound.queue.GpOutboundQueueService;
 import uk.nhs.digital.nhsconnect.lab.results.outbound.queue.MeshOutboundQueueService;
 
-import java.util.ArrayList;
 import java.util.Collections;
 
 import static org.mockito.Mockito.any;
@@ -77,8 +75,8 @@ class InboundMessageHandlerTest {
         when(edifactParser.parse(meshMessage.getContent())).thenReturn(interchange);
         when(interchange.getMessages()).thenReturn(Collections.singletonList(message));
 
-        final Transaction transaction = new Transaction(new ArrayList<>());
-        transaction.setMessage(message);
+        //final Transaction transaction = new Transaction(new ArrayList<>());
+        //transaction.setMessage(message);
         //when(message.getTransactions()).thenReturn(Collections.singletonList(transaction));
         //when(message.getReferenceTransactionType()).thenReturn(new ReferenceTransactionType(TransactionType.APPROVAL));
 
@@ -102,10 +100,10 @@ class InboundMessageHandlerTest {
         when(edifactParser.parse(meshMessage.getContent())).thenReturn(interchange);
         when(interchange.getMessages()).thenReturn(Collections.singletonList(message));
 
-        final Transaction transaction1 = new Transaction(new ArrayList<>());
-        transaction1.setMessage(message);
-        final Transaction transaction2 = new Transaction(new ArrayList<>());
-        transaction2.setMessage(message);
+        //final Transaction transaction1 = new Transaction(new ArrayList<>());
+        //transaction1.setMessage(message);
+        //final Transaction transaction2 = new Transaction(new ArrayList<>());
+        //transaction2.setMessage(message);
         //when(message.getTransactions()).thenReturn(List.of(transaction1, transaction2));
         //when(message.getReferenceTransactionType()).thenReturn(new ReferenceTransactionType(TransactionType.APPROVAL));
 
