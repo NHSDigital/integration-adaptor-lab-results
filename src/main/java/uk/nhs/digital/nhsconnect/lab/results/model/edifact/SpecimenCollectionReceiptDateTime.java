@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -43,12 +44,15 @@ public class SpecimenCollectionReceiptDateTime extends Segment {
         final SpecimenCollectionReceiptDateTime.SpecimenCollectionReceiptDateTimeBuilder
             collectionReceiptDateTimeBuilder = SpecimenCollectionReceiptDateTime.builder();
 
-        if (isNotBlank(collectionReceiptDateTime) && isNotBlank(format)) {
-            final String formattedFhirDate = getFormattedFhirDate(collectionReceiptDateTime, format);
-            collectionReceiptDateTimeBuilder
-                .collectionReceiptDateTime(formattedFhirDate)
-                .dateFormat(DateFormat.fromCode(format));
+        if (isBlank(collectionReceiptDateTime) || isBlank(format)) {
+            throw new IllegalArgumentException("Can't create " + SpecimenCollectionReceiptDateTime.class.getSimpleName() +
+                " from " + edifactString + ". Both the collection receipt date time and the time format should be presented");
         }
+
+        final String formattedFhirDate = getFormattedFhirDate(collectionReceiptDateTime, format);
+        collectionReceiptDateTimeBuilder
+            .collectionReceiptDateTime(formattedFhirDate)
+            .dateFormat(DateFormat.fromCode(format));
 
         return collectionReceiptDateTimeBuilder.build();
     }

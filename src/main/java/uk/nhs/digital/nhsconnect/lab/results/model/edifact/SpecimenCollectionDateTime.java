@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -44,12 +45,15 @@ public class SpecimenCollectionDateTime extends Segment {
         final String format = Split.bySegmentTerminator(Split.byColon(input)[2])[0];
         final SpecimenCollectionDateTimeBuilder collectionDateTimeBuilder = SpecimenCollectionDateTime.builder();
 
-        if (isNotBlank(collectionDateTime) && isNotBlank(format)) {
-            final String formattedFhirDate = getFormattedFhirDate(collectionDateTime, format);
-            collectionDateTimeBuilder
-                .collectionDateTime(formattedFhirDate)
-                .dateFormat(DateFormat.fromCode(format));
+        if (isBlank(collectionDateTime) || isBlank(format)) {
+            throw new IllegalArgumentException("Can't create " + SpecimenCollectionDateTime.class.getSimpleName() +
+                " from " + edifactString + ". Both the collection date time and the time format should be presented");
         }
+
+        final String formattedFhirDate = getFormattedFhirDate(collectionDateTime, format);
+        collectionDateTimeBuilder
+            .collectionDateTime(formattedFhirDate)
+            .dateFormat(DateFormat.fromCode(format));
 
         return collectionDateTimeBuilder.build();
     }

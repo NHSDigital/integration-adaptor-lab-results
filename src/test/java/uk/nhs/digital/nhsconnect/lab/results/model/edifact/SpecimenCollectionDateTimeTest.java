@@ -101,4 +101,13 @@ public class SpecimenCollectionDateTimeTest {
 
         assertEquals("DTM: Date format code 100 is not supported", exception.getMessage());
     }
+
+    @Test
+    void testFromStringWithBlankDateFormatCodeThrowsException() {
+        final IllegalArgumentException exception =
+            assertThrows(IllegalArgumentException.class, () -> SpecimenCollectionDateTime.fromString("DTM+SCO:20100223:'"));
+
+        assertEquals("Can't create SpecimenCollectionDateTime from DTM+SCO:20100223:'." +
+            " Both the collection date time and the time format should be presented", exception.getMessage());
+    }
 }
