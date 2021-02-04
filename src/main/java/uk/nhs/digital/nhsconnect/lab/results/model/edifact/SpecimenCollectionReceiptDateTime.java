@@ -63,10 +63,10 @@ public class SpecimenCollectionReceiptDateTime extends Segment {
     @Override
     public String getValue() {
         return QUALIFIER
-            .concat(COLON_SEPARATOR)
-            .concat(getFormattedEdifactDate(collectionReceiptDateTime, dateFormat))
-            .concat(COLON_SEPARATOR)
-            .concat(dateFormat.getCode());
+            + COLON_SEPARATOR
+            + getFormattedEdifactDate(collectionReceiptDateTime, dateFormat)
+            + COLON_SEPARATOR
+            + dateFormat.getCode();
     }
 
     @Override
