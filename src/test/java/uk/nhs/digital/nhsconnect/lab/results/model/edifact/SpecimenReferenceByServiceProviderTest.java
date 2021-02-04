@@ -35,7 +35,7 @@ class SpecimenReferenceByServiceProviderTest {
         SpecimenReferenceByServiceProvider emptyFreeText = new SpecimenReferenceByServiceProvider(StringUtils.EMPTY);
         assertThatThrownBy(emptyFreeText::preValidate)
             .isInstanceOf(EdifactValidationException.class)
-            .hasMessage("RFF: Speciment Reference number by service provider is blank or missing");
+            .hasMessage("RFF: Specimen Reference number by service provider is blank or missing");
     }
 
     @Test
@@ -43,6 +43,6 @@ class SpecimenReferenceByServiceProviderTest {
         SpecimenReferenceByServiceProvider emptyFreeText = new SpecimenReferenceByServiceProvider(" ");
         assertThatThrownBy(emptyFreeText::preValidate)
             .isInstanceOf(EdifactValidationException.class)
-            .hasMessage("RFF: Speciment Reference number by service provider is blank or missing");
+            .hasMessage("RFF: Specimen Reference number by service provider is blank or missing");
     }
 }
