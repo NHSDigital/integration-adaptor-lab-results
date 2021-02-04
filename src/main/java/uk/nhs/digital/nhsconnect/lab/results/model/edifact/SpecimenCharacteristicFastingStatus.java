@@ -21,7 +21,7 @@ public class SpecimenCharacteristicFastingStatus extends Segment {
     private final String fastingStatus;
 
     public static SpecimenCharacteristicFastingStatus fromString(String edifactString) {
-        if (!edifactString.startsWith(SpecimenCharacteristicFastingStatus.KEY_QUALIFIER)) {
+        if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException(
                 "Can't create " + SpecimenCharacteristicFastingStatus.class.getSimpleName() + " from " + edifactString);
         }

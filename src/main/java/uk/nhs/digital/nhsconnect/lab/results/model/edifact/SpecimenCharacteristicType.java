@@ -22,7 +22,7 @@ public class SpecimenCharacteristicType extends Segment {
     private final String typeOfSpecimen;
 
     public static SpecimenCharacteristicType fromString(String edifactString) {
-        if (!edifactString.startsWith(SpecimenCharacteristicType.KEY_QUALIFIER)) {
+        if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException(
                 "Can't create " + SpecimenCharacteristicType.class.getSimpleName() + " from " + edifactString);
         }

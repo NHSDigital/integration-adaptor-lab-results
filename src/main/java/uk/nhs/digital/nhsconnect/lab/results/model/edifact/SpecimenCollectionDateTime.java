@@ -35,7 +35,7 @@ public class SpecimenCollectionDateTime extends Segment {
     private final DateFormat dateFormat;
 
     public static SpecimenCollectionDateTime fromString(final String edifactString) {
-        if (!edifactString.startsWith(SpecimenCollectionDateTime.KEY_QUALIFIER)) {
+        if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException(
                 "Can't create " + SpecimenCollectionDateTime.class.getSimpleName() + " from " + edifactString);
         }
