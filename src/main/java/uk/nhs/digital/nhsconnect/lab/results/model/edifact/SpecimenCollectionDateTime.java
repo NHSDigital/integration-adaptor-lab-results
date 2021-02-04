@@ -16,6 +16,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * Example 1: DTM+SCO:20100223:102'
+ *
  * Example 2: DTM+SCO:201002231541:203'
  */
 @Getter
