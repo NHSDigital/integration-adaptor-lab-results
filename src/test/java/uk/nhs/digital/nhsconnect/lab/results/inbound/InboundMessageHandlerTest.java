@@ -16,13 +16,11 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Transaction;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.TransactionType;
 import uk.nhs.digital.nhsconnect.lab.results.outbound.queue.GpOutboundQueueService;
 import uk.nhs.digital.nhsconnect.lab.results.outbound.queue.MeshOutboundQueueService;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.never;

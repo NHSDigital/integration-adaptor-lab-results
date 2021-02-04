@@ -8,7 +8,6 @@ import uk.nhs.digital.nhsconnect.lab.results.IntegrationBaseTest;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.TransactionType;
 import uk.nhs.digital.nhsconnect.lab.results.utils.JmsHeaders;
 
 import javax.jms.JMSException;
@@ -54,9 +53,6 @@ public class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
         final Message gpOutboundQueueMessage = getGpOutboundQueueMessage();
         assertThat(gpOutboundQueueMessage).isNotNull();
-
-        final String transactionType = gpOutboundQueueMessage.getStringProperty(JmsHeaders.TRANSACTION_TYPE);
-        assertThat(transactionType).isEqualTo(TransactionType.APPROVAL.name().toLowerCase());
 
         final String conservationId = gpOutboundQueueMessage.getStringProperty(JmsHeaders.CONVERSATION_ID);
         assertThat(conservationId).isNotEmpty();

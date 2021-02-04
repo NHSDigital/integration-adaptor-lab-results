@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.FhirDataToSend;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.TransactionType;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ConversationIdService;
 import uk.nhs.digital.nhsconnect.lab.results.utils.JmsHeaders;
 
@@ -50,7 +49,6 @@ class GpOutboundQueueServiceTest {
 
         final FhirDataToSend fhirDataToSend = new FhirDataToSend()
                 .setOperationId("123")
-                .setTransactionType(TransactionType.APPROVAL)
                 .setContent(parameters);
 
         final String serializedData = "some_serialized_data";
@@ -72,7 +70,6 @@ class GpOutboundQueueServiceTest {
 
         verify(session).createTextMessage(eq(serializedData));
         verify(textMessage).setStringProperty(JmsHeaders.OPERATION_ID, fhirDataToSend.getOperationId());
-        verify(textMessage).setStringProperty(JmsHeaders.TRANSACTION_TYPE, fhirDataToSend.getTransactionType().name().toLowerCase());
         verify(textMessage).setStringProperty(JmsHeaders.CONVERSATION_ID, CONSERVATION_ID);
 
         verify(conversationIdService).getCurrentConversationId();
