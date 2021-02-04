@@ -31,7 +31,7 @@ class SpecimenReferenceByServiceRequesterTest {
     }
 
     @Test
-    public void testPreValidationEmptyString() {
+    void testPreValidationEmptyString() {
         SpecimenReferenceByServiceRequester emptyFreeText = new SpecimenReferenceByServiceRequester(StringUtils.EMPTY);
         Assertions.assertThatThrownBy(emptyFreeText::preValidate)
             .isInstanceOf(EdifactValidationException.class)
@@ -39,7 +39,7 @@ class SpecimenReferenceByServiceRequesterTest {
     }
 
     @Test
-    public void testPreValidationBlankString() {
+    void testPreValidationBlankString() {
         SpecimenReferenceByServiceRequester emptyFreeText = new SpecimenReferenceByServiceRequester(" ");
         Assertions.assertThatThrownBy(emptyFreeText::preValidate)
             .isInstanceOf(EdifactValidationException.class)

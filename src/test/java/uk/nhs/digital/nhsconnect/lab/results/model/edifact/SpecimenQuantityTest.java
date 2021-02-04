@@ -36,7 +36,7 @@ class SpecimenQuantityTest {
     }
 
     @Test
-    public void testPreValidationQuantityUnitOfMeasureEmptyString() {
+    void testPreValidationQuantityUnitOfMeasureEmptyString() {
         SpecimenQuantity emptyFreeText = new SpecimenQuantity(SPECIMEN_QUANTITY, StringUtils.EMPTY);
         Assertions.assertThatThrownBy(emptyFreeText::preValidate)
             .isInstanceOf(EdifactValidationException.class)
@@ -44,7 +44,7 @@ class SpecimenQuantityTest {
     }
 
     @Test
-    public void testPreValidationQuantityUnitOfMeasureBlankString() {
+    void testPreValidationQuantityUnitOfMeasureBlankString() {
         SpecimenQuantity emptyFreeText = new SpecimenQuantity(SPECIMEN_QUANTITY, " ");
         Assertions.assertThatThrownBy(emptyFreeText::preValidate)
             .isInstanceOf(EdifactValidationException.class)

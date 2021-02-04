@@ -30,7 +30,7 @@ class SpecimenCharacteristicTypeTest {
     }
 
     @Test
-    public void testPreValidationEmptyString() {
+    void testPreValidationEmptyString() {
         SpecimenCharacteristicType emptyFreeText = new SpecimenCharacteristicType(StringUtils.EMPTY);
         assertThatThrownBy(emptyFreeText::preValidate)
             .isInstanceOf(EdifactValidationException.class)
@@ -38,7 +38,7 @@ class SpecimenCharacteristicTypeTest {
     }
 
     @Test
-    public void testPreValidationBlankString() {
+    void testPreValidationBlankString() {
         SpecimenCharacteristicType blankFreeText = new SpecimenCharacteristicType(" ");
         assertThatThrownBy(blankFreeText::preValidate)
             .isInstanceOf(EdifactValidationException.class)

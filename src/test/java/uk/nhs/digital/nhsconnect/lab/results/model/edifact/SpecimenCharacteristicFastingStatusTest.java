@@ -31,7 +31,7 @@ class SpecimenCharacteristicFastingStatusTest {
     }
 
     @Test
-    public void testPreValidationEmptyString() {
+    void testPreValidationEmptyString() {
         SpecimenCharacteristicFastingStatus emptyFreeText = new SpecimenCharacteristicFastingStatus(StringUtils.EMPTY);
         assertThatThrownBy(emptyFreeText::preValidate)
             .isInstanceOf(EdifactValidationException.class)
@@ -39,7 +39,7 @@ class SpecimenCharacteristicFastingStatusTest {
     }
 
     @Test
-    public void testPreValidationBlankString() {
+    void testPreValidationBlankString() {
         SpecimenCharacteristicFastingStatus emptyFreeText = new SpecimenCharacteristicFastingStatus(" ");
         assertThatThrownBy(emptyFreeText::preValidate)
             .isInstanceOf(EdifactValidationException.class)

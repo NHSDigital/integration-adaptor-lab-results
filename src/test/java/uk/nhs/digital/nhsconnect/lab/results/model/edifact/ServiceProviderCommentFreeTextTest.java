@@ -31,7 +31,7 @@ class ServiceProviderCommentFreeTextTest {
     }
 
     @Test
-    public void testPreValidationEmptyString() {
+    void testPreValidationEmptyString() {
         ServiceProviderCommentFreeText emptyFreeText = new ServiceProviderCommentFreeText(StringUtils.EMPTY);
         assertThatThrownBy(emptyFreeText::preValidate)
             .isInstanceOf(EdifactValidationException.class)
@@ -39,7 +39,7 @@ class ServiceProviderCommentFreeTextTest {
     }
 
     @Test
-    public void testPreValidationBlankString() {
+    void testPreValidationBlankString() {
         ServiceProviderCommentFreeText emptyFreeText = new ServiceProviderCommentFreeText(" ");
         assertThatThrownBy(emptyFreeText::preValidate)
             .isInstanceOf(EdifactValidationException.class)
