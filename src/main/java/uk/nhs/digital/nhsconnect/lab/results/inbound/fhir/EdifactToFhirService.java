@@ -13,14 +13,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 public class EdifactToFhirService {
 
     public Parameters convertToFhir(final Message message) {
-        //        final Message message = transaction.getMessage();
-        //        final ReferenceTransactionType referenceTransactionType = message.getReferenceTransactionType();
-        //        final TransactionType transactionType = referenceTransactionType.getTransactionType();
-        //
-        //        return transactionMappers
-        //                .getOrDefault(transactionType, new NotSupportedFhirTransactionMapper(transactionType))
-        //                .map(transaction);
-
+        //TODO: Replace this with actual mapping to FHIR
         return new Parameters();
     }
 

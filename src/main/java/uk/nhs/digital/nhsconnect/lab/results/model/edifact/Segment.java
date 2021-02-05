@@ -37,7 +37,7 @@ public abstract class Segment {
     public abstract String getValue();
 
     /**
-     * Validates the stateful portions of message (sequence numbers, transaction id) only.
+     * Validates the stateful portions of message (sequence numbers) only.
      */
     protected abstract void validateStateful() throws EdifactValidationException;
 

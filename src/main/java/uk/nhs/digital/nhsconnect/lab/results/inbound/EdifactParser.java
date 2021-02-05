@@ -68,46 +68,16 @@ public class EdifactParser {
         var messageTrailerIndex = singleMessageEdifactSegments.size() - 1;
         var firstMessageStartIndex = findAllIndexesOfSegment(singleMessageEdifactSegments, MESSAGE_END_SEGMENT).stream()
                 .findFirst()
-                // there might be no transaction inside - RECEP - so all message lines belong to the message
                 .orElse(messageTrailerIndex);
 
-        // first lines until transaction
+        // first lines until end of message
         var onlyMessageLines = new ArrayList<>(singleMessageEdifactSegments.subList(0, firstMessageStartIndex));
         onlyMessageLines.add(singleMessageEdifactSegments.get(messageTrailerIndex));
 
         var message = new Message(onlyMessageLines);
-        //var transactions = parseAllTransactions(singleMessageEdifactSegments);
-        //transactions.forEach(transaction -> transaction.setMessage(message));
-        //message.setTransactions(transactions);
 
         return message;
     }
-
-    /*
-    private List<Transaction> parseAllTransactions(List<String> singleMessageEdifactSegments) {
-        var transactionStartIndexes = findAllIndexesOfSegment(singleMessageEdifactSegments, MESSAGE_START_SEGMENT);
-        var transactionEndIndexes = new ArrayList<>(transactionStartIndexes);
-
-        // there might be no transactions inside - RECEP
-        if (!transactionEndIndexes.isEmpty()) {
-            // there is no transaction end indicator, so ending segment is the one before the beginning of the next transaction
-            // so end indexes are beginning without first S01
-            transactionEndIndexes.remove(0);
-            // and last transaction end indicator is the segment before message trailer
-            var messageTrailerIndex = singleMessageEdifactSegments.size() - 1;
-            transactionEndIndexes.add(messageTrailerIndex);
-        }
-
-        var transactionStartEndIndexPairs = zipIndexes(transactionStartIndexes, transactionEndIndexes);
-
-        return transactionStartEndIndexPairs.stream()
-                .map(transactionStartEndIndexPair ->
-                        singleMessageEdifactSegments.subList(transactionStartEndIndexPair.getLeft(),
-                            transactionStartEndIndexPair.getRight()))
-                .map(Transaction::new)
-                .collect(Collectors.toList());
-    }
-    */
 
     private List<Pair<Integer, Integer>> zipIndexes(List<Integer> startIndexes, List<Integer> endIndexes) {
         if (startIndexes.size() != endIndexes.size()) {

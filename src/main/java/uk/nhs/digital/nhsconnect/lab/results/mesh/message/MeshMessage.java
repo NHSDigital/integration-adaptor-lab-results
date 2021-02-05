@@ -18,7 +18,7 @@ public class MeshMessage implements InboundMeshMessage, OutboundMeshMessage {
     private String haTradingPartnerCode;
 
     /**
-     * If SENDING TO MESH: set based on the type of transaction being sent
+     * If SENDING TO MESH: set based on the type of message being sent
      * If DOWNLOADING FROM MESH: set to the Mex-WorkflowID response header
      */
     private WorkflowId workflowId;
