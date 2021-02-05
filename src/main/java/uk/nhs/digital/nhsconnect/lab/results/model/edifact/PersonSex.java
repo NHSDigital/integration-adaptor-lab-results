@@ -38,7 +38,7 @@ public class PersonSex extends Segment {
     }
 
     public static PersonSex fromString(final String edifactString) {
-        if (!edifactString.startsWith(PersonSex.KEY)) {
+        if (!edifactString.startsWith(KEY)) {
             throw new IllegalArgumentException("Can't create " + PersonSex.class.getSimpleName() + " from " + edifactString);
         }
         final String[] components = Split.byPlus(Split.bySegmentTerminator(edifactString)[0]);

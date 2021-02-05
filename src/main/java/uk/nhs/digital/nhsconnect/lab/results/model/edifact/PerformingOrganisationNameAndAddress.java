@@ -26,7 +26,7 @@ public class PerformingOrganisationNameAndAddress extends Segment {
     private final String performingOrganisationName;
 
     public static PerformingOrganisationNameAndAddress fromString(String edifactString) {
-        if (!edifactString.startsWith(PerformingOrganisationNameAndAddress.KEY_QUALIFIER)) {
+        if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException(
                 "Can't create " + PerformingOrganisationNameAndAddress.class.getSimpleName() + " from " + edifactString
             );

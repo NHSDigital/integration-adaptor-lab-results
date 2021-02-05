@@ -60,7 +60,7 @@ public class PersonDateOfBirth extends Segment {
     }
 
     public static PersonDateOfBirth fromString(final String edifactString) {
-        if (!edifactString.startsWith(PersonDateOfBirth.KEY_QUALIFIER)) {
+        if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException("Can't create " + PersonDateOfBirth.class.getSimpleName() + " from " + edifactString);
         }
         final String input = Split.byPlus(edifactString)[1];

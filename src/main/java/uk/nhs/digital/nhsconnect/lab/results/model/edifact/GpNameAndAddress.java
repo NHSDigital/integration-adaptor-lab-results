@@ -28,7 +28,7 @@ public class GpNameAndAddress extends Segment {
     private String code;
 
     public static GpNameAndAddress fromString(final String edifactString) {
-        if (!edifactString.startsWith(GpNameAndAddress.KEY_QUALIFIER)) {
+        if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException("Can't create " + GpNameAndAddress.class.getSimpleName()
                     + " from " + edifactString);
         }
