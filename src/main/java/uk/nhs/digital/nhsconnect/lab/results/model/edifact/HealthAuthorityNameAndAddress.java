@@ -51,7 +51,7 @@ public class HealthAuthorityNameAndAddress extends Segment {
     }
 
     public static HealthAuthorityNameAndAddress fromString(final String edifactString) {
-        if (!edifactString.startsWith(HealthAuthorityNameAndAddress.KEY_QUALIFIER)) {
+        if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException("Can't create " + HealthAuthorityNameAndAddress.class.getSimpleName()
                     + " from " + edifactString);
         }

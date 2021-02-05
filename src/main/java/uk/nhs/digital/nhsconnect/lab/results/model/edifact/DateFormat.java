@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 public enum DateFormat {
     CCYYMMDD("102"),
+    CCYYMMDDHHMM("203"),
     CCYY("602"),
     CCYYMM("610");
 

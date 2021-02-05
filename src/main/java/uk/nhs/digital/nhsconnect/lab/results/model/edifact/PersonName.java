@@ -83,7 +83,7 @@ public class PersonName extends Segment {
     }
 
     public static PersonName fromString(final String edifactString) {
-        if (!edifactString.startsWith(PersonName.KEY_QUALIFIER)) {
+        if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException("Can't create " + PersonName.class.getSimpleName() + " from " + edifactString);
         }
 

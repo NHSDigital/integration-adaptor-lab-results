@@ -30,7 +30,7 @@ public class RequesterNameAndAddress extends Segment {
     private final String requesterName;
 
     public static RequesterNameAndAddress fromString(String edifactString) {
-        if (!edifactString.startsWith(RequesterNameAndAddress.KEY_QUALIFIER)) {
+        if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException("Can't create " + RequesterNameAndAddress.class.getSimpleName() + " from " + edifactString);
         }
 

@@ -42,7 +42,7 @@ public class InterchangeHeader extends Segment {
     private Long sequenceNumber;
 
     public static InterchangeHeader fromString(final String edifactString) {
-        if (!edifactString.startsWith(InterchangeHeader.KEY)) {
+        if (!edifactString.startsWith(KEY)) {
             throw new IllegalArgumentException("Can't create " + InterchangeHeader.class.getSimpleName() + " from " + edifactString);
         }
 

@@ -31,7 +31,7 @@ public class DiagnosticReportDateIssued extends Segment {
         DateTimeFormatter.ofPattern("yyyMMddHHmm").withZone(TimestampService.UK_ZONE);
 
     public static DiagnosticReportDateIssued fromString(final String edifactString) {
-        if (!edifactString.startsWith(DiagnosticReportDateIssued.KEY_QUALIFIER)) {
+        if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException("Can't create " + DiagnosticReportDateIssued.class.getSimpleName()
                 + " from " + edifactString);
         }
