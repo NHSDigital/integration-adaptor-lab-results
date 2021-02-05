@@ -30,15 +30,6 @@ public class SequenceService {
         }
     }
 
-    private void validateSender(final String sender) {
-        if (sender == null) {
-            throw new SequenceException("Sender cannot be null");
-        }
-        if (sender.isEmpty()) {
-            throw new SequenceException("Sender cannot be empty");
-        }
-    }
-
     private Long getNextSequence(final String key) {
         return sequenceRepository.getNext(key);
     }

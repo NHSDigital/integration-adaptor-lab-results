@@ -64,6 +64,7 @@ class InboundMessageHandlerTest {
         inboundMessageHandler.handle(meshMessage);
 
         verify(edifactParser, times(2)).parse(any());
+        verify(edifactToFhirService, never()).convertToFhir(any(Message.class));
         verify(gpOutboundQueueService, never()).publish(any(FhirDataToSend.class));
         verify(recepProducerService).produceRecep(interchange);
         verify(meshOutboundQueueService).publish(any(OutboundMeshMessage.class));
@@ -106,6 +107,7 @@ class InboundMessageHandlerTest {
 
         verify(edifactParser, times(2)).parse(any());
         verify(edifactToFhirService).convertToFhir(message);
+        verify(edifactToFhirService).convertToFhir(message1);
         verify(gpOutboundQueueService, times(2)).publish(any(FhirDataToSend.class));
         verify(recepProducerService).produceRecep(interchange);
         verify(meshOutboundQueueService).publish(any(OutboundMeshMessage.class));

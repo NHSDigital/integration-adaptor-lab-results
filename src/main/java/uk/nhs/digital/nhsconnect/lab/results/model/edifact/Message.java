@@ -27,7 +27,6 @@ public class Message extends Section {
     public String findFirstGpCode() {
         return extractOptionalSegment(GpNameAndAddress.KEY_QUALIFIER)
             .stream()
-            .limit(1)
             .map(GpNameAndAddress::fromString)
             .map(GpNameAndAddress::getIdentifier)
             .findFirst()

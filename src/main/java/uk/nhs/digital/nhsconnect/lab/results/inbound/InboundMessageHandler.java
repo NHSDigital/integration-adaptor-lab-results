@@ -37,7 +37,7 @@ public class InboundMessageHandler {
 
         logInterchangeReceived(interchange);
 
-        final List<Message> messages = getMessages(interchange);
+        final List<Message> messages = interchange.getMessages();
 
         LOGGER.info("Interchange contains {} new messages", messages.size());
 
@@ -48,10 +48,6 @@ public class InboundMessageHandler {
         sendRecep(interchange);
 
         logSentFor(interchange);
-    }
-
-    private List<Message> getMessages(Interchange interchange) {
-        return interchange.getMessages();
     }
 
     private List<FhirDataToSend> getFhirDataToSend(List<Message> messagesToProcess) {

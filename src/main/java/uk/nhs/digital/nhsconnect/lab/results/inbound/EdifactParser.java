@@ -66,17 +66,15 @@ public class EdifactParser {
 
     private Message parseMessage(List<String> singleMessageEdifactSegments) {
         var messageTrailerIndex = singleMessageEdifactSegments.size() - 1;
-        var firstMessageStartIndex = findAllIndexesOfSegment(singleMessageEdifactSegments, MESSAGE_END_SEGMENT).stream()
+        var firstMessageEndIndex = findAllIndexesOfSegment(singleMessageEdifactSegments, MESSAGE_END_SEGMENT).stream()
                 .findFirst()
                 .orElse(messageTrailerIndex);
 
         // first lines until end of message
-        var onlyMessageLines = new ArrayList<>(singleMessageEdifactSegments.subList(0, firstMessageStartIndex));
+        var onlyMessageLines = new ArrayList<>(singleMessageEdifactSegments.subList(0, firstMessageEndIndex));
         onlyMessageLines.add(singleMessageEdifactSegments.get(messageTrailerIndex));
 
-        var message = new Message(onlyMessageLines);
-
-        return message;
+        return new Message(onlyMessageLines);
     }
 
     private List<Pair<Integer, Integer>> zipIndexes(List<Integer> startIndexes, List<Integer> endIndexes) {

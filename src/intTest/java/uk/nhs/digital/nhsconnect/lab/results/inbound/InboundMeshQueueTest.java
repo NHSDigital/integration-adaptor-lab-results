@@ -1,6 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.inbound;
 
-import org.assertj.core.api.SoftAssertions;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.annotation.DirtiesContext;
@@ -27,7 +27,7 @@ public class InboundMeshQueueTest extends IntegrationBaseTest {
     }
 
     @Test
-    void whenMeshInboundQueueMessageIsReceivedThenMessageIsHandled(SoftAssertions softly) throws IOException, JMSException {
+    void whenMeshInboundQueueMessageIsReceivedThenMessageIsHandled() throws IOException, JMSException {
         final MeshMessage meshMessage = new MeshMessage()
                 .setWorkflowId(WorkflowId.REGISTRATION)
                 .setContent(new String(Files.readAllBytes(getEdifactResource().getFile().toPath())))
@@ -39,6 +39,6 @@ public class InboundMeshQueueTest extends IntegrationBaseTest {
         final String content = parseTextMessage(message);
         final String expectedContent = new String(Files.readAllBytes(getFhirResource().getFile().toPath()));
 
-        softly.assertThat(content).isEqualTo(expectedContent);
+        assertThat(content).isEqualTo(expectedContent);
     }
 }
