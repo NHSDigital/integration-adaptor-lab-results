@@ -25,7 +25,13 @@ public class Message extends Section {
     }
 
     public String findFirstGpCode() {
-        return extractOptionalSegment(GpNameAndAddress.KEY_QUALIFIER).orElse(DEFAULT_GP_CODE);
+        return extractOptionalSegment(GpNameAndAddress.KEY_QUALIFIER)
+            .stream()
+            .limit(1)
+            .map(GpNameAndAddress::fromString)
+            .map(GpNameAndAddress::getIdentifier)
+            .findFirst()
+            .orElse(DEFAULT_GP_CODE);
     }
 
     @Override
