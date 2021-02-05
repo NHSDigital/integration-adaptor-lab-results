@@ -18,7 +18,6 @@ public class SequenceRepository {
     private static final String KEY = "key";
     private static final String SEQUENCE_NUMBER = "sequenceNumber";
     protected static final long MAX_SEQUENCE_NUMBER = 100_000_000L;
-    protected static final long MAX_TRANSACTION_SEQUENCE_NUMBER = 10_000_000L;
 
     @Autowired
     private MongoOperations mongoOperations;
@@ -27,14 +26,6 @@ public class SequenceRepository {
         Long seqNumber = increment(key, MAX_SEQUENCE_NUMBER);
         if (seqNumber == 0) {
             seqNumber = increment(key, MAX_SEQUENCE_NUMBER);
-        }
-        return seqNumber;
-    }
-
-    public Long getNextForTransaction(final String key) {
-        Long seqNumber = increment(key, MAX_TRANSACTION_SEQUENCE_NUMBER);
-        if (seqNumber == 0) {
-            seqNumber = increment(key, MAX_TRANSACTION_SEQUENCE_NUMBER);
         }
         return seqNumber;
     }

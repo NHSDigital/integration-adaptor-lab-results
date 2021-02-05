@@ -12,7 +12,6 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class SequenceServiceTest {
-    private static final String TRANSACTION_ID = "TN-sender";
     private static final String INTERCHANGE_ID = "SIS-sender-recipient";
     private static final String MESSAGE_ID = "SMS-sender-recipient";
     private static final Long SEQ_VALUE = 1L;
@@ -22,12 +21,6 @@ class SequenceServiceTest {
 
     @Mock
     private SequenceRepository sequenceRepository;
-
-    @Test
-    void when_generateTransactionId_expect_correctValue() {
-        when(sequenceRepository.getNextForTransaction(TRANSACTION_ID)).thenReturn(SEQ_VALUE);
-        assertThat(sequenceService.generateTransactionNumber("sender")).isEqualTo(SEQ_VALUE);
-    }
 
     @Test
     void when_generateInterchangeId_expect_correctValue() {
@@ -55,19 +48,5 @@ class SequenceServiceTest {
         assertThatThrownBy(() -> sequenceService.generateInterchangeSequence("sender", ""))
             .isExactlyInstanceOf(SequenceException.class)
             .hasMessage("Sender or recipient not valid. Sender: sender, recipient: ");
-    }
-
-    @Test
-    void when_generateTransactionIdsForNullSender_expect_exception() {
-        assertThatThrownBy(() -> sequenceService.generateTransactionNumber(null))
-            .isExactlyInstanceOf(SequenceException.class)
-            .hasMessage("Sender cannot be null");
-    }
-
-    @Test
-    void when_generateTransactionIdsForEmptySender_expect_exception() {
-        assertThatThrownBy(() -> sequenceService.generateTransactionNumber(""))
-            .isExactlyInstanceOf(SequenceException.class)
-            .hasMessage("Sender cannot be empty");
     }
 }
