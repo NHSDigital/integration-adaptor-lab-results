@@ -5,7 +5,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 
 import java.util.Optional;
 
-public class SpecimenCollector {
+public class SpecimenCollectorMapper {
     public Optional<Practitioner> map(final Message message) {
         return Optional.empty();
     }
