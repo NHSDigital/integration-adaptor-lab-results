@@ -19,6 +19,7 @@ import uk.nhs.digital.nhsconnect.lab.results.outbound.queue.GpOutboundQueueServi
 import uk.nhs.digital.nhsconnect.lab.results.outbound.queue.MeshOutboundQueueService;
 
 import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.never;
@@ -45,6 +46,8 @@ class InboundMessageHandlerTest {
     private Interchange interchange;
     @Mock
     private Message message;
+    @Mock
+    private Message message1;
 
     @BeforeEach
     void setUp() {
@@ -52,7 +55,7 @@ class InboundMessageHandlerTest {
     }
 
     @Test
-    void handleInboundMeshMessageNoTransactionsDoesNotPublishToGpOutboundQueue() {
+    void handleInboundMeshMessageNoMessagesDoesNotPublishToGpOutboundQueue() {
 
         final MeshMessage meshMessage = new MeshMessage();
 
@@ -61,62 +64,48 @@ class InboundMessageHandlerTest {
         inboundMessageHandler.handle(meshMessage);
 
         verify(edifactParser, times(2)).parse(any());
-        //verify(edifactToFhirService, never()).convertToFhir(any(Transaction.class));
         verify(gpOutboundQueueService, never()).publish(any(FhirDataToSend.class));
         verify(recepProducerService).produceRecep(interchange);
         verify(meshOutboundQueueService).publish(any(OutboundMeshMessage.class));
     }
 
     @Test
-    void handleInboundMeshMessageWithTransactionAndPublishesToGpOutboundQueue() {
+    void handleInboundMeshMessageWithMessageAndPublishesToGpOutboundQueue() {
 
         final MeshMessage meshMessage = new MeshMessage();
 
         when(edifactParser.parse(meshMessage.getContent())).thenReturn(interchange);
         when(interchange.getMessages()).thenReturn(Collections.singletonList(message));
 
-        //final Transaction transaction = new Transaction(new ArrayList<>());
-        //transaction.setMessage(message);
-        //when(message.getTransactions()).thenReturn(Collections.singletonList(transaction));
-        //when(message.getReferenceTransactionType()).thenReturn(new ReferenceTransactionType(TransactionType.APPROVAL));
-
         final Parameters parameters = new Parameters();
-        //when(edifactToFhirService.convertToFhir(transaction)).thenReturn(parameters);
+        when(edifactToFhirService.convertToFhir(message)).thenReturn(parameters);
 
         inboundMessageHandler.handle(meshMessage);
 
         verify(edifactParser, times(2)).parse(any());
-        //verify(edifactToFhirService).convertToFhir(transaction);
+        verify(edifactToFhirService).convertToFhir(message);
         verify(gpOutboundQueueService).publish(any(FhirDataToSend.class));
         verify(recepProducerService).produceRecep(interchange);
         verify(meshOutboundQueueService).publish(any(OutboundMeshMessage.class));
     }
 
     @Test
-    void handleInboundMeshMessageWithMultipleTransactionsAndPublishesToGpOutboundQueue() {
+    void handleInboundMeshMessageWithMultipleMessagesAndPublishesToGpOutboundQueue() {
 
         final MeshMessage meshMessage = new MeshMessage();
 
         when(edifactParser.parse(meshMessage.getContent())).thenReturn(interchange);
-        when(interchange.getMessages()).thenReturn(Collections.singletonList(message));
-
-        //final Transaction transaction1 = new Transaction(new ArrayList<>());
-        //transaction1.setMessage(message);
-        //final Transaction transaction2 = new Transaction(new ArrayList<>());
-        //transaction2.setMessage(message);
-        //when(message.getTransactions()).thenReturn(List.of(transaction1, transaction2));
-        //when(message.getReferenceTransactionType()).thenReturn(new ReferenceTransactionType(TransactionType.APPROVAL));
+        when(interchange.getMessages()).thenReturn(List.of(message, message1));
 
         final Parameters parameters = new Parameters();
 
-        //when(edifactToFhirService.convertToFhir(transaction1)).thenReturn(parameters);
-        //when(edifactToFhirService.convertToFhir(transaction2)).thenReturn(parameters);
+        when(edifactToFhirService.convertToFhir(message)).thenReturn(parameters);
+        when(edifactToFhirService.convertToFhir(message1)).thenReturn(parameters);
 
         inboundMessageHandler.handle(meshMessage);
 
         verify(edifactParser, times(2)).parse(any());
-        //verify(edifactToFhirService).convertToFhir(transaction1);
-        //verify(edifactToFhirService).convertToFhir(transaction2);
+        verify(edifactToFhirService).convertToFhir(message);
         verify(gpOutboundQueueService, times(2)).publish(any(FhirDataToSend.class));
         verify(recepProducerService).produceRecep(interchange);
         verify(meshOutboundQueueService).publish(any(OutboundMeshMessage.class));

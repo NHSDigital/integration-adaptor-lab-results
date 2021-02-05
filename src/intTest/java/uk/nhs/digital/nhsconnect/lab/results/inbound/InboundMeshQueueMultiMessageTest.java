@@ -19,11 +19,11 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * Tests the processing of a REGISTRATION interchange containing multiple messages and transactions by publishing it
+ * Tests the processing of a REGISTRATION interchange containing multiple messages by publishing it
  * onto the inbound MESH message queue. This bypasses the MESH polling loop / MESH Client / MESH API.
  */
 @DirtiesContext
-public class InboundMeshQueueMultiTransactionTest extends IntegrationBaseTest {
+public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
 
     @Value("classpath:edifact/multi_registration.dat")
     private Resource multiEdifactResource;
@@ -65,7 +65,7 @@ public class InboundMeshQueueMultiTransactionTest extends IntegrationBaseTest {
 
     private void assertGpOutboundQueueMessages(SoftAssertions softly, Message message) throws JMSException, IOException {
 
-        // all transactions come from the same interchange and use the same conversation id
+        // all messages come from the same interchange and use the same conversation id
         final String conversationId = message.getStringProperty("ConversationId");
         if (previousConversationId == null) {
             previousConversationId = conversationId;

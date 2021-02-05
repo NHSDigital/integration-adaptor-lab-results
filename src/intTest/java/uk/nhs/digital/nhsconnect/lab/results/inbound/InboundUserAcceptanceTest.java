@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * The test EDIFACT message (.dat file) is sent to the MESH mailbox where the adaptor receives inbound transactions.
- * The test waits for the transaction to be processed and compares the FHIR message published to the GP Outbound Queue
+ * The test EDIFACT message (.dat file) is sent to the MESH mailbox where the adaptor receives inbound messages.
+ * The test waits for the messages to be processed and compares the FHIR message published to the GP Outbound Queue
  * with the expected FHIR representation of the original message sent (.json file having the same name as the .dat)
  */
 @Slf4j

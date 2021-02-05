@@ -12,8 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ExtendWith(MockitoExtension.class)
 class EdifactToFhirServiceTest {
 
-    //@Mock
-    //private Transaction transaction;
     @Mock
     private Message message;
 
@@ -22,29 +20,9 @@ class EdifactToFhirServiceTest {
 
         final EdifactToFhirService service = new EdifactToFhirService();
 
-        //when(transaction.getMessage()).thenReturn(message);
-        //when(message.getReferenceTransactionType()).thenReturn(new ReferenceTransactionType(TransactionType.APPROVAL));
-
         final Parameters parameters = service.convertToFhir(message);
 
         assertNotNull(parameters);
     }
-
-    /*
-    @Test
-    void testConvertEdifactToFhirWithUnsupportedTransactionTypeThrowsException() {
-
-        final EdifactToFhirService service = new EdifactToFhirService(Map.of());
-
-        when(transaction.getMessage()).thenReturn(message);
-        when(message.getReferenceTransactionType()).thenReturn(new ReferenceTransactionType(TransactionType.APPROVAL));
-
-        final UnsupportedOperationException exception = assertThrows(UnsupportedOperationException.class,
-            () -> service.convertToFhir(transaction));
-
-        assertEquals("Transaction type APPROVAL is not supported", exception.getMessage());
-    }
-
-     */
 
 }
