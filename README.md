@@ -113,6 +113,19 @@ Navigate to: IntegrationAdapterLabResultsApplication -> right click -> Run
     docker-compose build lab-results
     docker-compose up lab-results
 
+**Inside multiple containers, behind a load balancer**
+
+Docker Compose allows running multiple instances behind a nginx load balancer in using round-robin routing.
+
+    export BUILD_TAG=latest
+    docker-compose build lab-results
+    docker-compose -f docker-compose.yml -f docker-compose.lb.override.yml up --scale lab-results=3 lab-results
+
+This command will start three instances of the adaptor behind a load balancer on port 8080
+
+To change the scale number while all services are running run the same "up" command with new scale value and then
+restart the load balancer container (so it will become aware of instance count change).
+
 ### Running Tests
 
 **All Tests**
