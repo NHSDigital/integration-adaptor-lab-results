@@ -87,8 +87,7 @@ pipeline {
                         script {
                             if (ecrLogin(TF_STATE_BUCKET_REGION) != 0 )  { error("Docker login to ECR failed") }
                             String dockerPushCommand = "docker push ${DOCKER_IMAGE}"
-                            // Change echo to be an error once the AWS has been set up
-                            if (sh (label: "Pushing image", script: dockerPushCommand, returnStatus: true) !=0) { echo("Docker push image failed") }
+                            if (sh (label: "Pushing image", script: dockerPushCommand, returnStatus: true) !=0) { error("Docker push image failed") }
                         }
                     }
                 }
