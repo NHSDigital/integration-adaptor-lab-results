@@ -19,7 +19,7 @@ public class RequesterNameAndAddress extends Segment {
 
     private static final String KEY = "NAD";
     private static final String QUALIFIER = "PO";
-    private static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
+    public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
     private static final int REQUESTER_NAME_INDEX_IN_EDIFACT_STRING = 4;
 
     @NonNull
@@ -31,7 +31,8 @@ public class RequesterNameAndAddress extends Segment {
 
     public static RequesterNameAndAddress fromString(String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {
-            throw new IllegalArgumentException("Can't create " + RequesterNameAndAddress.class.getSimpleName() + " from " + edifactString);
+            throw new IllegalArgumentException("Can't create " + RequesterNameAndAddress.class.getSimpleName()
+                + " from " + edifactString);
         }
 
         String[] keySplit = Split.byPlus(edifactString);
@@ -39,7 +40,10 @@ public class RequesterNameAndAddress extends Segment {
         String code = Split.byColon(keySplit[2])[1];
         String requesterName = keySplit[REQUESTER_NAME_INDEX_IN_EDIFACT_STRING];
 
-        return new RequesterNameAndAddress(identifier, HealthcareRegistrationIdentificationCode.fromCode(code), requesterName);
+        return new RequesterNameAndAddress(
+            identifier,
+            HealthcareRegistrationIdentificationCode.fromCode(code),
+            requesterName);
     }
 
     @Override
@@ -49,12 +53,18 @@ public class RequesterNameAndAddress extends Segment {
 
     @Override
     public String getValue() {
-        return QUALIFIER + "+" + identifier + ":" + healthcareRegistrationIdentificationCode.getCode() + "++" + requesterName;
+        return QUALIFIER
+            + PLUS_SEPARATOR
+            + identifier
+            + COLON_SEPARATOR
+            + healthcareRegistrationIdentificationCode.getCode()
+            + PLUS_SEPARATOR + PLUS_SEPARATOR
+            + requesterName;
     }
 
     @Override
     protected void validateStateful() throws EdifactValidationException {
-
+        // no stateful fields to validate
     }
 
     @Override
@@ -64,7 +74,8 @@ public class RequesterNameAndAddress extends Segment {
         }
 
         if (healthcareRegistrationIdentificationCode.getCode().isBlank()) {
-            throw new EdifactValidationException(getKey() + ": Attribute code in healthcareRegistrationIdentificationCode is required");
+            throw new EdifactValidationException(
+                getKey() + ": Attribute code in healthcareRegistrationIdentificationCode is required");
         }
 
         if (requesterName.isBlank()) {

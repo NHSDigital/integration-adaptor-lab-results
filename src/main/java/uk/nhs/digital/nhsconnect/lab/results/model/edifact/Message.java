@@ -1,10 +1,11 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
+import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class Message extends Section {
     private static final String DEFAULT_GP_CODE = "9999";
 
@@ -15,6 +16,11 @@ public class Message extends Section {
     @Getter(lazy = true)
     private final HealthAuthorityNameAndAddress healthAuthorityNameAndAddress =
         HealthAuthorityNameAndAddress.fromString(extractSegment(HealthAuthorityNameAndAddress.KEY_QUALIFIER));
+
+    @Getter(lazy = true)
+    private final Optional<RequesterNameAndAddress> requesterNameAndAddress =
+        extractOptionalSegment(RequesterNameAndAddress.KEY_QUALIFIER)
+            .map(RequesterNameAndAddress::fromString);
 
     @Getter
     @Setter
