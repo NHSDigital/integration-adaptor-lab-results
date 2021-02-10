@@ -4,11 +4,11 @@ import org.hl7.fhir.dstu3.model.Specimen;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 
-import java.util.Optional;
+import java.util.List;
 
 @Component
 public class SpecimenMapper {
-    public Optional<Specimen> map(final Message message) {
-        return Optional.empty();
+    public List<Specimen> mapToSpecimens(final Message message) {
+        return List.of(new Specimen());
     }
 }
