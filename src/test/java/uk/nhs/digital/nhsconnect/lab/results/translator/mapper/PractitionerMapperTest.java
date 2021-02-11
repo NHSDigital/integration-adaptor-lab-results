@@ -58,7 +58,7 @@ class PractitionerMapperTest {
             .first()
             .satisfies(identifier -> assertAll(
                 () -> assertThat(identifier.getValue()).isEqualTo("Identifier"),
-                () -> assertThat(identifier.getSystem()).isEqualTo(PractitionerMapper.SDS_USER_SYSTEM)
+                () -> assertThat(identifier.getSystem()).isEqualTo("https://fhir.nhs.uk/Id/sds-user-id")
             ));
     }
 

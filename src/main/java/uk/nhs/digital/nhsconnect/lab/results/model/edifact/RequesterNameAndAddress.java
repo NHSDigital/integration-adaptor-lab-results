@@ -43,7 +43,8 @@ public class RequesterNameAndAddress extends Segment {
         return new RequesterNameAndAddress(
             identifier,
             HealthcareRegistrationIdentificationCode.fromCode(code),
-            requesterName);
+            requesterName
+        );
     }
 
     @Override
@@ -70,16 +71,16 @@ public class RequesterNameAndAddress extends Segment {
     @Override
     public void preValidate() throws EdifactValidationException {
         if (identifier.isBlank()) {
-            throw new EdifactValidationException(getKey() + ": Attribute identifier is required");
+            throw new EdifactValidationException(KEY + ": Attribute identifier is required");
         }
 
         if (healthcareRegistrationIdentificationCode.getCode().isBlank()) {
             throw new EdifactValidationException(
-                getKey() + ": Attribute code in healthcareRegistrationIdentificationCode is required");
+                KEY + ": Attribute code in healthcareRegistrationIdentificationCode is required");
         }
 
         if (requesterName.isBlank()) {
-            throw new EdifactValidationException(getKey() + ": Attribute requesterName is required");
+            throw new EdifactValidationException(KEY + ": Attribute requesterName is required");
         }
     }
 }

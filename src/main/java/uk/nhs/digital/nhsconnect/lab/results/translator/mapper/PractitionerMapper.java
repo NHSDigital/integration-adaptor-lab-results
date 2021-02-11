@@ -8,7 +8,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.RequesterNameAndAddre
 
 @Component
 public class PractitionerMapper {
-    protected static final String SDS_USER_SYSTEM = "https://fhir.nhs.uk/Id/sds-user-id";
+    private static final String SDS_USER_SYSTEM = "https://fhir.nhs.uk/Id/sds-user-id";
 
     public Optional<Practitioner> mapRequester(final Message message) {
         return message.getRequesterNameAndAddress()
