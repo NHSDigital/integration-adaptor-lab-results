@@ -20,8 +20,8 @@ public class PractitionerMapper {
         result.addIdentifier()
             .setValue(requester.getIdentifier())
             .setSystem(SDS_USER_SYSTEM);
-        result.addName()
-            .setText(requester.getRequesterName());
+        Optional.ofNullable(requester.getRequesterName())
+            .ifPresent(name -> result.addName().setText(name));
         return result;
     }
 }

@@ -61,4 +61,15 @@ class PractitionerMapperTest {
                 () -> assertThat(identifier.getSystem()).isEqualTo(PractitionerMapper.SDS_USER_SYSTEM)
             ));
     }
+
+    @Test
+    void testMapMessageToPractitionerWithUnnamedRequester() {
+        when(message.getRequesterNameAndAddress()).thenReturn(Optional.of(requester));
+
+        Optional<Practitioner> result = mapper.mapRequester(message);
+        assertThat(result).isNotEmpty();
+
+        Practitioner practitioner = result.get();
+        assertThat(practitioner.getName()).isEmpty();
+    }
 }

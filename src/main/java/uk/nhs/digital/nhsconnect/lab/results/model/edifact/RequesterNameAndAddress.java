@@ -26,10 +26,10 @@ public class RequesterNameAndAddress extends Segment {
     private final String identifier;
     @NonNull
     private final HealthcareRegistrationIdentificationCode healthcareRegistrationIdentificationCode;
-    @NonNull
+
     private final String requesterName;
 
-    public static RequesterNameAndAddress fromString(String edifactString) {
+    public static RequesterNameAndAddress fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException("Can't create " + RequesterNameAndAddress.class.getSimpleName()
                 + " from " + edifactString);
