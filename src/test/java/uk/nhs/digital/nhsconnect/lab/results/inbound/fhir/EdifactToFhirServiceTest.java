@@ -13,13 +13,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
-import uk.nhs.digital.nhsconnect.lab.results.translator.mapper.RequesterMapper;
+import uk.nhs.digital.nhsconnect.lab.results.translator.mapper.PractitionerMapper;
 
 @ExtendWith(MockitoExtension.class)
 class EdifactToFhirServiceTest {
 
     @Mock
-    private RequesterMapper requesterMapper;
+    private PractitionerMapper practitionerMapper;
 
     @Mock
     private Message message;
@@ -29,7 +29,7 @@ class EdifactToFhirServiceTest {
 
     @Test
     void testConvertEdifactToFhirRequesterMapperReturnsEmpty() {
-        when(requesterMapper.map(message)).thenReturn(Optional.empty());
+        when(practitionerMapper.mapRequester(message)).thenReturn(Optional.empty());
 
         final Parameters parameters = service.convertToFhir(message);
 
@@ -39,7 +39,7 @@ class EdifactToFhirServiceTest {
 
     @Test
     void testConvertEdifactToFhirRequesterMapperReturnsSomething() {
-        when(requesterMapper.map(message)).thenReturn(Optional.of(mock(Practitioner.class)));
+        when(practitionerMapper.mapRequester(message)).thenReturn(Optional.of(mock(Practitioner.class)));
 
         final Parameters parameters = service.convertToFhir(message);
 

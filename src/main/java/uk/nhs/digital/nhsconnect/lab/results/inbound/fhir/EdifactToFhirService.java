@@ -7,18 +7,18 @@ import org.hl7.fhir.dstu3.model.Parameters.ParametersParameterComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
-import uk.nhs.digital.nhsconnect.lab.results.translator.mapper.RequesterMapper;
+import uk.nhs.digital.nhsconnect.lab.results.translator.mapper.PractitionerMapper;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class EdifactToFhirService {
-    private final RequesterMapper requesterMapper;
+    private final PractitionerMapper practitionerMapper;
 
     public Parameters convertToFhir(final Message message) {
         final var parameters = new Parameters();
 
-        requesterMapper.map(message)
+        practitionerMapper.mapRequester(message)
             .map(practitioner -> new ParametersParameterComponent().setResource(practitioner))
             .ifPresent(parameters::addParameter);
 

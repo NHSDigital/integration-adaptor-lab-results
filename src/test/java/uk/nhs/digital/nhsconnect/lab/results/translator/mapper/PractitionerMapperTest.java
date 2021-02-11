@@ -16,7 +16,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.RequesterNameAndAddress;
 
 @ExtendWith(MockitoExtension.class)
-class RequesterMapperTest {
+class PractitionerMapperTest {
 
     @Mock
     private Message message;
@@ -24,18 +24,18 @@ class RequesterMapperTest {
     @Mock
     private RequesterNameAndAddress requester;
 
-    private RequesterMapper mapper;
+    private PractitionerMapper mapper;
 
     @BeforeEach
     void setUp() {
-        mapper = new RequesterMapper();
+        mapper = new PractitionerMapper();
     }
 
     @Test
     void testMapMessageToPractitionerNoRequester() {
         when(message.getRequesterNameAndAddress()).thenReturn(Optional.empty());
 
-        assertThat(mapper.map(message)).isEmpty();
+        assertThat(mapper.mapRequester(message)).isEmpty();
     }
 
     @Test
@@ -44,7 +44,7 @@ class RequesterMapperTest {
         when(requester.getRequesterName()).thenReturn("Alan Turing");
         when(requester.getIdentifier()).thenReturn("Identifier");
 
-        Optional<Practitioner> result = mapper.map(message);
+        Optional<Practitioner> result = mapper.mapRequester(message);
         assertThat(result).isNotEmpty();
 
         Practitioner practitioner = result.get();
@@ -58,7 +58,7 @@ class RequesterMapperTest {
             .first()
             .satisfies(identifier -> assertAll(
                 () -> assertThat(identifier.getValue()).isEqualTo("Identifier"),
-                () -> assertThat(identifier.getSystem()).isEqualTo(RequesterMapper.SDS_USER_SYSTEM)
+                () -> assertThat(identifier.getSystem()).isEqualTo(PractitionerMapper.SDS_USER_SYSTEM)
             ));
     }
 }
