@@ -1,7 +1,7 @@
 <configuration>
 	<appender name="TEXT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<pattern>${LAB_RESULTS_LOGGING_FORMAT:-%d{yyyy-mm-dd HH:mm:ss.SSS} | %-5level | %thread | %logger{36} | %X{CorrelationId} %msg%n}</pattern>
+			<pattern>${LAB_RESULTS_LOGGING_FORMAT:-%d{yyyy-MM-dd HH:mm:ss.SSS} | %-5level | %thread | %logger{36} | %X{CorrelationId} %msg%n}</pattern>
 		</encoder>
 	</appender>
 
