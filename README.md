@@ -121,7 +121,8 @@ The adaptor configuration has sensible defaults for local development. Some over
 
 * Install a Java JDK 11. [AdoptOpenJdk](https://adoptopenjdk.net/index.html?variant=openjdk11&jvmVariant=hotspot) is recommended.
 * Install [IntelliJ](https://www.jetbrains.com/idea/)
-* Install the [Lombok plugin](https://plugins.jetbrains.com/plugin/6317-lombok)
+* Install the [Lombok plugin](https://plugins.jetbrains.com/plugin/6317-lombok). Intellij should prompt you to enable annotation processing, ensure you enable this.
+* Install [Docker](https://www.docker.com/products/docker-desktop)
 
 ### Import the integration-adaptor-lab-results project
 
@@ -132,6 +133,7 @@ The adaptor configuration has sensible defaults for local development. Some over
 
 ### Start Dependencies
 
+* [mongo](https://hub.docker.com/_/mongo/): MongoDB Docker images
 * [rmohr/activemq](https://hub.docker.com/r/rmohr/activemq): ActiveMQ Docker images
 * [nhsdev/fake-mesh](https://hub.docker.com/r/nhsdev/fake-mesh): fake-mesh (mock MESH API server) Docker images
 
@@ -140,9 +142,6 @@ Run `docker-compose up mongodb activemq fake-mesh`
 ### Running
 
 **From IntelliJ**
-
-Running inside a container is recommended. 
-Variables not marked optional *MUST* be either set up as system environment variables or overridden temporarily in the `application.yml` for the adaptor to run.
 
 Navigate to: IntegrationAdapterLabResultsApplication -> right click -> Run
 
