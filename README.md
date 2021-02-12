@@ -185,7 +185,7 @@ restart the load balancer container (so it will become aware of instance count c
 
     ./gradlew spotbugsMain
     
-SpotbugsMain is the only Spotbugs related task we run when executing `./gradlew check`.
+SpotbugsMain is the only Spotbugs task we run when executing `./gradlew check`.
 
 ### Running Tests
 
@@ -205,7 +205,7 @@ A separate source folder [src/intTest](./src/intTest) contains integration tests
 
     ./gradlew integrationTest
     
-**All tests and checks**
+**All Tests and Checks**
 
 This command will run all tests (unit & integration) and all static analysis and code style checks. 
 
