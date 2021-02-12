@@ -171,12 +171,14 @@ This command will start three instances of the adaptor behind a load balancer on
 To change the scale number while all services are running run the same "up" command with new scale value and then
 restart the load balancer container (so it will become aware of instance count change).
 
-### Running static checks
+### Running quality checks
 
-**All static checks**
+**All quality checks**
     
     ./gradlew check -x test -x integrationTest
     
+This runs Spotbugs and Checkstyle to perform a static analysis to find potential bugs and checks to see if the code style conforms to the [Java Coding standards](https://gpitbjss.atlassian.net/wiki/spaces/NIA/pages/2108522539/Java+Coding+Standards).
+
 **Checkstyle checks**
     
     ./gradlew checkstyleIntTest checkstyleMain checkstyleTest
