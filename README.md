@@ -210,7 +210,29 @@ The `--continue` flag ensures that all tests and checks will run.
     ./gradlew check --continue
 
 ### Debugging
-TO-DO
+
+#### Mongo DB
+
+To view data in MongoDB:
+
+* Download [Robo 3T](https://robomongo.org/)
+* Open Robo 3T -> Create new connection with details as below:
+  * Type: Direct Connection
+  * Name: lab-results
+  * Address: localhost : 27017
+* View adaptor collections by navigating to lab-results -> collections -> (select any collection)
+
+#### ActiveMQ
+
+To view messages in the ActiveMQ Web Console:
+
+* Open browser and navigate to: http://localhost:8161/
+  * Username: admin
+  * Password: admin
+* Click manage ActiveMQ broker
+* Click Queues tab
+* Select desired queue
+* Select a message ID to display information of message 
 
 #### MESH API
 
