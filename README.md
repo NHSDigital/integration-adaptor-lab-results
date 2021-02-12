@@ -3,22 +3,17 @@ Integration Adaptor to simplify processing of Pathology and Screening results
 
 ## Configuration
 
-### General Configuration
-
 The adaptor reads its configuration from environment variables. The following sections describe the environment variables
  used to configure the adaptor. 
  
 Variables without a default value and not marked optional are *MUST* be defined for the adaptor to run.
 
+### General Configuration
+
 | Environment Variable               | Default                   | Description 
 | -----------------------------------|---------------------------|-------------
 | LAB_RESULTS_OUTBOUND_SERVER_PORT   | 80                        | The port on which the outbound FHIR REST API and management endpoints will run
 | LAB_RESULTS_LOGGING_LEVEL          | INFO                      | Application logging level. One of: DEBUG, INFO, WARN, ERROR. The level DEBUG **MUST NOT** be used when handling live patient data.
-
-The adaptor reads its configuration from environment variables. The following sections describe the environment variables
- used to configure the adaptor. 
- 
-Variables without a default value and not marked optional *MUST* be defined for the adaptor to run.
 
 ### Message Queue Configuration
 
@@ -33,7 +28,6 @@ Variables without a default value and not marked optional *MUST* be defined for 
 | LAB_RESULTS_AMQP_MAX_REDELIVERIES    | 3                         | The number of times an message will be retried to be delivered to consumer. After exhausting all retires, it will be put on DLQ.<queue_name> dead letter queue
 
 (*) Active/Standby: The first broker in the list always used unless there is an error, in which case the other URLs will be used. At least one URL is required.
-
 
 ### Mongodb Configuration Options
 
@@ -67,18 +61,18 @@ Option 2: If `LAB_RESULTS_MONGO_HOST` is undefined then the adaptor uses the con
 
 Configure the MESH API connection using the following environment variables:
 
-| Environment Variable                           | Default                   | Description 
-| -----------------------------------------------|---------------------------|-------------
-| LAB_RESULTS_MESH_MAILBOX_ID                    |                           | The mailbox id used by the adaptor to send and receive messages. This is the sender of outbound messages and the mailbox where inbound messages are received.
-| LAB_RESULTS_MESH_MAILBOX_PASSWORD              |                           | The password for LAB_RESULTS_MESH_MAILBOX_ID
-| LAB_RESULTS_MESH_SHARED_KEY                    |                           | A shared key used to generate auth token and provided by MESH operator (OpenTest, PTL, etc)
-| LAB_RESULTS_MESH_HOST                          |                           | The **Complete URL** with trailing slash of the MESH service. For example: https://msg.int.spine2.ncrs.nhs.uk/messageexchange/
-| LAB_RESULTS_MESH_CERT_VALIDATION               | true                      | "false" to disable certificate validation of SSL connections
-| LAB_RESULTS_MESH_ENDPOINT_CERT                 |                           | The content of the PEM-formatted client endpoint certificate
-| LAB_RESULTS_MESH_ENDPOINT_PRIVATE_KEY          |                           | The content of the PEM-formatted client private key
-| LAB_RESULTS_MESH_SUB_CA                        |                           | The content of the PEM-formatted certificate of the issuing Sub CA. Empty if LAB_RESULTS_MESH_CERT_VALIDATION is false
-| LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS |                           | (1) The mapping between each recipient HA Trading Partner Code (HA Link Code) to its corresponding MESH Mailbox ID mapping. There is one mapping per line and an equals sign (=) separates the code and mailbox id. For example: "COD1=A6840385\nHA01=A0047392"
-| LAB_RESULTS_SCHEDULER_ENABLED                  | true                      | Enables/disables automatic MESH message downloads
+| Environment Variable                           | Default | Description 
+| -----------------------------------------------|---------|-------------
+| LAB_RESULTS_MESH_MAILBOX_ID                    |         | The mailbox id used by the adaptor to send and receive messages. This is the sender of outbound messages and the mailbox where inbound messages are received.
+| LAB_RESULTS_MESH_MAILBOX_PASSWORD              |         | The password for LAB_RESULTS_MESH_MAILBOX_ID
+| LAB_RESULTS_MESH_SHARED_KEY                    |         | A shared key used to generate auth token and provided by MESH operator (OpenTest, PTL, etc)
+| LAB_RESULTS_MESH_HOST                          |         | The **Complete URL** with trailing slash of the MESH service. For example: https://msg.int.spine2.ncrs.nhs.uk/messageexchange/
+| LAB_RESULTS_MESH_CERT_VALIDATION               | true    | "false" to disable certificate validation of SSL connections
+| LAB_RESULTS_MESH_ENDPOINT_CERT                 |         | The content of the PEM-formatted client endpoint certificate
+| LAB_RESULTS_MESH_ENDPOINT_PRIVATE_KEY          |         | The content of the PEM-formatted client private key
+| LAB_RESULTS_MESH_SUB_CA                        |         | The content of the PEM-formatted certificate of the issuing Sub CA. Empty if LAB_RESULTS_MESH_CERT_VALIDATION is false
+| LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS |         | (1) The mapping between each recipient HA Trading Partner Code (HA Link Code) to its corresponding MESH Mailbox ID mapping. There is one mapping per line and an equals sign (=) separates the code and mailbox id. For example: "COD1=A6840385\nHA01=A0047392"
+| LAB_RESULTS_SCHEDULER_ENABLED                  | true    | Enables/disables automatic MESH message downloads
 
 (1) The three-character "Destination HA Cipher" required for each outbound API request uniquely identifies that patient's 
 managing organisation. Each managing organisation also has a four-character "HA Trading Partner Code" (HA Link Code) uniquely
@@ -96,8 +90,8 @@ downloaded and acknowledged by some other means in a timely manner. The adaptor 
 ids leaving them in the inbox. If more than 500 "other" messages accumulate the adaptor wil no longer receive new 
 inbound GP Links messages.
 
-| Environment Variable                                 | Default | Description 
-| -----------------------------------------------------|---------|-------------
+| Environment Variable                                       | Default | Description 
+| -----------------------------------------------------------|---------|-------------
 | LAB_RESULTS_MESH_CLIENT_WAKEUP_INTERVAL_IN_MILLISECONDS    | 60000   | The time period (in milliseconds) between when each adaptor instance "wakes up" and attempts to obtain the lock to start a polling cycle
 | LAB_RESULTS_MESH_POLLING_CYCLE_MINIMUM_INTERVAL_IN_SECONDS | 300     | The minimum time period (in seconds) between MESH polling cycles
 | LAB_RESULTS_MESH_POLLING_CYCLE_DURATION_IN_SECONDS         | 285     | The duration (in seconds) fo the MESH polling cycle
