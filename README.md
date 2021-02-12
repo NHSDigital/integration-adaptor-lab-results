@@ -3,6 +3,18 @@ Integration Adaptor to simplify processing of Pathology and Screening results
 
 ## Configuration
 
+### General Configuration
+
+The adaptor reads its configuration from environment variables. The following sections describe the environment variables
+ used to configure the adaptor. 
+ 
+Variables without a default value and not marked optional are *MUST* be defined for the adaptor to run.
+
+| Environment Variable               | Default                   | Description 
+| -----------------------------------|---------------------------|-------------
+| LAB_RESULTS_OUTBOUND_SERVER_PORT   | 80                        | The port on which the outbound FHIR REST API and management endpoints will run
+| LAB_RESULTS_LOGGING_LEVEL          | INFO                      | Application logging level. One of: DEBUG, INFO, WARN, ERROR. The level DEBUG **MUST NOT** be used when handling live patient data.
+
 The adaptor reads its configuration from environment variables. The following sections describe the environment variables
  used to configure the adaptor. 
  
@@ -15,6 +27,39 @@ Variables without a default value and not marked optional *MUST* be defined for 
 | LAB_RESULTS_MESH_OUTBOUND_QUEUE_NAME | lab_results_mesh_outbound | The name of the outbound (to MESH) message queue
 | LAB_RESULTS_MESH_INBOUND_QUEUE_NAME  | lab_results_mesh_inbound  | The name of the inbound (from MESH) message queue
 | LAB_RESULTS_GP_OUTBOUND_QUEUE_NAME   | lab_results_gp_outbound   | The name of the outbound (to GP System) message queue
+| LAB_RESULTS_AMQP_BROKERS             | amqp://localhost:5672     | A comma-separated list of URLs to AMQP brokers (*)
+| LAB_RESULTS_AMQP_USERNAME            |                           | (Optional) username for the AMQP server
+| LAB_RESULTS_AMQP_PASSWORD            |                           | (Optional) password for the AMQP server
+| LAB_RESULTS_AMQP_MAX_REDELIVERIES    | 3                         | The number of times an message will be retried to be delivered to consumer. After exhausting all retires, it will be put on DLQ.<queue_name> dead letter queue
+
+(*) Active/Standby: The first broker in the list always used unless there is an error, in which case the other URLs will be used. At least one URL is required.
+
+
+### Mongodb Configuration Options
+
+The adaptor configuration for mongodb can be configured two ways: using a connection string or providing individual 
+properties. This is to accommodate differences in the capabilities of deployment automation frameworks and varying 
+environments.
+
+Option 1: If `LAB_RESULTS_MONGO_HOST` is defined then the adaptor forms a connection string from the following properties:
+
+| Environment Variable             | Default     | Description 
+| ---------------------------------|-------------|-------------
+| LAB_RESULTS_MONGO_DATABASE_NAME  | lab-results | Database name for Mongo
+| LAB_RESULTS_MONGO_HOST           |             | Mongodb host
+| LAB_RESULTS_MONGO_PORT           |             | Mongodb port
+| LAB_RESULTS_MONGO_USERNAME       |             | (Optional) Mongodb username. If set then password must also be set.
+| LAB_RESULTS_MONGO_PASSWORD       |             | (Optional) Mongodb password
+| LAB_RESULTS_MONGO_OPTIONS        |             | (Optional) Mongodb URL encoded parameters for the connection string without a leading ?
+| LAB_RESULTS_MONGO_TTL            | P30D        | (Optional) Time-to-live value for inbound and outbound state collection documents as an [ISO 8601 Duration](https://en.wikipedia.org/wiki/ISO_8601#Durations)
+| LAB_RESULTS_COSMOS_DB_ENABLED    | false       | (Optional) If true the adaptor will enable features and workarounds to support Azure Cosmos DB
+
+Option 2: If `LAB_RESULTS_MONGO_HOST` is undefined then the adaptor uses the connection string provided:
+
+| Environment Variable             | Default                   | Description 
+| ---------------------------------|---------------------------|-------------
+| LAB_RESULTS_MONGO_DATABASE_NAME  | lab-results               | Database name for Mongo
+| LAB_RESULTS_MONGO_URI            | mongodb://localhost:27017 | Mongodb connection string
 
 ## MESH API
 
@@ -22,18 +67,18 @@ Variables without a default value and not marked optional *MUST* be defined for 
 
 Configure the MESH API connection using the following environment variables:
 
-| Environment Variable             | Default                   | Description 
-| ---------------------------------|---------------------------|-------------
-| LAB_RESULTS_MESH_MAILBOX_ID            |                           | The mailbox id used by the adaptor to send and receive messages. This is the sender of outbound messages and the mailbox where inbound messages are received.
-| LAB_RESULTS_MESH_MAILBOX_PASSWORD      |                           | The password for LAB_RESULTS_MESH_MAILBOX_ID
-| LAB_RESULTS_MESH_SHARED_KEY            |                           | A shared key used to generate auth token and provided by MESH operator (OpenTest, PTL, etc)
-| LAB_RESULTS_MESH_HOST                  |                           | The **Complete URL** with trailing slash of the MESH service. For example: https://msg.int.spine2.ncrs.nhs.uk/messageexchange/
-| LAB_RESULTS_MESH_CERT_VALIDATION       | true                      | "false" to disable certificate validation of SSL connections
-| LAB_RESULTS_MESH_ENDPOINT_CERT         |                           | The content of the PEM-formatted client endpoint certificate
-| LAB_RESULTS_MESH_ENDPOINT_PRIVATE_KEY  |                           | The content of the PEM-formatted client private key
-| LAB_RESULTS_MESH_SUB_CA                |                           | The content of the PEM-formatted certificate of the issuing Sub CA. Empty if LAB_RESULTS_MESH_CERT_VALIDATION is false
-| LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS |                   | (1) The mapping between each recipient HA Trading Partner Code (HA Link Code) to its corresponding MESH Mailbox ID mapping. There is one mapping per line and an equals sign (=) separates the code and mailbox id. For example: "COD1=A6840385\nHA01=A0047392"
-| LAB_RESULTS_SCHEDULER_ENABLED          | true                      | Enables/disables automatic MESH message downloads
+| Environment Variable                           | Default                   | Description 
+| -----------------------------------------------|---------------------------|-------------
+| LAB_RESULTS_MESH_MAILBOX_ID                    |                           | The mailbox id used by the adaptor to send and receive messages. This is the sender of outbound messages and the mailbox where inbound messages are received.
+| LAB_RESULTS_MESH_MAILBOX_PASSWORD              |                           | The password for LAB_RESULTS_MESH_MAILBOX_ID
+| LAB_RESULTS_MESH_SHARED_KEY                    |                           | A shared key used to generate auth token and provided by MESH operator (OpenTest, PTL, etc)
+| LAB_RESULTS_MESH_HOST                          |                           | The **Complete URL** with trailing slash of the MESH service. For example: https://msg.int.spine2.ncrs.nhs.uk/messageexchange/
+| LAB_RESULTS_MESH_CERT_VALIDATION               | true                      | "false" to disable certificate validation of SSL connections
+| LAB_RESULTS_MESH_ENDPOINT_CERT                 |                           | The content of the PEM-formatted client endpoint certificate
+| LAB_RESULTS_MESH_ENDPOINT_PRIVATE_KEY          |                           | The content of the PEM-formatted client private key
+| LAB_RESULTS_MESH_SUB_CA                        |                           | The content of the PEM-formatted certificate of the issuing Sub CA. Empty if LAB_RESULTS_MESH_CERT_VALIDATION is false
+| LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS |                           | (1) The mapping between each recipient HA Trading Partner Code (HA Link Code) to its corresponding MESH Mailbox ID mapping. There is one mapping per line and an equals sign (=) separates the code and mailbox id. For example: "COD1=A6840385\nHA01=A0047392"
+| LAB_RESULTS_SCHEDULER_ENABLED                  | true                      | Enables/disables automatic MESH message downloads
 
 (1) The three-character "Destination HA Cipher" required for each outbound API request uniquely identifies that patient's 
 managing organisation. Each managing organisation also has a four-character "HA Trading Partner Code" (HA Link Code) uniquely
