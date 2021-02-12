@@ -165,11 +165,35 @@ This command will start three instances of the adaptor behind a load balancer on
 To change the scale number while all services are running run the same "up" command with new scale value and then
 restart the load balancer container (so it will become aware of instance count change).
 
+### Running quality checks
+
+**All quality checks**
+    
+    ./gradlew check -x test -x integrationTest
+    
+This runs Spotbugs and Checkstyle to perform a static analysis to find potential bugs and checks to see if the code style conforms to the [Java Coding standards](https://gpitbjss.atlassian.net/wiki/spaces/NIA/pages/2108522539/Java+Coding+Standards).
+
+**Checkstyle checks**
+    
+    ./gradlew checkstyleIntTest checkstyleMain checkstyleTest
+    
+**Spotbugs checks**
+
+    ./gradlew spotbugsMain
+    
+SpotbugsMain is the only Spotbugs task we run when executing `./gradlew check`.
+
 ### Running Tests
 
 **All Tests**
 
-    ./gradlew check
+    ./gradlew check -x spotbugsMain -x spotbugsIntTest -x spotbugsTest -x checkstyleMain -x checkstyleIntTest -x checkstyleTest
+
+**Unit Tests**
+
+This will run all tests inside the [src/test](./src/test) folder.
+
+    ./gradlew test
 
 **Integration Tests**
 
@@ -177,6 +201,14 @@ A separate source folder [src/intTest](./src/intTest) contains integration tests
 
     ./gradlew integrationTest
     
+**All Tests and Checks**
+
+This command will run all tests (unit & integration) and all static analysis and code style checks. 
+
+The `--continue` flag ensures that all tests and checks will run.
+
+    ./gradlew check --continue
+
 ### Debugging
 TO-DO
 
