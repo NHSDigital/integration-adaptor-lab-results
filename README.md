@@ -14,6 +14,11 @@ Variables without a default value and not marked optional are *MUST* be defined 
 | -----------------------------------|---------------------------|-------------
 | LAB_RESULTS_OUTBOUND_SERVER_PORT   | 80                        | The port on which the outbound FHIR REST API and management endpoints will run
 | LAB_RESULTS_LOGGING_LEVEL          | INFO                      | Application logging level. One of: DEBUG, INFO, WARN, ERROR. The level DEBUG **MUST NOT** be used when handling live patient data.
+| LAB_RESULTS_LOGGING_FORMAT         | (*)                       | Defines how to format log events on stdout
+
+(*) The adaptor uses logback (http://logback.qos.ch/). The built-in [logback.xml](src/main/resources/logback.xml) 
+defines the default log format. This value can be overridden using the `LAB_RESULTS_LOGGING_FORMAT` environment variable.
+You can provide an external `logback.xml` file using the `-Dlogback.configurationFile` JVM parameter.
 
 ### Message Queue Configuration
 
@@ -71,10 +76,10 @@ Configure the MESH API connection using the following environment variables:
 | LAB_RESULTS_MESH_ENDPOINT_CERT                 |         | The content of the PEM-formatted client endpoint certificate
 | LAB_RESULTS_MESH_ENDPOINT_PRIVATE_KEY          |         | The content of the PEM-formatted client private key
 | LAB_RESULTS_MESH_SUB_CA                        |         | The content of the PEM-formatted certificate of the issuing Sub CA. Empty if LAB_RESULTS_MESH_CERT_VALIDATION is false
-| LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS |         | (1) The mapping between each recipient HA Trading Partner Code (HA Link Code) to its corresponding MESH Mailbox ID mapping. There is one mapping per line and an equals sign (=) separates the code and mailbox id. For example: "COD1=A6840385\nHA01=A0047392"
+| LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS |         | (*) The mapping between each recipient HA Trading Partner Code (HA Link Code) to its corresponding MESH Mailbox ID mapping. There is one mapping per line and an equals sign (=) separates the code and mailbox id. For example: "COD1=A6840385\nHA01=A0047392"
 | LAB_RESULTS_SCHEDULER_ENABLED                  | true    | Enables/disables automatic MESH message downloads
 
-(1) The three-character "Destination HA Cipher" required for each outbound API request uniquely identifies that patient's 
+(*) The three-character "Destination HA Cipher" required for each outbound API request uniquely identifies that patient's 
 managing organisation. Each managing organisation also has a four-character "HA Trading Partner Code" (HA Link Code) uniquely
 identifying that patient's managing organisation for the purpose of EDIFACT messaging. Finally, each "HA Trading Partner Code"
 is assigned a MESH Mailbox ID: the mailbox to which the EDIFACT files for a given recipient are sent. The mappings between
