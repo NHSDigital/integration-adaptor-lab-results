@@ -25,7 +25,6 @@ labresults:
     options:
     autoIndexCreation: false
     ttl: P30D
-    cosmosDbEnabled: false
   mesh:
     mailboxId: fake_mailboxId #defaults below are used by fake-mesh
     mailboxPassword: password

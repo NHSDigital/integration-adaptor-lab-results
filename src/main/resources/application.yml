@@ -33,7 +33,7 @@ labresults:
     maxRedeliveries: ${LAB_RESULTS_AMQP_MAX_REDELIVERIES:3}
   mongodb:
     uri: ${LAB_RESULTS_MONGO_URI:mongodb://localhost:27017}
-    database: ${LAB_RESULTS_MONGO_DATABASE_NAME:lab-results}
+    database: ${LAB_RESULTS_MONGO_DATABASE_NAME:labresults}
     host: ${LAB_RESULTS_MONGO_HOST:}
     port: ${LAB_RESULTS_MONGO_PORT:}
     username: ${LAB_RESULTS_MONGO_USERNAME:}
@@ -41,7 +41,6 @@ labresults:
     options: ${LAB_RESULTS_MONGO_OPTIONS:}
     autoIndexCreation: ${LAB_RESULTS_MONGO_AUTO_INDEX_CREATION:true}
     ttl: ${LAB_RESULTS_MONGO_TTL:P30D}
-    cosmosDbEnabled: ${LAB_RESULTS_COSMOS_DB_ENABLED:false}
   mesh:
     mailboxId: ${LAB_RESULTS_MESH_MAILBOX_ID:gp_mailbox}
     mailboxPassword: ${LAB_RESULTS_MESH_MAILBOX_PASSWORD:password}

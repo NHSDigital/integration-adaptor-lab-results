@@ -36,7 +36,6 @@ labresults:
     options:
     autoIndexCreation: ${LAB_RESULTS_MONGO_AUTO_INDEX_CREATION:true}
     ttl: PT87600H # long duration (10 years) because the timestamps used in tests are hardcoded. prevent deletion of data during tests
-    cosmosDbEnabled: false
   mesh:
     mailboxId: lab_results_mailbox #defaults below are used by fake-mesh
     mailboxPassword: password

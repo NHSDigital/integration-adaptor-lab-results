@@ -12,7 +12,7 @@ Variables without a default value and not marked optional are *MUST* be defined 
 
 | Environment Variable               | Default                   | Description 
 | -----------------------------------|---------------------------|-------------
-| LAB_RESULTS_OUTBOUND_SERVER_PORT   | 80                        | The port on which the outbound FHIR REST API and management endpoints will run
+| LAB_RESULTS_OUTBOUND_SERVER_PORT   | 80                        | The port on which the adaptor and management endpoints will run
 | LAB_RESULTS_LOGGING_LEVEL          | INFO                      | Application logging level. One of: DEBUG, INFO, WARN, ERROR. The level DEBUG **MUST NOT** be used when handling live patient data.
 | LAB_RESULTS_LOGGING_FORMAT         | (*)                       | Defines how to format log events on stdout
 
@@ -32,7 +32,7 @@ You can provide an external `logback.xml` file using the `-Dlogback.configuratio
 | LAB_RESULTS_AMQP_PASSWORD            |                           | (Optional) password for the AMQP server
 | LAB_RESULTS_AMQP_MAX_REDELIVERIES    | 3                         | The number of times an message will be retried to be delivered to consumer. After exhausting all retires, it will be put on DLQ.<queue_name> dead letter queue
 
-(*) Active/Standby: The first broker in the list always used unless there is an error, in which case the other URLs will be used. At least one URL is required.
+(*) Active/Standby: The first broker in the list is always used unless there is an error, in which case the other URLs will be used. At least one URL is required.
 
 ### Mongodb Configuration Options
 
@@ -44,20 +44,19 @@ Option 1: If `LAB_RESULTS_MONGO_HOST` is defined then the adaptor forms a connec
 
 | Environment Variable             | Default     | Description 
 | ---------------------------------|-------------|-------------
-| LAB_RESULTS_MONGO_DATABASE_NAME  | lab-results | Database name for Mongo
+| LAB_RESULTS_MONGO_DATABASE_NAME  | labresults  | Database name for Mongo
 | LAB_RESULTS_MONGO_HOST           |             | Mongodb host
 | LAB_RESULTS_MONGO_PORT           |             | Mongodb port
 | LAB_RESULTS_MONGO_USERNAME       |             | (Optional) Mongodb username. If set then password must also be set.
 | LAB_RESULTS_MONGO_PASSWORD       |             | (Optional) Mongodb password
 | LAB_RESULTS_MONGO_OPTIONS        |             | (Optional) Mongodb URL encoded parameters for the connection string without a leading ?
-| LAB_RESULTS_MONGO_TTL            | P30D        | (Optional) Time-to-live value for inbound and outbound state collection documents as an [ISO 8601 Duration](https://en.wikipedia.org/wiki/ISO_8601#Durations)
-| LAB_RESULTS_COSMOS_DB_ENABLED    | false       | (Optional) If true the adaptor will enable features and workarounds to support Azure Cosmos DB
+| LAB_RESULTS_MONGO_TTL            | P30D        | (Optional) Time-to-live value
 
 Option 2: If `LAB_RESULTS_MONGO_HOST` is undefined then the adaptor uses the connection string provided:
 
 | Environment Variable             | Default                   | Description 
 | ---------------------------------|---------------------------|-------------
-| LAB_RESULTS_MONGO_DATABASE_NAME  | lab-results               | Database name for Mongo
+| LAB_RESULTS_MONGO_DATABASE_NAME  | labresults               | Database name for Mongo
 | LAB_RESULTS_MONGO_URI            | mongodb://localhost:27017 | Mongodb connection string
 
 ## MESH API
@@ -226,9 +225,9 @@ To view data in MongoDB:
 * Download [Robo 3T](https://robomongo.org/)
 * Open Robo 3T -> Create new connection with details as below:
   * Type: Direct Connection
-  * Name: lab-results
+  * Name: labresults
   * Address: localhost : 27017
-* View adaptor collections by navigating to lab-results -> collections -> (select any collection)
+* View adaptor collections by navigating to labresults -> collections -> (select any collection)
 
 #### ActiveMQ
 

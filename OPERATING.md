@@ -1,6 +1,6 @@
 # Operating
 
-This document contains requirements and tips for operation the adaptor in a production environment.
+This document contains requirements and tips for operating the adaptor in a production environment.
 
 # AMQP Message Broker Requirements
 
@@ -34,10 +34,6 @@ The value of `LAB_RESULTS_MONGO_URI` should be set to this value. Since the URI 
 managing the entire value as a secured secret.
 
 The user must have the `readWrite` role or a custom role with specific privileges.
-
-**Azure Cosmos DB Tips**
-
-Follow Azure documentation on Cosmos DB's API for MongoDB
 
 ## Database Collections
 

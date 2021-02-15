@@ -37,8 +37,6 @@ public class LabResultsMongoClientConfiguration extends AbstractMongoClientConfi
 
     private Duration ttl;
 
-    private boolean cosmosDbEnabled;
-
     @Override
     public String getDatabaseName() {
         return this.database;
