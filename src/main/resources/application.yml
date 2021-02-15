@@ -6,7 +6,7 @@ logging:
     uk.nhs.digital.nhsconnect.lab.results: ${LAB_RESULTS_LOGGING_LEVEL:INFO}
 
 management:
-  endpoints:
+  endpoints:MeshInboundQueueService
     web:
       base-path: /
       path-mapping.health: healthcheck

@@ -42,7 +42,8 @@ public class MeshInboundQueueService {
 
     @PostConstruct
     public void postConstruct() {
-        LOGGER.info("Created {} object consuming messages from {} queue", MeshInboundQueueService.class.getSimpleName(), meshInboundQueueName);
+        LOGGER.info("Created {} object consuming messages from {} queue",
+            MeshInboundQueueService.class.getSimpleName(), meshInboundQueueName);
     }
 
     @JmsListener(destination = "${labresults.amqp.meshInboundQueueName}")
