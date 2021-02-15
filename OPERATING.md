@@ -125,7 +125,7 @@ Messages published to the adaptor's three AMQP message queues include a Correlat
 # Linking a GP Practice to an Lab Results system
 
 The Lab Results Adaptor and Lab Results system communications synchronise through a sequence number mechanism. Linking a GP 
-Practice to an Lab Results system which have never previously exchanged messages requires no additional setup for 
+Practice to a Lab Results system which have never previously exchanged messages requires no additional setup for 
 synchronisation. All the sequences begin at 1, and the adaptor will start them automatically.
 
 In the case that a new market entrant GP System takes over from an incumbent system the new system must pick up the 
