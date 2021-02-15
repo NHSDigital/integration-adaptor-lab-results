@@ -30,7 +30,7 @@ You can provide an external `logback.xml` file using the `-Dlogback.configuratio
 | LAB_RESULTS_AMQP_BROKERS             | amqp://localhost:5672     | A comma-separated list of URLs to AMQP brokers (*)
 | LAB_RESULTS_AMQP_USERNAME            |                           | (Optional) username for the AMQP server
 | LAB_RESULTS_AMQP_PASSWORD            |                           | (Optional) password for the AMQP server
-| LAB_RESULTS_AMQP_MAX_REDELIVERIES    | 3                         | The number of times an message will be retried to be delivered to consumer. After exhausting all retires, it will be put on DLQ.<queue_name> dead letter queue
+| LAB_RESULTS_AMQP_MAX_REDELIVERIES    | 3                         | The number of times a message will be retried to be delivered to consumer. After exhausting all retries, it will be put on DLQ.<queue_name> dead-letter queue
 
 (*) Active/Standby: The first broker in the list is always used unless there is an error, in which case the other URLs will be used. At least one URL is required.
 
@@ -138,6 +138,11 @@ The adaptor configuration has sensible defaults for local development. Some over
 * Open the cloned `integration-adaptor-lab-results` folder
 * Click pop-up that appears: (import gradle daemon)
 * Verify the project structure
+
+
+    Project structure -> SDKs -> add new SDK -> select adoptopenjdk-11.jdk/Contents/Home  (or alternative location)
+                      -> Project SDK -> Java 11 (11.0.9)
+                      -> Module SDK -> Java 11 (11.0.9)
 
 ### Start Dependencies
 

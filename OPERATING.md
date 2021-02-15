@@ -4,15 +4,15 @@ This document contains requirements and tips for operating the adaptor in a prod
 
 # AMQP Message Broker Requirements
 
-* The broker must be configured with a limited number of retries and deadletter queues
-* It is the responsibility of the GP supplier to configure adequate monitoring against the deadletter queues that allows ALL undeliverable messages to be investigated fully.
+* The broker must be configured with a limited number of retries and dead-letter queues
+* It is the responsibility of the GP supplier to configure adequate monitoring against the dead-letter queues that allows ALL undeliverable messages to be investigated fully.
 * The broker must use persistent queues to avoid loss of data
 * The GP System must persist the relevant message data before acknowledging the message from the queue to avoid loss of data
 
 **Using AmazonMQ**
 
 * A persistent broker (not in-memory) must be used to avoid data loss.
-* A configuration profile that includes settings for [retry and deadlettering](https://activemq.apache.org/message-redelivery-and-dlq-handling.html) must be applied.
+* A configuration profile that includes settings for [retry and dead-lettering](https://activemq.apache.org/message-redelivery-and-dlq-handling.html) must be applied.
 * AmazonMQ uses the scheme `amqp+ssl://` but this **MUST** be changed the to `amqps://` when configuring the adaptor.
 
 **Using Azure Service Bus**
@@ -29,7 +29,7 @@ This document contains requirements and tips for operating the adaptor in a prod
 **Amazon Document DB Tips**
 
 In the "Connectivity & security" tab of the cluster a URI is provided to "Connect to this cluster with an application".
-Replace <username>:<insertYourPasswordHere> with the actual mongo username and password to be used by the application.
+Replace \<username\>:\<insertYourPasswordHere\> with the actual mongo username and password to be used by the application.
 The value of `LAB_RESULTS_MONGO_URI` should be set to this value. Since the URI string contains credentials we recommend 
 managing the entire value as a secured secret.
 
@@ -38,7 +38,7 @@ The user must have the `readWrite` role or a custom role with specific privilege
 ## Database Collections
 
 The default database name is `labresults` but this can be changed through an environment variable. Each deployment of the
-adaptor MUST have its own database, but multiple database could be hosted by a single cluster. The collection names
+adaptor MUST have its own database, but multiple databases could be hosted by a single cluster. The collection names
 used by the adaptor cannot be changed.
 
 ### Outbound Sequence Ids
@@ -50,7 +50,7 @@ Collection Name: `outboundSequenceId`
 
 Properties:
 
-* `_id` the key for the sequence in the format <type>-<sender>-<recipient> where:
+* `_id` the key for the sequence in the format \<type\>-\<sender\>-\<recipient\> where:
   * \<type\> is one of SIS (send interchange sequence), SMS (send message sequence)
   * \<sender\> is the GP Trading Partner Code
   * \<recipient\> is the HA Trading Partner Code
@@ -115,14 +115,14 @@ The adaptor uses a correlation id to make tracing individual requests easier. Al
 request headers or randomly generated.
 
 For inbound messages the adaptor generates a correlation id for every message (interchange) downloaded from MESH. 
-An interchange may contain multiple messages, and the adaptor uses same correlation id for every messages 
+An interchange may contain multiple messages, and the adaptor uses the same correlation id for all messages 
 within an interchange.
 
 Some log lines are uncorrelated to a specific message. These logs have an empty `<Correlation Id>` value.
 
 Messages published to the adaptor's three AMQP message queues include a CorrelationId header.
 
-# Linking a GP Practice to an Lab Results system
+# Linking a GP Practice to a Lab Results system
 
 The Lab Results Adaptor and Lab Results system communications synchronise through a sequence number mechanism. Linking a GP 
 Practice to a Lab Results system which have never previously exchanged messages requires no additional setup for 
