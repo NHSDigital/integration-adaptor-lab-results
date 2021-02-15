@@ -41,6 +41,29 @@ The default database name is `labresults` but this can be changed through an env
 adaptor MUST have its own database, but multiple database could be hosted by a single cluster. The collection names
 used by the adaptor cannot be changed.
 
+### Outbound Sequence Ids
+
+Tracks the sequence numbers used to "link" a GP and to HA using EDIFACT messaging. See 
+"Linking a GP Practice to a Lab Results system" section below for more information.
+
+Collection Name: `outboundSequenceId`
+
+Properties:
+
+* `_id` the key for the sequence in the format <type>-<sender>-<recipient> where:
+  * \<type\> is one of SIS (send interchange sequence), SMS (send message sequence)
+  * \<sender\> is the GP Trading Partner Code
+  * \<recipient\> is the HA Trading Partner Code
+* `sequenceNumber` is the most recently generated number for the sequence
+
+Example:
+
+    {
+        "_id" : "SIS-TES5-XX11",
+        "sequenceNumber" : 2
+    }
+
+
 ### Scheduler Timestamp
 
 A collection used to coordinate running the MESH polling cycle across multiple instances of the adaptor. README 
@@ -98,3 +121,31 @@ within an interchange.
 Some log lines are uncorrelated to a specific message. These logs have an empty `<Correlation Id>` value.
 
 Messages published to the adaptor's three AMQP message queues include a CorrelationId header.
+
+# Linking a GP Practice to an Lab Results system
+
+The Lab Results Adaptor and Lab Results system communications synchronise through a sequence number mechanism. Linking a GP 
+Practice to an Lab Results system which have never previously exchanged messages requires no additional setup for 
+synchronisation. All the sequences begin at 1, and the adaptor will start them automatically.
+
+In the case that a new market entrant GP System takes over from an incumbent system the new system must pick up the 
+sequences where the incumbent left off. For every GP/Lab Results link established, the incumbent supplier or Lab Results operator 
+must advise the following:
+
+* Most recently used Send Interchange Sequence (SIS) number, GP -> HA
+* Most recently used Send Message Sequence (SMS) number, GP -> HA
+
+For each GP/Lab Results pair the following documents must be inserted into the `outboundSequenceId` collection of the 
+adaptor's database. The angle-bracketed values must be replaced (including the brackets) with the relevant data items.
+The `_id` property should have the type `String`, and the `sequenceNumber` property should have the type `int32`. Any 
+existing documents with the same `_id` must be replaced.
+
+    {
+        _id: 'SIS-<GP Link (Trading Partner) Code>-<HA Link (Trading Partner) Code>',
+        sequenceNumber: <Send Interchange Sequence (SIS) number>
+    }
+    
+    {
+        _id: 'SMS-<GP Link (Trading Partner) Code>-<HA Link (Trading Partner) Code>',
+        sequenceNumber: <Send Message Sequence (SMS) number>
+    }
