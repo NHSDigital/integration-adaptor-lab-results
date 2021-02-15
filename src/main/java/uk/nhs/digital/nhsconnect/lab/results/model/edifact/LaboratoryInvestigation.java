@@ -30,7 +30,8 @@ public class LaboratoryInvestigation extends Segment {
 
     public static LaboratoryInvestigation fromString(String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {
-            throw new IllegalArgumentException("Can't create " + LaboratoryInvestigation.class.getSimpleName() + " from " + edifactString);
+            throw new IllegalArgumentException("Can't create " + LaboratoryInvestigation.class.getSimpleName()
+                + " from " + edifactString);
         }
 
         String[] keySplit = Split.byPlus(edifactString);
@@ -50,12 +51,12 @@ public class LaboratoryInvestigation extends Segment {
         String fiveByteReadCode = !investigationCode.isBlank() ? FIVE_BYTE_READ_CODE : "";
 
         return QUALIFIER
-                + PLUS_SEPARATOR
-                + investigationCode
-                + COLON_SEPARATOR
-                + fiveByteReadCode
-                + COLON_SEPARATOR + COLON_SEPARATOR
-                + investigationDescription;
+            + PLUS_SEPARATOR
+            + investigationCode
+            + COLON_SEPARATOR
+            + fiveByteReadCode
+            + COLON_SEPARATOR + COLON_SEPARATOR
+            + investigationDescription;
     }
 
     @Override

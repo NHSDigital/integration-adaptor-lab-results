@@ -37,7 +37,8 @@ class MeshMailBoxSchedulerTest {
 
     @Test
     void when_collectionIsEmpty_expect_singleDocumentIsCreatedAndTheJobIsNotExecuted() {
-        when(schedulerTimestampRepository.updateTimestamp(anyString(), isA(Instant.class), anyLong())).thenReturn(false);
+        when(schedulerTimestampRepository.updateTimestamp(anyString(), isA(Instant.class), anyLong()))
+                .thenReturn(false);
         when(timestampService.getCurrentTimestamp()).thenReturn(Instant.now());
 
         boolean hasTimePassed = meshMailBoxScheduler.hasTimePassed(MAX_WAIT);
@@ -57,7 +58,8 @@ class MeshMailBoxSchedulerTest {
 
     @Test
     void when_documentExistsAndTimestampIsAfterProvidedTime_expect_documentIsNotUpdateAndTheJobIsNotExecuted() {
-        when(schedulerTimestampRepository.updateTimestamp(anyString(), isA(Instant.class), anyLong())).thenReturn(false);
+        when(schedulerTimestampRepository.updateTimestamp(anyString(), isA(Instant.class), anyLong()))
+                .thenReturn(false);
         when(timestampService.getCurrentTimestamp()).thenReturn(Instant.now());
 
         boolean hasTimePassed = meshMailBoxScheduler.hasTimePassed(MAX_WAIT);

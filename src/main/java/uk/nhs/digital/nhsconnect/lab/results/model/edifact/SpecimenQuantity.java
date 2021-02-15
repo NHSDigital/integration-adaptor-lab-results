@@ -41,7 +41,12 @@ public class SpecimenQuantity extends Segment {
 
     @Override
     public String getValue() {
-        return QUALIFIER + COLON_SEPARATOR + quantity + PLUS_SEPARATOR + COLON_SEPARATOR.repeat(QUANTITY_INDEX) + quantityUnitOfMeasure;
+        return QUALIFIER
+            + COLON_SEPARATOR
+            + quantity
+            + PLUS_SEPARATOR
+            + COLON_SEPARATOR.repeat(QUANTITY_INDEX)
+            + quantityUnitOfMeasure;
     }
 
     @Override
@@ -52,7 +57,7 @@ public class SpecimenQuantity extends Segment {
     @Override
     public void preValidate() throws EdifactValidationException {
         if (quantityUnitOfMeasure.isBlank()) {
-            throw new EdifactValidationException(getKey() + ": Unit of measure is required");
+            throw new EdifactValidationException(KEY + ": Unit of measure is required");
         }
     }
 }

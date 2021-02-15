@@ -61,12 +61,12 @@ class MeshServiceTest {
         meshMessage2.setMeshMessageId(MESSAGE_ID2);
 
         meshService = new MeshService(meshClient,
-            meshInboundQueueService,
-            meshMailBoxScheduler,
-            correlationIdService,
-            scanDelayInSeconds,
-            scanIntervalInMilliseconds,
-            pollingCycleMaximumDurationInSeconds);
+                meshInboundQueueService,
+                meshMailBoxScheduler,
+                correlationIdService,
+                scanDelayInSeconds,
+                scanIntervalInMilliseconds,
+                pollingCycleMaximumDurationInSeconds);
     }
 
     @Test
@@ -132,7 +132,7 @@ class MeshServiceTest {
     }
 
     @Test
-    void when_intervalHasPassedAndRequestToDownloadMeshMessageFails_withConnectionException_expect_doNotPublishAndAcknowledgeMessage() {
+    void when_intervalPassedAndMeshDownloadFailsWithConnectionException_expect_doNotPublishOrAcknowledgeMessage() {
         when(meshMailBoxScheduler.hasTimePassed(scanDelayInSeconds)).thenReturn(true);
         when(meshMailBoxScheduler.isEnabled()).thenReturn(true);
         when(meshClient.getInboxMessageIds()).thenReturn(List.of(ERROR_MESSAGE_ID));
@@ -150,7 +150,7 @@ class MeshServiceTest {
     }
 
     @Test
-    void when_intervalHasPassedAndRequestToDownloadMeshMessageFail_withWorkflowUnknownException_expect_doNotPublishAndAcknowledgeMessage() {
+    void when_intervalPassedAndMeshDownloadFailsWithWorkflowUnknownException_expect_doNotPublishOrAcknowledgeMessage() {
         when(meshMailBoxScheduler.hasTimePassed(scanDelayInSeconds)).thenReturn(true);
         when(meshMailBoxScheduler.isEnabled()).thenReturn(true);
         when(meshClient.getInboxMessageIds()).thenReturn(List.of(ERROR_MESSAGE_ID));
@@ -263,10 +263,10 @@ class MeshServiceTest {
         when(meshMailBoxScheduler.hasTimePassed(scanDelayInSeconds)).thenReturn(true);
         when(meshMailBoxScheduler.isEnabled()).thenReturn(true);
         doThrow(new MeshApiConnectionException("Auth fail", HttpStatus.OK, HttpStatus.INTERNAL_SERVER_ERROR))
-            .when(meshClient).authenticate();
+                .when(meshClient).authenticate();
 
         Assertions.assertThatThrownBy(() -> meshService.scanMeshInboxForMessages())
-            .isExactlyInstanceOf(MeshApiConnectionException.class);
+                .isExactlyInstanceOf(MeshApiConnectionException.class);
 
         verify(meshClient).authenticate();
         verifyNoMoreInteractions(meshClient);

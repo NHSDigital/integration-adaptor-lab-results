@@ -7,7 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshConfig;
-import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -21,9 +20,7 @@ class MeshAuthorizationTokenTest {
     private static final String AUTHORIZATION_HASH = "474c0634fd2267e41252bddfb40031d85e433599a8015c74546e95b05c2df569";
     private static final String MAILBOX_ID = "mailbox_id";
 
-    @SuppressWarnings("checkstyle:magicnumber")
-    private static final Instant FIXED_TIME_LOCAL = ZonedDateTime.of(1991, 11, 6, 12, 30, 0, 0, TimestampService.UK_ZONE)
-            .toInstant();
+    private static final Instant FIXED_TIME_LOCAL = ZonedDateTime.parse("1991-11-06T12:30:00.000Z").toInstant();
     private static final String UUID = "73eefd69-811f-44d0-81f8-a54ff352a991";
 
     @Mock
@@ -40,8 +37,8 @@ class MeshAuthorizationTokenTest {
     @Test
     @SuppressWarnings("checkstyle:magicnumber")
     void testTokenUsesCorrectFormat() {
-        final MeshAuthorizationToken meshToken = new MeshAuthorizationToken(meshConfig, FIXED_TIME_LOCAL, new Nonce(UUID),
-            authorizationHashGenerator);
+        final MeshAuthorizationToken meshToken = new MeshAuthorizationToken(
+            meshConfig, FIXED_TIME_LOCAL, new Nonce(UUID), authorizationHashGenerator);
         SoftAssertions.assertSoftly(softly -> {
             String[] values = meshToken.getValue().split(":");
             softly.assertThat(values[0]).isEqualTo("NHSMESH " + MAILBOX_ID);
@@ -50,8 +47,8 @@ class MeshAuthorizationTokenTest {
             softly.assertThat(values[3]).isEqualTo(new TokenTimestamp(FIXED_TIME_LOCAL).getValue());
             softly.assertThat(values[4]).isEqualTo(AUTHORIZATION_HASH);
             softly.assertThat(meshToken.getValue())
-                    .isEqualTo("NHSMESH mailbox_id:73eefd69-811f-44d0-81f8-a54ff352a991:1:199111061230:474c0634fd2267e41252bddfb40031d85e43"
-                        + "3599a8015c74546e95b05c2df569");
+                .isEqualTo("NHSMESH mailbox_id:73eefd69-811f-44d0-81f8-a54ff352a991:1:"
+                    + "199111061230:474c0634fd2267e41252bddfb40031d85e433599a8015c74546e95b05c2df569");
         });
     }
 

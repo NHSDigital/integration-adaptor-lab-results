@@ -40,16 +40,19 @@ public class MessageHeader extends Segment {
             throw new EdifactValidationException(getKey() + ": Attribute sequenceNumber is required");
         }
         if (sequenceNumber < 1 || sequenceNumber > MAX_MESSAGE_SEQUENCE) {
-            throw new EdifactValidationException(getKey() + ": Attribute sequenceNumber must be between 1 and " + MAX_MESSAGE_SEQUENCE);
+            throw new EdifactValidationException(getKey() + ": Attribute sequenceNumber must be between 1 and "
+                + MAX_MESSAGE_SEQUENCE);
         }
     }
 
     @Override
-    public void preValidate() { }
+    public void preValidate() {
+    }
 
     public static MessageHeader fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY)) {
-            throw new IllegalArgumentException("Can't create " + MessageHeader.class.getSimpleName() + " from " + edifactString);
+            throw new IllegalArgumentException("Can't create " + MessageHeader.class.getSimpleName()
+                + " from " + edifactString);
         }
         String[] split = Split.byPlus(edifactString);
         return new MessageHeader(Long.valueOf(split[1]));

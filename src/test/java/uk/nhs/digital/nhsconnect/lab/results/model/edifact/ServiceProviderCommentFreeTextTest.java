@@ -19,7 +19,8 @@ class ServiceProviderCommentFreeTextTest {
     @Test
     void testFromString() {
         var edifact = "FTX+SPC+++red blood cell seen, Note low platelets'";
-        var parsedFreeText = ServiceProviderCommentFreeText.fromString("FTX+SPC+++red blood cell seen, Note low platelets");
+        var parsedFreeText = ServiceProviderCommentFreeText.fromString(
+            "FTX+SPC+++red blood cell seen, Note low platelets");
         assertThat(parsedFreeText.getServiceProviderComment()).isEqualTo("red blood cell seen, Note low platelets");
         assertThat(parsedFreeText.toEdifact()).isEqualTo(edifact);
     }

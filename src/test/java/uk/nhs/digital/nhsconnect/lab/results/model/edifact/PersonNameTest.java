@@ -10,13 +10,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PersonNameTest {
 
-    private static final String IDENTIFICATION_AND_NAMES = "PNA+PAT+RAT56:OPI+++SU:KENNEDY+FO:SARAH+TI:MISS+MI:ANGELA";
-    private static final String IDENTIFICATION_AND_NAMES_VALUE = "PAT+RAT56:OPI+++SU:KENNEDY+FO:SARAH+TI:MISS+MI:ANGELA";
+    private static final String ID_AND_NAMES = "PNA+PAT+RAT56:OPI+++SU:KENNEDY+FO:SARAH+TI:MISS+MI:ANGELA";
+    private static final String ID_AND_NAMES_VALUE = "PAT+RAT56:OPI+++SU:KENNEDY+FO:SARAH+TI:MISS+MI:ANGELA";
     private static final String NAMES_ONLY = "PNA+PAT++++SU:KENNEDY+FO:SARAH+TI:MISS+MI:ANGELA";
     private static final String NAMES_ONLY_VALUE = "PAT++++SU:KENNEDY+FO:SARAH+TI:MISS+MI:ANGELA";
-    private static final String IDENTIFICATION_ONLY = "PNA+PAT+RAT56:OPI";
-    private static final String IDENTIFICATION_ONLY_VALUE = "PAT+RAT56:OPI";
-    private static final String BLANK_IDENTIFICATION_VALUE = "PNA+PAT+   +++SU:KENNEDY+FO:SARAH+TI:MISS+MI:ANGELA";
+    private static final String ID_ONLY = "PNA+PAT+RAT56:OPI";
+    private static final String ID_ONLY_VALUE = "PAT+RAT56:OPI";
+    private static final String BLANK_ID_VALUE = "PNA+PAT+   +++SU:KENNEDY+FO:SARAH+TI:MISS+MI:ANGELA";
 
     @Test
     void testToEdifactReturnsForValidPersonName() {
@@ -62,8 +62,9 @@ class PersonNameTest {
     @Test
     void testFromString() {
         assertAll("fromString",
-            () -> assertEquals(IDENTIFICATION_ONLY_VALUE, PersonName.fromString(IDENTIFICATION_ONLY).getValue()),
-            () -> assertEquals(IDENTIFICATION_AND_NAMES_VALUE, PersonName.fromString(IDENTIFICATION_AND_NAMES).getValue()),
+            () -> assertEquals(ID_ONLY_VALUE, PersonName.fromString(ID_ONLY).getValue()),
+            () -> assertEquals(ID_AND_NAMES_VALUE,
+                PersonName.fromString(ID_AND_NAMES).getValue()),
             () -> assertEquals(NAMES_ONLY_VALUE, PersonName.fromString(NAMES_ONLY).getValue()));
     }
 
@@ -84,7 +85,7 @@ class PersonNameTest {
 
     @Test
     void testFromStringWithBlankNhsNumberReturnsNull() {
-        final String actual = PersonName.fromString(BLANK_IDENTIFICATION_VALUE).getNhsNumber();
+        final String actual = PersonName.fromString(BLANK_ID_VALUE).getNhsNumber();
         assertNull(actual);
     }
 }

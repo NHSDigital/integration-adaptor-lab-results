@@ -23,8 +23,8 @@ public class SpecimenReferenceByServiceProvider extends Segment {
 
     public static SpecimenReferenceByServiceProvider fromString(String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {
-            throw new IllegalArgumentException(
-                "Can't create " + SpecimenReferenceByServiceProvider.class.getSimpleName() + " from " + edifactString);
+            throw new IllegalArgumentException("Can't create "
+                + SpecimenReferenceByServiceProvider.class.getSimpleName() + " from " + edifactString);
         }
 
         String[] split = Split.byColon(
@@ -52,7 +52,8 @@ public class SpecimenReferenceByServiceProvider extends Segment {
     @Override
     public void preValidate() throws EdifactValidationException {
         if (referenceNumber.isBlank()) {
-            throw new EdifactValidationException(getKey() + ": Specimen Reference number by service provider is blank or missing");
+            throw new EdifactValidationException(KEY
+                + ": Specimen Reference number by service provider is blank or missing");
         }
     }
 }

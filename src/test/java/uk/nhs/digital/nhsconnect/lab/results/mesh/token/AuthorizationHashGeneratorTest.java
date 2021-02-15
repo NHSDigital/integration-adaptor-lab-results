@@ -6,7 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshConfig;
-import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -24,9 +23,7 @@ class AuthorizationHashGeneratorTest {
     private static final String MAILBOX_PASSWORD = "mailbox_password";
     private static final String SHARED_KEY = "shared_key";
 
-    @SuppressWarnings("checkstyle:magicnumber")
-    private static final Instant FIXED_TIME_LOCAL = ZonedDateTime.of(1991, 11, 6, 12, 30, 0, 0, TimestampService.UK_ZONE)
-            .toInstant();
+    private static final Instant FIXED_TIME_LOCAL = ZonedDateTime.parse("1991-11-06T12:30:00.000Z").toInstant();
     private static final String UUID = "73eefd69-811f-44d0-81f8-a54ff352a991";
 
     @BeforeEach

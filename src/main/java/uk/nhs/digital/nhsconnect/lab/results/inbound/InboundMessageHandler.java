@@ -63,9 +63,9 @@ public class InboundMessageHandler {
     private void logInterchangeReceived(final Interchange interchange) {
         if (LOGGER.isInfoEnabled()) {
             final InterchangeHeader interchangeHeader = interchange.getInterchangeHeader();
-            LOGGER.info("Translating EDIFACT interchange from Sender={} to Recipient={} with RIS={} containing {} messages",
-                interchangeHeader.getSender(), interchangeHeader.getRecipient(), interchangeHeader.getSequenceNumber(),
-                interchange.getMessages().size());
+            LOGGER.info("Translating EDIFACT interchange from Sender={} to Recipient={} with RIS={} "
+                    + "containing {} messages", interchangeHeader.getSender(), interchangeHeader.getRecipient(),
+                interchangeHeader.getSequenceNumber(), interchange.getMessages().size());
         }
     }
 
@@ -96,7 +96,8 @@ public class InboundMessageHandler {
         if (LOGGER.isInfoEnabled()) {
             final InterchangeHeader interchangeHeader = interchange.getInterchangeHeader();
             LOGGER.info("Published FHIR for the interchange from Sender={} to Recipient={} with RIS={}",
-                interchangeHeader.getSender(), interchangeHeader.getRecipient(), interchangeHeader.getSequenceNumber());
+                interchangeHeader.getSender(), interchangeHeader.getRecipient(),
+                interchangeHeader.getSequenceNumber());
         }
     }
 

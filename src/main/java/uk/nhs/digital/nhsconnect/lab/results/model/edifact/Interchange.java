@@ -8,10 +8,12 @@ import java.util.List;
 public class Interchange extends Section {
 
     @Getter(lazy = true)
-    private final InterchangeHeader interchangeHeader = InterchangeHeader.fromString(extractSegment(InterchangeHeader.KEY));
+    private final InterchangeHeader interchangeHeader =
+        InterchangeHeader.fromString(extractSegment(InterchangeHeader.KEY));
 
     @Getter(lazy = true)
-    private final InterchangeTrailer interchangeTrailer = InterchangeTrailer.fromString(extractSegment(InterchangeTrailer.KEY));
+    private final InterchangeTrailer interchangeTrailer =
+        InterchangeTrailer.fromString(extractSegment(InterchangeTrailer.KEY));
 
     @Getter
     @Setter

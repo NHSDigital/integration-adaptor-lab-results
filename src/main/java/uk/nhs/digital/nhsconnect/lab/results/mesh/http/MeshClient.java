@@ -47,8 +47,8 @@ public class MeshClient {
                 logResponse(loggingName, response);
                 if (response.getStatusLine().getStatusCode() != HttpStatus.OK.value()) {
                     throw new MeshApiConnectionException("Couldn't authenticate to MESH.",
-                            HttpStatus.OK,
-                            HttpStatus.valueOf(response.getStatusLine().getStatusCode()));
+                        HttpStatus.OK,
+                        HttpStatus.valueOf(response.getStatusLine().getStatusCode()));
                 }
             }
         }
@@ -69,15 +69,16 @@ public class MeshClient {
             try (CloseableHttpResponse response = client.execute(request)) {
                 logResponse(loggingName, response);
                 if (response.getStatusLine().getStatusCode() != HttpStatus.ACCEPTED.value()) {
-                    final String content = EntityUtils.toString(response.getEntity()); // safe to get content in case of error
+                    // safe to get content in case of error
+                    final String content = EntityUtils.toString(response.getEntity());
                     throw new MeshApiConnectionException("Couldn't send MESH message.",
-                            HttpStatus.ACCEPTED,
-                            HttpStatus.valueOf(response.getStatusLine().getStatusCode()),
-                            content);
+                        HttpStatus.ACCEPTED,
+                        HttpStatus.valueOf(response.getStatusLine().getStatusCode()),
+                        content);
                 }
                 final MeshMessageId meshMessageId = parseInto(MeshMessageId.class, response, loggingName);
                 LOGGER.info("Successfully sent message OperationId={} to MeshMailboxId={} in MeshMessageId={}",
-                        outboundMeshMessage.getOperationId(), recipientMailbox, meshMessageId.getMessageID());
+                    outboundMeshMessage.getOperationId(), recipientMailbox, meshMessageId.getMessageID());
                 return meshMessageId;
             }
         }
@@ -92,11 +93,12 @@ public class MeshClient {
             try (CloseableHttpResponse response = client.execute(request)) {
                 logResponse(loggingName, response);
                 if (response.getStatusLine().getStatusCode() != HttpStatus.OK.value()) {
-                    final String content = EntityUtils.toString(response.getEntity()); // safe to get content in case of error
+                    // safe to get content in case of error
+                    final String content = EntityUtils.toString(response.getEntity());
                     throw new MeshApiConnectionException("Couldn't download MeshMessageId=" + messageId,
-                            HttpStatus.OK,
-                            HttpStatus.valueOf(response.getStatusLine().getStatusCode()),
-                            content);
+                        HttpStatus.OK,
+                        HttpStatus.valueOf(response.getStatusLine().getStatusCode()),
+                        content);
                 }
                 final var meshMessage = new MeshMessage();
                 /* Get the workflowId before extracting the message body. An exception is thrown if the workflowId is
@@ -121,8 +123,8 @@ public class MeshClient {
                 if (response.getStatusLine().getStatusCode() != HttpStatus.OK.value()) {
                     logResponse(loggingName, response);
                     throw new MeshApiConnectionException("Couldn't acknowledge MESH message using id: " + messageId,
-                            HttpStatus.OK,
-                            HttpStatus.valueOf(response.getStatusLine().getStatusCode()));
+                        HttpStatus.OK,
+                        HttpStatus.valueOf(response.getStatusLine().getStatusCode()));
                 }
             }
         }
@@ -138,8 +140,8 @@ public class MeshClient {
                 logResponse(loggingName, response);
                 if (response.getStatusLine().getStatusCode() != HttpStatus.OK.value()) {
                     throw new MeshApiConnectionException("Couldn't receive MESH message list",
-                            HttpStatus.OK,
-                            HttpStatus.valueOf(response.getStatusLine().getStatusCode()));
+                        HttpStatus.OK,
+                        HttpStatus.valueOf(response.getStatusLine().getStatusCode()));
                 }
                 final var meshMessages = parseInto(MeshMessages.class, response, loggingName);
                 return Arrays.asList(meshMessages.getMessageIDs());
@@ -164,7 +166,8 @@ public class MeshClient {
                 final var entity = ((HttpEntityEnclosingRequest) request).getEntity();
                 if (entity != null) {
                     LOGGER.debug("MESH '{}' request content line: {}", type, entity);
-                    // request content is usually not "repeatable" so we can only decode it once. Log response content separately.
+                    // request content is usually not "repeatable" so we can only decode it once.
+                    // Log response content separately.
                 }
             }
         }

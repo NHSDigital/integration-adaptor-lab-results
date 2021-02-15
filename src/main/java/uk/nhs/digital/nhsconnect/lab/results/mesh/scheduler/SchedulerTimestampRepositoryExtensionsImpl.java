@@ -30,11 +30,12 @@ public class SchedulerTimestampRepositoryExtensionsImpl implements SchedulerTime
 
     @Override
     public boolean updateTimestamp(String schedulerType, Instant timestamp, long seconds) {
-        final var query = query(where(TIMESTAMP_FIELD_NAME).lt(timestampService.getCurrentTimestamp().minusSeconds(seconds))
-                .and(SCHEDULER_TYPE).is(schedulerType));
+        final var query = query(where(TIMESTAMP_FIELD_NAME)
+            .lt(timestampService.getCurrentTimestamp().minusSeconds(seconds))
+            .and(SCHEDULER_TYPE).is(schedulerType));
 
         final var update = Update.update(TIMESTAMP_FIELD_NAME, timestamp)
-                .set(SCHEDULER_TYPE, schedulerType);
+            .set(SCHEDULER_TYPE, schedulerType);
 
         if (documentAlreadyExists(schedulerType)) {
             final UpdateResult result = mongoOperations.updateFirst(query, update, MESH_TIMESTAMP_COLLECTION_NAME);
@@ -43,12 +44,13 @@ public class SchedulerTimestampRepositoryExtensionsImpl implements SchedulerTime
         } else {
             LOGGER.info("{} collection does not exist or it is empty. Document with timestamp will be created",
                 MESH_TIMESTAMP_COLLECTION_NAME);
-            final SchedulerTimestamp schedulerTimestamp = new SchedulerTimestamp(schedulerType, timestampService.getCurrentTimestamp());
+            final SchedulerTimestamp schedulerTimestamp = new SchedulerTimestamp(
+                schedulerType, timestampService.getCurrentTimestamp());
             try {
                 mongoOperations.save(schedulerTimestamp, MESH_TIMESTAMP_COLLECTION_NAME);
             } catch (MongoWriteException | DuplicateKeyException e) {
-                LOGGER.warn("Unable to create new document for scheduler type " + schedulerType
-                    + ". Most likely another instance already created the document.", e);
+                LOGGER.warn("Unable to create new document for scheduler type {}. "
+                    + "Most likely another instance already created the document.", schedulerType, e);
             }
             return false;
         }
@@ -59,8 +61,8 @@ public class SchedulerTimestampRepositoryExtensionsImpl implements SchedulerTime
         final var query = query(where(SCHEDULER_TYPE).is(schedulerType));
         final var count = mongoOperations.count(query, MESH_TIMESTAMP_COLLECTION_NAME);
         if (count > 1) {
-            LOGGER.error("More than one document exists for schedulerType {}. This can cause unexpected scheduling behaviour.",
-                schedulerType);
+            LOGGER.error("More than one document exists for schedulerType {}. "
+                + "This can cause unexpected scheduling behaviour.", schedulerType);
         }
         return count >= 1;
     }

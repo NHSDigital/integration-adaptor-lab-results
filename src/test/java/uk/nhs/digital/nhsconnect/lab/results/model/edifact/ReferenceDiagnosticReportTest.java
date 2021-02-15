@@ -24,7 +24,8 @@ public class ReferenceDiagnosticReportTest {
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
             () -> ReferenceDiagnosticReport.fromString("RFF+ABC:13/CH001137K/211010191093"));
 
-        assertEquals("Can't create ReferenceDiagnosticReport from RFF+ABC:13/CH001137K/211010191093", exception.getMessage());
+        assertEquals("Can't create ReferenceDiagnosticReport from RFF+ABC:13/CH001137K/211010191093",
+            exception.getMessage());
     }
 
     @Test

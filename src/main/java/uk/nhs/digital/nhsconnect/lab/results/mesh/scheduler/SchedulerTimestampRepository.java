@@ -4,5 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SchedulerTimestampRepository extends CrudRepository<SchedulerTimestamp, String>, SchedulerTimestampRepositoryExtensions {
+public interface SchedulerTimestampRepository
+    extends CrudRepository<SchedulerTimestamp, String>, SchedulerTimestampRepositoryExtensions {
 }

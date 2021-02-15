@@ -51,7 +51,7 @@ class DiagnosticReportStatusTest {
 
     @Test
     void testFromStringWithValidEdifactStringReturnsDiagnosticReportStatus() {
-        final DiagnosticReportStatus diagnosticReportStatus = DiagnosticReportStatus.fromString(VALID_EDIFACT_WITHOUT_DETAILS);
+        final var diagnosticReportStatus = DiagnosticReportStatus.fromString(VALID_EDIFACT_WITHOUT_DETAILS);
 
         assertAll(
             () -> assertEquals(KEY, diagnosticReportStatus.getKey()),

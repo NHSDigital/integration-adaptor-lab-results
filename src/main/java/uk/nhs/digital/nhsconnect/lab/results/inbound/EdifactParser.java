@@ -55,20 +55,21 @@ public class EdifactParser {
         var allMessageHeaderSegmentIndexes = findAllIndexesOfSegment(allEdifactSegments, MessageHeader.KEY);
         var allMessageTrailerSegmentIndexes = findAllIndexesOfSegment(allEdifactSegments, MessageTrailer.KEY);
 
-        var messageHeaderTrailerIndexPairs = zipIndexes(allMessageHeaderSegmentIndexes, allMessageTrailerSegmentIndexes);
+        var messageHeaderTrailerIndexPairs =
+            zipIndexes(allMessageHeaderSegmentIndexes, allMessageTrailerSegmentIndexes);
 
         return messageHeaderTrailerIndexPairs.stream()
-                .map(messageStartEndIndexPair ->
-                        allEdifactSegments.subList(messageStartEndIndexPair.getLeft(), messageStartEndIndexPair.getRight() + 1))
-                .map(this::parseMessage)
-                .collect(Collectors.toList());
+            .map(messageStartEndIndexPair -> allEdifactSegments.subList(
+                messageStartEndIndexPair.getLeft(), messageStartEndIndexPair.getRight() + 1))
+            .map(this::parseMessage)
+            .collect(Collectors.toList());
     }
 
     private Message parseMessage(List<String> singleMessageEdifactSegments) {
         var messageTrailerIndex = singleMessageEdifactSegments.size() - 1;
         var firstMessageEndIndex = findAllIndexesOfSegment(singleMessageEdifactSegments, MESSAGE_END_SEGMENT).stream()
-                .findFirst()
-                .orElse(messageTrailerIndex);
+            .findFirst()
+            .orElse(messageTrailerIndex);
 
         // first lines until end of message
         var onlyMessageLines = new ArrayList<>(singleMessageEdifactSegments.subList(0, firstMessageEndIndex));
@@ -80,11 +81,11 @@ public class EdifactParser {
     private List<Pair<Integer, Integer>> zipIndexes(List<Integer> startIndexes, List<Integer> endIndexes) {
         if (startIndexes.size() != endIndexes.size()) {
             throw new ToEdifactParsingException(
-                    "Message header-trailer count mismatch: " + startIndexes.size() + "-" + endIndexes.size());
+                "Message header-trailer count mismatch: " + startIndexes.size() + "-" + endIndexes.size());
         }
 
         var indexPairs = Streams.zip(startIndexes.stream(), endIndexes.stream(), Pair::of)
-                .collect(Collectors.toList());
+            .collect(Collectors.toList());
 
         if (!areIndexesInOrder(indexPairs)) {
             throw new ToEdifactParsingException("Message trailer before message header");
@@ -97,11 +98,11 @@ public class EdifactParser {
         // trailer must go after header
         // next header must go after previous trailer
         return Comparators.isInOrder(
-                messageIndexPairs.stream()
-                        .map(pair -> List.of(pair.getLeft(), pair.getRight()))
-                        .flatMap(Collection::stream)
-                        .collect(Collectors.toList()),
-                Comparator.naturalOrder());
+            messageIndexPairs.stream()
+                .map(pair -> List.of(pair.getLeft(), pair.getRight()))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList()),
+            Comparator.naturalOrder());
     }
 
     private List<String> extractInterchangeEdifactSegments(List<String> allEdifactSegments) {
@@ -110,17 +111,18 @@ public class EdifactParser {
         var lastMessageTrailerIndex = allMessageTrailerIndexes.get(allMessageTrailerIndexes.size() - 1);
 
         var segmentsBeforeFirstMessageHeader = allEdifactSegments.subList(0, firstMessageHeaderIndex);
-        var segmentsAfterLastMessageTrailer = allEdifactSegments.subList(lastMessageTrailerIndex + 1, allEdifactSegments.size());
+        var segmentsAfterLastMessageTrailer = allEdifactSegments.subList(
+            lastMessageTrailerIndex + 1, allEdifactSegments.size());
 
         return Stream.of(segmentsBeforeFirstMessageHeader, segmentsAfterLastMessageTrailer)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList());
     }
 
     private List<Integer> findAllIndexesOfSegment(List<String> list, String key) {
         return IntStream.range(0, list.size())
-                .filter(i -> list.get(i).startsWith(key))
-                .boxed()
-                .collect(Collectors.toList());
+            .filter(i -> list.get(i).startsWith(key))
+            .boxed()
+            .collect(Collectors.toList());
     }
 }

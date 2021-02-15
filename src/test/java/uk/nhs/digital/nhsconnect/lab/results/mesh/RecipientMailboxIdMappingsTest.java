@@ -15,7 +15,8 @@ public class RecipientMailboxIdMappingsTest {
 
     @BeforeEach
     void setUp() {
-        recipientMailboxIdMappings = new RecipientMailboxIdMappings("REC1=test_mailbox REC2=test_mailbox REC3=test_mailbox");
+        recipientMailboxIdMappings = new RecipientMailboxIdMappings(
+            "REC1=test_mailbox REC2=test_mailbox REC3=test_mailbox");
     }
 
     @Test
