@@ -6,7 +6,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 
 @Component
 public class PatientMapper {
-    public Patient map(final Message message) {
+    public Patient mapToPatient(final Message message) {
         return new Patient();
     }
 }
