@@ -112,6 +112,10 @@ Only one instance of the adaptor runs the polling cycle at any given time to pre
 `LAB_RESULTS_MESH_POLLING_CYCLE_DURATION_IN_SECONDS` prevents one polling cycle from overrunning into the next time interval.
 This value must always be less than `LAB_RESULTS_MESH_POLLING_CYCLE_MINIMUM_INTERVAL_IN_SECONDS`.
 
+## Operating
+
+Refer to [OPERATING.md](OPERATING.md) for tips about how to operate the adaptor in the production environment.
+
 ## Development
 
 The following sections provide the necessary information to develop the Integration Adaptor.
