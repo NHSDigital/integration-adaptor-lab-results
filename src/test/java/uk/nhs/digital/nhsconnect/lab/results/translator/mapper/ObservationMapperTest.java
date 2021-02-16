@@ -7,12 +7,19 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-class SpecimenMapperTest {
+class ObservationMapperTest {
 
     @Test
-    void testMapMessageToSpecimen() {
+    void testMapTestGroups() {
         final Message message = new Message(new ArrayList<>());
 
-        assertFalse(new SpecimenMapper().mapToSpecimens(message).isEmpty());
+        assertFalse(new ObservationMapper().mapToTestGroups(message).isEmpty());
+    }
+
+    @Test
+    void testMapTestResults() {
+        final Message message = new Message(new ArrayList<>());
+
+        assertFalse(new ObservationMapper().mapToTestResults(message).isEmpty());
     }
 }

@@ -1,6 +1,5 @@
 package uk.nhs.digital.nhsconnect.lab.results.inbound;
 
-
 import org.hl7.fhir.dstu3.model.Parameters;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,6 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.outbound.queue.GpOutboundQueueService;
 import uk.nhs.digital.nhsconnect.lab.results.outbound.queue.MeshOutboundQueueService;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.any;
@@ -76,7 +74,7 @@ class InboundMessageHandlerTest {
         final MeshMessage meshMessage = new MeshMessage();
 
         when(edifactParser.parse(meshMessage.getContent())).thenReturn(interchange);
-        when(interchange.getMessages()).thenReturn(Collections.singletonList(message));
+        when(interchange.getMessages()).thenReturn(List.of(message));
 
         final Parameters parameters = new Parameters();
         when(edifactToFhirService.convertToFhir(message)).thenReturn(parameters);
