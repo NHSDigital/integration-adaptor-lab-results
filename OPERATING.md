@@ -5,31 +5,31 @@ This document contains requirements and tips for operating the adaptor in a prod
 # AMQP Message Broker Requirements
 
 * The broker must be configured with a limited number of retries and dead-letter queues
-* It is the responsibility of the GP supplier to configure adequate monitoring against the dead-letter queues that allows ALL undeliverable messages to be investigated fully.
+* It is the responsibility of the GP supplier to configure adequate monitoring against the dead-letter queues that allows ALL undeliverable messages to be investigated fully
 * The broker must use persistent queues to avoid loss of data
 * The GP System must persist the relevant message data before acknowledging the message from the queue to avoid loss of data
 
 **Using AmazonMQ**
 
-* A persistent broker (not in-memory) must be used to avoid data loss.
-* A configuration profile that includes settings for [retry and dead-lettering](https://activemq.apache.org/message-redelivery-and-dlq-handling.html) must be applied.
-* AmazonMQ uses the scheme `amqp+ssl://` but this **MUST** be changed the to `amqps://` when configuring the adaptor.
+* A persistent broker (not in-memory) must be used to avoid data loss
+* A configuration profile that includes settings for [retry and dead-lettering](https://activemq.apache.org/message-redelivery-and-dlq-handling.html) must be applied
+* AmazonMQ uses the scheme `amqp+ssl://` but this **MUST** be changed to `amqps://` when configuring the adaptor
 
 **Using Azure Service Bus**
 
 * The ASB must use [MaxDeliveryCount and dead-lettering](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-dead-letter-queues#exceeding-maxdeliverycount)
 * Azure Service Bus may require some parameters as part of the URL configuration. For example: `LAB_RESULTS_AMQP_BROKERS=amqps://<NAME>.servicebus.windows.net/;SharedAccessKeyName=<KEY NAME>;SharedAccessKey=<KEY VALUE>`
 
-# Mongodb Database Requirements
+# MongoDB Database Requirements
 
 * The Lab Results Adaptor and Lab Results system communications synchronise through a sequence number mechanism
-* The Mongodb database preserves this synchronisation
-* Deleting the mongodb database and/or its collections will break the link with the Lab Results system
+* The MongoDB database preserves this synchronisation
+* Deleting the MongoDB database and/or its collections will break the link with the Lab Results system
 
 **Amazon Document DB Tips**
 
 In the "Connectivity & security" tab of the cluster a URI is provided to "Connect to this cluster with an application".
-Replace \<username\>:\<insertYourPasswordHere\> with the actual mongo username and password to be used by the application.
+Replace \<username\>:\<insertYourPasswordHere\> with the actual MongoDB username and password to be used by the application.
 The value of `LAB_RESULTS_MONGO_URI` should be set to this value. Since the URI string contains credentials we recommend 
 managing the entire value as a secured secret.
 

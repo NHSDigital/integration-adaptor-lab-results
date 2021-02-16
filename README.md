@@ -34,9 +34,9 @@ You can provide an external `logback.xml` file using the `-Dlogback.configuratio
 
 (*) Active/Standby: The first broker in the list is always used unless there is an error, in which case the other URLs will be used. At least one URL is required.
 
-### Mongodb Configuration Options
+### MongoDB Configuration Options
 
-The adaptor configuration for mongodb can be configured two ways, using a connection string or providing individual 
+The adaptor configuration for MongoDB can be configured two ways, using a connection string or providing individual 
 properties. This is to accommodate differences in the capabilities of deployment automation frameworks and varying 
 environments.
 
@@ -44,20 +44,20 @@ Option 1: If `LAB_RESULTS_MONGO_HOST` is defined then the adaptor forms a connec
 
 | Environment Variable             | Default     | Description 
 | ---------------------------------|-------------|-------------
-| LAB_RESULTS_MONGO_DATABASE_NAME  | labresults  | Database name for Mongo
-| LAB_RESULTS_MONGO_HOST           |             | Mongodb host
-| LAB_RESULTS_MONGO_PORT           |             | Mongodb port
-| LAB_RESULTS_MONGO_USERNAME       |             | (Optional) Mongodb username. If set then password must also be set.
-| LAB_RESULTS_MONGO_PASSWORD       |             | (Optional) Mongodb password
-| LAB_RESULTS_MONGO_OPTIONS        |             | (Optional) Mongodb URL encoded parameters for the connection string without a leading ?
+| LAB_RESULTS_MONGO_DATABASE_NAME  | labresults  | Database name for MongoDB
+| LAB_RESULTS_MONGO_HOST           |             | MongoDB host
+| LAB_RESULTS_MONGO_PORT           |             | MongoDB port
+| LAB_RESULTS_MONGO_USERNAME       |             | (Optional) MongoDB username. If set then password must also be set.
+| LAB_RESULTS_MONGO_PASSWORD       |             | (Optional) MongoDB password
+| LAB_RESULTS_MONGO_OPTIONS        |             | (Optional) MongoDB URL encoded parameters for the connection string without a leading ?
 | LAB_RESULTS_MONGO_TTL            | P30D        | (Optional) Time-to-live value
 
 Option 2: If `LAB_RESULTS_MONGO_HOST` is undefined then the adaptor uses the connection string provided:
 
 | Environment Variable             | Default                   | Description 
 | ---------------------------------|---------------------------|-------------
-| LAB_RESULTS_MONGO_DATABASE_NAME  | labresults               | Database name for Mongo
-| LAB_RESULTS_MONGO_URI            | mongodb://localhost:27017 | Mongodb connection string
+| LAB_RESULTS_MONGO_DATABASE_NAME  | labresults               | Database name for MongoDB
+| LAB_RESULTS_MONGO_URI            | mongodb://localhost:27017 | MongoDB connection string
 
 ## MESH API
 
@@ -223,7 +223,7 @@ The `--continue` flag ensures that all tests and checks will run.
 
 ### Debugging
 
-#### Mongo DB
+#### MongoDB
 
 To view data in MongoDB:
 
