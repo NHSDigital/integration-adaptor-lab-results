@@ -6,7 +6,7 @@ Integration Adaptor to simplify processing of Pathology and Screening results.
 The adaptor reads its configuration from environment variables. The following sections describe the environment variables
  used to configure the adaptor. 
  
-Variables without a default value and not marked optional are *MUST* be defined for the adaptor to run.
+Variables without a default value and not marked optional *MUST* be defined for the adaptor to run.
 
 ### General Configuration
 
