@@ -17,7 +17,6 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.JmsHeaders;
 import uk.nhs.digital.nhsconnect.lab.results.utils.JmsReader;
 import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
 
-import javax.annotation.PostConstruct;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import java.io.IOException;
@@ -39,12 +38,6 @@ public class MeshInboundQueueService {
 
     @Value("${labresults.amqp.meshInboundQueueName}")
     private String meshInboundQueueName;
-
-    @PostConstruct
-    public void postConstruct() {
-        LOGGER.info("Created {} object consuming messages from {} queue",
-            MeshInboundQueueService.class.getSimpleName(), meshInboundQueueName);
-    }
 
     @JmsListener(destination = "${labresults.amqp.meshInboundQueueName}")
     public void receive(final Message message) throws IOException, JMSException {
