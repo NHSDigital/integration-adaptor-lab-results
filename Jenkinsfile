@@ -18,7 +18,7 @@ pipeline {
         ENVIRONMENT_ID = "lab-results-build"
         ECR_REPO_DIR = "lab-results"
         DOCKER_IMAGE = "${DOCKER_REGISTRY}/${ECR_REPO_DIR}:${BUILD_TAG}"
-        AWS_DEPLOY_NON_MAIN_BRANCH = false // false: Skip AWS deployment for all branches other than 'main' ; true: Allow AWS Deployment for all branches
+        AWS_DEPLOY_ONLY_MAIN = true // true: Skip AWS deployment for all branches other than 'main' ; false: Allow AWS Deployment for all branches
     }
 
     stages {
@@ -103,7 +103,7 @@ pipeline {
         }
         stage('Deploy and Integration Test') {
             when {
-                expression { currentBuild.resultIsBetterOrEqualTo('SUCCESS') && { ${env.AWS_DEPLOY_NON_MAIN_BRANCH} == true || ${GIT_BRANCH} == 'main' } }
+                expression { currentBuild.resultIsBetterOrEqualTo('SUCCESS') && { ${env.AWS_DEPLOY_ONLY_MAIN} == false || ${GIT_BRANCH} == 'main' } }
             }
             options {
               lock("${tfProject}-${tfEnvironment}-${tfComponent}")
