@@ -48,12 +48,13 @@ public class InterchangeTrailer extends Segment {
 
     public static InterchangeTrailer fromString(String edifactString) {
         if (!edifactString.startsWith(KEY)) {
-            throw new IllegalArgumentException("Can't create " + InterchangeTrailer.class.getSimpleName() + " from " + edifactString);
+            throw new IllegalArgumentException("Can't create " + InterchangeTrailer.class.getSimpleName()
+                + " from " + edifactString);
         }
         String[] split = Split.byPlus(
-                Split.bySegmentTerminator(edifactString)[0]
+            Split.bySegmentTerminator(edifactString)[0]
         );
         return new InterchangeTrailer(Integer.parseInt(split[1]))
-                .setSequenceNumber(Long.parseLong(split[2]));
+            .setSequenceNumber(Long.parseLong(split[2]));
     }
 }

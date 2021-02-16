@@ -3,9 +3,9 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SpecimenCollectionDateTimeTest {
 
@@ -18,96 +18,92 @@ class SpecimenCollectionDateTimeTest {
 
     @Test
     void testToEdifactForValidSpecimenCollectionDateTimeInFormatCCYYMMDD() {
-        final SpecimenCollectionDateTime specimenCollectionDateTime = SpecimenCollectionDateTime.builder()
+        final var specimenCollectionDateTime = SpecimenCollectionDateTime.builder()
             .collectionDateTime(VALID_FHIR_SCDT_CCYYMMDD)
             .dateFormat(DateFormat.CCYYMMDD)
             .build();
 
         final String actual = specimenCollectionDateTime.toEdifact();
 
-        assertEquals(VALID_EDIFACT_CCYYMMDD, actual);
+        assertThat(actual).isEqualTo(VALID_EDIFACT_CCYYMMDD);
     }
 
     @Test
     void testToEdifactForValidSpecimenCollectionDateTimeInFormatCCYYMMDDHHMM() {
-        final SpecimenCollectionDateTime specimenCollectionDateTime = SpecimenCollectionDateTime.builder()
+        final var specimenCollectionDateTime = SpecimenCollectionDateTime.builder()
             .collectionDateTime(VALID_FHIR_SCDT_CCYYMMDDHHMM)
             .dateFormat(DateFormat.CCYYMMDDHHMM)
             .build();
 
         final String actual = specimenCollectionDateTime.toEdifact();
 
-        assertEquals(VALID_EDIFACT_CCYYMMDDHHMM, actual);
+        assertThat(actual).isEqualTo(VALID_EDIFACT_CCYYMMDDHHMM);
     }
 
     @Test
     void testToEdifactForEmptySpecimenCollectionDateTimeThrowsException() {
-        final SpecimenCollectionDateTime specimenCollectionDateTime = SpecimenCollectionDateTime.builder()
+        final var specimenCollectionDateTime = SpecimenCollectionDateTime.builder()
             .collectionDateTime("")
             .dateFormat(DateFormat.CCYYMMDD)
             .build();
 
-        final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
-            specimenCollectionDateTime::toEdifact);
-
-        assertEquals("DTM: Date/time of sample collection is required", exception.getMessage());
+        assertThatThrownBy(specimenCollectionDateTime::toEdifact)
+            .isExactlyInstanceOf(EdifactValidationException.class)
+            .hasMessage("DTM: Date/time of sample collection is required");
     }
 
     @Test
     void testToEdifactForBlankSpecimenCollectionDateTimeThrowsException() {
-        final SpecimenCollectionDateTime specimenCollectionDateTime = SpecimenCollectionDateTime.builder()
+        final var specimenCollectionDateTime = SpecimenCollectionDateTime.builder()
             .collectionDateTime(" ")
             .dateFormat(DateFormat.CCYYMMDD)
             .build();
 
-        final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
-            specimenCollectionDateTime::toEdifact);
-
-        assertEquals("DTM: Date/time of sample collection is required", exception.getMessage());
+        assertThatThrownBy(specimenCollectionDateTime::toEdifact)
+            .isExactlyInstanceOf(EdifactValidationException.class)
+            .hasMessage("DTM: Date/time of sample collection is required");
     }
 
     @Test
     void testFromStringWithValidEdifactStringReturnsSpecimenCollectionDateTimeInFormatCCYYMMDD() {
-        final SpecimenCollectionDateTime specimenCollectionDateTime = SpecimenCollectionDateTime.fromString(VALID_EDIFACT_CCYYMMDD);
+        final var specimenCollectionDateTime = SpecimenCollectionDateTime.fromString(VALID_EDIFACT_CCYYMMDD);
 
         assertAll("fromString specimen collection date format CCYYMMDD",
-            () -> assertEquals(SpecimenCollectionDateTime.KEY, specimenCollectionDateTime.getKey()),
-            () -> assertEquals(VALID_EDIFACT_CCYYMMDD_VALUE, specimenCollectionDateTime.getValue()),
-            () -> assertEquals(VALID_FHIR_SCDT_CCYYMMDD, specimenCollectionDateTime.getCollectionDateTime()));
+            () -> assertThat(specimenCollectionDateTime.getKey()).isEqualTo(SpecimenCollectionDateTime.KEY),
+            () -> assertThat(specimenCollectionDateTime.getValue()).isEqualTo(VALID_EDIFACT_CCYYMMDD_VALUE),
+            () -> assertThat(specimenCollectionDateTime.getCollectionDateTime()).isEqualTo(VALID_FHIR_SCDT_CCYYMMDD));
     }
 
     @Test
     void testFromStringWithValidEdifactStringReturnsSpecimenCollectionDateTimeInFormatCCYYMMDDHHMM() {
-        final SpecimenCollectionDateTime specimenCollectionDateTime = SpecimenCollectionDateTime.fromString(VALID_EDIFACT_CCYYMMDDHHMM);
+        final var specimenCollectionDateTime = SpecimenCollectionDateTime.fromString(VALID_EDIFACT_CCYYMMDDHHMM);
 
         assertAll("fromString specimen collection date format CCYYMMDDHHMM",
-            () -> assertEquals(SpecimenCollectionDateTime.KEY, specimenCollectionDateTime.getKey()),
-            () -> assertEquals(VALID_EDIFACT_CCYYMMDDHHMM_VALUE, specimenCollectionDateTime.getValue()),
-            () -> assertEquals(VALID_FHIR_SCDT_CCYYMMDDHHMM, specimenCollectionDateTime.getCollectionDateTime()));
+            () -> assertThat(specimenCollectionDateTime.getKey()).isEqualTo(SpecimenCollectionDateTime.KEY),
+            () -> assertThat(specimenCollectionDateTime.getValue()).isEqualTo(VALID_EDIFACT_CCYYMMDDHHMM_VALUE),
+            () -> assertThat(specimenCollectionDateTime.getCollectionDateTime())
+                .isEqualTo(VALID_FHIR_SCDT_CCYYMMDDHHMM));
     }
 
     @Test
     void testFromStringWithInvalidEdifactStringThrowsException() {
-        final IllegalArgumentException exception =
-            assertThrows(IllegalArgumentException.class, () -> SpecimenCollectionDateTime.fromString("wrong value"));
-
-        assertEquals("Can't create SpecimenCollectionDateTime from wrong value", exception.getMessage());
+        assertThatThrownBy(() -> SpecimenCollectionDateTime.fromString("wrong value"))
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Can't create SpecimenCollectionDateTime from wrong value");
     }
 
     @Test
     void testFromStringWithInvalidDateFormatCodeThrowsException() {
-        final IllegalArgumentException exception =
-            assertThrows(IllegalArgumentException.class, () -> SpecimenCollectionDateTime.fromString("DTM+SCO:20100223:100'"));
-
-        assertEquals("DTM: Date format code 100 is not supported", exception.getMessage());
+        assertThatThrownBy(() -> SpecimenCollectionDateTime.fromString("DTM+SCO:20100223:100'"))
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("DTM: Date format code 100 is not supported");
     }
 
     @Test
     void testFromStringWithBlankDateFormatCodeThrowsException() {
-        final IllegalArgumentException exception =
-            assertThrows(IllegalArgumentException.class, () -> SpecimenCollectionDateTime.fromString("DTM+SCO:20100223:'"));
-
-        assertEquals("Can't create SpecimenCollectionDateTime from DTM+SCO:20100223:'"
-            + " because of missing date-time and/or format definition", exception.getMessage());
+        assertThatThrownBy(() -> SpecimenCollectionDateTime.fromString("DTM+SCO:20100223:'"))
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Can't create SpecimenCollectionDateTime from DTM+SCO:20100223:'"
+                + " because of missing date-time and/or format definition");
     }
 }

@@ -84,7 +84,8 @@ public class PersonName extends Segment {
 
     public static PersonName fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {
-            throw new IllegalArgumentException("Can't create " + PersonName.class.getSimpleName() + " from " + edifactString);
+            throw new IllegalArgumentException("Can't create " + PersonName.class.getSimpleName()
+                + " from " + edifactString);
         }
 
         final String nhsNumber = extractNhsNumber(edifactString);

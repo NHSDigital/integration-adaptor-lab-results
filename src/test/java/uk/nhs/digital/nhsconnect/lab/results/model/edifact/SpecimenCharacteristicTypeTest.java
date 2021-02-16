@@ -26,7 +26,8 @@ class SpecimenCharacteristicTypeTest {
 
     @Test
     void testFromStringWithInvalidEdifactStringThrowsException() {
-        assertThatThrownBy(() -> SpecimenCharacteristicType.fromString("wrong value")).isExactlyInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> SpecimenCharacteristicType.fromString("wrong value"))
+            .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

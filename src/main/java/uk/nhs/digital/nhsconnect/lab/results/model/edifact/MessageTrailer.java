@@ -38,19 +38,23 @@ public class MessageTrailer extends Segment {
             throw new EdifactValidationException(getKey() + ": Attribute sequenceNumber is required");
         }
         if (sequenceNumber <= 0) {
-            throw new EdifactValidationException(getKey() + ": Attribute sequenceNumber must be greater than or equal to zero");
+            throw new EdifactValidationException(getKey()
+                + ": Attribute sequenceNumber must be greater than or equal to zero");
         }
         if (numberOfSegments <= 1) {
-            throw new EdifactValidationException(getKey() + ": Attribute numberOfSegments must be greater than or equal to 2");
+            throw new EdifactValidationException(getKey()
+                + ": Attribute numberOfSegments must be greater than or equal to 2");
         }
     }
 
     @Override
-    public void preValidate() throws EdifactValidationException { }
+    public void preValidate() throws EdifactValidationException {
+    }
 
     public static MessageTrailer fromString(String edifactString) {
         if (!edifactString.startsWith(KEY)) {
-            throw new IllegalArgumentException("Can't create " + MessageTrailer.class.getSimpleName() + " from " + edifactString);
+            throw new IllegalArgumentException("Can't create " + MessageTrailer.class.getSimpleName()
+                + " from " + edifactString);
         }
         String[] split = Split.byPlus(
             Split.bySegmentTerminator(edifactString)[0]

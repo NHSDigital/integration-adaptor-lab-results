@@ -17,7 +17,7 @@ class RequesterNameAndAddressTest {
     );
 
     @Test
-    void when_edifactStringDoesNotStartWithRequesterNameAndAddressKey_expect_illegalArgumentExceptionIsThrown() {
+    void when_edifactStringDoesNotStartWithRequesterNameAndAddressKey_expect_illegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> RequesterNameAndAddress.fromString("wrong value"));
     }
 
@@ -42,7 +42,7 @@ class RequesterNameAndAddressTest {
     }
 
     @Test
-    void when_mappingSegmentObjectToEdifactStringWithEmptyIdentifierField_expect_edifactValidationExceptionIsThrown() {
+    void when_mappingSegmentObjectToEdifactStringWithEmptyIdentifierField_expect_edifactValidationException() {
         RequesterNameAndAddress requester = RequesterNameAndAddress.builder()
             .identifier("")
             .healthcareRegistrationIdentificationCode(HealthcareRegistrationIdentificationCode.GP)
@@ -53,18 +53,18 @@ class RequesterNameAndAddressTest {
     }
 
     @Test
-    void when_mappingSegmentObjectToEdifactStringWithEmptyRequesterNameField_expect_edifactValidationExceptionIsThrown() {
+    void when_mappingSegmentObjectToEdifactStringWithEmptyRequesterNameField_expect_edifactValidationException() {
         RequesterNameAndAddress requester = RequesterNameAndAddress.builder()
-                .identifier("ABC")
-                .healthcareRegistrationIdentificationCode(HealthcareRegistrationIdentificationCode.GP)
-                .requesterName("")
-                .build();
+            .identifier("ABC")
+            .healthcareRegistrationIdentificationCode(HealthcareRegistrationIdentificationCode.GP)
+            .requesterName("")
+            .build();
 
         assertThrows(EdifactValidationException.class, requester::toEdifact);
     }
 
     @Test
-    void when_buildingSegmentObjectWithoutMandatoryFields_expect_nullPointerExceptionIsThrown() {
+    void when_buildingSegmentObjectWithoutMandatoryFields_expect_nullPointerException() {
         assertThrows(NullPointerException.class, () -> RequesterNameAndAddress.builder().build());
     }
 
@@ -86,19 +86,19 @@ class RequesterNameAndAddressTest {
     @Test
     void testPreValidate() {
         RequesterNameAndAddress emptyIdentifier = new RequesterNameAndAddress(
-                "", HealthcareRegistrationIdentificationCode.GP, "SMITH"
+            "", HealthcareRegistrationIdentificationCode.GP, "SMITH"
         );
         RequesterNameAndAddress emptyRequesterName = new RequesterNameAndAddress(
-                "ABC", HealthcareRegistrationIdentificationCode.GP, ""
+            "ABC", HealthcareRegistrationIdentificationCode.GP, ""
         );
 
         assertAll(
             () -> assertThatThrownBy(emptyIdentifier::preValidate)
-                    .isExactlyInstanceOf(EdifactValidationException.class)
-                    .hasMessage("NAD: Attribute identifier is required"),
+                .isExactlyInstanceOf(EdifactValidationException.class)
+                .hasMessage("NAD: Attribute identifier is required"),
             () -> assertThatThrownBy(emptyRequesterName::preValidate)
-                    .isExactlyInstanceOf(EdifactValidationException.class)
-                    .hasMessage("NAD: Attribute requesterName is required")
+                .isExactlyInstanceOf(EdifactValidationException.class)
+                .hasMessage("NAD: Attribute requesterName is required")
         );
     }
 }

@@ -16,7 +16,8 @@ class PerformingOrganisationNameAndAddressTest {
 
     @Test
     void when_edifactStringDoesNotStartWithCorrectKey_expect_illegalArgumentExceptionIsThrown() {
-        assertThrows(IllegalArgumentException.class, () -> PerformingOrganisationNameAndAddress.fromString("wrong value"));
+        assertThrows(IllegalArgumentException.class,
+            () -> PerformingOrganisationNameAndAddress.fromString("wrong value"));
     }
 
     @Test
@@ -31,8 +32,8 @@ class PerformingOrganisationNameAndAddressTest {
         String expectedEdifactString = "NAD+SLA+++LONDON CITY HOSPITAL'";
 
         PerformingOrganisationNameAndAddress performingOrganisation = PerformingOrganisationNameAndAddress.builder()
-                .performingOrganisationName("LONDON CITY HOSPITAL")
-                .build();
+            .performingOrganisationName("LONDON CITY HOSPITAL")
+            .build();
 
         assertEquals(expectedEdifactString, performingOrganisation.toEdifact());
     }
@@ -40,8 +41,8 @@ class PerformingOrganisationNameAndAddressTest {
     @Test
     void when_mappingSegmentObjectToEdifactStringWithEmptyField_expect_edifactValidationExceptionIsThrown() {
         PerformingOrganisationNameAndAddress performingOrganisation = PerformingOrganisationNameAndAddress.builder()
-                .performingOrganisationName("")
-                .build();
+            .performingOrganisationName("")
+            .build();
 
         assertThrows(EdifactValidationException.class, performingOrganisation::toEdifact);
     }
@@ -68,7 +69,7 @@ class PerformingOrganisationNameAndAddressTest {
 
     @Test
     void testPreValidate() {
-        PerformingOrganisationNameAndAddress emptyPerformingOrganisationName = new PerformingOrganisationNameAndAddress("");
+        var emptyPerformingOrganisationName = new PerformingOrganisationNameAndAddress("");
 
         assertThatThrownBy(emptyPerformingOrganisationName::preValidate)
             .isExactlyInstanceOf(EdifactValidationException.class)

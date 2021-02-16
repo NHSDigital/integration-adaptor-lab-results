@@ -3,6 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -35,7 +36,7 @@ class DiagnosticReportDateIssuedTest {
 
     @Test
     void testFromStringWithValidEdifactStringReturnsDiagnosticReportDateIssued() {
-        final DiagnosticReportDateIssued diagnosticReportDateIssued = DiagnosticReportDateIssued.fromString(VALID_EDIFACT);
+        final var diagnosticReportDateIssued = DiagnosticReportDateIssued.fromString(VALID_EDIFACT);
 
         assertEquals("DTM", diagnosticReportDateIssued.getKey());
         assertEquals(VALID_EDIFACT_VALUE, diagnosticReportDateIssued.getValue());

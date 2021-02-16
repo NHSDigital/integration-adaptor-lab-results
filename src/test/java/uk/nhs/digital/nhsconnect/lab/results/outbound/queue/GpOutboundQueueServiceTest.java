@@ -4,6 +4,7 @@ import org.hl7.fhir.dstu3.model.Parameters;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -40,6 +41,9 @@ class GpOutboundQueueServiceTest {
     @Mock
     private TextMessage textMessage;
 
+    @Captor
+    private ArgumentCaptor<MessageCreator> messageCreatorArgumentCaptor;
+
     @Value("${labresults.amqp.gpOutboundQueueName}")
     private String gpOutboundQueueName;
 
@@ -48,8 +52,8 @@ class GpOutboundQueueServiceTest {
         final Parameters parameters = new Parameters();
 
         final FhirDataToSend fhirDataToSend = new FhirDataToSend()
-                .setOperationId("123")
-                .setContent(parameters);
+            .setOperationId("123")
+            .setContent(parameters);
 
         final String serializedData = "some_serialized_data";
 
@@ -59,8 +63,6 @@ class GpOutboundQueueServiceTest {
         gpOutboundQueueService.publish(fhirDataToSend);
 
         verify(serializer).serialize(fhirDataToSend.getContent());
-
-        final ArgumentCaptor<MessageCreator> messageCreatorArgumentCaptor = ArgumentCaptor.forClass(MessageCreator.class);
 
         verify(jmsTemplate).send(eq(gpOutboundQueueName), messageCreatorArgumentCaptor.capture());
 

@@ -121,8 +121,8 @@ class PersonDateOfBirthTest {
 
     @Test
     void testFromStringWithInvalidDateFormatCodeThrowsException() {
-        final UnsupportedOperationException exception =
-            assertThrows(UnsupportedOperationException.class, () -> PersonDateOfBirth.fromString("DTM+329:19911106:100'"));
+        final UnsupportedOperationException exception = assertThrows(UnsupportedOperationException.class,
+            () -> PersonDateOfBirth.fromString("DTM+329:19911106:100'"));
 
         assertEquals("DTM: Date format code 100 is not supported", exception.getMessage());
     }

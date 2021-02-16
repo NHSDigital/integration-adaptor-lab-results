@@ -14,20 +14,23 @@ class OrganizationMapperTest {
     void testMapPerformingOrganization() {
         final Message message = new Message(new ArrayList<>());
 
-        assertThat(new OrganizationMapper().mapToPerformingOrganization(message)).isExactlyInstanceOf(Organization.class);
+        assertThat(new OrganizationMapper().mapToPerformingOrganization(message))
+            .isExactlyInstanceOf(Organization.class);
     }
 
     @Test
     void testMapRequestingOrganization() {
         final Message message = new Message(new ArrayList<>());
 
-        assertThat(new OrganizationMapper().mapToRequestingOrganization(message)).isExactlyInstanceOf(Organization.class);
+        assertThat(new OrganizationMapper().mapToRequestingOrganization(message))
+            .isExactlyInstanceOf(Organization.class);
     }
 
     @Test
     void testMapSpecimenCollectingOrganization() {
         final Message message = new Message(new ArrayList<>());
 
-        assertThat(new OrganizationMapper().mapToSpecimenCollectingOrganization(message)).isExactlyInstanceOf(Organization.class);
+        assertThat(new OrganizationMapper().mapToSpecimenCollectingOrganization(message))
+            .isExactlyInstanceOf(Organization.class);
     }
 }

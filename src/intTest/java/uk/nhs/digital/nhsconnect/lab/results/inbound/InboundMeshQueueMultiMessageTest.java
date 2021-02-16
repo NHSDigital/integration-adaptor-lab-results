@@ -37,12 +37,14 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
     }
 
     @Test
-    void whenMeshInboundQueueMessageIsReceivedThenMessageIsHandled(SoftAssertions softly) throws IOException, JMSException {
+    void whenMeshInboundQueueMessageIsReceivedThenMessageIsHandled(SoftAssertions softly)
+        throws IOException, JMSException {
+
         final String content = new String(Files.readAllBytes(multiEdifactResource.getFile().toPath()));
 
         final MeshMessage meshMessage = new MeshMessage()
-                .setWorkflowId(WorkflowId.REGISTRATION)
-                .setContent(content);
+            .setWorkflowId(WorkflowId.REGISTRATION)
+            .setContent(content);
 
         sendToMeshInboundQueue(meshMessage);
 
@@ -52,8 +54,8 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
     @SuppressWarnings("checkstyle:magicnumber")
     private void assertGpOutboundQueueMessages(SoftAssertions softly) throws JMSException, IOException {
         final List<Message> gpOutboundQueueMessages = IntStream.range(0, 6)
-                .mapToObj(x -> getGpOutboundQueueMessage())
-                .collect(Collectors.toList());
+            .mapToObj(x -> getGpOutboundQueueMessage())
+            .collect(Collectors.toList());
 
         assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(0));
         assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(1));
@@ -63,7 +65,8 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
         assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(5));
     }
 
-    private void assertGpOutboundQueueMessages(SoftAssertions softly, Message message) throws JMSException, IOException {
+    private void assertGpOutboundQueueMessages(SoftAssertions softly, Message message)
+        throws JMSException, IOException {
 
         // all messages come from the same interchange and use the same correlation id
         final String correlationId = message.getStringProperty("CorrelationId");

@@ -14,6 +14,7 @@ class ProcedureRequestMapperTest {
     void testMapMessageToProcedureRequest() {
         final Message message = new Message(new ArrayList<>());
 
-        assertThat(new ProcedureRequestMapper().mapToProcedureRequest(message)).isExactlyInstanceOf(ProcedureRequest.class);
+        assertThat(new ProcedureRequestMapper().mapToProcedureRequest(message))
+            .isExactlyInstanceOf(ProcedureRequest.class);
     }
 }

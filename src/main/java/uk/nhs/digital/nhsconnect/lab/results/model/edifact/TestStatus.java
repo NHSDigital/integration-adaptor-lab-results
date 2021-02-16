@@ -23,7 +23,8 @@ public class TestStatus extends Segment {
 
     public static TestStatus fromString(String edifactString) {
         if (!edifactString.startsWith(KEY)) {
-            throw new IllegalArgumentException("Can't create " + TestStatus.class.getSimpleName() + " from " + edifactString);
+            throw new IllegalArgumentException("Can't create " + TestStatus.class.getSimpleName()
+                + " from " + edifactString);
         }
 
         String[] keySplit = Split.byPlus(edifactString);

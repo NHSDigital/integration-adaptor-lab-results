@@ -34,13 +34,15 @@ public class MeshService {
     private final long pollingCycleDurationInSeconds;
 
     @Autowired
-    public MeshService(MeshClient meshClient,
-                       MeshInboundQueueService meshInboundQueueService,
-                       MeshMailBoxScheduler meshMailBoxScheduler,
-                       CorrelationIdService correlationIdService,
-                       @Value("${labresults.mesh.pollingCycleMinimumIntervalInSeconds}") long pollingCycleMinimumIntervalInSeconds,
-                       @Value("${labresults.mesh.wakeupIntervalInMilliseconds}") long wakeupIntervalInMilliseconds,
-                       @Value("${labresults.mesh.pollingCycleDurationInSeconds}") long pollingCycleDurationInSeconds) {
+    public MeshService(
+        MeshClient meshClient,
+        MeshInboundQueueService meshInboundQueueService,
+        MeshMailBoxScheduler meshMailBoxScheduler,
+        CorrelationIdService correlationIdService,
+        @Value("${labresults.mesh.pollingCycleMinimumIntervalInSeconds}") long pollingCycleMinimumIntervalInSeconds,
+        @Value("${labresults.mesh.wakeupIntervalInMilliseconds}") long wakeupIntervalInMilliseconds,
+        @Value("${labresults.mesh.pollingCycleDurationInSeconds}") long pollingCycleDurationInSeconds
+    ) {
         this.meshClient = meshClient;
         this.meshInboundQueueService = meshInboundQueueService;
         this.meshMailBoxScheduler = meshMailBoxScheduler;
@@ -67,16 +69,17 @@ public class MeshService {
                 if (sufficientTimeRemainsInPollingCycle(pollingCycleElapsedTime)) {
                     processSingleMessage(messageId);
                 } else {
-                    LOGGER.warn("Insufficient time remains to complete the polling cycle. Processed {} of {} messages from inbox.",
-                        i + 1, inboxMessageIds.size());
+                    LOGGER.warn("Insufficient time remains to complete the polling cycle. "
+                        + "Processed {} of {} messages from inbox.", i + 1, inboxMessageIds.size());
                     return;
                 }
             }
             LOGGER.info("Completed MESH mailbox polling cycle. Processed all messages from inbox.");
         } else {
-            LOGGER.info("Could not obtain database lock to run MESH mailbox polling cycle: insufficient time has elapsed "
-                + "since the previous polling cycle or another adaptor instance has already started the polling cycle. "
-                + "Next scan in {} seconds", TimeUnit.MILLISECONDS.toSeconds(wakeupIntervalInMilliseconds));
+            LOGGER.info("Could not obtain database lock to run MESH mailbox polling cycle: insufficient time has "
+                    + "elapsed since the previous polling cycle or another adaptor instance has already "
+                    + "started the polling cycle. Next scan in {} seconds",
+                TimeUnit.MILLISECONDS.toSeconds(wakeupIntervalInMilliseconds));
         }
     }
 

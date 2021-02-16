@@ -15,7 +15,9 @@ public class RecipientMailboxIdMappings {
     private final String recipientToMailboxIdMappings;
 
     @Autowired
-    public RecipientMailboxIdMappings(@Value("${labresults.mesh.recipientToMailboxIdMappings}") String recipientToMailboxIdMappings) {
+    public RecipientMailboxIdMappings(
+        @Value("${labresults.mesh.recipientToMailboxIdMappings}") String recipientToMailboxIdMappings
+    ) {
         this.recipientToMailboxIdMappings = recipientToMailboxIdMappings;
     }
 

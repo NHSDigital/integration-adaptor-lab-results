@@ -22,10 +22,10 @@ class InterchangeHeaderTest {
     private final Instant translationSummerDateTime = ZonedDateTime
         .of(2019, 5, 23, 9, 0, 0, 0, ZoneOffset.UTC)
         .toInstant();
-    private final InterchangeHeader interchangeHeaderWinter = new InterchangeHeader("SNDR", "RECP", translationWinterDateTime)
-        .setSequenceNumber(1L);
-    private final InterchangeHeader interchangeHeaderSummer = new InterchangeHeader("SNDR", "RECP", translationSummerDateTime)
-        .setSequenceNumber(1L);
+    private final InterchangeHeader interchangeHeaderWinter =
+        new InterchangeHeader("SNDR", "RECP", translationWinterDateTime).setSequenceNumber(1L);
+    private final InterchangeHeader interchangeHeaderSummer =
+        new InterchangeHeader("SNDR", "RECP", translationSummerDateTime).setSequenceNumber(1L);
 
     @Test
     void testToEdifactForValidInterchangeHeaderWithWinterTime() {
@@ -44,7 +44,7 @@ class InterchangeHeaderTest {
     @Test
     void testGetValueForValidInterchangeHeader() {
         final InterchangeHeader interchangeHeader =
-                new InterchangeHeader("SNDR", "RECP", translationSummerDateTime);
+            new InterchangeHeader("SNDR", "RECP", translationSummerDateTime);
         interchangeHeader.setSequenceNumber(1L);
 
         final String interchangeHeaderValue = interchangeHeader.getValue();
@@ -55,10 +55,10 @@ class InterchangeHeaderTest {
     @Test
     void testValidateStatefulSequenceNumberNullThrowsException() {
         final InterchangeHeader interchangeHeader =
-                new InterchangeHeader("SNDR", "RECP", translationSummerDateTime);
+            new InterchangeHeader("SNDR", "RECP", translationSummerDateTime);
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
-                interchangeHeader::validateStateful);
+            interchangeHeader::validateStateful);
 
         assertEquals("UNB: Attribute sequenceNumber is required", exception.getMessage());
     }
@@ -66,11 +66,11 @@ class InterchangeHeaderTest {
     @Test
     void testValidateStatefulSequenceNumberLessThanOneThrowsException() {
         final InterchangeHeader interchangeHeader =
-                new InterchangeHeader("SNDR", "RECP", translationSummerDateTime);
+            new InterchangeHeader("SNDR", "RECP", translationSummerDateTime);
         interchangeHeader.setSequenceNumber(0L);
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
-                interchangeHeader::validateStateful);
+            interchangeHeader::validateStateful);
 
         assertEquals("UNB: Attribute sequenceNumber must be between 1 and 99999999", exception.getMessage());
     }
@@ -78,11 +78,11 @@ class InterchangeHeaderTest {
     @Test
     void testValidateStatefulSequenceNumberMoreThanMaxThrowsException() {
         final InterchangeHeader interchangeHeader =
-                new InterchangeHeader("SNDR", "RECP", translationSummerDateTime);
+            new InterchangeHeader("SNDR", "RECP", translationSummerDateTime);
         interchangeHeader.setSequenceNumber(LARGE_SEQUENCE_NUMBER);
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
-                interchangeHeader::validateStateful);
+            interchangeHeader::validateStateful);
 
         assertEquals("UNB: Attribute sequenceNumber must be between 1 and 99999999", exception.getMessage());
     }
@@ -90,7 +90,7 @@ class InterchangeHeaderTest {
     @Test
     void testValidateStatefulSequenceNumberWithinMinMaxDoesNotThrowException() {
         final InterchangeHeader interchangeHeader =
-                new InterchangeHeader("SNDR", "RECP", translationSummerDateTime);
+            new InterchangeHeader("SNDR", "RECP", translationSummerDateTime);
         interchangeHeader.setSequenceNumber(1L);
 
         assertDoesNotThrow(interchangeHeader::validateStateful);
@@ -102,7 +102,7 @@ class InterchangeHeaderTest {
         interchangeHeader.setSequenceNumber(1L);
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
-                interchangeHeader::preValidate);
+            interchangeHeader::preValidate);
 
         assertEquals("UNB: Attribute sender is required", exception.getMessage());
     }
@@ -113,14 +113,14 @@ class InterchangeHeaderTest {
         interchangeHeader.setSequenceNumber(1L);
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
-                interchangeHeader::preValidate);
+            interchangeHeader::preValidate);
 
         assertEquals("UNB: Attribute recipient is required", exception.getMessage());
     }
 
     @Test
     void testFromStringWithValidEdifactStringReturnsInterchangeHeader() {
-        final InterchangeHeader interchangeHeader = InterchangeHeader.fromString("UNB+UNOA:2+SNDR+RECP+190323:0900+00000001");
+        final var interchangeHeader = InterchangeHeader.fromString("UNB+UNOA:2+SNDR+RECP+190323:0900+00000001");
 
         assertEquals(InterchangeHeader.KEY, interchangeHeader.getKey());
         assertEquals("UNOA:2+SNDR+RECP+190323:0900+00000001", interchangeHeader.getValue());
@@ -132,7 +132,7 @@ class InterchangeHeaderTest {
     @Test
     void testFromStringWithInvalidEdifactStringThrowsException() {
         final IllegalArgumentException exception =
-                assertThrows(IllegalArgumentException.class, () -> InterchangeHeader.fromString("wrong value"));
+            assertThrows(IllegalArgumentException.class, () -> InterchangeHeader.fromString("wrong value"));
 
         assertEquals("Can't create InterchangeHeader from wrong value", exception.getMessage());
     }

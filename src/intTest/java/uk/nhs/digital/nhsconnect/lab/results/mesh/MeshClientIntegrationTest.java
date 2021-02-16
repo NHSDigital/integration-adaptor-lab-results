@@ -22,7 +22,6 @@ import uk.nhs.digital.nhsconnect.lab.results.mesh.exception.MeshApiConnectionExc
 import uk.nhs.digital.nhsconnect.lab.results.mesh.exception.MeshWorkflowUnknownException;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshHttpClientBuilder;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshRequests;
-import uk.nhs.digital.nhsconnect.lab.results.mesh.message.InboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessageId;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
@@ -72,9 +71,9 @@ class MeshClientIntegrationTest extends IntegrationBaseTest {
     void when_callingMeshGetMessageEndpoint_expect_messageIsReturned() {
         final MeshMessageId testMessageId = getMeshClient().sendEdifactMessage(OUTBOUND_MESH_MESSAGE);
 
-        final InboundMeshMessage meshMessage = getLabResultsMeshClient().getEdifactMessage(testMessageId.getMessageID());
-        assertThat(meshMessage.getContent()).isEqualTo(CONTENT);
-        assertThat(meshMessage.getWorkflowId()).isEqualTo(WorkflowId.REGISTRATION);
+        final var inboundMeshMessage = getLabResultsMeshClient().getEdifactMessage(testMessageId.getMessageID());
+        assertThat(inboundMeshMessage.getContent()).isEqualTo(CONTENT);
+        assertThat(inboundMeshMessage.getWorkflowId()).isEqualTo(WorkflowId.REGISTRATION);
     }
 
     @Test

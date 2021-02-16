@@ -48,7 +48,8 @@ class SchedulerTimestampRepositoryExtensionTest {
         final Instant timestamp = Instant.now();
         when(timestampService.getCurrentTimestamp()).thenReturn(timestamp);
 
-        final boolean updated = schedulerTimestampRepositoryExtensions.updateTimestamp(SCHEDULER_TYPE, timestamp, SECONDS);
+        final boolean updated = schedulerTimestampRepositoryExtensions.updateTimestamp(
+            SCHEDULER_TYPE, timestamp, SECONDS);
 
         assertThat(updated).isFalse();
         final var expected = new SchedulerTimestamp(SCHEDULER_TYPE, timestamp);
@@ -62,7 +63,8 @@ class SchedulerTimestampRepositoryExtensionTest {
         final MongoWriteException exception = mock(MongoWriteException.class);
         when(mongoOperations.save(any(), eq(MESH_TIMESTAMP_COLLECTION_NAME))).thenThrow(exception);
 
-        final boolean updated = schedulerTimestampRepositoryExtensions.updateTimestamp(SCHEDULER_TYPE, Instant.now(), SECONDS);
+        final boolean updated = schedulerTimestampRepositoryExtensions.updateTimestamp(
+            SCHEDULER_TYPE, Instant.now(), SECONDS);
 
         assertThat(updated).isFalse();
     }
@@ -74,7 +76,8 @@ class SchedulerTimestampRepositoryExtensionTest {
         final DuplicateKeyException exception = mock(DuplicateKeyException.class);
         when(mongoOperations.save(any(), eq(MESH_TIMESTAMP_COLLECTION_NAME))).thenThrow(exception);
 
-        final boolean updated = schedulerTimestampRepositoryExtensions.updateTimestamp(SCHEDULER_TYPE, Instant.now(), SECONDS);
+        final boolean updated = schedulerTimestampRepositoryExtensions.updateTimestamp(
+            SCHEDULER_TYPE, Instant.now(), SECONDS);
 
         assertThat(updated).isFalse();
     }
@@ -83,11 +86,13 @@ class SchedulerTimestampRepositoryExtensionTest {
     void when_updated_expect_returnTrue() {
         when(mongoOperations.count(any(Query.class), eq(MESH_TIMESTAMP_COLLECTION_NAME))).thenReturn(1L);
 
-        when(mongoOperations.updateFirst(isA(Query.class), isA(UpdateDefinition.class), isA(String.class))).thenReturn(updateResult);
+        when(mongoOperations.updateFirst(isA(Query.class), isA(UpdateDefinition.class), isA(String.class)))
+            .thenReturn(updateResult);
         when(updateResult.getModifiedCount()).thenReturn(1L);
         when(timestampService.getCurrentTimestamp()).thenReturn(Instant.now());
 
-        final boolean updated = schedulerTimestampRepositoryExtensions.updateTimestamp(SCHEDULER_TYPE, Instant.now(), SECONDS);
+        final boolean updated = schedulerTimestampRepositoryExtensions.updateTimestamp(
+            SCHEDULER_TYPE, Instant.now(), SECONDS);
 
         assertThat(updated).isTrue();
     }
@@ -96,11 +101,13 @@ class SchedulerTimestampRepositoryExtensionTest {
     void when_updatedAndMoreThanOneDocumentExistsForSchedulerType_expect_stillReturnTrue() {
         when(mongoOperations.count(any(Query.class), eq(MESH_TIMESTAMP_COLLECTION_NAME))).thenReturn(2L);
 
-        when(mongoOperations.updateFirst(isA(Query.class), isA(UpdateDefinition.class), isA(String.class))).thenReturn(updateResult);
+        when(mongoOperations.updateFirst(isA(Query.class), isA(UpdateDefinition.class), isA(String.class)))
+            .thenReturn(updateResult);
         when(updateResult.getModifiedCount()).thenReturn(1L);
         when(timestampService.getCurrentTimestamp()).thenReturn(Instant.now());
 
-        final boolean updated = schedulerTimestampRepositoryExtensions.updateTimestamp(SCHEDULER_TYPE, Instant.now(), SECONDS);
+        final boolean updated = schedulerTimestampRepositoryExtensions.updateTimestamp(
+            SCHEDULER_TYPE, Instant.now(), SECONDS);
 
         assertThat(updated).isTrue();
     }
@@ -109,11 +116,13 @@ class SchedulerTimestampRepositoryExtensionTest {
     void when_notUpdated_expect_returnFalse() {
         when(mongoOperations.count(any(Query.class), eq(MESH_TIMESTAMP_COLLECTION_NAME))).thenReturn(1L);
 
-        when(mongoOperations.updateFirst(isA(Query.class), isA(UpdateDefinition.class), isA(String.class))).thenReturn(updateResult);
+        when(mongoOperations.updateFirst(isA(Query.class), isA(UpdateDefinition.class), isA(String.class)))
+            .thenReturn(updateResult);
         when(updateResult.getModifiedCount()).thenReturn(0L);
         when(timestampService.getCurrentTimestamp()).thenReturn(Instant.now());
 
-        final boolean updated = schedulerTimestampRepositoryExtensions.updateTimestamp(SCHEDULER_TYPE, Instant.now(), SECONDS);
+        final boolean updated = schedulerTimestampRepositoryExtensions.updateTimestamp(
+            SCHEDULER_TYPE, Instant.now(), SECONDS);
 
         assertThat(updated).isFalse();
     }

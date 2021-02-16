@@ -61,7 +61,8 @@ public class PersonDateOfBirth extends Segment {
 
     public static PersonDateOfBirth fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {
-            throw new IllegalArgumentException("Can't create " + PersonDateOfBirth.class.getSimpleName() + " from " + edifactString);
+            throw new IllegalArgumentException("Can't create " + PersonDateOfBirth.class.getSimpleName()
+                + " from " + edifactString);
         }
         final String input = Split.byPlus(edifactString)[1];
         final String dateOfBirth = Split.byColon(input)[1];

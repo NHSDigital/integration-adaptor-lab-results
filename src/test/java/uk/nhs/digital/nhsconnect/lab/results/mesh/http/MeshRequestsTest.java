@@ -19,13 +19,13 @@ class MeshRequestsTest {
     private static final String MESSAGE_RECIPIENT = "recipient";
 
     private final MeshConfig meshConfig = new MeshConfig(MAILBOX_ID,
-        "password",
-        "SharedKey",
+            "password",
+            "SharedKey",
             MESH_HOST,
-        "false",
-        StringUtils.EMPTY,
-        StringUtils.EMPTY,
-        StringUtils.EMPTY);
+            "false",
+            StringUtils.EMPTY,
+            StringUtils.EMPTY,
+            StringUtils.EMPTY);
     private final MeshHeaders meshHeaders = new MeshHeaders(meshConfig);
 
     @Test
@@ -73,7 +73,8 @@ class MeshRequestsTest {
         final var request = meshRequests.acknowledge(MESSAGE_ID);
 
         assertThat(request).isExactlyInstanceOf(HttpPut.class);
-        assertThat(request.getURI().toString()).isEqualTo(MESH_HOST + MAILBOX_ID + "/inbox/" +  MESSAGE_ID + "/status/acknowledged");
+        assertThat(request.getURI().toString())
+                .isEqualTo(MESH_HOST + MAILBOX_ID + "/inbox/" + MESSAGE_ID + "/status/acknowledged");
     }
 
     @Test
@@ -88,7 +89,7 @@ class MeshRequestsTest {
 
     private void assertSending(HttpEntityEnclosingRequestBase request, WorkflowId workflowId) {
         assertThat(request).isExactlyInstanceOf(HttpPost.class);
-        assertThat(request.getURI().toString()).isEqualTo(MESH_HOST + MAILBOX_ID  + "/outbox");
+        assertThat(request.getURI().toString()).isEqualTo(MESH_HOST + MAILBOX_ID + "/outbox");
         final Header[] mexToHeader = request.getHeaders("Mex-To");
         assertThat(mexToHeader.length).isEqualTo(1);
         assertThat(mexToHeader[0].getValue()).isEqualTo(MESSAGE_RECIPIENT);

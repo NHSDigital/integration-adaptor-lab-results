@@ -22,7 +22,8 @@ public class DiagnosticReportCode extends Segment {
 
     public static DiagnosticReportCode fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY)) {
-            throw new IllegalArgumentException("Can't create " + DiagnosticReportCode.class.getSimpleName() + " from " + edifactString);
+            throw new IllegalArgumentException("Can't create " + DiagnosticReportCode.class.getSimpleName()
+                + " from " + edifactString);
         }
         final String[] keySplit = Split.byPlus(edifactString);
         final String code = keySplit[1];
