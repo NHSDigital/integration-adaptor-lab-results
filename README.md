@@ -1,5 +1,5 @@
 # integration-adaptor-lab-results
-Integration Adaptor to simplify processing of Pathology and Screening results
+Integration Adaptor to simplify processing of Pathology and Screening results.
 
 ## Configuration
 
@@ -30,13 +30,13 @@ You can provide an external `logback.xml` file using the `-Dlogback.configuratio
 | LAB_RESULTS_AMQP_BROKERS             | amqp://localhost:5672     | A comma-separated list of URLs to AMQP brokers (*)
 | LAB_RESULTS_AMQP_USERNAME            |                           | (Optional) username for the AMQP server
 | LAB_RESULTS_AMQP_PASSWORD            |                           | (Optional) password for the AMQP server
-| LAB_RESULTS_AMQP_MAX_REDELIVERIES    | 3                         | The number of times a message will be retried to be delivered to consumer. After exhausting all retries, it will be put on DLQ.<queue_name> dead-letter queue
+| LAB_RESULTS_AMQP_MAX_REDELIVERIES    | 3                         | The number of times a message will be retried to be delivered to consumer. After exhausting all retries, it will be put on DLQ.<queue_name> dead-letter queue. The default JMS configuration is (-1) disabled.
 
 (*) Active/Standby: The first broker in the list is always used unless there is an error, in which case the other URLs will be used. At least one URL is required.
 
 ### Mongodb Configuration Options
 
-The adaptor configuration for mongodb can be configured two ways: using a connection string or providing individual 
+The adaptor configuration for mongodb can be configured two ways, using a connection string or providing individual 
 properties. This is to accommodate differences in the capabilities of deployment automation frameworks and varying 
 environments.
 
@@ -172,7 +172,7 @@ Docker Compose allows running multiple instances behind a nginx load balancer in
     docker-compose build lab-results
     docker-compose -f docker-compose.yml -f docker-compose.lb.override.yml up --scale lab-results=3 lab-results
 
-This command will start three instances of the adaptor behind a load balancer on port 8080
+This command will start three instances of the adaptor behind a load balancer on port 8080.
 
 To change the scale number while all services are running run the same "up" command with new scale value and then
 restart the load balancer container (so it will become aware of instance count change).
