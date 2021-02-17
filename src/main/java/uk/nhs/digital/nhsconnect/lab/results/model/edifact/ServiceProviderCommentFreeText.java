@@ -54,7 +54,7 @@ public class ServiceProviderCommentFreeText extends Segment {
     @Override
     public void preValidate() throws EdifactValidationException {
         if (StringUtils.isBlank(serviceProviderComment)) {
-            throw new EdifactValidationException(getKey() + ": Attribute freeTextValue is blank or missing");
+            throw new EdifactValidationException(KEY + ": Attribute serviceProviderComment is blank or missing");
         }
     }
 }

@@ -36,7 +36,7 @@ class ServiceProviderCommentFreeTextTest {
         ServiceProviderCommentFreeText emptyFreeText = new ServiceProviderCommentFreeText(StringUtils.EMPTY);
         assertThatThrownBy(emptyFreeText::preValidate)
             .isInstanceOf(EdifactValidationException.class)
-            .hasMessage("FTX: Attribute freeTextValue is blank or missing");
+            .hasMessage("FTX: Attribute serviceProviderComment is blank or missing");
     }
 
     @Test
@@ -44,6 +44,6 @@ class ServiceProviderCommentFreeTextTest {
         ServiceProviderCommentFreeText emptyFreeText = new ServiceProviderCommentFreeText(" ");
         assertThatThrownBy(emptyFreeText::preValidate)
             .isInstanceOf(EdifactValidationException.class)
-            .hasMessage("FTX: Attribute freeTextValue is blank or missing");
+            .hasMessage("FTX: Attribute serviceProviderComment is blank or missing");
     }
 }

@@ -45,12 +45,16 @@ public class PerformingOrganisationNameAndAddress extends Segment {
 
     @Override
     public String getValue() {
-        return QUALIFIER + "+++" + performingOrganisationName;
+        return QUALIFIER
+            + PLUS_SEPARATOR
+            + PLUS_SEPARATOR
+            + PLUS_SEPARATOR
+            + performingOrganisationName;
     }
 
     @Override
     protected void validateStateful() throws EdifactValidationException {
-
+        // no stateful fields to validate
     }
 
     @Override
