@@ -19,7 +19,7 @@ import java.util.Arrays;
 public class ReferencePopulationDefinitionFreeText extends Segment {
     private static final String KEY = "FTX";
     private static final String QUALIFIER = "RPD";
-    private static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
+    public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
 
     private static final int INDEX_FREE_TEXTS = 4;
     private static final int MAXIMUM_FREE_TEXTS = 5;

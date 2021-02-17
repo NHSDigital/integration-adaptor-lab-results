@@ -19,7 +19,7 @@ public class LaboratoryInvestigationResult extends Segment {
 
     private static final String KEY = "RSL";
     private static final String QUALIFIER = "NV";
-    private static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
+    public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
 
     private static final int MEASUREMENT_UNIT_SECTION = 4;
     private static final int MEASUREMENT_UNIT_INDEX = 3;

@@ -16,7 +16,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 public class ServiceProviderCommentFreeText extends Segment {
     private static final String KEY = "FTX";
     private static final String QUALIFIER = "SPC";
-    private static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
+    public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
     private static final int FREE_TEXT_INDEX = 4;
 
     private final String serviceProviderComment;

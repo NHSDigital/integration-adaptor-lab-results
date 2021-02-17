@@ -25,7 +25,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 public class SpecimenCollectionDateTime extends Segment {
     protected static final String KEY = "DTM";
     private static final String QUALIFIER = "SCO";
-    private static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
+    public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
     private static final DateTimeFormatter DATE_FORMATTER_CCYYMMDD = DateTimeFormatter.ofPattern("yyyyMMdd");
     private static final DateTimeFormatter DATE_FORMATTER_CCYYMMDDHHMM = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
 
