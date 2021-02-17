@@ -1,13 +1,5 @@
 package uk.nhs.digital.nhsconnect.lab.results.inbound;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.jms.JMSException;
-import javax.jms.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +9,15 @@ import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.utils.JmsHeaders;
+
+import javax.jms.JMSException;
+import javax.jms.Message;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * The test EDIFACT message (.dat file) is sent to the MESH mailbox where the adaptor receives inbound messages.
@@ -46,7 +47,7 @@ public class InboundUserAcceptanceTest extends IntegrationBaseTest {
         final String content = new String(Files.readAllBytes(getEdifactResource().getFile().toPath()));
 
         final OutboundMeshMessage outboundMeshMessage = OutboundMeshMessage.create(RECIPIENT,
-            WorkflowId.REGISTRATION, content, null, null);
+            WorkflowId.PATHOLOGY, content, null, null);
 
         getLabResultsMeshClient().sendEdifactMessage(outboundMeshMessage);
 
@@ -79,7 +80,7 @@ public class InboundUserAcceptanceTest extends IntegrationBaseTest {
         Interchange actualRecep = edifactParser.parse(meshMessage.getContent());
 
         assertThat(meshMessage.getWorkflowId())
-            .isEqualTo(WorkflowId.RECEP);
+            .isEqualTo(WorkflowId.PATHOLOGY_ACK);
         assertThat(actualRecep.getInterchangeHeader().getRecipient())
             .isEqualTo(expectedRecep.getInterchangeHeader().getRecipient());
         assertThat(actualRecep.getInterchangeHeader().getSender())

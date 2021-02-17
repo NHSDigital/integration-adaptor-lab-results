@@ -39,21 +39,30 @@ class MeshRequestsTest {
     }
 
     @Test
-    void when_sendingRegistrationMessage_expect_httpPostAndCorrectUri() {
+    void when_sendingPathologyMessage_expect_httpPostAndCorrectUri() {
         final MeshRequests meshRequests = new MeshRequests(meshConfig, meshHeaders);
 
-        final var request = meshRequests.sendMessage(MESSAGE_RECIPIENT, WorkflowId.REGISTRATION);
+        final var request = meshRequests.sendMessage(MESSAGE_RECIPIENT, WorkflowId.PATHOLOGY);
 
-        assertSending(request, WorkflowId.REGISTRATION);
+        assertSending(request, WorkflowId.PATHOLOGY);
+    }
+
+    @Test
+    void when_sendingScreeningMessage_expect_httpPostAndCorrectUri() {
+        final MeshRequests meshRequests = new MeshRequests(meshConfig, meshHeaders);
+
+        final var request = meshRequests.sendMessage(MESSAGE_RECIPIENT, WorkflowId.SCREENING);
+
+        assertSending(request, WorkflowId.SCREENING);
     }
 
     @Test
     void when_sendingRecepMessage_expect_httpPostAndCorrectUri() {
         final MeshRequests meshRequests = new MeshRequests(meshConfig, meshHeaders);
 
-        final var request = meshRequests.sendMessage(MESSAGE_RECIPIENT, WorkflowId.RECEP);
+        final var request = meshRequests.sendMessage(MESSAGE_RECIPIENT, WorkflowId.PATHOLOGY_ACK);
 
-        assertSending(request, WorkflowId.RECEP);
+        assertSending(request, WorkflowId.PATHOLOGY_ACK);
     }
 
     @Test

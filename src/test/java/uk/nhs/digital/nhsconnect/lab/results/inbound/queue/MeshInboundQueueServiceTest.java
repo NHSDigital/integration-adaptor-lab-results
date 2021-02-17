@@ -67,14 +67,14 @@ class MeshInboundQueueServiceTest {
     @Test
     void receiveInboundMessageIsHandledByInboundQueueConsumerService() throws Exception {
         when(message.getStringProperty(JmsHeaders.CORRELATION_ID)).thenReturn(CORRELATION_ID);
-        when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"LAB_RESULTS_REG\"}");
+        when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"PATH_MEDRPT_V3\"}");
 
         meshInboundQueueService.receive(message);
 
         verify(correlationIdService).applyCorrelationId(CORRELATION_ID);
 
         final MeshMessage expectedMeshMessage = new MeshMessage();
-        expectedMeshMessage.setWorkflowId(WorkflowId.REGISTRATION);
+        expectedMeshMessage.setWorkflowId(WorkflowId.PATHOLOGY);
         verify(inboundMessageHandler).handle(expectedMeshMessage);
 
         verify(message).acknowledge();
@@ -96,7 +96,7 @@ class MeshInboundQueueServiceTest {
     @Test
     void receiveInboundMessageHandledByInboundQueueConsumerServiceThrowsException() throws Exception {
         when(message.getStringProperty(JmsHeaders.CORRELATION_ID)).thenReturn(CORRELATION_ID);
-        when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"LAB_RESULTS_REG\"}");
+        when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"PATH_MEDRPT_V3\"}");
         doThrow(RuntimeException.class).when(inboundMessageHandler).handle(any(MeshMessage.class));
 
         assertThrows(RuntimeException.class, () -> meshInboundQueueService.receive(message));
@@ -107,16 +107,31 @@ class MeshInboundQueueServiceTest {
     }
 
     @Test
+    void receiveInboundMessageForUnsupportedWorkflowIdThrowsException() throws Exception {
+        when(message.getStringProperty(JmsHeaders.CORRELATION_ID)).thenReturn(CORRELATION_ID);
+        when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"SCRN_BCS_MEDRPT_V4\"}");
+
+        final RuntimeException exception =
+            assertThrows(RuntimeException.class, () -> meshInboundQueueService.receive(message));
+
+        assertEquals("Unknown workflow id: SCRN_BCS_MEDRPT_V4", exception.getMessage());
+
+        verify(correlationIdService).applyCorrelationId(CORRELATION_ID);
+        verify(message, never()).acknowledge();
+        verify(correlationIdService).resetCorrelationId();
+    }
+
+    @Test
     void receiveInboundMessageSetLoggingCorrelationHeaderThrowsExceptionCatchesAndContinues() throws Exception {
         doThrow(JMSException.class).when(message).getStringProperty(JmsHeaders.CORRELATION_ID);
-        when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"LAB_RESULTS_REG\"}");
+        when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"PATH_MEDRPT_V3\"}");
 
         meshInboundQueueService.receive(message);
 
         verify(correlationIdService, never()).applyCorrelationId(CORRELATION_ID);
 
         final MeshMessage expectedMeshMessage = new MeshMessage();
-        expectedMeshMessage.setWorkflowId(WorkflowId.REGISTRATION);
+        expectedMeshMessage.setWorkflowId(WorkflowId.PATHOLOGY);
         verify(inboundMessageHandler).handle(expectedMeshMessage);
 
         verify(message).acknowledge();
@@ -130,13 +145,13 @@ class MeshInboundQueueServiceTest {
         final var messageSentTimestamp = "2020-06-12T14:15:16Z";
         when(timestampService.formatInISO(now)).thenReturn(messageSentTimestamp);
 
-        final InboundMeshMessage inboundMeshMessage = InboundMeshMessage.create(WorkflowId.REGISTRATION,
+        final InboundMeshMessage inboundMeshMessage = InboundMeshMessage.create(WorkflowId.PATHOLOGY,
             "ASDF", null, "ID123");
 
         meshInboundQueueService.publish(inboundMeshMessage);
 
         // the method parameter is modified so another copy is needed. Timestamp set to expected value
-        final InboundMeshMessage expectedInboundMeshMessage = InboundMeshMessage.create(WorkflowId.REGISTRATION,
+        final InboundMeshMessage expectedInboundMeshMessage = InboundMeshMessage.create(WorkflowId.PATHOLOGY,
             "ASDF", messageSentTimestamp,
             "ID123");
         final String expectedStringMessage = objectMapper.writeValueAsString(expectedInboundMeshMessage);
