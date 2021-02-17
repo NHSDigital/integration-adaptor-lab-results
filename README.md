@@ -1,5 +1,49 @@
-# integration-adaptor-lab-results
-Integration Adaptor to simplify processing of Pathology and Screening results.
+# Lab Results - Pathology and Screening Adaptor
+
+## Adaptor Scope
+
+The main objective of the Lab Results Adaptor is to hide complex legacy standards and instead present a simple and consistent interface aligned to current NHSD national standards. The adaptor removes the requirement for a GP System to handle the complexities of EDIFACT and MESH messaging.
+
+At a high level Lab Results Adaptor exposes a queue from which the GP System can consume medical reports
+
+See the [Resources](#resources) section for links to the underlying services and standards. 
+
+Adaptor handles two types of messages
+
+- Pathology `NHS003`
+- Screening `NHS004`
+
+## Adaptor API
+
+The GP System will receive medical reports on the `Outbound GP Queue` in form of a FHIR DSTU3 Bundle.
+
+### Examples
+
+Examples of both Pathology and Screening messages are provided as part of the adaptor's User Acceptance Tests.
+Each example is built from 3 files:
+
+- `<example-id>.edifact.dat` - message provided by laboratory
+- `<example-id>.fhir.json` - message translated to FHIR format
+- `<example-id>.nhsack.dat` - confirmation messasge sent back to the laboratory
+
+Pathology examples can be found here //TODO
+Screening examples can be found here //TODO
+
+## Adaptor Architecture
+
+//TODO link to digital.nhs.uk
+
+## Resources
+
+[Pathology & Diagnostics Information Standards Collaboration Space](https://hscic.kahootz.com/connect.ti/PathologyandDiagnostics/groupHome)
+
+[National Pathology FHIR Messaging Specifications](https://developer.nhs.uk/apis/itk3nationalpathology-1-1-0/index.html)
+
+[Messaging Specification](https://hscic.kahootz.com/connect.ti/PathologyandDiagnostics/view?objectId=13046960#13046960)
+
+[Edifact Specification](https://webarchive.nationalarchives.gov.uk/20150107145848/http:/www.isb.nhs.uk/documents/isb-1557/amd-39-2003)
+
+[FHIR UK Core](https://digital.nhs.uk/services/fhir-uk-core)
 
 ## Configuration
 
@@ -255,3 +299,5 @@ The [nhsdev Docker Hub](https://hub.docker.com/repository/docker/nhsdev/fake-mes
 
 Ensure that you follow the agreed [Java Coding standards](https://gpitbjss.atlassian.net/wiki/spaces/NIA/pages/2108522539/Java+Coding+Standards) on the project when developing and code reviewing the adaptor.
 Feel free to update the documentation if you feel anything is incorrect or missing.
+
+
