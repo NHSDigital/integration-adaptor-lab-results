@@ -1,6 +1,7 @@
 String tfProject     = "nia"
 String tfEnvironment = "build1" // change for ptl, vp goes here
 String tfComponent   = "lab-results"  // this defines the application - nhais, mhs etc
+Boolean awsDeployOnlyMain = true // true: Skip AWS deployment for all branches other than 'main' ; false: Allow AWS Deployment for all branches
 
 pipeline {
     agent{
@@ -102,7 +103,7 @@ pipeline {
         }
         stage('Deploy and Integration Test') {
             when {
-                expression { currentBuild.resultIsBetterOrEqualTo('SUCCESS') }
+                expression { currentBuild.resultIsBetterOrEqualTo('SUCCESS') && ( !awsDeployOnlyMain || GIT_BRANCH == 'main'  )  }
             }
             options {
               lock("${tfProject}-${tfEnvironment}-${tfComponent}")
