@@ -45,7 +45,8 @@ public class InboundMessageHandler {
 
         fhirDataToSend.forEach(gpOutboundQueueService::publish);
 
-        sendRecep(interchange);
+        //TODO temporarily disabled
+        //sendRecep(interchange);
 
         logSentFor(interchange);
     }
