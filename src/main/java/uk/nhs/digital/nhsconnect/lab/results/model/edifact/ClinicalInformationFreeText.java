@@ -14,7 +14,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 @Getter
 @EqualsAndHashCode(callSuper = false)
 public class ClinicalInformationFreeText extends Segment {
-    public static final String KEY = "FTX";
+    protected static final String KEY = "FTX";
     private static final String QUALIFIER = "CID";
     public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
     private static final int FREE_TEXT_INDEX = 4;

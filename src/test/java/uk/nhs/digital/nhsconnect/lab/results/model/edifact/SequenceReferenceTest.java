@@ -55,7 +55,7 @@ class SequenceReferenceTest {
     }
 
     @Test
-    void testValidationBlankNumber() {
+    void testValidationEmptyNumber() {
         final var reference = new SequenceReference(SequenceReferenceTarget.SPECIMEN, "");
         assertAll(
             () -> assertDoesNotThrow(reference::validateStateful),

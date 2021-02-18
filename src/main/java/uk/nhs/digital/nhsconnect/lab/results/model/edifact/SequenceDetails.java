@@ -22,7 +22,8 @@ public class SequenceDetails extends Segment {
             throw new IllegalArgumentException(
                 "Can't create " + SequenceDetails.class.getSimpleName() + " from " + edifact);
         }
-        return new SequenceDetails(Split.byPlus(edifact)[2]);
+        final String sequenceValue = Split.byPlus(edifact)[2];
+        return new SequenceDetails(sequenceValue);
     }
 
     @Override
