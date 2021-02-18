@@ -45,8 +45,8 @@ class MeshClientIntegrationTest extends IntegrationBaseTest {
     private static final String RECIPIENT = "XX11";
     private static final String CONTENT = "test_message";
     private static final OutboundMeshMessage OUTBOUND_MESH_MESSAGE = OutboundMeshMessage.create(
-        RECIPIENT, WorkflowId.REGISTRATION, CONTENT, null, null
-    );
+        RECIPIENT, WorkflowId.PATHOLOGY, CONTENT, null, null);
+    private static final String INVALID_WORKFLOW_ID = "INVALID";
 
     @Autowired
     private MeshRequests meshRequests;
@@ -73,7 +73,7 @@ class MeshClientIntegrationTest extends IntegrationBaseTest {
 
         final var inboundMeshMessage = getLabResultsMeshClient().getEdifactMessage(testMessageId.getMessageID());
         assertThat(inboundMeshMessage.getContent()).isEqualTo(CONTENT);
-        assertThat(inboundMeshMessage.getWorkflowId()).isEqualTo(WorkflowId.REGISTRATION);
+        assertThat(inboundMeshMessage.getWorkflowId()).isEqualTo(WorkflowId.PATHOLOGY);
     }
 
     @Test
@@ -82,7 +82,7 @@ class MeshClientIntegrationTest extends IntegrationBaseTest {
 
         assertThatThrownBy(() -> getLabResultsMeshClient().getEdifactMessage(testMessageId.getMessageID()))
             .isInstanceOf(MeshWorkflowUnknownException.class)
-            .hasMessageContaining("NOT_LAB_RESULTS");
+            .hasMessageContaining(INVALID_WORKFLOW_ID);
     }
 
     @SneakyThrows
@@ -91,9 +91,9 @@ class MeshClientIntegrationTest extends IntegrationBaseTest {
         var recipientMailbox = recipientMailboxIdMappings.getRecipientMailboxId(messageForMappingMailboxId);
 
         try (CloseableHttpClient client = meshHttpClientBuilder.build()) {
-            var request = meshRequests.sendMessage(recipientMailbox, WorkflowId.REGISTRATION);
+            var request = meshRequests.sendMessage(recipientMailbox, WorkflowId.PATHOLOGY);
             request.removeHeaders("Mex-WorkflowID");
-            request.setHeader("Mex-WorkflowID", "NOT_LAB_RESULTS");
+            request.setHeader("Mex-WorkflowID", INVALID_WORKFLOW_ID);
             request.setEntity(new StringEntity("a".repeat(MB_100))); // 100mb
             try (CloseableHttpResponse response = client.execute(request)) {
                 assertThat(response.getStatusLine().getStatusCode()).isEqualTo(HttpStatus.ACCEPTED.value());

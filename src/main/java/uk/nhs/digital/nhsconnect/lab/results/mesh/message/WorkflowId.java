@@ -10,8 +10,10 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 @Getter
 public enum WorkflowId {
-    REGISTRATION("LAB_RESULTS_REG"),
-    RECEP("LAB_RESULTS_RECEP");
+    PATHOLOGY("PATH_MEDRPT_V3"),
+    PATHOLOGY_ACK("PATH_MEDRPT_V3_ACK"),
+    SCREENING("SCRN_BCS_MEDRPT_V4"),
+    SCREENING_ACK("SCRN_BCS_MEDRPT_V4_ACK");
 
     @JsonValue
     private final String workflowId;

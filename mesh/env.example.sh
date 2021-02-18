@@ -22,5 +22,6 @@ export SHARED_KEY=''
 # (optional) provide different flags / options for the curl command
 #export CURL_FLAGS="-s -i -k -o /dev/null"
 
-# WorkflowID used to send MESH messages. Can be either LAB_RESULTS_REG or LAB_RESULTS_ACK
-export WORKFLOW_ID=LAB_RESULTS_REG
+# WorkflowID used to send MESH messages.
+# Can be either PATH_MEDRPT_V3, PATH_MEDRPT_V3_ACK, SCRN_BCS_MEDRPT_V4 or SCRN_BCS_MEDRPT_V4_ACK.
+export WORKFLOW_ID=PATH_MEDRPT_V3
