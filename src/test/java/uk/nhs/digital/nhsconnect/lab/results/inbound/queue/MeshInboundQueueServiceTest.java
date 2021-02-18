@@ -39,6 +39,8 @@ import static org.mockito.Mockito.when;
 class MeshInboundQueueServiceTest {
 
     private static final String CORRELATION_ID = "CORR123";
+    private static final String PATHOLOGY_WORKFLOW_ID = WorkflowId.PATHOLOGY.getWorkflowId();
+    private static final String SCREENING_WORKFLOW_ID = WorkflowId.SCREENING.getWorkflowId();
 
     @Spy
     private ObjectMapper objectMapper;
@@ -67,7 +69,7 @@ class MeshInboundQueueServiceTest {
     @Test
     void receiveInboundMessageIsHandledByInboundQueueConsumerService() throws Exception {
         when(message.getStringProperty(JmsHeaders.CORRELATION_ID)).thenReturn(CORRELATION_ID);
-        when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"PATH_MEDRPT_V3\"}");
+        when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"" + PATHOLOGY_WORKFLOW_ID + "\"}");
 
         meshInboundQueueService.receive(message);
 
@@ -96,7 +98,7 @@ class MeshInboundQueueServiceTest {
     @Test
     void receiveInboundMessageHandledByInboundQueueConsumerServiceThrowsException() throws Exception {
         when(message.getStringProperty(JmsHeaders.CORRELATION_ID)).thenReturn(CORRELATION_ID);
-        when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"PATH_MEDRPT_V3\"}");
+        when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"" + PATHOLOGY_WORKFLOW_ID + "\"}");
         doThrow(RuntimeException.class).when(inboundMessageHandler).handle(any(MeshMessage.class));
 
         assertThrows(RuntimeException.class, () -> meshInboundQueueService.receive(message));
@@ -109,12 +111,12 @@ class MeshInboundQueueServiceTest {
     @Test
     void receiveInboundMessageForUnsupportedWorkflowIdThrowsException() throws Exception {
         when(message.getStringProperty(JmsHeaders.CORRELATION_ID)).thenReturn(CORRELATION_ID);
-        when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"SCRN_BCS_MEDRPT_V4\"}");
+        when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"" + SCREENING_WORKFLOW_ID + "\"}");
 
-        final RuntimeException exception =
-            assertThrows(RuntimeException.class, () -> meshInboundQueueService.receive(message));
+        final UnknownWorkflowException exception =
+            assertThrows(UnknownWorkflowException.class, () -> meshInboundQueueService.receive(message));
 
-        assertEquals("Unknown workflow id: SCRN_BCS_MEDRPT_V4", exception.getMessage());
+        assertEquals("Unknown workflow id: " + SCREENING_WORKFLOW_ID, exception.getMessage());
 
         verify(correlationIdService).applyCorrelationId(CORRELATION_ID);
         verify(message, never()).acknowledge();
@@ -124,7 +126,7 @@ class MeshInboundQueueServiceTest {
     @Test
     void receiveInboundMessageSetLoggingCorrelationHeaderThrowsExceptionCatchesAndContinues() throws Exception {
         doThrow(JMSException.class).when(message).getStringProperty(JmsHeaders.CORRELATION_ID);
-        when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"PATH_MEDRPT_V3\"}");
+        when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"" + PATHOLOGY_WORKFLOW_ID + "\"}");
 
         meshInboundQueueService.receive(message);
 
