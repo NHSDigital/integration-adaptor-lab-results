@@ -71,7 +71,7 @@ class MessageRecipientNameAndAddressTest {
     @Test
     void testValidationMissingName() {
         assertDoesNotThrow(() -> {
-            final var recipient = MessageRecipientNameAndAddress.fromString("MR+ID:900++");
+            final var recipient = MessageRecipientNameAndAddress.fromString("NAD+MR+ID:900++");
             recipient.validateStateful();
             recipient.preValidate();
         });
