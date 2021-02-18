@@ -7,6 +7,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.NonNull;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageRecipientNameAndAddress;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PartnerAgreedIdentification;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PerformingOrganisationNameAndAddress;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.RequesterNameAndAddress;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ServiceProvider;
@@ -43,7 +44,11 @@ public class InvolvedParty extends SegmentGroup {
     // ADR not used
     // COM not used
 
-    // TODO RFF+AHI
+    // RFF+AHI?
+    @Getter(lazy = true)
+    private final Optional<PartnerAgreedIdentification> partnerAgreedIdentification =
+        extractOptionalSegment(PartnerAgreedIdentification.KEY_QUALIFIER)
+            .map(PartnerAgreedIdentification::fromString);
 
     // SEQ not used
 

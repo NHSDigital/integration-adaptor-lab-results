@@ -2,6 +2,7 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
 import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageRecipientNameAndAddress;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PartnerAgreedIdentification;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PerformingOrganisationNameAndAddress;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.RequesterNameAndAddress;
 
@@ -52,6 +53,19 @@ class InvolvedPartyTest {
             .isPresent()
             .map(MessageRecipientNameAndAddress::getValue)
             .contains("MR+G3380314:900++SCOTT");
+    }
+
+    @Test
+    void testGetPartnerAgreedIdentification() {
+        final var involvedParty = new InvolvedParty(List.of(
+            "ignore me",
+            "RFF+AHI:agreed ID",
+            "ignore me"
+        ));
+        assertThat(involvedParty.getPartnerAgreedIdentification())
+            .isPresent()
+            .map(PartnerAgreedIdentification::getValue)
+            .contains("AHI:agreed ID");
     }
 
     @Test
