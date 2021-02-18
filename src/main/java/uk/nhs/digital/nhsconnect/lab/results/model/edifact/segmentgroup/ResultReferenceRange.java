@@ -28,7 +28,7 @@ public class ResultReferenceRange extends SegmentGroup {
     private final RangeDetail rangeDetail = RangeDetail.fromString(extractSegment(RangeDetail.KEY_QUALIFIER));
 
     // FTX?
-    @Getter
+    @Getter(lazy = true)
     private final Optional<ReferencePopulationDefinitionFreeText> referencePopulationDefinitionFreeText =
         extractOptionalSegment(ReferencePopulationDefinitionFreeText.KEY_QUALIFIER)
             .map(ReferencePopulationDefinitionFreeText::fromString);

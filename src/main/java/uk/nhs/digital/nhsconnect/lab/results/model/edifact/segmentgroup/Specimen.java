@@ -46,6 +46,8 @@ public class Specimen extends SegmentGroup {
         extractOptionalSegment(SpecimenCharacteristicFastingStatus.KEY_QUALIFIER)
             .map(SpecimenCharacteristicFastingStatus::fromString);
 
+    // PRC not used
+
     // RFF+RTI?
     @Getter(lazy = true)
     private final Optional<SpecimenReferenceByServiceRequester> specimenReferenceByServiceRequester =

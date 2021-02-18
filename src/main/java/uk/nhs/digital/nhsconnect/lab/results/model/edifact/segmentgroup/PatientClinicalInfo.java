@@ -21,7 +21,8 @@ import static java.util.stream.Collectors.toList;
 public class PatientClinicalInfo extends SegmentGroup {
     public static final String INDICATOR = "S10";
 
-    // CIN - all contents marks as "N"ot used
+    // CIN - TODO all contents marks as "N"ot used but it itself can be present CIN+UN
+
     // DTM not used
 
     // FTX{1,99}

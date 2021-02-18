@@ -57,6 +57,8 @@ public class LabResult extends SegmentGroup {
         extractOptionalSegment(TestStatus.KEY)
             .map(TestStatus::fromString);
 
+    // DTM not used
+
     // FTX{,99}
     @Getter(lazy = true)
     private final List<ServiceProviderCommentFreeText> serviceProviderCommentFreeTexts =
@@ -68,6 +70,8 @@ public class LabResult extends SegmentGroup {
     @Getter(lazy = true)
     private final SequenceReference sequenceReference = SequenceReference.fromString(
         extractSegment(SequenceReference.KEY));
+
+    // SG19 not used
 
     // S20{,9}
     @Getter(lazy = true)

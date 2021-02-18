@@ -34,6 +34,8 @@ public class InvestigationSubject extends SegmentGroup {
         extractOptionalSegment(UnstructuredAddress.KEY)
             .map(UnstructuredAddress::fromString);
 
+    // COM not used
+
     // S07
     @Getter(lazy = true)
     private final PatientDetails patientDetails = new PatientDetails(getEdifactSegments().stream()

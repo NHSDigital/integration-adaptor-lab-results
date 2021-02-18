@@ -40,6 +40,9 @@ public class ServiceReportDetails extends SegmentGroup {
     private final DiagnosticReportDateIssued diagnosticReportDateIssued =
         DiagnosticReportDateIssued.fromString(extractSegment(DiagnosticReportDateIssued.KEY_QUALIFIER));
 
+    // FTX not used
+    // SG4 not used
+
     // S06
     @Getter(lazy = true)
     private final InvestigationSubject investigationSubject = new InvestigationSubject(getEdifactSegments().stream()

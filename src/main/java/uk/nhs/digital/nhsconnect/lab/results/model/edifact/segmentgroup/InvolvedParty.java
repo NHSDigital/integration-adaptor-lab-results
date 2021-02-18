@@ -40,6 +40,13 @@ public class InvolvedParty extends SegmentGroup {
         extractOptionalSegment(MessageRecipientNameAndAddress.KEY_QUALIFIER)
             .map(MessageRecipientNameAndAddress::fromString);
 
+    // ADR not used
+    // COM not used
+
+    // TODO RFF+AHI
+
+    // SEQ not used
+
     // SPR
     @Getter(lazy = true)
     private final ServiceProvider serviceProvider = ServiceProvider.fromString(extractSegment(ServiceProvider.KEY));

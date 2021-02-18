@@ -67,4 +67,13 @@ class MessageRecipientNameAndAddressTest {
                 .hasMessage("NAD: Attribute identifier is required")
         );
     }
+
+    @Test
+    void testValidationMissingName() {
+        assertDoesNotThrow(() -> {
+            final var recipient = MessageRecipientNameAndAddress.fromString("MR+ID:900++");
+            recipient.validateStateful();
+            recipient.preValidate();
+        });
+    }
 }
