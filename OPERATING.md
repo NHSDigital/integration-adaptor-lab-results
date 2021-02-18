@@ -130,7 +130,7 @@ timestamp | log level | thread id | logger name | correlation id | message
 
 ## Correlation Id
 
-The adaptor uses a correlation id to make it easier to trace the processing of individual messages easier. It generates a random correlation id for every message (interchange) downloaded from MESH. 
+The adaptor uses a correlation id to make it easier to trace the processing of individual messages. It generates a random correlation id for every message (interchange) downloaded from MESH. 
 An interchange may contain multiple messages, and the adaptor uses the same correlation id for all messages 
 within an interchange.
 
