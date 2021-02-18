@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
+/**
+ * Example NAD+MR+G3380314:900++SCOTT
+ */
 @Getter
 @RequiredArgsConstructor
 public class MessageRecipientNameAndAddress extends Segment {
