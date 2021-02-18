@@ -136,4 +136,4 @@ labresults:
     pollingCycleMinimumIntervalInSeconds: 1
     pollingCycleDurationInSeconds: 1
   scheduler:
-    enabled: ${LAB_RESULTS_SCHEDULER_ENABLED}
+    enabled: ${LAB_RESULTS_SCHEDULER_ENABLED:false}

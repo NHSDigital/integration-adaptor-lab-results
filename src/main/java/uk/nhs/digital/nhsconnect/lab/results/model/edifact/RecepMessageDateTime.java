@@ -37,7 +37,7 @@ public class RecepMessageDateTime extends Segment {
 
     /**
      * When creating a new RecepTimestamp the timestamp is not provided. This is considered "stateful" and a value
-     * that is shared across multiple segments. For outbound registration messages the RecepProducerService sets this
+     * that is shared across multiple segments. For outbound pathology messages the RecepProducerService sets this
      * value as a pre-precessing step just before the segments are translated "toEdifact()"
      */
     private Instant timestamp;

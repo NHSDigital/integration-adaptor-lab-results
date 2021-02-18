@@ -59,9 +59,13 @@ public class MeshInboundQueueService {
             final WorkflowId workflowId = meshMessage.getWorkflowId();
 
             LOGGER.info("Processing MeshMessageId={} with MeshWorkflowId={}", meshMessage.getMeshMessageId(),
-                    workflowId);
+                workflowId);
 
-            inboundMessageHandler.handle(meshMessage);
+            if (WorkflowId.PATHOLOGY.equals(workflowId)) {
+                inboundMessageHandler.handle(meshMessage);
+            } else {
+                throw new UnknownWorkflowException(workflowId);
+            }
 
             message.acknowledge();
             LOGGER.info("Completed processing MeshMessageId={}", meshMessage.getMeshMessageId());

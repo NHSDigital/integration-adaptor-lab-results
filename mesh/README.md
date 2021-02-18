@@ -36,7 +36,7 @@ Send a message with message content provided on the command line
     
 Send a message with message content provided by a file
 
-    ./mesh.sh send [mailbox_id] "@../src/intTest/resources/edifact/registration.dat"
+    ./mesh.sh send [mailbox_id] "@../src/intTest/resources/edifact/pathology.dat"
     
 ### Download a message
 

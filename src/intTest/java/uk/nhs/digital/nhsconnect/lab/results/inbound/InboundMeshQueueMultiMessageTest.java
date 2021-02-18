@@ -19,13 +19,13 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * Tests the processing of a REGISTRATION interchange containing multiple messages by publishing it
+ * Tests the processing of a PATHOLOGY interchange containing multiple messages by publishing it
  * onto the inbound MESH message queue. This bypasses the MESH polling loop / MESH Client / MESH API.
  */
 @DirtiesContext
 public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
 
-    @Value("classpath:edifact/multi_registration.dat")
+    @Value("classpath:edifact/multi_pathology.dat")
     private Resource multiEdifactResource;
 
     private String previousCorrelationId;
@@ -43,7 +43,7 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
         final String content = new String(Files.readAllBytes(multiEdifactResource.getFile().toPath()));
 
         final MeshMessage meshMessage = new MeshMessage()
-            .setWorkflowId(WorkflowId.REGISTRATION)
+            .setWorkflowId(WorkflowId.PATHOLOGY)
             .setContent(content);
 
         sendToMeshInboundQueue(meshMessage);

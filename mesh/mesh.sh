@@ -12,7 +12,7 @@ OPENTEST_ENDPOINT_PRIVATE_KEY="${OPENTEST_ENDPOINT_PRIVATE_KEY:-${HOME}/opentest
 # "Your endpoint certificate" from your OpenTest registration e-mail
 OPENTEST_ENDPOINT_CERT="${OPENTEST_ENDPOINT_CERT:-${HOME}/opentest.endpoint.cert}"
 CURL_FLAGS="${CURL_FLAGS:--k}" # insecure, disable cert validation for fake-mesh. Add -i for headers
-WORKFLOW_ID="${WORKFLOW_ID:LAB_RESULTS_REG}"
+WORKFLOW_ID="${WORKFLOW_ID:PATH_MEDRPT_V3}"
 
 create_token() {
   local nonce
