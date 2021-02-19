@@ -1,13 +1,10 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import lombok.Getter;
 import lombok.NonNull;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceDetails;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ServiceProviderCommentFreeText;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicFastingStatus;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCollectionDateTime;
@@ -15,6 +12,10 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCollectionRec
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenQuantity;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenReferenceByServiceProvider;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenReferenceByServiceRequester;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Provides information about a specimen.
@@ -78,11 +79,11 @@ public class Specimen extends SegmentGroup {
         extractOptionalSegment(SpecimenCollectionReceiptDateTime.KEY_QUALIFIER)
             .map(SpecimenCollectionReceiptDateTime::fromString);
 
-    // FTX{,9}
+    // FTX+SPC{,9}
     @Getter(lazy = true)
-    private final List<ServiceProviderCommentFreeText> serviceProviderCommentFreeTexts =
-        extractSegments(ServiceProviderCommentFreeText.KEY_QUALIFIER).stream()
-            .map(ServiceProviderCommentFreeText::fromString)
+    private final List<FreeTextSegment> freeTexts =
+        extractSegments(FreeTextType.SERVICE_PROVIDER_COMMENT.getKeyQualifier()).stream()
+            .map(FreeTextSegment::fromString)
             .collect(Collectors.toList());
 
     public static List<Specimen> createMultiple(@NonNull final List<String> edifactSegments) {

@@ -1,62 +1,69 @@
 package uk.nhs.digital.nhsconnect.lab.segments.model.edifact;
 
-import lombok.NonNull;
 import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class FreeTextSegmentTest {
-    private static class SampleFreeText extends FreeTextSegment {
-        SampleFreeText(@NonNull final String qualifier, @NonNull final String... texts) {
-            super(qualifier, texts);
-        }
-        static String[] extractSegments(String edifact) {
-            return FreeTextSegment.extractFreeTextsFromString(edifact, "FTX+SMP", "ClassName");
-        }
+    @Test
+    void testGetKey() {
+        assertThat(new FreeTextSegment(FreeTextType.CLINICAL_INFO, new String[0]).getKey())
+            .isEqualTo("FTX");
+    }
+
+    @Test
+    void testWrongKey() {
+        assertThatThrownBy(() -> FreeTextSegment.fromString("WRONG+CID+++OK"))
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Can't create FreeTextSegment from WRONG+CID+++OK");
     }
 
     @Test
     void testNoTexts() {
-        var segments = SampleFreeText.extractSegments("FTX+SMP+++");
-        assertThat(segments).isEmpty();
+        var result = FreeTextSegment.fromString("FTX+CRR+++");
+        assertAll(
+            () -> assertThat(result.getValue()).isEqualTo("CRR+++"),
+            () -> assertThat(result.getTexts()).isEmpty(),
+            () -> assertThatThrownBy(result::preValidate)
+                .isExactlyInstanceOf(EdifactValidationException.class)
+                .hasMessage("FTX+CRR: At least one free text must be given."),
+            () -> assertThatNoException().isThrownBy(result::validateStateful)
+        );
     }
 
     @Test
     void testOneText() {
-        var segments = SampleFreeText.extractSegments("FTX+SMP+++Okay");
-        assertThat(segments).containsExactly("Okay");
+        var result = FreeTextSegment.fromString("FTX+RIT+++Okay");
+        assertAll(
+            () -> assertThat(result.getValue()).isEqualTo("RIT+++Okay"),
+            () -> assertThat(result.getTexts()).containsExactly("Okay"),
+            () -> assertThatNoException().isThrownBy(result::preValidate),
+            () -> assertThatNoException().isThrownBy(result::validateStateful)
+        );
     }
 
     @Test
     @SuppressWarnings("checkstyle:MagicNumber")
     void testFromStringTooManyFreeTexts() {
-        assertThatThrownBy(() -> SampleFreeText.extractSegments("FTX+SMP+++A" + ":A".repeat(10)))
+        assertThatThrownBy(() -> FreeTextSegment.fromString("FTX+RPD+++A" + ":A".repeat(10)))
             .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Can't create ClassName (FTX+SMP) "
-                + "from FTX+SMP+++A:A:A:A:A:A:A:A:A:A:A because too many free texts");
+            .hasMessage(
+                "Can't create FreeTextSegment from FTX+RPD+++A:A:A:A:A:A:A:A:A:A:A because too many free texts");
     }
 
     @Test
     @SuppressWarnings("checkstyle:MagicNumber")
     void testPreValidateTooManyFreeTexts() {
         final var texts = "A".repeat(10).split("");
-        final var freeText = new SampleFreeText("SMP", texts);
+        final var freeText = new FreeTextSegment(FreeTextType.SERVICE_PROVIDER_COMMENT, texts);
         assertThatThrownBy(freeText::preValidate)
             .isExactlyInstanceOf(EdifactValidationException.class)
-            .hasMessage("FTX+SMP: At most 5 free texts may be given.");
-    }
-
-    @Test
-    void testEqualsAndHashcode() {
-        final SampleFreeText a = new SampleFreeText("SMP", "");
-        final SampleFreeText b = new SampleFreeText("SMP", "");
-        assertAll(
-            () -> assertThat(a).isEqualTo(b),
-            () -> assertThat(a.hashCode()).isEqualTo(b.hashCode())
-        );
+            .hasMessage("FTX+SPC: At most 5 free texts may be given.");
     }
 }

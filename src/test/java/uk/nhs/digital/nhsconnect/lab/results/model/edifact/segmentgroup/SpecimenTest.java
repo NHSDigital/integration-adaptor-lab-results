@@ -1,8 +1,8 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
 import org.junit.jupiter.api.Test;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceDetails;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ServiceProviderCommentFreeText;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicFastingStatus;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCollectionDateTime;
@@ -137,9 +137,9 @@ class SpecimenTest {
             "FTX+SPC+++Note low platelets",
             "ignore me"
         ));
-        assertThat(specimen.getServiceProviderCommentFreeTexts())
+        assertThat(specimen.getFreeTexts())
             .hasSize(2)
-            .map(ServiceProviderCommentFreeText::getValue)
+            .map(FreeTextSegment::getValue)
             .contains("SPC+++red blood cell seen", "SPC+++Note low platelets");
     }
 
@@ -158,7 +158,7 @@ class SpecimenTest {
             () -> assertThat(specimen.getSpecimenQuantity()).isEmpty(),
             () -> assertThat(specimen.getSpecimenCollectionDateTime()).isEmpty(),
             () -> assertThat(specimen.getSpecimenCollectionReceiptDateTime()).isEmpty(),
-            () -> assertThat(specimen.getServiceProviderCommentFreeTexts()).isEmpty()
+            () -> assertThat(specimen.getFreeTexts()).isEmpty()
         );
     }
 }

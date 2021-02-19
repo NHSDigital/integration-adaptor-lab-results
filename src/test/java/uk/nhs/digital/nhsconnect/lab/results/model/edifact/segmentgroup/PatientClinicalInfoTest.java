@@ -2,7 +2,7 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
 import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ClinicalInformationCode;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ClinicalInformationFreeText;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
 
 import java.util.List;
@@ -39,9 +39,9 @@ class PatientClinicalInfoTest {
             "FTX+CID+++PAINS HANDS AND FEET.",
             "ignore me"
         ));
-        assertThat(patientInfo.getClinicalInformationFreeTexts())
+        assertThat(patientInfo.getFreeTexts())
             .hasSize(2)
-            .extracting(ClinicalInformationFreeText::getValue)
+            .extracting(FreeTextSegment::getValue)
             .contains("CID+++TIRED ALL THE TIME, LOW Hb", "CID+++PAINS HANDS AND FEET.");
     }
 
@@ -53,7 +53,7 @@ class PatientClinicalInfoTest {
             () -> assertThatThrownBy(patientInfo::getClinicalInformationCode)
                 .isExactlyInstanceOf(MissingSegmentException.class)
                 .hasMessage("EDIFACT section is missing segment CIN"),
-            () -> assertThat(patientInfo.getClinicalInformationFreeTexts()).isEmpty()
+            () -> assertThat(patientInfo.getFreeTexts()).isEmpty()
         );
     }
 }

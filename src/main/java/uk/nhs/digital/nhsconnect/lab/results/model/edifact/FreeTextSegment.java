@@ -13,45 +13,47 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 @Getter
 @EqualsAndHashCode(callSuper = false)
-public abstract class FreeTextSegment extends Segment {
-    protected static final String KEY = "FTX";
-    protected static final int FREE_TEXT_INDEX = 4;
+public class FreeTextSegment extends Segment {
+    public static final String KEY = "FTX";
+    private static final int FREE_TEXT_INDEX = 4;
     private static final int MAXIMUM_FREE_TEXTS = 5;
 
     @NonNull
-    private final String qualifier;
+    private final FreeTextType type;
     @NonNull
     private final String[] texts;
 
-    protected static String[] extractFreeTextsFromString(final String edifact, final String keyQualifier,
-                                                         final String className) {
-        if (!edifact.startsWith(keyQualifier)) {
-            throw new IllegalArgumentException(String.format("Can't create %s (%s) from %s",
-                className, keyQualifier, edifact));
+    public static FreeTextSegment fromString(final String edifact) {
+        if (!edifact.startsWith(KEY)) {
+            throw new IllegalArgumentException(
+                "Can't create " + FreeTextSegment.class.getSimpleName() + " from " + edifact);
         }
 
         final String[] split = Split.byPlus(edifact);
+        final String typeCode = split[1];
         final String freeTextComponent = split[FREE_TEXT_INDEX];
 
         final String[] freeTexts = Split.byColon(freeTextComponent);
         if (freeTexts.length > MAXIMUM_FREE_TEXTS) {
-            throw new IllegalArgumentException(String.format("Can't create %s (%s) from %s because too many free texts",
-                className, keyQualifier, edifact));
+            throw new IllegalArgumentException(
+                "Can't create " + FreeTextSegment.class.getSimpleName() + " from " + edifact
+                    + " because too many free texts");
         }
 
-        return Arrays.stream(freeTexts)
+        final var texts = Arrays.stream(freeTexts)
             .filter(line -> !StringUtils.isBlank(line))
             .toArray(String[]::new);
+        return new FreeTextSegment(FreeTextType.fromCode(typeCode), texts);
     }
 
     @Override
-    public final String getKey() {
+    public String getKey() {
         return KEY;
     }
 
     @Override
-    public final String getValue() {
-        return qualifier
+    public String getValue() {
+        return type.getQualifier()
             + PLUS_SEPARATOR
             + PLUS_SEPARATOR
             + PLUS_SEPARATOR
@@ -59,19 +61,19 @@ public abstract class FreeTextSegment extends Segment {
     }
 
     @Override
-    protected final void validateStateful() throws EdifactValidationException {
+    public void validateStateful() throws EdifactValidationException {
         // nothing
     }
 
     @Override
-    public final void preValidate() throws EdifactValidationException {
+    public void preValidate() throws EdifactValidationException {
         if (texts.length == 0 || texts[0].isBlank()) {
-            throw new EdifactValidationException(KEY + PLUS_SEPARATOR + qualifier
+            throw new EdifactValidationException(type.getKeyQualifier()
                 + ": At least one free text must be given.");
         }
 
         if (texts.length > MAXIMUM_FREE_TEXTS) {
-            throw new EdifactValidationException(KEY + PLUS_SEPARATOR + qualifier
+            throw new EdifactValidationException(type.getKeyQualifier()
                 + ": At most " + MAXIMUM_FREE_TEXTS + " free texts may be given.");
         }
     }

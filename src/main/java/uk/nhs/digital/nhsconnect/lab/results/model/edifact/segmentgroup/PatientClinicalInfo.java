@@ -3,7 +3,8 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 import lombok.Getter;
 import lombok.NonNull;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ClinicalInformationCode;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ClinicalInformationFreeText;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextType;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,11 +30,12 @@ public class PatientClinicalInfo extends SegmentGroup {
 
     // DTM not used
 
-    // FTX{1,99}
+    // FTX+CID{1,99}
     @Getter(lazy = true)
-    private final List<ClinicalInformationFreeText> clinicalInformationFreeTexts =
-        extractSegments(ClinicalInformationFreeText.KEY_QUALIFIER).stream()
-            .map(ClinicalInformationFreeText::fromString)
+    private final List<FreeTextSegment> freeTexts =
+        extractSegments(FreeTextSegment.KEY).stream()
+            .map(FreeTextSegment::fromString)
+            .filter(segment -> FreeTextType.CLINICAL_INFO.equals(segment.getType()))
             .collect(toList());
 
     // SG14 not used

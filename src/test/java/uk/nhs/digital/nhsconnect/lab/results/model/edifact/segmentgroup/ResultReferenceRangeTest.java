@@ -1,8 +1,8 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
 import org.junit.jupiter.api.Test;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.RangeDetail;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferencePopulationDefinitionFreeText;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
 
 import java.util.List;
@@ -37,9 +37,9 @@ class ResultReferenceRangeTest {
             "FTX+RPD+++Equivocal",
             "ignore me"
         ));
-        assertThat(range.getReferencePopulationDefinitionFreeText())
+        assertThat(range.getFreeTexts())
             .isPresent()
-            .map(ReferencePopulationDefinitionFreeText::getValue)
+            .map(FreeTextSegment::getValue)
             .contains("RPD+++Equivocal");
     }
 
@@ -51,7 +51,7 @@ class ResultReferenceRangeTest {
             () -> assertThatThrownBy(range::getRangeDetail)
                 .isExactlyInstanceOf(MissingSegmentException.class)
                 .hasMessage("EDIFACT section is missing segment RND+U"),
-            () -> assertThat(range.getReferencePopulationDefinitionFreeText()).isEmpty()
+            () -> assertThat(range.getFreeTexts()).isEmpty()
         );
     }
 }

@@ -2,15 +2,14 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
 import lombok.Getter;
 import lombok.NonNull;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ComplexReferenceRangeFreeText;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportCode;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InvestigationResultFreeText;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigation;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigationResult;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageTrailer;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceDetails;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceReference;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ServiceProviderCommentFreeText;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.TestStatus;
 
 import java.util.List;
@@ -61,25 +60,13 @@ public class LabResult extends SegmentGroup {
 
     // DTM not used
 
-    // FTX+SPC{,99}
+    // FTX(SPC|RIT|CRR){,99}
     @Getter(lazy = true)
-    private final List<ServiceProviderCommentFreeText> serviceProviderCommentFreeTexts =
-        extractSegments(ServiceProviderCommentFreeText.KEY_QUALIFIER).stream()
-            .map(ServiceProviderCommentFreeText::fromString)
-            .collect(toList());
-
-    // FTX+RIT{,99}
-    @Getter(lazy = true)
-    private final List<InvestigationResultFreeText> investigationResultFreeTexts =
-        extractSegments(InvestigationResultFreeText.KEY_QUALIFIER).stream()
-            .map(InvestigationResultFreeText::fromString)
-            .collect(toList());
-
-    // FTX+CRR{,99}
-    @Getter(lazy = true)
-    private final List<ComplexReferenceRangeFreeText> complexReferenceRangeFreeTexts =
-        extractSegments(ComplexReferenceRangeFreeText.KEY_QUALIFIER).stream()
-            .map(ComplexReferenceRangeFreeText::fromString)
+    private final List<FreeTextSegment> freeTexts =
+        extractSegments(FreeTextSegment.KEY).stream()
+            .map(FreeTextSegment::fromString)
+            .filter(segment -> List.of(FreeTextType.SERVICE_PROVIDER_COMMENT, FreeTextType.INVESTIGATION_RESULT,
+                FreeTextType.COMPLEX_REFERENCE_RANGE).contains(segment.getType()))
             .collect(toList());
 
     // RFF

@@ -1,14 +1,12 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
 import org.junit.jupiter.api.Test;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ComplexReferenceRangeFreeText;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportCode;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InvestigationResultFreeText;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigation;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigationResult;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceDetails;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceReference;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ServiceProviderCommentFreeText;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.TestStatus;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
 
@@ -98,9 +96,9 @@ class LabResultTest {
             "FTX+SPC+++Note low platelets",
             "ignore me"
         ));
-        assertThat(labResult.getServiceProviderCommentFreeTexts())
+        assertThat(labResult.getFreeTexts())
             .hasSize(2)
-            .map(ServiceProviderCommentFreeText::getValue)
+            .map(FreeTextSegment::getValue)
             .contains("SPC+++red blood cell seen", "SPC+++Note low platelets");
     }
 
@@ -113,9 +111,9 @@ class LabResultTest {
             "FTX+RIT+++Consisted of 36% Calcium oxalate and 64% Calcium phosphate.",
             "ignore me"
         ));
-        assertThat(labResult.getInvestigationResultFreeTexts())
+        assertThat(labResult.getFreeTexts())
             .hasSize(2)
-            .map(InvestigationResultFreeText::getValue)
+            .map(FreeTextSegment::getValue)
             .contains("RIT+++URINARY STONE weight 13 mg.",
                 "RIT+++Consisted of 36% Calcium oxalate and 64% Calcium phosphate.");
     }
@@ -129,9 +127,9 @@ class LabResultTest {
             "FTX+CRR+++Treatment of DVT,PE,AF,TIA - INR 2.0-3.0",
             "ignore me"
         ));
-        assertThat(labResult.getComplexReferenceRangeFreeTexts())
+        assertThat(labResult.getFreeTexts())
             .hasSize(2)
-            .map(ComplexReferenceRangeFreeText::getValue)
+            .map(FreeTextSegment::getValue)
             .contains("CRR+++DVT Prophylaxis - INR 2.0-2.5", "CRR+++Treatment of DVT,PE,AF,TIA - INR 2.0-3.0");
     }
 
@@ -185,7 +183,7 @@ class LabResultTest {
             () -> assertThat(labResult.getSequenceDetails()).isEmpty(),
             () -> assertThat(labResult.getLaboratoryInvestigationResult()).isEmpty(),
             () -> assertThat(labResult.getTestStatus()).isEmpty(),
-            () -> assertThat(labResult.getServiceProviderCommentFreeTexts()).isEmpty(),
+            () -> assertThat(labResult.getFreeTexts()).isEmpty(),
             () -> assertThatThrownBy(labResult::getSequenceReference)
                 .isExactlyInstanceOf(MissingSegmentException.class)
                 .hasMessage("EDIFACT section is missing segment RFF"),
