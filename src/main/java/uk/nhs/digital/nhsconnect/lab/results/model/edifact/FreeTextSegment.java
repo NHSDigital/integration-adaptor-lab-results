@@ -10,6 +10,9 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 import java.util.Arrays;
 
+/**
+ * Example FTX+CID+++ON WARFARIN'
+ */
 @RequiredArgsConstructor
 @Getter
 @EqualsAndHashCode(callSuper = false)
