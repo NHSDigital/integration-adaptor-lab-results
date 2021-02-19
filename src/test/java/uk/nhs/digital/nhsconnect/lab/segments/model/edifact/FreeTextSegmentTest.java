@@ -25,6 +25,13 @@ class FreeTextSegmentTest {
     }
 
     @Test
+    void testUnknownQualifier() {
+        assertThatThrownBy(() -> FreeTextSegment.fromString("FTX+ZZZ+++Eek"))
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("No free text type for 'ZZZ'");
+    }
+
+    @Test
     void testNoTexts() {
         var result = FreeTextSegment.fromString("FTX+CRR+++");
         assertAll(
