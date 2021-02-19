@@ -50,4 +50,28 @@ class EdifactToFhirServiceTest {
             .extracting(Parameters.ParametersParameterComponent::getResource)
             .isNotNull();
     }
+
+    @Test
+    void testConvertEdifactToFhirPerformerMapperReturnsEmpty() {
+        when(practitionerMapper.mapPerformer(message)).thenReturn(Optional.empty());
+
+        final Parameters parameters = service.convertToFhir(message);
+
+        assertThat(parameters).isNotNull();
+        assertThat(parameters.getParameter()).isEmpty();
+    }
+
+    @Test
+    void testConvertEdifactToFhirPerformerMapperReturnsSomething() {
+        when(practitionerMapper.mapPerformer(message)).thenReturn(Optional.of(mock(Practitioner.class)));
+
+        final Parameters parameters = service.convertToFhir(message);
+
+        assertThat(parameters).isNotNull();
+        assertThat(parameters.getParameter())
+            .hasSize(1)
+            .first()
+            .extracting(Parameters.ParametersParameterComponent::getResource)
+            .isNotNull();
+    }
 }

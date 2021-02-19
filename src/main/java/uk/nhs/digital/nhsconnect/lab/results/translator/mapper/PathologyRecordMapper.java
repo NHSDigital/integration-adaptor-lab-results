@@ -17,6 +17,7 @@ public class PathologyRecordMapper {
         final PathologyRecordBuilder pathologyRecordBuilder = PathologyRecord.builder();
 
         practitionerMapper.mapRequester(message).ifPresent(pathologyRecordBuilder::requester);
+        practitionerMapper.mapPerformer(message).ifPresent(pathologyRecordBuilder::performer);
 
         return pathologyRecordBuilder.build();
     }

@@ -17,7 +17,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.when;
-import static uk.nhs.digital.nhsconnect.lab.results.fixtures.FhirFixtures.generateRequester;
+import static uk.nhs.digital.nhsconnect.lab.results.fixtures.FhirFixtures.generatePractitioner;
 
 @ExtendWith(MockitoExtension.class)
 class PathologyRecordMapperTest {
@@ -33,12 +33,17 @@ class PathologyRecordMapperTest {
         final Message message = new Message(new ArrayList<>());
 
         when(practitionerMapper.mapRequester(message)).thenReturn(
-                Optional.of(generateRequester("Dr Bob Hope", AdministrativeGender.MALE))
+                Optional.of(generatePractitioner("Dr Bob Hope", AdministrativeGender.MALE))
+        );
+
+        when(practitionerMapper.mapPerformer(message)).thenReturn(
+                Optional.of(generatePractitioner("Dr Darcy Lewis", AdministrativeGender.FEMALE))
         );
 
         final PathologyRecord pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
 
         Practitioner requester = pathologyRecord.getRequester();
+        Practitioner performer = pathologyRecord.getPerformer();
 
         assertAll(
             () -> assertThat(requester.getName())
@@ -47,7 +52,14 @@ class PathologyRecordMapperTest {
                     .extracting(HumanName::getText)
                     .isEqualTo("Dr Bob Hope"),
             () -> assertThat(requester.getGender().toCode())
-                    .isEqualTo("male")
+                    .isEqualTo("male"),
+            () -> assertThat(performer.getName())
+                    .hasSize(1)
+                    .first()
+                    .extracting(HumanName::getText)
+                    .isEqualTo("Dr Darcy Lewis"),
+            () -> assertThat(performer.getGender().toCode())
+                    .isEqualTo("female")
         );
     }
 }

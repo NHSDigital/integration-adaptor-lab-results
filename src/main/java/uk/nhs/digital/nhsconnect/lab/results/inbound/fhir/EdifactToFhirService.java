@@ -22,6 +22,10 @@ public class EdifactToFhirService {
             .map(practitioner -> new ParametersParameterComponent().setResource(practitioner))
             .ifPresent(parameters::addParameter);
 
+        practitionerMapper.mapPerformer(message)
+            .map(practitioner -> new ParametersParameterComponent().setResource(practitioner))
+            .ifPresent(parameters::addParameter);
+
         return parameters;
     }
 }

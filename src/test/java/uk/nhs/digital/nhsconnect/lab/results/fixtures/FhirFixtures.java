@@ -20,7 +20,7 @@ public final class FhirFixtures {
     private static final int HOUR_OF_DAY = 15;
     private static final int MINUTE = 41;
 
-    public static Practitioner generateRequester(final String name, final AdministrativeGender gender) {
+    public static Practitioner generatePractitioner(final String name, final AdministrativeGender gender) {
         Practitioner requester = new Practitioner();
 
         requester.addName().setText(name);

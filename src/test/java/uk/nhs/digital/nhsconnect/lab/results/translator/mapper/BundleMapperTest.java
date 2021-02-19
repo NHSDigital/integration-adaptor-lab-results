@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
-import static uk.nhs.digital.nhsconnect.lab.results.fixtures.FhirFixtures.generateRequester;
+import static uk.nhs.digital.nhsconnect.lab.results.fixtures.FhirFixtures.generatePractitioner;
 import static uk.nhs.digital.nhsconnect.lab.results.fixtures.PathologyRecordFixtures.generatePathologyRecord;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,7 +32,7 @@ class BundleMapperTest {
     void testMapPathologyRecordToBundle() {
         when(uuidGenerator.generateUUID()).thenReturn("some-value-uuid").thenReturn("some-entry-uuid");
 
-        Practitioner generatedRequester = generateRequester("Dr Bob Hope", Enumerations.AdministrativeGender.MALE);
+        Practitioner generatedRequester = generatePractitioner("Dr Bob Hope", Enumerations.AdministrativeGender.MALE);
         final Bundle bundle = bundleMapper.mapToBundle(generatePathologyRecord(generatedRequester));
 
         assertAll(

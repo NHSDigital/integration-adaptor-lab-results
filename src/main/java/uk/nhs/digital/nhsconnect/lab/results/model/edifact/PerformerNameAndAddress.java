@@ -20,7 +20,7 @@ public class PerformerNameAndAddress extends Segment {
 
     private static final String KEY = "NAD";
     private static final String QUALIFIER = "SLA";
-    private static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
+    public static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
     private static final int PERFORMING_NAME_INDEX_IN_EDIFACT_STRING = 4;
     private static final int PERFORMER_ID_INDEX_IN_EDIFACT_STRING = 2;
     private static final int PERFORMER_CODE_INDEX_IN_EDIFACT_STRING = 3;

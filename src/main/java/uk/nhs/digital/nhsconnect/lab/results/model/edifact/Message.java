@@ -22,6 +22,12 @@ public class Message extends Section {
         extractOptionalSegment(RequesterNameAndAddress.KEY_QUALIFIER)
             .map(RequesterNameAndAddress::fromString);
 
+    @Getter(lazy = true)
+    private final Optional<PerformerNameAndAddress> performerNameAndAddress =
+        extractOptionalSegment(PerformerNameAndAddress.KEY_QUALIFIER)
+            .map(PerformerNameAndAddress::fromString);
+
+
     @Getter
     @Setter
     private Interchange interchange;
