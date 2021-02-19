@@ -16,7 +16,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 public class SpecimenCharacteristicFastingStatus extends Segment {
     private static final String KEY = "SPC";
     private static final String QUALIFIER = "FS";
-    private static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
+    public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
 
     private final String fastingStatus;
 

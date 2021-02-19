@@ -1,50 +1,45 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 /**
- * Example: NAD+PO+G3380314:900++SCOTT'
+ * Example NAD+MR+G3380314:900++SCOTT
  */
 @Getter
-@Setter
-@Builder
 @RequiredArgsConstructor
-public class RequesterNameAndAddress extends Segment {
-
+public class MessageRecipientNameAndAddress extends Segment {
     private static final String KEY = "NAD";
-    private static final String QUALIFIER = "PO";
+    private static final String QUALIFIER = "MR";
     public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
-    private static final int REQUESTER_NAME_INDEX_IN_EDIFACT_STRING = 4;
+    private static final int MESSAGE_RECIPIENT_NAME_INDEX = 4;
 
     @NonNull
     private final String identifier;
+
     @NonNull
     private final HealthcareRegistrationIdentificationCode healthcareRegistrationIdentificationCode;
 
-    private final String requesterName;
+    private final String messageRecipientName;
 
-    public static RequesterNameAndAddress fromString(final String edifactString) {
-        if (!edifactString.startsWith(KEY_QUALIFIER)) {
-            throw new IllegalArgumentException("Can't create " + RequesterNameAndAddress.class.getSimpleName()
-                + " from " + edifactString);
+    public static MessageRecipientNameAndAddress fromString(final String edifact) {
+        if (!edifact.startsWith(KEY_QUALIFIER)) {
+            throw new IllegalArgumentException(
+                "Can't create " + MessageRecipientNameAndAddress.class.getSimpleName() + " from " + edifact);
         }
 
-        String[] keySplit = Split.byPlus(edifactString);
+        String[] keySplit = Split.byPlus(edifact);
         String identifier = Split.byColon(keySplit[2])[0];
         String code = Split.byColon(keySplit[2])[1];
-        String requesterName = keySplit[REQUESTER_NAME_INDEX_IN_EDIFACT_STRING];
+        String recipientName = keySplit.length > MESSAGE_RECIPIENT_NAME_INDEX
+            ? keySplit[MESSAGE_RECIPIENT_NAME_INDEX]
+            : null;
 
-        return new RequesterNameAndAddress(
-            identifier,
-            HealthcareRegistrationIdentificationCode.fromCode(code),
-            requesterName
-        );
+        return new MessageRecipientNameAndAddress(identifier, HealthcareRegistrationIdentificationCode.fromCode(code),
+            recipientName);
     }
 
     @Override
@@ -61,7 +56,7 @@ public class RequesterNameAndAddress extends Segment {
             + healthcareRegistrationIdentificationCode.getCode()
             + PLUS_SEPARATOR
             + PLUS_SEPARATOR
-            + requesterName;
+            + messageRecipientName;
     }
 
     @Override
@@ -73,15 +68,6 @@ public class RequesterNameAndAddress extends Segment {
     public void preValidate() throws EdifactValidationException {
         if (identifier.isBlank()) {
             throw new EdifactValidationException(KEY + ": Attribute identifier is required");
-        }
-
-        if (healthcareRegistrationIdentificationCode.getCode().isBlank()) {
-            throw new EdifactValidationException(
-                KEY + ": Attribute code in healthcareRegistrationIdentificationCode is required");
-        }
-
-        if (requesterName.isBlank()) {
-            throw new EdifactValidationException(KEY + ": Attribute requesterName is required");
         }
     }
 }

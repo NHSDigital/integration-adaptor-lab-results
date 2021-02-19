@@ -18,8 +18,9 @@ public enum HealthcareRegistrationIdentificationCode {
 
     public static HealthcareRegistrationIdentificationCode fromCode(@NonNull String code) {
         return Arrays.stream(HealthcareRegistrationIdentificationCode.values())
-                .filter(c -> code.equals(c.getCode()))
-                .findFirst()
-                .orElseThrow();
+            .filter(c -> code.equals(c.getCode()))
+            .findFirst()
+            .orElseThrow(
+                () -> new IllegalArgumentException("No HealthcareRegistrationIdentificationCode for '" + code + "'"));
     }
 }

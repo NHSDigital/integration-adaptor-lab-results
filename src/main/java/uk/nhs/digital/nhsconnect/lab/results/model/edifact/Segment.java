@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public abstract class Segment {
-    protected static final String PLUS_SEPARATOR = "+";
+    public static final String PLUS_SEPARATOR = "+";
     protected static final String COLON_SEPARATOR = ":";
     protected static final String TERMINATOR = "'";
 

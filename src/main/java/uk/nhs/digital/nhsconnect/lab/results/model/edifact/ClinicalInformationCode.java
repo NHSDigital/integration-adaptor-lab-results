@@ -8,26 +8,25 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 /**
- * Example GIS+N'
+ * Example CIN+UN'
  */
 @EqualsAndHashCode(callSuper = false)
 @Builder
 @Getter
-public class DiagnosticReportCode extends Segment {
-
-    public static final String KEY = "GIS";
+public class ClinicalInformationCode extends Segment {
+    public static final String KEY = "CIN";
 
     @NonNull
     private final String code;
 
-    public static DiagnosticReportCode fromString(final String edifactString) {
+    public static ClinicalInformationCode fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY)) {
-            throw new IllegalArgumentException("Can't create " + DiagnosticReportCode.class.getSimpleName()
+            throw new IllegalArgumentException("Can't create " + ClinicalInformationCode.class.getSimpleName()
                 + " from " + edifactString);
         }
         final String[] keySplit = Split.byPlus(edifactString);
         final String code = keySplit[1];
-        return new DiagnosticReportCode(code);
+        return new ClinicalInformationCode(code);
     }
 
     @Override
@@ -47,8 +46,7 @@ public class DiagnosticReportCode extends Segment {
     @Override
     public void preValidate() throws EdifactValidationException {
         if (code.isBlank()) {
-            throw new EdifactValidationException(getKey() + ": Diagnostic Report Code is required");
-
+            throw new EdifactValidationException(KEY + ": Clinical Information Code is required");
         }
     }
 }

@@ -2,8 +2,11 @@ package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import org.hl7.fhir.dstu3.model.HumanName;
 import org.hl7.fhir.dstu3.model.Practitioner;
@@ -14,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.RequesterNameAndAddress;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvolvedParty;
 
 @ExtendWith(MockitoExtension.class)
 class PractitionerMapperTest {
@@ -33,14 +37,16 @@ class PractitionerMapperTest {
 
     @Test
     void testMapMessageToPractitionerNoRequester() {
-        when(message.getRequesterNameAndAddress()).thenReturn(Optional.empty());
+        when(message.getInvolvedParties()).thenReturn(Collections.emptyList());
 
         assertThat(mapper.mapRequester(message)).isEmpty();
     }
 
     @Test
     void testMapMessageToPractitionerWithRequester() {
-        when(message.getRequesterNameAndAddress()).thenReturn(Optional.of(requester));
+        final var requestingParty = mock(InvolvedParty.class);
+        when(message.getInvolvedParties()).thenReturn(List.of(requestingParty));
+        when(requestingParty.getRequesterNameAndAddress()).thenReturn(Optional.of(requester));
         when(requester.getRequesterName()).thenReturn("Alan Turing");
         when(requester.getIdentifier()).thenReturn("Identifier");
 
@@ -64,7 +70,9 @@ class PractitionerMapperTest {
 
     @Test
     void testMapMessageToPractitionerWithUnnamedRequester() {
-        when(message.getRequesterNameAndAddress()).thenReturn(Optional.of(requester));
+        final var requestingParty = mock(InvolvedParty.class);
+        when(message.getInvolvedParties()).thenReturn(List.of(requestingParty));
+        when(requestingParty.getRequesterNameAndAddress()).thenReturn(Optional.of(requester));
 
         Optional<Practitioner> result = mapper.mapRequester(message);
         assertThat(result).isNotEmpty();

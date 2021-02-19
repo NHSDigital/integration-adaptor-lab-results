@@ -19,7 +19,7 @@ public class PerformingOrganisationNameAndAddress extends Segment {
 
     private static final String KEY = "NAD";
     private static final String QUALIFIER = "SLA";
-    private static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
+    public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
     private static final int PERFORMING_ORGANISATION_NAME_INDEX_IN_EDIFACT_STRING = 4;
 
     @NonNull
@@ -45,12 +45,16 @@ public class PerformingOrganisationNameAndAddress extends Segment {
 
     @Override
     public String getValue() {
-        return QUALIFIER + "+++" + performingOrganisationName;
+        return QUALIFIER
+            + PLUS_SEPARATOR
+            + PLUS_SEPARATOR
+            + PLUS_SEPARATOR
+            + performingOrganisationName;
     }
 
     @Override
     protected void validateStateful() throws EdifactValidationException {
-
+        // no stateful fields to validate
     }
 
     @Override
