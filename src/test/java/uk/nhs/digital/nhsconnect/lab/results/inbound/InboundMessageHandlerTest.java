@@ -8,7 +8,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.fhir.EdifactToFhirService;
-import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.FhirDataToSend;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
@@ -64,7 +63,7 @@ class InboundMessageHandlerTest {
         //verify(edifactParser, times(2)).parse(any());
         verify(edifactParser, times(1)).parse(any());
         verify(edifactToFhirService, never()).convertToFhir(any(Message.class));
-        verify(gpOutboundQueueService, never()).publish(any(FhirDataToSend.class));
+        verify(gpOutboundQueueService, never()).publish(any(Bundle.class));
         //TODO: NIAD-1063 temporarily disabling NHSACK for v0.1
         //verify(recepProducerService).produceRecep(interchange);
         //verify(meshOutboundQueueService).publish(any(OutboundMeshMessage.class));
@@ -87,7 +86,7 @@ class InboundMessageHandlerTest {
         //verify(edifactParser, times(2)).parse(any());
         verify(edifactParser, times(1)).parse(any());
         verify(edifactToFhirService).convertToFhir(message);
-        verify(gpOutboundQueueService).publish(any(FhirDataToSend.class));
+        verify(gpOutboundQueueService).publish(any(Bundle.class));
         //TODO: NIAD-1063 temporarily disabling NHSACK for v0.1
         //verify(recepProducerService).produceRecep(interchange);
         //verify(meshOutboundQueueService).publish(any(OutboundMeshMessage.class));
@@ -113,7 +112,7 @@ class InboundMessageHandlerTest {
         verify(edifactParser, times(1)).parse(any());
         verify(edifactToFhirService).convertToFhir(message);
         verify(edifactToFhirService).convertToFhir(message1);
-        verify(gpOutboundQueueService, times(2)).publish(any(FhirDataToSend.class));
+        verify(gpOutboundQueueService, times(2)).publish(any(Bundle.class));
         //TODO: NIAD-1063 temporarily disabling NHSACK for v0.1
         //verify(recepProducerService).produceRecep(interchange);
         //verify(meshOutboundQueueService).publish(any(OutboundMeshMessage.class));
