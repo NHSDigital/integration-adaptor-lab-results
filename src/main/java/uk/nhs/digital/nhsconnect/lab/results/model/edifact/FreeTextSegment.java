@@ -68,12 +68,12 @@ public class FreeTextSegment extends Segment {
     @Override
     public void preValidate() throws EdifactValidationException {
         if (texts.length == 0 || texts[0].isBlank()) {
-            throw new EdifactValidationException(type.getKeyQualifier()
+            throw new EdifactValidationException(KEY + PLUS_SEPARATOR + type.getQualifier()
                 + ": At least one free text must be given.");
         }
 
         if (texts.length > MAXIMUM_FREE_TEXTS) {
-            throw new EdifactValidationException(type.getKeyQualifier()
+            throw new EdifactValidationException(KEY + PLUS_SEPARATOR + type.getQualifier()
                 + ": At most " + MAXIMUM_FREE_TEXTS + " free texts may be given.");
         }
     }

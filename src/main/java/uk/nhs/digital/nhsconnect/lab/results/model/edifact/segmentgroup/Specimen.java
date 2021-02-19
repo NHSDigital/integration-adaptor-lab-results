@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static uk.nhs.digital.nhsconnect.lab.results.model.edifact.Segment.PLUS_SEPARATOR;
+
 /**
  * Provides information about a specimen.
  * <p>
@@ -83,7 +85,8 @@ public class Specimen extends SegmentGroup {
 
     @Getter(lazy = true)
     private final List<FreeTextSegment> freeTexts =
-        extractSegments(FreeTextType.SERVICE_PROVIDER_COMMENT.getKeyQualifier()).stream()
+        extractSegments(FreeTextSegment.KEY + PLUS_SEPARATOR + FreeTextType.SERVICE_PROVIDER_COMMENT.getQualifier())
+            .stream()
             .map(FreeTextSegment::fromString)
             .collect(Collectors.toList());
 

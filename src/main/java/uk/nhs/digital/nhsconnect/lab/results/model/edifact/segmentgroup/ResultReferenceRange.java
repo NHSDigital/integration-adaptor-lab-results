@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
+import static uk.nhs.digital.nhsconnect.lab.results.model.edifact.Segment.PLUS_SEPARATOR;
 
 /**
  * Defines the reference limits of the laboratory investigation result item.
@@ -34,7 +35,8 @@ public class ResultReferenceRange extends SegmentGroup {
 
     @Getter(lazy = true)
     private final Optional<FreeTextSegment> freeTexts =
-        extractOptionalSegment(FreeTextType.REFERENCE_POPULATION_DEFINITION.getKeyQualifier())
+        extractOptionalSegment(FreeTextSegment.KEY + PLUS_SEPARATOR
+            + FreeTextType.REFERENCE_POPULATION_DEFINITION.getQualifier())
             .map(FreeTextSegment::fromString);
 
     public static List<ResultReferenceRange> createMultiple(@NonNull final List<String> edifactSegments) {

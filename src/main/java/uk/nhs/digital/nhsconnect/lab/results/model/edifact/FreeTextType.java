@@ -16,12 +16,6 @@ public enum FreeTextType {
 
     private final String qualifier;
 
-    public String getKeyQualifier() {
-        return FreeTextSegment.KEY
-            + Segment.PLUS_SEPARATOR
-            + qualifier;
-    }
-
     public static FreeTextType fromCode(final String code) {
         return Arrays.stream(FreeTextType.values())
             .filter(c -> c.qualifier.equals(code))
