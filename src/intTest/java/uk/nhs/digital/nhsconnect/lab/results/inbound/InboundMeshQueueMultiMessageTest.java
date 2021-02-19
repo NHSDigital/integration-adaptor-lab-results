@@ -1,8 +1,13 @@
 package uk.nhs.digital.nhsconnect.lab.results.inbound;
 
 import org.assertj.core.api.SoftAssertions;
+import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.Customization;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
+import org.skyscreamer.jsonassert.comparator.CustomComparator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.test.annotation.DirtiesContext;
@@ -38,7 +43,7 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
 
     @Test
     void whenMeshInboundQueueMessageIsReceivedThenMessageIsHandled(SoftAssertions softly)
-        throws IOException, JMSException {
+            throws IOException, JMSException, JSONException {
 
         final String content = new String(Files.readAllBytes(multiEdifactResource.getFile().toPath()));
 
@@ -52,7 +57,7 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
     }
 
     @SuppressWarnings("checkstyle:magicnumber")
-    private void assertGpOutboundQueueMessages(SoftAssertions softly) throws JMSException, IOException {
+    private void assertGpOutboundQueueMessages(SoftAssertions softly) throws IOException, JMSException, JSONException {
         final List<Message> gpOutboundQueueMessages = IntStream.range(0, 6)
             .mapToObj(x -> getGpOutboundQueueMessage())
             .collect(Collectors.toList());
@@ -66,7 +71,7 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
     }
 
     private void assertGpOutboundQueueMessages(SoftAssertions softly, Message message)
-        throws JMSException, IOException {
+            throws IOException, JMSException, JSONException {
 
         // all messages come from the same interchange and use the same correlation id
         final String correlationId = message.getStringProperty("CorrelationId");
@@ -77,7 +82,17 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
 
         final String messageBody = parseTextMessage(message);
         final String expectedMessageBody = new String(Files.readAllBytes(getFhirResource().getFile().toPath()));
-        softly.assertThat(messageBody).isEqualTo(expectedMessageBody);
+
+        JSONAssert.assertEquals(
+            expectedMessageBody,
+            messageBody,
+            new CustomComparator(
+                JSONCompareMode.STRICT,
+                new Customization("meta.lastUpdated", (c1, c2) -> true),
+                new Customization("identifier.value", (c1, c2) -> true),
+                new Customization("entry[*].fullUrl", (c1, c2) -> true)
+            )
+        );
     }
 
 }

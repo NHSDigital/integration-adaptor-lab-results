@@ -2,7 +2,7 @@ package uk.nhs.digital.nhsconnect.lab.results.inbound;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hl7.fhir.dstu3.model.Parameters;
+import org.hl7.fhir.dstu3.model.Bundle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.fhir.EdifactToFhirService;
@@ -54,10 +54,10 @@ public class InboundMessageHandler {
     private List<FhirDataToSend> getFhirDataToSend(List<Message> messagesToProcess) {
         return messagesToProcess.stream()
             .map(message -> {
-                final Parameters parameters = edifactToFhirService.convertToFhir(message);
-                LOGGER.debug("Converted edifact message into {}", parameters);
+                final Bundle bundle = edifactToFhirService.convertToFhir(message);
+                LOGGER.debug("Converted edifact message into {}", bundle);
                 return new FhirDataToSend()
-                    .setContent(parameters);
+                    .setContent(bundle);
             }).collect(Collectors.toList());
     }
 

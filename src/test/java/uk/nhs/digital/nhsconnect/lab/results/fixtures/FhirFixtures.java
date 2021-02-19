@@ -29,7 +29,7 @@ public final class FhirFixtures {
         return requester;
     }
 
-    public static Bundle generateBundle() {
+    public static Bundle generateBundle(final Practitioner requester) {
         Bundle bundle = new Bundle();
 
         bundle.setMeta(new Meta()
@@ -46,7 +46,7 @@ public final class FhirFixtures {
 
         bundle.addEntry()
                 .setFullUrl("urn:uuid:some-entry-uuid")
-                .setResource(new Practitioner());
+                .setResource(requester);
 
         return bundle;
     }

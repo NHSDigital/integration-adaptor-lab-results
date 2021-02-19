@@ -1,6 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.outbound.queue;
 
-import org.hl7.fhir.dstu3.model.Parameters;
+import org.hl7.fhir.dstu3.model.Bundle;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -49,15 +49,15 @@ class GpOutboundQueueServiceTest {
 
     @Test
     void publishMessageToGpOutboundQueue() throws JMSException {
-        final Parameters parameters = new Parameters();
+        final Bundle bundle = new Bundle();
 
         final FhirDataToSend fhirDataToSend = new FhirDataToSend()
             .setOperationId("123")
-            .setContent(parameters);
+            .setContent(bundle);
 
         final String serializedData = "some_serialized_data";
 
-        when(serializer.serialize(parameters)).thenReturn(serializedData);
+        when(serializer.serialize(bundle)).thenReturn(serializedData);
         when(correlationIdService.getCurrentCorrelationId()).thenReturn(CONSERVATION_ID);
 
         gpOutboundQueueService.publish(fhirDataToSend);

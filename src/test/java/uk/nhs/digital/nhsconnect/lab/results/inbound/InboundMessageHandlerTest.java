@@ -1,6 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.inbound;
 
-import org.hl7.fhir.dstu3.model.Parameters;
+import org.hl7.fhir.dstu3.model.Bundle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -78,8 +78,8 @@ class InboundMessageHandlerTest {
         when(edifactParser.parse(meshMessage.getContent())).thenReturn(interchange);
         when(interchange.getMessages()).thenReturn(List.of(message));
 
-        final Parameters parameters = new Parameters();
-        when(edifactToFhirService.convertToFhir(message)).thenReturn(parameters);
+        final Bundle bundle = new Bundle();
+        when(edifactToFhirService.convertToFhir(message)).thenReturn(bundle);
 
         inboundMessageHandler.handle(meshMessage);
 
@@ -101,10 +101,10 @@ class InboundMessageHandlerTest {
         when(edifactParser.parse(meshMessage.getContent())).thenReturn(interchange);
         when(interchange.getMessages()).thenReturn(List.of(message, message1));
 
-        final Parameters parameters = new Parameters();
+        final Bundle bundle = new Bundle();
 
-        when(edifactToFhirService.convertToFhir(message)).thenReturn(parameters);
-        when(edifactToFhirService.convertToFhir(message1)).thenReturn(parameters);
+        when(edifactToFhirService.convertToFhir(message)).thenReturn(bundle);
+        when(edifactToFhirService.convertToFhir(message1)).thenReturn(bundle);
 
         inboundMessageHandler.handle(meshMessage);
 
