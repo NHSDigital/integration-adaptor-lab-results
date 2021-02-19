@@ -15,6 +15,10 @@ import static java.util.stream.Collectors.toList;
  * Defines the reference limits of the laboratory investigation result item.
  * <p>
  * Segment group 20: {@code S20-RND-FTX}
+ * <ul>
+ *     <li>{@code RND} is mandatory. Must be qualified with {@code +U}.</li>
+ *     <li>{@code FTX} is optional. Must be qualified with {@code +RPD}, if present.</li>
+ * </ul>
  * <p>
  * Parents: {@link uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message Message}
  * &gt; {@link ServiceReportDetails}
@@ -25,11 +29,9 @@ import static java.util.stream.Collectors.toList;
 public class ResultReferenceRange extends SegmentGroup {
     public static final String INDICATOR = "S20";
 
-    // RND+U
     @Getter(lazy = true)
     private final RangeDetail rangeDetail = RangeDetail.fromString(extractSegment(RangeDetail.KEY_QUALIFIER));
 
-    // FTX+RPD?
     @Getter(lazy = true)
     private final Optional<FreeTextSegment> freeTexts =
         extractOptionalSegment(FreeTextType.REFERENCE_POPULATION_DEFINITION.getKeyQualifier())

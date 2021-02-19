@@ -16,6 +16,14 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ServiceProvider;
  * Represents information about involved healthcare parties.
  * <p>
  * Segment group 1: {@code S01-NAD-ADR-COM-RFF-SEQ-SPR}
+ * <ul>
+ *     <li>{@code NAD} is optional. Must be qualified {@code +SLA}, {@code +PO}, or {@code +MR}, if present.</li>
+ *     <li>{@code ADR} is not used.</li>
+ *     <li>{@code COM} is not used.</li>
+ *     <li>{@code RFF} is optional. Must be qualified {@code +AHI}, if present.</li>
+ *     <li>{@code SEQ} is not used.</li>
+ *     <li>{@code SPR} is mandatory.</li>
+ * </ul>
  * <p>
  * Parents: {@link uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message Message}
  */
@@ -23,36 +31,26 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ServiceProvider;
 public class InvolvedParty extends SegmentGroup {
     public static final String INDICATOR = "S01";
 
-    // NAD+SLA?
     @Getter(lazy = true)
     private final Optional<PerformingOrganisationNameAndAddress> performingOrganisationNameAndAddress =
         extractOptionalSegment(PerformingOrganisationNameAndAddress.KEY_QUALIFIER)
             .map(PerformingOrganisationNameAndAddress::fromString);
 
-    // NAD+PO?
     @Getter(lazy = true)
     private final Optional<RequesterNameAndAddress> requesterNameAndAddress =
         extractOptionalSegment(RequesterNameAndAddress.KEY_QUALIFIER)
             .map(RequesterNameAndAddress::fromString);
 
-    // NAD+MR?
     @Getter(lazy = true)
     private final Optional<MessageRecipientNameAndAddress> messageRecipientNameAndAddress =
         extractOptionalSegment(MessageRecipientNameAndAddress.KEY_QUALIFIER)
             .map(MessageRecipientNameAndAddress::fromString);
 
-    // ADR not used
-    // COM not used
-
-    // RFF+AHI?
     @Getter(lazy = true)
     private final Optional<PartnerAgreedIdentification> partnerAgreedIdentification =
         extractOptionalSegment(PartnerAgreedIdentification.KEY_QUALIFIER)
             .map(PartnerAgreedIdentification::fromString);
 
-    // SEQ not used
-
-    // SPR
     @Getter(lazy = true)
     private final ServiceProvider serviceProvider = ServiceProvider.fromString(extractSegment(ServiceProvider.KEY));
 

@@ -11,6 +11,11 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PersonSex;
  * Provides further patient identification information.
  * <p>
  * Segment group 7: {@code S07-PNA-DTM-PDI}
+ * <ul>
+ *     <li>{@code PNA} is mandatory. Must be qualified with {@code +PAT}.</li>
+ *     <li>{@code DTM} is optional. Must be qualified with {@code +329}, if present.</li>
+ *     <li>{@code PDI} is optional.</li>
+ * </ul>
  * <p>
  * Parents: {@link uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message Message}
  * &gt; {@link ServiceReportDetails}
@@ -20,17 +25,14 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PersonSex;
 public class PatientDetails extends SegmentGroup {
     public static final String INDICATOR = "S07";
 
-    // PNA+PAT
     @Getter(lazy = true)
     private final PersonName personName = PersonName.fromString(extractSegment(PersonName.KEY_QUALIFIER));
 
-    // DTM+329?
     @Getter(lazy = true)
     private final Optional<PersonDateOfBirth> personDateOfBirth =
         extractOptionalSegment(PersonDateOfBirth.KEY_QUALIFIER)
             .map(PersonDateOfBirth::fromString);
 
-    // PDI?
     @Getter(lazy = true)
     private final Optional<PersonSex> personSex =
         extractOptionalSegment(PersonSex.KEY)

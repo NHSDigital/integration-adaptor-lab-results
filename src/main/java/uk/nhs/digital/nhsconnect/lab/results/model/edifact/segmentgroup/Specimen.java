@@ -21,6 +21,18 @@ import java.util.stream.Collectors;
  * Provides information about a specimen.
  * <p>
  * Segment group 16: {@code S16-SEQ-SPC-PRC-RFF-QTY-DTM-FTX}
+ * <ul>
+ *     <li>{@code SEQ} is optional.</li>
+ *     <li>{@code SPC} is mandatory. Must be qualified with {@code +TSP}.
+ *     May optionally also be present qualified with {@code +FS}.</li>
+ *     <li>{@code PRC} is not used.</li>
+ *     <li>{@code RFF} is optional. May be qualified with {@code +RTI} or {@code +STI}.
+ *     May have up to 2 instances.</li>
+ *     <li>{@code QTY} is optional.</li>
+ *     <li>{@code DTM} is optional. May be qualified with {@code +SCO} or {@code +SRI}.
+ *     May have up to 2 instances.</li>
+ *     <li>{@code FTX} is optional. May have up to 9 instances. Each must be qualified with {@code +SPC}.</li>
+ * </ul>
  * <p>
  * Parents: {@link uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message Message}
  * &gt; {@link ServiceReportDetails}
@@ -30,56 +42,45 @@ import java.util.stream.Collectors;
 public class Specimen extends SegmentGroup {
     public static final String INDICATOR = "S16";
 
-    // SEQ?
     @Getter(lazy = true)
     private final Optional<SequenceDetails> sequenceDetails =
         extractOptionalSegment(SequenceDetails.KEY)
             .map(SequenceDetails::fromString);
 
-    // SPC+TSP
     @Getter(lazy = true)
     private final SpecimenCharacteristicType specimenCharacteristicType =
         SpecimenCharacteristicType.fromString(extractSegment(SpecimenCharacteristicType.KEY_QUALIFIER));
 
-    // SPC+FS?
     @Getter(lazy = true)
     private final Optional<SpecimenCharacteristicFastingStatus> specimenCharacteristicFastingStatus =
         extractOptionalSegment(SpecimenCharacteristicFastingStatus.KEY_QUALIFIER)
             .map(SpecimenCharacteristicFastingStatus::fromString);
 
-    // PRC not used
-
-    // RFF+RTI?
     @Getter(lazy = true)
     private final Optional<SpecimenReferenceByServiceRequester> specimenReferenceByServiceRequester =
         extractOptionalSegment(SpecimenReferenceByServiceRequester.KEY_QUALIFIER)
             .map(SpecimenReferenceByServiceRequester::fromString);
 
-    // RFF+STI?
     @Getter(lazy = true)
     private final Optional<SpecimenReferenceByServiceProvider> specimenReferenceByServiceProvider =
         extractOptionalSegment(SpecimenReferenceByServiceProvider.KEY_QUALIFIER)
             .map(SpecimenReferenceByServiceProvider::fromString);
 
-    // QTY?
     @Getter(lazy = true)
     private final Optional<SpecimenQuantity> specimenQuantity =
         extractOptionalSegment(SpecimenQuantity.KEY_QUALIFIER)
             .map(SpecimenQuantity::fromString);
 
-    // DTM+SCO?
     @Getter(lazy = true)
     private final Optional<SpecimenCollectionDateTime> specimenCollectionDateTime =
         extractOptionalSegment(SpecimenCollectionDateTime.KEY_QUALIFIER)
             .map(SpecimenCollectionDateTime::fromString);
 
-    // DTM+SRI?
     @Getter(lazy = true)
     private final Optional<SpecimenCollectionReceiptDateTime> specimenCollectionReceiptDateTime =
         extractOptionalSegment(SpecimenCollectionReceiptDateTime.KEY_QUALIFIER)
             .map(SpecimenCollectionReceiptDateTime::fromString);
 
-    // FTX+SPC{,9}
     @Getter(lazy = true)
     private final List<FreeTextSegment> freeTexts =
         extractSegments(FreeTextType.SERVICE_PROVIDER_COMMENT.getKeyQualifier()).stream()
