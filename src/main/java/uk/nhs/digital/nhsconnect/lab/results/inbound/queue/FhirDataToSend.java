@@ -10,10 +10,4 @@ public class FhirDataToSend {
 
     private Bundle content;
     private String operationId;
-
-    public FhirDataToSend setContent(final Bundle bundle) {
-        this.content = bundle;
-
-        return this;
-    }
 }

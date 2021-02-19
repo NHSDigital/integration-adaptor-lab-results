@@ -35,12 +35,13 @@ class EdifactToFhirServiceTest {
     private EdifactToFhirService service;
 
     @Test
-    void testConvertEdifactToFhirRequesterMapperReturnsSomething() {
+    void testEdifactIsMappedToFhirBundle() {
         Practitioner requester = generateRequester("Dr Bob Hope", Enumerations.AdministrativeGender.MALE);
         PathologyRecord pathologyRecord = generatePathologyRecord(requester);
+        Bundle generatedBundle = generateBundle(pathologyRecord);
 
         when(pathologyRecordMapper.mapToPathologyRecord(message)).thenReturn(pathologyRecord);
-        when(bundleMapper.mapToBundle(pathologyRecord)).thenReturn(generateBundle(requester));
+        when(bundleMapper.mapToBundle(pathologyRecord)).thenReturn(generatedBundle);
 
         final Bundle bundle = service.convertToFhir(message);
 
