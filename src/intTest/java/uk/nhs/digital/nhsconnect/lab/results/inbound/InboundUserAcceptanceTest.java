@@ -61,7 +61,8 @@ public class InboundUserAcceptanceTest extends IntegrationBaseTest {
         final String messageBody = parseTextMessage(gpOutboundQueueMessage);
         assertThat(messageBody).isEqualTo(expectedMessageBody);
 
-        assertOutboundRecepMessage();
+        //TODO: NIAD-1063 temporarily disabling NHSACK for v0.1
+        //assertOutboundRecepMessage();
     }
 
     private void assertOutboundRecepMessage() throws IOException {
