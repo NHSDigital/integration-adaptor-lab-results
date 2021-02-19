@@ -29,7 +29,7 @@ class LabResultTest {
             "GIS+N",
             "ignore me"
         ));
-        assertThat(labResult.getDiagnosticReportCode())
+        assertThat(labResult.getReportCode())
             .isNotNull()
             .extracting(DiagnosticReportCode::getValue)
             .isEqualTo("N");
@@ -42,7 +42,7 @@ class LabResultTest {
             "INV+MQ+42R4.:911::Serum ferritin",
             "ignore me"
         ));
-        assertThat(labResult.getLaboratoryInvestigation())
+        assertThat(labResult.getInvestigation())
             .isNotNull()
             .extracting(LaboratoryInvestigation::getValue)
             .isEqualTo("MQ+42R4.:911::Serum ferritin");
@@ -68,7 +68,7 @@ class LabResultTest {
             "RSL+NV+11.9:7++:::ng/mL+HI",
             "ignore me"
         ));
-        assertThat(labResult.getLaboratoryInvestigationResult())
+        assertThat(labResult.getInvestigationResult())
             .isPresent()
             .map(LaboratoryInvestigationResult::getValue)
             .contains("NV+11.9:7++:::ng/mL+HI");
@@ -174,14 +174,14 @@ class LabResultTest {
     void testLazyGettersWhenMissing() {
         final var labResult = new LabResult(List.of());
         assertAll(
-            () -> assertThatThrownBy(labResult::getDiagnosticReportCode)
+            () -> assertThatThrownBy(labResult::getReportCode)
                 .isExactlyInstanceOf(MissingSegmentException.class)
                 .hasMessage("EDIFACT section is missing segment GIS"),
-            () -> assertThatThrownBy(labResult::getLaboratoryInvestigation)
+            () -> assertThatThrownBy(labResult::getInvestigation)
                 .isExactlyInstanceOf(MissingSegmentException.class)
                 .hasMessage("EDIFACT section is missing segment INV+MQ"),
             () -> assertThat(labResult.getSequenceDetails()).isEmpty(),
-            () -> assertThat(labResult.getLaboratoryInvestigationResult()).isEmpty(),
+            () -> assertThat(labResult.getInvestigationResult()).isEmpty(),
             () -> assertThat(labResult.getTestStatus()).isEmpty(),
             () -> assertThat(labResult.getFreeTexts()).isEmpty(),
             () -> assertThatThrownBy(labResult::getSequenceReference)

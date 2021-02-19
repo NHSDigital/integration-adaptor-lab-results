@@ -35,7 +35,7 @@ public class InvolvedParty extends SegmentGroup {
     public static final String INDICATOR = "S01";
 
     @Getter(lazy = true)
-    private final Optional<PerformingOrganisationNameAndAddress> performingOrganisationNameAndAddress =
+    private final Optional<PerformingOrganisationNameAndAddress> organisationNameAndAddress =
         extractOptionalSegment(PerformingOrganisationNameAndAddress.KEY_QUALIFIER)
             .map(PerformingOrganisationNameAndAddress::fromString);
 
@@ -45,12 +45,12 @@ public class InvolvedParty extends SegmentGroup {
             .map(RequesterNameAndAddress::fromString);
 
     @Getter(lazy = true)
-    private final Optional<MessageRecipientNameAndAddress> messageRecipientNameAndAddress =
+    private final Optional<MessageRecipientNameAndAddress> recipientNameAndAddress =
         extractOptionalSegment(MessageRecipientNameAndAddress.KEY_QUALIFIER)
             .map(MessageRecipientNameAndAddress::fromString);
 
     @Getter(lazy = true)
-    private final Optional<Reference> partnerAgreedIdentification =
+    private final Optional<Reference> partnerAgreedId =
         extractOptionalSegment(Reference.KEY + PLUS_SEPARATOR + ReferenceType.PARTNER_AGREED_ID.getQualifier())
             .map(Reference::fromString);
 

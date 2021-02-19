@@ -23,7 +23,7 @@ class InvolvedPartyTest {
             "NAD+SLA+++ST JAMES?'S UNIVERSITY HOSPITAL",
             "ignore me"
         ));
-        assertThat(involvedParty.getPerformingOrganisationNameAndAddress())
+        assertThat(involvedParty.getOrganisationNameAndAddress())
             .isPresent()
             .map(PerformingOrganisationNameAndAddress::getValue)
             .contains("SLA+++ST JAMES?'S UNIVERSITY HOSPITAL");
@@ -49,7 +49,7 @@ class InvolvedPartyTest {
             "NAD+MR+G3380314:900++SCOTT",
             "ignore me"
         ));
-        assertThat(involvedParty.getMessageRecipientNameAndAddress())
+        assertThat(involvedParty.getRecipientNameAndAddress())
             .isPresent()
             .map(MessageRecipientNameAndAddress::getValue)
             .contains("MR+G3380314:900++SCOTT");
@@ -62,7 +62,7 @@ class InvolvedPartyTest {
             "RFF+AHI:agreed ID",
             "ignore me"
         ));
-        assertThat(involvedParty.getPartnerAgreedIdentification())
+        assertThat(involvedParty.getPartnerAgreedId())
             .isPresent()
             .map(Reference::getValue)
             .contains("AHI:agreed ID");

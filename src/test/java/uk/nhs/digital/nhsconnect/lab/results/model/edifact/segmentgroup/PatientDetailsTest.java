@@ -26,7 +26,7 @@ class PatientDetailsTest {
             "PNA+PAT+9435492908:OPI+++SU:KENNEDY+FO:SARAH+TI:MISS+MI:ANGELA",
             "ignore me"
         ));
-        assertThat(details.getPersonName())
+        assertThat(details.getName())
             .isNotNull()
             .extracting(PersonName::getValue)
             .isEqualTo("PAT+9435492908:OPI+++SU:KENNEDY+FO:SARAH+TI:MISS+MI:ANGELA");
@@ -39,7 +39,7 @@ class PatientDetailsTest {
             "DTM+329:19450730:102",
             "ignore me"
         ));
-        assertThat(details.getPersonDateOfBirth())
+        assertThat(details.getDateOfBirth())
             .isPresent()
             .map(PersonDateOfBirth::getValue)
             .contains("329:19450730:102");
@@ -52,7 +52,7 @@ class PatientDetailsTest {
             "PDI+2",
             "ignore me"
         ));
-        assertThat(details.getPersonSex())
+        assertThat(details.getSex())
             .isPresent()
             .map(PersonSex::getValue)
             .contains("2");
@@ -63,11 +63,11 @@ class PatientDetailsTest {
     void testLazyGettersWhenMissing() {
         final var details = new PatientDetails(List.of());
         assertAll(
-            () -> assertThatThrownBy(details::getPersonName)
+            () -> assertThatThrownBy(details::getName)
                 .isExactlyInstanceOf(MissingSegmentException.class)
                 .hasMessage("EDIFACT section is missing segment PNA+PAT"),
-            () -> assertThat(details.getPersonDateOfBirth()).isEmpty(),
-            () -> assertThat(details.getPersonSex()).isEmpty()
+            () -> assertThat(details.getDateOfBirth()).isEmpty(),
+            () -> assertThat(details.getSex()).isEmpty()
         );
     }
 }

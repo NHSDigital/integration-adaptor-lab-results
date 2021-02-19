@@ -24,7 +24,7 @@ class PatientClinicalInfoTest {
             "CIN+UN",
             "ignore me"
         ));
-        assertThat(patientInfo.getClinicalInformationCode())
+        assertThat(patientInfo.getCode())
             .isNotNull()
             .extracting(ClinicalInformationCode::getValue)
             .isEqualTo("UN");
@@ -50,7 +50,7 @@ class PatientClinicalInfoTest {
     void testLazyGettersWhenMissing() {
         final var patientInfo = new PatientClinicalInfo(List.of());
         assertAll(
-            () -> assertThatThrownBy(patientInfo::getClinicalInformationCode)
+            () -> assertThatThrownBy(patientInfo::getCode)
                 .isExactlyInstanceOf(MissingSegmentException.class)
                 .hasMessage("EDIFACT section is missing segment CIN"),
             () -> assertThat(patientInfo.getFreeTexts()).isEmpty()

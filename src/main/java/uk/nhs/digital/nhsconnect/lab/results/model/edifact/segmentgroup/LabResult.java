@@ -44,11 +44,11 @@ public class LabResult extends SegmentGroup {
     public static final String INDICATOR = DiagnosticReportCode.KEY;
 
     @Getter(lazy = true)
-    private final DiagnosticReportCode diagnosticReportCode =
+    private final DiagnosticReportCode reportCode =
         DiagnosticReportCode.fromString(extractSegment(DiagnosticReportCode.KEY));
 
     @Getter(lazy = true)
-    private final LaboratoryInvestigation laboratoryInvestigation =
+    private final LaboratoryInvestigation investigation =
         LaboratoryInvestigation.fromString(extractSegment(LaboratoryInvestigation.KEY_QUALIFIER));
 
     @Getter(lazy = true)
@@ -57,7 +57,7 @@ public class LabResult extends SegmentGroup {
             .map(SequenceDetails::fromString);
 
     @Getter(lazy = true)
-    private final Optional<LaboratoryInvestigationResult> laboratoryInvestigationResult =
+    private final Optional<LaboratoryInvestigationResult> investigationResult =
         extractOptionalSegment(LaboratoryInvestigationResult.KEY_QUALIFIER)
             .map(LaboratoryInvestigationResult::fromString);
 

@@ -30,7 +30,7 @@ public class PatientClinicalInfo extends SegmentGroup {
     public static final String INDICATOR = "S10";
 
     @Getter(lazy = true)
-    private final ClinicalInformationCode clinicalInformationCode =
+    private final ClinicalInformationCode code =
         ClinicalInformationCode.fromString(extractSegment(ClinicalInformationCode.KEY));
 
     @Getter(lazy = true)

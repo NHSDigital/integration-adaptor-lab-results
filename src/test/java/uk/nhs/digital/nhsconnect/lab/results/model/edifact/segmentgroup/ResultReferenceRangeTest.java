@@ -24,7 +24,7 @@ class ResultReferenceRangeTest {
             "RND+U+170+1100",
             "ignore me"
         ));
-        assertThat(range.getRangeDetail())
+        assertThat(range.getDetails())
             .isNotNull()
             .extracting(RangeDetail::getValue)
             .isEqualTo("U+170+1100");
@@ -48,7 +48,7 @@ class ResultReferenceRangeTest {
     void testLazyGettersWhenMissing() {
         final var range = new ResultReferenceRange(List.of());
         assertAll(
-            () -> assertThatThrownBy(range::getRangeDetail)
+            () -> assertThatThrownBy(range::getDetails)
                 .isExactlyInstanceOf(MissingSegmentException.class)
                 .hasMessage("EDIFACT section is missing segment RND+U"),
             () -> assertThat(range.getFreeTexts()).isEmpty()

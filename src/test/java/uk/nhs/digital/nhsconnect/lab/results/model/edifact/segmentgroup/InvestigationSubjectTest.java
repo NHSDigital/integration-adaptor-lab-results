@@ -35,7 +35,7 @@ class InvestigationSubjectTest {
             "ADR++US:FLAT1:12 BROWNBERRIE AVENUE::LEEDS:++LS18 5PN",
             "ignore me"
         ));
-        assertThat(investigationSubject.getUnstructuredAddress())
+        assertThat(investigationSubject.getAddress())
             .isPresent()
             .map(UnstructuredAddress::getValue)
             .contains("US:FLAT1:12 BROWNBERRIE AVENUE::LEEDS:++LS18 5PN");
@@ -50,7 +50,7 @@ class InvestigationSubjectTest {
             "S16+16",
             "ignore me"
         ));
-        assertThat(investigationSubject.getPatientDetails())
+        assertThat(investigationSubject.getDetails())
             .isNotNull()
             .extracting(PatientDetails::getEdifactSegments)
             .isEqualTo(List.of("S07+07", "include me"));
@@ -65,7 +65,7 @@ class InvestigationSubjectTest {
             "S16+16",
             "ignore me"
         ));
-        assertThat(investigationSubject.getPatientClinicalInfo())
+        assertThat(investigationSubject.getClinicalInfo())
             .isPresent()
             .map(PatientClinicalInfo::getEdifactSegments)
             .contains(List.of("S10+10", "include me"));
@@ -124,11 +124,11 @@ class InvestigationSubjectTest {
         final var investigationSubject = new InvestigationSubject(List.of());
         assertAll(
             () -> assertThat(investigationSubject.getReferenceServiceSubject()).isEmpty(),
-            () -> assertThat(investigationSubject.getUnstructuredAddress()).isEmpty(),
-            () -> assertThat(investigationSubject.getPatientDetails()).isNotNull()
+            () -> assertThat(investigationSubject.getAddress()).isEmpty(),
+            () -> assertThat(investigationSubject.getDetails()).isNotNull()
                 .extracting(PatientDetails::getEdifactSegments)
                 .isEqualTo(List.of()),
-            () -> assertThat(investigationSubject.getPatientClinicalInfo()).isEmpty(),
+            () -> assertThat(investigationSubject.getClinicalInfo()).isEmpty(),
             () -> assertThat(investigationSubject.getSpecimens()).isEmpty(),
             () -> assertThat(investigationSubject.getLabResults()).isEmpty()
         );

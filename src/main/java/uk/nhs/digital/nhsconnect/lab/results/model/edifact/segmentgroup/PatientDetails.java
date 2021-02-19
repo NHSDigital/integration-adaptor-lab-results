@@ -1,11 +1,12 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
-import java.util.List;
-import java.util.Optional;
 import lombok.Getter;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PersonDateOfBirth;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PersonName;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PersonSex;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Provides further patient identification information.
@@ -26,15 +27,15 @@ public class PatientDetails extends SegmentGroup {
     public static final String INDICATOR = "S07";
 
     @Getter(lazy = true)
-    private final PersonName personName = PersonName.fromString(extractSegment(PersonName.KEY_QUALIFIER));
+    private final PersonName name = PersonName.fromString(extractSegment(PersonName.KEY_QUALIFIER));
 
     @Getter(lazy = true)
-    private final Optional<PersonDateOfBirth> personDateOfBirth =
+    private final Optional<PersonDateOfBirth> dateOfBirth =
         extractOptionalSegment(PersonDateOfBirth.KEY_QUALIFIER)
             .map(PersonDateOfBirth::fromString);
 
     @Getter(lazy = true)
-    private final Optional<PersonSex> personSex =
+    private final Optional<PersonSex> sex =
         extractOptionalSegment(PersonSex.KEY)
             .map(PersonSex::fromString);
 

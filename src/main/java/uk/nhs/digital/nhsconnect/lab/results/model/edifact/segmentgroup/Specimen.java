@@ -69,17 +69,17 @@ public class Specimen extends SegmentGroup {
             .map(Reference::fromString);
 
     @Getter(lazy = true)
-    private final Optional<SpecimenQuantity> specimenQuantity =
+    private final Optional<SpecimenQuantity> quantity =
         extractOptionalSegment(SpecimenQuantity.KEY_QUALIFIER)
             .map(SpecimenQuantity::fromString);
 
     @Getter(lazy = true)
-    private final Optional<SpecimenCollectionDateTime> specimenCollectionDateTime =
+    private final Optional<SpecimenCollectionDateTime> collectionDateTime =
         extractOptionalSegment(SpecimenCollectionDateTime.KEY_QUALIFIER)
             .map(SpecimenCollectionDateTime::fromString);
 
     @Getter(lazy = true)
-    private final Optional<SpecimenCollectionReceiptDateTime> specimenCollectionReceiptDateTime =
+    private final Optional<SpecimenCollectionReceiptDateTime> collectionReceiptDateTime =
         extractOptionalSegment(SpecimenCollectionReceiptDateTime.KEY_QUALIFIER)
             .map(SpecimenCollectionReceiptDateTime::fromString);
 

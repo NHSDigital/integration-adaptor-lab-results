@@ -39,19 +39,19 @@ public class InvestigationSubject extends SegmentGroup {
             .map(Reference::fromString);
 
     @Getter(lazy = true)
-    private final Optional<UnstructuredAddress> unstructuredAddress =
+    private final Optional<UnstructuredAddress> address =
         extractOptionalSegment(UnstructuredAddress.KEY)
             .map(UnstructuredAddress::fromString);
 
     @Getter(lazy = true)
-    private final PatientDetails patientDetails = new PatientDetails(getEdifactSegments().stream()
+    private final PatientDetails details = new PatientDetails(getEdifactSegments().stream()
         .dropWhile(segment -> !segment.startsWith(PatientDetails.INDICATOR))
         .takeWhile(segment -> !segment.startsWith(Specimen.INDICATOR))
         .takeWhile(segment -> !segment.startsWith(MessageTrailer.KEY))
         .collect(toList()));
 
     @Getter(lazy = true)
-    private final Optional<PatientClinicalInfo> patientClinicalInfo = PatientClinicalInfo.createOptional(
+    private final Optional<PatientClinicalInfo> clinicalInfo = PatientClinicalInfo.createOptional(
         getEdifactSegments().stream()
             .dropWhile(segment -> !segment.startsWith(PatientClinicalInfo.INDICATOR))
             .takeWhile(segment -> !segment.startsWith(Specimen.INDICATOR))

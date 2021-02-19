@@ -31,7 +31,7 @@ public class ResultReferenceRange extends SegmentGroup {
     public static final String INDICATOR = "S20";
 
     @Getter(lazy = true)
-    private final RangeDetail rangeDetail = RangeDetail.fromString(extractSegment(RangeDetail.KEY_QUALIFIER));
+    private final RangeDetail details = RangeDetail.fromString(extractSegment(RangeDetail.KEY_QUALIFIER));
 
     @Getter(lazy = true)
     private final Optional<FreeTextSegment> freeTexts =

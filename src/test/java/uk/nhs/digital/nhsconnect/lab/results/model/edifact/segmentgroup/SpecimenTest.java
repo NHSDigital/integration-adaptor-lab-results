@@ -95,7 +95,7 @@ class SpecimenTest {
             "QTY+SVO:1750+:::mL",
             "ignore me"
         ));
-        assertThat(specimen.getSpecimenQuantity())
+        assertThat(specimen.getQuantity())
             .isPresent()
             .map(SpecimenQuantity::getValue)
             .contains("SVO:1750+:::mL");
@@ -108,7 +108,7 @@ class SpecimenTest {
             "DTM+SCO:20100223:102",
             "ignore me"
         ));
-        assertThat(specimen.getSpecimenCollectionDateTime())
+        assertThat(specimen.getCollectionDateTime())
             .isPresent()
             .map(SpecimenCollectionDateTime::getValue)
             .contains("SCO:20100223:102");
@@ -121,7 +121,7 @@ class SpecimenTest {
             "DTM+SRI:201002241541:203",
             "ignore me"
         ));
-        assertThat(specimen.getSpecimenCollectionReceiptDateTime())
+        assertThat(specimen.getCollectionReceiptDateTime())
             .isPresent()
             .map(SpecimenCollectionReceiptDateTime::getValue)
             .contains("SRI:201002241541:203");
@@ -154,9 +154,9 @@ class SpecimenTest {
             () -> assertThat(specimen.getCharacteristicFastingStatus()).isEmpty(),
             () -> assertThat(specimen.getServiceRequesterReference()).isEmpty(),
             () -> assertThat(specimen.getServiceProviderReference()).isEmpty(),
-            () -> assertThat(specimen.getSpecimenQuantity()).isEmpty(),
-            () -> assertThat(specimen.getSpecimenCollectionDateTime()).isEmpty(),
-            () -> assertThat(specimen.getSpecimenCollectionReceiptDateTime()).isEmpty(),
+            () -> assertThat(specimen.getQuantity()).isEmpty(),
+            () -> assertThat(specimen.getCollectionDateTime()).isEmpty(),
+            () -> assertThat(specimen.getCollectionReceiptDateTime()).isEmpty(),
             () -> assertThat(specimen.getFreeTexts()).isEmpty()
         );
     }
