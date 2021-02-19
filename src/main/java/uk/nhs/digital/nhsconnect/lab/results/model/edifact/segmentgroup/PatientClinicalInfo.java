@@ -2,6 +2,7 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
 import lombok.Getter;
 import lombok.NonNull;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ClinicalInformationCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ClinicalInformationFreeText;
 
 import java.util.List;
@@ -21,7 +22,10 @@ import static java.util.stream.Collectors.toList;
 public class PatientClinicalInfo extends SegmentGroup {
     public static final String INDICATOR = "S10";
 
-    // CIN - TODO all contents marks as "N"ot used but it itself can be present CIN+UN
+    // CIN+UN
+    @Getter(lazy = true)
+    private final ClinicalInformationCode clinicalInformationCode =
+        ClinicalInformationCode.fromString(extractSegment(ClinicalInformationCode.KEY));
 
     // DTM not used
 

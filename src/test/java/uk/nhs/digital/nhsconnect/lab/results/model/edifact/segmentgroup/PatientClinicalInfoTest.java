@@ -1,16 +1,33 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
 import org.junit.jupiter.api.Test;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ClinicalInformationCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ClinicalInformationFreeText;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class PatientClinicalInfoTest {
     @Test
     void testIndicator() {
         assertThat(PatientClinicalInfo.INDICATOR).isEqualTo("S10");
+    }
+
+    @Test
+    void testGetClinicalInformationCode() {
+        final var patientInfo = new PatientClinicalInfo(List.of(
+            "ignore me",
+            "CIN+UN",
+            "ignore me"
+        ));
+        assertThat(patientInfo.getClinicalInformationCode())
+            .isNotNull()
+            .extracting(ClinicalInformationCode::getValue)
+            .isEqualTo("UN");
     }
 
     @Test
@@ -29,8 +46,14 @@ class PatientClinicalInfoTest {
     }
 
     @Test
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     void testLazyGettersWhenMissing() {
         final var patientInfo = new PatientClinicalInfo(List.of());
-        assertThat(patientInfo.getClinicalInformationFreeTexts()).isEmpty();
+        assertAll(
+            () -> assertThatThrownBy(patientInfo::getClinicalInformationCode)
+                .isExactlyInstanceOf(MissingSegmentException.class)
+                .hasMessage("EDIFACT section is missing segment CIN"),
+            () -> assertThat(patientInfo.getClinicalInformationFreeTexts()).isEmpty()
+        );
     }
 }
