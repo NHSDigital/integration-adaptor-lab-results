@@ -1,7 +1,9 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
 import org.junit.jupiter.api.Test;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ComplexReferenceRangeFreeText;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportCode;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InvestigationResultFreeText;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigation;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigationResult;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceDetails;
@@ -100,6 +102,37 @@ class LabResultTest {
             .hasSize(2)
             .map(ServiceProviderCommentFreeText::getValue)
             .contains("SPC+++red blood cell seen", "SPC+++Note low platelets");
+    }
+
+    @Test
+    void testGetInvestigationResultFreeTexts() {
+        final var labResult = new LabResult(List.of(
+            "ignore me",
+            "FTX+RIT+++URINARY STONE weight 13 mg.",
+            "ignore me",
+            "FTX+RIT+++Consisted of 36% Calcium oxalate and 64% Calcium phosphate.",
+            "ignore me"
+        ));
+        assertThat(labResult.getInvestigationResultFreeTexts())
+            .hasSize(2)
+            .map(InvestigationResultFreeText::getValue)
+            .contains("RIT+++URINARY STONE weight 13 mg.",
+                "RIT+++Consisted of 36% Calcium oxalate and 64% Calcium phosphate.");
+    }
+
+    @Test
+    void testGetComplexReferenceRangeFreeTexts() {
+        final var labResult = new LabResult(List.of(
+            "ignore me",
+            "FTX+CRR+++DVT Prophylaxis - INR 2.0-2.5",
+            "ignore me",
+            "FTX+CRR+++Treatment of DVT,PE,AF,TIA - INR 2.0-3.0",
+            "ignore me"
+        ));
+        assertThat(labResult.getComplexReferenceRangeFreeTexts())
+            .hasSize(2)
+            .map(ComplexReferenceRangeFreeText::getValue)
+            .contains("CRR+++DVT Prophylaxis - INR 2.0-2.5", "CRR+++Treatment of DVT,PE,AF,TIA - INR 2.0-3.0");
     }
 
     @Test

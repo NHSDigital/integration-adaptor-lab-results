@@ -1,60 +1,23 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
+import lombok.NonNull;
 
 /**
  * Example FTX+SPC+++red blood cell seen, Note low platelets'
  */
-@RequiredArgsConstructor
-@Getter
-@EqualsAndHashCode(callSuper = false)
-public class ServiceProviderCommentFreeText extends Segment {
-    private static final String KEY = "FTX";
+@EqualsAndHashCode(callSuper = true)
+public class ServiceProviderCommentFreeText extends FreeTextSegment {
     private static final String QUALIFIER = "SPC";
     public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
-    private static final int FREE_TEXT_INDEX = 4;
 
-    private final String serviceProviderComment;
-
-    public static ServiceProviderCommentFreeText fromString(String edifactString) {
-        if (!edifactString.startsWith(KEY_QUALIFIER)) {
-            throw new IllegalArgumentException(
-                "Can't create " + ServiceProviderCommentFreeText.class.getSimpleName() + " from " + edifactString);
-        }
-        String[] split = Split.byPlus(
-            Split.bySegmentTerminator(edifactString)[0]
-        );
-        return new ServiceProviderCommentFreeText(split[FREE_TEXT_INDEX]);
+    public static ServiceProviderCommentFreeText fromString(String edifact) {
+        final String[] texts = FreeTextSegment.extractFreeTextsFromString(edifact, KEY_QUALIFIER,
+            ServiceProviderCommentFreeText.class.getSimpleName());
+        return new ServiceProviderCommentFreeText(texts);
     }
 
-    @Override
-    public String getKey() {
-        return KEY;
-    }
-
-    @Override
-    public String getValue() {
-        return String.join(PLUS_SEPARATOR,
-            QUALIFIER,
-            StringUtils.EMPTY,
-            StringUtils.EMPTY,
-            serviceProviderComment);
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-        // nothing
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
-        if (StringUtils.isBlank(serviceProviderComment)) {
-            throw new EdifactValidationException(KEY + ": Attribute serviceProviderComment is blank or missing");
-        }
+    public ServiceProviderCommentFreeText(@NonNull final String... texts) {
+        super(QUALIFIER, texts);
     }
 }

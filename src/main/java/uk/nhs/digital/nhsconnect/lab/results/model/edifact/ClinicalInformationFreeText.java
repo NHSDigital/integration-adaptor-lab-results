@@ -1,60 +1,23 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
+import lombok.NonNull;
 
 /**
  * Example FTX+CID+++TIRED ALL THE TIME, LOW Hb'
  */
-@RequiredArgsConstructor
-@Getter
-@EqualsAndHashCode(callSuper = false)
-public class ClinicalInformationFreeText extends Segment {
-    protected static final String KEY = "FTX";
+@EqualsAndHashCode(callSuper = true)
+public class ClinicalInformationFreeText extends FreeTextSegment {
     private static final String QUALIFIER = "CID";
     public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
-    private static final int FREE_TEXT_INDEX = 4;
 
-    private final String clinicalInformationComment;
-
-    public static ClinicalInformationFreeText fromString(final String edifactString) {
-        if (!edifactString.startsWith(KEY_QUALIFIER)) {
-            throw new IllegalArgumentException(
-                "Can't create " + ClinicalInformationFreeText.class.getSimpleName() + " from " + edifactString);
-        }
-        String[] split = Split.byPlus(
-            Split.bySegmentTerminator(edifactString)[0]
-        );
-        return new ClinicalInformationFreeText(split[FREE_TEXT_INDEX]);
+    public static ClinicalInformationFreeText fromString(final String edifact) {
+        final String[] texts = FreeTextSegment.extractFreeTextsFromString(edifact, KEY_QUALIFIER,
+            ClinicalInformationFreeText.class.getSimpleName());
+        return new ClinicalInformationFreeText(texts);
     }
 
-    @Override
-    public String getKey() {
-        return KEY;
-    }
-
-    @Override
-    public String getValue() {
-        return QUALIFIER
-            + PLUS_SEPARATOR
-            + PLUS_SEPARATOR
-            + PLUS_SEPARATOR
-            + clinicalInformationComment;
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-        // nothing
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
-        if (StringUtils.isBlank(clinicalInformationComment)) {
-            throw new EdifactValidationException(KEY + ": Attribute clinicalInformationComment is blank or missing");
-        }
+    public ClinicalInformationFreeText(@NonNull final String... text) {
+        super(QUALIFIER, text);
     }
 }

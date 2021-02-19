@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 class ClinicalInformationFreeTextTest {
     @Test
     void testGetKey() {
-        final var clinicalInfo = new ClinicalInformationFreeText(null);
+        final var clinicalInfo = new ClinicalInformationFreeText();
         assertThat(clinicalInfo.getKey()).isEqualTo(ClinicalInformationFreeText.KEY);
     }
 
@@ -25,13 +25,13 @@ class ClinicalInformationFreeTextTest {
     void testFromStringWrongKey() {
         assertThatThrownBy(() -> ClinicalInformationFreeText.fromString("WRONG+++Comment"))
             .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Can't create ClinicalInformationFreeText from WRONG+++Comment");
+            .hasMessage("Can't create ClinicalInformationFreeText (FTX+CID) from WRONG+++Comment");
     }
 
     @Test
     void testFromStringAllValues() {
         final var result = ClinicalInformationFreeText.fromString("FTX+CID+++Comment");
-        assertThat(result.getClinicalInformationComment()).isEqualTo("Comment");
+        assertThat(result.getTexts()).containsSequence("Comment");
     }
 
     @Test
@@ -50,7 +50,7 @@ class ClinicalInformationFreeTextTest {
             () -> assertDoesNotThrow(result::validateStateful),
             () -> assertThatThrownBy(result::preValidate)
                 .isExactlyInstanceOf(EdifactValidationException.class)
-                .hasMessage("FTX: Attribute clinicalInformationComment is blank or missing")
+                .hasMessage("FTX+CID: At least one free text must be given.")
         );
     }
 }

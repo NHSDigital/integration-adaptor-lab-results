@@ -21,7 +21,7 @@ class ServiceProviderCommentFreeTextTest {
         var edifact = "FTX+SPC+++red blood cell seen, Note low platelets'";
         var parsedFreeText = ServiceProviderCommentFreeText.fromString(
             "FTX+SPC+++red blood cell seen, Note low platelets");
-        assertThat(parsedFreeText.getServiceProviderComment()).isEqualTo("red blood cell seen, Note low platelets");
+        assertThat(parsedFreeText.getTexts()).containsSequence("red blood cell seen, Note low platelets");
         assertThat(parsedFreeText.toEdifact()).isEqualTo(edifact);
     }
 
@@ -36,7 +36,7 @@ class ServiceProviderCommentFreeTextTest {
         ServiceProviderCommentFreeText emptyFreeText = new ServiceProviderCommentFreeText(StringUtils.EMPTY);
         assertThatThrownBy(emptyFreeText::preValidate)
             .isInstanceOf(EdifactValidationException.class)
-            .hasMessage("FTX: Attribute serviceProviderComment is blank or missing");
+            .hasMessage("FTX+SPC: At least one free text must be given.");
     }
 
     @Test
@@ -44,6 +44,6 @@ class ServiceProviderCommentFreeTextTest {
         ServiceProviderCommentFreeText emptyFreeText = new ServiceProviderCommentFreeText(" ");
         assertThatThrownBy(emptyFreeText::preValidate)
             .isInstanceOf(EdifactValidationException.class)
-            .hasMessage("FTX: Attribute serviceProviderComment is blank or missing");
+            .hasMessage("FTX+SPC: At least one free text must be given.");
     }
 }

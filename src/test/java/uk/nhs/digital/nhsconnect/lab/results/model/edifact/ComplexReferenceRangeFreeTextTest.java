@@ -8,38 +8,38 @@ import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class ReferencePopulationDefinitionFreeTextTest {
+class ComplexReferenceRangeFreeTextTest {
     @Test
     void testGetKey() {
-        assertThat(new ReferencePopulationDefinitionFreeText().getKey())
+        assertThat(new ComplexReferenceRangeFreeText().getKey())
             .isEqualTo("FTX");
     }
 
     @Test
     void testWrongKey() {
-        assertThatThrownBy(() -> ReferencePopulationDefinitionFreeText.fromString("WRONG+RPD+++OK"))
+        assertThatThrownBy(() -> ComplexReferenceRangeFreeText.fromString("WRONG+CRR+++OK"))
             .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Can't create ReferencePopulationDefinitionFreeText (FTX+RPD) from WRONG+RPD+++OK");
+            .hasMessage("Can't create ComplexReferenceRangeFreeText (FTX+CRR) from WRONG+CRR+++OK");
     }
 
     @Test
     void testNoTexts() {
-        var result = ReferencePopulationDefinitionFreeText.fromString("FTX+RPD+++");
+        var result = ComplexReferenceRangeFreeText.fromString("FTX+CRR+++");
         assertAll(
-            () -> assertThat(result.getValue()).isEqualTo("RPD+++"),
+            () -> assertThat(result.getValue()).isEqualTo("CRR+++"),
             () -> assertThat(result.getTexts()).isEmpty(),
             () -> assertThatThrownBy(result::preValidate)
                 .isExactlyInstanceOf(EdifactValidationException.class)
-                .hasMessage("FTX+RPD: At least one free text must be given."),
+                .hasMessage("FTX+CRR: At least one free text must be given."),
             () -> assertThatNoException().isThrownBy(result::validateStateful)
         );
     }
 
     @Test
     void testOneText() {
-        var result = ReferencePopulationDefinitionFreeText.fromString("FTX+RPD+++Okay");
+        var result = ComplexReferenceRangeFreeText.fromString("FTX+CRR+++Okay");
         assertAll(
-            () -> assertThat(result.getValue()).isEqualTo("RPD+++Okay"),
+            () -> assertThat(result.getValue()).isEqualTo("CRR+++Okay"),
             () -> assertThat(result.getTexts()).containsExactly("Okay"),
             () -> assertThatNoException().isThrownBy(result::preValidate),
             () -> assertThatNoException().isThrownBy(result::validateStateful)
@@ -49,19 +49,19 @@ class ReferencePopulationDefinitionFreeTextTest {
     @Test
     @SuppressWarnings("checkstyle:MagicNumber")
     void testFromStringTooManyFreeTexts() {
-        assertThatThrownBy(() -> ReferencePopulationDefinitionFreeText.fromString("FTX+RPD+++A" + ":A".repeat(10)))
+        assertThatThrownBy(() -> ComplexReferenceRangeFreeText.fromString("FTX+CRR+++A" + ":A".repeat(10)))
             .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Can't create ReferencePopulationDefinitionFreeText (FTX+RPD) "
-                + "from FTX+RPD+++A:A:A:A:A:A:A:A:A:A:A because too many free texts");
+            .hasMessage("Can't create ComplexReferenceRangeFreeText (FTX+CRR) "
+                + "from FTX+CRR+++A:A:A:A:A:A:A:A:A:A:A because too many free texts");
     }
 
     @Test
     @SuppressWarnings("checkstyle:MagicNumber")
     void testPreValidateTooManyFreeTexts() {
         final var texts = "A".repeat(10).split("");
-        final var freeText = new ReferencePopulationDefinitionFreeText(texts);
+        final var freeText = new ComplexReferenceRangeFreeText(texts);
         assertThatThrownBy(freeText::preValidate)
             .isExactlyInstanceOf(EdifactValidationException.class)
-            .hasMessage("FTX+RPD: At most 5 free texts may be given.");
+            .hasMessage("FTX+CRR: At most 5 free texts may be given.");
     }
 }

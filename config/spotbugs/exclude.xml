@@ -16,7 +16,14 @@
         <Bug pattern="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE " />
     </Match>
     <Match>
-        <Class name="uk.nhs.digital.nhsconnect.lab.results.model.edifact.RecepHeader" />
+        <Or>
+            <Class name="uk.nhs.digital.nhsconnect.lab.results.model.edifact.RecepHeader" />
+            <Class name="uk.nhs.digital.nhsconnect.lab.results.model.edifact.ClinicalInformationFreeText" />
+            <Class name="uk.nhs.digital.nhsconnect.lab.results.model.edifact.ComplexReferenceRangeFreeText" />
+            <Class name="uk.nhs.digital.nhsconnect.lab.results.model.edifact.InvestigationResultFreeText" />
+            <Class name="uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferencePopulationDefinitionFreeText" />
+            <Class name="uk.nhs.digital.nhsconnect.lab.results.model.edifact.ServiceProviderCommentFreeText" />
+        </Or>
         <Bug pattern="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE " />
     </Match>
     <Match>
