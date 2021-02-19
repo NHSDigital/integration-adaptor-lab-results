@@ -1,7 +1,7 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
 import org.junit.jupiter.api.Test;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceServiceSubject;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.UnstructuredAddress;
 
 import java.util.List;
@@ -24,7 +24,7 @@ class InvestigationSubjectTest {
         ));
         assertThat(investigationSubject.getReferenceServiceSubject())
             .isPresent()
-            .map(ReferenceServiceSubject::getValue)
+            .map(Reference::getValue)
             .contains("SSI:X88442211");
     }
 

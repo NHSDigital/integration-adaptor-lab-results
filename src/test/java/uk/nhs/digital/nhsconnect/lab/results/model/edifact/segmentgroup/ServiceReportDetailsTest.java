@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportDateIssued;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportStatus;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceDiagnosticReport;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
 
 import java.util.List;
@@ -26,7 +26,7 @@ class ServiceReportDetailsTest {
             "GIS+N",
             "ignore me"
         ));
-        assertThat(report.getDiagnosticReportCode())
+        assertThat(report.getCode())
             .isNotNull()
             .extracting(DiagnosticReportCode::getValue)
             .isEqualTo("N");
@@ -39,9 +39,9 @@ class ServiceReportDetailsTest {
             "RFF+SRI:13/CH001137K/211010191093",
             "ignore me"
         ));
-        assertThat(report.getReferenceDiagnosticReport())
+        assertThat(report.getReference())
             .isNotNull()
-            .extracting(ReferenceDiagnosticReport::getValue)
+            .extracting(Reference::getValue)
             .isEqualTo("SRI:13/CH001137K/211010191093");
     }
 
@@ -52,7 +52,7 @@ class ServiceReportDetailsTest {
             "STS++UN",
             "ignore me"
         ));
-        assertThat(report.getDiagnosticReportStatus())
+        assertThat(report.getStatus())
             .isNotNull()
             .extracting(DiagnosticReportStatus::getValue)
             .isEqualTo("UN");
@@ -65,7 +65,7 @@ class ServiceReportDetailsTest {
             "DTM+ISR:202001280957:203",
             "ignore me"
         ));
-        assertThat(report.getDiagnosticReportDateIssued())
+        assertThat(report.getDateIssued())
             .isNotNull()
             .extracting(DiagnosticReportDateIssued::getValue)
             .isEqualTo("ISR:202001280957:203");
@@ -80,7 +80,7 @@ class ServiceReportDetailsTest {
             "UNT+18+00000003",
             "ignore me"
         ));
-        assertThat(report.getInvestigationSubject())
+        assertThat(report.getSubject())
             .isNotNull()
             .extracting(InvestigationSubject::getEdifactSegments)
             .isEqualTo(List.of("S06", "investigation subject content"));
@@ -91,19 +91,19 @@ class ServiceReportDetailsTest {
     void testLazyGettersWhenMissing() {
         final var report = new ServiceReportDetails(List.of());
         assertAll(
-            () -> assertThatThrownBy(report::getDiagnosticReportCode)
+            () -> assertThatThrownBy(report::getCode)
                 .isExactlyInstanceOf(MissingSegmentException.class)
                 .hasMessage("EDIFACT section is missing segment GIS"),
-            () -> assertThatThrownBy(report::getReferenceDiagnosticReport)
+            () -> assertThatThrownBy(report::getReference)
                 .isExactlyInstanceOf(MissingSegmentException.class)
                 .hasMessage("EDIFACT section is missing segment RFF+SRI"),
-            () -> assertThatThrownBy(report::getDiagnosticReportDateIssued)
+            () -> assertThatThrownBy(report::getDateIssued)
                 .isExactlyInstanceOf(MissingSegmentException.class)
                 .hasMessage("EDIFACT section is missing segment DTM+ISR"),
-            () -> assertThatThrownBy(report::getDiagnosticReportStatus)
+            () -> assertThatThrownBy(report::getStatus)
                 .isExactlyInstanceOf(MissingSegmentException.class)
                 .hasMessage("EDIFACT section is missing segment STS"),
-            () -> assertThat(report.getInvestigationSubject())
+            () -> assertThat(report.getSubject())
                 .isNotNull()
                 .extracting(InvestigationSubject::getEdifactSegments)
                 .isEqualTo(List.of())

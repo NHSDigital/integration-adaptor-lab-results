@@ -4,14 +4,14 @@ import lombok.Getter;
 import lombok.NonNull;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextType;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceDetails;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicFastingStatus;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCollectionDateTime;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCollectionReceiptDateTime;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenQuantity;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenReferenceByServiceProvider;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenReferenceByServiceRequester;
 
 import java.util.List;
 import java.util.Optional;
@@ -50,23 +50,23 @@ public class Specimen extends SegmentGroup {
             .map(SequenceDetails::fromString);
 
     @Getter(lazy = true)
-    private final SpecimenCharacteristicType specimenCharacteristicType =
+    private final SpecimenCharacteristicType characteristicType =
         SpecimenCharacteristicType.fromString(extractSegment(SpecimenCharacteristicType.KEY_QUALIFIER));
 
     @Getter(lazy = true)
-    private final Optional<SpecimenCharacteristicFastingStatus> specimenCharacteristicFastingStatus =
+    private final Optional<SpecimenCharacteristicFastingStatus> characteristicFastingStatus =
         extractOptionalSegment(SpecimenCharacteristicFastingStatus.KEY_QUALIFIER)
             .map(SpecimenCharacteristicFastingStatus::fromString);
 
     @Getter(lazy = true)
-    private final Optional<SpecimenReferenceByServiceRequester> specimenReferenceByServiceRequester =
-        extractOptionalSegment(SpecimenReferenceByServiceRequester.KEY_QUALIFIER)
-            .map(SpecimenReferenceByServiceRequester::fromString);
+    private final Optional<Reference> serviceRequesterReference =
+        extractOptionalSegment(Reference.KEY + PLUS_SEPARATOR + ReferenceType.SPECIMEN_BY_REQUESTER.getQualifier())
+            .map(Reference::fromString);
 
     @Getter(lazy = true)
-    private final Optional<SpecimenReferenceByServiceProvider> specimenReferenceByServiceProvider =
-        extractOptionalSegment(SpecimenReferenceByServiceProvider.KEY_QUALIFIER)
-            .map(SpecimenReferenceByServiceProvider::fromString);
+    private final Optional<Reference> serviceProviderReference =
+        extractOptionalSegment(Reference.KEY + PLUS_SEPARATOR + ReferenceType.SPECIMEN_BY_PROVIDER.getQualifier())
+            .map(Reference::fromString);
 
     @Getter(lazy = true)
     private final Optional<SpecimenQuantity> specimenQuantity =

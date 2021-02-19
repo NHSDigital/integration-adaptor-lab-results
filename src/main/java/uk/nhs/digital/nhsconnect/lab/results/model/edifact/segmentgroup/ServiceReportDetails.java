@@ -1,14 +1,17 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
-import static java.util.stream.Collectors.toList;
-
-import java.util.List;
 import lombok.Getter;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportDateIssued;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportStatus;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageTrailer;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceDiagnosticReport;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceType;
+
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+import static uk.nhs.digital.nhsconnect.lab.results.model.edifact.Segment.PLUS_SEPARATOR;
 
 /**
  * Provides general information about the laboratory service report from the laboratory service provider.
@@ -30,23 +33,24 @@ public class ServiceReportDetails extends SegmentGroup {
     public static final String INDICATOR = "S02";
 
     @Getter(lazy = true)
-    private final DiagnosticReportCode diagnosticReportCode =
+    private final DiagnosticReportCode code =
         DiagnosticReportCode.fromString(extractSegment(DiagnosticReportCode.KEY));
 
     @Getter(lazy = true)
-    private final ReferenceDiagnosticReport referenceDiagnosticReport =
-        ReferenceDiagnosticReport.fromString(extractSegment(ReferenceDiagnosticReport.KEY_QUALIFIER));
+    private final Reference reference =
+        Reference.fromString(extractSegment(Reference.KEY + PLUS_SEPARATOR
+            + ReferenceType.DIAGNOSTIC_REPORT.getQualifier()));
 
     @Getter(lazy = true)
-    private final DiagnosticReportStatus diagnosticReportStatus =
+    private final DiagnosticReportStatus status =
         DiagnosticReportStatus.fromString(extractSegment(DiagnosticReportStatus.KEY));
 
     @Getter(lazy = true)
-    private final DiagnosticReportDateIssued diagnosticReportDateIssued =
+    private final DiagnosticReportDateIssued dateIssued =
         DiagnosticReportDateIssued.fromString(extractSegment(DiagnosticReportDateIssued.KEY_QUALIFIER));
 
     @Getter(lazy = true)
-    private final InvestigationSubject investigationSubject = new InvestigationSubject(getEdifactSegments().stream()
+    private final InvestigationSubject subject = new InvestigationSubject(getEdifactSegments().stream()
         .dropWhile(segment -> !segment.startsWith(InvestigationSubject.INDICATOR))
         .takeWhile(segment -> !segment.startsWith(MessageTrailer.KEY))
         .collect(toList()));

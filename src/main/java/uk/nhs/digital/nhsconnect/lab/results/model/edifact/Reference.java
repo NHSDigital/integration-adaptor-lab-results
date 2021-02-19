@@ -11,24 +11,24 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
  */
 @Getter
 @RequiredArgsConstructor
-public class SequenceReference extends Segment {
+public class Reference extends Segment {
     public static final String KEY = "RFF";
 
     @NonNull
-    private final SequenceReferenceTarget target;
+    private final ReferenceType target;
 
     @NonNull
     private final String number;
 
-    public static SequenceReference fromString(final String edifact) {
+    public static Reference fromString(final String edifact) {
         if (!edifact.startsWith(KEY)) {
             throw new IllegalArgumentException(
-                "Can't create " + SequenceReference.class.getSimpleName() + " from " + edifact);
+                "Can't create " + Reference.class.getSimpleName() + " from " + edifact);
         }
         String[] data = Split.byColon(
             Split.byPlus(edifact)[1]
         );
-        return new SequenceReference(SequenceReferenceTarget.fromCode(data[0]), data[1]);
+        return new Reference(ReferenceType.fromCode(data[0]), data[1]);
     }
 
     @Override

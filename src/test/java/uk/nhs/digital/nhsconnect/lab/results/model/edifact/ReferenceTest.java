@@ -8,46 +8,46 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-class SequenceReferenceTest {
+class ReferenceTest {
 
     @Test
     void testGetKey() {
-        final var reference = new SequenceReference(SequenceReferenceTarget.SPECIMEN, "");
+        final var reference = new Reference(ReferenceType.SPECIMEN, "");
         assertThat(reference.getKey()).isEqualTo("RFF");
     }
 
     @Test
     void testGetValue() {
-        final var reference = new SequenceReference(SequenceReferenceTarget.INVESTIGATION, "1A2B3C");
+        final var reference = new Reference(ReferenceType.INVESTIGATION, "1A2B3C");
         assertThat(reference.getValue()).isEqualTo("ARL:1A2B3C");
     }
 
     @Test
     void testFromStringWrongKey() {
-        assertThatThrownBy(() -> SequenceReference.fromString("WRONG+ARL:1A2B3C"))
+        assertThatThrownBy(() -> Reference.fromString("WRONG+ARL:1A2B3C"))
             .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Can't create SequenceReference from WRONG+ARL:1A2B3C");
+            .hasMessage("Can't create Reference from WRONG+ARL:1A2B3C");
     }
 
     @Test
     void testFromStringUnrecognisedTarget() {
-        assertThatThrownBy(() -> SequenceReference.fromString("RFF+ZZZ:1A2B3C"))
+        assertThatThrownBy(() -> Reference.fromString("RFF+ZZZ:1A2B3C"))
             .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessage("No sequenceReferenceTarget qualifier for 'ZZZ'");
+            .hasMessage("No reference qualifier for 'ZZZ'");
     }
 
     @Test
     void testFromStringAllValues() {
-        final var reference = SequenceReference.fromString("RFF+ASL:1A2B3C");
+        final var reference = Reference.fromString("RFF+ASL:1A2B3C");
         assertAll(
-            () -> assertThat(reference.getTarget()).isEqualTo(SequenceReferenceTarget.SPECIMEN),
+            () -> assertThat(reference.getTarget()).isEqualTo(ReferenceType.SPECIMEN),
             () -> assertThat(reference.getNumber()).isEqualTo("1A2B3C")
         );
     }
 
     @Test
     void testValidationPasses() {
-        final var reference = new SequenceReference(SequenceReferenceTarget.SPECIMEN, "9");
+        final var reference = new Reference(ReferenceType.SPECIMEN, "9");
         assertAll(
             () -> assertDoesNotThrow(reference::validateStateful),
             () -> assertDoesNotThrow(reference::preValidate)
@@ -56,7 +56,7 @@ class SequenceReferenceTest {
 
     @Test
     void testValidationEmptyNumber() {
-        final var reference = new SequenceReference(SequenceReferenceTarget.SPECIMEN, "");
+        final var reference = new Reference(ReferenceType.SPECIMEN, "");
         assertAll(
             () -> assertDoesNotThrow(reference::validateStateful),
             () -> assertThatThrownBy(reference::preValidate)
@@ -67,7 +67,7 @@ class SequenceReferenceTest {
 
     @Test
     void testValidationTooLongNumber() {
-        final var reference = new SequenceReference(SequenceReferenceTarget.SPECIMEN, "Qwertyuiop");
+        final var reference = new Reference(ReferenceType.SPECIMEN, "Qwertyuiop");
         assertAll(
             () -> assertDoesNotThrow(reference::validateStateful),
             () -> assertThatThrownBy(reference::preValidate)
@@ -78,7 +78,7 @@ class SequenceReferenceTest {
 
     @Test
     void testValidationNonAlphanumericNumber() {
-        final var reference = new SequenceReference(SequenceReferenceTarget.SPECIMEN, "失 🤯");
+        final var reference = new Reference(ReferenceType.SPECIMEN, "失 🤯");
         assertAll(
             () -> assertDoesNotThrow(reference::validateStateful),
             () -> assertThatThrownBy(reference::preValidate)

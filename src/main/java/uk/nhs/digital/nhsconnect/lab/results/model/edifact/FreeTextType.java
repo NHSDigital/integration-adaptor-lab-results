@@ -20,6 +20,6 @@ public enum FreeTextType {
         return Arrays.stream(FreeTextType.values())
             .filter(c -> c.qualifier.equals(code))
             .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("No free text type for '" + code +"'"));
+            .orElseThrow(() -> new IllegalArgumentException("No free text type for '" + code + "'"));
     }
 }

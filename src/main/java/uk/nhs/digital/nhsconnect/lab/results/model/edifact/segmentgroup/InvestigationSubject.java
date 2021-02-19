@@ -1,14 +1,16 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
-import static java.util.stream.Collectors.toList;
+import lombok.Getter;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageTrailer;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceType;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.UnstructuredAddress;
 
 import java.util.List;
 import java.util.Optional;
 
-import lombok.Getter;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageTrailer;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceServiceSubject;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.UnstructuredAddress;
+import static java.util.stream.Collectors.toList;
+import static uk.nhs.digital.nhsconnect.lab.results.model.edifact.Segment.PLUS_SEPARATOR;
 
 /**
  * Provides information about the subject of investigation; that is, the patient.
@@ -32,9 +34,9 @@ public class InvestigationSubject extends SegmentGroup {
     public static final String INDICATOR = "S06";
 
     @Getter(lazy = true)
-    private final Optional<ReferenceServiceSubject> referenceServiceSubject =
-        extractOptionalSegment(ReferenceServiceSubject.KEY_QUALIFIER)
-            .map(ReferenceServiceSubject::fromString);
+    private final Optional<Reference> referenceServiceSubject =
+        extractOptionalSegment(Reference.KEY + PLUS_SEPARATOR + ReferenceType.SERVICE_SUBJECT.getQualifier())
+            .map(Reference::fromString);
 
     @Getter(lazy = true)
     private final Optional<UnstructuredAddress> unstructuredAddress =

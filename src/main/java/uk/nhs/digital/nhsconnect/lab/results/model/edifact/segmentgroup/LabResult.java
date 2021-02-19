@@ -9,7 +9,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigati
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigationResult;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageTrailer;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceDetails;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceReference;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.TestStatus;
 
 import java.util.List;
@@ -75,8 +75,8 @@ public class LabResult extends SegmentGroup {
             .collect(toList());
 
     @Getter(lazy = true)
-    private final SequenceReference sequenceReference = SequenceReference.fromString(
-        extractSegment(SequenceReference.KEY));
+    private final Reference sequenceReference = Reference.fromString(
+        extractSegment(Reference.KEY));
 
     @Getter(lazy = true)
     private final List<ResultReferenceRange> resultReferenceRanges =

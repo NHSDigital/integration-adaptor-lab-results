@@ -6,7 +6,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigation;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigationResult;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceDetails;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceReference;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.TestStatus;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
 
@@ -142,7 +142,7 @@ class LabResultTest {
         ));
         assertThat(labResult.getSequenceReference())
             .isNotNull()
-            .extracting(SequenceReference::getValue)
+            .extracting(Reference::getValue)
             .isEqualTo("ASL:1");
     }
 

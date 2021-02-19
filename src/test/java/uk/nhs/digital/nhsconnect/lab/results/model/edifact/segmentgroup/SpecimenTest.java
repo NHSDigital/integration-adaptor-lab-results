@@ -2,14 +2,13 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
 import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceDetails;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicFastingStatus;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCollectionDateTime;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCollectionReceiptDateTime;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenQuantity;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenReferenceByServiceProvider;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenReferenceByServiceRequester;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
 
 import java.util.List;
@@ -44,7 +43,7 @@ class SpecimenTest {
             "SPC+TSP+:::BLOOD & URINE",
             "ignore me"
         ));
-        assertThat(specimen.getSpecimenCharacteristicType())
+        assertThat(specimen.getCharacteristicType())
             .isNotNull()
             .extracting(SpecimenCharacteristicType::getValue)
             .isEqualTo("TSP+:::BLOOD & URINE");
@@ -57,7 +56,7 @@ class SpecimenTest {
             "SPC+FS+F",
             "ignore me"
         ));
-        assertThat(specimen.getSpecimenCharacteristicFastingStatus())
+        assertThat(specimen.getCharacteristicFastingStatus())
             .isPresent()
             .map(SpecimenCharacteristicFastingStatus::getValue)
             .contains("FS+F");
@@ -70,9 +69,9 @@ class SpecimenTest {
             "RFF+RTI:CH000064LX",
             "ignore me"
         ));
-        assertThat(specimen.getSpecimenReferenceByServiceRequester())
+        assertThat(specimen.getServiceRequesterReference())
             .isPresent()
-            .map(SpecimenReferenceByServiceRequester::getValue)
+            .map(Reference::getValue)
             .contains("RTI:CH000064LX");
     }
 
@@ -83,9 +82,9 @@ class SpecimenTest {
             "RFF+STI:CH000064LX",
             "ignore me"
         ));
-        assertThat(specimen.getSpecimenReferenceByServiceProvider())
+        assertThat(specimen.getServiceProviderReference())
             .isPresent()
-            .map(SpecimenReferenceByServiceProvider::getValue)
+            .map(Reference::getValue)
             .contains("STI:CH000064LX");
     }
 
@@ -149,12 +148,12 @@ class SpecimenTest {
         final var specimen = new Specimen(List.of());
         assertAll(
             () -> assertThat(specimen.getSequenceDetails()).isEmpty(),
-            () -> assertThatThrownBy(specimen::getSpecimenCharacteristicType)
+            () -> assertThatThrownBy(specimen::getCharacteristicType)
                 .isExactlyInstanceOf(MissingSegmentException.class)
                 .hasMessage("EDIFACT section is missing segment SPC+TSP"),
-            () -> assertThat(specimen.getSpecimenCharacteristicFastingStatus()).isEmpty(),
-            () -> assertThat(specimen.getSpecimenReferenceByServiceRequester()).isEmpty(),
-            () -> assertThat(specimen.getSpecimenReferenceByServiceProvider()).isEmpty(),
+            () -> assertThat(specimen.getCharacteristicFastingStatus()).isEmpty(),
+            () -> assertThat(specimen.getServiceRequesterReference()).isEmpty(),
+            () -> assertThat(specimen.getServiceProviderReference()).isEmpty(),
             () -> assertThat(specimen.getSpecimenQuantity()).isEmpty(),
             () -> assertThat(specimen.getSpecimenCollectionDateTime()).isEmpty(),
             () -> assertThat(specimen.getSpecimenCollectionReceiptDateTime()).isEmpty(),

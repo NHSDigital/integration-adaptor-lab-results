@@ -2,8 +2,8 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
 import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageRecipientNameAndAddress;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PartnerAgreedIdentification;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PerformingOrganisationNameAndAddress;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.RequesterNameAndAddress;
 
 import java.util.List;
@@ -64,7 +64,7 @@ class InvolvedPartyTest {
         ));
         assertThat(involvedParty.getPartnerAgreedIdentification())
             .isPresent()
-            .map(PartnerAgreedIdentification::getValue)
+            .map(Reference::getValue)
             .contains("AHI:agreed ID");
     }
 
