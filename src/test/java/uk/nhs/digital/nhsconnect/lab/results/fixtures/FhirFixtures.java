@@ -49,6 +49,10 @@ public final class FhirFixtures {
                 .setFullUrl("urn:uuid:some-entry-uuid")
                 .setResource(pathologyRecord.getRequester());
 
+        bundle.addEntry()
+                .setFullUrl("urn:uuid:some-entry-uuid")
+                .setResource(pathologyRecord.getPerformer());
+
         return bundle;
     }
 }

@@ -3,7 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.inbound.fhir;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static uk.nhs.digital.nhsconnect.lab.results.fixtures.FhirFixtures.generateBundle;
-import static uk.nhs.digital.nhsconnect.lab.results.fixtures.FhirFixtures.generateRequester;
+import static uk.nhs.digital.nhsconnect.lab.results.fixtures.FhirFixtures.generatePractitioner;
 import static uk.nhs.digital.nhsconnect.lab.results.fixtures.PathologyRecordFixtures.generatePathologyRecord;
 
 import org.hl7.fhir.dstu3.model.Bundle;
@@ -36,8 +36,9 @@ class EdifactToFhirServiceTest {
 
     @Test
     void testEdifactIsMappedToFhirBundle() {
-        Practitioner requester = generateRequester("Dr Bob Hope", Enumerations.AdministrativeGender.MALE);
-        PathologyRecord pathologyRecord = generatePathologyRecord(requester);
+        Practitioner requester = generatePractitioner("Dr Bob Hope", Enumerations.AdministrativeGender.MALE);
+        Practitioner performer = generatePractitioner("Dr Darcy Lewis", Enumerations.AdministrativeGender.FEMALE);
+        PathologyRecord pathologyRecord = generatePathologyRecord(requester, performer);
         Bundle generatedBundle = generateBundle(pathologyRecord);
 
         when(pathologyRecordMapper.mapToPathologyRecord(message)).thenReturn(pathologyRecord);
@@ -47,33 +48,9 @@ class EdifactToFhirServiceTest {
 
         assertThat(bundle).isNotNull();
         assertThat(bundle.getEntry())
-            .hasSize(1)
+            .hasSize(2)
             .first()
             .extracting(Bundle.BundleEntryComponent::getResource)
-            .isNotNull();
-    }
-
-    @Test
-    void testConvertEdifactToFhirPerformerMapperReturnsEmpty() {
-        when(practitionerMapper.mapPerformer(message)).thenReturn(Optional.empty());
-
-        final Parameters parameters = service.convertToFhir(message);
-
-        assertThat(parameters).isNotNull();
-        assertThat(parameters.getParameter()).isEmpty();
-    }
-
-    @Test
-    void testConvertEdifactToFhirPerformerMapperReturnsSomething() {
-        when(practitionerMapper.mapPerformer(message)).thenReturn(Optional.of(mock(Practitioner.class)));
-
-        final Parameters parameters = service.convertToFhir(message);
-
-        assertThat(parameters).isNotNull();
-        assertThat(parameters.getParameter())
-            .hasSize(1)
-            .first()
-            .extracting(Parameters.ParametersParameterComponent::getResource)
             .isNotNull();
     }
 }

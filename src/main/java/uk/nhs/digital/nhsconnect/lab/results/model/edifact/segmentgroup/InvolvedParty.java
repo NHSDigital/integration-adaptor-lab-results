@@ -3,7 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 import lombok.Getter;
 import lombok.NonNull;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageRecipientNameAndAddress;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PerformingOrganisationNameAndAddress;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PerformerNameAndAddress;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.RequesterNameAndAddress;
@@ -35,9 +35,9 @@ public class InvolvedParty extends SegmentGroup {
     public static final String INDICATOR = "S01";
 
     @Getter(lazy = true)
-    private final Optional<PerformingOrganisationNameAndAddress> organisationNameAndAddress =
-        extractOptionalSegment(PerformingOrganisationNameAndAddress.KEY_QUALIFIER)
-            .map(PerformingOrganisationNameAndAddress::fromString);
+    private final Optional<PerformerNameAndAddress> organisationNameAndAddress =
+        extractOptionalSegment(PerformerNameAndAddress.KEY_QUALIFIER)
+            .map(PerformerNameAndAddress::fromString);
 
     @Getter(lazy = true)
     private final Optional<RequesterNameAndAddress> requesterNameAndAddress =

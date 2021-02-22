@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvolvedParty;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.ServiceReportDetails;
+import java.util.Optional;
 
 public class Message extends Section {
     private static final String DEFAULT_GP_CODE = "9999";

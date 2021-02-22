@@ -33,7 +33,9 @@ class BundleMapperTest {
         when(uuidGenerator.generateUUID()).thenReturn("some-value-uuid").thenReturn("some-entry-uuid");
 
         Practitioner generatedRequester = generatePractitioner("Dr Bob Hope", Enumerations.AdministrativeGender.MALE);
-        final Bundle bundle = bundleMapper.mapToBundle(generatePathologyRecord(generatedRequester));
+        Practitioner generatedPerformer = generatePractitioner("Dr Darcy Lewis",
+            Enumerations.AdministrativeGender.FEMALE);
+        final Bundle bundle = bundleMapper.mapToBundle(generatePathologyRecord(generatedRequester, generatedPerformer));
 
         assertAll(
             () -> assertNotNull(bundle.getMeta().getLastUpdated()),
@@ -44,7 +46,7 @@ class BundleMapperTest {
             () -> assertEquals("https://tools.ietf.org/html/rfc4122", bundle.getIdentifier().getSystem()),
             () -> assertEquals("some-value-uuid", bundle.getIdentifier().getValue()),
             () -> assertEquals(Bundle.BundleType.MESSAGE, bundle.getType()),
-            () -> assertEquals(1, bundle.getEntry().size())
+            () -> assertEquals(2, bundle.getEntry().size())
         );
 
         Bundle.BundleEntryComponent bundleEntryComponentForRequesterResource = bundle.getEntry().get(0);

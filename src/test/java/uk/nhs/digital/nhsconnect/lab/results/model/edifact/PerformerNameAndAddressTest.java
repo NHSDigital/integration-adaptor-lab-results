@@ -10,8 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.NoSuchElementException;
-
 class PerformerNameAndAddressTest {
 
     private final PerformerNameAndAddress performingOrganisationNameAndAddress =
@@ -92,9 +90,9 @@ class PerformerNameAndAddressTest {
     }
 
     @Test
-    void when_buildingSegmentObjectWithEmptyHealthcareCode_expect_noSuchElementExceptionIsThrown() {
+    void when_buildingSegmentObjectWithEmptyHealthcareCode_expect_illegalArgumentExceptionIsThrown() {
         assertThrows(
-            NoSuchElementException.class,
+            IllegalArgumentException.class,
             () -> PerformerNameAndAddress.builder()
                 .identifier("A2442389")
                 .code(HealthcareRegistrationIdentificationCode.fromCode(""))
