@@ -68,12 +68,12 @@ public class PerformerNameAndAddress extends Segment {
 
     @Override
     public String getValue() {
-        if (this.identifier.isBlank()) {
-            return QUALIFIER + "+++" + performingOrganisationName;
-        } else {
-            return QUALIFIER + PLUS_SEPARATOR + this.identifier + COLON_SEPARATOR
-                + this.code.getCode() + PLUS_SEPARATOR + PLUS_SEPARATOR + this.partyName;
-        }
+        return QUALIFIER
+            + PLUS_SEPARATOR
+            + (identifier.isBlank() ? "" : identifier + COLON_SEPARATOR + code.getCode())
+            + PLUS_SEPARATOR
+            + PLUS_SEPARATOR
+            + (identifier.isBlank() ? performingOrganisationName : partyName);
     }
 
     @Override
