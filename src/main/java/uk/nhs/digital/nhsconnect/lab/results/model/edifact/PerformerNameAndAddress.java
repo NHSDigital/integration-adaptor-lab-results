@@ -9,7 +9,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 /**
- * Example: NAD+SLA+A2442389:902++DR J SMITH'
+ * Example: NAD+SLA+A2442389:902++DR J SMITH'<br>
  * Example: NAD+SLA+++ST JAMES?'S UNIVERSITY HOSPITAL'
  */
 @Getter
@@ -51,7 +51,6 @@ public class PerformerNameAndAddress extends Segment {
         } else {
             String performerCode = colonSplit[1];
             String performerPartyName = keySplit[PERFORMING_NAME_INDEX_IN_EDIFACT_STRING];
-            System.out.println(performerPartyName);
             return new PerformerNameAndAddress(
                 performerID,
                 HealthcareRegistrationIdentificationCode.fromCode(performerCode),
