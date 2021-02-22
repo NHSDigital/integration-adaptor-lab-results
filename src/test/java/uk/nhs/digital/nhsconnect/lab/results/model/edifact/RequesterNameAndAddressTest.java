@@ -30,7 +30,7 @@ class RequesterNameAndAddressTest {
 
     @Test
     void when_mappingSegmentObjectToEdifactString_expect_returnCorrectEdifactString() {
-        String expectedEdifactString = "NAD+PO+ABC:900++SMITH'";
+        String edifactString = "NAD+PO+ABC:900++SMITH";
 
         RequesterNameAndAddress requester = RequesterNameAndAddress.builder()
             .identifier("ABC")
@@ -38,7 +38,12 @@ class RequesterNameAndAddressTest {
             .requesterName("SMITH")
             .build();
 
-        assertEquals(expectedEdifactString, requester.toEdifact());
+        var fromString = RequesterNameAndAddress.fromString(edifactString);
+
+        assertThat(fromString.getIdentifier()).isEqualTo("ABC");
+        assertThat(fromString.getRequesterName()).isEqualTo("SMITH");
+        assertThat(fromString.getHealthcareRegistrationIdentificationCode())
+            .isEqualTo(HealthcareRegistrationIdentificationCode.GP);
     }
 
     @Test
@@ -49,7 +54,7 @@ class RequesterNameAndAddressTest {
             .requesterName("SMITH")
             .build();
 
-        assertThrows(EdifactValidationException.class, requester::toEdifact);
+        assertThrows(EdifactValidationException.class, requester::validate);
     }
 
     @Test
@@ -60,7 +65,7 @@ class RequesterNameAndAddressTest {
             .requesterName("")
             .build();
 
-        assertThrows(EdifactValidationException.class, requester::toEdifact);
+        assertThrows(EdifactValidationException.class, requester::validate);
     }
 
     @Test
@@ -74,17 +79,9 @@ class RequesterNameAndAddressTest {
     }
 
     @Test
-    void testGetValue() {
-        assertEquals(requesterNameAndAddress.getValue(), "PO+ABC:900++SMITH");
-    }
+    void testValidate() {
+        assertDoesNotThrow(requesterNameAndAddress::validate);
 
-    @Test
-    void testValidateStateful() {
-        assertDoesNotThrow(requesterNameAndAddress::validateStateful);
-    }
-
-    @Test
-    void testPreValidate() {
         RequesterNameAndAddress emptyIdentifier = new RequesterNameAndAddress(
             "", HealthcareRegistrationIdentificationCode.GP, "SMITH"
         );
@@ -93,10 +90,10 @@ class RequesterNameAndAddressTest {
         );
 
         assertAll(
-            () -> assertThatThrownBy(emptyIdentifier::preValidate)
+            () -> assertThatThrownBy(emptyIdentifier::validate)
                 .isExactlyInstanceOf(EdifactValidationException.class)
                 .hasMessage("NAD: Attribute identifier is required"),
-            () -> assertThatThrownBy(emptyRequesterName::preValidate)
+            () -> assertThatThrownBy(emptyRequesterName::validate)
                 .isExactlyInstanceOf(EdifactValidationException.class)
                 .hasMessage("NAD: Attribute requesterName is required")
         );

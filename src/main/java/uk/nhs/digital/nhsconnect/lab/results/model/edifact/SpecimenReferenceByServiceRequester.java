@@ -27,9 +27,7 @@ public class SpecimenReferenceByServiceRequester extends Segment {
                 + SpecimenReferenceByServiceRequester.class.getSimpleName() + " from " + edifactString);
         }
 
-        String[] split = Split.byColon(
-            Split.bySegmentTerminator(edifactString)[0]
-        );
+        final String[] split = Split.byColon(edifactString);
 
         return new SpecimenReferenceByServiceRequester(split[1]);
     }
@@ -40,17 +38,7 @@ public class SpecimenReferenceByServiceRequester extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return QUALIFIER + COLON_SEPARATOR + referenceNumber;
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-        // nothing
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (referenceNumber.isBlank()) {
             throw new EdifactValidationException(KEY
                 + ": Specimen Reference number by service requester is blank or missing");

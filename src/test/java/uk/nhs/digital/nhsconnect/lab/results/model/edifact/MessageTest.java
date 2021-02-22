@@ -1,27 +1,13 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MessageTest {
-    @Test
-    void testGetMessageHeader() {
-        final Message msg = new Message(List.of(
-            "UNH+00000009+FHSREG:0:1:FH:FHS001'"
-        ));
-
-        MessageHeader header = msg.getMessageHeader();
-
-        assertAll(
-            () -> assertEquals("UNH", header.getKey()),
-            () -> assertEquals("00000009+FHSREG:0:1:FH:FHS001", header.getValue())
-        );
-    }
-
     @Test
     void testGetHealthAuthorityNameAndAddress() {
         final Message msg = new Message(List.of(
@@ -32,7 +18,6 @@ class MessageTest {
 
         assertAll(
             () -> assertEquals("NAD", haAddress.getKey()),
-            () -> assertEquals("FHS+XX1:954'", haAddress.getValue()),
             () -> assertEquals("954'", haAddress.getCode()),
             () -> assertEquals("XX1", haAddress.getIdentifier())
         );

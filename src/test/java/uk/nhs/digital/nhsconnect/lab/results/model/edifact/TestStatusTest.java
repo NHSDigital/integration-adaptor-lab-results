@@ -2,7 +2,11 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -19,20 +23,31 @@ class TestStatusTest {
 
     @Test
     void when_edifactStringIsPassed_expect_returnATestStatusObject() {
-        assertThat(testStatus)
-                .usingRecursiveComparison()
-                .isEqualTo(TestStatus.fromString("STS++CO"));
-    }
+        var valueMap = Map.of(
+            TestStatusCode.CORRECTED, "CO",
+            TestStatusCode.UNKNOWN, "UN",
+            TestStatusCode.AMENDED, "AM",
+            TestStatusCode.CANCELLED, "CA",
+            TestStatusCode.ENTERED_IN_ERROR, "EN",
+            TestStatusCode.FINAL, "FI",
+            TestStatusCode.PRELIMINARY, "PR",
+            TestStatusCode.REGISTERED, "RE");
 
-    @Test
-    void when_mappingSegmentObjectToEdifactString_expect_returnCorrectEdifactString() {
-        String expectedEdifactString = "STS+CO'";
+        assertThat(valueMap).hasSameSizeAs(TestStatusCode.values());
 
-        TestStatus testStatus = TestStatus.builder()
-                .testStatusCode(TestStatusCode.CORRECTED)
-                .build();
+        for (TestStatusCode testStatusCode : TestStatusCode.values()) {
+            assertThat(new TestStatus(testStatusCode)).usingRecursiveComparison()
+                .isEqualTo(TestStatus.fromString("STS++" + valueMap.get(testStatusCode)));
+        }
 
-        assertEquals(expectedEdifactString, testStatus.toEdifact());
+        assertAll(
+            () -> assertThatThrownBy(() -> TestStatus.fromString("STS++XX"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("No test status code for 'XX'"),
+            () -> assertThatThrownBy(() -> TestStatus.fromString("STS++"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("No test status code for ''")
+        );
     }
 
     @Test
@@ -47,6 +62,6 @@ class TestStatusTest {
 
     @Test
     void testGetValue() {
-        assertEquals(testStatus.getValue(), "CO");
+        assertEquals(testStatus.getTestStatusCode(), TestStatusCode.CORRECTED);
     }
 }

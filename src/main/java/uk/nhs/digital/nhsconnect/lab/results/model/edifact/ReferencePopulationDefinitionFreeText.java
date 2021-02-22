@@ -54,21 +54,7 @@ public class ReferencePopulationDefinitionFreeText extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return QUALIFIER
-            + PLUS_SEPARATOR
-            + PLUS_SEPARATOR
-            + PLUS_SEPARATOR
-            + String.join(COLON_SEPARATOR, freeTexts);
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-        // no stateful fields to validate
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (freeTexts.length == 0 || freeTexts[0].isBlank()) {
             throw new EdifactValidationException(KEY_QUALIFIER
                 + ": At least one reference population definition must be given.");

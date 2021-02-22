@@ -17,7 +17,6 @@ class ReferenceServiceSubjectTest {
     void testFromStringValid() {
         var reference = ReferenceServiceSubject.fromString("RFF+SSI:NUMBER");
         assertAll(
-            () -> assertThat(reference.getValue()).isEqualTo("SSI:NUMBER"),
             () -> assertThat(reference.getNumber()).isEqualTo("NUMBER")
         );
     }
@@ -30,8 +29,8 @@ class ReferenceServiceSubjectTest {
     }
 
     @Test
-    void testPreValidateMissingNumber() {
-        assertThatThrownBy(() -> new ReferenceServiceSubject("").preValidate())
+    void testValidateMissingNumber() {
+        assertThatThrownBy(() -> new ReferenceServiceSubject("").validate())
             .isExactlyInstanceOf(EdifactValidationException.class)
             .hasMessage("RFF: Attribute number is required");
     }

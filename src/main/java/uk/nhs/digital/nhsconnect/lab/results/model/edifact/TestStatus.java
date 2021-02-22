@@ -27,8 +27,8 @@ public class TestStatus extends Segment {
                 + " from " + edifactString);
         }
 
-        String[] keySplit = Split.byPlus(edifactString);
-        String code = keySplit[2];
+        final String[] keySplit = Split.byPlus(edifactString);
+        final String code = keySplit[2];
 
         return new TestStatus(TestStatusCode.fromCode(code));
     }
@@ -39,17 +39,7 @@ public class TestStatus extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return testStatusCode.getCode();
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (ObjectUtils.isEmpty(testStatusCode)) {
             throw new EdifactValidationException(getKey() + ": Attribute code in testStatusCode is required");
         }

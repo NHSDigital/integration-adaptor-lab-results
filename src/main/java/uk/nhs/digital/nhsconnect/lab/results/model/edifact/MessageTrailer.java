@@ -27,13 +27,7 @@ public class MessageTrailer extends Segment {
     }
 
     @Override
-    public String getValue() {
-        String formattedSequenceNumber = String.format("%08d", sequenceNumber);
-        return numberOfSegments + "+" + formattedSequenceNumber;
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (sequenceNumber == null) {
             throw new EdifactValidationException(getKey() + ": Attribute sequenceNumber is required");
         }
@@ -47,18 +41,12 @@ public class MessageTrailer extends Segment {
         }
     }
 
-    @Override
-    public void preValidate() throws EdifactValidationException {
-    }
-
     public static MessageTrailer fromString(String edifactString) {
         if (!edifactString.startsWith(KEY)) {
             throw new IllegalArgumentException("Can't create " + MessageTrailer.class.getSimpleName()
                 + " from " + edifactString);
         }
-        String[] split = Split.byPlus(
-            Split.bySegmentTerminator(edifactString)[0]
-        );
+        final String[] split = Split.byPlus(edifactString);
         return new MessageTrailer(Integer.parseInt(split[1]))
             .setSequenceNumber(Long.parseLong(split[2]));
     }

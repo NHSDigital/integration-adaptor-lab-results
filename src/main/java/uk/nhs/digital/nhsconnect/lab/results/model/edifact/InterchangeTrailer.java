@@ -1,9 +1,8 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
@@ -12,14 +11,17 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
  * takes in specific values required to generate an interchange trailer
  * example: UNZ+1+00000002'.
  */
+@Builder
 @Getter
-@Setter
-@RequiredArgsConstructor
 public class InterchangeTrailer extends Segment {
 
     public static final String KEY = "UNZ";
-    private @NonNull Integer numberOfMessages;
-    private Long sequenceNumber;
+
+    private static final int NUMBER_OF_MESSAGES_INDEX = 1;
+    private static final int SEQUENCE_NUMBER_INDEX = 2;
+
+    private final Long sequenceNumber;
+    private final Integer numberOfMessages;
 
     @Override
     public String getKey() {
@@ -27,22 +29,12 @@ public class InterchangeTrailer extends Segment {
     }
 
     @Override
-    public String getValue() {
-        String formattedSequenceNumber = String.format("%08d", sequenceNumber);
-        return numberOfMessages + "+" + formattedSequenceNumber;
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-        if (sequenceNumber == null || sequenceNumber <= 0) {
-            throw new EdifactValidationException(getKey() + ": Attribute sequenceNumber is required");
-        }
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
-        if (numberOfMessages < 1) {
+    public void validate() throws EdifactValidationException {
+        if (getNumberOfMessages() < 1) {
             throw new EdifactValidationException(getKey() + ": Attribute numberOfMessages is required");
+        }
+        if (getSequenceNumber() == null || getSequenceNumber() <= 0) {
+            throw new EdifactValidationException(getKey() + ": Attribute sequenceNumber is required");
         }
     }
 
@@ -51,10 +43,36 @@ public class InterchangeTrailer extends Segment {
             throw new IllegalArgumentException("Can't create " + InterchangeTrailer.class.getSimpleName()
                 + " from " + edifactString);
         }
-        String[] split = Split.byPlus(
-            Split.bySegmentTerminator(edifactString)[0]
-        );
-        return new InterchangeTrailer(Integer.parseInt(split[1]))
-            .setSequenceNumber(Long.parseLong(split[2]));
+
+        final var split = Split.byPlus(edifactString);
+
+        return InterchangeTrailer.builder()
+            .sequenceNumber(
+                split.length > SEQUENCE_NUMBER_INDEX ? parseLong(split[SEQUENCE_NUMBER_INDEX]) : null)
+            .numberOfMessages(
+                split.length > NUMBER_OF_MESSAGES_INDEX ? parseInt(split[NUMBER_OF_MESSAGES_INDEX]) : null)
+            .build();
+    }
+
+    private static Long parseLong(String longString) {
+        if (StringUtils.isBlank(longString)) {
+            return null;
+        }
+        try {
+            return Long.parseLong(longString);
+        } catch (Exception ex) {
+            throw new EdifactValidationException(KEY + ": Error parsing long value", ex);
+        }
+    }
+
+    private static Integer parseInt(String intString) {
+        if (StringUtils.isBlank(intString)) {
+            return null;
+        }
+        try {
+            return Integer.parseInt(intString);
+        } catch (Exception ex) {
+            throw new EdifactValidationException(KEY + ": Error parsing long value", ex);
+        }
     }
 }

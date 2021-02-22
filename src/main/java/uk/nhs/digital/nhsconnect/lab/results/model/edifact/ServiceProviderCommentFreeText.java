@@ -26,9 +26,7 @@ public class ServiceProviderCommentFreeText extends Segment {
             throw new IllegalArgumentException(
                 "Can't create " + ServiceProviderCommentFreeText.class.getSimpleName() + " from " + edifactString);
         }
-        String[] split = Split.byPlus(
-            Split.bySegmentTerminator(edifactString)[0]
-        );
+        final String[] split = Split.byPlus(edifactString);
         return new ServiceProviderCommentFreeText(split[FREE_TEXT_INDEX]);
     }
 
@@ -38,21 +36,7 @@ public class ServiceProviderCommentFreeText extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return String.join(PLUS_SEPARATOR,
-            QUALIFIER,
-            StringUtils.EMPTY,
-            StringUtils.EMPTY,
-            serviceProviderComment);
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-        // nothing
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (StringUtils.isBlank(serviceProviderComment)) {
             throw new EdifactValidationException(getKey() + ": Attribute freeTextValue is blank or missing");
         }

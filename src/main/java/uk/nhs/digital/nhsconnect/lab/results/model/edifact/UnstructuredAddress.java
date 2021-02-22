@@ -51,14 +51,6 @@ public class UnstructuredAddress extends Segment {
         return KEY;
     }
 
-    @Override
-    public String getValue() {
-        return getAddressValue()
-            + PLUS_SEPARATOR
-            + PLUS_SEPARATOR
-            + postCode;
-    }
-
     private String getAddressValue() {
         if (FORMAT.equals(format)) {
             return format
@@ -69,12 +61,7 @@ public class UnstructuredAddress extends Segment {
     }
 
     @Override
-    protected void validateStateful() throws EdifactValidationException {
-        // no op
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         // if no postcode, there must be address lines
         if (StringUtils.isBlank(postCode)) {
             if (addressLines == null || addressLines.length <= 1) {

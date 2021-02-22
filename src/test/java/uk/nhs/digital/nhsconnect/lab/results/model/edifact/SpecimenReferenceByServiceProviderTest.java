@@ -10,18 +10,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class SpecimenReferenceByServiceProviderTest {
 
     @Test
-    void toEdifactTest() {
-        var edifact = new SpecimenReferenceByServiceProvider("CH000064LX").toEdifact();
-
-        assertThat(edifact).isEqualTo("RFF+STI:CH000064LX'");
-    }
-
-    @Test
     void testFromString() {
-        var edifact = "RFF+STI:CH000064LX'";
-        var parsedFreeText = SpecimenReferenceByServiceProvider.fromString("RFF+STI:CH000064LX'");
+        var parsedFreeText = SpecimenReferenceByServiceProvider.fromString("RFF+STI:CH000064LX");
         assertThat(parsedFreeText.getReferenceNumber()).isEqualTo("CH000064LX");
-        assertThat(parsedFreeText.toEdifact()).isEqualTo(edifact);
     }
 
     @Test
@@ -31,17 +22,17 @@ class SpecimenReferenceByServiceProviderTest {
     }
 
     @Test
-    void testPreValidationEmptyString() {
+    void testValidationEmptyString() {
         SpecimenReferenceByServiceProvider emptyFreeText = new SpecimenReferenceByServiceProvider(StringUtils.EMPTY);
-        assertThatThrownBy(emptyFreeText::preValidate)
+        assertThatThrownBy(emptyFreeText::validate)
             .isInstanceOf(EdifactValidationException.class)
             .hasMessage("RFF: Specimen Reference number by service provider is blank or missing");
     }
 
     @Test
-    void testPreValidationBlankString() {
+    void testValidationBlankString() {
         SpecimenReferenceByServiceProvider emptyFreeText = new SpecimenReferenceByServiceProvider(" ");
-        assertThatThrownBy(emptyFreeText::preValidate)
+        assertThatThrownBy(emptyFreeText::validate)
             .isInstanceOf(EdifactValidationException.class)
             .hasMessage("RFF: Specimen Reference number by service provider is blank or missing");
     }

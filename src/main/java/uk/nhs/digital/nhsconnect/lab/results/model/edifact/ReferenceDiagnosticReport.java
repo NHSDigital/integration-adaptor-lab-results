@@ -28,7 +28,7 @@ public class ReferenceDiagnosticReport extends Segment {
                 "Can't create " + ReferenceDiagnosticReport.class.getSimpleName() + " from " + edifactString);
         }
 
-        String[] keySplit = Split.byPlus(edifactString);
+        final String[] keySplit = Split.byPlus(edifactString);
         final String referenceNumber = Split.byColon(keySplit[1])[1];
         return new ReferenceDiagnosticReport(referenceNumber);
     }
@@ -39,17 +39,7 @@ public class ReferenceDiagnosticReport extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return QUALIFIER + COLON_SEPARATOR + referenceNumber;
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (referenceNumber.isBlank()) {
             throw new EdifactValidationException(getKey() + ": Diagnostic Report Reference is required");
         }

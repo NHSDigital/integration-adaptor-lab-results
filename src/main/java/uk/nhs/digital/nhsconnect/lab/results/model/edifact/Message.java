@@ -1,9 +1,10 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
-import java.util.List;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
+import java.util.Optional;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class Message extends Section {
@@ -21,6 +22,10 @@ public class Message extends Section {
     private final Optional<RequesterNameAndAddress> requesterNameAndAddress =
         extractOptionalSegment(RequesterNameAndAddress.KEY_QUALIFIER)
             .map(RequesterNameAndAddress::fromString);
+
+    @Getter(lazy = true)
+    private final MessageTrailer messageTrailer =
+        MessageTrailer.fromString(extractSegment(MessageTrailer.KEY));
 
     @Getter
     @Setter

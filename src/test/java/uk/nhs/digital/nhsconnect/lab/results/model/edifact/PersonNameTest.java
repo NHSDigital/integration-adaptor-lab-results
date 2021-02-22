@@ -10,62 +10,37 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PersonNameTest {
 
-    private static final String ID_AND_NAMES = "PNA+PAT+RAT56:OPI+++SU:KENNEDY+FO:SARAH+TI:MISS+MI:ANGELA";
-    private static final String ID_AND_NAMES_VALUE = "PAT+RAT56:OPI+++SU:KENNEDY+FO:SARAH+TI:MISS+MI:ANGELA";
-    private static final String NAMES_ONLY = "PNA+PAT++++SU:KENNEDY+FO:SARAH+TI:MISS+MI:ANGELA";
-    private static final String NAMES_ONLY_VALUE = "PAT++++SU:KENNEDY+FO:SARAH+TI:MISS+MI:ANGELA";
+    private static final String ID_AND_NAMES_VALUE = "PNA+PAT+RAT56:OPI+++SU:KENNEDY+FO:SARAH+TI:MISS+MI:ANGELA";
+    private static final String NAMES_ONLY_VALUE = "PNA+PAT++++SU:KENNEDY+FO:SARAH+TI:MISS+MI:ANGELA";
     private static final String ID_ONLY = "PNA+PAT+RAT56:OPI";
-    private static final String ID_ONLY_VALUE = "PAT+RAT56:OPI";
     private static final String BLANK_ID_VALUE = "PNA+PAT+   +++SU:KENNEDY+FO:SARAH+TI:MISS+MI:ANGELA";
 
     @Test
-    void testToEdifactReturnsForValidPersonName() {
-        final String expected = "PNA+PAT+1234567890:OPI+++SU:STEVENS+FO:CHARLES+TI:MR+MI:ANTHONY'";
-
-        final PersonName personName = PersonName.builder()
-            .nhsNumber("1234567890")
-            .patientIdentificationType(PatientIdentificationType.OFFICIAL_PATIENT_IDENTIFICATION)
-            .surname("STEVENS")
-            .firstForename("CHARLES")
-            .title("MR")
-            .secondForename("ANTHONY")
-            .build();
-
-        final String actual = personName.toEdifact();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void testToEdifactWithTypeOnlyReturnsCorrectValue() {
-        final String expected = "PNA+PAT+T247:OPI'";
-
-        final PersonName personName = PersonName.builder()
-            .nhsNumber("T247")
-            .patientIdentificationType(PatientIdentificationType.OFFICIAL_PATIENT_IDENTIFICATION)
-            .build();
-
-        final String actual = personName.toEdifact();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void testToEdifactWithBlankIdentificationAndBlankNamesThrowsException() {
-        final PersonName personName = PersonName.builder().build();
-
-        final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
-            personName::toEdifact);
-
-        assertEquals("PNA: At least one of patient identification and person name details are required",
-            exception.getMessage());
-    }
-
-    @Test
     void testFromString() {
-        assertAll("fromString",
-            () -> assertEquals(ID_ONLY_VALUE, PersonName.fromString(ID_ONLY).getValue()),
-            () -> assertEquals(ID_AND_NAMES_VALUE,
-                PersonName.fromString(ID_AND_NAMES).getValue()),
-            () -> assertEquals(NAMES_ONLY_VALUE, PersonName.fromString(NAMES_ONLY).getValue()));
+        var fromStringIdOnly = PersonName.fromString(ID_ONLY);
+        var fromStringIdAndNames = PersonName.fromString(ID_AND_NAMES_VALUE);
+        var fromStringNamesOnly = PersonName.fromString(NAMES_ONLY_VALUE);
+
+        assertAll("fromStringIdOnly",
+            () -> assertEquals(fromStringIdOnly.getNhsNumber(), "RAT56"),
+            () -> assertNull(fromStringIdOnly.getFirstForename()),
+            () -> assertNull(fromStringIdOnly.getSecondForename()),
+            () -> assertNull(fromStringIdOnly.getSurname()),
+            () -> assertNull(fromStringIdOnly.getTitle()));
+
+        assertAll("fromStringIdAndNames",
+            () -> assertEquals(fromStringIdAndNames.getNhsNumber(), "RAT56"),
+            () -> assertEquals(fromStringIdAndNames.getFirstForename(), "SARAH"),
+            () -> assertEquals(fromStringIdAndNames.getSecondForename(), "ANGELA"),
+            () -> assertEquals(fromStringIdAndNames.getSurname(), "KENNEDY"),
+            () -> assertEquals(fromStringIdAndNames.getTitle(), "MISS"));
+
+        assertAll("fromStringNamesOnly",
+            () -> assertNull(fromStringNamesOnly.getNhsNumber()),
+            () -> assertEquals(fromStringNamesOnly.getFirstForename(), "SARAH"),
+            () -> assertEquals(fromStringNamesOnly.getSecondForename(), "ANGELA"),
+            () -> assertEquals(fromStringNamesOnly.getSurname(), "KENNEDY"),
+            () -> assertEquals(fromStringNamesOnly.getTitle(), "MISS"));
     }
 
     @Test

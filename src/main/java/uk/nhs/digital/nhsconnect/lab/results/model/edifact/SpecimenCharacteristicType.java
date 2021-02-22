@@ -26,9 +26,7 @@ public class SpecimenCharacteristicType extends Segment {
             throw new IllegalArgumentException(
                 "Can't create " + SpecimenCharacteristicType.class.getSimpleName() + " from " + edifactString);
         }
-        String[] split = Split.byColon(
-            Split.bySegmentTerminator(edifactString)[0]
-        );
+        final String[] split = Split.byColon(edifactString);
         return new SpecimenCharacteristicType(split[TYPE_OF_SPECIMEN_DETAILS_INDEX]);
     }
 
@@ -38,17 +36,7 @@ public class SpecimenCharacteristicType extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return QUALIFIER + PLUS_SEPARATOR + COLON_SEPARATOR.repeat(TYPE_OF_SPECIMEN_DETAILS_INDEX) + typeOfSpecimen;
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-        // nothing
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (StringUtils.isBlank(typeOfSpecimen)) {
             throw new EdifactValidationException(getKey() + ": Attribute typeOfSpecimen is blank or missing");
         }

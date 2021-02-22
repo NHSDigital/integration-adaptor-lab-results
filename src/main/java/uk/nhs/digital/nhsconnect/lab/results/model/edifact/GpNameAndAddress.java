@@ -44,17 +44,7 @@ public class GpNameAndAddress extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return QUALIFIER + "+" + identifier + ":" + code;
-    }
-
-    @Override
-    protected void validateStateful() {
-        //NOP
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (StringUtils.isBlank(identifier)) {
             throw new EdifactValidationException(getKey() + ": Attribute identifier is required");
         }

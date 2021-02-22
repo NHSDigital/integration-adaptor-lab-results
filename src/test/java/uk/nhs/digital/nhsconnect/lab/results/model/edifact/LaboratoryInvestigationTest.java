@@ -28,28 +28,6 @@ class LaboratoryInvestigationTest {
     }
 
     @Test
-    void when_mappingSegmentObjectToEdifactString_expect_returnCorrectEdifactString() {
-        String expectedEdifactString = "INV+MQ+42R4.:911::Serum ferritin'";
-
-        LaboratoryInvestigation laboratoryInvestigation = LaboratoryInvestigation.builder()
-            .investigationCode("42R4.")
-            .investigationDescription("Serum ferritin")
-            .build();
-
-        assertEquals(expectedEdifactString, laboratoryInvestigation.toEdifact());
-    }
-
-    @Test
-    void when_mappingSegmentObjectToEdifactStringWithEmptyDescriptionField_expect_edifactValidationExceptionIsThrown() {
-        LaboratoryInvestigation laboratoryInvestigation = LaboratoryInvestigation.builder()
-            .investigationCode("42R4.")
-            .investigationDescription("")
-            .build();
-
-        assertThrows(EdifactValidationException.class, laboratoryInvestigation::toEdifact);
-    }
-
-    @Test
     void when_buildingSegmentObjectWithoutAnyFields_expect_nullPointerExceptionIsThrown() {
         assertThrows(NullPointerException.class, () -> LaboratoryInvestigation.builder().build());
     }
@@ -60,22 +38,14 @@ class LaboratoryInvestigationTest {
     }
 
     @Test
-    void testGetValue() {
-        assertEquals(laboratoryInvestigation.getValue(), "MQ+42R4.:911::Serum ferritin");
-    }
+    void testValidate() {
+        assertDoesNotThrow(laboratoryInvestigation::validate);
 
-    @Test
-    void testValidateStateful() {
-        assertDoesNotThrow(laboratoryInvestigation::validateStateful);
-    }
-
-    @Test
-    void testPreValidate() {
         LaboratoryInvestigation emptyDescription = new LaboratoryInvestigation(
                 "42R4.", ""
         );
 
-        assertThatThrownBy(emptyDescription::preValidate)
+        assertThatThrownBy(emptyDescription::validate)
                 .isExactlyInstanceOf(EdifactValidationException.class)
                 .hasMessage("INV: Attribute investigationDescription is required");
     }

@@ -28,26 +28,6 @@ class PerformingOrganisationNameAndAddressTest {
     }
 
     @Test
-    void when_mappingSegmentObjectToEdifactString_expect_returnCorrectEdifactString() {
-        String expectedEdifactString = "NAD+SLA+++LONDON CITY HOSPITAL'";
-
-        PerformingOrganisationNameAndAddress performingOrganisation = PerformingOrganisationNameAndAddress.builder()
-            .performingOrganisationName("LONDON CITY HOSPITAL")
-            .build();
-
-        assertEquals(expectedEdifactString, performingOrganisation.toEdifact());
-    }
-
-    @Test
-    void when_mappingSegmentObjectToEdifactStringWithEmptyField_expect_edifactValidationExceptionIsThrown() {
-        PerformingOrganisationNameAndAddress performingOrganisation = PerformingOrganisationNameAndAddress.builder()
-            .performingOrganisationName("")
-            .build();
-
-        assertThrows(EdifactValidationException.class, performingOrganisation::toEdifact);
-    }
-
-    @Test
     void when_buildingSegmentObjectWithoutMandatoryField_expect_nullPointerExceptionIsThrown() {
         assertThrows(NullPointerException.class, () -> PerformingOrganisationNameAndAddress.builder().build());
     }
@@ -59,19 +39,16 @@ class PerformingOrganisationNameAndAddressTest {
 
     @Test
     void testGetValue() {
-        assertEquals(performingOrganisationNameAndAddress.getValue(), "SLA+++LONDON CITY HOSPITAL");
+        assertEquals(performingOrganisationNameAndAddress.getPerformingOrganisationName(), "LONDON CITY HOSPITAL");
     }
 
     @Test
-    void testValidateStateful() {
-        assertDoesNotThrow(performingOrganisationNameAndAddress::validateStateful);
-    }
+    void testValidate() {
+        assertDoesNotThrow(performingOrganisationNameAndAddress::validate);
 
-    @Test
-    void testPreValidate() {
         var emptyPerformingOrganisationName = new PerformingOrganisationNameAndAddress("");
 
-        assertThatThrownBy(emptyPerformingOrganisationName::preValidate)
+        assertThatThrownBy(emptyPerformingOrganisationName::validate)
             .isExactlyInstanceOf(EdifactValidationException.class)
             .hasMessage("NAD: Attribute performingOrganisationName is required");
     }

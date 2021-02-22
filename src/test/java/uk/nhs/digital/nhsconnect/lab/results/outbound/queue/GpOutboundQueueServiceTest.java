@@ -52,7 +52,6 @@ class GpOutboundQueueServiceTest {
         final Parameters parameters = new Parameters();
 
         final FhirDataToSend fhirDataToSend = new FhirDataToSend()
-            .setOperationId("123")
             .setContent(parameters);
 
         final String serializedData = "some_serialized_data";
@@ -71,7 +70,6 @@ class GpOutboundQueueServiceTest {
         messageCreatorArgumentCaptor.getValue().createMessage(session);
 
         verify(session).createTextMessage(eq(serializedData));
-        verify(textMessage).setStringProperty(JmsHeaders.OPERATION_ID, fhirDataToSend.getOperationId());
         verify(textMessage).setStringProperty(JmsHeaders.CORRELATION_ID, CONSERVATION_ID);
 
         verify(correlationIdService).getCurrentCorrelationId();

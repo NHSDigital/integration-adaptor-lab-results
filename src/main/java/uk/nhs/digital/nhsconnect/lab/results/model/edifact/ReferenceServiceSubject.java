@@ -38,19 +38,7 @@ public class ReferenceServiceSubject extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return QUALIFIER
-            + COLON_SEPARATOR
-            + number;
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-        // no op
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (StringUtils.isBlank(number)) {
             throw new EdifactValidationException(KEY + ": Attribute number is required");
         }

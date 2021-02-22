@@ -8,7 +8,6 @@ import org.hl7.fhir.dstu3.model.Parameters;
 @Setter
 public class FhirDataToSend {
     private Object content;
-    private String operationId;
 
     public FhirDataToSend setContent(final Parameters parameters) {
         this.content = parameters;

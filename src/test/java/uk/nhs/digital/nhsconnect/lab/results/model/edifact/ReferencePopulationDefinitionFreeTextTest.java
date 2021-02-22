@@ -26,12 +26,10 @@ class ReferencePopulationDefinitionFreeTextTest {
     void testNoTexts() {
         var result = ReferencePopulationDefinitionFreeText.fromString("FTX+RPD+++");
         assertAll(
-            () -> assertThat(result.getValue()).isEqualTo("RPD+++"),
             () -> assertThat(result.getFreeTexts()).isEmpty(),
-            () -> assertThatThrownBy(result::preValidate)
+            () -> assertThatThrownBy(result::validate)
                 .isExactlyInstanceOf(EdifactValidationException.class)
-                .hasMessage("FTX+RPD: At least one reference population definition must be given."),
-            () -> assertThatNoException().isThrownBy(result::validateStateful)
+                .hasMessage("FTX+RPD: At least one reference population definition must be given.")
         );
     }
 
@@ -39,10 +37,8 @@ class ReferencePopulationDefinitionFreeTextTest {
     void testOneText() {
         var result = ReferencePopulationDefinitionFreeText.fromString("FTX+RPD+++Okay");
         assertAll(
-            () -> assertThat(result.getValue()).isEqualTo("RPD+++Okay"),
             () -> assertThat(result.getFreeTexts()).containsExactly("Okay"),
-            () -> assertThatNoException().isThrownBy(result::preValidate),
-            () -> assertThatNoException().isThrownBy(result::validateStateful)
+            () -> assertThatNoException().isThrownBy(result::validate)
         );
     }
 
@@ -57,10 +53,10 @@ class ReferencePopulationDefinitionFreeTextTest {
 
     @Test
     @SuppressWarnings("checkstyle:MagicNumber")
-    void testPreValidateTooManyFreeTexts() {
+    void testValidateTooManyFreeTexts() {
         final var texts = "A".repeat(10).split("");
         final var freeText = new ReferencePopulationDefinitionFreeText(texts);
-        assertThatThrownBy(freeText::preValidate)
+        assertThatThrownBy(freeText::validate)
             .isExactlyInstanceOf(EdifactValidationException.class)
             .hasMessage("FTX+RPD: At most 5 reference population definitions may be given.");
     }
