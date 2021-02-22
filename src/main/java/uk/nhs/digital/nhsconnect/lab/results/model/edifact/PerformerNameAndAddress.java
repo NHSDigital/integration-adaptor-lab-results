@@ -87,7 +87,7 @@ public class PerformerNameAndAddress extends Segment {
                 throw new EdifactValidationException(getKey() + ": Attribute performingOrganisationName is required");
             }
         } else {
-            if (code.getCode().isBlank()) {
+            if (code == null || code.getCode().isBlank()) {
                 throw new EdifactValidationException(getKey() + ": Attribute code is required");
             }
             if (partyName.isBlank()) {
@@ -96,6 +96,7 @@ public class PerformerNameAndAddress extends Segment {
         }
     }
 
+    @Override
     public String toEdifact() throws EdifactValidationException {
         this.validate();
         return this.getKey() + PLUS_SEPARATOR + this.getValue() + TERMINATOR;
