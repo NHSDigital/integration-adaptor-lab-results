@@ -24,7 +24,7 @@ public class PersonDateOfBirth extends Segment {
 
     protected static final String KEY = "DTM";
     private static final String QUALIFIER = "329";
-    private static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
+    public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
     private static final DateTimeFormatter DATE_FORMATTER_CCYY = DateTimeFormatter.ofPattern("yyyy");
     private static final DateTimeFormatter DATE_FORMATTER_CCYYMM = DateTimeFormatter.ofPattern("yyyyMM");
     private static final DateTimeFormatter DATE_FORMATTER_CCYYMMDD = DateTimeFormatter.ofPattern("yyyyMMdd");

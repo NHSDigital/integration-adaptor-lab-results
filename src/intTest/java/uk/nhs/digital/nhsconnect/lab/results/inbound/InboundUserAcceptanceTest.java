@@ -1,9 +1,14 @@
 package uk.nhs.digital.nhsconnect.lab.results.inbound;
 
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.Customization;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
+import org.skyscreamer.jsonassert.comparator.CustomComparator;
 import uk.nhs.digital.nhsconnect.lab.results.IntegrationBaseTest;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
@@ -45,7 +50,7 @@ public class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
     @Test
     void testSendEdifactIsProcessedAndPushedToGpOutboundQueue()
-            throws JMSException, IOException, InterchangeParsingException, MessagesParsingException {
+            throws JMSException, IOException, InterchangeParsingException, MessagesParsingException, JSONException {
 
         final String content = new String(Files.readAllBytes(getEdifactResource().getFile().toPath()));
 
@@ -62,9 +67,20 @@ public class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
         final String expectedMessageBody = new String(Files.readAllBytes(getFhirResource().getFile().toPath()));
         final String messageBody = parseTextMessage(gpOutboundQueueMessage);
-        assertThat(messageBody).isEqualTo(expectedMessageBody);
 
-        assertOutboundRecepMessage();
+        JSONAssert.assertEquals(
+            expectedMessageBody,
+            messageBody,
+            new CustomComparator(
+                JSONCompareMode.STRICT,
+                new Customization("meta.lastUpdated", (c1, c2) -> true),
+                new Customization("identifier.value", (c1, c2) -> true),
+                new Customization("entry[*].fullUrl", (c1, c2) -> true)
+            )
+        );
+
+        //TODO: NIAD-1063 temporarily disabling NHSACK for v0.1
+        //assertOutboundRecepMessage();
     }
 
     private void assertOutboundRecepMessage()

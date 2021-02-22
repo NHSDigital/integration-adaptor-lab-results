@@ -15,7 +15,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 @Getter
 @AllArgsConstructor
 public class UnstructuredAddress extends Segment {
-    private static final String KEY = "ADR";
+    public static final String KEY = "ADR";
     private static final String FORMAT = "US";
 
     private static final int ADDRESS_LINES = 5;

@@ -1,6 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.outbound.queue;
 
-import org.hl7.fhir.dstu3.model.Parameters;
+import org.hl7.fhir.dstu3.model.Bundle;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,12 +22,12 @@ class ObjectSerializerTest {
 
     @Test
     void serializeFhirObjectToString() {
-        final String expected = "{\n  \"resourceType\": \"Parameters\"\n}";
+        final String expected = "{\n  \"resourceType\": \"Bundle\"\n}";
 
-        final Parameters resource = new Parameters();
-        when(fhirParser.encodeToString(resource)).thenReturn(expected);
+        final Bundle bundle = new Bundle();
+        when(fhirParser.encodeToString(bundle)).thenReturn(expected);
 
-        assertEquals(expected, objectSerializer.serialize(resource));
+        assertEquals(expected, objectSerializer.serialize(bundle));
     }
 
     @Test

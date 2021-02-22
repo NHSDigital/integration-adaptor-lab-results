@@ -22,7 +22,7 @@ public class ServiceProvider extends Segment {
     @NonNull
     private final ServiceProviderCode serviceProviderCode;
 
-    public static ServiceProvider fromString(String edifactString) {
+    public static ServiceProvider fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY)) {
             throw new IllegalArgumentException("Can't create " + ServiceProvider.class.getSimpleName()
                 + " from " + edifactString);

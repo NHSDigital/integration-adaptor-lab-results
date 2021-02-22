@@ -4,11 +4,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.hl7.fhir.dstu3.model.Parameters;
+import org.hl7.fhir.dstu3.model.Bundle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.fhir.EdifactToFhirService;
-import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.FhirDataToSend;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.InboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
@@ -61,8 +60,7 @@ public class InboundMessageHandler {
         messageProcessingResults.stream()
             .filter(result -> result instanceof SuccessMessageProcessingResult)
             .map(SuccessMessageProcessingResult.class::cast)
-            .map(result -> new FhirDataToSend()
-                .setContent(result.getParameters()))
+            .map(SuccessMessageProcessingResult::getBundle)
             .forEach(gpOutboundQueueService::publish);
 
         logSentFor(interchange);
@@ -80,9 +78,9 @@ public class InboundMessageHandler {
 
     private MessageProcessingResult convertToFhir(Message message) {
         try {
-            final var parameters = edifactToFhirService.convertToFhir(message);
-            LOGGER.debug("Converted edifact message into {}", parameters);
-            return new SuccessMessageProcessingResult(message, parameters);
+            final var bundle = edifactToFhirService.convertToFhir(message);
+            LOGGER.debug("Converted edifact message into {}", bundle);
+            return new SuccessMessageProcessingResult(message, bundle);
         } catch (Exception ex) {
             LOGGER.error("Error converting Message to FHIR", ex);
             return new ErrorMessageProcessingResult(message, ex);
@@ -124,7 +122,7 @@ public class InboundMessageHandler {
     @RequiredArgsConstructor
     public static final class SuccessMessageProcessingResult extends MessageProcessingResult {
         private final Message message;
-        private final Parameters parameters;
+        private final Bundle bundle;
     }
 
     @Getter

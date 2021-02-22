@@ -14,7 +14,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 @EqualsAndHashCode(callSuper = false)
 @Builder
 public class PersonSex extends Segment {
-    protected static final String KEY = "PDI";
+    public static final String KEY = "PDI";
 
     @NonNull
     private final Gender gender;

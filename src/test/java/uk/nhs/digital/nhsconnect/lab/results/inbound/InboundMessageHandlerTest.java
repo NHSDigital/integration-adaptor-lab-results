@@ -1,6 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.inbound;
 
-import org.hl7.fhir.dstu3.model.Parameters;
+import org.hl7.fhir.dstu3.model.Bundle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,7 +8,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.fhir.EdifactToFhirService;
-import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.FhirDataToSend;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
@@ -87,7 +86,7 @@ class InboundMessageHandlerTest {
 
         verify(edifactParser, times(1)).parse(any());
         verify(edifactToFhirService, never()).convertToFhir(any(Message.class));
-        verify(gpOutboundQueueService, never()).publish(any(FhirDataToSend.class));
+        verify(gpOutboundQueueService, never()).publish(any(Bundle.class));
         verify(outboundMeshMessageBuilder, never()).buildNhsAck(any(), any(), anyList());
         verify(meshOutboundQueueService).publish(eq(outboundMeshMessage));
     }
@@ -107,7 +106,7 @@ class InboundMessageHandlerTest {
 
         verify(edifactParser, times(1)).parse(any());
         verify(edifactToFhirService, never()).convertToFhir(any(Message.class));
-        verify(gpOutboundQueueService, never()).publish(any(FhirDataToSend.class));
+        verify(gpOutboundQueueService, never()).publish(any(Bundle.class));
         verify(outboundMeshMessageBuilder, never()).buildNhsAck(any(), any(), anyList());
         verify(meshOutboundQueueService).publish(eq(outboundMeshMessage));
     }
@@ -130,7 +129,7 @@ class InboundMessageHandlerTest {
 
         verify(edifactParser, times(1)).parse(any());
         verify(edifactToFhirService, never()).convertToFhir(any(Message.class));
-        verify(gpOutboundQueueService, never()).publish(any(FhirDataToSend.class));
+        verify(gpOutboundQueueService, never()).publish(any(Bundle.class));
         verify(outboundMeshMessageBuilder)
             .buildNhsAck(eq(WorkflowId.PATHOLOGY), eq(interchange), eq(Collections.emptyList()));
         verify(meshOutboundQueueService).publish(eq(outboundMeshMessage));
@@ -144,8 +143,8 @@ class InboundMessageHandlerTest {
         when(edifactParser.parse(meshMessage.getContent())).thenReturn(interchange);
         when(interchange.getMessages()).thenReturn(List.of(message));
 
-        final Parameters parameters = new Parameters();
-        when(edifactToFhirService.convertToFhir(message)).thenReturn(parameters);
+        final Bundle bundle = new Bundle();
+        when(edifactToFhirService.convertToFhir(message)).thenReturn(bundle);
 
         final OutboundMeshMessage outboundMeshMessage = new MeshMessage()
             .setWorkflowId(WorkflowId.PATHOLOGY_ACK);
@@ -155,7 +154,7 @@ class InboundMessageHandlerTest {
 
         verify(edifactParser, times(1)).parse(any());
         verify(edifactToFhirService).convertToFhir(message);
-        verify(gpOutboundQueueService).publish(any(FhirDataToSend.class));
+        verify(gpOutboundQueueService).publish(any(Bundle.class));
         verify(outboundMeshMessageBuilder).buildNhsAck(any(), eq(interchange), anyList());
         verify(meshOutboundQueueService).publish(eq(outboundMeshMessage));
     }
@@ -168,9 +167,10 @@ class InboundMessageHandlerTest {
         when(edifactParser.parse(meshMessage.getContent())).thenReturn(interchange);
         when(interchange.getMessages()).thenReturn(List.of(message, message1));
 
-        final Parameters parameters = new Parameters();
-        when(edifactToFhirService.convertToFhir(message)).thenReturn(parameters);
-        when(edifactToFhirService.convertToFhir(message1)).thenReturn(parameters);
+        final Bundle bundle = new Bundle();
+
+        when(edifactToFhirService.convertToFhir(message)).thenReturn(bundle);
+        when(edifactToFhirService.convertToFhir(message1)).thenReturn(bundle);
 
         final OutboundMeshMessage outboundMeshMessage = new MeshMessage()
             .setWorkflowId(WorkflowId.PATHOLOGY_ACK);
@@ -181,7 +181,7 @@ class InboundMessageHandlerTest {
         verify(edifactParser, times(1)).parse(any());
         verify(edifactToFhirService).convertToFhir(message);
         verify(edifactToFhirService).convertToFhir(message1);
-        verify(gpOutboundQueueService, times(2)).publish(any(FhirDataToSend.class));
+        verify(gpOutboundQueueService, times(2)).publish(any(Bundle.class));
         verify(outboundMeshMessageBuilder).buildNhsAck(any(), eq(interchange), anyList());
         verify(meshOutboundQueueService).publish(eq(outboundMeshMessage));
     }

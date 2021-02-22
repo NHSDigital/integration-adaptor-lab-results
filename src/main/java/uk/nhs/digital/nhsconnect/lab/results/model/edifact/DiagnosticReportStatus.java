@@ -15,7 +15,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 @Getter
 public class DiagnosticReportStatus extends Segment {
 
-    private static final String KEY = "STS";
+    public static final String KEY = "STS";
 
     private final String detail;
     @NonNull

@@ -2,11 +2,13 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
 import lombok.Getter;
 import lombok.Setter;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvolvedParty;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.ServiceReportDetails;
 
 import java.util.List;
-import java.util.Optional;
 
-@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+import static java.util.stream.Collectors.toList;
+
 public class Message extends Section {
     private static final String DEFAULT_GP_CODE = "9999";
 
@@ -19,9 +21,16 @@ public class Message extends Section {
         HealthAuthorityNameAndAddress.fromString(extractSegment(HealthAuthorityNameAndAddress.KEY_QUALIFIER));
 
     @Getter(lazy = true)
-    private final Optional<RequesterNameAndAddress> requesterNameAndAddress =
-        extractOptionalSegment(RequesterNameAndAddress.KEY_QUALIFIER)
-            .map(RequesterNameAndAddress::fromString);
+    private final List<InvolvedParty> involvedParties = InvolvedParty.createMultiple(getEdifactSegments().stream()
+        .dropWhile(segment -> !segment.startsWith(InvolvedParty.INDICATOR))
+        .takeWhile(segment -> !segment.startsWith(ServiceReportDetails.INDICATOR))
+        .collect(toList()));
+
+    @Getter(lazy = true)
+    private final ServiceReportDetails serviceReportDetails = new ServiceReportDetails(getEdifactSegments().stream()
+        .dropWhile(segment -> !segment.startsWith(ServiceReportDetails.INDICATOR))
+        .takeWhile(segment -> !segment.startsWith(MessageTrailer.KEY))
+        .collect(toList()));
 
     @Getter(lazy = true)
     private final MessageTrailer messageTrailer =

@@ -21,7 +21,7 @@ public class PersonName extends Segment {
 
     private static final String KEY = "PNA";
     private static final String QUALIFIER = "PAT";
-    private static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
+    public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
     private static final String FAMILY_NAME_QUALIFIER = "SU";
     private static final String FIRST_NAME_QUALIFIER = "FO";
     private static final String MIDDLE_NAME_QUALIFIER = "MI";

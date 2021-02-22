@@ -21,7 +21,7 @@ public class DiagnosticReportDateIssued extends Segment {
 
     private static final String KEY = "DTM";
     private static final String QUALIFIER = "ISR";
-    private static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
+    public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
     private static final String DATE_FORMAT = "203";
 
     @NonNull
