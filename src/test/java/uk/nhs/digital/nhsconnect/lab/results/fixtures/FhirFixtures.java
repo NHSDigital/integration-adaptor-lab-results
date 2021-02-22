@@ -7,6 +7,7 @@ import org.hl7.fhir.dstu3.model.InstantType;
 import org.hl7.fhir.dstu3.model.Meta;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.hl7.fhir.dstu3.model.UriType;
+import uk.nhs.digital.nhsconnect.lab.results.model.fhir.PathologyRecord;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -29,7 +30,7 @@ public final class FhirFixtures {
         return requester;
     }
 
-    public static Bundle generateBundle() {
+    public static Bundle generateBundle(final PathologyRecord pathologyRecord) {
         Bundle bundle = new Bundle();
 
         bundle.setMeta(new Meta()
@@ -46,7 +47,7 @@ public final class FhirFixtures {
 
         bundle.addEntry()
                 .setFullUrl("urn:uuid:some-entry-uuid")
-                .setResource(new Practitioner());
+                .setResource(pathologyRecord.getRequester());
 
         return bundle;
     }

@@ -1,6 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.inbound;
 
-import org.hl7.fhir.dstu3.model.Parameters;
+import org.hl7.fhir.dstu3.model.Bundle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,7 +8,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.fhir.EdifactToFhirService;
-import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.FhirDataToSend;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
@@ -64,7 +63,7 @@ class InboundMessageHandlerTest {
         //verify(edifactParser, times(2)).parse(any());
         verify(edifactParser, times(1)).parse(any());
         verify(edifactToFhirService, never()).convertToFhir(any(Message.class));
-        verify(gpOutboundQueueService, never()).publish(any(FhirDataToSend.class));
+        verify(gpOutboundQueueService, never()).publish(any(Bundle.class));
         //TODO: NIAD-1063 temporarily disabling NHSACK for v0.1
         //verify(recepProducerService).produceRecep(interchange);
         //verify(meshOutboundQueueService).publish(any(OutboundMeshMessage.class));
@@ -78,8 +77,8 @@ class InboundMessageHandlerTest {
         when(edifactParser.parse(meshMessage.getContent())).thenReturn(interchange);
         when(interchange.getMessages()).thenReturn(List.of(message));
 
-        final Parameters parameters = new Parameters();
-        when(edifactToFhirService.convertToFhir(message)).thenReturn(parameters);
+        final Bundle bundle = new Bundle();
+        when(edifactToFhirService.convertToFhir(message)).thenReturn(bundle);
 
         inboundMessageHandler.handle(meshMessage);
 
@@ -87,7 +86,7 @@ class InboundMessageHandlerTest {
         //verify(edifactParser, times(2)).parse(any());
         verify(edifactParser, times(1)).parse(any());
         verify(edifactToFhirService).convertToFhir(message);
-        verify(gpOutboundQueueService).publish(any(FhirDataToSend.class));
+        verify(gpOutboundQueueService).publish(any(Bundle.class));
         //TODO: NIAD-1063 temporarily disabling NHSACK for v0.1
         //verify(recepProducerService).produceRecep(interchange);
         //verify(meshOutboundQueueService).publish(any(OutboundMeshMessage.class));
@@ -101,10 +100,10 @@ class InboundMessageHandlerTest {
         when(edifactParser.parse(meshMessage.getContent())).thenReturn(interchange);
         when(interchange.getMessages()).thenReturn(List.of(message, message1));
 
-        final Parameters parameters = new Parameters();
+        final Bundle bundle = new Bundle();
 
-        when(edifactToFhirService.convertToFhir(message)).thenReturn(parameters);
-        when(edifactToFhirService.convertToFhir(message1)).thenReturn(parameters);
+        when(edifactToFhirService.convertToFhir(message)).thenReturn(bundle);
+        when(edifactToFhirService.convertToFhir(message1)).thenReturn(bundle);
 
         inboundMessageHandler.handle(meshMessage);
 
@@ -113,7 +112,7 @@ class InboundMessageHandlerTest {
         verify(edifactParser, times(1)).parse(any());
         verify(edifactToFhirService).convertToFhir(message);
         verify(edifactToFhirService).convertToFhir(message1);
-        verify(gpOutboundQueueService, times(2)).publish(any(FhirDataToSend.class));
+        verify(gpOutboundQueueService, times(2)).publish(any(Bundle.class));
         //TODO: NIAD-1063 temporarily disabling NHSACK for v0.1
         //verify(recepProducerService).produceRecep(interchange);
         //verify(meshOutboundQueueService).publish(any(OutboundMeshMessage.class));

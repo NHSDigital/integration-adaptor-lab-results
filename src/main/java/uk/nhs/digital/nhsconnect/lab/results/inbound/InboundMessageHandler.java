@@ -2,11 +2,10 @@ package uk.nhs.digital.nhsconnect.lab.results.inbound;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hl7.fhir.dstu3.model.Parameters;
+import org.hl7.fhir.dstu3.model.Bundle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.fhir.EdifactToFhirService;
-import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.FhirDataToSend;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.InboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
@@ -41,9 +40,9 @@ public class InboundMessageHandler {
 
         LOGGER.info("Interchange contains {} new messages", messages.size());
 
-        final List<FhirDataToSend> fhirDataToSend = getFhirDataToSend(messages);
+        final List<Bundle> bundles = getBundlesToSend(messages);
 
-        fhirDataToSend.forEach(gpOutboundQueueService::publish);
+        bundles.forEach(gpOutboundQueueService::publish);
 
         //TODO temporarily disabled
         //sendRecep(interchange);
@@ -51,13 +50,14 @@ public class InboundMessageHandler {
         logSentFor(interchange);
     }
 
-    private List<FhirDataToSend> getFhirDataToSend(List<Message> messagesToProcess) {
+    private List<Bundle> getBundlesToSend(List<Message> messagesToProcess) {
         return messagesToProcess.stream()
             .map(message -> {
-                final Parameters parameters = edifactToFhirService.convertToFhir(message);
-                LOGGER.debug("Converted edifact message into {}", parameters);
-                return new FhirDataToSend()
-                    .setContent(parameters);
+                final Bundle bundle = edifactToFhirService.convertToFhir(message);
+
+                LOGGER.debug("Converted edifact message into {}", bundle);
+
+                return bundle;
             }).collect(Collectors.toList());
     }
 
