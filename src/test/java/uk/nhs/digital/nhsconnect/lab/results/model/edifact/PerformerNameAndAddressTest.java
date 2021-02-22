@@ -111,14 +111,14 @@ class PerformerNameAndAddressTest {
 
     @Test
     void testGetKey() {
-        assertEquals(performingOrganisationNameAndAddress.getKey(), "NAD");
+        assertEquals("NAD", performingOrganisationNameAndAddress.getKey());
     }
 
     @Test
     void testGetValue() {
         assertAll(
-            () -> assertEquals(performingOrganisationNameAndAddress.getValue(), "SLA+++LONDON CITY HOSPITAL"),
-            () -> assertEquals(performerNameAndAddress.getValue(), "SLA+A2442389:902++DR J SMITH")
+            () -> assertEquals("SLA+++LONDON CITY HOSPITAL", performingOrganisationNameAndAddress.getValue()),
+            () -> assertEquals("SLA+A2442389:902++DR J SMITH", performerNameAndAddress.getValue())
         );
 
     }
