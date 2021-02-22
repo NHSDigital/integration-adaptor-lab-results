@@ -41,7 +41,7 @@ import static uk.nhs.digital.nhsconnect.lab.results.model.edifact.Segment.PLUS_S
  * &gt; {@link InvestigationSubject}
  */
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-public class Specimen extends SegmentGroup {
+public class SpecimenDetails extends SegmentGroup {
     public static final String INDICATOR = "S16";
 
     @Getter(lazy = true)
@@ -90,13 +90,13 @@ public class Specimen extends SegmentGroup {
             .map(FreeTextSegment::fromString)
             .collect(Collectors.toList());
 
-    public static List<Specimen> createMultiple(@NonNull final List<String> edifactSegments) {
+    public static List<SpecimenDetails> createMultiple(@NonNull final List<String> edifactSegments) {
         return splitMultipleSegmentGroups(edifactSegments, INDICATOR).stream()
-            .map(Specimen::new)
+            .map(SpecimenDetails::new)
             .collect(Collectors.toList());
     }
 
-    public Specimen(final List<String> edifactSegments) {
+    public SpecimenDetails(final List<String> edifactSegments) {
         super(edifactSegments);
     }
 }

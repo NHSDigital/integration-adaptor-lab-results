@@ -46,7 +46,7 @@ public class InvestigationSubject extends SegmentGroup {
     @Getter(lazy = true)
     private final PatientDetails details = new PatientDetails(getEdifactSegments().stream()
         .dropWhile(segment -> !segment.startsWith(PatientDetails.INDICATOR))
-        .takeWhile(segment -> !segment.startsWith(Specimen.INDICATOR))
+        .takeWhile(segment -> !segment.startsWith(SpecimenDetails.INDICATOR))
         .takeWhile(segment -> !segment.startsWith(MessageTrailer.KEY))
         .collect(toList()));
 
@@ -54,12 +54,12 @@ public class InvestigationSubject extends SegmentGroup {
     private final Optional<PatientClinicalInfo> clinicalInfo = PatientClinicalInfo.createOptional(
         getEdifactSegments().stream()
             .dropWhile(segment -> !segment.startsWith(PatientClinicalInfo.INDICATOR))
-            .takeWhile(segment -> !segment.startsWith(Specimen.INDICATOR))
+            .takeWhile(segment -> !segment.startsWith(SpecimenDetails.INDICATOR))
             .collect(toList()));
 
     @Getter(lazy = true)
-    private final List<Specimen> specimens = Specimen.createMultiple(getEdifactSegments().stream()
-        .dropWhile(segment -> !segment.startsWith(Specimen.INDICATOR))
+    private final List<SpecimenDetails> specimens = SpecimenDetails.createMultiple(getEdifactSegments().stream()
+        .dropWhile(segment -> !segment.startsWith(SpecimenDetails.INDICATOR))
         .takeWhile(segment -> !segment.startsWith(LabResult.INDICATOR))
         .takeWhile(segment -> !segment.startsWith(MessageTrailer.KEY))
         .collect(toList()));
