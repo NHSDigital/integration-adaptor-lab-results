@@ -17,15 +17,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class SpecimenTest {
+class SpecimenDetailsTest {
     @Test
     void testIndicator() {
-        assertThat(Specimen.INDICATOR).isEqualTo("S16");
+        assertThat(SpecimenDetails.INDICATOR).isEqualTo("S16");
     }
 
     @Test
     void testGetSequenceDetails() {
-        final var specimen = new Specimen(List.of(
+        final var specimen = new SpecimenDetails(List.of(
             "ignore me",
             "SEQ++123ABC",
             "ignore me"
@@ -38,7 +38,7 @@ class SpecimenTest {
 
     @Test
     void testGetSpecimenCharacteristicType() {
-        final var specimen = new Specimen(List.of(
+        final var specimen = new SpecimenDetails(List.of(
             "ignore me",
             "SPC+TSP+:::BLOOD & URINE",
             "ignore me"
@@ -51,7 +51,7 @@ class SpecimenTest {
 
     @Test
     void testGetSpecimenCharacteristicFastingStatus() {
-        final var specimen = new Specimen(List.of(
+        final var specimen = new SpecimenDetails(List.of(
             "ignore me",
             "SPC+FS+F",
             "ignore me"
@@ -64,7 +64,7 @@ class SpecimenTest {
 
     @Test
     void testGetSpecimenReferenceByServiceRequester() {
-        final var specimen = new Specimen(List.of(
+        final var specimen = new SpecimenDetails(List.of(
             "ignore me",
             "RFF+RTI:CH000064LX",
             "ignore me"
@@ -77,7 +77,7 @@ class SpecimenTest {
 
     @Test
     void testGetSpecimenReferenceByServiceProvider() {
-        final var specimen = new Specimen(List.of(
+        final var specimen = new SpecimenDetails(List.of(
             "ignore me",
             "RFF+STI:CH000064LX",
             "ignore me"
@@ -90,7 +90,7 @@ class SpecimenTest {
 
     @Test
     void testGetSpecimenQuantity() {
-        final var specimen = new Specimen(List.of(
+        final var specimen = new SpecimenDetails(List.of(
             "ignore me",
             "QTY+SVO:1750+:::mL",
             "ignore me"
@@ -103,7 +103,7 @@ class SpecimenTest {
 
     @Test
     void testGetSpecimenCollectionDateTime() {
-        final var specimen = new Specimen(List.of(
+        final var specimen = new SpecimenDetails(List.of(
             "ignore me",
             "DTM+SCO:20100223:102",
             "ignore me"
@@ -116,7 +116,7 @@ class SpecimenTest {
 
     @Test
     void testGetSpecimenCollectionReceiptDateTime() {
-        final var specimen = new Specimen(List.of(
+        final var specimen = new SpecimenDetails(List.of(
             "ignore me",
             "DTM+SRI:201002241541:203",
             "ignore me"
@@ -129,7 +129,7 @@ class SpecimenTest {
 
     @Test
     void testGetServiceProviderCommentFreeTexts() {
-        final var specimen = new Specimen(List.of(
+        final var specimen = new SpecimenDetails(List.of(
             "ignore me",
             "FTX+SPC+++red blood cell seen",
             "ignore me",
@@ -145,7 +145,7 @@ class SpecimenTest {
     @Test
     @SuppressWarnings("ResultOfMethodCallIgnored")
     void testLazyGettersWhenMissing() {
-        final var specimen = new Specimen(List.of());
+        final var specimen = new SpecimenDetails(List.of());
         assertAll(
             () -> assertThat(specimen.getSequenceDetails()).isEmpty(),
             () -> assertThatThrownBy(specimen::getCharacteristicType)
