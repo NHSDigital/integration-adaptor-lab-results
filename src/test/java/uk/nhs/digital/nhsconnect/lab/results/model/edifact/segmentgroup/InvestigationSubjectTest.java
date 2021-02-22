@@ -85,11 +85,11 @@ class InvestigationSubjectTest {
         assertAll(
             () -> assertThat(investigationSubject.getSpecimens()).hasSize(2)
                 .first()
-                .extracting(Specimen::getEdifactSegments)
+                .extracting(SpecimenDetails::getEdifactSegments)
                 .isEqualTo(List.of("S16+16", "specimen #1 contents")),
             () -> assertThat(investigationSubject.getSpecimens())
                 .last()
-                .extracting(Specimen::getEdifactSegments)
+                .extracting(SpecimenDetails::getEdifactSegments)
                 .isEqualTo(List.of("S16+16", "specimen #2 contents"))
         );
     }
