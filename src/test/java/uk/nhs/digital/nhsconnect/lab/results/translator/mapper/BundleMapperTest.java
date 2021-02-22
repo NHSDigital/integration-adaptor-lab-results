@@ -62,5 +62,19 @@ class BundleMapperTest {
             () -> assertThat(requester.getGender().toCode())
                     .isEqualTo("male")
         );
+
+        Bundle.BundleEntryComponent bundleEntryComponentForPerformerResource = bundle.getEntry().get(1);
+        Practitioner performer = (Practitioner) bundleEntryComponentForPerformerResource.getResource();
+
+        assertAll(
+            () -> assertEquals("urn:uuid:some-entry-uuid", bundleEntryComponentForPerformerResource.getFullUrl()),
+            () -> assertThat(performer.getName())
+                .hasSize(1)
+                .first()
+                .extracting(HumanName::getText)
+                .isEqualTo("Dr Darcy Lewis"),
+            () -> assertThat(performer.getGender().toCode())
+                .isEqualTo("female")
+        );
     }
 }
