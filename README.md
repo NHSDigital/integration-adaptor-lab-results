@@ -1,5 +1,49 @@
-# integration-adaptor-lab-results
-Integration Adaptor to simplify processing of Pathology and Screening results.
+# Lab Results - Pathology and Screening Adaptor
+
+## Adaptor Scope
+
+The main objective of the Lab Results Adaptor is to hide complex legacy standards and instead present a simple and consistent interface aligned to current NHSD national standards. The adaptor removes the requirement for a GP System to handle the complexities of EDIFACT and MESH messaging.
+
+At a high level, the Lab Results Adaptor exposes a queue from which the GP System can consume medical reports
+
+See the [Resources](#resources) section for links to the underlying services and standards. 
+
+Adaptor handles two types of messages
+
+- Pathology `NHS003`
+- Screening `NHS004`
+
+## Adaptor API
+
+The GP System will receive medical reports on the `Outbound GP Queue` in form of a FHIR DSTU3 Bundle.
+
+### Examples
+
+Examples of both Pathology and Screening messages are provided as part of the adaptor's User Acceptance Tests.
+Each example is built from 3 files:
+
+- `<example-id>.edifact.dat` - message provided by laboratory
+- `<example-id>.fhir.json` - message translated to FHIR format
+- `<example-id>.nhsack.dat` - confirmation messasge sent back to the laboratory
+
+Pathology examples can be found here //TODO
+Screening examples can be found here //TODO
+
+## Adaptor Architecture
+
+//TODO NIAD-993 link to digital.nhs.uk
+
+## Resources
+
+[Pathology & Diagnostics Information Standards Collaboration Space](https://hscic.kahootz.com/connect.ti/PathologyandDiagnostics/groupHome)
+
+[National Pathology FHIR Messaging Specifications](https://developer.nhs.uk/apis/itk3nationalpathology-1-1-0/index.html)
+
+[Messaging Specification](https://hscic.kahootz.com/connect.ti/PathologyandDiagnostics/view?objectId=13046960#13046960)
+
+[Edifact Specification](https://webarchive.nationalarchives.gov.uk/20150107145848/http:/www.isb.nhs.uk/documents/isb-1557/amd-39-2003)
+
+[FHIR UK Core](https://digital.nhs.uk/services/fhir-uk-core)
 
 ## Configuration
 
@@ -12,7 +56,7 @@ Variables without a default value and not marked optional *MUST* be defined for 
 
 | Environment Variable               | Default                   | Description 
 | -----------------------------------|---------------------------|-------------
-| LAB_RESULTS_OUTBOUND_SERVER_PORT   | 80                        | The port on which the adaptor and management endpoints will run
+| LAB_RESULTS_OUTBOUND_SERVER_PORT   | 8080                      | The port on which the adaptor management endpoints will run
 | LAB_RESULTS_LOGGING_LEVEL          | INFO                      | Application logging level. One of: DEBUG, INFO, WARN, ERROR. The level DEBUG **MUST NOT** be used when handling live patient data.
 | LAB_RESULTS_LOGGING_FORMAT         | (*)                       | Defines how to format log events on stdout
 
@@ -24,8 +68,8 @@ You can provide an external `logback.xml` file using the `-Dlogback.configuratio
 
 | Environment Variable                 | Default                   | Description 
 | -------------------------------------|---------------------------|-------------
-| LAB_RESULTS_MESH_OUTBOUND_QUEUE_NAME | lab_results_mesh_outbound | The name of the outbound (to MESH) message queue
-| LAB_RESULTS_MESH_INBOUND_QUEUE_NAME  | lab_results_mesh_inbound  | The name of the inbound (from MESH) message queue
+| LAB_RESULTS_MESH_OUTBOUND_QUEUE_NAME | lab_results_mesh_outbound | The name of the internal outbound (to MESH) message queue
+| LAB_RESULTS_MESH_INBOUND_QUEUE_NAME  | lab_results_mesh_inbound  | The name of the internal inbound (from MESH) message queue
 | LAB_RESULTS_GP_OUTBOUND_QUEUE_NAME   | lab_results_gp_outbound   | The name of the outbound (to GP System) message queue
 | LAB_RESULTS_AMQP_BROKERS             | amqp://localhost:5672     | A comma-separated list of URLs to AMQP brokers (*)
 | LAB_RESULTS_AMQP_USERNAME            |                           | (Optional) username for the AMQP server
@@ -56,7 +100,7 @@ Option 2: If `LAB_RESULTS_MONGO_HOST` is undefined then the adaptor uses the con
 
 | Environment Variable             | Default                   | Description 
 | ---------------------------------|---------------------------|-------------
-| LAB_RESULTS_MONGO_DATABASE_NAME  | labresults               | Database name for MongoDB
+| LAB_RESULTS_MONGO_DATABASE_NAME  | labresults                | Database name for MongoDB
 | LAB_RESULTS_MONGO_URI            | mongodb://localhost:27017 | MongoDB connection string
 
 ## MESH API
@@ -75,22 +119,16 @@ Configure the MESH API connection using the following environment variables:
 | LAB_RESULTS_MESH_ENDPOINT_CERT                 |         | The content of the PEM-formatted client endpoint certificate
 | LAB_RESULTS_MESH_ENDPOINT_PRIVATE_KEY          |         | The content of the PEM-formatted client private key
 | LAB_RESULTS_MESH_SUB_CA                        |         | The content of the PEM-formatted certificate of the issuing Sub CA. Empty if LAB_RESULTS_MESH_CERT_VALIDATION is false
-| LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS |         | (*) The mapping between each recipient HA Trading Partner Code (HA Link Code) to its corresponding MESH Mailbox ID mapping. There is one mapping per line and an equals sign (=) separates the code and mailbox id. For example: "COD1=A6840385\nHA01=A0047392"
+| LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS |         | (*) The mapping between each NHSACK recipient to its corresponding MESH Mailbox ID mapping. There is one mapping per line and an equals sign (=) separates the code and mailbox id. For example: "000000004400001=A6840385\000000024600002=A0047392"
 | LAB_RESULTS_SCHEDULER_ENABLED                  | true    | Enables/disables automatic MESH message downloads
 
-(*) The three-character "Destination HA Cipher" required for each outbound API request uniquely identifies that patient's 
-managing organisation. Each managing organisation also has a four-character "HA Trading Partner Code" (HA Link Code) uniquely
-identifying that patient's managing organisation for the purpose of EDIFACT messaging. Finally, each "HA Trading Partner Code"
-is assigned a MESH Mailbox ID: the mailbox to which the EDIFACT files for a given recipient are sent. The mappings between
-organisations' "HA Trading Partner Codes" and their MESH Mailbox IDs are controlled by this variable. Note: A "Destination HA Cipher" 
-can usually be converted into a "HA Link Code" by appending 1 or 01 to create the four-character code. If in doubt consult 
-with the operator of the LAB_RESULTS instance for the correct value.
+(*) 15 digit NHS Sender ID required for successful NHSACK dispatch
 
 The following three variables control how often the adaptor performs a MESH polling cycle. During a polling cycle the 
 adaptor will download and acknowledge up to "the first 500 messages" (a MESH API limit).
 
-Important: If the MESH mailbox uses workflows other than `PATH_MEDRPT_V3`, `PATH_MEDRPT_V3_ACK`, `SCRN_BCS_MEDRPT_V4` 
-and `SCRN_BCS_MEDRPT_V4_ACK`, then these messages must be downloaded and acknowledged by some other means in a timely manner. 
+Important: If the MESH mailbox uses workflows other than `PATH_MEDRPT_V3` 
+and `SCRN_BCS_MEDRPT_V4`, then these messages must be downloaded and acknowledged by some other means in a timely manner. 
 The adaptor will skip messages with other workflow ids leaving them in the inbox. If more than 500 "other" messages 
 accumulate the adaptor wil no longer receive new inbound GP Links messages.
 

@@ -17,6 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 public class PathologyRecord {
+
     private Patient patient;
     private Practitioner performer;
     private Organization performingOrganization;

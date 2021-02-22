@@ -59,7 +59,8 @@ public class RequesterNameAndAddress extends Segment {
             + identifier
             + COLON_SEPARATOR
             + healthcareRegistrationIdentificationCode.getCode()
-            + PLUS_SEPARATOR + PLUS_SEPARATOR
+            + PLUS_SEPARATOR
+            + PLUS_SEPARATOR
             + requesterName;
     }
 

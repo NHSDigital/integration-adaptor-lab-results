@@ -18,7 +18,7 @@ public class LaboratoryInvestigation extends Segment {
 
     private static final String KEY = "INV";
     private static final String QUALIFIER = "MQ";
-    private static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
+    public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
     private static final String FIVE_BYTE_READ_CODE = "911";
 
     private static final int INVESTIGATION_CODE_INDEX = 0;
