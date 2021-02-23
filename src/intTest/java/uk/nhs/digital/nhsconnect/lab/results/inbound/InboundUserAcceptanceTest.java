@@ -1,13 +1,20 @@
 package uk.nhs.digital.nhsconnect.lab.results.inbound;
 
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.Customization;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
+import org.skyscreamer.jsonassert.comparator.CustomComparator;
 import uk.nhs.digital.nhsconnect.lab.results.IntegrationBaseTest;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessagesParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.utils.JmsHeaders;
 
 import javax.jms.JMSException;
@@ -42,12 +49,13 @@ public class InboundUserAcceptanceTest extends IntegrationBaseTest {
     }
 
     @Test
-    void testSendEdifactIsProcessedAndPushedToGpOutboundQueue() throws JMSException, IOException {
+    void testSendEdifactIsProcessedAndPushedToGpOutboundQueue()
+            throws JMSException, IOException, InterchangeParsingException, MessagesParsingException, JSONException {
 
         final String content = new String(Files.readAllBytes(getEdifactResource().getFile().toPath()));
 
         final OutboundMeshMessage outboundMeshMessage = OutboundMeshMessage.create(RECIPIENT,
-            WorkflowId.PATHOLOGY, content, null, null);
+            WorkflowId.PATHOLOGY, content, null);
 
         getLabResultsMeshClient().sendEdifactMessage(outboundMeshMessage);
 
@@ -59,12 +67,25 @@ public class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
         final String expectedMessageBody = new String(Files.readAllBytes(getFhirResource().getFile().toPath()));
         final String messageBody = parseTextMessage(gpOutboundQueueMessage);
-        assertThat(messageBody).isEqualTo(expectedMessageBody);
 
-        assertOutboundRecepMessage();
+        JSONAssert.assertEquals(
+            expectedMessageBody,
+            messageBody,
+            new CustomComparator(
+                JSONCompareMode.STRICT,
+                new Customization("meta.lastUpdated", (c1, c2) -> true),
+                new Customization("identifier.value", (c1, c2) -> true),
+                new Customization("entry[*].fullUrl", (c1, c2) -> true)
+            )
+        );
+
+        //TODO: NIAD-1063 temporarily disabling NHSACK for v0.1
+        //assertOutboundRecepMessage();
     }
 
-    private void assertOutboundRecepMessage() throws IOException {
+    private void assertOutboundRecepMessage()
+            throws IOException, InterchangeParsingException, MessagesParsingException {
+
         final var labResultMeshClient = getLabResultsMeshClient();
         final var edifactParser = getEdifactParser();
         final var recep = new String(Files.readAllBytes(getRecepResource().getFile().toPath()));
@@ -76,23 +97,24 @@ public class InboundUserAcceptanceTest extends IntegrationBaseTest {
         });
         var meshMessage = labResultMeshClient.getEdifactMessage(messageIds.get(0));
 
-        Interchange expectedRecep = edifactParser.parse(recep);
-        Interchange actualRecep = edifactParser.parse(meshMessage.getContent());
-
-        assertThat(meshMessage.getWorkflowId())
-            .isEqualTo(WorkflowId.PATHOLOGY_ACK);
-        assertThat(actualRecep.getInterchangeHeader().getRecipient())
-            .isEqualTo(expectedRecep.getInterchangeHeader().getRecipient());
-        assertThat(actualRecep.getInterchangeHeader().getSender())
-            .isEqualTo(expectedRecep.getInterchangeHeader().getSender());
-        assertThat(actualRecep.getInterchangeHeader().getSequenceNumber())
-            .isEqualTo(expectedRecep.getInterchangeHeader().getSequenceNumber());
-        assertThat(filterTimestampedSegments(actualRecep))
-            .containsExactlyElementsOf(filterTimestampedSegments(expectedRecep));
-        assertThat(actualRecep.getInterchangeTrailer().getNumberOfMessages())
-            .isEqualTo(expectedRecep.getInterchangeTrailer().getNumberOfMessages());
-        assertThat(actualRecep.getInterchangeTrailer().getSequenceNumber())
-            .isEqualTo(expectedRecep.getInterchangeTrailer().getSequenceNumber());
+        //TODO NIAD-851 UAT framework
+//        Interchange expectedRecep = edifactParser.parse(recep);
+//        Interchange actualRecep = edifactParser.parse(meshMessage.getContent());
+//
+//        assertThat(meshMessage.getWorkflowId())
+//            .isEqualTo(WorkflowId.PATHOLOGY_ACK);
+//        assertThat(actualRecep.getInterchangeHeader().getRecipient())
+//            .isEqualTo(expectedRecep.getInterchangeHeader().getRecipient());
+//        assertThat(actualRecep.getInterchangeHeader().getSender())
+//            .isEqualTo(expectedRecep.getInterchangeHeader().getSender());
+//        assertThat(actualRecep.getInterchangeHeader().getSequenceNumber())
+//            .isEqualTo(expectedRecep.getInterchangeHeader().getSequenceNumber());
+//        assertThat(filterTimestampedSegments(actualRecep))
+//            .containsExactlyElementsOf(filterTimestampedSegments(expectedRecep));
+//        assertThat(actualRecep.getInterchangeTrailer().getNumberOfMessages())
+//            .isEqualTo(expectedRecep.getInterchangeTrailer().getNumberOfMessages());
+//        assertThat(actualRecep.getInterchangeTrailer().getSequenceNumber())
+//            .isEqualTo(expectedRecep.getInterchangeTrailer().getSequenceNumber());
 
     }
 

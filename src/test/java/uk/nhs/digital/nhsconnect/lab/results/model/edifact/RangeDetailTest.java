@@ -27,13 +27,11 @@ class RangeDetailTest {
     void testMissingBothLimits() {
         var result = RangeDetail.fromString("RND+U++");
         assertAll(
-            () -> assertThat(result.getValue()).isEqualTo("U++"),
             () -> assertThat(result.getLowerLimit()).isNull(),
             () -> assertThat(result.getUpperLimit()).isNull(),
-            () -> assertThatThrownBy(result::preValidate)
+            () -> assertThatThrownBy(result::validate)
                 .isExactlyInstanceOf(EdifactValidationException.class)
-                .hasMessage("RND: At least one of lower reference limit and upper reference limit is required"),
-            () -> assertThatNoException().isThrownBy(result::validateStateful)
+                .hasMessage("RND: At least one of lower reference limit and upper reference limit is required")
         );
     }
 
@@ -41,11 +39,9 @@ class RangeDetailTest {
     void testOnlyLowerLimit() {
         var result = RangeDetail.fromString("RND+U+0+");
         assertAll(
-            () -> assertThat(result.getValue()).isEqualTo("U+0+"),
             () -> assertThat(result.getLowerLimit()).isEqualTo(BigDecimal.ZERO),
             () -> assertThat(result.getUpperLimit()).isNull(),
-            () -> assertThatNoException().isThrownBy(result::preValidate),
-            () -> assertThatNoException().isThrownBy(result::validateStateful)
+            () -> assertThatNoException().isThrownBy(result::validate)
         );
     }
 
@@ -53,11 +49,9 @@ class RangeDetailTest {
     void testOnlyUpperLimit() {
         var result = RangeDetail.fromString("RND+U++1");
         assertAll(
-            () -> assertThat(result.getValue()).isEqualTo("U++1"),
             () -> assertThat(result.getLowerLimit()).isNull(),
             () -> assertThat(result.getUpperLimit()).isEqualTo(BigDecimal.ONE),
-            () -> assertThatNoException().isThrownBy(result::preValidate),
-            () -> assertThatNoException().isThrownBy(result::validateStateful)
+            () -> assertThatNoException().isThrownBy(result::validate)
         );
     }
 
@@ -65,11 +59,9 @@ class RangeDetailTest {
     void testBothLimits() {
         var result = RangeDetail.fromString("RND+U+-1+1");
         assertAll(
-            () -> assertThat(result.getValue()).isEqualTo("U+-1+1"),
             () -> assertThat(result.getLowerLimit()).isEqualTo(BigDecimal.ONE.negate()),
             () -> assertThat(result.getUpperLimit()).isEqualTo(BigDecimal.ONE),
-            () -> assertThatNoException().isThrownBy(result::preValidate),
-            () -> assertThatNoException().isThrownBy(result::validateStateful)
+            () -> assertThatNoException().isThrownBy(result::validate)
         );
     }
 
@@ -78,11 +70,9 @@ class RangeDetailTest {
     void testRetainsPrecision() {
         var result = RangeDetail.fromString("RND+U+-1.0+1.00");
         assertAll(
-            () -> assertThat(result.getValue()).isEqualTo("U+-1.0+1.00"),
             () -> assertThat(result.getLowerLimit()).isEqualTo(BigDecimal.ONE.setScale(1).negate()),
             () -> assertThat(result.getUpperLimit()).isEqualTo(BigDecimal.ONE.setScale(2)),
-            () -> assertThatNoException().isThrownBy(result::preValidate),
-            () -> assertThatNoException().isThrownBy(result::validateStateful)
+            () -> assertThatNoException().isThrownBy(result::validate)
         );
     }
 }

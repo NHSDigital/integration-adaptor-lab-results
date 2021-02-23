@@ -8,9 +8,8 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public abstract class Segment {
-    protected static final String PLUS_SEPARATOR = "+";
+    public static final String PLUS_SEPARATOR = "+";
     protected static final String COLON_SEPARATOR = ":";
-    protected static final String TERMINATOR = "'";
 
     protected static <T> List<T> removeEmptyTrailingFields(List<T> list, Predicate<T> predicate) {
         var result = new ArrayList<T>();
@@ -31,28 +30,6 @@ public abstract class Segment {
      */
     public abstract String getKey();
 
-    /**
-     * @return the value portion of the segment (everything after the first +)
-     */
-    public abstract String getValue();
-
-    /**
-     * Validates the stateful portions of message (sequence numbers) only.
-     */
-    protected abstract void validateStateful() throws EdifactValidationException;
-
-    /**
-     * Validates non-stateful data items of the segment (excludes things like sequence numbers).
-     */
-    public abstract void preValidate() throws EdifactValidationException;
-
     public void validate() throws EdifactValidationException {
-        this.preValidate();
-        this.validateStateful();
-    }
-
-    public String toEdifact() throws EdifactValidationException {
-        this.validate();
-        return this.getKey() + PLUS_SEPARATOR + this.getValue() + TERMINATOR;
     }
 }

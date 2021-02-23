@@ -7,12 +7,16 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.fixtures.EdifactFixtures;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeTrailer;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeCriticalException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeFactory;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.ToEdifactParsingException;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessagesParsingException;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -21,18 +25,31 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class EdifactParserTest {
+    private static final String SENDER = "some_sender";
+    private static final String RECIPIENT = "some_recipient";
+    private static final Long INTERCHANGE_SEQUENCE_NUMBER = 1L;
     @Mock
     private InterchangeFactory interchangeFactory;
 
     @Mock
     private Interchange interchange;
 
+    @Mock
+    private InterchangeHeader interchangeHeader;
+
+    @Mock
+    private InterchangeTrailer interchangeTrailer;
+
     @InjectMocks
     private EdifactParser edifactParser;
 
     @Test
-    void testParseCreatesInterchangeWithSameMessage() {
+    void testParseCreatesInterchangeWithSameMessage() throws InterchangeParsingException, MessagesParsingException {
+        when(interchangeTrailer.getNumberOfMessages()).thenReturn(1);
+        when(interchange.getInterchangeTrailer()).thenReturn(interchangeTrailer);
+
         when(interchangeFactory.createInterchange(any())).thenReturn(interchange);
+        when(interchange.setMessages(any())).thenReturn(interchange);
 
         Interchange interchange = edifactParser.parse(String.join("\n", EdifactFixtures.SAMPLE_EDIFACT));
 
@@ -45,27 +62,38 @@ class EdifactParserTest {
 
     @Test
     void testParsePropagatesExceptionWhenPassedTrailerBeforeHeader() {
+        when(interchangeHeader.getSender()).thenReturn(SENDER);
+        when(interchangeHeader.getRecipient()).thenReturn(RECIPIENT);
+        when(interchangeHeader.getSequenceNumber()).thenReturn(INTERCHANGE_SEQUENCE_NUMBER);
+
+        when(interchange.getInterchangeHeader()).thenReturn(interchangeHeader);
+
         when(interchangeFactory.createInterchange(any())).thenReturn(interchange);
 
-        ToEdifactParsingException toEdifactParsingException = assertThrows(ToEdifactParsingException.class,
-            () -> edifactParser.parse(String.join("\n", EdifactFixtures.TRAILER_BEFORE_HEADER_EDIFACT)));
-
-        assertEquals("Message trailer before message header", toEdifactParsingException.getMessage());
+        assertThatThrownBy(() ->
+            edifactParser.parse(String.join("\n", EdifactFixtures.TRAILER_BEFORE_HEADER_EDIFACT)))
+            .isInstanceOf(MessagesParsingException.class)
+            .hasMessage("Error parsing messages");
     }
 
     @Test
     void testParsePropagatesExceptionWhenThereIsAMismatchOfHeadersAndTrailers() {
+        when(interchangeHeader.getSender()).thenReturn(SENDER);
+        when(interchangeHeader.getRecipient()).thenReturn(RECIPIENT);
+        when(interchangeHeader.getSequenceNumber()).thenReturn(INTERCHANGE_SEQUENCE_NUMBER);
+
+        when(interchange.getInterchangeHeader()).thenReturn(interchangeHeader);
+
         when(interchangeFactory.createInterchange(any())).thenReturn(interchange);
 
-        ToEdifactParsingException toEdifactParsingException = assertThrows(ToEdifactParsingException.class,
-            () -> edifactParser.parse(String.join("\n", EdifactFixtures.MISMATCH_MESSAGE_TRAILER_HEADER_EDIFACT)));
-
-
-        assertEquals("Message header-trailer count mismatch: 1-2", toEdifactParsingException.getMessage());
+        assertThatThrownBy(() ->
+            edifactParser.parse(String.join("\n", EdifactFixtures.MISMATCH_MESSAGE_TRAILER_HEADER_EDIFACT)))
+            .isInstanceOf(MessagesParsingException.class)
+            .hasMessage("Error parsing messages");
     }
 
     @Test
     void testParsePropagatesExceptionsFromInvalidContent() {
-        assertThrows(IndexOutOfBoundsException.class, () -> edifactParser.parse("invalid edifact"));
+        assertThrows(InterchangeCriticalException.class, () -> edifactParser.parse("invalid edifact"));
     }
 }

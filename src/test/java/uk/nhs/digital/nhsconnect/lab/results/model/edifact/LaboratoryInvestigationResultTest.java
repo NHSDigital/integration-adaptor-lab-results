@@ -53,20 +53,6 @@ class LaboratoryInvestigationResultTest {
     }
 
     @Test
-    void when_mappingSegmentObjectToEdifactString_expect_returnCorrectEdifactString() {
-        String expectedEdifactString = "RSL+NV+11.9:7++:::ng/mL+HI'";
-
-        LaboratoryInvestigationResult laboratoryInvestigationResult = LaboratoryInvestigationResult.builder()
-            .measurementValue(new BigDecimal("11.9"))
-            .measurementValueComparator(MeasurementValueComparator.LESS_THAN)
-            .measurementUnit("ng/mL")
-            .deviatingResultIndicator(DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT)
-            .build();
-
-        assertEquals(expectedEdifactString, laboratoryInvestigationResult.toEdifact());
-    }
-
-    @Test
     void when_buildingSegmentObjectWithoutAnyFields_expect_nullPointerExceptionIsThrown() {
         assertThrows(NullPointerException.class, () -> LaboratoryInvestigation.builder().build());
     }
@@ -77,27 +63,19 @@ class LaboratoryInvestigationResultTest {
     }
 
     @Test
-    void testGetValue() {
-        assertEquals(laboratoryInvestigationResult.getValue(), "NV+11.9:7++:::ng/mL+HI");
-    }
+    void testValidate() {
+        assertDoesNotThrow(laboratoryInvestigationResult::validate);
 
-    @Test
-    void testValidateStateful() {
-        assertDoesNotThrow(laboratoryInvestigationResult::validateStateful);
-    }
-
-    @Test
-    void testPreValidate() {
         LaboratoryInvestigationResult emptyMeasurementValue = new LaboratoryInvestigationResult(null,
             MeasurementValueComparator.LESS_THAN, "ng/mL", DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT);
         LaboratoryInvestigationResult emptyMeasurementUnit = new LaboratoryInvestigationResult(new BigDecimal("11.9"),
             MeasurementValueComparator.LESS_THAN, null, DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT);
 
         assertAll(
-            () -> assertThatThrownBy(emptyMeasurementValue::preValidate)
+            () -> assertThatThrownBy(emptyMeasurementValue::validate)
                 .isExactlyInstanceOf(EdifactValidationException.class)
                 .hasMessage("RSL: Attribute measurementValue is required"),
-            () -> assertThatThrownBy(emptyMeasurementUnit::preValidate)
+            () -> assertThatThrownBy(emptyMeasurementUnit::validate)
                 .isExactlyInstanceOf(EdifactValidationException.class)
                 .hasMessage("RSL: Attribute measurementUnit is required")
         );

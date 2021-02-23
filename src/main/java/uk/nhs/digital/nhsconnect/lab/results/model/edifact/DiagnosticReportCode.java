@@ -15,7 +15,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 @Getter
 public class DiagnosticReportCode extends Segment {
 
-    private static final String KEY = "GIS";
+    public static final String KEY = "GIS";
 
     @NonNull
     private final String code;
@@ -36,19 +36,9 @@ public class DiagnosticReportCode extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return code;
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (code.isBlank()) {
-            throw new EdifactValidationException(getKey() + ": Diagnostic Report Code is required");
-
+            throw new EdifactValidationException(KEY + ": Diagnostic Report Code is required");
         }
     }
 }

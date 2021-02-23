@@ -27,7 +27,6 @@ class UnstructuredAddressTest {
         final var address = UnstructuredAddress.fromString("ADR++US:LINE1:LINE2:LINE3:LINE4:LINE5++POSTCODE");
         assertAll(
             () -> assertThat(address.getFormat()).isEqualTo("US"),
-            () -> assertThat(address.getValue()).isEqualTo("US:LINE1:LINE2:LINE3:LINE4:LINE5++POSTCODE"),
             () -> assertThat(address.getAddressLines()).containsExactly("LINE1", "LINE2", "LINE3", "LINE4", "LINE5"),
             () -> assertThat(address.getPostCode()).isEqualTo("POSTCODE")
         );
@@ -38,7 +37,6 @@ class UnstructuredAddressTest {
         final var address = UnstructuredAddress.fromString("ADR++US:LINE1::::++");
         assertAll(
             () -> assertThat(address.getFormat()).isEqualTo("US"),
-            () -> assertThat(address.getValue()).isEqualTo("US:LINE1::::++"),
             () -> assertThat(address.getAddressLines()).containsExactly("LINE1", "", "", "", ""),
             () -> assertThat(address.getPostCode()).isEmpty()
         );
@@ -49,40 +47,39 @@ class UnstructuredAddressTest {
         final var address = UnstructuredAddress.fromString("ADR++++POSTCODE");
         assertAll(
             () -> assertThat(address.getFormat()).isEmpty(),
-            () -> assertThat(address.getValue()).isEqualTo("++POSTCODE"),
             () -> assertThat(address.getAddressLines()).isNull(),
             () -> assertThat(address.getPostCode()).isEqualTo("POSTCODE")
         );
     }
 
     @Test
-    void testPreValidateInvalidMissingAddressAndPostcode() {
+    void testValidateInvalidMissingAddressAndPostcode() {
         final var address = UnstructuredAddress.fromString("ADR++++");
-        assertThatThrownBy(address::preValidate)
+        assertThatThrownBy(address::validate)
             .isExactlyInstanceOf(EdifactValidationException.class)
             .hasMessage("ADR: attribute addressLines is required when postcode is missing");
     }
 
     @Test
-    void testPreValidateInvalidInsufficientAddressLines() {
+    void testValidateInvalidInsufficientAddressLines() {
         final var address = UnstructuredAddress.fromString("ADR++US++");
-        assertThatThrownBy(address::preValidate)
+        assertThatThrownBy(address::validate)
             .isExactlyInstanceOf(EdifactValidationException.class)
             .hasMessage("ADR: attribute addressLines is required when postcode is missing");
     }
 
     @Test
-    void testPreValidateInvalidMissingFormat() {
+    void testValidateInvalidMissingFormat() {
         final var address = UnstructuredAddress.fromString("ADR++:LINE1::::++");
-        assertThatThrownBy(address::preValidate)
+        assertThatThrownBy(address::validate)
             .isExactlyInstanceOf(EdifactValidationException.class)
             .hasMessage("ADR: format of 'US' is required when postCode is missing");
     }
 
     @Test
-    void testPreValidateInvalidMissingPostcodeAndLine1() {
+    void testValidateInvalidMissingPostcodeAndLine1() {
         final var address = UnstructuredAddress.fromString("ADR++US::LINE2:::++");
-        assertThatThrownBy(address::preValidate)
+        assertThatThrownBy(address::validate)
             .isExactlyInstanceOf(EdifactValidationException.class)
             .hasMessage("ADR: attribute addressLines[0] is required");
     }

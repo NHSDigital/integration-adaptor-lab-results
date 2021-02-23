@@ -23,8 +23,8 @@ public enum TestStatusCode {
 
     public static TestStatusCode fromCode(@NonNull String code) {
         return Arrays.stream(TestStatusCode.values())
-                .filter(c -> code.equals(c.getCode()))
-                .findFirst()
-                .orElseThrow();
+            .filter(c -> code.equals(c.getCode()))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("No test status code for '" + code + "'"));
     }
 }

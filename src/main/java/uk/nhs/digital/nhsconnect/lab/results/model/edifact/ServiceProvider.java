@@ -22,14 +22,14 @@ public class ServiceProvider extends Segment {
     @NonNull
     private final ServiceProviderCode serviceProviderCode;
 
-    public static ServiceProvider fromString(String edifactString) {
+    public static ServiceProvider fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY)) {
             throw new IllegalArgumentException("Can't create " + ServiceProvider.class.getSimpleName()
                 + " from " + edifactString);
         }
 
-        String[] keySplit = Split.byPlus(edifactString);
-        String code = keySplit[1];
+        final String[] keySplit = Split.byPlus(edifactString);
+        final String code = keySplit[1];
 
         return new ServiceProvider(ServiceProviderCode.fromCode(code));
     }
@@ -40,19 +40,9 @@ public class ServiceProvider extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return serviceProviderCode.getCode();
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (serviceProviderCode.getCode().isBlank()) {
-            throw new EdifactValidationException(getKey() + ": Attribute code in serviceProviderCode is required");
+            throw new EdifactValidationException(KEY + ": Attribute code in serviceProviderCode is required");
         }
     }
 }

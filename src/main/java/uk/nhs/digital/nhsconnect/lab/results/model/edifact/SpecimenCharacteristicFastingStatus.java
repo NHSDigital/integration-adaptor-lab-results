@@ -16,7 +16,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 public class SpecimenCharacteristicFastingStatus extends Segment {
     private static final String KEY = "SPC";
     private static final String QUALIFIER = "FS";
-    private static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
+    public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
 
     private final String fastingStatus;
 
@@ -25,9 +25,7 @@ public class SpecimenCharacteristicFastingStatus extends Segment {
             throw new IllegalArgumentException(
                 "Can't create " + SpecimenCharacteristicFastingStatus.class.getSimpleName() + " from " + edifactString);
         }
-        String[] split = Split.byPlus(
-            Split.bySegmentTerminator(edifactString)[0]
-        );
+        final String[] split = Split.byPlus(edifactString);
         return new SpecimenCharacteristicFastingStatus(split[2]);
     }
 
@@ -37,19 +35,9 @@ public class SpecimenCharacteristicFastingStatus extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return QUALIFIER + PLUS_SEPARATOR + fastingStatus;
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-        // nothing
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (StringUtils.isBlank(fastingStatus)) {
-            throw new EdifactValidationException(getKey() + ": Attribute fastingStatus is blank or missing");
+            throw new EdifactValidationException(KEY + ": Attribute fastingStatus is blank or missing");
         }
     }
 }

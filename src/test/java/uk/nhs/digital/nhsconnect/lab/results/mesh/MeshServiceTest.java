@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -79,17 +80,17 @@ class MeshServiceTest {
 
         meshService.scanMeshInboxForMessages();
 
-        verify(meshClient).authenticate();
-        verify(meshClient).getEdifactMessage(MESSAGE_ID1);
-        verify(meshInboundQueueService).publish(meshMessage1);
-        verify(meshClient).acknowledgeMessage(MESSAGE_ID1);
-
-        verify(meshClient).getEdifactMessage(MESSAGE_ID2);
-        verify(meshInboundQueueService).publish(meshMessage1);
-        verify(meshClient).acknowledgeMessage(MESSAGE_ID2);
-
-        verify(correlationIdService, times(2)).applyRandomCorrelationId();
-        verify(correlationIdService, times(2)).resetCorrelationId();
+        assertAll(
+            () -> verify(meshClient).authenticate(),
+            () -> verify(meshClient).getEdifactMessage(MESSAGE_ID1),
+            () -> verify(meshInboundQueueService).publish(meshMessage1),
+            () -> verify(meshClient).acknowledgeMessage(MESSAGE_ID1),
+            () -> verify(meshClient).getEdifactMessage(MESSAGE_ID2),
+            () -> verify(meshInboundQueueService).publish(meshMessage1),
+            () -> verify(meshClient).acknowledgeMessage(MESSAGE_ID2),
+            () -> verify(correlationIdService, times(2)).applyRandomCorrelationId(),
+            () -> verify(correlationIdService, times(2)).resetCorrelationId()
+        );
     }
 
     @Test
@@ -105,14 +106,16 @@ class MeshServiceTest {
 
         meshService.scanMeshInboxForMessages();
 
-        verify(meshClient).authenticate();
-        verify(meshClient).getEdifactMessage(MESSAGE_ID1);
-        verify(meshInboundQueueService).publish(meshMessage1);
-        verify(meshClient).acknowledgeMessage(MESSAGE_ID1);
-        verifyNoMoreInteractions(meshClient, meshInboundQueueService); // second message not downloaded and published
-
-        verify(correlationIdService).applyRandomCorrelationId();
-        verify(correlationIdService).resetCorrelationId();
+        assertAll(
+            () -> verify(meshClient).authenticate(),
+            () -> verify(meshClient).getEdifactMessage(MESSAGE_ID1),
+            () -> verify(meshInboundQueueService).publish(meshMessage1),
+            () -> verify(meshClient).acknowledgeMessage(MESSAGE_ID1),
+            // second message not downloaded and published
+            () -> verifyNoMoreInteractions(meshClient, meshInboundQueueService),
+            () -> verify(correlationIdService).applyRandomCorrelationId(),
+            () -> verify(correlationIdService).resetCorrelationId()
+        );
     }
 
     @Test
@@ -121,14 +124,15 @@ class MeshServiceTest {
         when(meshMailBoxScheduler.isEnabled()).thenReturn(true);
         when(meshClient.getInboxMessageIds()).thenThrow(new MeshApiConnectionException("error"));
 
-        assertThatThrownBy(meshService::scanMeshInboxForMessages).isExactlyInstanceOf(MeshApiConnectionException.class);
-
-        verify(meshClient).authenticate();
-        verify(meshClient, never()).getEdifactMessage(any());
-        verify(meshInboundQueueService, never()).publish(any());
-        verify(meshClient, never()).acknowledgeMessage(any());
-
-        verifyNoInteractions(correlationIdService);
+        assertAll(
+            () -> assertThatThrownBy(meshService::scanMeshInboxForMessages)
+                .isExactlyInstanceOf(MeshApiConnectionException.class),
+            () -> verify(meshClient).authenticate(),
+            () -> verify(meshClient, never()).getEdifactMessage(any()),
+            () -> verify(meshInboundQueueService, never()).publish(any()),
+            () -> verify(meshClient, never()).acknowledgeMessage(any()),
+            () -> verifyNoInteractions(correlationIdService)
+        );
     }
 
     @Test
@@ -140,13 +144,15 @@ class MeshServiceTest {
 
         meshService.scanMeshInboxForMessages();
 
-        verify(meshClient).authenticate();
-        verify(meshClient).getEdifactMessage(ERROR_MESSAGE_ID);
-        verify(meshInboundQueueService, never()).publish(any());
-        verify(meshClient, never()).acknowledgeMessage(MESSAGE_ID1);
+        assertAll(
+            () -> verify(meshClient).authenticate(),
+            () -> verify(meshClient).getEdifactMessage(ERROR_MESSAGE_ID),
+            () -> verify(meshInboundQueueService, never()).publish(any()),
+            () -> verify(meshClient, never()).acknowledgeMessage(MESSAGE_ID1),
 
-        verify(correlationIdService).applyRandomCorrelationId();
-        verify(correlationIdService).resetCorrelationId();
+            () -> verify(correlationIdService).applyRandomCorrelationId(),
+            () -> verify(correlationIdService).resetCorrelationId()
+        );
     }
 
     @Test
@@ -158,13 +164,14 @@ class MeshServiceTest {
 
         meshService.scanMeshInboxForMessages();
 
-        verify(meshClient).authenticate();
-        verify(meshClient).getEdifactMessage(ERROR_MESSAGE_ID);
-        verify(meshInboundQueueService, never()).publish(any());
-        verify(meshClient, never()).acknowledgeMessage(MESSAGE_ID1);
-
-        verify(correlationIdService).applyRandomCorrelationId();
-        verify(correlationIdService).resetCorrelationId();
+        assertAll(
+            () -> verify(meshClient).authenticate(),
+            () -> verify(meshClient).getEdifactMessage(ERROR_MESSAGE_ID),
+            () -> verify(meshInboundQueueService, never()).publish(any()),
+            () -> verify(meshClient, never()).acknowledgeMessage(MESSAGE_ID1),
+            () -> verify(correlationIdService).applyRandomCorrelationId(),
+            () -> verify(correlationIdService).resetCorrelationId()
+        );
     }
 
     @Test
@@ -177,14 +184,15 @@ class MeshServiceTest {
 
         meshService.scanMeshInboxForMessages();
 
-        verify(meshClient).authenticate();
-        verify(meshClient).getEdifactMessage(ERROR_MESSAGE_ID);
-        verify(meshClient).getEdifactMessage(MESSAGE_ID1);
-        verify(meshInboundQueueService).publish(meshMessage1);
-        verify(meshClient).acknowledgeMessage(MESSAGE_ID1);
-
-        verify(correlationIdService, times(2)).applyRandomCorrelationId();
-        verify(correlationIdService, times(2)).resetCorrelationId();
+        assertAll(
+            () -> verify(meshClient).authenticate(),
+            () -> verify(meshClient).getEdifactMessage(ERROR_MESSAGE_ID),
+            () -> verify(meshClient).getEdifactMessage(MESSAGE_ID1),
+            () -> verify(meshInboundQueueService).publish(meshMessage1),
+            () -> verify(meshClient).acknowledgeMessage(MESSAGE_ID1),
+            () -> verify(correlationIdService, times(2)).applyRandomCorrelationId(),
+            () -> verify(correlationIdService, times(2)).resetCorrelationId()
+        );
     }
 
     @Test
@@ -202,16 +210,17 @@ class MeshServiceTest {
 
         meshService.scanMeshInboxForMessages();
 
-        verify(meshClient).authenticate();
-        verify(meshClient).getEdifactMessage(ERROR_MESSAGE_ID);
-        verify(meshClient).getEdifactMessage(MESSAGE_ID1);
-        verify(meshInboundQueueService).publish(messageForAckError);
-        verify(meshInboundQueueService).publish(meshMessage1);
-        verify(meshClient).acknowledgeMessage(ERROR_MESSAGE_ID);
-        verify(meshClient).acknowledgeMessage(MESSAGE_ID1);
-
-        verify(correlationIdService, times(2)).applyRandomCorrelationId();
-        verify(correlationIdService, times(2)).resetCorrelationId();
+        assertAll(
+            () -> verify(meshClient).authenticate(),
+            () -> verify(meshClient).getEdifactMessage(ERROR_MESSAGE_ID),
+            () -> verify(meshClient).getEdifactMessage(MESSAGE_ID1),
+            () -> verify(meshInboundQueueService).publish(messageForAckError),
+            () -> verify(meshInboundQueueService).publish(meshMessage1),
+            () -> verify(meshClient).acknowledgeMessage(ERROR_MESSAGE_ID),
+            () -> verify(meshClient).acknowledgeMessage(MESSAGE_ID1),
+            () -> verify(correlationIdService, times(2)).applyRandomCorrelationId(),
+            () -> verify(correlationIdService, times(2)).resetCorrelationId()
+        );
     }
 
     @Test
@@ -224,13 +233,14 @@ class MeshServiceTest {
 
         meshService.scanMeshInboxForMessages();
 
-        verify(meshClient).authenticate();
-        verify(meshClient).getEdifactMessage(MESSAGE_ID1);
-        verify(meshInboundQueueService).publish(meshMessage1);
-        verify(meshClient, never()).acknowledgeMessage(MESSAGE_ID1);
-
-        verify(correlationIdService).applyRandomCorrelationId();
-        verify(correlationIdService).resetCorrelationId();
+        assertAll(
+            () -> verify(meshClient).authenticate(),
+            () -> verify(meshClient).getEdifactMessage(MESSAGE_ID1),
+            () -> verify(meshInboundQueueService).publish(meshMessage1),
+            () -> verify(meshClient, never()).acknowledgeMessage(MESSAGE_ID1),
+            () -> verify(correlationIdService).applyRandomCorrelationId(),
+            () -> verify(correlationIdService).resetCorrelationId()
+        );
     }
 
     @Test
@@ -253,9 +263,11 @@ class MeshServiceTest {
 
         meshService.scanMeshInboxForMessages();
 
-        verify(meshClient).authenticate();
-        verify(meshClient, never()).getEdifactMessage(MESSAGE_ID1);
-        verifyNoInteractions(meshInboundQueueService);
+        assertAll(
+            () -> verify(meshClient).authenticate(),
+            () -> verify(meshClient, never()).getEdifactMessage(MESSAGE_ID1),
+            () -> verifyNoInteractions(meshInboundQueueService)
+        );
     }
 
     @Test
@@ -268,9 +280,11 @@ class MeshServiceTest {
         Assertions.assertThatThrownBy(() -> meshService.scanMeshInboxForMessages())
                 .isExactlyInstanceOf(MeshApiConnectionException.class);
 
-        verify(meshClient).authenticate();
-        verifyNoMoreInteractions(meshClient);
-        verifyNoInteractions(meshInboundQueueService);
+        assertAll(
+            () -> verify(meshClient).authenticate(),
+            () -> verifyNoMoreInteractions(meshClient),
+            () -> verifyNoInteractions(meshInboundQueueService)
+        );
     }
 
     @Test
@@ -279,9 +293,11 @@ class MeshServiceTest {
 
         meshService.scanMeshInboxForMessages();
 
-        verify(meshMailBoxScheduler, never()).hasTimePassed(scanDelayInSeconds);
-        verify(meshClient, never()).getEdifactMessage(MESSAGE_ID1);
-        verifyNoInteractions(meshInboundQueueService);
+        assertAll(
+            () -> verify(meshMailBoxScheduler, never()).hasTimePassed(scanDelayInSeconds),
+            () -> verify(meshClient, never()).getEdifactMessage(MESSAGE_ID1),
+            () -> verifyNoInteractions(meshInboundQueueService)
+        );
     }
 
 }

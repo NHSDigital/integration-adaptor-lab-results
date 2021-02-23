@@ -2,18 +2,16 @@ package uk.nhs.digital.nhsconnect.lab.results.inbound;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hl7.fhir.dstu3.model.Parameters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.fhir.EdifactToFhirService;
-import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.FhirDataToSend;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.InboundMeshMessage;
-import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
-import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
-import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessagesParsingException;
+import uk.nhs.digital.nhsconnect.lab.results.outbound.OutboundMeshMessageBuilder;
 import uk.nhs.digital.nhsconnect.lab.results.outbound.queue.GpOutboundQueueService;
 import uk.nhs.digital.nhsconnect.lab.results.outbound.queue.MeshOutboundQueueService;
 
@@ -28,36 +26,62 @@ public class InboundMessageHandler {
     private final EdifactToFhirService edifactToFhirService;
     private final EdifactParser edifactParser;
     private final GpOutboundQueueService gpOutboundQueueService;
-    private final RecepProducerService recepProducerService;
     private final MeshOutboundQueueService meshOutboundQueueService;
+    private final OutboundMeshMessageBuilder outboundMeshMessageBuilder;
 
     public void handle(final InboundMeshMessage meshMessage) {
-
-        final Interchange interchange = edifactParser.parse(meshMessage.getContent());
+        final Interchange interchange;
+        try {
+            interchange = edifactParser.parse(meshMessage.getContent());
+        } catch (InterchangeParsingException ex) {
+            LOGGER.error("Error parsing Interchange", ex);
+            var nhsack = outboundMeshMessageBuilder.buildNhsAck(meshMessage.getWorkflowId(), ex);
+            meshOutboundQueueService.publish(nhsack);
+            return;
+        } catch (MessagesParsingException ex) {
+            LOGGER.error("Error parsing Messages", ex);
+            var nhsack = outboundMeshMessageBuilder.buildNhsAck(meshMessage.getWorkflowId(), ex);
+            meshOutboundQueueService.publish(nhsack);
+            return;
+        }
 
         logInterchangeReceived(interchange);
 
-        final List<Message> messages = interchange.getMessages();
+        final List<MessageProcessingResult> messageProcessingResults = getFhirDataToSend(interchange.getMessages());
 
-        LOGGER.info("Interchange contains {} new messages", messages.size());
+        var nhsack = outboundMeshMessageBuilder.buildNhsAck(
+            meshMessage.getWorkflowId(),
+            interchange,
+            messageProcessingResults);
 
-        final List<FhirDataToSend> fhirDataToSend = getFhirDataToSend(messages);
-
-        fhirDataToSend.forEach(gpOutboundQueueService::publish);
-
-        sendRecep(interchange);
+        messageProcessingResults.stream()
+            .filter(MessageProcessingResult.Success.class::isInstance)
+            .map(MessageProcessingResult.Success.class::cast)
+            .map(MessageProcessingResult.Success::getBundle)
+            .forEach(gpOutboundQueueService::publish);
 
         logSentFor(interchange);
+
+        meshOutboundQueueService.publish(nhsack);
+
+        logNhsackSentFor(interchange);
     }
 
-    private List<FhirDataToSend> getFhirDataToSend(List<Message> messagesToProcess) {
-        return messagesToProcess.stream()
-            .map(message -> {
-                final Parameters parameters = edifactToFhirService.convertToFhir(message);
-                LOGGER.debug("Converted edifact message into {}", parameters);
-                return new FhirDataToSend()
-                    .setContent(parameters);
-            }).collect(Collectors.toList());
+    private List<MessageProcessingResult> getFhirDataToSend(List<Message> messages) {
+        return messages.stream()
+            .map(this::convertToFhir)
+            .collect(Collectors.toList());
+    }
+
+    private MessageProcessingResult convertToFhir(Message message) {
+        try {
+            final var bundle = edifactToFhirService.convertToFhir(message);
+            LOGGER.debug("Converted edifact message into {}", bundle);
+            return new MessageProcessingResult.Success(message, bundle);
+        } catch (Exception ex) {
+            LOGGER.error("Error converting Message to FHIR", ex);
+            return new MessageProcessingResult.Error(message, ex);
+        }
     }
 
     private void logInterchangeReceived(final Interchange interchange) {
@@ -69,29 +93,6 @@ public class InboundMessageHandler {
         }
     }
 
-    private void sendRecep(final Interchange interchange) {
-        final String recepEdifact = recepProducerService.produceRecep(interchange);
-        final Interchange recep = edifactParser.parse(recepEdifact);
-        final var recepOutboundMessage = prepareRecepOutboundMessage(recepEdifact, recep);
-
-        meshOutboundQueueService.publish(recepOutboundMessage);
-
-        logRecepSentFor(interchange);
-    }
-
-    private OutboundMeshMessage prepareRecepOutboundMessage(final String recepEdifact, final Interchange recep) {
-        final var recepMeshMessage = buildRecepMeshMessage(recepEdifact, recep);
-        LOGGER.debug("Wrapped recep in mesh message: {}", recepMeshMessage);
-        return recepMeshMessage;
-    }
-
-    private OutboundMeshMessage buildRecepMeshMessage(final String edifactRecep, final Interchange recep) {
-        return new MeshMessage()
-            .setHaTradingPartnerCode(recep.getInterchangeHeader().getRecipient())
-            .setWorkflowId(WorkflowId.PATHOLOGY_ACK)
-            .setContent(edifactRecep);
-    }
-
     private void logSentFor(final Interchange interchange) {
         if (LOGGER.isInfoEnabled()) {
             final InterchangeHeader interchangeHeader = interchange.getInterchangeHeader();
@@ -101,10 +102,10 @@ public class InboundMessageHandler {
         }
     }
 
-    private void logRecepSentFor(final Interchange interchange) {
+    private void logNhsackSentFor(final Interchange interchange) {
         if (LOGGER.isInfoEnabled()) {
             final var header = interchange.getInterchangeHeader();
-            LOGGER.info("Published for async send to MESH a RECEP for the interchange from "
+            LOGGER.info("Published for async send to MESH an NHSACK for the interchange from "
                     + "Sender={} to Recipient={} with RIS={}",
                 header.getSender(), header.getRecipient(), header.getSequenceNumber());
         }
