@@ -3,6 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 import org.hl7.fhir.dstu3.model.DateType;
 import org.hl7.fhir.dstu3.model.Enumerations;
 import org.hl7.fhir.dstu3.model.HumanName;
+import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
@@ -16,7 +17,7 @@ import java.util.Optional;
 @Component
 public class PatientMapper {
 
-    protected static final String SYSTEM = "https://fhir.nhs.uk/Id/nhs-number";
+    protected static final String NHS_NUMBER_SYSTEM = "https://fhir.nhs.uk/Id/nhs-number";
 
     public Patient mapToPatient(final Message message) {
 
@@ -40,9 +41,12 @@ public class PatientMapper {
     }
 
     private void mapIdentifier(final PersonName name, final Patient patient) {
-        patient.addIdentifier()
-            .setValue(name.getNhsNumber())
-            .setSystem(SYSTEM);
+        final Identifier identifier = new Identifier();
+
+        identifier.setSystem(NHS_NUMBER_SYSTEM);
+        Optional.ofNullable(name.getNhsNumber()).ifPresent(identifier::setValue);
+
+        patient.addIdentifier(identifier);
     }
 
     private void mapDateOfBirth(final PatientDetails details, final Patient patient) {

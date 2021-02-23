@@ -99,7 +99,7 @@ class PatientMapperTest {
             () -> assertThat(patient.getIdentifier()).hasSize(1).first()
                 .satisfies(identifier -> assertAll(
                     () -> assertThat(identifier.getValue()).isEqualTo(NHS_NUMBER),
-                    () -> assertThat(identifier.getSystem()).isEqualTo(PatientMapper.SYSTEM))),
+                    () -> assertThat(identifier.getSystem()).isEqualTo(PatientMapper.NHS_NUMBER_SYSTEM))),
 
             () -> assertThat(patient.getName()).hasSize(1).first()
                 .satisfies(name -> assertAll(
