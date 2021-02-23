@@ -34,6 +34,10 @@ public class BundleMapper {
             .setFullUrl(FULL_URL_PREFIX.concat(patient.getId()))
             .setResource(patient);
 
+        bundle.addEntry()
+            .setFullUrl(FULL_URL_PREFIX.concat(uuidGenerator.generateUUID()))
+            .setResource(pathologyRecord.getPatient());
+
         return bundle;
     }
 
