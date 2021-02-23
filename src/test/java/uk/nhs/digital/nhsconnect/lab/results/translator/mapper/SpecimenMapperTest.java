@@ -6,6 +6,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.Mockito.mock;
 
 class SpecimenMapperTest {
 
@@ -13,6 +14,6 @@ class SpecimenMapperTest {
     void testMapMessageToSpecimen() {
         final Message message = new Message(new ArrayList<>());
 
-        assertFalse(new SpecimenMapper().mapToSpecimens(message).isEmpty());
+        assertFalse(new SpecimenMapper(mock(DateFormatMapper.class)).mapToSpecimens(message).isEmpty());
     }
 }
