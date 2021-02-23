@@ -1,0 +1,17 @@
+UNA:+.? '
+UNB+UNOC:3+{{interchangeRecipient}}+{{interchangeSender}}+{{date_YYMMDD}}:{{time_HHMM}}+{{nhsAckControlReference}}++{{workflowId}}'
+UNH+1+NHSACK:D:1:NH:NHS001'
+BGM+AKR'
+DTM+137:{{date_CCYYMMDD}}:102'
+NIR+SIR:{{interchangeControlReference}}+{{interchangeSender}}+{{interchangeRecipient}}+{{interchangeStatusCode}}'
+{{#interchangeError}}
+FTX+ERD+++{{interchangeErrorDescription}}'
+{{/interchangeError}}
+{{#messageStatus}}
+NMR+AGO:{{messageNumber}}+{{messageStatus}}'
+{{#messageError}}
+FTX+ERD+++{{messageErrorDescription}}'
+{{/messageError}}
+{{/messageStatus}}
+UNT+{{segmentCount}}+1'
+UNZ+1+{{nhsAckControlReference}}'
