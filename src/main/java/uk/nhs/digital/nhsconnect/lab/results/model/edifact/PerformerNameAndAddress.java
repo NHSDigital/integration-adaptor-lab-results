@@ -9,7 +9,8 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 /**
- * Example: NAD+SLA+A2442389:902++DR J SMITH'<br>
+ * Example: NAD+SLA+A2442389:902++DR J SMITH'
+ * <br>
  * Example: NAD+SLA+++ST JAMES?'S UNIVERSITY HOSPITAL'
  */
 @Getter
@@ -21,6 +22,7 @@ public class PerformerNameAndAddress extends Segment {
     private static final String KEY = "NAD";
     private static final String QUALIFIER = "SLA";
     public static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
+
     private static final int PERFORMING_NAME_INDEX_IN_EDIFACT_STRING = 4;
     private static final int PERFORMER_ID_INDEX_IN_EDIFACT_STRING = 2;
     private static final int PERFORMER_CODE_INDEX_IN_EDIFACT_STRING = 3;

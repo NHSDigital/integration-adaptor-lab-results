@@ -38,7 +38,6 @@ public class Message extends Section {
         extractOptionalSegment(PerformerNameAndAddress.KEY_QUALIFIER)
             .map(PerformerNameAndAddress::fromString);
 
-
     @Getter
     @Setter
     private Interchange interchange;

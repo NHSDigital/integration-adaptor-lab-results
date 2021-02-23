@@ -6,9 +6,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.fhir.PathologyRecord;
 @SuppressWarnings("checkstyle:hideutilityclassconstructor")
 public final class PathologyRecordFixtures {
 
-    public static PathologyRecord generatePathologyRecord(
-        Practitioner requester,
-        Practitioner performer) {
+    public static PathologyRecord generatePathologyRecord(Practitioner requester, Practitioner performer) {
         return PathologyRecord.builder()
                 .requester(requester)
                 .performer(performer)
