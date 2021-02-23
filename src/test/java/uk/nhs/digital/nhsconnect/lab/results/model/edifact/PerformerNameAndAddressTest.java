@@ -6,7 +6,6 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -51,14 +50,14 @@ class PerformerNameAndAddressTest {
             .identifier("")
             .code(null)
             .performingOrganisationName("LONDON CITY HOSPITAL")
-            .partyName("")
+            .performerName("")
             .build();
 
         PerformerNameAndAddress performer = PerformerNameAndAddress.builder()
             .identifier("A2442389")
             .code(HealthcareRegistrationIdentificationCode.CONSULTANT)
             .performingOrganisationName("")
-            .partyName("DR J SMITH")
+            .performerName("DR J SMITH")
             .build();
 
         assertAll(
@@ -73,14 +72,14 @@ class PerformerNameAndAddressTest {
             .identifier("")
             .code(null)
             .performingOrganisationName("")
-            .partyName("")
+            .performerName("")
             .build();
 
         PerformerNameAndAddress performerWithoutName = PerformerNameAndAddress.builder()
             .identifier("A2442389")
             .code(HealthcareRegistrationIdentificationCode.CONSULTANT)
             .performingOrganisationName("")
-            .partyName("")
+            .performerName("")
             .build();
 
         assertAll(
@@ -97,7 +96,7 @@ class PerformerNameAndAddressTest {
                 .identifier("A2442389")
                 .code(HealthcareRegistrationIdentificationCode.fromCode(""))
                 .performingOrganisationName("")
-                .partyName("")
+                .performerName("")
                 .build()
         );
     }
@@ -119,11 +118,6 @@ class PerformerNameAndAddressTest {
             () -> assertEquals("SLA+A2442389:902++DR J SMITH", performerNameAndAddress.getValue())
         );
 
-    }
-
-    @Test
-    void testValidateStateful() {
-        assertDoesNotThrow(performingOrganisationNameAndAddress::validateStateful);
     }
 
     @Test

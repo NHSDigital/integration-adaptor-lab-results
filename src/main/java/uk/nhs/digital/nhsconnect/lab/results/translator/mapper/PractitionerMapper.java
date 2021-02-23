@@ -40,7 +40,7 @@ public class PractitionerMapper {
         result.addIdentifier()
             .setValue(performer.getIdentifier())
             .setSystem(SDS_USER_SYSTEM);
-        Optional.ofNullable(performer.getPartyName())
+        Optional.ofNullable(performer.getPerformerName())
             .ifPresent(name -> result.addName().setText(name));
         return result;
     }

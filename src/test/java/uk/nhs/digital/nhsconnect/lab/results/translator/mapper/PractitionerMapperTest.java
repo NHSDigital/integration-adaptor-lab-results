@@ -98,7 +98,7 @@ class PractitionerMapperTest {
     @Test
     void testMapMessageToPractitionerWithPerformer() {
         when(message.getPerformerNameAndAddress()).thenReturn(Optional.of(performer));
-        when(performer.getPartyName()).thenReturn("Jane Doe");
+        when(performer.getPerformerName()).thenReturn("Jane Doe");
         when(performer.getIdentifier()).thenReturn("Performer");
 
         Optional<Practitioner> result = mapper.mapPerformer(message);

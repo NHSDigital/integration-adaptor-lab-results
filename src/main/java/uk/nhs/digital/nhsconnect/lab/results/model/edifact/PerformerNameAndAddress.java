@@ -25,13 +25,12 @@ public class PerformerNameAndAddress extends Segment {
     private static final int PERFORMER_ID_INDEX_IN_EDIFACT_STRING = 2;
     private static final int PERFORMER_CODE_INDEX_IN_EDIFACT_STRING = 3;
 
-    @NonNull
     private final String identifier;
     private final HealthcareRegistrationIdentificationCode code;
     @NonNull
     private final String performingOrganisationName;
     @NonNull
-    private final String partyName;
+    private final String performerName;
 
     public static PerformerNameAndAddress fromString(String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {
@@ -50,12 +49,12 @@ public class PerformerNameAndAddress extends Segment {
             return new PerformerNameAndAddress("", null, performingOrganisationName, "");
         } else {
             String performerCode = colonSplit[1];
-            String performerPartyName = keySplit[PERFORMING_NAME_INDEX_IN_EDIFACT_STRING];
+            String performerName = keySplit[PERFORMING_NAME_INDEX_IN_EDIFACT_STRING];
             return new PerformerNameAndAddress(
                 performerID,
                 HealthcareRegistrationIdentificationCode.fromCode(performerCode),
                 "",
-                performerPartyName
+                performerName
             );
         }
     }
@@ -72,7 +71,7 @@ public class PerformerNameAndAddress extends Segment {
             + (identifier.isBlank() ? "" : identifier + COLON_SEPARATOR + code.getCode())
             + PLUS_SEPARATOR
             + PLUS_SEPARATOR
-            + (identifier.isBlank() ? performingOrganisationName : partyName);
+            + (identifier.isBlank() ? performingOrganisationName : performerName);
     }
 
     @Override
@@ -90,8 +89,8 @@ public class PerformerNameAndAddress extends Segment {
             if (code == null || code.getCode().isBlank()) {
                 throw new EdifactValidationException(getKey() + ": Attribute code is required");
             }
-            if (partyName.isBlank()) {
-                throw new EdifactValidationException(getKey() + ": Attribute partyName is required");
+            if (performerName == null || performerName.isBlank()) {
+                throw new EdifactValidationException(getKey() + ": Attribute performerName is required");
             }
         }
     }
