@@ -49,8 +49,7 @@ class EdifactToFhirServiceTest {
         assertThat(bundle).isNotNull();
         assertThat(bundle.getEntry())
             .hasSize(2)
-            .first()
             .extracting(Bundle.BundleEntryComponent::getResource)
-            .isNotNull();
+            .containsExactly(pathologyRecord.getRequester(), pathologyRecord.getPatient());
     }
 }
