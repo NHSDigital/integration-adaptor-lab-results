@@ -58,16 +58,12 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
 
     @SuppressWarnings("checkstyle:magicnumber")
     private void assertGpOutboundQueueMessages(SoftAssertions softly) throws IOException, JMSException, JSONException {
-        final List<Message> gpOutboundQueueMessages = IntStream.range(0, 6)
+        final List<Message> gpOutboundQueueMessages = IntStream.range(0, 2)
             .mapToObj(x -> getGpOutboundQueueMessage())
             .collect(Collectors.toList());
 
         assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(0));
         assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(1));
-        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(2));
-        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(3));
-        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(4));
-        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(5));
     }
 
     private void assertGpOutboundQueueMessages(SoftAssertions softly, Message message)
