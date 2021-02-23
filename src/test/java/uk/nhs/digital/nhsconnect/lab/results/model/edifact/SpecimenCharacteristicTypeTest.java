@@ -10,18 +10,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class SpecimenCharacteristicTypeTest {
 
     @Test
-    void toEdifactTest() {
-        var edifact = new SpecimenCharacteristicType("Something").toEdifact();
-
-        assertThat(edifact).isEqualTo("SPC+TSP+:::Something'");
-    }
-
-    @Test
     void testFromString() {
-        var edifact = "SPC+TSP+:::BLOOD & URINE'";
-        var parsedFreeText = SpecimenCharacteristicType.fromString("SPC+TSP+:::BLOOD & URINE'");
+        var parsedFreeText = SpecimenCharacteristicType.fromString("SPC+TSP+:::BLOOD & URINE");
         assertThat(parsedFreeText.getTypeOfSpecimen()).isEqualTo("BLOOD & URINE");
-        assertThat(parsedFreeText.toEdifact()).isEqualTo(edifact);
     }
 
     @Test
@@ -31,17 +22,17 @@ class SpecimenCharacteristicTypeTest {
     }
 
     @Test
-    void testPreValidationEmptyString() {
+    void testValidationEmptyString() {
         SpecimenCharacteristicType emptyFreeText = new SpecimenCharacteristicType(StringUtils.EMPTY);
-        assertThatThrownBy(emptyFreeText::preValidate)
+        assertThatThrownBy(emptyFreeText::validate)
             .isInstanceOf(EdifactValidationException.class)
             .hasMessage("SPC: Attribute typeOfSpecimen is blank or missing");
     }
 
     @Test
-    void testPreValidationBlankString() {
+    void testValidationBlankString() {
         SpecimenCharacteristicType blankFreeText = new SpecimenCharacteristicType(" ");
-        assertThatThrownBy(blankFreeText::preValidate)
+        assertThatThrownBy(blankFreeText::validate)
             .isInstanceOf(EdifactValidationException.class)
             .hasMessage("SPC: Attribute typeOfSpecimen is blank or missing");
     }

@@ -31,22 +31,12 @@ public class HealthAuthorityNameAndAddress extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return QUALIFIER + "+" + identifier + ":" + code;
-    }
-
-    @Override
-    protected void validateStateful() {
-        // Do nothing
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (!StringUtils.hasText(identifier)) {
-            throw new EdifactValidationException(getKey() + ": Attribute identifier is required");
+            throw new EdifactValidationException(KEY + ": Attribute identifier is required");
         }
         if (!StringUtils.hasText(code)) {
-            throw new EdifactValidationException(getKey() + ": Attribute code is required");
+            throw new EdifactValidationException(KEY + ": Attribute code is required");
         }
     }
 

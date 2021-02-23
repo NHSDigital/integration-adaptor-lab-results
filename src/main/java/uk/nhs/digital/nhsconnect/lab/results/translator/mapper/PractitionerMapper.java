@@ -1,11 +1,12 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
-import java.util.Optional;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.RequesterNameAndAddress;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvolvedParty;
+
+import java.util.Optional;
 
 @Component
 public class PractitionerMapper {

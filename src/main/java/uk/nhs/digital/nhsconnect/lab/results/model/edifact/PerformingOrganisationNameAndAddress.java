@@ -32,8 +32,8 @@ public class PerformingOrganisationNameAndAddress extends Segment {
             );
         }
 
-        String[] keySplit = Split.byPlus(edifactString);
-        String performingOrganisationName = keySplit[PERFORMING_ORGANISATION_NAME_INDEX_IN_EDIFACT_STRING];
+        final String[] keySplit = Split.byPlus(edifactString);
+        final String performingOrganisationName = keySplit[PERFORMING_ORGANISATION_NAME_INDEX_IN_EDIFACT_STRING];
 
         return new PerformingOrganisationNameAndAddress(performingOrganisationName);
     }
@@ -44,23 +44,9 @@ public class PerformingOrganisationNameAndAddress extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return QUALIFIER
-            + PLUS_SEPARATOR
-            + PLUS_SEPARATOR
-            + PLUS_SEPARATOR
-            + performingOrganisationName;
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-        // no stateful fields to validate
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (performingOrganisationName.isBlank()) {
-            throw new EdifactValidationException(getKey() + ": Attribute performingOrganisationName is required");
+            throw new EdifactValidationException(KEY + ": Attribute performingOrganisationName is required");
         }
     }
 }

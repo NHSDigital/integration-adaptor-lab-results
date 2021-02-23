@@ -27,10 +27,8 @@ public class SpecimenQuantity extends Segment {
             throw new IllegalArgumentException(
                 "Can't create " + SpecimenQuantity.class.getSimpleName() + " from " + edifactString);
         }
-        String[] splitByColon = Split.byColon(
-            Split.bySegmentTerminator(edifactString)[0]
-        );
-        int quantity = Integer.parseInt(Split.byPlus(splitByColon[1])[0]);
+        final String[] splitByColon = Split.byColon(edifactString);
+        final int quantity = Integer.parseInt(Split.byPlus(splitByColon[1])[0]);
         return new SpecimenQuantity(quantity, splitByColon[MEASUREMENT_UNIT_INDEX]);
     }
 
@@ -40,22 +38,7 @@ public class SpecimenQuantity extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return QUALIFIER
-            + COLON_SEPARATOR
-            + quantity
-            + PLUS_SEPARATOR
-            + COLON_SEPARATOR.repeat(QUANTITY_INDEX)
-            + quantityUnitOfMeasure;
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-        // nothing
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (quantityUnitOfMeasure.isBlank()) {
             throw new EdifactValidationException(KEY + ": Unit of measure is required");
         }

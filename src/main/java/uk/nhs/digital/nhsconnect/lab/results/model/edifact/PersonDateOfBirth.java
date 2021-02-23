@@ -40,22 +40,9 @@ public class PersonDateOfBirth extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return QUALIFIER
-            + COLON_SEPARATOR
-            + getFormattedEdifactDate(dateOfBirth, dateFormat)
-            + COLON_SEPARATOR
-            + dateFormat.getCode();
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (dateOfBirth.isBlank()) {
-            throw new EdifactValidationException(getKey() + ": Date of birth is required");
+            throw new EdifactValidationException(KEY + ": Date of birth is required");
         }
     }
 

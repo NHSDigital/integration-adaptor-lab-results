@@ -27,6 +27,7 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import java.time.Instant;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
@@ -79,8 +80,10 @@ class MeshOutboundQueueServiceTest {
 
             meshOutboundQueueService.publish(outboundMeshMessage);
 
-            verify(outboundMeshMessage).setMessageSentTimestamp(TIMESTAMP);
-            verify(jmsTemplate).send(eq("queue"), messageCreatorCaptor.capture());
+            assertAll(
+                () -> verify(outboundMeshMessage).setMessageSentTimestamp(TIMESTAMP),
+                () -> verify(jmsTemplate).send(eq("queue"), messageCreatorCaptor.capture())
+            );
 
             final var mockSession = mock(Session.class);
             final var mockTextMessage = mock(TextMessage.class);
@@ -90,8 +93,10 @@ class MeshOutboundQueueServiceTest {
 
             final Message result = messageCreatorCaptor.getValue().createMessage(mockSession);
 
-            verify(mockTextMessage).setStringProperty(JmsHeaders.CORRELATION_ID, "CorrelationID");
-            assertEquals(mockTextMessage, result);
+            assertAll(
+                () -> verify(mockTextMessage).setStringProperty(JmsHeaders.CORRELATION_ID, "CorrelationID"),
+                () -> assertEquals(mockTextMessage, result)
+            );
         }
     }
 
@@ -110,10 +115,12 @@ class MeshOutboundQueueServiceTest {
 
             meshOutboundQueueService.receive(message);
 
-            verify(correlationIdService).applyCorrelationId("CorrelationID");
-            verify(meshClient).authenticate();
-            verify(meshClient).sendEdifactMessage(outboundMeshMessage);
-            verify(correlationIdService).resetCorrelationId();
+            assertAll(
+                () -> verify(correlationIdService).applyCorrelationId("CorrelationID"),
+                () -> verify(meshClient).authenticate(),
+                () -> verify(meshClient).sendEdifactMessage(outboundMeshMessage),
+                () -> verify(correlationIdService).resetCorrelationId()
+            );
         }
 
         @Test
@@ -129,10 +136,12 @@ class MeshOutboundQueueServiceTest {
 
             meshOutboundQueueService.receive(message);
 
-            verify(correlationIdService, never()).applyCorrelationId("CorrelationID");
-            verify(meshClient).authenticate();
-            verify(meshClient).sendEdifactMessage(outboundMeshMessage);
-            verify(correlationIdService).resetCorrelationId();
+            assertAll(
+                () -> verify(correlationIdService, never()).applyCorrelationId("CorrelationID"),
+                () -> verify(meshClient).authenticate(),
+                () -> verify(meshClient).sendEdifactMessage(outboundMeshMessage),
+                () -> verify(correlationIdService).resetCorrelationId()
+            );
         }
 
         @Test
@@ -147,12 +156,13 @@ class MeshOutboundQueueServiceTest {
             when(objectMapper.readValue("Message Body", OutboundMeshMessage.class))
                 .thenThrow(new JsonMappingException("Expected exception"));
 
-            assertThrows(JsonMappingException.class, () -> meshOutboundQueueService.receive(message));
-
-            verify(correlationIdService).applyCorrelationId("CorrelationID");
-            verify(meshClient, never()).authenticate();
-            verify(meshClient, never()).sendEdifactMessage(outboundMeshMessage);
-            verify(correlationIdService).resetCorrelationId();
+            assertAll(
+                () -> assertThrows(JsonMappingException.class, () -> meshOutboundQueueService.receive(message)),
+                () -> verify(correlationIdService).applyCorrelationId("CorrelationID"),
+                () -> verify(meshClient, never()).authenticate(),
+                () -> verify(meshClient, never()).sendEdifactMessage(outboundMeshMessage),
+                () -> verify(correlationIdService).resetCorrelationId()
+            );
         }
     }
 }

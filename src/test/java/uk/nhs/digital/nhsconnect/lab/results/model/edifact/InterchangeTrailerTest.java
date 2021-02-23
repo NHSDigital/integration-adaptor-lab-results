@@ -13,92 +13,47 @@ class InterchangeTrailerTest {
     private static final long SEQUENCE_NUMBER = 3L;
 
     @Test
-    void testToEdifactForValidInterchangeTrailer() {
-        final InterchangeTrailer interchangeTrailer = new InterchangeTrailer(1);
-        interchangeTrailer.setSequenceNumber(1L);
-
-        final String edifact = interchangeTrailer.toEdifact();
-
-        assertEquals("UNZ+1+00000001'", edifact);
-    }
-
-    @Test
-    void testToEdifactForMissingSequenceNumberThrowsException() {
-        final InterchangeTrailer interchangeTrailer = new InterchangeTrailer(1);
+    void testValidateSequenceNumberNullThrowsException() {
+        final InterchangeTrailer interchangeTrailer = InterchangeTrailer.fromString("UNZ+1");
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
-                interchangeTrailer::toEdifact);
+                interchangeTrailer::validate);
 
         assertEquals("UNZ: Attribute sequenceNumber is required", exception.getMessage());
     }
 
     @Test
-    void testToEdifactForZeroNumberOfMessagesThrowsException() {
-        final InterchangeTrailer interchangeTrailer = new InterchangeTrailer(0);
-        interchangeTrailer.setSequenceNumber(1L);
+    void testValidateSequenceNumberLessThanOrEqualToZeroThrowsException() {
+        final InterchangeTrailer interchangeTrailer = InterchangeTrailer.fromString("UNZ+1+00000000");
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
-                interchangeTrailer::toEdifact);
-
-        assertEquals("UNZ: Attribute numberOfMessages is required", exception.getMessage());
-    }
-
-    @Test
-    void testGetValueForValidInterchangeTrailer() {
-        final InterchangeTrailer interchangeTrailer = new InterchangeTrailer(1);
-        interchangeTrailer.setSequenceNumber(1L);
-
-        final String interchangeTrailerValue = interchangeTrailer.getValue();
-
-        assertEquals("1+00000001", interchangeTrailerValue);
-    }
-
-    @Test
-    void testValidateStatefulSequenceNumberNullThrowsException() {
-        final InterchangeTrailer interchangeTrailer = new InterchangeTrailer(1);
-
-        final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
-                interchangeTrailer::validateStateful);
+                interchangeTrailer::validate);
 
         assertEquals("UNZ: Attribute sequenceNumber is required", exception.getMessage());
     }
 
     @Test
-    void testValidateStatefulSequenceNumberLessThanOrEqualToZeroThrowsException() {
-        final InterchangeTrailer interchangeTrailer = new InterchangeTrailer(1);
-        interchangeTrailer.setSequenceNumber(0L);
+    void testValidateSequenceNumberWithinMinMaxDoesNotThrowException() {
+        final InterchangeTrailer interchangeTrailer = InterchangeTrailer.fromString("UNZ+1+00000001");
 
-        final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
-                interchangeTrailer::validateStateful);
-
-        assertEquals("UNZ: Attribute sequenceNumber is required", exception.getMessage());
+        assertDoesNotThrow(interchangeTrailer::validate);
     }
 
     @Test
-    void testValidateStatefulSequenceNumberWithinMinMaxDoesNotThrowException() {
-        final InterchangeTrailer interchangeTrailer = new InterchangeTrailer(1);
-        interchangeTrailer.setSequenceNumber(1L);
-
-        assertDoesNotThrow(interchangeTrailer::validateStateful);
-    }
-
-    @Test
-    void testPreValidationNumberOfMessagesZero() {
-        final InterchangeTrailer interchangeTrailer = new InterchangeTrailer(0);
-        interchangeTrailer.setSequenceNumber(1L);
+    void testValidationNumberOfMessagesZero() {
+        final InterchangeTrailer interchangeTrailer = InterchangeTrailer.fromString("UNZ+0+00000001");
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
-                interchangeTrailer::preValidate);
+                interchangeTrailer::validate);
 
         assertEquals("UNZ: Attribute numberOfMessages is required", exception.getMessage());
     }
 
     @Test
     void testFromStringWithValidEdifactStringReturnsInterchangeTrailer() {
-        final InterchangeTrailer interchangeTrailer = InterchangeTrailer.fromString("UNZ+18+00000003'");
+        final InterchangeTrailer interchangeTrailer = InterchangeTrailer.fromString("UNZ+18+00000003");
 
         assertEquals(InterchangeTrailer.KEY, interchangeTrailer.getKey());
-        assertEquals("18+00000003", interchangeTrailer.getValue());
         assertEquals(NUMBER_OF_MESSAGES, interchangeTrailer.getNumberOfMessages());
         assertEquals(SEQUENCE_NUMBER, interchangeTrailer.getSequenceNumber());
     }

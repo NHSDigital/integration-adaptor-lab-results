@@ -3,6 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ClinicalInformationCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
 
 import java.util.List;
@@ -26,7 +27,7 @@ class PatientClinicalInfoTest {
         ));
         assertThat(patientInfo.getCode())
             .isNotNull()
-            .extracting(ClinicalInformationCode::getValue)
+            .extracting(ClinicalInformationCode::getCode)
             .isEqualTo("UN");
     }
 
@@ -39,10 +40,14 @@ class PatientClinicalInfoTest {
             "FTX+CID+++PAINS HANDS AND FEET.",
             "ignore me"
         ));
-        assertThat(patientInfo.getFreeTexts())
-            .hasSize(2)
-            .extracting(FreeTextSegment::getValue)
-            .contains("CID+++TIRED ALL THE TIME, LOW Hb", "CID+++PAINS HANDS AND FEET.");
+        var patientInfoFreeTexts = assertThat(patientInfo.getFreeTexts()).hasSize(2);
+
+        patientInfoFreeTexts
+            .extracting(FreeTextSegment::getType)
+            .allMatch(value -> value == FreeTextType.CLINICAL_INFO);
+        patientInfoFreeTexts.extracting(FreeTextSegment::getTexts)
+            .map(values -> values[0])
+            .isEqualTo(List.of("TIRED ALL THE TIME, LOW Hb", "PAINS HANDS AND FEET."));
     }
 
     @Test

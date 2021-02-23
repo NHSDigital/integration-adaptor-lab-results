@@ -10,18 +10,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class SpecimenCharacteristicFastingStatusTest {
 
     @Test
-    void toEdifactTest() {
-        var edifact = new SpecimenCharacteristicFastingStatus("Something").toEdifact();
-
-        assertThat(edifact).isEqualTo("SPC+FS+Something'");
-    }
-
-    @Test
     void testFromString() {
-        var edifact = "SPC+FS+F'";
-        var parsedFreeText = SpecimenCharacteristicFastingStatus.fromString("SPC+FS+F'");
+        var parsedFreeText = SpecimenCharacteristicFastingStatus.fromString("SPC+FS+F");
         assertThat(parsedFreeText.getFastingStatus()).isEqualTo("F");
-        assertThat(parsedFreeText.toEdifact()).isEqualTo(edifact);
     }
 
     @Test
@@ -31,17 +22,17 @@ class SpecimenCharacteristicFastingStatusTest {
     }
 
     @Test
-    void testPreValidationEmptyString() {
+    void testValidationEmptyString() {
         SpecimenCharacteristicFastingStatus emptyFreeText = new SpecimenCharacteristicFastingStatus(StringUtils.EMPTY);
-        assertThatThrownBy(emptyFreeText::preValidate)
+        assertThatThrownBy(emptyFreeText::validate)
             .isInstanceOf(EdifactValidationException.class)
             .hasMessage("SPC: Attribute fastingStatus is blank or missing");
     }
 
     @Test
-    void testPreValidationBlankString() {
+    void testValidationBlankString() {
         SpecimenCharacteristicFastingStatus emptyFreeText = new SpecimenCharacteristicFastingStatus(" ");
-        assertThatThrownBy(emptyFreeText::preValidate)
+        assertThatThrownBy(emptyFreeText::validate)
             .isInstanceOf(EdifactValidationException.class)
             .hasMessage("SPC: Attribute fastingStatus is blank or missing");
     }

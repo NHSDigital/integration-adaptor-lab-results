@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ServiceProviderTest {
 
     private final ServiceProvider serviceProvider = new ServiceProvider(
-            ServiceProviderCode.ORGANISATION
+        ServiceProviderCode.ORGANISATION
     );
 
     @Test
@@ -20,19 +20,8 @@ class ServiceProviderTest {
     @Test
     void when_edifactStringIsPassed_expect_returnAServiceProviderObject() {
         assertThat(serviceProvider)
-                .usingRecursiveComparison()
-                .isEqualTo(ServiceProvider.fromString("SPR+ORG"));
-    }
-
-    @Test
-    void when_mappingSegmentObjectToEdifactString_expect_returnCorrectEdifactString() {
-        String expectedEdifactString = "SPR+ORG'";
-
-        ServiceProvider serviceProvider = ServiceProvider.builder()
-                .serviceProviderCode(ServiceProviderCode.ORGANISATION)
-                .build();
-
-        assertEquals(expectedEdifactString, serviceProvider.toEdifact());
+            .usingRecursiveComparison()
+            .isEqualTo(ServiceProvider.fromString("SPR+ORG"));
     }
 
     @Test
@@ -43,10 +32,5 @@ class ServiceProviderTest {
     @Test
     void testGetKey() {
         assertEquals(serviceProvider.getKey(), "SPR");
-    }
-
-    @Test
-    void testGetValue() {
-        assertEquals(serviceProvider.getValue(), "ORG");
     }
 }

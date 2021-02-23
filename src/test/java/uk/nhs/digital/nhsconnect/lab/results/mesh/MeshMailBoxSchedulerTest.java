@@ -13,9 +13,9 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -37,7 +37,7 @@ class MeshMailBoxSchedulerTest {
 
     @Test
     void when_collectionIsEmpty_expect_singleDocumentIsCreatedAndTheJobIsNotExecuted() {
-        when(schedulerTimestampRepository.updateTimestamp(anyString(), isA(Instant.class), anyLong()))
+        when(schedulerTimestampRepository.updateTimestamp(anyString(), any(Instant.class), anyLong()))
                 .thenReturn(false);
         when(timestampService.getCurrentTimestamp()).thenReturn(Instant.now());
 
@@ -48,7 +48,7 @@ class MeshMailBoxSchedulerTest {
 
     @Test
     void when_documentExistsAndTimestampIsBeforeProvidedTime_expect_documentIsUpdateAndTheJobIsExecuted() {
-        when(schedulerTimestampRepository.updateTimestamp(anyString(), isA(Instant.class), anyLong())).thenReturn(true);
+        when(schedulerTimestampRepository.updateTimestamp(anyString(), any(Instant.class), anyLong())).thenReturn(true);
         when(timestampService.getCurrentTimestamp()).thenReturn(Instant.now());
 
         boolean hasTimePassed = meshMailBoxScheduler.hasTimePassed(MAX_WAIT);
@@ -58,7 +58,7 @@ class MeshMailBoxSchedulerTest {
 
     @Test
     void when_documentExistsAndTimestampIsAfterProvidedTime_expect_documentIsNotUpdateAndTheJobIsNotExecuted() {
-        when(schedulerTimestampRepository.updateTimestamp(anyString(), isA(Instant.class), anyLong()))
+        when(schedulerTimestampRepository.updateTimestamp(anyString(), any(Instant.class), anyLong()))
                 .thenReturn(false);
         when(timestampService.getCurrentTimestamp()).thenReturn(Instant.now());
 

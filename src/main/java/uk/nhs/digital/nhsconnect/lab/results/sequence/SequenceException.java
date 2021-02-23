@@ -1,8 +1,8 @@
 package uk.nhs.digital.nhsconnect.lab.results.sequence;
 
-import uk.nhs.digital.nhsconnect.lab.results.rest.exception.BadRequestException;
+import uk.nhs.digital.nhsconnect.lab.results.exception.LabResultsBaseException;
 
-public class SequenceException extends BadRequestException {
+public class SequenceException extends LabResultsBaseException {
     public SequenceException(final String message) {
         super(message);
     }

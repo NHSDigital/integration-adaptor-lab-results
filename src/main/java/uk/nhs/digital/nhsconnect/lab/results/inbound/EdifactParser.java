@@ -9,7 +9,11 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageTrailer;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeCriticalException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeFactory;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessagesParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.ToEdifactParsingException;
 
@@ -34,26 +38,80 @@ public class EdifactParser {
         this.interchangeFactory = interchangeFactory;
     }
 
-    public Interchange parse(String edifact) {
+    public Interchange parse(String edifact)
+            throws InterchangeParsingException, MessagesParsingException, InterchangeCriticalException {
+
         var allEdifactSegments = Arrays.asList(Split.bySegmentTerminator(edifact.replaceAll("\\n", "").strip()));
 
-        return parseInterchange(allEdifactSegments);
+        return buildInterchange(allEdifactSegments);
     }
 
-    private Interchange parseInterchange(List<String> allEdifactSegments) {
-        Interchange interchange = interchangeFactory.createInterchange(
-            extractInterchangeEdifactSegments(allEdifactSegments));
+    private Interchange buildInterchange(List<String> allEdifactSegments)
+            throws InterchangeParsingException, InterchangeCriticalException, MessagesParsingException {
 
-        var messages = parseAllMessages(allEdifactSegments);
-        messages.forEach(message -> message.setInterchange(interchange));
-        interchange.setMessages(messages);
-
+        final Interchange interchange = parseInterchange(allEdifactSegments);
+        parseMessages(allEdifactSegments, interchange);
         return interchange;
     }
 
+    private Interchange parseInterchange(List<String> allEdifactSegments)
+            throws InterchangeCriticalException, InterchangeParsingException {
+
+        final Interchange interchange;
+        try {
+            interchange = interchangeFactory.createInterchange(extractInterchangeEdifactSegments(allEdifactSegments));
+            interchange.validate();
+        } catch (InterchangeCriticalException | InterchangeParsingException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new InterchangeCriticalException(ex);
+        }
+        return interchange;
+    }
+
+    private void parseMessages(List<String> allEdifactSegments, Interchange interchange)
+            throws MessagesParsingException, InterchangeParsingException {
+
+        final List<Message> messages;
+        try {
+            messages = parseAllMessages(allEdifactSegments);
+            messages.forEach(message -> {
+                final var messageHeader = message.getMessageHeader();
+                final var messageTrailer = message.getMessageTrailer();
+                messageHeader.validate();
+                messageTrailer.validate();
+                if (!messageHeader.getSequenceNumber().equals(messageTrailer.getSequenceNumber())) {
+                    throw new EdifactValidationException(
+                        "Message header sequence number does not match trailer sequence number");
+                }
+                message.setInterchange(interchange);
+            });
+            interchange.setMessages(messages);
+        } catch (Exception ex) {
+            var interchangeHeader = interchange.getInterchangeHeader();
+            throw new MessagesParsingException(
+                "Error parsing messages",
+                interchangeHeader.getSender(),
+                interchangeHeader.getRecipient(),
+                interchangeHeader.getSequenceNumber(),
+                ex);
+        }
+
+        if (interchange.getInterchangeTrailer().getNumberOfMessages() != messages.size()) {
+            var interchangeHeader = interchange.getInterchangeHeader();
+            throw new InterchangeParsingException(
+                "Interchange trailer message count does not equal actual message count",
+                interchangeHeader.getSender(),
+                interchangeHeader.getRecipient(),
+                interchangeHeader.getSequenceNumber());
+        }
+    }
+
     private List<Message> parseAllMessages(List<String> allEdifactSegments) {
-        var allMessageHeaderSegmentIndexes = findAllIndexesOfSegment(allEdifactSegments, MessageHeader.KEY);
-        var allMessageTrailerSegmentIndexes = findAllIndexesOfSegment(allEdifactSegments, MessageTrailer.KEY);
+        var allMessageHeaderSegmentIndexes =
+            findAllIndexesOfSegment(allEdifactSegments, MessageHeader.KEY);
+        var allMessageTrailerSegmentIndexes =
+            findAllIndexesOfSegment(allEdifactSegments, MessageTrailer.KEY);
 
         var messageHeaderTrailerIndexPairs =
             zipIndexes(allMessageHeaderSegmentIndexes, allMessageTrailerSegmentIndexes);

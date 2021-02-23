@@ -1,7 +1,5 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
-import org.apache.commons.lang3.StringUtils;
-
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -28,8 +26,8 @@ public class DiagnosticReportStatus extends Segment {
             throw new IllegalArgumentException("Can't create " + DiagnosticReportStatus.class.getSimpleName()
                 + " from " + edifactString);
         }
-        String detail = Split.byPlus(edifactString)[1];
-        String event = Split.byPlus(edifactString)[2];
+        final String detail = Split.byPlus(edifactString)[1];
+        final String event = Split.byPlus(edifactString)[2];
         return new DiagnosticReportStatus(detail, ReportStatusCode.fromCode(event));
     }
 
@@ -39,33 +37,9 @@ public class DiagnosticReportStatus extends Segment {
     }
 
     @Override
-    public String getValue() {
-        if (StringUtils.isBlank(detail)) {
-            return event.getCode();
-        } else {
-            return detail + PLUS_SEPARATOR + event.getCode();
-        }
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (event.getCode().isBlank()) {
-            throw new EdifactValidationException(getKey() + ": Status is required");
-        }
-    }
-
-    @Override
-    public String toEdifact() throws EdifactValidationException {
-        super.validate();
-        if (StringUtils.isBlank(detail)) {
-            return this.getKey() + PLUS_SEPARATOR + PLUS_SEPARATOR + this.getValue() + TERMINATOR;
-        } else {
-            return this.getKey() + PLUS_SEPARATOR + this.getValue() + TERMINATOR;
+            throw new EdifactValidationException(KEY + ": Status is required");
         }
     }
 }

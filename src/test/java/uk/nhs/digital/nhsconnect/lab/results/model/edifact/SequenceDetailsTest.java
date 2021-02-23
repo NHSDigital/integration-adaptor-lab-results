@@ -16,12 +16,6 @@ class SequenceDetailsTest {
     }
 
     @Test
-    void testGetValue() {
-        final var sequence = new SequenceDetails("1A2B3C");
-        assertThat(sequence.getValue()).isEqualTo("1A2B3C");
-    }
-
-    @Test
     void testFromStringWrongKey() {
         assertThatThrownBy(() -> SequenceDetails.fromString("WRONG++123"))
             .isExactlyInstanceOf(IllegalArgumentException.class)
@@ -44,8 +38,7 @@ class SequenceDetailsTest {
     void testValidationPasses() {
         final var sequence = new SequenceDetails("123456");
         assertAll(
-            () -> assertDoesNotThrow(sequence::validateStateful),
-            () -> assertDoesNotThrow(sequence::preValidate)
+            () -> assertDoesNotThrow(sequence::validate)
         );
     }
 
@@ -53,8 +46,7 @@ class SequenceDetailsTest {
     void testValidationEmptyNumber() {
         final var sequence = new SequenceDetails("");
         assertAll(
-            () -> assertDoesNotThrow(sequence::validateStateful),
-            () -> assertThatThrownBy(sequence::preValidate)
+            () -> assertThatThrownBy(sequence::validate)
                 .isExactlyInstanceOf(EdifactValidationException.class)
                 .hasMessage("SEQ: attribute number must be an alphanumeric string of up to 6 characters")
         );
@@ -64,8 +56,7 @@ class SequenceDetailsTest {
     void testValidationNonAlphaNumericNumber() {
         final var sequence = new SequenceDetails("1.00");
         assertAll(
-            () -> assertDoesNotThrow(sequence::validateStateful),
-            () -> assertThatThrownBy(sequence::preValidate)
+            () -> assertThatThrownBy(sequence::validate)
                 .isExactlyInstanceOf(EdifactValidationException.class)
                 .hasMessage("SEQ: attribute number must be an alphanumeric string of up to 6 characters")
         );
@@ -75,8 +66,7 @@ class SequenceDetailsTest {
     void testValidationTooLongNumber() {
         final var sequence = new SequenceDetails("ABCDEFG");
         assertAll(
-            () -> assertDoesNotThrow(sequence::validateStateful),
-            () -> assertThatThrownBy(sequence::preValidate)
+            () -> assertThatThrownBy(sequence::validate)
                 .isExactlyInstanceOf(EdifactValidationException.class)
                 .hasMessage("SEQ: attribute number must be an alphanumeric string of up to 6 characters")
         );

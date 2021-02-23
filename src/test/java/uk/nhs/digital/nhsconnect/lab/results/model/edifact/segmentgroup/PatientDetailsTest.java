@@ -1,6 +1,9 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
 import org.junit.jupiter.api.Test;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DateFormat;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Gender;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PatientIdentificationType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PersonDateOfBirth;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PersonName;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PersonSex;
@@ -26,10 +29,16 @@ class PatientDetailsTest {
             "PNA+PAT+9435492908:OPI+++SU:KENNEDY+FO:SARAH+TI:MISS+MI:ANGELA",
             "ignore me"
         ));
-        assertThat(details.getName())
-            .isNotNull()
-            .extracting(PersonName::getValue)
-            .isEqualTo("PAT+9435492908:OPI+++SU:KENNEDY+FO:SARAH+TI:MISS+MI:ANGELA");
+        var name = assertThat(details.getName())
+            .isNotNull();
+
+        name.extracting(PersonName::getNhsNumber).isEqualTo("9435492908");
+        name.extracting(PersonName::getFirstForename).isEqualTo("SARAH");
+        name.extracting(PersonName::getSecondForename).isEqualTo("ANGELA");
+        name.extracting(PersonName::getSurname).isEqualTo("KENNEDY");
+        name.extracting(PersonName::getTitle).isEqualTo("MISS");
+        name.extracting(PersonName::getPatientIdentificationType)
+            .isEqualTo(PatientIdentificationType.OFFICIAL_PATIENT_IDENTIFICATION);
     }
 
     @Test
@@ -39,10 +48,9 @@ class PatientDetailsTest {
             "DTM+329:19450730:102",
             "ignore me"
         ));
-        assertThat(details.getDateOfBirth())
-            .isPresent()
-            .map(PersonDateOfBirth::getValue)
-            .contains("329:19450730:102");
+        var dateOfBirth = assertThat(details.getDateOfBirth()).isPresent();
+        dateOfBirth.map(PersonDateOfBirth::getDateOfBirth).hasValue("1945-07-30");
+        dateOfBirth.map(PersonDateOfBirth::getDateFormat).hasValue(DateFormat.CCYYMMDD);
     }
 
     @Test
@@ -54,8 +62,8 @@ class PatientDetailsTest {
         ));
         assertThat(details.getSex())
             .isPresent()
-            .map(PersonSex::getValue)
-            .contains("2");
+            .map(PersonSex::getGender)
+            .contains(Gender.FEMALE);
     }
 
     @Test

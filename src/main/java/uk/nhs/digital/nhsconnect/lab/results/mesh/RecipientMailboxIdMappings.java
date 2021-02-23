@@ -23,7 +23,7 @@ public class RecipientMailboxIdMappings {
 
     public String getRecipientMailboxId(OutboundMeshMessage outboundMeshMessage) {
         Map<String, String> mappings = createMappings();
-        String recipient = outboundMeshMessage.getHaTradingPartnerCode();
+        String recipient = outboundMeshMessage.getRecipient();
         if (!mappings.containsKey(recipient)) {
             throw new MeshRecipientUnknownException("Couldn't decode recipient: " + recipient);
         }

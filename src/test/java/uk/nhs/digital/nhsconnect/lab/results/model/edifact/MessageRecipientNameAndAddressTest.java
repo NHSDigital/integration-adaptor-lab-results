@@ -17,13 +17,6 @@ class MessageRecipientNameAndAddressTest {
     }
 
     @Test
-    void testGetValue() {
-        final var recipient = new MessageRecipientNameAndAddress("ID",
-            HealthcareRegistrationIdentificationCode.GP, "Name");
-        assertThat(recipient.getValue()).isEqualTo("MR+ID:900++Name");
-    }
-
-    @Test
     void testFromStringWrongKey() {
         assertThatThrownBy(() -> MessageRecipientNameAndAddress.fromString("WRONG+MR+ID:900++Name"))
             .isExactlyInstanceOf(IllegalArgumentException.class)
@@ -52,8 +45,7 @@ class MessageRecipientNameAndAddressTest {
     void testValidationPasses() {
         final var recipient = MessageRecipientNameAndAddress.fromString("NAD+MR+42:902++Woody Woodpecker");
         assertAll(
-            () -> assertDoesNotThrow(recipient::validateStateful),
-            () -> assertDoesNotThrow(recipient::preValidate)
+            () -> assertDoesNotThrow(recipient::validate)
         );
     }
 
@@ -61,8 +53,7 @@ class MessageRecipientNameAndAddressTest {
     void testValidationBlankIdentifier() {
         final var recipient = MessageRecipientNameAndAddress.fromString("NAD+MR+:900++Wile E Coyote");
         assertAll(
-            () -> assertDoesNotThrow(recipient::validateStateful),
-            () -> assertThatThrownBy(recipient::preValidate)
+            () -> assertThatThrownBy(recipient::validate)
                 .isExactlyInstanceOf(EdifactValidationException.class)
                 .hasMessage("NAD: Attribute identifier is required")
         );
@@ -72,8 +63,7 @@ class MessageRecipientNameAndAddressTest {
     void testValidationMissingName() {
         assertDoesNotThrow(() -> {
             final var recipient = MessageRecipientNameAndAddress.fromString("NAD+MR+ID:900++");
-            recipient.validateStateful();
-            recipient.preValidate();
+            recipient.validate();
         });
     }
 }

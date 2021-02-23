@@ -22,7 +22,7 @@ public class RecipientMailboxIdMappingsTest {
     @Test
     void testGetRecipientMailboxIdForMessage() {
 
-        final OutboundMeshMessage message = new MeshMessage().setHaTradingPartnerCode("REC1");
+        final OutboundMeshMessage message = new MeshMessage().setRecipient("REC1");
 
         assertEquals("test_mailbox", recipientMailboxIdMappings.getRecipientMailboxId(message));
     }
@@ -30,7 +30,7 @@ public class RecipientMailboxIdMappingsTest {
     @Test
     void testGetRecipientMailboxIdForMessageRecipientNotFoundThrowsException() {
 
-        final OutboundMeshMessage message = new MeshMessage().setHaTradingPartnerCode("INVALID");
+        final OutboundMeshMessage message = new MeshMessage().setRecipient("INVALID");
 
         final MeshRecipientUnknownException exception = assertThrows(MeshRecipientUnknownException.class,
             () -> recipientMailboxIdMappings.getRecipientMailboxId(message));

@@ -2,6 +2,7 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
 import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.UnstructuredAddress;
 
 import java.util.List;
@@ -22,10 +23,14 @@ class InvestigationSubjectTest {
             "RFF+SSI:X88442211",
             "ignore me"
         ));
-        assertThat(investigationSubject.getReferenceServiceSubject())
-            .isPresent()
-            .map(Reference::getValue)
-            .contains("SSI:X88442211");
+        var referenceServiceSubject = assertThat(investigationSubject.getReferenceServiceSubject()).isPresent();
+
+        referenceServiceSubject
+            .map(Reference::getNumber)
+            .hasValue("X88442211");
+        referenceServiceSubject
+            .map(Reference::getTarget)
+            .hasValue(ReferenceType.SERVICE_SUBJECT);
     }
 
     @Test
@@ -35,10 +40,18 @@ class InvestigationSubjectTest {
             "ADR++US:FLAT1:12 BROWNBERRIE AVENUE::LEEDS:++LS18 5PN",
             "ignore me"
         ));
-        assertThat(investigationSubject.getAddress())
-            .isPresent()
-            .map(UnstructuredAddress::getValue)
-            .contains("US:FLAT1:12 BROWNBERRIE AVENUE::LEEDS:++LS18 5PN");
+        var investigationSubjectAddress = assertThat(investigationSubject.getAddress()).isPresent();
+
+        investigationSubjectAddress
+            .map(UnstructuredAddress::getAddressLines)
+            .contains(new String[] {"FLAT1", "12 BROWNBERRIE AVENUE", "", "LEEDS", ""});
+
+        investigationSubjectAddress
+            .map(UnstructuredAddress::getFormat)
+            .hasValue("US");
+        investigationSubjectAddress
+            .map(UnstructuredAddress::getPostCode)
+            .hasValue("LS18 5PN");
     }
 
     @Test
