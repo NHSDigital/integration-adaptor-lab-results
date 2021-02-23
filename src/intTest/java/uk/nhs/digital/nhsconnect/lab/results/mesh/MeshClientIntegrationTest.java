@@ -45,7 +45,7 @@ class MeshClientIntegrationTest extends IntegrationBaseTest {
     private static final String RECIPIENT = "XX11";
     private static final String CONTENT = "test_message";
     private static final OutboundMeshMessage OUTBOUND_MESH_MESSAGE = OutboundMeshMessage.create(
-        RECIPIENT, WorkflowId.PATHOLOGY, CONTENT, null, null);
+        RECIPIENT, WorkflowId.PATHOLOGY, CONTENT, null);
     private static final String INVALID_WORKFLOW_ID = "INVALID";
 
     @Autowired
@@ -87,7 +87,7 @@ class MeshClientIntegrationTest extends IntegrationBaseTest {
 
     @SneakyThrows
     private MeshMessageId sendLargeMessageWithWrongWorkflowId() {
-        OutboundMeshMessage messageForMappingMailboxId = new MeshMessage().setHaTradingPartnerCode("XX11");
+        OutboundMeshMessage messageForMappingMailboxId = new MeshMessage().setRecipient("XX11");
         var recipientMailbox = recipientMailboxIdMappings.getRecipientMailboxId(messageForMappingMailboxId);
 
         try (CloseableHttpClient client = meshHttpClientBuilder.build()) {

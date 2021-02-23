@@ -12,10 +12,10 @@ import lombok.ToString;
 public class MeshMessage implements InboundMeshMessage, OutboundMeshMessage {
 
     /**
-     * If SENDING TO MESH: set to the HA Trading Partner Code (recipient)
+     * If SENDING TO MESH: set to the NHS Code (recipient)
      * If DOWNLOADING FROM MESH: DO NOT USE
      */
-    private String haTradingPartnerCode;
+    private String recipient;
 
     /**
      * If SENDING TO MESH: set based on the type of message being sent
@@ -40,11 +40,4 @@ public class MeshMessage implements InboundMeshMessage, OutboundMeshMessage {
      * If DOWNLOADING FROM MESH: the message id of the message that was downloaded from MESH
      */
     private String meshMessageId;
-
-    /**
-     * If SENDING TO MESH: Value of OperationId response header for GP System
-     * If DOWNLOADING FROM MESH: DO NOT USE
-     */
-    private String operationId;
-
 }

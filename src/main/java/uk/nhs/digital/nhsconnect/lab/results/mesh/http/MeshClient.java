@@ -59,7 +59,7 @@ public class MeshClient {
         final var loggingName = "Send a message";
         final String recipientMailbox = recipientMailboxIdMappings.getRecipientMailboxId(outboundMeshMessage);
         LOGGER.info("Sending to MESH API: recipient: {}, MESH mailbox: {}, workflow: {}",
-            outboundMeshMessage.getHaTradingPartnerCode(), recipientMailbox, outboundMeshMessage.getWorkflowId());
+            outboundMeshMessage.getRecipient(), recipientMailbox, outboundMeshMessage.getWorkflowId());
         try (CloseableHttpClient client = meshHttpClientBuilder.build()) {
             final var request = meshRequests.sendMessage(recipientMailbox, outboundMeshMessage.getWorkflowId());
             final String contentString = outboundMeshMessage.getContent();
@@ -77,8 +77,8 @@ public class MeshClient {
                         content);
                 }
                 final MeshMessageId meshMessageId = parseInto(MeshMessageId.class, response, loggingName);
-                LOGGER.info("Successfully sent message OperationId={} to MeshMailboxId={} in MeshMessageId={}",
-                    outboundMeshMessage.getOperationId(), recipientMailbox, meshMessageId.getMessageID());
+                LOGGER.info("Successfully sent message to MeshMailboxId={} in MeshMessageId={}",
+                    recipientMailbox, meshMessageId.getMessageID());
                 return meshMessageId;
             }
         }
