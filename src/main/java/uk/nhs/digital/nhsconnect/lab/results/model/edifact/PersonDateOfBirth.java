@@ -42,7 +42,7 @@ public class PersonDateOfBirth extends Segment {
     @Override
     public void validate() throws EdifactValidationException {
         if (dateOfBirth.isBlank()) {
-            throw new EdifactValidationException(getKey() + ": Date of birth is required");
+            throw new EdifactValidationException(KEY + ": Date of birth is required");
         }
     }
 

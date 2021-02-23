@@ -31,10 +31,10 @@ public class InterchangeTrailer extends Segment {
     @Override
     public void validate() throws EdifactValidationException {
         if (getNumberOfMessages() < 1) {
-            throw new EdifactValidationException(getKey() + ": Attribute numberOfMessages is required");
+            throw new EdifactValidationException(KEY + ": Attribute numberOfMessages is required");
         }
         if (getSequenceNumber() == null || getSequenceNumber() <= 0) {
-            throw new EdifactValidationException(getKey() + ": Attribute sequenceNumber is required");
+            throw new EdifactValidationException(KEY + ": Attribute sequenceNumber is required");
         }
     }
 
@@ -72,7 +72,7 @@ public class InterchangeTrailer extends Segment {
         try {
             return Integer.parseInt(intString);
         } catch (Exception ex) {
-            throw new EdifactValidationException(KEY + ": Error parsing long value", ex);
+            throw new EdifactValidationException(KEY + ": Error parsing int value", ex);
         }
     }
 }

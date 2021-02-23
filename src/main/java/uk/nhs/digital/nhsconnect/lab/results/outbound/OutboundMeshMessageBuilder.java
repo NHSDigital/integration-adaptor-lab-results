@@ -3,7 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.outbound;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.nhs.digital.nhsconnect.lab.results.inbound.InboundMessageHandler;
+import uk.nhs.digital.nhsconnect.lab.results.inbound.MessageProcessingResult;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.NhsackProducerService;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
@@ -26,7 +26,7 @@ public class OutboundMeshMessageBuilder {
     public OutboundMeshMessage buildNhsAck(
             WorkflowId workflowId,
             Interchange interchange,
-            List<InboundMessageHandler.MessageProcessingResult> messageProcessingResults) {
+            List<MessageProcessingResult> messageProcessingResults) {
         //TODO NIAD-1063: one of IAF, IAP, IRA
         return new MeshMessage()
             .setWorkflowId(getOutboundWorkflowId(workflowId))
@@ -35,7 +35,7 @@ public class OutboundMeshMessageBuilder {
     }
 
     public OutboundMeshMessage buildNhsAck(WorkflowId workflowId, InterchangeParsingException exception) {
-        //TODO NIAD-1063
+        //TODO NIAD-1063: IAI
         return new MeshMessage()
             .setWorkflowId(getOutboundWorkflowId(workflowId))
             .setRecipient(exception.getSender())
@@ -43,7 +43,7 @@ public class OutboundMeshMessageBuilder {
     }
 
     public OutboundMeshMessage buildNhsAck(WorkflowId workflowId, MessagesParsingException exception) {
-        //TODO NIAD-1063
+        //TODO NIAD-1063: IRM
         return new MeshMessage()
             .setWorkflowId(getOutboundWorkflowId(workflowId))
             .setRecipient(exception.getSender())

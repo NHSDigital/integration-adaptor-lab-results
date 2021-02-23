@@ -46,7 +46,7 @@ public class PerformingOrganisationNameAndAddress extends Segment {
     @Override
     public void validate() throws EdifactValidationException {
         if (performingOrganisationName.isBlank()) {
-            throw new EdifactValidationException(getKey() + ": Attribute performingOrganisationName is required");
+            throw new EdifactValidationException(KEY + ": Attribute performingOrganisationName is required");
         }
     }
 }

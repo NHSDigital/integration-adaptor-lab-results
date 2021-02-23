@@ -63,7 +63,7 @@ public class SpecimenCollectionReceiptDateTime extends Segment {
     @Override
     public void validate() throws EdifactValidationException {
         if (collectionReceiptDateTime.isBlank()) {
-            throw new EdifactValidationException(getKey() + ": Date/time of sample collection is required");
+            throw new EdifactValidationException(KEY + ": Date/time of sample collection is required");
         }
     }
 

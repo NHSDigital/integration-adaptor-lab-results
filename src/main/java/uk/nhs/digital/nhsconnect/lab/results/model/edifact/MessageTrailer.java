@@ -29,14 +29,14 @@ public class MessageTrailer extends Segment {
     @Override
     public void validate() throws EdifactValidationException {
         if (sequenceNumber == null) {
-            throw new EdifactValidationException(getKey() + ": Attribute sequenceNumber is required");
+            throw new EdifactValidationException(KEY + ": Attribute sequenceNumber is required");
         }
         if (sequenceNumber <= 0) {
-            throw new EdifactValidationException(getKey()
+            throw new EdifactValidationException(KEY
                 + ": Attribute sequenceNumber must be greater than or equal to zero");
         }
         if (numberOfSegments <= 1) {
-            throw new EdifactValidationException(getKey()
+            throw new EdifactValidationException(KEY
                 + ": Attribute numberOfSegments must be greater than or equal to 2");
         }
     }

@@ -52,8 +52,8 @@ Properties:
 
 * `_id` the key for the sequence in the format \<type\>-\<sender\>-\<recipient\> where:
   * \<type\> is one of SIS (send interchange sequence), SMS (send message sequence)
-  * \<sender\> is the GP Trading Partner Code
-  * \<recipient\> is the HA Trading Partner Code
+  * \<sender\> is the NHS Code of the sender organization
+  * \<recipient\> is the NHS Code of the recipient organization
 * `sequenceNumber` is the most recently generated number for the sequence
 
 Example:

@@ -24,9 +24,9 @@ import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
@@ -79,16 +79,18 @@ class InboundMessageHandlerTest {
 
         final OutboundMeshMessage outboundMeshMessage = new MeshMessage()
             .setWorkflowId(WorkflowId.PATHOLOGY_ACK);
-        when(outboundMeshMessageBuilder.buildNhsAck(eq(WorkflowId.PATHOLOGY), isA(InterchangeParsingException.class)))
+        when(outboundMeshMessageBuilder.buildNhsAck(eq(WorkflowId.PATHOLOGY), any(InterchangeParsingException.class)))
             .thenReturn(outboundMeshMessage);
 
         inboundMessageHandler.handle(meshMessage);
 
-        verify(edifactParser, times(1)).parse(any());
-        verify(edifactToFhirService, never()).convertToFhir(any(Message.class));
-        verify(gpOutboundQueueService, never()).publish(any(Bundle.class));
-        verify(outboundMeshMessageBuilder, never()).buildNhsAck(any(), any(), anyList());
-        verify(meshOutboundQueueService).publish(eq(outboundMeshMessage));
+        assertAll(
+            () -> verify(edifactParser).parse(any()),
+            () -> verify(edifactToFhirService, never()).convertToFhir(any(Message.class)),
+            () -> verify(gpOutboundQueueService, never()).publish(any(Bundle.class)),
+            () -> verify(outboundMeshMessageBuilder, never()).buildNhsAck(any(), any(), anyList()),
+            () -> verify(meshOutboundQueueService).publish(outboundMeshMessage)
+        );
     }
 
     @Test
@@ -99,16 +101,18 @@ class InboundMessageHandlerTest {
 
         final OutboundMeshMessage outboundMeshMessage = new MeshMessage()
             .setWorkflowId(WorkflowId.PATHOLOGY_ACK);
-        when(outboundMeshMessageBuilder.buildNhsAck(eq(WorkflowId.PATHOLOGY), isA(MessagesParsingException.class)))
+        when(outboundMeshMessageBuilder.buildNhsAck(eq(WorkflowId.PATHOLOGY), any(MessagesParsingException.class)))
             .thenReturn(outboundMeshMessage);
 
         inboundMessageHandler.handle(meshMessage);
 
-        verify(edifactParser, times(1)).parse(any());
-        verify(edifactToFhirService, never()).convertToFhir(any(Message.class));
-        verify(gpOutboundQueueService, never()).publish(any(Bundle.class));
-        verify(outboundMeshMessageBuilder, never()).buildNhsAck(any(), any(), anyList());
-        verify(meshOutboundQueueService).publish(eq(outboundMeshMessage));
+        assertAll(
+            () -> verify(edifactParser).parse(any()),
+            () -> verify(edifactToFhirService, never()).convertToFhir(any(Message.class)),
+            () -> verify(gpOutboundQueueService, never()).publish(any(Bundle.class)),
+            () -> verify(outboundMeshMessageBuilder, never()).buildNhsAck(any(), any(), anyList()),
+            () -> verify(meshOutboundQueueService).publish(outboundMeshMessage)
+        );
     }
 
     @Test
@@ -127,12 +131,14 @@ class InboundMessageHandlerTest {
 
         inboundMessageHandler.handle(meshMessage);
 
-        verify(edifactParser, times(1)).parse(any());
-        verify(edifactToFhirService, never()).convertToFhir(any(Message.class));
-        verify(gpOutboundQueueService, never()).publish(any(Bundle.class));
-        verify(outboundMeshMessageBuilder)
-            .buildNhsAck(eq(WorkflowId.PATHOLOGY), eq(interchange), eq(Collections.emptyList()));
-        verify(meshOutboundQueueService).publish(eq(outboundMeshMessage));
+        assertAll(
+            () -> verify(edifactParser).parse(any()),
+            () -> verify(edifactToFhirService, never()).convertToFhir(any(Message.class)),
+            () -> verify(gpOutboundQueueService, never()).publish(any(Bundle.class)),
+            () -> verify(outboundMeshMessageBuilder)
+                .buildNhsAck(eq(WorkflowId.PATHOLOGY), eq(interchange), eq(Collections.emptyList())),
+            () -> verify(meshOutboundQueueService).publish(outboundMeshMessage)
+        );
     }
 
     @Test
@@ -152,11 +158,13 @@ class InboundMessageHandlerTest {
 
         inboundMessageHandler.handle(meshMessage);
 
-        verify(edifactParser, times(1)).parse(any());
-        verify(edifactToFhirService).convertToFhir(message);
-        verify(gpOutboundQueueService).publish(any(Bundle.class));
-        verify(outboundMeshMessageBuilder).buildNhsAck(any(), eq(interchange), anyList());
-        verify(meshOutboundQueueService).publish(eq(outboundMeshMessage));
+        assertAll(
+            () -> verify(edifactParser).parse(any()),
+            () -> verify(edifactToFhirService).convertToFhir(message),
+            () -> verify(gpOutboundQueueService).publish(any(Bundle.class)),
+            () -> verify(outboundMeshMessageBuilder).buildNhsAck(any(), eq(interchange), anyList()),
+            () -> verify(meshOutboundQueueService).publish(outboundMeshMessage)
+        );
     }
 
     @Test
@@ -178,11 +186,13 @@ class InboundMessageHandlerTest {
 
         inboundMessageHandler.handle(meshMessage);
 
-        verify(edifactParser, times(1)).parse(any());
-        verify(edifactToFhirService).convertToFhir(message);
-        verify(edifactToFhirService).convertToFhir(message1);
-        verify(gpOutboundQueueService, times(2)).publish(any(Bundle.class));
-        verify(outboundMeshMessageBuilder).buildNhsAck(any(), eq(interchange), anyList());
-        verify(meshOutboundQueueService).publish(eq(outboundMeshMessage));
+        assertAll(
+            () -> verify(edifactParser).parse(any()),
+            () -> verify(edifactToFhirService).convertToFhir(message),
+            () -> verify(edifactToFhirService).convertToFhir(message1),
+            () -> verify(gpOutboundQueueService, times(2)).publish(any(Bundle.class)),
+            () -> verify(outboundMeshMessageBuilder).buildNhsAck(any(), eq(interchange), anyList()),
+            () -> verify(meshOutboundQueueService).publish(outboundMeshMessage)
+        );
     }
 }

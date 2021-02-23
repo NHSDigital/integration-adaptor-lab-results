@@ -37,7 +37,7 @@ public class SpecimenCharacteristicFastingStatus extends Segment {
     @Override
     public void validate() throws EdifactValidationException {
         if (StringUtils.isBlank(fastingStatus)) {
-            throw new EdifactValidationException(getKey() + ": Attribute fastingStatus is blank or missing");
+            throw new EdifactValidationException(KEY + ": Attribute fastingStatus is blank or missing");
         }
     }
 }

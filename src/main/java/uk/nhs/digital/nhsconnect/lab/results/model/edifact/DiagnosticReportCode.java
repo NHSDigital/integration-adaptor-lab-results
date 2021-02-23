@@ -38,7 +38,7 @@ public class DiagnosticReportCode extends Segment {
     @Override
     public void validate() throws EdifactValidationException {
         if (code.isBlank()) {
-            throw new EdifactValidationException(getKey() + ": Diagnostic Report Code is required");
+            throw new EdifactValidationException(KEY + ": Diagnostic Report Code is required");
         }
     }
 }

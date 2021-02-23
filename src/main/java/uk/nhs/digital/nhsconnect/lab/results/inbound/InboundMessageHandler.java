@@ -1,10 +1,7 @@
 package uk.nhs.digital.nhsconnect.lab.results.inbound;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.hl7.fhir.dstu3.model.Bundle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.fhir.EdifactToFhirService;
@@ -58,20 +55,20 @@ public class InboundMessageHandler {
             messageProcessingResults);
 
         messageProcessingResults.stream()
-            .filter(result -> result instanceof SuccessMessageProcessingResult)
-            .map(SuccessMessageProcessingResult.class::cast)
-            .map(SuccessMessageProcessingResult::getBundle)
+            .filter(MessageProcessingResult.Success.class::isInstance)
+            .map(MessageProcessingResult.Success.class::cast)
+            .map(MessageProcessingResult.Success::getBundle)
             .forEach(gpOutboundQueueService::publish);
 
         logSentFor(interchange);
 
         meshOutboundQueueService.publish(nhsack);
 
-        logRecepSentFor(interchange);
+        logNhsackSentFor(interchange);
     }
 
     private List<MessageProcessingResult> getFhirDataToSend(List<Message> messages) {
-        return messages.stream().parallel()
+        return messages.stream()
             .map(this::convertToFhir)
             .collect(Collectors.toList());
     }
@@ -80,10 +77,10 @@ public class InboundMessageHandler {
         try {
             final var bundle = edifactToFhirService.convertToFhir(message);
             LOGGER.debug("Converted edifact message into {}", bundle);
-            return new SuccessMessageProcessingResult(message, bundle);
+            return new MessageProcessingResult.Success(message, bundle);
         } catch (Exception ex) {
             LOGGER.error("Error converting Message to FHIR", ex);
-            return new ErrorMessageProcessingResult(message, ex);
+            return new MessageProcessingResult.Error(message, ex);
         }
     }
 
@@ -105,31 +102,12 @@ public class InboundMessageHandler {
         }
     }
 
-    private void logRecepSentFor(final Interchange interchange) {
+    private void logNhsackSentFor(final Interchange interchange) {
         if (LOGGER.isInfoEnabled()) {
             final var header = interchange.getInterchangeHeader();
             LOGGER.info("Published for async send to MESH an NHSACK for the interchange from "
                     + "Sender={} to Recipient={} with RIS={}",
                 header.getSender(), header.getRecipient(), header.getSequenceNumber());
         }
-    }
-
-    public static class MessageProcessingResult {
-    }
-
-    @Getter
-    @Setter
-    @RequiredArgsConstructor
-    public static final class SuccessMessageProcessingResult extends MessageProcessingResult {
-        private final Message message;
-        private final Bundle bundle;
-    }
-
-    @Getter
-    @Setter
-    @RequiredArgsConstructor
-    public static final class ErrorMessageProcessingResult extends MessageProcessingResult {
-        private final Message message;
-        private final Exception exception;
     }
 }

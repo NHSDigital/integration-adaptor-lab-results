@@ -61,16 +61,16 @@ public class InterchangeHeader extends Segment {
     @Override
     public void validate() throws EdifactValidationException {
         if (StringUtils.isBlank(getSender())) {
-            throw new EdifactValidationException(getKey() + ": Attribute sender is required");
+            throw new EdifactValidationException(KEY + ": Attribute sender is required");
         }
         if (StringUtils.isBlank(getRecipient())) {
-            throw new EdifactValidationException(getKey() + ": Attribute recipient is required");
+            throw new EdifactValidationException(KEY + ": Attribute recipient is required");
         }
         if (getTranslationTime() == null) {
-            throw new EdifactValidationException(getKey() + ": Attribute translationTime is required");
+            throw new EdifactValidationException(KEY + ": Attribute translationTime is required");
         }
         if (getSequenceNumber() == null) {
-            throw new EdifactValidationException(getKey() + ": Attribute sequenceNumber is required");
+            throw new EdifactValidationException(KEY + ": Attribute sequenceNumber is required");
         }
         if (getSequenceNumber() < 1 || getSequenceNumber() > MAX_INTERCHANGE_SEQUENCE) {
             throw new EdifactValidationException(
@@ -93,14 +93,13 @@ public class InterchangeHeader extends Segment {
         if (StringUtils.isBlank(translationTimeStr)) {
             return null;
         }
-        ZonedDateTime translationTime;
         try {
-            translationTime = ZonedDateTime.parse(
+            var translationTime = ZonedDateTime.parse(
                 translationTimeStr,
                 DateTimeFormatter.ofPattern("yyMMdd:HHmm").withZone(TimestampService.UK_ZONE));
+            return translationTime.toInstant();
         } catch (Exception ex) {
             throw new EdifactValidationException(KEY + ": Error parsing time", ex);
         }
-        return translationTime.toInstant();
     }
 }

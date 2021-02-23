@@ -38,7 +38,7 @@ public class SpecimenCharacteristicType extends Segment {
     @Override
     public void validate() throws EdifactValidationException {
         if (StringUtils.isBlank(typeOfSpecimen)) {
-            throw new EdifactValidationException(getKey() + ": Attribute typeOfSpecimen is blank or missing");
+            throw new EdifactValidationException(KEY + ": Attribute typeOfSpecimen is blank or missing");
         }
     }
 }

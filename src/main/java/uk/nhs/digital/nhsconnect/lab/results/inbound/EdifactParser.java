@@ -88,20 +88,22 @@ public class EdifactParser {
             });
             interchange.setMessages(messages);
         } catch (Exception ex) {
+            var interchangeHeader = interchange.getInterchangeHeader();
             throw new MessagesParsingException(
                 "Error parsing messages",
-                interchange.getInterchangeHeader().getSender(),
-                interchange.getInterchangeHeader().getRecipient(),
-                interchange.getInterchangeHeader().getSequenceNumber(),
+                interchangeHeader.getSender(),
+                interchangeHeader.getRecipient(),
+                interchangeHeader.getSequenceNumber(),
                 ex);
         }
 
         if (interchange.getInterchangeTrailer().getNumberOfMessages() != messages.size()) {
+            var interchangeHeader = interchange.getInterchangeHeader();
             throw new InterchangeParsingException(
                 "Interchange trailer message count is not equal message count",
-                interchange.getInterchangeHeader().getSender(),
-                interchange.getInterchangeHeader().getRecipient(),
-                interchange.getInterchangeHeader().getSequenceNumber());
+                interchangeHeader.getSender(),
+                interchangeHeader.getRecipient(),
+                interchangeHeader.getSequenceNumber());
         }
     }
 

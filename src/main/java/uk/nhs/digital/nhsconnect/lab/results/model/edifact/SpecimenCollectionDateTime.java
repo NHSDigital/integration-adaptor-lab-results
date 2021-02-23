@@ -64,7 +64,7 @@ public class SpecimenCollectionDateTime extends Segment {
     @Override
     public void validate() throws EdifactValidationException {
         if (collectionDateTime.isBlank()) {
-            throw new EdifactValidationException(getKey() + ": Date/time of sample collection is required");
+            throw new EdifactValidationException(KEY + ": Date/time of sample collection is required");
         }
     }
 

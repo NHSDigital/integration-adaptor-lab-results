@@ -25,6 +25,7 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import java.time.Instant;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
@@ -73,14 +74,15 @@ class MeshInboundQueueServiceTest {
 
         meshInboundQueueService.receive(message);
 
-        verify(correlationIdService).applyCorrelationId(CORRELATION_ID);
-
         final MeshMessage expectedMeshMessage = new MeshMessage();
         expectedMeshMessage.setWorkflowId(WorkflowId.PATHOLOGY);
-        verify(inboundMessageHandler).handle(expectedMeshMessage);
 
-        verify(message).acknowledge();
-        verify(correlationIdService).resetCorrelationId();
+        assertAll(
+            () -> verify(correlationIdService).applyCorrelationId(CORRELATION_ID),
+            () -> verify(inboundMessageHandler).handle(expectedMeshMessage),
+            () -> verify(message).acknowledge(),
+            () -> verify(correlationIdService).resetCorrelationId()
+        );
     }
 
     @Test
@@ -90,9 +92,11 @@ class MeshInboundQueueServiceTest {
 
         assertThrows(Exception.class, () -> meshInboundQueueService.receive(message));
 
-        verify(correlationIdService).applyCorrelationId(CORRELATION_ID);
-        verify(message, never()).acknowledge();
-        verify(correlationIdService).resetCorrelationId();
+        assertAll(
+            () -> verify(correlationIdService).applyCorrelationId(CORRELATION_ID),
+            () -> verify(message, never()).acknowledge(),
+            () -> verify(correlationIdService).resetCorrelationId()
+        );
     }
 
     @Test
@@ -103,9 +107,11 @@ class MeshInboundQueueServiceTest {
 
         assertThrows(RuntimeException.class, () -> meshInboundQueueService.receive(message));
 
-        verify(correlationIdService).applyCorrelationId(CORRELATION_ID);
-        verify(message, never()).acknowledge();
-        verify(correlationIdService).resetCorrelationId();
+        assertAll(
+            () -> verify(correlationIdService).applyCorrelationId(CORRELATION_ID),
+            () -> verify(message, never()).acknowledge(),
+            () -> verify(correlationIdService).resetCorrelationId()
+        );
     }
 
     @Test
@@ -118,9 +124,11 @@ class MeshInboundQueueServiceTest {
 
         assertEquals("Unknown workflow id: " + SCREENING_WORKFLOW_ID, exception.getMessage());
 
-        verify(correlationIdService).applyCorrelationId(CORRELATION_ID);
-        verify(message, never()).acknowledge();
-        verify(correlationIdService).resetCorrelationId();
+        assertAll(
+            () -> verify(correlationIdService).applyCorrelationId(CORRELATION_ID),
+            () -> verify(message, never()).acknowledge(),
+            () -> verify(correlationIdService).resetCorrelationId()
+        );
     }
 
     @Test
@@ -130,14 +138,15 @@ class MeshInboundQueueServiceTest {
 
         meshInboundQueueService.receive(message);
 
-        verify(correlationIdService, never()).applyCorrelationId(CORRELATION_ID);
-
         final MeshMessage expectedMeshMessage = new MeshMessage();
         expectedMeshMessage.setWorkflowId(WorkflowId.PATHOLOGY);
-        verify(inboundMessageHandler).handle(expectedMeshMessage);
 
-        verify(message).acknowledge();
-        verify(correlationIdService).resetCorrelationId();
+        assertAll(
+            () -> verify(correlationIdService, never()).applyCorrelationId(CORRELATION_ID),
+            () -> verify(inboundMessageHandler).handle(expectedMeshMessage),
+            () -> verify(message).acknowledge(),
+            () -> verify(correlationIdService).resetCorrelationId()
+        );
     }
 
     @Test

@@ -95,11 +95,11 @@ public class LaboratoryInvestigationResult extends Segment {
     @Override
     public void validate() throws EdifactValidationException {
         if (measurementValue == null) {
-            throw new EdifactValidationException(getKey() + ": Attribute measurementValue is required");
+            throw new EdifactValidationException(KEY + ": Attribute measurementValue is required");
         }
 
         if (StringUtils.isBlank(measurementUnit)) {
-            throw new EdifactValidationException(getKey() + ": Attribute measurementUnit is required");
+            throw new EdifactValidationException(KEY + ": Attribute measurementUnit is required");
         }
     }
 }

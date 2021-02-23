@@ -12,7 +12,7 @@ public interface OutboundMeshMessage {
 
     @JsonCreator
     static OutboundMeshMessage create(
-            @JsonProperty(value = "recipient") String haTradingPartnerCode,
+            @JsonProperty(value = "recipient") String recipient,
             @JsonProperty(value = "workflowId") WorkflowId workflowId,
             @JsonProperty(value = "content") String content,
             @JsonProperty(value = "messageSentTimestamp") String messageSentTimestamp
@@ -21,6 +21,6 @@ public interface OutboundMeshMessage {
                 .setWorkflowId(workflowId)
                 .setContent(content)
                 .setMessageSentTimestamp(messageSentTimestamp)
-                .setRecipient(haTradingPartnerCode);
+                .setRecipient(recipient);
     }
 }

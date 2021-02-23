@@ -42,7 +42,7 @@ public class ServiceProvider extends Segment {
     @Override
     public void validate() throws EdifactValidationException {
         if (serviceProviderCode.getCode().isBlank()) {
-            throw new EdifactValidationException(getKey() + ": Attribute code in serviceProviderCode is required");
+            throw new EdifactValidationException(KEY + ": Attribute code in serviceProviderCode is required");
         }
     }
 }

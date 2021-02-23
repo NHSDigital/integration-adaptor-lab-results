@@ -42,7 +42,7 @@ public class PersonName extends Segment {
     @Override
     public void validate() throws EdifactValidationException {
         if (isBlank(nhsNumber) && patientIdentificationType == null && isBlank(surname)) {
-            throw new EdifactValidationException(getKey() + ": At least one of patient identification and person "
+            throw new EdifactValidationException(KEY + ": At least one of patient identification and person "
                 + "name details are required");
         }
     }

@@ -1,6 +1,5 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
-import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 
@@ -52,7 +51,6 @@ class InterchangeHeaderTest {
     }
 
     @Test
-    @Ignore
     void testValidationEmptySenderThrowsException() {
         final InterchangeHeader interchangeHeader =
             InterchangeHeader.fromString("UNB+UNOA:2++RECP+190523:0900+00000001");
@@ -75,7 +73,6 @@ class InterchangeHeaderTest {
     }
 
     @Test
-    @Ignore
     void testFromStringWithValidEdifactStringReturnsInterchangeHeader() {
         final var interchangeHeader = InterchangeHeader.fromString("UNB+UNOA:2+SNDR+RECP+190323:0900+00000001");
 
@@ -86,7 +83,6 @@ class InterchangeHeaderTest {
     }
 
     @Test
-    @Ignore
     void testFromStringWithInvalidEdifactStringThrowsException() {
         final IllegalArgumentException exception =
             assertThrows(IllegalArgumentException.class, () -> InterchangeHeader.fromString("wrong value"));

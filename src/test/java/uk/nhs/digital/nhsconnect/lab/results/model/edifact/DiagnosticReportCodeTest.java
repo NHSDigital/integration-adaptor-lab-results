@@ -19,7 +19,7 @@ class DiagnosticReportCodeTest {
     void testFromStringWithValidInput() {
         DiagnosticReportCode diagnosticReportCode = DiagnosticReportCode.fromString("GIS+N");
 
-        assertEquals(diagnosticReportCode.getCode(), "N");
+        assertEquals("N", diagnosticReportCode.getCode());
     }
 
     @Test

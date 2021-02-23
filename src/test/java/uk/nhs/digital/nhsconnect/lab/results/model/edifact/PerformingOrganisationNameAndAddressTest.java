@@ -38,7 +38,7 @@ class PerformingOrganisationNameAndAddressTest {
     }
 
     @Test
-    void testGetValue() {
+    void testGetPerformingOrganisationName() {
         assertEquals(performingOrganisationNameAndAddress.getPerformingOrganisationName(), "LONDON CITY HOSPITAL");
     }
 

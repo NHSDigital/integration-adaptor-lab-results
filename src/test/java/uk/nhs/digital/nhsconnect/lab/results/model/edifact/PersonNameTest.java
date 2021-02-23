@@ -16,10 +16,8 @@ class PersonNameTest {
     private static final String BLANK_ID_VALUE = "PNA+PAT+   +++SU:KENNEDY+FO:SARAH+TI:MISS+MI:ANGELA";
 
     @Test
-    void testFromString() {
+    void testFromStringIdOnly() {
         var fromStringIdOnly = PersonName.fromString(ID_ONLY);
-        var fromStringIdAndNames = PersonName.fromString(ID_AND_NAMES_VALUE);
-        var fromStringNamesOnly = PersonName.fromString(NAMES_ONLY_VALUE);
 
         assertAll("fromStringIdOnly",
             () -> assertEquals(fromStringIdOnly.getNhsNumber(), "RAT56"),
@@ -27,6 +25,11 @@ class PersonNameTest {
             () -> assertNull(fromStringIdOnly.getSecondForename()),
             () -> assertNull(fromStringIdOnly.getSurname()),
             () -> assertNull(fromStringIdOnly.getTitle()));
+    }
+
+    @Test
+    void testFromStringIdAndNames() {
+        var fromStringIdAndNames = PersonName.fromString(ID_AND_NAMES_VALUE);
 
         assertAll("fromStringIdAndNames",
             () -> assertEquals(fromStringIdAndNames.getNhsNumber(), "RAT56"),
@@ -34,6 +37,11 @@ class PersonNameTest {
             () -> assertEquals(fromStringIdAndNames.getSecondForename(), "ANGELA"),
             () -> assertEquals(fromStringIdAndNames.getSurname(), "KENNEDY"),
             () -> assertEquals(fromStringIdAndNames.getTitle(), "MISS"));
+    }
+
+    @Test
+    void testFromStringNamesOnly() {
+        var fromStringNamesOnly = PersonName.fromString(NAMES_ONLY_VALUE);
 
         assertAll("fromStringNamesOnly",
             () -> assertNull(fromStringNamesOnly.getNhsNumber()),

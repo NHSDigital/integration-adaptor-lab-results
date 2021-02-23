@@ -41,7 +41,7 @@ public class TestStatus extends Segment {
     @Override
     public void validate() throws EdifactValidationException {
         if (ObjectUtils.isEmpty(testStatusCode)) {
-            throw new EdifactValidationException(getKey() + ": Attribute code in testStatusCode is required");
+            throw new EdifactValidationException(KEY + ": Attribute code in testStatusCode is required");
         }
     }
 }

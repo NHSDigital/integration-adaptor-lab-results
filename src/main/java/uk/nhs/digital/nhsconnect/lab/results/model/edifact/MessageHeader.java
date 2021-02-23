@@ -31,10 +31,10 @@ public class MessageHeader extends Segment {
     @Override
     public void validate() {
         if (sequenceNumber == null) {
-            throw new EdifactValidationException(getKey() + ": Attribute sequenceNumber is required");
+            throw new EdifactValidationException(KEY + ": Attribute sequenceNumber is required");
         }
         if (sequenceNumber < 1 || sequenceNumber > MAX_MESSAGE_SEQUENCE) {
-            throw new EdifactValidationException(getKey() + ": Attribute sequenceNumber must be between 1 and "
+            throw new EdifactValidationException(KEY + ": Attribute sequenceNumber must be between 1 and "
                 + MAX_MESSAGE_SEQUENCE);
         }
     }

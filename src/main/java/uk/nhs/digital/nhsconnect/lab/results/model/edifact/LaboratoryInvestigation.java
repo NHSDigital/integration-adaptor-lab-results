@@ -49,7 +49,7 @@ public class LaboratoryInvestigation extends Segment {
     @Override
     public void validate() throws EdifactValidationException {
         if (StringUtils.isBlank(investigationDescription)) {
-            throw new EdifactValidationException(getKey() + ": Attribute investigationDescription is required");
+            throw new EdifactValidationException(KEY + ": Attribute investigationDescription is required");
         }
     }
 }

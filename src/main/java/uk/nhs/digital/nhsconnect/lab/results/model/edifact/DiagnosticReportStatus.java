@@ -39,7 +39,7 @@ public class DiagnosticReportStatus extends Segment {
     @Override
     public void validate() throws EdifactValidationException {
         if (event.getCode().isBlank()) {
-            throw new EdifactValidationException(getKey() + ": Status is required");
+            throw new EdifactValidationException(KEY + ": Status is required");
         }
     }
 }
