@@ -42,14 +42,9 @@ class InvestigationSubjectTest {
         ));
         var investigationSubjectAddress = assertThat(investigationSubject.getAddress()).isPresent();
 
-        var address = investigationSubjectAddress
-            .map(UnstructuredAddress::getAddressLines);
-
-        var expectedValues = List.of("FLAT1", "12 BROWNBERRIE AVENUE", "", "LEEDS", "");
-        for (int i = 0; i < expectedValues.size(); i++) {
-            final int index = i;
-            address.map(x -> x[index]).hasValue(expectedValues.get(i));
-        }
+        investigationSubjectAddress
+            .map(UnstructuredAddress::getAddressLines)
+            .contains(new String[] {"FLAT1", "12 BROWNBERRIE AVENUE", "", "LEEDS", ""});
 
         investigationSubjectAddress
             .map(UnstructuredAddress::getFormat)

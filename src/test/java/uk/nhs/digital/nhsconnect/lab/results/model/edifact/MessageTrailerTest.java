@@ -7,13 +7,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class MessageTrailerTest {
+class MessageTrailerTest {
 
     private static final int NUMBER_OF_SEGMENTS = 18;
     private static final long SEQUENCE_NUMBER = 3L;
 
     @Test
-    public void testValidationStatefulNonSequenceNumber() {
+    void testValidationStatefulNonSequenceNumber() {
         MessageTrailer messageTrailer = new MessageTrailer(NUMBER_OF_SEGMENTS);
 
         Exception exception = assertThrows(EdifactValidationException.class, messageTrailer::validate);
@@ -25,7 +25,7 @@ public class MessageTrailerTest {
     }
 
     @Test
-    public void testValidationStatefulInvalidNumberOfSegments() {
+    void testValidationStatefulInvalidNumberOfSegments() {
         MessageTrailer messageTrailer = new MessageTrailer(-1);
         messageTrailer.setSequenceNumber(SEQUENCE_NUMBER);
 
