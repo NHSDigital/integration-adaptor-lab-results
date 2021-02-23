@@ -22,8 +22,11 @@ public class PractitionerMapper {
     }
 
     public Optional<Practitioner> mapPerformer(final Message message) {
-        return message.getPerformerNameAndAddress()
-            .map(this::toPerformer);
+        return message.getInvolvedParties().stream()
+            .map(InvolvedParty::getPerformerNameAndAddress)
+            .flatMap(Optional::stream)
+            .map(this::toPerformer)
+            .findAny();
     }
 
     private Practitioner toPractitioner(final RequesterNameAndAddress requester) {

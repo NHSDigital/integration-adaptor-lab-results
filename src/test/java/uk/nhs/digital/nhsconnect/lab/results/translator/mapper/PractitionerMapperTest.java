@@ -91,16 +91,18 @@ class PractitionerMapperTest {
 
     @Test
     void testMapMessageToPractitionerNoPerformer() {
-        when(message.getPerformerNameAndAddress()).thenReturn(Optional.empty());
+        when(message.getInvolvedParties()).thenReturn(Collections.emptyList());
 
-        assertThat(mapper.mapPerformer(message)).isEmpty();
+        assertThat(mapper.mapRequester(message)).isEmpty();
     }
 
     @Test
     void testMapMessageToPractitionerWithPerformer() {
-        when(message.getPerformerNameAndAddress()).thenReturn(Optional.of(performer));
+        final var requestingParty = mock(InvolvedParty.class);
+        when(message.getInvolvedParties()).thenReturn(List.of(requestingParty));
+        when(requestingParty.getPerformerNameAndAddress()).thenReturn(Optional.of(performer));
         when(performer.getPerformerName()).thenReturn("Jane Doe");
-        when(performer.getIdentifier()).thenReturn("Performer");
+        when(performer.getIdentifier()).thenReturn("Identifier");
 
         Optional<Practitioner> result = mapper.mapPerformer(message);
         assertThat(result).isNotEmpty();
@@ -109,27 +111,26 @@ class PractitionerMapperTest {
 
         assertAll(
             () -> assertThat(practitioner.getName())
-                    .hasSize(1)
-                    .first()
-                    .extracting(HumanName::getText)
-                    .isEqualTo("Jane Doe"),
-
-
+                .hasSize(1)
+                .first()
+                .extracting(HumanName::getText)
+                .isEqualTo("Jane Doe"),
             () -> assertThat(practitioner.getIdentifier())
-                    .hasSize(1)
-                    .first()
-                    .satisfies(identifier -> assertAll(
-                        () -> assertThat(identifier.getValue()).isEqualTo("Performer"),
-                        () -> assertThat(identifier.getSystem()).isEqualTo("https://fhir.nhs.uk/Id/sds-user-id")
-                    ))
+                .hasSize(1)
+                .first()
+                .satisfies(identifier -> assertAll(
+                    () -> assertThat(identifier.getValue()).isEqualTo("Identifier"),
+                    () -> assertThat(identifier.getSystem()).isEqualTo("https://fhir.nhs.uk/Id/sds-user-id")
+                ))
         );
-
 
     }
 
     @Test
     void testMapMessageToPractitionerWithUnnamedPerformer() {
-        when(message.getPerformerNameAndAddress()).thenReturn(Optional.of(performer));
+        final var requestingParty = mock(InvolvedParty.class);
+        when(message.getInvolvedParties()).thenReturn(List.of(requestingParty));
+        when(requestingParty.getPerformerNameAndAddress()).thenReturn(Optional.of(performer));
 
         Optional<Practitioner> result = mapper.mapPerformer(message);
         assertThat(result).isNotEmpty();

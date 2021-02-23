@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvolvedParty;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.ServiceReportDetails;
-import java.util.Optional;
 
 import java.util.List;
 
@@ -36,11 +35,6 @@ public class Message extends Section {
     @Getter(lazy = true)
     private final MessageTrailer messageTrailer =
         MessageTrailer.fromString(extractSegment(MessageTrailer.KEY));
-
-    @Getter(lazy = true)
-    private final Optional<PerformerNameAndAddress> performerNameAndAddress =
-        extractOptionalSegment(PerformerNameAndAddress.KEY_QUALIFIER)
-            .map(PerformerNameAndAddress::fromString);
 
     @Getter
     @Setter

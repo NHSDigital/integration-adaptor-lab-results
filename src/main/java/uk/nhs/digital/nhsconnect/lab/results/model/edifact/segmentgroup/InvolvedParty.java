@@ -35,7 +35,7 @@ public class InvolvedParty extends SegmentGroup {
     public static final String INDICATOR = "S01";
 
     @Getter(lazy = true)
-    private final Optional<PerformerNameAndAddress> organisationNameAndAddress =
+    private final Optional<PerformerNameAndAddress> performerNameAndAddress =
         extractOptionalSegment(PerformerNameAndAddress.KEY_QUALIFIER)
             .map(PerformerNameAndAddress::fromString);
 
