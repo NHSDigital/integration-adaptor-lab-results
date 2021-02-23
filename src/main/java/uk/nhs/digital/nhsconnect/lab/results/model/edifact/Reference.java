@@ -37,19 +37,7 @@ public class Reference extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return target.getQualifier()
-            + COLON_SEPARATOR
-            + number;
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-        // no stateful fields to validate
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (!number.matches("\\p{Alnum}{1,6}")) {
             throw new EdifactValidationException(
                 KEY + ": attribute number must be an alphanumeric string of up to 6 characters");

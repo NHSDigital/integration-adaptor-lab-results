@@ -29,24 +29,14 @@ public class MessageHeader extends Segment {
     }
 
     @Override
-    public String getValue() {
-        String formattedSequenceNumber = String.format("%08d", sequenceNumber);
-        return formattedSequenceNumber + "+FHSREG:0:1:FH:FHS001";
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
+    public void validate() {
         if (sequenceNumber == null) {
-            throw new EdifactValidationException(getKey() + ": Attribute sequenceNumber is required");
+            throw new EdifactValidationException(KEY + ": Attribute sequenceNumber is required");
         }
         if (sequenceNumber < 1 || sequenceNumber > MAX_MESSAGE_SEQUENCE) {
-            throw new EdifactValidationException(getKey() + ": Attribute sequenceNumber must be between 1 and "
+            throw new EdifactValidationException(KEY + ": Attribute sequenceNumber must be between 1 and "
                 + MAX_MESSAGE_SEQUENCE);
         }
-    }
-
-    @Override
-    public void preValidate() {
     }
 
     public static MessageHeader fromString(final String edifactString) {
@@ -54,7 +44,7 @@ public class MessageHeader extends Segment {
             throw new IllegalArgumentException("Can't create " + MessageHeader.class.getSimpleName()
                 + " from " + edifactString);
         }
-        String[] split = Split.byPlus(edifactString);
+        final String[] split = Split.byPlus(edifactString);
         return new MessageHeader(Long.valueOf(split[1]));
     }
 }

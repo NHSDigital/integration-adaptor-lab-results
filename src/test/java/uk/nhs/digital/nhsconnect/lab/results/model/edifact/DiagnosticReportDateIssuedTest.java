@@ -1,8 +1,8 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
-import java.time.LocalDateTime;
-
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -11,20 +11,6 @@ class DiagnosticReportDateIssuedTest {
 
     private static final LocalDateTime FIXED_TIME = LocalDateTime.of(2020, 01, 28, 9, 57);
     private static final String VALID_EDIFACT = "DTM+ISR:202001280957:203";
-    private static final String VALID_EDIFACT_VALUE = "ISR:202001280957:203";
-
-    @Test
-    void testToEdifactForValidDiagnosticReportIssued() {
-        String expected = "DTM+ISR:202001280957:203'";
-
-        final DiagnosticReportDateIssued diagnosticReportDateIssued = DiagnosticReportDateIssued.builder()
-            .dateIssued(FIXED_TIME)
-            .build();
-
-        final String actual = diagnosticReportDateIssued.toEdifact();
-
-        assertEquals(expected, actual);
-    }
 
     @Test
     void testBuildWithEmptyTimestampThrowsException() {
@@ -39,7 +25,6 @@ class DiagnosticReportDateIssuedTest {
         final var diagnosticReportDateIssued = DiagnosticReportDateIssued.fromString(VALID_EDIFACT);
 
         assertEquals("DTM", diagnosticReportDateIssued.getKey());
-        assertEquals(VALID_EDIFACT_VALUE, diagnosticReportDateIssued.getValue());
         assertEquals(FIXED_TIME, diagnosticReportDateIssued.getDateIssued());
     }
 

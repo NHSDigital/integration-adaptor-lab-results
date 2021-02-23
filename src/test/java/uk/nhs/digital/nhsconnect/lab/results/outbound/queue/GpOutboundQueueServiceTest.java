@@ -18,6 +18,7 @@ import javax.jms.JMSException;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -61,17 +62,19 @@ class GpOutboundQueueServiceTest {
 
         gpOutboundQueueService.publish(bundle);
 
-        verify(serializer).serialize(bundle);
-
-        verify(jmsTemplate).send(eq(gpOutboundQueueName), messageCreatorArgumentCaptor.capture());
+        assertAll(
+            () -> verify(serializer).serialize(bundle),
+            () -> verify(jmsTemplate).send(eq(gpOutboundQueueName), messageCreatorArgumentCaptor.capture())
+        );
 
         when(session.createTextMessage(serializedData)).thenReturn(textMessage);
 
         messageCreatorArgumentCaptor.getValue().createMessage(session);
 
-        verify(session).createTextMessage(eq(serializedData));
-        verify(textMessage).setStringProperty(JmsHeaders.CORRELATION_ID, CONSERVATION_ID);
-
-        verify(correlationIdService).getCurrentCorrelationId();
+        assertAll(
+            () -> verify(session).createTextMessage(eq(serializedData)),
+            () -> verify(textMessage).setStringProperty(JmsHeaders.CORRELATION_ID, CONSERVATION_ID),
+            () -> verify(correlationIdService).getCurrentCorrelationId()
+        );
     }
 }

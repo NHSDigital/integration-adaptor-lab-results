@@ -5,6 +5,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.RangeDetail;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,6 +13,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ResultReferenceRangeTest {
+
+    public static final int EXPECTED_RANGE_LOWER_LIMIT = 170;
+    public static final int EXPECTED_RANGE_UPPER_LIMIT = 1100;
+
     @Test
     void testIndicator() {
         assertThat(ResultReferenceRange.INDICATOR).isEqualTo("S20");
@@ -24,10 +29,15 @@ class ResultReferenceRangeTest {
             "RND+U+170+1100",
             "ignore me"
         ));
-        assertThat(range.getDetails())
+        var rangeDetails = range.getDetails();
+        assertThat(rangeDetails)
             .isNotNull()
-            .extracting(RangeDetail::getValue)
-            .isEqualTo("U+170+1100");
+            .extracting(RangeDetail::getLowerLimit)
+            .isEqualTo(BigDecimal.valueOf(EXPECTED_RANGE_LOWER_LIMIT));
+        assertThat(rangeDetails)
+            .isNotNull()
+            .extracting(RangeDetail::getUpperLimit)
+            .isEqualTo(BigDecimal.valueOf(EXPECTED_RANGE_UPPER_LIMIT));
     }
 
     @Test
@@ -39,8 +49,9 @@ class ResultReferenceRangeTest {
         ));
         assertThat(range.getFreeTexts())
             .isPresent()
-            .map(FreeTextSegment::getValue)
-            .contains("RPD+++Equivocal");
+            .map(FreeTextSegment::getTexts)
+            .map(texts -> texts[0])
+            .contains("Equivocal");
     }
 
     @Test

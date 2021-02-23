@@ -55,21 +55,7 @@ public class FreeTextSegment extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return type.getQualifier()
-            + PLUS_SEPARATOR
-            + PLUS_SEPARATOR
-            + PLUS_SEPARATOR
-            + String.join(COLON_SEPARATOR, texts);
-    }
-
-    @Override
-    public void validateStateful() throws EdifactValidationException {
-        // nothing
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (texts.length == 0 || texts[0].isBlank()) {
             throw new EdifactValidationException(KEY + PLUS_SEPARATOR + type.getQualifier()
                 + ": At least one free text must be given.");

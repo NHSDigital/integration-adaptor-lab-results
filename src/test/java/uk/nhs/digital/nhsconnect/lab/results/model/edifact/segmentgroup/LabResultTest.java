@@ -1,15 +1,21 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
 import org.junit.jupiter.api.Test;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DeviatingResultIndicator;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigation;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigationResult;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceDetails;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MeasurementValueComparator;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceType;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceDetails;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.TestStatus;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.TestStatusCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,6 +23,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class LabResultTest {
+
+    public static final double EXPECTED_MEASUREMENT_VALUE = 11.9;
+
     @Test
     void testIndicator() {
         assertThat(LabResult.INDICATOR).isEqualTo("GIS");
@@ -31,7 +40,7 @@ class LabResultTest {
         ));
         assertThat(labResult.getReportCode())
             .isNotNull()
-            .extracting(DiagnosticReportCode::getValue)
+            .extracting(DiagnosticReportCode::getCode)
             .isEqualTo("N");
     }
 
@@ -42,10 +51,14 @@ class LabResultTest {
             "INV+MQ+42R4.:911::Serum ferritin",
             "ignore me"
         ));
-        assertThat(labResult.getInvestigation())
-            .isNotNull()
-            .extracting(LaboratoryInvestigation::getValue)
-            .isEqualTo("MQ+42R4.:911::Serum ferritin");
+        var labResultInvestigation = assertThat(labResult.getInvestigation()).isNotNull();
+
+        labResultInvestigation
+            .extracting(LaboratoryInvestigation::getInvestigationCode)
+            .isEqualTo("42R4.");
+        labResultInvestigation
+            .extracting(LaboratoryInvestigation::getInvestigationDescription)
+            .isEqualTo("Serum ferritin");
     }
 
     @Test
@@ -57,7 +70,7 @@ class LabResultTest {
         ));
         assertThat(labResult.getSequenceDetails())
             .isPresent()
-            .map(SequenceDetails::getValue)
+            .map(SequenceDetails::getNumber)
             .contains("ABC123");
     }
 
@@ -68,10 +81,20 @@ class LabResultTest {
             "RSL+NV+11.9:7++:::ng/mL+HI",
             "ignore me"
         ));
-        assertThat(labResult.getInvestigationResult())
-            .isPresent()
-            .map(LaboratoryInvestigationResult::getValue)
-            .contains("NV+11.9:7++:::ng/mL+HI");
+        var labResultInvestigationResult = assertThat(labResult.getInvestigationResult()).isPresent();
+
+        labResultInvestigationResult
+            .map(LaboratoryInvestigationResult::getDeviatingResultIndicator)
+            .hasValue(DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT);
+        labResultInvestigationResult
+            .map(LaboratoryInvestigationResult::getMeasurementUnit)
+            .hasValue("ng/mL");
+        labResultInvestigationResult
+            .map(LaboratoryInvestigationResult::getMeasurementValue)
+            .hasValue(BigDecimal.valueOf(EXPECTED_MEASUREMENT_VALUE));
+        labResultInvestigationResult
+            .map(LaboratoryInvestigationResult::getMeasurementValueComparator)
+            .hasValue(MeasurementValueComparator.LESS_THAN);
     }
 
     @Test
@@ -83,8 +106,8 @@ class LabResultTest {
         ));
         assertThat(labResult.getTestStatus())
             .isPresent()
-            .map(TestStatus::getValue)
-            .contains("CO");
+            .map(TestStatus::getTestStatusCode)
+            .contains(TestStatusCode.CORRECTED);
     }
 
     @Test
@@ -96,10 +119,15 @@ class LabResultTest {
             "FTX+SPC+++Note low platelets",
             "ignore me"
         ));
-        assertThat(labResult.getFreeTexts())
-            .hasSize(2)
-            .map(FreeTextSegment::getValue)
-            .contains("SPC+++red blood cell seen", "SPC+++Note low platelets");
+        var labResultFreeTexts = assertThat(labResult.getFreeTexts()).hasSize(2);
+
+        labResultFreeTexts
+            .map(FreeTextSegment::getType)
+            .isEqualTo(List.of(FreeTextType.SERVICE_PROVIDER_COMMENT, FreeTextType.SERVICE_PROVIDER_COMMENT));
+        labResultFreeTexts
+            .map(FreeTextSegment::getTexts)
+            .map(values -> values[0])
+            .isEqualTo(List.of("red blood cell seen", "Note low platelets"));
     }
 
     @Test
@@ -111,11 +139,17 @@ class LabResultTest {
             "FTX+RIT+++Consisted of 36% Calcium oxalate and 64% Calcium phosphate.",
             "ignore me"
         ));
-        assertThat(labResult.getFreeTexts())
-            .hasSize(2)
-            .map(FreeTextSegment::getValue)
-            .contains("RIT+++URINARY STONE weight 13 mg.",
-                "RIT+++Consisted of 36% Calcium oxalate and 64% Calcium phosphate.");
+
+        var labResultFreeTexts = assertThat(labResult.getFreeTexts()).hasSize(2);
+
+        labResultFreeTexts
+            .map(FreeTextSegment::getType)
+            .isEqualTo(List.of(FreeTextType.INVESTIGATION_RESULT, FreeTextType.INVESTIGATION_RESULT));
+        labResultFreeTexts
+            .map(FreeTextSegment::getTexts)
+            .map(values -> values[0])
+            .isEqualTo(List.of(
+                "URINARY STONE weight 13 mg.", "Consisted of 36% Calcium oxalate and 64% Calcium phosphate."));
     }
 
     @Test
@@ -127,10 +161,16 @@ class LabResultTest {
             "FTX+CRR+++Treatment of DVT,PE,AF,TIA - INR 2.0-3.0",
             "ignore me"
         ));
-        assertThat(labResult.getFreeTexts())
-            .hasSize(2)
-            .map(FreeTextSegment::getValue)
-            .contains("CRR+++DVT Prophylaxis - INR 2.0-2.5", "CRR+++Treatment of DVT,PE,AF,TIA - INR 2.0-3.0");
+
+        var labResultFreeTexts = assertThat(labResult.getFreeTexts()).hasSize(2);
+
+        labResultFreeTexts
+            .map(FreeTextSegment::getType)
+            .isEqualTo(List.of(FreeTextType.COMPLEX_REFERENCE_RANGE, FreeTextType.COMPLEX_REFERENCE_RANGE));
+        labResultFreeTexts
+            .map(FreeTextSegment::getTexts)
+            .map(values -> values[0])
+            .isEqualTo(List.of("DVT Prophylaxis - INR 2.0-2.5", "Treatment of DVT,PE,AF,TIA - INR 2.0-3.0"));
     }
 
     @Test
@@ -140,10 +180,15 @@ class LabResultTest {
             "RFF+ASL:1",
             "ignore me"
         ));
-        assertThat(labResult.getSequenceReference())
-            .isNotNull()
-            .extracting(Reference::getValue)
-            .isEqualTo("ASL:1");
+        var labResultSequenceReference = assertThat(labResult.getSequenceReference()).isNotNull();
+
+        labResultSequenceReference
+            .extracting(Reference::getNumber)
+            .isEqualTo("1");
+        labResultSequenceReference
+            .extracting(Reference::getTarget)
+            .extracting(ReferenceType::getQualifier)
+            .isEqualTo("ASL");
     }
 
     @Test

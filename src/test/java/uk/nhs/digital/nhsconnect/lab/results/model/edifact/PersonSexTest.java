@@ -8,19 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PersonSexTest {
 
-    private static final String VALID_EDIFACT = "PDI+1'";
-    private static final String VALID_EDIFACT_VALUE = "1";
-
-    @Test
-    void testToEdifactForValidPersonGender() {
-        final PersonSex personSex = PersonSex.builder()
-            .gender(Gender.MALE)
-            .build();
-
-        final String actual = personSex.toEdifact();
-
-        assertEquals(VALID_EDIFACT, actual);
-    }
+    private static final String VALID_EDIFACT = "PDI+1";
 
     @Test
     void testFromStringWithValidEdifactStringReturnsPersonGender() {
@@ -28,7 +16,6 @@ class PersonSexTest {
 
         assertAll("fromString",
             () -> assertEquals(PersonSex.KEY, personSex.getKey()),
-            () -> assertEquals(VALID_EDIFACT_VALUE, personSex.getValue()),
             () -> assertEquals(Gender.MALE, personSex.getGender()));
     }
 

@@ -48,24 +48,7 @@ public class MessageRecipientNameAndAddress extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return QUALIFIER
-            + PLUS_SEPARATOR
-            + identifier
-            + COLON_SEPARATOR
-            + healthcareRegistrationIdentificationCode.getCode()
-            + PLUS_SEPARATOR
-            + PLUS_SEPARATOR
-            + messageRecipientName;
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-        // no stateful fields to validate
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (identifier.isBlank()) {
             throw new EdifactValidationException(KEY + ": Attribute identifier is required");
         }

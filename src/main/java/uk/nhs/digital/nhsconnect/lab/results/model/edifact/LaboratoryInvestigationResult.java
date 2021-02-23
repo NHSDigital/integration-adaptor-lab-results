@@ -36,19 +36,23 @@ public class LaboratoryInvestigationResult extends Segment {
                     + LaboratoryInvestigationResult.class.getSimpleName() + " from " + edifactString);
         }
 
-        String[] keySplit = Split.byPlus(edifactString);
+        final String[] keySplit = Split.byPlus(edifactString);
 
-        BigDecimal measurementValue = extractMeasurementValue(keySplit);
-        String measurementValueComparator = extractMeasurementValueComparator(keySplit);
-        String measurementUnit = extractMeasurementUnit(keySplit);
-        String deviatingResultIndicator = extractDeviatingResultIndicator(keySplit);
+        final BigDecimal measurementValue = extractMeasurementValue(keySplit);
+        final String measurementValueComparator = extractMeasurementValueComparator(keySplit);
+        final String measurementUnit = extractMeasurementUnit(keySplit);
+        final String deviatingResultIndicator = extractDeviatingResultIndicator(keySplit);
 
-        return new LaboratoryInvestigationResult(
-                measurementValue,
-                MeasurementValueComparator.fromCode(measurementValueComparator),
-                measurementUnit,
-                DeviatingResultIndicator.fromCode(deviatingResultIndicator)
-        );
+        return LaboratoryInvestigationResult.builder()
+            .measurementValue(measurementValue)
+            .measurementValueComparator(StringUtils.isNotBlank(measurementValueComparator)
+                    ? MeasurementValueComparator.fromCode(measurementValueComparator)
+                    : null)
+            .measurementUnit(measurementUnit)
+            .deviatingResultIndicator(StringUtils.isNotBlank(deviatingResultIndicator)
+                    ? DeviatingResultIndicator.fromCode(deviatingResultIndicator)
+                    : null)
+            .build();
     }
 
     private static BigDecimal extractMeasurementValue(String[] keySplit) {
@@ -89,32 +93,13 @@ public class LaboratoryInvestigationResult extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return QUALIFIER
-                + PLUS_SEPARATOR
-                + measurementValue
-                + COLON_SEPARATOR
-                + measurementValueComparator.getCode()
-                + PLUS_SEPARATOR + PLUS_SEPARATOR
-                + COLON_SEPARATOR + COLON_SEPARATOR + COLON_SEPARATOR
-                + measurementUnit
-                + PLUS_SEPARATOR
-                + deviatingResultIndicator.getCode();
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (measurementValue == null) {
-            throw new EdifactValidationException(getKey() + ": Attribute measurementValue is required");
+            throw new EdifactValidationException(KEY + ": Attribute measurementValue is required");
         }
 
         if (StringUtils.isBlank(measurementUnit)) {
-            throw new EdifactValidationException(getKey() + ": Attribute measurementUnit is required");
+            throw new EdifactValidationException(KEY + ": Attribute measurementUnit is required");
         }
     }
 }

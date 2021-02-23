@@ -34,9 +34,9 @@ public class LaboratoryInvestigation extends Segment {
                 + " from " + edifactString);
         }
 
-        String[] keySplit = Split.byPlus(edifactString);
-        String investigationCode = Split.byColon(keySplit[2])[INVESTIGATION_CODE_INDEX];
-        String investigationDescription = Split.byColon(keySplit[2])[INVESTIGATION_DESCRIPTION_INDEX];
+        final String[] keySplit = Split.byPlus(edifactString);
+        final String investigationCode = Split.byColon(keySplit[2])[INVESTIGATION_CODE_INDEX];
+        final String investigationDescription = Split.byColon(keySplit[2])[INVESTIGATION_DESCRIPTION_INDEX];
 
         return new LaboratoryInvestigation(investigationCode, investigationDescription);
     }
@@ -47,27 +47,9 @@ public class LaboratoryInvestigation extends Segment {
     }
 
     @Override
-    public String getValue() {
-        String fiveByteReadCode = !investigationCode.isBlank() ? FIVE_BYTE_READ_CODE : "";
-
-        return QUALIFIER
-            + PLUS_SEPARATOR
-            + investigationCode
-            + COLON_SEPARATOR
-            + fiveByteReadCode
-            + COLON_SEPARATOR + COLON_SEPARATOR
-            + investigationDescription;
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (StringUtils.isBlank(investigationDescription)) {
-            throw new EdifactValidationException(getKey() + ": Attribute investigationDescription is required");
+            throw new EdifactValidationException(KEY + ": Attribute investigationDescription is required");
         }
     }
 }

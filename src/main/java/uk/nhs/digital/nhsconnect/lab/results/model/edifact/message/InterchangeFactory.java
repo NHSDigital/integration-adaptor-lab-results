@@ -7,7 +7,7 @@ import java.util.List;
 
 @Component
 public class InterchangeFactory {
-    public Interchange createInterchange(List<String> edifactSegments) {
+    public Interchange createInterchange(List<String> edifactSegments) throws InterchangeCriticalException {
         return new Interchange(edifactSegments);
     }
 }

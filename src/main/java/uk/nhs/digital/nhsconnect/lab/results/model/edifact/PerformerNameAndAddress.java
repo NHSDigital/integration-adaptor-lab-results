@@ -67,22 +67,7 @@ public class PerformerNameAndAddress extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return QUALIFIER
-            + PLUS_SEPARATOR
-            + (identifier.isBlank() ? "" : identifier + COLON_SEPARATOR + code.getCode())
-            + PLUS_SEPARATOR
-            + PLUS_SEPARATOR
-            + (identifier.isBlank() ? performingOrganisationName : performerName);
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (this.identifier.isBlank()) {
             if (performingOrganisationName.isBlank()) {
                 throw new EdifactValidationException(getKey() + ": Attribute performingOrganisationName is required");
@@ -95,11 +80,5 @@ public class PerformerNameAndAddress extends Segment {
                 throw new EdifactValidationException(getKey() + ": Attribute performerName is required");
             }
         }
-    }
-
-    @Override
-    public String toEdifact() throws EdifactValidationException {
-        this.validate();
-        return this.getKey() + PLUS_SEPARATOR + this.getValue() + TERMINATOR;
     }
 }

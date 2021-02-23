@@ -1,11 +1,11 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
+import lombok.NonNull;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Section;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import lombok.NonNull;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Section;
 
 public abstract class SegmentGroup extends Section {
     public SegmentGroup(final List<String> edifactSegments) {

@@ -1,8 +1,10 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
 import org.junit.jupiter.api.Test;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DateFormat;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceDetails;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicFastingStatus;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicType;
@@ -12,12 +14,15 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenQuantity;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class SpecimenDetailsTest {
+    private static final int EXPECTED_SPECIMEN_QUANTITY = 1750;
+
     @Test
     void testIndicator() {
         assertThat(SpecimenDetails.INDICATOR).isEqualTo("S16");
@@ -32,7 +37,7 @@ class SpecimenDetailsTest {
         ));
         assertThat(specimen.getSequenceDetails())
             .isPresent()
-            .map(SequenceDetails::getValue)
+            .map(SequenceDetails::getNumber)
             .contains("123ABC");
     }
 
@@ -45,8 +50,8 @@ class SpecimenDetailsTest {
         ));
         assertThat(specimen.getCharacteristicType())
             .isNotNull()
-            .extracting(SpecimenCharacteristicType::getValue)
-            .isEqualTo("TSP+:::BLOOD & URINE");
+            .extracting(SpecimenCharacteristicType::getTypeOfSpecimen)
+            .isEqualTo("BLOOD & URINE");
     }
 
     @Test
@@ -58,8 +63,8 @@ class SpecimenDetailsTest {
         ));
         assertThat(specimen.getCharacteristicFastingStatus())
             .isPresent()
-            .map(SpecimenCharacteristicFastingStatus::getValue)
-            .contains("FS+F");
+            .map(SpecimenCharacteristicFastingStatus::getFastingStatus)
+            .hasValue("F");
     }
 
     @Test
@@ -69,10 +74,16 @@ class SpecimenDetailsTest {
             "RFF+RTI:CH000064LX",
             "ignore me"
         ));
-        assertThat(specimen.getServiceRequesterReference())
-            .isPresent()
-            .map(Reference::getValue)
-            .contains("RTI:CH000064LX");
+        var serviceRequesterReference = assertThat(specimen.getServiceRequesterReference())
+            .isPresent();
+
+        serviceRequesterReference
+            .map(Reference::getNumber)
+            .isEqualTo(Optional.of("CH000064LX"));
+        serviceRequesterReference
+            .map(Reference::getTarget)
+            .map(ReferenceType::getQualifier)
+            .hasValue("RTI");
     }
 
     @Test
@@ -82,10 +93,16 @@ class SpecimenDetailsTest {
             "RFF+STI:CH000064LX",
             "ignore me"
         ));
-        assertThat(specimen.getServiceProviderReference())
-            .isPresent()
-            .map(Reference::getValue)
-            .contains("STI:CH000064LX");
+        var serviceProviderReference = assertThat(specimen.getServiceProviderReference())
+            .isPresent();
+
+        serviceProviderReference
+            .map(Reference::getNumber)
+            .hasValue("CH000064LX");
+        serviceProviderReference
+            .map(Reference::getTarget)
+            .map(ReferenceType::getQualifier)
+            .hasValue("STI");
     }
 
     @Test
@@ -95,10 +112,14 @@ class SpecimenDetailsTest {
             "QTY+SVO:1750+:::mL",
             "ignore me"
         ));
-        assertThat(specimen.getQuantity())
-            .isPresent()
-            .map(SpecimenQuantity::getValue)
-            .contains("SVO:1750+:::mL");
+        var specimenQuantity = assertThat(specimen.getQuantity()).isPresent();
+
+        specimenQuantity
+            .map(SpecimenQuantity::getQuantity)
+            .hasValue(EXPECTED_SPECIMEN_QUANTITY);
+        specimenQuantity
+            .map(SpecimenQuantity::getQuantityUnitOfMeasure)
+            .hasValue("mL");
     }
 
     @Test
@@ -108,10 +129,14 @@ class SpecimenDetailsTest {
             "DTM+SCO:20100223:102",
             "ignore me"
         ));
-        assertThat(specimen.getCollectionDateTime())
-            .isPresent()
-            .map(SpecimenCollectionDateTime::getValue)
-            .contains("SCO:20100223:102");
+        var specimenCollectionDateTime = assertThat(specimen.getCollectionDateTime()).isPresent();
+
+        specimenCollectionDateTime
+            .map(SpecimenCollectionDateTime::getCollectionDateTime)
+            .hasValue("2010-02-23");
+        specimenCollectionDateTime
+            .map(SpecimenCollectionDateTime::getDateFormat)
+            .hasValue(DateFormat.CCYYMMDD);
     }
 
     @Test
@@ -121,10 +146,15 @@ class SpecimenDetailsTest {
             "DTM+SRI:201002241541:203",
             "ignore me"
         ));
-        assertThat(specimen.getCollectionReceiptDateTime())
-            .isPresent()
-            .map(SpecimenCollectionReceiptDateTime::getValue)
-            .contains("SRI:201002241541:203");
+
+        var specimenCollectionReceiptDateTime = assertThat(specimen.getCollectionReceiptDateTime()).isPresent();
+
+        specimenCollectionReceiptDateTime
+            .map(SpecimenCollectionReceiptDateTime::getCollectionReceiptDateTime)
+            .hasValue("2010-02-24T15:41+00:00");
+        specimenCollectionReceiptDateTime
+            .map(SpecimenCollectionReceiptDateTime::getDateFormat)
+            .hasValue(DateFormat.CCYYMMDDHHMM);
     }
 
     @Test
@@ -136,10 +166,17 @@ class SpecimenDetailsTest {
             "FTX+SPC+++Note low platelets",
             "ignore me"
         ));
-        assertThat(specimen.getFreeTexts())
-            .hasSize(2)
-            .map(FreeTextSegment::getValue)
-            .contains("SPC+++red blood cell seen", "SPC+++Note low platelets");
+
+        var specimenFreeTexts = assertThat(specimen.getFreeTexts()).hasSize(2);
+
+        specimenFreeTexts
+            .map(FreeTextSegment::getTexts)
+            .map(freeTexts -> freeTexts[0])
+            .contains("red blood cell seen");
+        specimenFreeTexts
+            .map(FreeTextSegment::getTexts)
+            .map(freeTexts -> freeTexts[0])
+            .contains("Note low platelets");
     }
 
     @Test

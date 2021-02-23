@@ -1,4 +1,4 @@
-package uk.nhs.digital.nhsconnect.lab.results.rest.exception;
+package uk.nhs.digital.nhsconnect.lab.results.exception;
 
 public class LabResultsBaseException extends RuntimeException {
 

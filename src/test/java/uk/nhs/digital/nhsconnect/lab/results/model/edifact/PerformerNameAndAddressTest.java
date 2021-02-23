@@ -42,53 +42,6 @@ class PerformerNameAndAddressTest {
     }
 
     @Test
-    void when_mappingSegmentObjectToEdifactString_expect_returnCorrectEdifactString() {
-        String expectedEdifactString = "NAD+SLA+++LONDON CITY HOSPITAL'";
-        String expectedPerformerEdifactString = "NAD+SLA+A2442389:902++DR J SMITH'";
-
-        PerformerNameAndAddress performingOrganisation = PerformerNameAndAddress.builder()
-            .identifier("")
-            .code(null)
-            .performingOrganisationName("LONDON CITY HOSPITAL")
-            .performerName("")
-            .build();
-
-        PerformerNameAndAddress performer = PerformerNameAndAddress.builder()
-            .identifier("A2442389")
-            .code(HealthcareRegistrationIdentificationCode.CONSULTANT)
-            .performingOrganisationName("")
-            .performerName("DR J SMITH")
-            .build();
-
-        assertAll(
-            () -> assertEquals(expectedEdifactString, performingOrganisation.toEdifact()),
-            () -> assertEquals(expectedPerformerEdifactString, performer.toEdifact())
-        );
-    }
-
-    @Test
-    void when_mappingSegmentObjectToEdifactStringWithEmptyField_expect_edifactValidationExceptionIsThrown() {
-        PerformerNameAndAddress performingOrganisation = PerformerNameAndAddress.builder()
-            .identifier("")
-            .code(null)
-            .performingOrganisationName("")
-            .performerName("")
-            .build();
-
-        PerformerNameAndAddress performerWithoutName = PerformerNameAndAddress.builder()
-            .identifier("A2442389")
-            .code(HealthcareRegistrationIdentificationCode.CONSULTANT)
-            .performingOrganisationName("")
-            .performerName("")
-            .build();
-
-        assertAll(
-            () -> assertThrows(EdifactValidationException.class, performingOrganisation::toEdifact),
-            () -> assertThrows(EdifactValidationException.class, performerWithoutName::toEdifact)
-        );
-    }
-
-    @Test
     void when_buildingSegmentObjectWithEmptyHealthcareCode_expect_illegalArgumentExceptionIsThrown() {
         assertThrows(
             IllegalArgumentException.class,
@@ -112,19 +65,20 @@ class PerformerNameAndAddressTest {
     }
 
     @Test
-    void testGetValue() {
-        assertAll(
-            () -> assertEquals("SLA+++LONDON CITY HOSPITAL", performingOrganisationNameAndAddress.getValue()),
-            () -> assertEquals("SLA+A2442389:902++DR J SMITH", performerNameAndAddress.getValue())
-        );
-
+    void testGetPerformingOrganisationName() {
+        assertEquals("LONDON CITY HOSPITAL", performingOrganisationNameAndAddress.getPerformingOrganisationName());
     }
 
     @Test
-    void testPreValidate() {
+    void testGetPerformerName() {
+        assertEquals("DR J SMITH", performerNameAndAddress.getPerformerName());
+    }
+
+    @Test
+    void testValidate() {
         var emptyPerformingOrganisationName = new PerformerNameAndAddress("", null, "", "");
 
-        assertThatThrownBy(emptyPerformingOrganisationName::preValidate)
+        assertThatThrownBy(emptyPerformingOrganisationName::validate)
             .isExactlyInstanceOf(EdifactValidationException.class)
             .hasMessage("NAD: Attribute performingOrganisationName is required");
     }

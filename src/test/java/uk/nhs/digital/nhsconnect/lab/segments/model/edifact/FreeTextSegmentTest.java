@@ -35,12 +35,10 @@ class FreeTextSegmentTest {
     void testNoTexts() {
         var result = FreeTextSegment.fromString("FTX+CRR+++");
         assertAll(
-            () -> assertThat(result.getValue()).isEqualTo("CRR+++"),
             () -> assertThat(result.getTexts()).isEmpty(),
-            () -> assertThatThrownBy(result::preValidate)
+            () -> assertThatThrownBy(result::validate)
                 .isExactlyInstanceOf(EdifactValidationException.class)
-                .hasMessage("FTX+CRR: At least one free text must be given."),
-            () -> assertThatNoException().isThrownBy(result::validateStateful)
+                .hasMessage("FTX+CRR: At least one free text must be given.")
         );
     }
 
@@ -48,10 +46,8 @@ class FreeTextSegmentTest {
     void testOneText() {
         var result = FreeTextSegment.fromString("FTX+RIT+++Okay");
         assertAll(
-            () -> assertThat(result.getValue()).isEqualTo("RIT+++Okay"),
             () -> assertThat(result.getTexts()).containsExactly("Okay"),
-            () -> assertThatNoException().isThrownBy(result::preValidate),
-            () -> assertThatNoException().isThrownBy(result::validateStateful)
+            () -> assertThatNoException().isThrownBy(result::validate)
         );
     }
 
@@ -69,7 +65,7 @@ class FreeTextSegmentTest {
     void testPreValidateTooManyFreeTexts() {
         final var texts = "A".repeat(10).split("");
         final var freeText = new FreeTextSegment(FreeTextType.SERVICE_PROVIDER_COMMENT, texts);
-        assertThatThrownBy(freeText::preValidate)
+        assertThatThrownBy(freeText::validate)
             .isExactlyInstanceOf(EdifactValidationException.class)
             .hasMessage("FTX+SPC: At most 5 free texts may be given.");
     }

@@ -7,10 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -43,43 +40,11 @@ public class PersonName extends Segment {
     }
 
     @Override
-    public String getValue() {
-        List<String> values = new ArrayList<>();
-        values.add(QUALIFIER);
-
-        values.add(Optional.ofNullable(this.nhsNumber)
-            .map(value -> value + COLON_SEPARATOR + this.patientIdentificationType.getCode())
-            .orElse(StringUtils.EMPTY));
-        values.add(StringUtils.EMPTY);
-        values.add(StringUtils.EMPTY);
-        values.add(Optional.ofNullable(this.surname)
-            .map(value -> FAMILY_NAME_QUALIFIER + COLON_SEPARATOR + value)
-            .orElse(StringUtils.EMPTY));
-        values.add(Optional.ofNullable(this.firstForename)
-            .map(value -> FIRST_NAME_QUALIFIER + COLON_SEPARATOR + value)
-            .orElse(StringUtils.EMPTY));
-        values.add(Optional.ofNullable(this.title)
-            .map(value -> TITLE_QUALIFIER + COLON_SEPARATOR + value)
-            .orElse(StringUtils.EMPTY));
-        values.add(Optional.ofNullable(this.secondForename)
-            .map(value -> MIDDLE_NAME_QUALIFIER + COLON_SEPARATOR + value)
-            .orElse(StringUtils.EMPTY));
-
-        values = removeEmptyTrailingFields(values, StringUtils::isNotBlank);
-
-        return String.join(PLUS_SEPARATOR, values);
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (isBlank(nhsNumber) && patientIdentificationType == null && isBlank(surname)) {
-            throw new EdifactValidationException(getKey() + ": At least one of patient identification and person "
+            throw new EdifactValidationException(KEY + ": At least one of patient identification and person "
                 + "name details are required");
         }
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
     }
 
     public static PersonName fromString(final String edifactString) {

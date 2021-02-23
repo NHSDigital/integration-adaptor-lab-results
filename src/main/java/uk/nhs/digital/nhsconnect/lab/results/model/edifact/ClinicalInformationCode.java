@@ -35,16 +35,7 @@ public class ClinicalInformationCode extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return code;
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (code.isBlank()) {
             throw new EdifactValidationException(KEY + ": Clinical Information Code is required");
         }

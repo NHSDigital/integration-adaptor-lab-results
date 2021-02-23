@@ -1,14 +1,14 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
-import static java.util.stream.Collectors.toList;
-
-import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvolvedParty;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.ServiceReportDetails;
 import java.util.Optional;
+
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 public class Message extends Section {
     private static final String DEFAULT_GP_CODE = "9999";
@@ -32,6 +32,10 @@ public class Message extends Section {
         .dropWhile(segment -> !segment.startsWith(ServiceReportDetails.INDICATOR))
         .takeWhile(segment -> !segment.startsWith(MessageTrailer.KEY))
         .collect(toList()));
+
+    @Getter(lazy = true)
+    private final MessageTrailer messageTrailer =
+        MessageTrailer.fromString(extractSegment(MessageTrailer.KEY));
 
     @Getter(lazy = true)
     private final Optional<PerformerNameAndAddress> performerNameAndAddress =

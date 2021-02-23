@@ -1,10 +1,13 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
 import org.junit.jupiter.api.Test;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.HealthcareRegistrationIdentificationCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageRecipientNameAndAddress;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PerformerNameAndAddress;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.RequesterNameAndAddress;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ServiceProviderCode;
 
 import java.util.List;
 
@@ -25,8 +28,8 @@ class InvolvedPartyTest {
         ));
         assertThat(involvedParty.getOrganisationNameAndAddress())
             .isPresent()
-            .map(PerformerNameAndAddress::getValue)
-            .contains("SLA+++ST JAMES?'S UNIVERSITY HOSPITAL");
+            .map(PerformerNameAndAddress::getPerformingOrganisationName)
+            .contains("ST JAMES?'S UNIVERSITY HOSPITAL");
     }
 
     @Test
@@ -36,10 +39,19 @@ class InvolvedPartyTest {
             "NAD+PO+G3380314:900++SCOTT",
             "ignore me"
         ));
-        assertThat(involvedParty.getRequesterNameAndAddress())
+        var requesterNameAndAddress = involvedParty.getRequesterNameAndAddress();
+        assertThat(requesterNameAndAddress)
             .isPresent()
-            .map(RequesterNameAndAddress::getValue)
-            .contains("PO+G3380314:900++SCOTT");
+            .map(RequesterNameAndAddress::getRequesterName)
+            .hasValue("SCOTT");
+        assertThat(requesterNameAndAddress)
+            .isPresent()
+            .map(RequesterNameAndAddress::getHealthcareRegistrationIdentificationCode)
+            .hasValue(HealthcareRegistrationIdentificationCode.GP);
+        assertThat(requesterNameAndAddress)
+            .isPresent()
+            .map(RequesterNameAndAddress::getIdentifier)
+            .hasValue("G3380314");
     }
 
     @Test
@@ -49,10 +61,19 @@ class InvolvedPartyTest {
             "NAD+MR+G3380314:900++SCOTT",
             "ignore me"
         ));
-        assertThat(involvedParty.getRecipientNameAndAddress())
+        var recipientNameAndAddress = involvedParty.getRecipientNameAndAddress();
+        assertThat(recipientNameAndAddress)
             .isPresent()
-            .map(MessageRecipientNameAndAddress::getValue)
-            .contains("MR+G3380314:900++SCOTT");
+            .map(MessageRecipientNameAndAddress::getMessageRecipientName)
+            .hasValue("SCOTT");
+        assertThat(recipientNameAndAddress)
+            .isPresent()
+            .map(MessageRecipientNameAndAddress::getHealthcareRegistrationIdentificationCode)
+            .hasValue(HealthcareRegistrationIdentificationCode.GP);
+        assertThat(recipientNameAndAddress)
+            .isPresent()
+            .map(MessageRecipientNameAndAddress::getIdentifier)
+            .hasValue("G3380314");
     }
 
     @Test
@@ -62,10 +83,16 @@ class InvolvedPartyTest {
             "RFF+AHI:agreed ID",
             "ignore me"
         ));
-        assertThat(involvedParty.getPartnerAgreedId())
+        var partnerAgreedId = involvedParty.getPartnerAgreedId();
+        assertThat(partnerAgreedId)
             .isPresent()
-            .map(Reference::getValue)
-            .contains("AHI:agreed ID");
+            .map(Reference::getTarget)
+            .map(ReferenceType::getQualifier)
+            .contains("AHI");
+        assertThat(partnerAgreedId)
+            .isPresent()
+            .map(Reference::getNumber)
+            .contains("agreed ID");
     }
 
     @Test
@@ -75,7 +102,7 @@ class InvolvedPartyTest {
             "SPR+ORG",
             "ignore me"
         ));
-        assertThat(involvedParty.getServiceProvider().getValue())
-            .isEqualTo("ORG");
+        assertThat(involvedParty.getServiceProvider().getServiceProviderCode())
+            .isEqualTo(ServiceProviderCode.ORGANISATION);
     }
 }

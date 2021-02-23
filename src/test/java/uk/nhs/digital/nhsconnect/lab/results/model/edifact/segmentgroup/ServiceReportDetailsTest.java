@@ -5,8 +5,11 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportDateIssued;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportStatus;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceType;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReportStatusCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,6 +17,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ServiceReportDetailsTest {
+    private static final LocalDateTime EXPECTED_DATE_TIME =
+        LocalDateTime.of(2020, 1, 28, 9, 57);
+
     @Test
     void testIndicator() {
         assertThat(ServiceReportDetails.INDICATOR).isEqualTo("S02");
@@ -28,7 +34,7 @@ class ServiceReportDetailsTest {
         ));
         assertThat(report.getCode())
             .isNotNull()
-            .extracting(DiagnosticReportCode::getValue)
+            .extracting(DiagnosticReportCode::getCode)
             .isEqualTo("N");
     }
 
@@ -39,10 +45,15 @@ class ServiceReportDetailsTest {
             "RFF+SRI:13/CH001137K/211010191093",
             "ignore me"
         ));
-        assertThat(report.getReference())
-            .isNotNull()
-            .extracting(Reference::getValue)
-            .isEqualTo("SRI:13/CH001137K/211010191093");
+        var reportReference = assertThat(report.getReference()).isNotNull();
+
+        reportReference
+            .extracting(Reference::getNumber)
+            .isEqualTo("13/CH001137K/211010191093");
+        reportReference
+            .extracting(Reference::getTarget)
+            .extracting(ReferenceType::getQualifier)
+            .isEqualTo("SRI");
     }
 
     @Test
@@ -54,8 +65,8 @@ class ServiceReportDetailsTest {
         ));
         assertThat(report.getStatus())
             .isNotNull()
-            .extracting(DiagnosticReportStatus::getValue)
-            .isEqualTo("UN");
+            .extracting(DiagnosticReportStatus::getEvent)
+            .isEqualTo(ReportStatusCode.UNSPECIFIED);
     }
 
     @Test
@@ -65,10 +76,11 @@ class ServiceReportDetailsTest {
             "DTM+ISR:202001280957:203",
             "ignore me"
         ));
-        assertThat(report.getDateIssued())
-            .isNotNull()
-            .extracting(DiagnosticReportDateIssued::getValue)
-            .isEqualTo("ISR:202001280957:203");
+        var reportDateIssued = assertThat(report.getDateIssued()).isNotNull();
+
+        reportDateIssued
+            .extracting(DiagnosticReportDateIssued::getDateIssued)
+            .isEqualTo(EXPECTED_DATE_TIME);
     }
 
     @Test

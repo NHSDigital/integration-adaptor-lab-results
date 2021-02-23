@@ -35,10 +35,10 @@ public class RequesterNameAndAddress extends Segment {
                 + " from " + edifactString);
         }
 
-        String[] keySplit = Split.byPlus(edifactString);
-        String identifier = Split.byColon(keySplit[2])[0];
-        String code = Split.byColon(keySplit[2])[1];
-        String requesterName = keySplit[REQUESTER_NAME_INDEX_IN_EDIFACT_STRING];
+        final String[] keySplit = Split.byPlus(edifactString);
+        final String identifier = Split.byColon(keySplit[2])[0];
+        final String code = Split.byColon(keySplit[2])[1];
+        final String requesterName = keySplit[REQUESTER_NAME_INDEX_IN_EDIFACT_STRING];
 
         return new RequesterNameAndAddress(
             identifier,
@@ -53,24 +53,7 @@ public class RequesterNameAndAddress extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return QUALIFIER
-            + PLUS_SEPARATOR
-            + identifier
-            + COLON_SEPARATOR
-            + healthcareRegistrationIdentificationCode.getCode()
-            + PLUS_SEPARATOR
-            + PLUS_SEPARATOR
-            + requesterName;
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-        // no stateful fields to validate
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (identifier.isBlank()) {
             throw new EdifactValidationException(KEY + ": Attribute identifier is required");
         }

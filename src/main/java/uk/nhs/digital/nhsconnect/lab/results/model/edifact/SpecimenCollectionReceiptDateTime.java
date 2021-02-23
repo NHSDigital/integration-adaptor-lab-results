@@ -61,23 +61,9 @@ public class SpecimenCollectionReceiptDateTime extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return QUALIFIER
-            + COLON_SEPARATOR
-            + getFormattedEdifactDate(collectionReceiptDateTime, dateFormat)
-            + COLON_SEPARATOR
-            + dateFormat.getCode();
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-        // nothing
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (collectionReceiptDateTime.isBlank()) {
-            throw new EdifactValidationException(getKey() + ": Date/time of sample collection is required");
+            throw new EdifactValidationException(KEY + ": Date/time of sample collection is required");
         }
     }
 

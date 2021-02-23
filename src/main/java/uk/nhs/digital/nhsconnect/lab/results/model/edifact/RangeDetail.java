@@ -51,21 +51,7 @@ public class RangeDetail extends Segment {
     }
 
     @Override
-    public String getValue() {
-        return QUALIFIER
-            + PLUS_SEPARATOR
-            + (lowerLimit == null ? "" : lowerLimit.toPlainString())
-            + PLUS_SEPARATOR
-            + (upperLimit == null ? "" : upperLimit.toPlainString());
-    }
-
-    @Override
-    protected void validateStateful() throws EdifactValidationException {
-        // no stateful fields to validate
-    }
-
-    @Override
-    public void preValidate() throws EdifactValidationException {
+    public void validate() throws EdifactValidationException {
         if (lowerLimit == null && upperLimit == null) {
             throw new EdifactValidationException(KEY
                 + ": At least one of lower reference limit and upper reference limit is required");
