@@ -14,38 +14,45 @@ public class PractitionerMapper {
     private static final String SDS_USER_SYSTEM = "https://fhir.nhs.uk/Id/sds-user-id";
 
     public Optional<Practitioner> mapRequester(final Message message) {
-        return message.getInvolvedParties().stream()
+        Optional<RequesterNameAndAddress> requester = message.getInvolvedParties().stream()
             .map(InvolvedParty::getRequesterNameAndAddress)
             .flatMap(Optional::stream)
-            .map(this::toPractitioner)
             .findAny();
+
+        if (requester.isPresent()) {
+            final var r = requester.get();
+            Practitioner practitioner = mapToPractitioner(r.getIdentifier(), r.getRequesterName());
+            return Optional.of(practitioner);
+        } else {
+            return Optional.empty();
+        }
     }
+
 
     public Optional<Practitioner> mapPerformer(final Message message) {
-        return message.getInvolvedParties().stream()
+        Optional<PerformerNameAndAddress> performer = message.getInvolvedParties().stream()
             .map(InvolvedParty::getPerformerNameAndAddress)
             .flatMap(Optional::stream)
-            .map(this::toPerformer)
             .findAny();
+
+        if (performer.isPresent()) {
+            final var p = performer.get();
+            Practitioner practitioner = mapToPractitioner(p.getIdentifier(), p.getPerformerName());
+            return Optional.of(practitioner);
+        } else {
+            return Optional.empty();
+        }
     }
 
-    private Practitioner toPractitioner(final RequesterNameAndAddress requester) {
+    private Practitioner mapToPractitioner(final String identifier, final String name) {
         final var result = new Practitioner();
-        result.addIdentifier()
-            .setValue(requester.getIdentifier())
-            .setSystem(SDS_USER_SYSTEM);
-        Optional.ofNullable(requester.getRequesterName())
-            .ifPresent(name -> result.addName().setText(name));
-        return result;
-    }
 
-    private Practitioner toPerformer(final PerformerNameAndAddress performer) {
-        final var result = new Practitioner();
         result.addIdentifier()
-            .setValue(performer.getIdentifier())
+            .setValue(identifier)
             .setSystem(SDS_USER_SYSTEM);
-        Optional.ofNullable(performer.getPerformerName())
-            .ifPresent(name -> result.addName().setText(name));
+        Optional.ofNullable(name)
+            .ifPresent(n -> result.addName().setText(n));
+
         return result;
     }
 }
