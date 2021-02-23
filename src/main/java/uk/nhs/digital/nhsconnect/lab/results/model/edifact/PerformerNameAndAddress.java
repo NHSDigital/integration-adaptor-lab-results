@@ -1,9 +1,10 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
+import org.apache.commons.lang3.StringUtils;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
@@ -13,7 +14,6 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
  * Example: NAD+SLA+++ST JAMES?'S UNIVERSITY HOSPITAL'
  */
 @Getter
-@Setter
 @Builder
 @RequiredArgsConstructor
 public class PerformerNameAndAddress extends Segment {
@@ -23,8 +23,6 @@ public class PerformerNameAndAddress extends Segment {
     public static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
 
     private static final int PERFORMING_NAME_INDEX_IN_EDIFACT_STRING = 4;
-    private static final int PERFORMER_ID_INDEX_IN_EDIFACT_STRING = 2;
-    private static final int PERFORMER_CODE_INDEX_IN_EDIFACT_STRING = 3;
 
     private final String identifier;
     private final HealthcareRegistrationIdentificationCode code;
@@ -45,16 +43,21 @@ public class PerformerNameAndAddress extends Segment {
         if (performerID.isBlank()) {
             // if identifier is blank - organisation/department
             String performingOrganisationName = keySplit[PERFORMING_NAME_INDEX_IN_EDIFACT_STRING];
-            return new PerformerNameAndAddress("", null, performingOrganisationName, "");
+            PerformerNameAndAddress performingOrganisation = PerformerNameAndAddress.builder()
+                .performingOrganisationName(performingOrganisationName)
+                .build();
+
+            return performingOrganisation;
         } else {
             String performerCode = colonSplit[1];
             String performerName = keySplit[PERFORMING_NAME_INDEX_IN_EDIFACT_STRING];
-            return new PerformerNameAndAddress(
-                performerID,
-                HealthcareRegistrationIdentificationCode.fromCode(performerCode),
-                "",
-                performerName
-            );
+            PerformerNameAndAddress performer = PerformerNameAndAddress.builder()
+                .identifier(performerID)
+                .code(HealthcareRegistrationIdentificationCode.fromCode(performerCode))
+                .performerName(performerName)
+                .build();
+
+            return performer;
         }
     }
 
@@ -65,15 +68,15 @@ public class PerformerNameAndAddress extends Segment {
 
     @Override
     public void validate() throws EdifactValidationException {
-        if (this.identifier.isBlank()) {
-            if (performingOrganisationName == null || performingOrganisationName.isBlank()) {
+        if (StringUtils.isBlank(identifier)) {
+            if (StringUtils.isBlank(performingOrganisationName)) {
                 throw new EdifactValidationException(getKey() + ": Attribute performingOrganisationName is required");
             }
         } else {
-            if (code == null || code.getCode().isBlank()) {
+            if (code == null || StringUtils.isBlank(code.getCode())) {
                 throw new EdifactValidationException(getKey() + ": Attribute code is required");
             }
-            if (performerName == null || performerName.isBlank()) {
+            if (StringUtils.isBlank(performerName)) {
                 throw new EdifactValidationException(getKey() + ": Attribute performerName is required");
             }
         }

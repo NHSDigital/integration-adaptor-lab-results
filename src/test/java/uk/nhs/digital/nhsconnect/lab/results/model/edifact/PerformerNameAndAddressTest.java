@@ -11,16 +11,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PerformerNameAndAddressTest {
 
-    private final PerformerNameAndAddress performingOrganisationNameAndAddress =
-        new PerformerNameAndAddress("", null, "LONDON CITY HOSPITAL", "");
+    private final PerformerNameAndAddress performingOrganisationNameAndAddress = PerformerNameAndAddress.builder()
+        .performingOrganisationName("LONDON CITY HOSPITAL")
+        .build();
 
-    private final PerformerNameAndAddress performerNameAndAddress =
-        new PerformerNameAndAddress(
-            "A2442389",
-            HealthcareRegistrationIdentificationCode.CONSULTANT,
-            "",
-            "DR J SMITH"
-        );
+    private final PerformerNameAndAddress performerNameAndAddress = PerformerNameAndAddress.builder()
+            .identifier("A2442389")
+            .code(HealthcareRegistrationIdentificationCode.CONSULTANT)
+            .performerName("DR J SMITH")
+            .build();
 
     @Test
     void when_edifactStringDoesNotStartWithCorrectKey_expect_illegalArgumentExceptionIsThrown() {
