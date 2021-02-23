@@ -55,11 +55,6 @@ class PerformerNameAndAddressTest {
     }
 
     @Test
-    void when_buildingSegmentObjectWithoutMandatoryField_expect_nullPointerExceptionIsThrown() {
-        assertThrows(NullPointerException.class, () -> PerformerNameAndAddress.builder().build());
-    }
-
-    @Test
     void testGetKey() {
         assertEquals("NAD", performingOrganisationNameAndAddress.getKey());
     }
@@ -77,9 +72,26 @@ class PerformerNameAndAddressTest {
     @Test
     void testValidate() {
         var emptyPerformingOrganisationName = new PerformerNameAndAddress("", null, "", "");
+        var emptyCode = new PerformerNameAndAddress("Identifier", null, "", "DR J SMITH");
+        var emptyPerformerName = new PerformerNameAndAddress(
+            "Identifier",
+            HealthcareRegistrationIdentificationCode.CONSULTANT,
+            null,
+            null
+        );
 
-        assertThatThrownBy(emptyPerformingOrganisationName::validate)
-            .isExactlyInstanceOf(EdifactValidationException.class)
-            .hasMessage("NAD: Attribute performingOrganisationName is required");
+        assertAll(
+            () -> assertThatThrownBy(emptyPerformingOrganisationName::validate)
+                    .isExactlyInstanceOf(EdifactValidationException.class)
+                    .hasMessage("NAD: Attribute performingOrganisationName is required"),
+
+            () -> assertThatThrownBy(emptyCode::validate)
+                    .isExactlyInstanceOf(EdifactValidationException.class)
+                    .hasMessage("NAD: Attribute code is required"),
+
+            () -> assertThatThrownBy(emptyPerformerName::validate)
+                    .isExactlyInstanceOf(EdifactValidationException.class)
+                    .hasMessage("NAD: Attribute performerName is required")
+        );
     }
 }

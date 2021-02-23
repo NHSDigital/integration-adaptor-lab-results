@@ -29,9 +29,7 @@ public class PerformerNameAndAddress extends Segment {
 
     private final String identifier;
     private final HealthcareRegistrationIdentificationCode code;
-    @NonNull
     private final String performingOrganisationName;
-    @NonNull
     private final String performerName;
 
     public static PerformerNameAndAddress fromString(String edifactString) {
@@ -69,7 +67,7 @@ public class PerformerNameAndAddress extends Segment {
     @Override
     public void validate() throws EdifactValidationException {
         if (this.identifier.isBlank()) {
-            if (performingOrganisationName.isBlank()) {
+            if (performingOrganisationName == null || performingOrganisationName.isBlank()) {
                 throw new EdifactValidationException(getKey() + ": Attribute performingOrganisationName is required");
             }
         } else {
