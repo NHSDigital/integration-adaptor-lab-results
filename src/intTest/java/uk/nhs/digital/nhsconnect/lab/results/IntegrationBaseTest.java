@@ -93,8 +93,8 @@ public abstract class IntegrationBaseTest {
     private Resource fhirResource;
 
     @Getter
-    @Value("classpath:edifact/pathology_recep.dat")
-    private Resource recepResource;
+    @Value("classpath:edifact/pathology_nhsAck.dat")
+    private Resource nhsAckResource;
 
     private long originalReceiveTimeout;
 
