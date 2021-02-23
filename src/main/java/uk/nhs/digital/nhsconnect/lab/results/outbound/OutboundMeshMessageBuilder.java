@@ -57,7 +57,7 @@ public class OutboundMeshMessageBuilder {
             case SCREENING:
                 return SCREENING_ACK;
             default:
-                throw new IllegalArgumentException(workflowId.name());
+                throw new IllegalArgumentException(workflowId.name() + " workflow has no corresponding ACK one");
         }
     }
 }

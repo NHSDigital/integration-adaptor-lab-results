@@ -126,7 +126,7 @@ class InboundMessageHandlerTest {
         final OutboundMeshMessage outboundMeshMessage = new MeshMessage()
             .setWorkflowId(WorkflowId.PATHOLOGY_ACK);
         when(outboundMeshMessageBuilder
-            .buildNhsAck(eq(WorkflowId.PATHOLOGY), eq(interchange), eq(Collections.emptyList())))
+            .buildNhsAck(WorkflowId.PATHOLOGY, interchange, Collections.emptyList()))
             .thenReturn(outboundMeshMessage);
 
         inboundMessageHandler.handle(meshMessage);
@@ -136,7 +136,7 @@ class InboundMessageHandlerTest {
             () -> verify(edifactToFhirService, never()).convertToFhir(any(Message.class)),
             () -> verify(gpOutboundQueueService, never()).publish(any(Bundle.class)),
             () -> verify(outboundMeshMessageBuilder)
-                .buildNhsAck(eq(WorkflowId.PATHOLOGY), eq(interchange), eq(Collections.emptyList())),
+                .buildNhsAck(WorkflowId.PATHOLOGY, interchange, Collections.emptyList()),
             () -> verify(meshOutboundQueueService).publish(outboundMeshMessage)
         );
     }
