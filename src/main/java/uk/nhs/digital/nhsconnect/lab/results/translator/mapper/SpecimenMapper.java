@@ -73,6 +73,7 @@ public class SpecimenMapper {
         edifact.getFreeTexts().stream()
             .map(FreeTextSegment::getTexts)
             .flatMap(Arrays::stream)
+            .map(MappingUtils::unescape)
             .map(text -> new Annotation().setText(text))
             .forEach(fhir::addNote);
         // fhir.collection.collector = [none]
