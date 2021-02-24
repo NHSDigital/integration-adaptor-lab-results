@@ -1,0 +1,33 @@
+{
+  "resourceType": "Bundle",
+  "meta": {
+    "lastUpdated": "2021-02-24T09:53:11.637+00:00",
+    "profile": [
+      "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"
+    ]
+  },
+  "identifier": {
+    "system": "https://tools.ietf.org/html/rfc4122",
+    "value": "7ce22b61-ff08-4ab8-b766-38560168265d"
+  },
+  "type": "message",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:314bcfae-c309-4413-abf6-a69cc8c48553",
+      "resource": {
+        "resourceType": "Practitioner",
+        "identifier": [
+          {
+            "system": "https://fhir.nhs.uk/Id/sds-user-id",
+            "value": "G3380314"
+          }
+        ],
+        "name": [
+          {
+            "text": "SCOTT"
+          }
+        ]
+      }
+    }
+  ]
+}
