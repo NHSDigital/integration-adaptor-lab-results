@@ -1,5 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +31,7 @@ public class PractitionerMapper {
         return message.getInvolvedParties().stream()
             .map(InvolvedParty::getPerformerNameAndAddress)
             .flatMap(Optional::stream)
-            .filter(p -> p.getIdentifier() != null && !p.getIdentifier().isBlank())
+            .filter(p -> !StringUtils.isBlank(p.getIdentifier()))
             .map(p -> mapToPractitioner(p.getIdentifier(), p.getPerformerName()))
             .findAny();
     }
