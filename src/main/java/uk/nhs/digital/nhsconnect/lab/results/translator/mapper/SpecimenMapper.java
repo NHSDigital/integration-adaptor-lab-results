@@ -14,6 +14,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristi
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenQuantity;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.SpecimenDetails;
+import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +25,7 @@ import static java.util.stream.Collectors.toList;
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class SpecimenMapper {
+    private final UUIDGenerator uuidGenerator;
     private final DateFormatMapper dateFormatMapper;
 
     public List<Specimen> mapToSpecimens(final Message message) {
@@ -33,7 +35,8 @@ public class SpecimenMapper {
     }
 
     private Specimen edifactToFhir(final SpecimenDetails edifact) {
-        Specimen fhir = new Specimen();
+        final Specimen fhir = new Specimen();
+        fhir.setId(uuidGenerator.generateUUID());
         // fhir.identifier = SG16.RFF.C506.1154 (requester)
         edifact.getServiceRequesterReference()
             .map(Reference::getNumber)

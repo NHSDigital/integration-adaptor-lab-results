@@ -40,7 +40,7 @@ public class BundleMapper {
 
         pathologyRecord.getSpecimens().forEach(specimen ->
             bundle.addEntry()
-                .setFullUrl(FULL_URL_PREFIX + uuidGenerator.generateUUID())
+                .setFullUrl(FULL_URL_PREFIX + specimen.getId())
                 .setResource(specimen));
 
         return bundle;

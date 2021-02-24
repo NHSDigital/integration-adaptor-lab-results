@@ -26,8 +26,6 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static uk.nhs.digital.nhsconnect.lab.results.fixtures.FhirFixtures.generatePatient;
@@ -128,7 +126,9 @@ class BundleMapperTest {
     @Test
     void testMapPathologyRecordToBundleWithSpecimens() {
         final var mockSpecimen1 = mock(Specimen.class);
+        when(mockSpecimen1.getId()).thenReturn("some-uuid");
         final var mockSpecimen2 = mock(Specimen.class);
+        when(mockSpecimen2.getId()).thenReturn("some-uuid");
         final var pathologyRecord = PathologyRecord.builder()
             .specimens(List.of(mockSpecimen1, mockSpecimen2))
             .build();
@@ -177,14 +177,12 @@ class BundleMapperTest {
 
     private void verifyBundle(Bundle bundle) {
         assertAll(
-            () -> assertNotNull(bundle.getMeta().getLastUpdated()),
-            () -> assertEquals(
-                "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1",
-                bundle.getMeta().getProfile().get(0).asStringValue()
-            ),
-            () -> assertEquals("https://tools.ietf.org/html/rfc4122", bundle.getIdentifier().getSystem()),
-            () -> assertEquals("some-uuid", bundle.getIdentifier().getValue()),
-            () -> assertEquals(Bundle.BundleType.MESSAGE, bundle.getType())
+            () -> assertThat(bundle.getMeta().getLastUpdated()).isNotNull(),
+            () -> assertThat(bundle.getMeta().getProfile().get(0).asStringValue())
+                    .isEqualTo("https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"),
+            () -> assertThat(bundle.getIdentifier().getSystem()).isEqualTo("https://tools.ietf.org/html/rfc4122"),
+            () -> assertThat(bundle.getIdentifier().getValue()).isEqualTo("some-uuid"),
+            () -> assertThat(bundle.getType()).isEqualTo(Bundle.BundleType.MESSAGE)
         );
     }
 }

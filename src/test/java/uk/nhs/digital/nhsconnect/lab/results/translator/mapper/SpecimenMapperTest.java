@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DateFormat;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
+import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -27,6 +28,9 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class SpecimenMapperTest {
+    @Mock
+    private UUIDGenerator uuidGenerator;
+
     @Mock
     private DateFormatMapper dateFormatMapper;
 
@@ -57,6 +61,7 @@ class SpecimenMapperTest {
 
     @Test
     void testMapToSpecimensOnlyRequiredSegmentCharacteristicType() {
+        when(uuidGenerator.generateUUID()).thenReturn("test-uuid");
         final Message message = new Message(List.of(
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
@@ -70,7 +75,8 @@ class SpecimenMapperTest {
         final var specimens = specimenMapper.mapToSpecimens(message);
 
         assertThat(specimens).hasSize(2)
-            .allSatisfy(specimen -> assertThat(specimen.getType().getText()).isEqualTo("Specimen type"));
+            .allSatisfy(specimen -> assertThat(specimen.getType().getText()).isEqualTo("Specimen type"))
+            .allSatisfy(specimen -> assertThat(specimen.getId()).isEqualTo("test-uuid"));
     }
 
     @Test
