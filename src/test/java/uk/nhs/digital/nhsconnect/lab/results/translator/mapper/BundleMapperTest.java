@@ -32,9 +32,16 @@ class BundleMapperTest {
     void testMapPathologyRecordToBundle() {
         when(uuidGenerator.generateUUID()).thenReturn("some-value-uuid").thenReturn("some-entry-uuid");
 
-        Practitioner generatedRequester = generatePractitioner("Dr Bob Hope", Enumerations.AdministrativeGender.MALE);
-        Practitioner generatedPerformer = generatePractitioner("Dr Darcy Lewis",
-            Enumerations.AdministrativeGender.FEMALE);
+        Practitioner generatedRequester = generatePractitioner(
+            "Dr Bob Hope",
+            Enumerations.AdministrativeGender.MALE,
+            "some-entry-uuid"
+        );
+        Practitioner generatedPerformer = generatePractitioner(
+            "Dr Darcy Lewis",
+            Enumerations.AdministrativeGender.FEMALE,
+            "some-entry-uuid"
+        );
         final Bundle bundle = bundleMapper.mapToBundle(generatePathologyRecord(generatedRequester, generatedPerformer));
 
         assertAll(
@@ -60,7 +67,9 @@ class BundleMapperTest {
                     .extracting(HumanName::getText)
                     .isEqualTo("Dr Bob Hope"),
             () -> assertThat(requester.getGender().toCode())
-                    .isEqualTo("male")
+                    .isEqualTo("male"),
+            () -> assertThat(requester.getId())
+                    .isEqualTo("some-entry-uuid")
         );
 
         Bundle.BundleEntryComponent bundleEntryComponentForPerformerResource = bundle.getEntry().get(1);
@@ -74,7 +83,9 @@ class BundleMapperTest {
                 .extracting(HumanName::getText)
                 .isEqualTo("Dr Darcy Lewis"),
             () -> assertThat(performer.getGender().toCode())
-                .isEqualTo("female")
+                .isEqualTo("female"),
+            () -> assertThat(performer.getId())
+                .isEqualTo("some-entry-uuid")
         );
     }
 }

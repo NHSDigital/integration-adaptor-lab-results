@@ -36,8 +36,11 @@ class EdifactToFhirServiceTest {
 
     @Test
     void testEdifactIsMappedToFhirBundle() {
-        Practitioner requester = generatePractitioner("Dr Bob Hope", Enumerations.AdministrativeGender.MALE);
-        Practitioner performer = generatePractitioner("Dr Darcy Lewis", Enumerations.AdministrativeGender.FEMALE);
+        Practitioner requester = generatePractitioner("Dr Bob Hope", Enumerations.AdministrativeGender.MALE, "id-1");
+        Practitioner performer = generatePractitioner(
+            "Dr Darcy Lewis",
+            Enumerations.AdministrativeGender.FEMALE,
+            "id-1");
         PathologyRecord pathologyRecord = generatePathologyRecord(requester, performer);
         Bundle generatedBundle = generateBundle(pathologyRecord);
 

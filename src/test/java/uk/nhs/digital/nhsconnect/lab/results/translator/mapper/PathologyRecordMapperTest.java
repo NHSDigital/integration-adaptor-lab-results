@@ -33,11 +33,11 @@ class PathologyRecordMapperTest {
         final Message message = new Message(new ArrayList<>());
 
         when(practitionerMapper.mapRequester(message)).thenReturn(
-                Optional.of(generatePractitioner("Dr Bob Hope", AdministrativeGender.MALE))
+                Optional.of(generatePractitioner("Dr Bob Hope", AdministrativeGender.MALE, "id-1"))
         );
 
         when(practitionerMapper.mapPerformer(message)).thenReturn(
-                Optional.of(generatePractitioner("Dr Darcy Lewis", AdministrativeGender.FEMALE))
+                Optional.of(generatePractitioner("Dr Darcy Lewis", AdministrativeGender.FEMALE, "id-2"))
         );
 
         final PathologyRecord pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
@@ -53,13 +53,17 @@ class PathologyRecordMapperTest {
                     .isEqualTo("Dr Bob Hope"),
             () -> assertThat(requester.getGender().toCode())
                     .isEqualTo("male"),
+            () -> assertThat(requester.getId())
+                    .isEqualTo("id-1"),
             () -> assertThat(performer.getName())
                     .hasSize(1)
                     .first()
                     .extracting(HumanName::getText)
                     .isEqualTo("Dr Darcy Lewis"),
             () -> assertThat(performer.getGender().toCode())
-                    .isEqualTo("female")
+                    .isEqualTo("female"),
+            () -> assertThat(performer.getId())
+                    .isEqualTo("id-2")
         );
     }
 }
