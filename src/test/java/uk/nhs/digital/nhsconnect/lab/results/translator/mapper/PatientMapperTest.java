@@ -36,10 +36,13 @@ class PatientMapperTest {
     private static final String SECOND_FORENAME = "ANGELA";
     private static final String SURNAME = "KENNEDY";
     private static final String NHS_NUMBER = "1234";
-    private static final String BIRTH_DATE_YY = "1991";
-    private static final String BIRTH_DATE_YYMM = "1991-10";
-    private static final String BIRTH_DATE_YYMMDD = "1999-12-28";
     private static final String UUID = "some-uuid";
+    private static final String BIRTH_DATE_FULL = "1991-10-28";
+    private static final String BIRTH_DATE_YEAR_AND_MONTH = "1991-10";
+    private static final String BIRTH_DATE_YEAR_ONLY = "1991";
+    private static final LocalDate LOCAL_DATE_FULL = LocalDate.of(1991, 10, 28);
+    private static final LocalDate LOCAL_DATE_FOR_YEAR_AND_MONTH = LocalDate.of(1991, 10, 1);
+    private static final LocalDate LOCAL_DATE_FOR_YEAR_ONLY = LocalDate.of(1991, 1, 1);
 
     @InjectMocks
     private PatientMapper patientMapper;
@@ -87,9 +90,21 @@ class PatientMapperTest {
         when(investigationSubject.getDetails()).thenReturn(patientDetails);
         when(uuidGenerator.generateUUID()).thenReturn(UUID);
 
-        stubPersonName();
-        stubGender();
-        stubDateOfBirth(BIRTH_DATE_YYMMDD, DateFormat.CCYYMMDD);
+        final PersonName personName = PersonName.builder()
+            .title(TITLE)
+            .firstForename(FIRST_FORENAME)
+            .secondForename(SECOND_FORENAME)
+            .surname(SURNAME)
+            .nhsNumber(NHS_NUMBER)
+            .build();
+        when(patientDetails.getName()).thenReturn(personName);
+
+        final Optional<PersonSex> personSex = Optional.of(PersonSex.builder()
+            .gender(Gender.FEMALE)
+            .build());
+        when(patientDetails.getSex()).thenReturn(personSex);
+
+        stubDateOfBirth(BIRTH_DATE_FULL, DateFormat.CCYYMMDD);
 
         final Patient patient = patientMapper.mapToPatient(message);
 
@@ -111,10 +126,60 @@ class PatientMapperTest {
             () -> assertThat(patient.getGender()).isEqualTo(Enumerations.AdministrativeGender.FEMALE),
 
             () -> {
-                final Date birthDate = Date.from(LocalDate.of(1999, 12, 28).atStartOfDay()
+                final Date birthDate = Date.from(LOCAL_DATE_FULL.atStartOfDay()
                     .atZone(ZoneId.systemDefault()).toInstant());
                 assertThat(patient.getBirthDate()).isEqualTo(birthDate);
             });
+    }
+
+    @Test
+    void testMapMessageToPatientDoesNotMapGivenNameIfFirstForenameIsNull() {
+        when(message.getServiceReportDetails()).thenReturn(serviceReportDetails);
+        when(serviceReportDetails.getSubject()).thenReturn(investigationSubject);
+        when(investigationSubject.getDetails()).thenReturn(patientDetails);
+        when(uuidGenerator.generateUUID()).thenReturn(UUID);
+
+        final PersonName personName = PersonName.builder()
+            .title(TITLE)
+            .secondForename(SECOND_FORENAME)
+            .surname(SURNAME)
+            .build();
+        when(patientDetails.getName()).thenReturn(personName);
+
+        final Patient patient = patientMapper.mapToPatient(message);
+
+        assertAll("patient",
+            () -> assertThat(patient).isNotNull(),
+            () -> assertThat(patient.getName()).hasSize(1).first()
+                .satisfies(name -> assertAll(
+                    () -> assertThat(name.getPrefixAsSingleString()).isEqualTo(TITLE),
+                    () -> assertThat(name.getGivenAsSingleString()).isEmpty(),
+                    () -> assertThat(name.getFamily()).isEqualTo(SURNAME))));
+    }
+
+    @Test
+    void testMapMessageToPatientMapsGivenNameIfSecondForenameIsNull() {
+        when(message.getServiceReportDetails()).thenReturn(serviceReportDetails);
+        when(serviceReportDetails.getSubject()).thenReturn(investigationSubject);
+        when(investigationSubject.getDetails()).thenReturn(patientDetails);
+        when(uuidGenerator.generateUUID()).thenReturn(UUID);
+
+        final PersonName personName = PersonName.builder()
+            .title(TITLE)
+            .firstForename(FIRST_FORENAME)
+            .surname(SURNAME)
+            .build();
+        when(patientDetails.getName()).thenReturn(personName);
+
+        final Patient patient = patientMapper.mapToPatient(message);
+
+        assertAll("patient",
+            () -> assertThat(patient).isNotNull(),
+            () -> assertThat(patient.getName()).hasSize(1).first()
+                .satisfies(name -> assertAll(
+                    () -> assertThat(name.getPrefixAsSingleString()).isEqualTo(TITLE),
+                    () -> assertThat(name.getGivenAsSingleString()).isEqualTo(FIRST_FORENAME),
+                    () -> assertThat(name.getFamily()).isEqualTo(SURNAME))));
     }
 
     @Test
@@ -135,13 +200,13 @@ class PatientMapperTest {
     }
 
     @Test
-    void testMapMessageToPatientWithBirthDateYearOnly() {
+    void testMapMessageToPatientWithBirthDateIsYearOnly() {
         when(message.getServiceReportDetails()).thenReturn(serviceReportDetails);
         when(serviceReportDetails.getSubject()).thenReturn(investigationSubject);
         when(investigationSubject.getDetails()).thenReturn(patientDetails);
         when(uuidGenerator.generateUUID()).thenReturn(UUID);
 
-        stubDateOfBirth(BIRTH_DATE_YY, DateFormat.CCYY);
+        stubDateOfBirth(BIRTH_DATE_YEAR_ONLY, DateFormat.CCYY);
 
         final Patient patient = patientMapper.mapToPatient(message);
 
@@ -152,7 +217,7 @@ class PatientMapperTest {
             () -> assertThat(patient.getGender()).isNull(),
 
             () -> {
-                final Date birthDate = Date.from(LocalDate.of(1991, 1, 1).atStartOfDay()
+                final Date birthDate = Date.from(LOCAL_DATE_FOR_YEAR_ONLY.atStartOfDay()
                     .atZone(ZoneId.systemDefault()).toInstant());
                 assertThat(patient.getBirthDate()).isEqualTo(birthDate);
             });
@@ -165,7 +230,7 @@ class PatientMapperTest {
         when(investigationSubject.getDetails()).thenReturn(patientDetails);
         when(uuidGenerator.generateUUID()).thenReturn(UUID);
 
-        stubDateOfBirth(BIRTH_DATE_YYMM, DateFormat.CCYYMM);
+        stubDateOfBirth(BIRTH_DATE_YEAR_AND_MONTH, DateFormat.CCYYMM);
 
         final Patient patient = patientMapper.mapToPatient(message);
 
@@ -176,7 +241,7 @@ class PatientMapperTest {
             () -> assertThat(patient.getGender()).isNull(),
 
             () -> {
-                final Date birthDate = Date.from(LocalDate.of(1991, 10, 1).atStartOfDay()
+                final Date birthDate = Date.from(LOCAL_DATE_FOR_YEAR_AND_MONTH.atStartOfDay()
                     .atZone(ZoneId.systemDefault()).toInstant());
                 assertThat(patient.getBirthDate()).isEqualTo(birthDate);
             });
@@ -188,24 +253,6 @@ class PatientMapperTest {
             .dateFormat(dateFormat)
             .build());
         when(patientDetails.getDateOfBirth()).thenReturn(personDateOfBirth);
-    }
-
-    private void stubPersonName() {
-        final PersonName personName = PersonName.builder()
-            .title(TITLE)
-            .firstForename(FIRST_FORENAME)
-            .secondForename(SECOND_FORENAME)
-            .surname(SURNAME)
-            .nhsNumber(NHS_NUMBER)
-            .build();
-        when(patientDetails.getName()).thenReturn(personName);
-    }
-
-    private void stubGender() {
-        final Optional<PersonSex> personSex = Optional.of(PersonSex.builder()
-            .gender(Gender.FEMALE)
-            .build());
-        when(patientDetails.getSex()).thenReturn(personSex);
     }
 
 }

@@ -71,9 +71,12 @@ public class PatientMapper {
         final HumanName humanName = new HumanName();
 
         Optional.ofNullable(name.getTitle()).ifPresent(humanName::addPrefix);
-        Optional.ofNullable(name.getFirstForename()).ifPresent(humanName::addGiven);
-        Optional.ofNullable(name.getSecondForename()).ifPresent(humanName::addGiven);
-        Optional.ofNullable(name.getSurname()).ifPresent(humanName::setFamily);
+        Optional.ofNullable(name.getFirstForename()).ifPresent(forename -> {
+            humanName.addGiven(forename);
+            Optional.ofNullable(name.getSecondForename())
+                .ifPresent(humanName::addGiven);
+        });
+        humanName.setFamily(name.getSurname());
 
         patient.addName(humanName);
     }
