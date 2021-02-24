@@ -30,7 +30,7 @@ public class PractitionerMapper {
         return message.getInvolvedParties().stream()
             .map(InvolvedParty::getPerformerNameAndAddress)
             .flatMap(Optional::stream)
-            .filter(p -> !p.getIdentifier().isBlank())
+            .filter(p -> p.getIdentifier() != null && !p.getIdentifier().isBlank())
             .map(p -> mapToPractitioner(p.getIdentifier(), p.getPerformerName()))
             .findAny();
     }

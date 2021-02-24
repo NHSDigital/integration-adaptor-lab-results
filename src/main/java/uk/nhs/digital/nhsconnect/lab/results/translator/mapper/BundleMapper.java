@@ -28,9 +28,11 @@ public class BundleMapper {
             .setFullUrl(FULL_URL_PREFIX.concat(pathologyRecord.getRequester().getId()))
             .setResource(pathologyRecord.getRequester());
 
-        bundle.addEntry()
-            .setFullUrl(FULL_URL_PREFIX.concat(pathologyRecord.getPerformer().getId()))
-            .setResource(pathologyRecord.getPerformer());
+        if (pathologyRecord.getPerformer() != null) {
+            bundle.addEntry()
+                .setFullUrl(FULL_URL_PREFIX.concat(pathologyRecord.getPerformer().getId()))
+                .setResource(pathologyRecord.getPerformer());
+        }
 
         return bundle;
     }
