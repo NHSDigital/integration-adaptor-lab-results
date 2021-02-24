@@ -1,13 +1,12 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
-import org.junit.jupiter.api.Test;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
+
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 
 class PerformerNameAndAddressTest {
 
@@ -23,49 +22,53 @@ class PerformerNameAndAddressTest {
 
     @Test
     void when_edifactStringDoesNotStartWithCorrectKey_expect_illegalArgumentExceptionIsThrown() {
-        assertThrows(IllegalArgumentException.class,
-            () -> PerformerNameAndAddress.fromString("wrong value"));
+        assertThatThrownBy(() -> PerformerNameAndAddress.fromString("wrong value"))
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Can't create PerformerNameAndAddress from wrong value");
     }
 
     @Test
     void when_edifactStringIsPassed_expect_returnAPerformingOrganisationNameAndAddressObject() {
         assertAll(
             () -> assertThat(performingOrganisationNameAndAddress)
-                .usingRecursiveComparison()
-                .isEqualTo(PerformerNameAndAddress.fromString("NAD+SLA+++LONDON CITY HOSPITAL")),
+                    .usingRecursiveComparison()
+                    .isEqualTo(PerformerNameAndAddress.fromString("NAD+SLA+++LONDON CITY HOSPITAL")),
 
             () -> assertThat(performerNameAndAddress)
-                .usingRecursiveComparison()
-                .isEqualTo(PerformerNameAndAddress.fromString("NAD+SLA+A2442389:902++DR J SMITH"))
+                    .usingRecursiveComparison()
+                    .isEqualTo(PerformerNameAndAddress.fromString("NAD+SLA+A2442389:902++DR J SMITH"))
         );
     }
 
     @Test
     void when_buildingSegmentObjectWithEmptyHealthcareCode_expect_illegalArgumentExceptionIsThrown() {
-        assertThrows(
-            IllegalArgumentException.class,
+        assertThatThrownBy(
             () -> PerformerNameAndAddress.builder()
                 .identifier("A2442389")
                 .code(HealthcareRegistrationIdentificationCode.fromCode(""))
                 .performingOrganisationName("")
                 .performerName("")
                 .build()
-        );
+        )
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("No HealthcareRegistrationIdentificationCode for ''");
+
     }
 
     @Test
     void testGetKey() {
-        assertEquals("NAD", performingOrganisationNameAndAddress.getKey());
+        assertThat(performingOrganisationNameAndAddress.getKey()).isEqualTo("NAD");
     }
 
     @Test
     void testGetPerformingOrganisationName() {
-        assertEquals("LONDON CITY HOSPITAL", performingOrganisationNameAndAddress.getPerformingOrganisationName());
+        assertThat(performingOrganisationNameAndAddress.getPerformingOrganisationName())
+            .isEqualTo("LONDON CITY HOSPITAL");
     }
 
     @Test
     void testGetPerformerName() {
-        assertEquals("DR J SMITH", performerNameAndAddress.getPerformerName());
+        assertThat(performerNameAndAddress.getPerformerName()).isEqualTo("DR J SMITH");
     }
 
     @Test
