@@ -1,28 +1,33 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
-import org.hl7.fhir.dstu3.model.HumanName;
-import org.hl7.fhir.dstu3.model.Practitioner;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PerformerNameAndAddress;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.RequesterNameAndAddress;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvolvedParty;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import org.hl7.fhir.dstu3.model.HumanName;
+import org.hl7.fhir.dstu3.model.Practitioner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PerformerNameAndAddress;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.RequesterNameAndAddress;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvolvedParty;
+import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
+
 @ExtendWith(MockitoExtension.class)
 class PractitionerMapperTest {
+
+    @InjectMocks
+    private PractitionerMapper mapper;
 
     @Mock
     private Message message;
@@ -33,12 +38,8 @@ class PractitionerMapperTest {
     @Mock
     private PerformerNameAndAddress performer;
 
-    private PractitionerMapper mapper;
-
-    @BeforeEach
-    void setUp() {
-        mapper = new PractitionerMapper();
-    }
+    @Mock
+    private UUIDGenerator uuidGenerator;
 
     @Test
     void testMapMessageToPractitionerNoRequester() {
