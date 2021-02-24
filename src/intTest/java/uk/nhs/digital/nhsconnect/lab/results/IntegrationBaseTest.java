@@ -85,16 +85,18 @@ public abstract class IntegrationBaseTest {
     private String gpOutboundQueueName;
 
     @Getter
-    @Value("classpath:edifact/pathology.dat")
+    @Value("classpath:edifact/pathology.edifact.dat")
     private Resource edifactResource;
 
     @Getter
-    @Value("classpath:edifact/pathology.json")
+    @Value("classpath:edifact/pathology.fhir.json")
     private Resource fhirResource;
 
     @Getter
     @Value("classpath:edifact/pathology_nhsAck.dat")
     private Resource nhsAckResource;
+    @Value("classpath:edifact/pathology_recep.edifact.dat")
+    private Resource recepResource;
 
     private long originalReceiveTimeout;
 
