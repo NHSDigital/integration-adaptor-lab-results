@@ -25,11 +25,11 @@ public class BundleMapper {
         Bundle bundle = generateInitialPathologyBundle();
 
         bundle.addEntry()
-            .setFullUrl(FULL_URL_PREFIX.concat(uuidGenerator.generateUUID()))
+            .setFullUrl(FULL_URL_PREFIX.concat(pathologyRecord.getRequester().getId()))
             .setResource(pathologyRecord.getRequester());
 
         bundle.addEntry()
-            .setFullUrl(FULL_URL_PREFIX.concat(uuidGenerator.generateUUID()))
+            .setFullUrl(FULL_URL_PREFIX.concat(pathologyRecord.getPerformer().getId()))
             .setResource(pathologyRecord.getPerformer());
 
         return bundle;

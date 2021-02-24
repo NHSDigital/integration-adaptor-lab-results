@@ -4,11 +4,14 @@ import org.hl7.fhir.dstu3.model.Practitioner;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvolvedParty;
+import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 import java.util.Optional;
 
 @Component
 public class PractitionerMapper {
+    private UUIDGenerator uuidGenerator = new UUIDGenerator();
+
     private static final String SDS_USER_SYSTEM = "https://fhir.nhs.uk/Id/sds-user-id";
 
     public Optional<Practitioner> mapRequester(final Message message) {
@@ -37,6 +40,7 @@ public class PractitionerMapper {
             .setSystem(SDS_USER_SYSTEM);
         Optional.ofNullable(name)
             .ifPresent(n -> result.addName().setText(n));
+        result.setId(uuidGenerator.generateUUID());
 
         return result;
     }
