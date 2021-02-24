@@ -170,6 +170,11 @@ public abstract class IntegrationBaseTest {
     }
 
     @SneakyThrows
+    protected Message getMeshOutboundQueueMessage() {
+        return waitFor(() -> jmsTemplate.receive(meshOutboundQueueName));
+    }
+
+    @SneakyThrows
     protected Message getDeadLetterMeshInboundQueueMessage(String queueName) {
         return waitFor(() -> jmsTemplate.receive(DLQ_PREFIX + queueName));
     }
@@ -194,6 +199,10 @@ public abstract class IntegrationBaseTest {
 
     protected void clearGpOutboundQueue() {
         waitForCondition(() -> jmsTemplate.receive(gpOutboundQueueName) == null);
+    }
+
+    protected void clearMeshOutboundQueue() {
+        waitForCondition(() -> jmsTemplate.receive(meshOutboundQueueName) == null);
     }
 
     @SneakyThrows

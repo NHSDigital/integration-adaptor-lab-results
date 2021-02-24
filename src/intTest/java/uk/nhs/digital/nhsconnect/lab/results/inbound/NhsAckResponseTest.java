@@ -1,0 +1,109 @@
+package uk.nhs.digital.nhsconnect.lab.results.inbound;
+
+import org.assertj.core.api.SoftAssertions;
+import org.json.JSONException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.Customization;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
+import org.skyscreamer.jsonassert.comparator.CustomComparator;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.test.annotation.DirtiesContext;
+import uk.nhs.digital.nhsconnect.lab.results.IntegrationBaseTest;
+import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
+import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
+
+import javax.jms.JMSException;
+import javax.jms.Message;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@DirtiesContext
+public class NhsAckResponseTest extends IntegrationBaseTest {
+
+    @Value("classpath:edifact/multi_pathology.dat")
+    private Resource multiEdifactResource;
+
+    @Value("classpath:edifact/pathology_edifact_IAF.dat")
+    private Resource edifact_IAF_resource;
+
+    @Value("classpath:edifact/pathology_nhsAck_IAF.dat")
+    private Resource nhsAck_IAF_resource;
+
+    private String previousCorrelationId;
+
+    @BeforeEach
+    void setUp() {
+        clearGpOutboundQueue();
+        clearMeshMailboxes();
+    }
+
+    @Test
+    void whenMeshInboundQueueMessageIsReceivedThenMessageIsHandled(SoftAssertions softly)
+            throws IOException, JMSException {
+
+        final String content = new String(Files.readAllBytes(edifact_IAF_resource.getFile().toPath()));
+
+        final MeshMessage meshMessage = new MeshMessage()
+                .setWorkflowId(WorkflowId.PATHOLOGY)
+                .setContent(content);
+
+        sendToMeshInboundQueue(meshMessage);
+
+        final Message nhsAck = getMeshOutboundQueueMessage();
+        final String nhsAckContent = parseTextMessage(nhsAck);
+
+        final String expectedContent = new String(Files.readAllBytes(nhsAck_IAF_resource.getFile().toPath()));
+
+        assertThat(nhsAckContent).isEqualTo(expectedContent);
+
+        //assertGpOutboundQueueMessages(softly);
+    }
+
+    @SuppressWarnings("checkstyle:magicnumber")
+    private void assertGpOutboundQueueMessages(SoftAssertions softly) throws IOException, JMSException, JSONException {
+        final List<Message> gpOutboundQueueMessages = IntStream.range(0, 6)
+                .mapToObj(x -> getGpOutboundQueueMessage())
+                .collect(Collectors.toList());
+
+        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(0));
+        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(1));
+        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(2));
+        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(3));
+        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(4));
+        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(5));
+    }
+
+    private void assertGpOutboundQueueMessages(SoftAssertions softly, Message message)
+            throws IOException, JMSException, JSONException {
+
+        // all messages come from the same interchange and use the same correlation id
+        final String correlationId = message.getStringProperty("CorrelationId");
+        if (previousCorrelationId == null) {
+            previousCorrelationId = correlationId;
+        }
+        softly.assertThat(correlationId).isEqualTo(previousCorrelationId);
+
+        final String messageBody = parseTextMessage(message);
+        final String expectedMessageBody = new String(Files.readAllBytes(getFhirResource().getFile().toPath()));
+
+        JSONAssert.assertEquals(
+                expectedMessageBody,
+                messageBody,
+                new CustomComparator(
+                        JSONCompareMode.STRICT,
+                        new Customization("meta.lastUpdated", (c1, c2) -> true),
+                        new Customization("identifier.value", (c1, c2) -> true),
+                        new Customization("entry[*].fullUrl", (c1, c2) -> true)
+                )
+        );
+    }
+
+}
