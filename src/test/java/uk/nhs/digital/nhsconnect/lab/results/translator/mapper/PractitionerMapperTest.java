@@ -131,6 +131,8 @@ class PractitionerMapperTest {
         final var requestingParty = mock(InvolvedParty.class);
         when(message.getInvolvedParties()).thenReturn(List.of(requestingParty));
         when(requestingParty.getPerformerNameAndAddress()).thenReturn(Optional.of(performer));
+        when(performer.getIdentifier()).thenReturn("Identifier");
+
 
         Optional<Practitioner> result = mapper.mapPerformer(message);
         assertThat(result).isNotEmpty();

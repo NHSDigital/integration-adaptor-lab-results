@@ -33,6 +33,7 @@ public class PractitionerMapper {
         Optional<PerformerNameAndAddress> performer = message.getInvolvedParties().stream()
             .map(InvolvedParty::getPerformerNameAndAddress)
             .flatMap(Optional::stream)
+            .filter(p -> !p.getIdentifier().isBlank())
             .findAny();
 
         if (performer.isPresent()) {
