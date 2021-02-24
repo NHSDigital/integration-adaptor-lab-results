@@ -1,5 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
+import lombok.RequiredArgsConstructor;
 import org.hl7.fhir.dstu3.model.DateType;
 import org.hl7.fhir.dstu3.model.Enumerations;
 import org.hl7.fhir.dstu3.model.HumanName;
@@ -11,13 +12,16 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PersonName;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvestigationSubject;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.PatientDetails;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.ServiceReportDetails;
+import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class PatientMapper {
 
     protected static final String NHS_NUMBER_SYSTEM = "https://fhir.nhs.uk/Id/nhs-number";
+    private final UUIDGenerator uuidGenerator;
 
     public Patient mapToPatient(final Message message) {
 
@@ -27,6 +31,7 @@ public class PatientMapper {
             .orElseThrow(() -> new FhirValidationException("Unable to map message to patient details"));
 
         final Patient patient = new Patient();
+        patient.setId(uuidGenerator.generateUUID());
 
         final PersonName personName = patientDetails.getName();
         Optional.ofNullable(personName).ifPresent(name -> {
@@ -44,7 +49,7 @@ public class PatientMapper {
         final Identifier identifier = new Identifier();
 
         identifier.setSystem(NHS_NUMBER_SYSTEM);
-        Optional.ofNullable(name.getNhsNumber()).ifPresent(identifier::setValue);
+        identifier.setValue(name.getNhsNumber());
 
         patient.addIdentifier(identifier);
     }
@@ -56,10 +61,10 @@ public class PatientMapper {
     }
 
     private void mapGender(final PatientDetails details, final Patient patient) {
-        details.getSex().ifPresent(personSex -> {
-            final String gender = personSex.getGender().name().toLowerCase();
-            patient.setGender(Enumerations.AdministrativeGender.fromCode(gender));
-        });
+        details.getSex()
+            .map(sex -> sex.getGender().name().toLowerCase())
+            .map(Enumerations.AdministrativeGender::fromCode)
+            .ifPresent(patient::setGender);
     }
 
     private void mapName(final PersonName name, final Patient patient) {

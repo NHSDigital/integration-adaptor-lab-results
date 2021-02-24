@@ -27,6 +27,7 @@ public final class FhirFixtures {
                                           final String birthDate) {
         Patient patient = new Patient();
 
+        patient.setId("some-entry-uuid");
         patient.addName().setText(name);
         patient.setGender(gender);
         patient.setBirthDateElement(new DateType(birthDate));

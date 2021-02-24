@@ -97,6 +97,7 @@ class BundleMapperTest {
 
         assertAll("patient",
             () -> assertNotNull(patient),
+            () -> assertThat(patient.getId()).isEqualTo(ENTRY_UUID),
             () -> assertThat(patient.getName())
                 .hasSize(1)
                 .first()

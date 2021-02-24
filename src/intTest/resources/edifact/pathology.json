@@ -30,9 +30,10 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:2ed2631b-4823-4ee5-990a-bd03098998a3",
+      "fullUrl": "urn:uuid:ff210519-fd8f-44c2-9bbe-733fd19b940f",
       "resource": {
         "resourceType": "Patient",
+        "id": "ff210519-fd8f-44c2-9bbe-733fd19b940f",
         "identifier": [
           {
             "system": "https://fhir.nhs.uk/Id/nhs-number",

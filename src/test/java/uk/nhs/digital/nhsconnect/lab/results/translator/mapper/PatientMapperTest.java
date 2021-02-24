@@ -16,6 +16,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PersonSex;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvestigationSubject;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.PatientDetails;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.ServiceReportDetails;
+import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -38,19 +39,18 @@ class PatientMapperTest {
     private static final String BIRTH_DATE_YY = "1991";
     private static final String BIRTH_DATE_YYMM = "1991-10";
     private static final String BIRTH_DATE_YYMMDD = "1999-12-28";
+    private static final String UUID = "some-uuid";
 
     @InjectMocks
     private PatientMapper patientMapper;
-
+    @Mock
+    private UUIDGenerator uuidGenerator;
     @Mock
     private Message message;
-
     @Mock
     private ServiceReportDetails serviceReportDetails;
-
     @Mock
     private InvestigationSubject investigationSubject;
-
     @Mock
     private PatientDetails patientDetails;
 
@@ -85,6 +85,7 @@ class PatientMapperTest {
         when(message.getServiceReportDetails()).thenReturn(serviceReportDetails);
         when(serviceReportDetails.getSubject()).thenReturn(investigationSubject);
         when(investigationSubject.getDetails()).thenReturn(patientDetails);
+        when(uuidGenerator.generateUUID()).thenReturn(UUID);
 
         stubPersonName();
         stubGender();
@@ -121,6 +122,7 @@ class PatientMapperTest {
         when(message.getServiceReportDetails()).thenReturn(serviceReportDetails);
         when(serviceReportDetails.getSubject()).thenReturn(investigationSubject);
         when(investigationSubject.getDetails()).thenReturn(patientDetails);
+        when(uuidGenerator.generateUUID()).thenReturn(UUID);
 
         final Patient patient = patientMapper.mapToPatient(message);
 
@@ -137,6 +139,7 @@ class PatientMapperTest {
         when(message.getServiceReportDetails()).thenReturn(serviceReportDetails);
         when(serviceReportDetails.getSubject()).thenReturn(investigationSubject);
         when(investigationSubject.getDetails()).thenReturn(patientDetails);
+        when(uuidGenerator.generateUUID()).thenReturn(UUID);
 
         stubDateOfBirth(BIRTH_DATE_YY, DateFormat.CCYY);
 
@@ -160,6 +163,7 @@ class PatientMapperTest {
         when(message.getServiceReportDetails()).thenReturn(serviceReportDetails);
         when(serviceReportDetails.getSubject()).thenReturn(investigationSubject);
         when(investigationSubject.getDetails()).thenReturn(patientDetails);
+        when(uuidGenerator.generateUUID()).thenReturn(UUID);
 
         stubDateOfBirth(BIRTH_DATE_YYMM, DateFormat.CCYYMM);
 
