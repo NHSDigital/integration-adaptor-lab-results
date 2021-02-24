@@ -133,7 +133,7 @@ class SpecimenDetailsTest {
 
         specimenCollectionDateTime
             .map(SpecimenCollectionDateTime::getCollectionDateTime)
-            .hasValue("2010-02-23");
+            .hasValue("20100223");
         specimenCollectionDateTime
             .map(SpecimenCollectionDateTime::getDateFormat)
             .hasValue(DateFormat.CCYYMMDD);
@@ -151,7 +151,7 @@ class SpecimenDetailsTest {
 
         specimenCollectionReceiptDateTime
             .map(SpecimenCollectionReceiptDateTime::getCollectionReceiptDateTime)
-            .hasValue("2010-02-24T15:41+00:00");
+            .hasValue("201002241541");
         specimenCollectionReceiptDateTime
             .map(SpecimenCollectionReceiptDateTime::getDateFormat)
             .hasValue(DateFormat.CCYYMMDDHHMM);

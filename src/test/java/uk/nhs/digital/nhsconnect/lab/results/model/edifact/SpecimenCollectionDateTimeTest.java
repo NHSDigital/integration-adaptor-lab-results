@@ -10,49 +10,49 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class SpecimenCollectionDateTimeTest {
 
     @Test
-    void testToEdifactForValidSpecimenCollectionDateTimeInFormatCCYYMMDD() {
+    void testGetCollectionDateTimeForValidSpecimenCollectionDateTimeInFormatCCYYMMDD() {
         final var specimenCollectionDateTime = SpecimenCollectionDateTime.builder()
             .collectionDateTime("20100223")
             .dateFormat(DateFormat.CCYYMMDD)
             .build();
 
-        final String actual = specimenCollectionDateTime.toEdifact();
+        final String actual = specimenCollectionDateTime.getCollectionDateTime();
 
-        assertThat(actual).isEqualTo("DTM+SCO:20100223:102'");
+        assertThat(actual).isEqualTo("20100223");
     }
 
     @Test
-    void testToEdifactForValidSpecimenCollectionDateTimeInFormatCCYYMMDDHHMM() {
+    void testGetCollectionReceiptDateTimeForValidSpecimenCollectionDateTimeInFormatCCYYMMDDHHMM() {
         final var specimenCollectionDateTime = SpecimenCollectionDateTime.builder()
             .collectionDateTime("201002231541")
             .dateFormat(DateFormat.CCYYMMDDHHMM)
             .build();
 
-        final String actual = specimenCollectionDateTime.toEdifact();
+        final String actual = specimenCollectionDateTime.getCollectionDateTime();
 
-        assertThat(actual).isEqualTo("DTM+SCO:201002231541:203'");
+        assertThat(actual).isEqualTo("201002231541");
     }
 
     @Test
-    void testToEdifactForEmptySpecimenCollectionDateTimeThrowsException() {
+    void testValidateForEmptySpecimenCollectionDateTimeThrowsException() {
         final var specimenCollectionDateTime = SpecimenCollectionDateTime.builder()
             .collectionDateTime("")
             .dateFormat(DateFormat.CCYYMMDD)
             .build();
 
-        assertThatThrownBy(specimenCollectionDateTime::toEdifact)
+        assertThatThrownBy(specimenCollectionDateTime::validate)
             .isExactlyInstanceOf(EdifactValidationException.class)
             .hasMessage("DTM: Date/time of sample collection is required");
     }
 
     @Test
-    void testToEdifactForBlankSpecimenCollectionDateTimeThrowsException() {
+    void testValidateForBlankSpecimenCollectionDateTimeThrowsException() {
         final var specimenCollectionDateTime = SpecimenCollectionDateTime.builder()
             .collectionDateTime(" ")
             .dateFormat(DateFormat.CCYYMMDD)
             .build();
 
-        assertThatThrownBy(specimenCollectionDateTime::toEdifact)
+        assertThatThrownBy(specimenCollectionDateTime::validate)
             .isExactlyInstanceOf(EdifactValidationException.class)
             .hasMessage("DTM: Date/time of sample collection is required");
     }
