@@ -94,6 +94,7 @@ public class EdifactParser {
                 interchangeHeader.getSender(),
                 interchangeHeader.getRecipient(),
                 interchangeHeader.getSequenceNumber(),
+                interchangeHeader.isNhsAckRequested(),
                 ex);
         }
 

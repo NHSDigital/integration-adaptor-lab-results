@@ -2,7 +2,6 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
 import lombok.Getter;
 import lombok.Setter;
-import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +11,11 @@ import java.util.List;
 public class NhsAckContent {
     private String interchangeSender;
     private String interchangeRecipient;
-    private String date_YYMMDD;
-    private String time_HHMM;
+    private String dateYYMMDD;
+    private String timeHHMM;
     private String nhsAckControlReference;
     private String workflowId;
-    private String date_CCYYMMDD;
+    private String dateCCYYMMDD;
     private String interchangeControlReference;
     private NhsAckStatus interchangeStatusCode;
     private boolean interchangeError; // This value is only set if an error occurred on the interchange level

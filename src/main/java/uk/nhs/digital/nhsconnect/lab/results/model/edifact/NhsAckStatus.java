@@ -1,34 +1,21 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Getter
 public enum NhsAckStatus {
-    ACCEPTED {
-        @Override
-        public String toString() {
-            return "IAF";
-        }
-    },
-    PARTIALLY_ACCEPTED {
-        @Override
-        public String toString() {
-            return "IAP";
-        }
-    },
-    INTERCHANGE_REJECTED {
-        @Override
-        public String toString() {
-            return "IRI";
-        }
-    },
-    MESSAGE_REJECTED {
-        @Override
-        public String toString() {
-            return "IRM";
-        }
-    },
-    ALL_MESSAGES_REJECTED {
-        @Override
-        public String toString() {
-            return "IRA";
-        }
+    ACCEPTED("IAF"),
+    PARTIALLY_ACCEPTED("IAP"),
+    INTERCHANGE_REJECTED("IRI"),
+    MESSAGE_REJECTED("IRM"),
+    ALL_MESSAGES_REJECTED("IRA");
+
+    private final String nhsAckStatus;
+
+    @Override
+    public String toString() {
+        return nhsAckStatus;
     }
 }

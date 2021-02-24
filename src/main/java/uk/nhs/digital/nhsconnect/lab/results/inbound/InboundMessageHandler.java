@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.fhir.EdifactToFhirService;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.InboundMeshMessage;
+import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
@@ -40,8 +41,10 @@ public class InboundMessageHandler {
             return;
         } catch (MessagesParsingException ex) {
             LOGGER.error("Error parsing Messages", ex);
-            var nhsack = outboundMeshMessageBuilder.buildNhsAck(meshMessage.getWorkflowId(), ex);
-            meshOutboundQueueService.publish(nhsack);
+            if (ex.isNhsAckRequested()) {
+                var nhsack = outboundMeshMessageBuilder.buildNhsAck(meshMessage.getWorkflowId(), ex);
+                meshOutboundQueueService.publish(nhsack);
+            }
             return;
         }
 
@@ -49,10 +52,16 @@ public class InboundMessageHandler {
 
         final List<MessageProcessingResult> messageProcessingResults = getFhirDataToSend(interchange.getMessages());
 
-        var nhsack = outboundMeshMessageBuilder.buildNhsAck(
-            meshMessage.getWorkflowId(),
-            interchange,
-            messageProcessingResults);
+        boolean ackRequested = interchange.getInterchangeHeader().isNhsAckRequested();
+
+        OutboundMeshMessage nhsack = null;
+
+        if (ackRequested) {
+            nhsack = outboundMeshMessageBuilder.buildNhsAck(
+                    meshMessage.getWorkflowId(),
+                    interchange,
+                    messageProcessingResults);
+        }
 
         messageProcessingResults.stream()
             .filter(MessageProcessingResult.Success.class::isInstance)
@@ -62,9 +71,10 @@ public class InboundMessageHandler {
 
         logSentFor(interchange);
 
-        meshOutboundQueueService.publish(nhsack);
-
-        logNhsackSentFor(interchange);
+        if (ackRequested) {
+            meshOutboundQueueService.publish(nhsack);
+            logNhsackSentFor(interchange);
+        }
     }
 
     private List<MessageProcessingResult> getFhirDataToSend(List<Message> messages) {

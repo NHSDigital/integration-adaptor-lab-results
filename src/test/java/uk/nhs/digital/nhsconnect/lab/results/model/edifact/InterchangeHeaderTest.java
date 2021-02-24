@@ -80,6 +80,7 @@ class InterchangeHeaderTest {
         assertEquals("SNDR", interchangeHeader.getSender());
         assertEquals("RECP", interchangeHeader.getRecipient());
         assertEquals(1L, interchangeHeader.getSequenceNumber());
+        assert (!interchangeHeader.isNhsAckRequested());
     }
 
     @Test
@@ -88,5 +89,29 @@ class InterchangeHeaderTest {
             assertThrows(IllegalArgumentException.class, () -> InterchangeHeader.fromString("wrong value"));
 
         assertEquals("Can't create InterchangeHeader from wrong value", exception.getMessage());
+    }
+
+    @Test
+    void testFromStringWithNhsAckRequestedSetsTrue() {
+        final var interchangeHeader = InterchangeHeader.fromString(
+                "UNB+UNOA:2+SNDR+RECP+190323:0900+00000001++MEDRPT++1");
+
+        assertEquals(InterchangeHeader.KEY, interchangeHeader.getKey());
+        assertEquals("SNDR", interchangeHeader.getSender());
+        assertEquals("RECP", interchangeHeader.getRecipient());
+        assertEquals(1L, interchangeHeader.getSequenceNumber());
+        assert (interchangeHeader.isNhsAckRequested());
+    }
+
+    @Test
+    void testFromStringWithNoNhsAckRequestedSetsFalse() {
+        final var interchangeHeader = InterchangeHeader.fromString(
+                "UNB+UNOA:2+SNDR+RECP+190323:0900+00000001++MEDRPT++0");
+
+        assertEquals(InterchangeHeader.KEY, interchangeHeader.getKey());
+        assertEquals("SNDR", interchangeHeader.getSender());
+        assertEquals("RECP", interchangeHeader.getRecipient());
+        assertEquals(1L, interchangeHeader.getSequenceNumber());
+        assert (!interchangeHeader.isNhsAckRequested());
     }
 }

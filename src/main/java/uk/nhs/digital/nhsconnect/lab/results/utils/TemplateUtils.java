@@ -7,7 +7,10 @@ import com.github.mustachejava.MustacheFactory;
 import java.io.IOException;
 import java.io.StringWriter;
 
-public class TemplateUtils {
+public final class TemplateUtils {
+
+    private TemplateUtils() { }
+
     private static final String TEMPLATES_DIRECTORY = "templates";
 
     public static Mustache loadTemplate(String templateName) {
