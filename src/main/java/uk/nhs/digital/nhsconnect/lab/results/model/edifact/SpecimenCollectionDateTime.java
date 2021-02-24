@@ -7,7 +7,6 @@ import lombok.NonNull;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
-import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -25,8 +24,6 @@ public class SpecimenCollectionDateTime extends Segment {
     private static final String QUALIFIER = "SCO";
     public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
     private static final Set<DateFormat> VALID_DATE_FORMATS = Set.of(DateFormat.CCYYMMDD, DateFormat.CCYYMMDDHHMM);
-    private static final DateTimeFormatter DATE_FORMATTER_CCYYMMDD = DateTimeFormatter.ofPattern("yyyyMMdd");
-    private static final DateTimeFormatter DATE_FORMATTER_CCYYMMDDHHMM = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
 
     @NonNull
     private final String collectionDateTime;
