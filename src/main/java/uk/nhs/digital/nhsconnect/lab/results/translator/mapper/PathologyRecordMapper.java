@@ -13,12 +13,14 @@ public class PathologyRecordMapper {
 
     private final PractitionerMapper practitionerMapper;
     private final PatientMapper patientMapper;
+    private final SpecimenMapper specimenMapper;
 
     public PathologyRecord mapToPathologyRecord(final Message message) {
         final PathologyRecordBuilder pathologyRecordBuilder = PathologyRecord.builder();
 
         practitionerMapper.mapRequester(message).ifPresent(pathologyRecordBuilder::requester);
         pathologyRecordBuilder.patient(patientMapper.mapToPatient(message));
+        pathologyRecordBuilder.specimens(specimenMapper.mapToSpecimens(message));
 
         return pathologyRecordBuilder.build();
     }

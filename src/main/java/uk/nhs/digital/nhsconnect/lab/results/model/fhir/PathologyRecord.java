@@ -11,6 +11,7 @@ import org.hl7.fhir.dstu3.model.Practitioner;
 import org.hl7.fhir.dstu3.model.ProcedureRequest;
 import org.hl7.fhir.dstu3.model.Specimen;
 
+import java.util.Collections;
 import java.util.List;
 
 @Builder
@@ -25,9 +26,12 @@ public class PathologyRecord {
     private Organization requestingOrganization;
     private Organization specimenCollectingOrganization;
     private Practitioner specimenCollector;
-    private List<Specimen> specimens;
-    private List<Observation> testGroups;
+    @Builder.Default
+    private List<Specimen> specimens = Collections.emptyList();
+    @Builder.Default
+    private List<Observation> testGroups = Collections.emptyList();
     private DiagnosticReport testReport;
     private ProcedureRequest testRequestSummary;
-    private List<Observation> testResults;
+    @Builder.Default
+    private List<Observation> testResults = Collections.emptyList();
 }
