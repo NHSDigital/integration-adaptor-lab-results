@@ -20,8 +20,6 @@ import javax.jms.Message;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Tests the processing of a PATHOLOGY interchange containing multiple messages by publishing it
@@ -30,8 +28,13 @@ import java.util.stream.IntStream;
 @DirtiesContext
 public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
 
-    @Value("classpath:edifact/multi_pathology.dat")
+    @Value("classpath:edifact/multi_pathology.edifact.dat")
     private Resource multiEdifactResource;
+
+    @Value("classpath:edifact/multi_pathology_msg1.fhir.json")
+    private Resource fhirMessage1;
+    @Value("classpath:edifact/multi_pathology_msg2.fhir.json")
+    private Resource fhirMessage2;
 
     private String previousCorrelationId;
 
@@ -58,19 +61,13 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
 
     @SuppressWarnings("checkstyle:magicnumber")
     private void assertGpOutboundQueueMessages(SoftAssertions softly) throws IOException, JMSException, JSONException {
-        final List<Message> gpOutboundQueueMessages = IntStream.range(0, 6)
-            .mapToObj(x -> getGpOutboundQueueMessage())
-            .collect(Collectors.toList());
+        final List<Message> gpOutboundQueueMessages = List.of(getGpOutboundQueueMessage(), getGpOutboundQueueMessage());
 
-        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(0));
-        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(1));
-        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(2));
-        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(3));
-        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(4));
-        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(5));
+        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(0), fhirMessage1);
+        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(1), fhirMessage2);
     }
 
-    private void assertGpOutboundQueueMessages(SoftAssertions softly, Message message)
+    private void assertGpOutboundQueueMessages(SoftAssertions softly, Message message, Resource fhirMessage)
             throws IOException, JMSException, JSONException {
 
         // all messages come from the same interchange and use the same correlation id
@@ -81,7 +78,7 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
         softly.assertThat(correlationId).isEqualTo(previousCorrelationId);
 
         final String messageBody = parseTextMessage(message);
-        final String expectedMessageBody = new String(Files.readAllBytes(getFhirResource().getFile().toPath()));
+        final String expectedMessageBody = new String(Files.readAllBytes(fhirMessage.getFile().toPath()));
 
         JSONAssert.assertEquals(
             expectedMessageBody,
