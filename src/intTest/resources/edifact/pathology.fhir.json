@@ -62,6 +62,23 @@
           }
         ]
       }
+    },
+    {
+      "fullUrl": "urn:uuid:1cc2e06f-bbe8-47a0-854c-c3d0ddfb1354",
+      "resource": {
+        "resourceType": "Specimen",
+        "id": "1cc2e06f-bbe8-47a0-854c-c3d0ddfb1354",
+        "accessionIdentifier": {
+          "value": "CH000037KA"
+        },
+        "type": {
+          "text": "VENOUS BLOOD"
+        },
+        "receivedTime": "2010-02-24T15:41:00+00:00",
+        "collection": {
+          "collectedDateTime": "2010-02-23T15:41:00+00:00"
+        }
+      }
     }
   ]
 }

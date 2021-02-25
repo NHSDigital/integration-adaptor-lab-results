@@ -1,14 +1,12 @@
 {
   "resourceType": "Bundle",
   "meta": {
-    "lastUpdated": "2021-02-24T14:18:27.244+00:00",
-    "profile": [
-      "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"
-    ]
+    "lastUpdated": "2021-02-25T10:40:10.561+00:00",
+    "profile": [ "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1" ]
   },
   "identifier": {
     "system": "https://tools.ietf.org/html/rfc4122",
-    "value": "524d0910-dd42-43c8-998f-f94a0de2fe2c"
+    "value": "c31bc85e-4faf-4045-a4a2-c58d7bafdeff"
   },
   "type": "message",
   "entry": [
@@ -61,6 +59,22 @@
             "postalCode": "DN9 1PJ"
           }
         ]
+      }
+    }, {
+      "fullUrl": "urn:uuid:6117b6d6-d0a8-4930-a404-611ddece464a",
+      "resource": {
+        "resourceType": "Specimen",
+        "id": "6117b6d6-d0a8-4930-a404-611ddece464a",
+        "accessionIdentifier": {
+          "value": "CH000037KA"
+        },
+        "type": {
+          "text": "VENOUS BLOOD"
+        },
+        "receivedTime": "2010-02-24T15:41:00+00:00",
+        "collection": {
+          "collectedDateTime": "2010-02-23T15:41:00+00:00"
+        }
       }
     }
   ]
