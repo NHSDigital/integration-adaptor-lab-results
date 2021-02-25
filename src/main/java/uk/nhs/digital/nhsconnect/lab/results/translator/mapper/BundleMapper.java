@@ -31,16 +31,17 @@ public class BundleMapper {
             .setFullUrl(FULL_URL_PREFIX.concat(pathologyRecord.getRequester().getId()))
             .setResource(pathologyRecord.getRequester());
 
-        final Patient patient = pathologyRecord.getPatient();
-        bundle.addEntry()
-            .setFullUrl(FULL_URL_PREFIX.concat(patient.getId()))
-            .setResource(patient);
-
         Optional.ofNullable(pathologyRecord.getPerformer()).ifPresent(performer ->
             bundle.addEntry()
                 .setFullUrl(FULL_URL_PREFIX.concat(performer.getId()))
                 .setResource(performer)
         );
+
+        final Patient patient = pathologyRecord.getPatient();
+        bundle.addEntry()
+            .setFullUrl(FULL_URL_PREFIX.concat(patient.getId()))
+            .setResource(patient);
+
         return bundle;
     }
 

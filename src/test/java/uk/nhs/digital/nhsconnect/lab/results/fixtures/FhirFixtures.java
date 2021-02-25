@@ -1,5 +1,9 @@
 package uk.nhs.digital.nhsconnect.lab.results.fixtures;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.DateType;
 import org.hl7.fhir.dstu3.model.Enumerations.AdministrativeGender;
@@ -9,11 +13,8 @@ import org.hl7.fhir.dstu3.model.Meta;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.hl7.fhir.dstu3.model.UriType;
-import uk.nhs.digital.nhsconnect.lab.results.model.fhir.PathologyRecord;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
+import uk.nhs.digital.nhsconnect.lab.results.model.fhir.PathologyRecord;
 
 @SuppressWarnings("checkstyle:hideutilityclassconstructor")
 public final class FhirFixtures {
@@ -35,15 +36,12 @@ public final class FhirFixtures {
         return patient;
     }
 
-    public static Practitioner generateRequester(final String name, final AdministrativeGender gender) {
-    public static Practitioner generatePractitioner(final String name,
-                                                    final AdministrativeGender gender,
-                                                    final String id) {
+    public static Practitioner generatePractitioner(final String name, final AdministrativeGender gender) {
         Practitioner requester = new Practitioner();
 
         requester.addName().setText(name);
         requester.setGender(gender);
-        requester.setId(id);
+        requester.setId("some-entry-uuid");
 
         return requester;
     }
@@ -68,12 +66,12 @@ public final class FhirFixtures {
             .setResource(pathologyRecord.getRequester());
 
         bundle.addEntry()
-            .setFullUrl("urn:uuid:some-entry-uuid")
-            .setResource(pathologyRecord.getPatient());
-
-        bundle.addEntry()
                 .setFullUrl("urn:uuid:some-entry-uuid")
                 .setResource(pathologyRecord.getPerformer());
+
+        bundle.addEntry()
+            .setFullUrl("urn:uuid:some-entry-uuid")
+            .setResource(pathologyRecord.getPatient());
 
         return bundle;
     }
