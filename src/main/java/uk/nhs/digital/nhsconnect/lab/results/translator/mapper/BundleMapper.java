@@ -7,6 +7,7 @@ import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.InstantType;
 import org.hl7.fhir.dstu3.model.Meta;
+import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.UriType;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +30,11 @@ public class BundleMapper {
         bundle.addEntry()
             .setFullUrl(FULL_URL_PREFIX.concat(pathologyRecord.getRequester().getId()))
             .setResource(pathologyRecord.getRequester());
+
+        final Patient patient = pathologyRecord.getPatient();
+        bundle.addEntry()
+            .setFullUrl(FULL_URL_PREFIX.concat(patient.getId()))
+            .setResource(patient);
 
         Optional.ofNullable(pathologyRecord.getPerformer()).ifPresent(performer ->
             bundle.addEntry()
