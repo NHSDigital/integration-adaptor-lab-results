@@ -1,0 +1,1 @@
+./../../mesh/mesh.sh send gp_mailbox "@../src/intTest/resources/edifact/pathology.dat"
