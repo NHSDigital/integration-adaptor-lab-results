@@ -2,7 +2,6 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 import org.junit.jupiter.api.Test;
 
@@ -29,27 +28,26 @@ class PerformerNameAndAddressTest {
 
     @Test
     void when_edifactStringIsPassed_expect_returnAPerformingOrganisationNameAndAddressObject() {
-        assertAll(
-            () -> assertThat(performingOrganisationNameAndAddress)
-                    .usingRecursiveComparison()
-                    .isEqualTo(PerformerNameAndAddress.fromString("NAD+SLA+++LONDON CITY HOSPITAL")),
+        assertThat(performingOrganisationNameAndAddress)
+            .usingRecursiveComparison()
+            .isEqualTo(PerformerNameAndAddress.fromString("NAD+SLA+++LONDON CITY HOSPITAL"));
+    }
 
-            () -> assertThat(performerNameAndAddress)
-                    .usingRecursiveComparison()
-                    .isEqualTo(PerformerNameAndAddress.fromString("NAD+SLA+A2442389:902++DR J SMITH"))
-        );
+    @Test
+    void when_edifactStringIsPassed_expect_returnAPerformerNameAndAddressObject() {
+        assertThat(performerNameAndAddress)
+            .usingRecursiveComparison()
+            .isEqualTo(PerformerNameAndAddress.fromString("NAD+SLA+A2442389:902++DR J SMITH"));
     }
 
     @Test
     void when_buildingSegmentObjectWithEmptyHealthcareCode_expect_illegalArgumentExceptionIsThrown() {
-        assertThatThrownBy(
-            () -> PerformerNameAndAddress.builder()
-                .identifier("A2442389")
-                .code(HealthcareRegistrationIdentificationCode.fromCode(""))
-                .performingOrganisationName("")
-                .performerName("")
-                .build()
-        )
+        final var builder = PerformerNameAndAddress.builder()
+            .identifier("A2442389")
+            .performingOrganisationName("")
+            .performerName("");
+
+        assertThatThrownBy(() -> builder.code(HealthcareRegistrationIdentificationCode.fromCode("")))
             .isExactlyInstanceOf(IllegalArgumentException.class)
             .hasMessage("No HealthcareRegistrationIdentificationCode for ''");
 
@@ -72,9 +70,25 @@ class PerformerNameAndAddressTest {
     }
 
     @Test
-    void testValidate() {
+    void testValidateMissingPerformingOrganisationName() {
         var emptyPerformingOrganisationName = new PerformerNameAndAddress("", null, "", "");
+
+        assertThatThrownBy(emptyPerformingOrganisationName::validate)
+            .isExactlyInstanceOf(EdifactValidationException.class)
+            .hasMessage("NAD: Attribute performingOrganisationName is required");
+    }
+
+    @Test
+    void testValidateMissingCode() {
         var emptyCode = new PerformerNameAndAddress("Identifier", null, "", "DR J SMITH");
+
+        assertThatThrownBy(emptyCode::validate)
+            .isExactlyInstanceOf(EdifactValidationException.class)
+            .hasMessage("NAD: Attribute code is required");
+    }
+
+    @Test
+    void testValidateMissingPerformerName() {
         var emptyPerformerName = new PerformerNameAndAddress(
             "Identifier",
             HealthcareRegistrationIdentificationCode.CONSULTANT,
@@ -82,18 +96,8 @@ class PerformerNameAndAddressTest {
             null
         );
 
-        assertAll(
-            () -> assertThatThrownBy(emptyPerformingOrganisationName::validate)
-                    .isExactlyInstanceOf(EdifactValidationException.class)
-                    .hasMessage("NAD: Attribute performingOrganisationName is required"),
-
-            () -> assertThatThrownBy(emptyCode::validate)
-                    .isExactlyInstanceOf(EdifactValidationException.class)
-                    .hasMessage("NAD: Attribute code is required"),
-
-            () -> assertThatThrownBy(emptyPerformerName::validate)
-                    .isExactlyInstanceOf(EdifactValidationException.class)
-                    .hasMessage("NAD: Attribute performerName is required")
-        );
+        assertThatThrownBy(emptyPerformerName::validate)
+            .isExactlyInstanceOf(EdifactValidationException.class)
+            .hasMessage("NAD: Attribute performerName is required");
     }
 }
