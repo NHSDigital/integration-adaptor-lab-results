@@ -66,6 +66,7 @@ class InboundMessageHandlerTest {
                 .recipient("some_recipient")
                 .sequenceNumber(SEQUENCE_NUMBER)
                 .translationTime(Instant.now())
+                .nhsAckRequested(true)
                 .build());
     }
 
@@ -75,7 +76,9 @@ class InboundMessageHandlerTest {
 
         final MeshMessage meshMessage = new MeshMessage()
             .setWorkflowId(WorkflowId.PATHOLOGY);
-        when(edifactParser.parse(meshMessage.getContent())).thenThrow(InterchangeParsingException.class);
+        when(edifactParser.parse(meshMessage.getContent())).thenThrow(new InterchangeParsingException(
+                null, null, null, 1L, true
+        ));
 
         final OutboundMeshMessage outboundMeshMessage = new MeshMessage()
             .setWorkflowId(WorkflowId.PATHOLOGY_ACK);
@@ -97,7 +100,8 @@ class InboundMessageHandlerTest {
     void handleInvalidMessageMeshMessageRaisesException() throws InterchangeParsingException, MessagesParsingException {
         final MeshMessage meshMessage = new MeshMessage()
             .setWorkflowId(WorkflowId.PATHOLOGY);
-        when(edifactParser.parse(meshMessage.getContent())).thenThrow(MessagesParsingException.class);
+        when(edifactParser.parse(meshMessage.getContent())).thenThrow(
+                new MessagesParsingException(null, null, null, 1L, true, null));
 
         final OutboundMeshMessage outboundMeshMessage = new MeshMessage()
             .setWorkflowId(WorkflowId.PATHOLOGY_ACK);

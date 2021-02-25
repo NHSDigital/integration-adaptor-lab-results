@@ -104,7 +104,8 @@ public class EdifactParser {
                 "Interchange trailer message count does not equal actual message count",
                 interchangeHeader.getSender(),
                 interchangeHeader.getRecipient(),
-                interchangeHeader.getSequenceNumber());
+                interchangeHeader.getSequenceNumber(),
+                interchangeHeader.isNhsAckRequested());
         }
     }
 

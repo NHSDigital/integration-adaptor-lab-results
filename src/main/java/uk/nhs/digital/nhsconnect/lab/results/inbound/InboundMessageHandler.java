@@ -36,8 +36,10 @@ public class InboundMessageHandler {
             interchange = edifactParser.parse(meshMessage.getContent());
         } catch (InterchangeParsingException ex) {
             LOGGER.error("Error parsing Interchange", ex);
-            var nhsack = outboundMeshMessageBuilder.buildNhsAck(meshMessage.getWorkflowId(), ex);
-            meshOutboundQueueService.publish(nhsack);
+            if (ex.isNhsAckRequested()) {
+                var nhsack = outboundMeshMessageBuilder.buildNhsAck(meshMessage.getWorkflowId(), ex);
+                meshOutboundQueueService.publish(nhsack);
+            }
             return;
         } catch (MessagesParsingException ex) {
             LOGGER.error("Error parsing Messages", ex);
