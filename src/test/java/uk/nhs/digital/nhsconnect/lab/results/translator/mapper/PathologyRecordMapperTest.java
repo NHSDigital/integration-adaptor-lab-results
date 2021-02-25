@@ -27,6 +27,7 @@ import static uk.nhs.digital.nhsconnect.lab.results.fixtures.FhirFixtures.genera
 import static uk.nhs.digital.nhsconnect.lab.results.fixtures.FhirFixtures.generateRequester;
 
 @ExtendWith(MockitoExtension.class)
+@SuppressWarnings("checkstyle:MagicNumber")
 class PathologyRecordMapperTest {
 
     private static final String NAME_TEXT = "Dr Bob Hope";
