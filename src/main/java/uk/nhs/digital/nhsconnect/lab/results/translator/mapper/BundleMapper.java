@@ -34,10 +34,6 @@ public class BundleMapper {
             .setFullUrl(FULL_URL_PREFIX + patient.getId())
             .setResource(patient);
 
-        bundle.addEntry()
-            .setFullUrl(FULL_URL_PREFIX.concat(patient.getId()))
-            .setResource(patient);
-
         pathologyRecord.getSpecimens().forEach(specimen ->
             bundle.addEntry()
                 .setFullUrl(FULL_URL_PREFIX + specimen.getId())
