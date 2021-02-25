@@ -45,7 +45,17 @@
             "family": "HENDERSON"
           }
         ],
-        "gender": "female"
+        "gender": "female",
+        "address": [
+          {
+            "line": [
+              "4-5",
+              "WESLEY PLACE",
+              "SOWERBY BRIDGE"
+            ],
+            "postalCode": "HX6 1JQ"
+          }
+        ]
       }
     }
   ]

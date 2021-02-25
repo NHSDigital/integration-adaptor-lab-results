@@ -49,7 +49,18 @@
           }
         ],
         "gender": "female",
-        "birthDate": "1945-07-30"
+        "birthDate": "1945-07-30",
+        "address": [
+          {
+            "line": [
+              "FLAT1",
+              "59 SANDTOFT ROAD",
+              "BELTON",
+              "DONCASTER"
+            ],
+            "postalCode": "DN9 1PJ"
+          }
+        ]
       }
     }
   ]

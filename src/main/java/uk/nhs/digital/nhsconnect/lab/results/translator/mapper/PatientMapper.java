@@ -1,23 +1,27 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
 import lombok.RequiredArgsConstructor;
+import org.hl7.fhir.dstu3.model.Address;
 import org.hl7.fhir.dstu3.model.DateType;
 import org.hl7.fhir.dstu3.model.Enumerations;
 import org.hl7.fhir.dstu3.model.HumanName;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Patient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PersonName;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.UnstructuredAddress;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvestigationSubject;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.PatientDetails;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.ServiceReportDetails;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @Component
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class PatientMapper {
 
     protected static final String NHS_NUMBER_SYSTEM = "https://fhir.nhs.uk/Id/nhs-number";
@@ -25,16 +29,18 @@ public class PatientMapper {
 
     public Patient mapToPatient(final Message message) {
 
-        final PatientDetails patientDetails = Optional.ofNullable(message.getServiceReportDetails())
-            .map(ServiceReportDetails::getSubject)
+        final Optional<InvestigationSubject> investigationSubject =
+            Optional.ofNullable(message.getServiceReportDetails())
+                .map(ServiceReportDetails::getSubject);
+
+        final PatientDetails patientDetails = investigationSubject
             .map(InvestigationSubject::getDetails)
             .orElseThrow(() -> new FhirValidationException("Unable to map message to patient details"));
 
         final Patient patient = new Patient();
         patient.setId(uuidGenerator.generateUUID());
 
-        final PersonName personName = patientDetails.getName();
-        Optional.ofNullable(personName).ifPresent(name -> {
+        Optional.ofNullable(patientDetails.getName()).ifPresent(name -> {
             mapIdentifier(name, patient);
             mapName(name, patient);
         });
@@ -42,7 +48,22 @@ public class PatientMapper {
         mapGender(patientDetails, patient);
         mapDateOfBirth(patientDetails, patient);
 
+        investigationSubject.flatMap(InvestigationSubject::getAddress)
+            .ifPresent(unstructuredAddress -> mapAddress(unstructuredAddress, patient));
+
         return patient;
+    }
+
+    private void mapAddress(UnstructuredAddress unstructuredAddress, Patient patient) {
+        final Address address = new Address();
+
+        final String[] addressLines = unstructuredAddress.getAddressLines();
+        if (addressLines != null && addressLines.length > 0) {
+            Arrays.stream(addressLines).forEach(address::addLine);
+        }
+        address.setPostalCode(unstructuredAddress.getPostCode());
+
+        patient.addAddress(address);
     }
 
     private void mapIdentifier(final PersonName name, final Patient patient) {
