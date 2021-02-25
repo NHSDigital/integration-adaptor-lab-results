@@ -48,7 +48,7 @@ dependencies {
 	implementation 'ca.uhn.hapi.fhir:hapi-fhir-structures-dstu3:5.2.0'
 	implementation 'org.springframework:spring-jms:5.3.3'
 	implementation 'org.apache.qpid:qpid-jms-client:0.56.0'
-	implementation 'com.github.spullara.mustache.java:compiler:0.9.5'
+	implementation 'com.github.spullara.mustache.java:compiler:0.9.7'
 	implementation 'ch.qos.logback.contrib:logback-jackson:0.1.5'
 	implementation 'ch.qos.logback.contrib:logback-json-classic:0.1.5'
 

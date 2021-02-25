@@ -20,40 +20,47 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+/**
+ * Tests that the correct NHSACK is returned for valid interchanges and when errors occur in processing.
+ * There is an NHSACK status code for each type of response:
+ *
+ * IAF: Valid Interchange, all Messages accepted
+ * IAP: Valid Interchange, some Messages accepted, some Messages rejected
+ * IRA: Valid Interchange, but all Messages were rejected
+ * IRM: Interchange rejected due to an error in one message
+ * IRI: Interchange rejected due to interchange level error
+ */
 @DirtiesContext
 class NhsAckResponseTest extends IntegrationBaseTest {
-    @Value("classpath:edifact/pathology_edifact_IAF.dat")
+    @Value("classpath:edifact/pathology_IAF.edifact.dat")
     private Resource edifactIAFResource;
 
-    @Value("classpath:edifact/pathology_nhsAck_IAF.dat")
+    @Value("classpath:edifact/pathology_IAF.nhsack.dat")
     private Resource nhsAckIAFResource;
 
-    @Value("classpath:edifact/pathology_edifact_IAP.dat")
+    @Value("classpath:edifact/pathology_IAP.edifact.dat")
     private Resource edifactIAPResource;
 
-    @Value("classpath:edifact/pathology_nhsAck_IAP.dat")
+    @Value("classpath:edifact/pathology_IAP.nhsack.dat")
     private Resource nhsAckIAPResource;
 
-    @Value("classpath:edifact/pathology_edifact_IRA.dat")
+    @Value("classpath:edifact/pathology_IRA.edifact.dat")
     private Resource edifactIRAResource;
 
-    @Value("classpath:edifact/pathology_nhsAck_IRA.dat")
+    @Value("classpath:edifact/pathology_IRA.nhsack.dat")
     private Resource nhsAckIRAResource;
 
-    @Value("classpath:edifact/pathology_edifact_IRM.dat")
+    @Value("classpath:edifact/pathology_IRM.edifact.dat")
     private Resource edifactIRMResource;
 
-    @Value("classpath:edifact/pathology_nhsAck_IRM.dat")
+    @Value("classpath:edifact/pathology_IRM.nhsack.dat")
     private Resource nhsAckIRMResource;
 
-    @Value("classpath:edifact/pathology_edifact_IRI.dat")
+    @Value("classpath:edifact/pathology_IRI.edifact.dat")
     private Resource edifactIRIResource;
 
-    @Value("classpath:edifact/pathology_nhsAck_IRI.dat")
+    @Value("classpath:edifact/pathology_IRI.nhsack.dat")
     private Resource nhsAckIRIResource;
-
-    @Value("classpath:edifact/pathology_edifact_no_nhsAck.dat")
-    private Resource edifactNoNHSACKResource;
 
     @MockBean
     private TimestampService timestampService;
@@ -73,7 +80,7 @@ class NhsAckResponseTest extends IntegrationBaseTest {
     }
 
     @Test
-    void whenValidEdifactSentThenIAFNhsAckReturned()
+    void whenValidEdifactSentThenCorrectNhsAckReturned()
             throws IOException {
 
         final String content = new String(Files.readAllBytes(edifactIAFResource.getFile().toPath()));
@@ -95,7 +102,7 @@ class NhsAckResponseTest extends IntegrationBaseTest {
     }
 
     @Test
-    void whenPartiallyValidEdifactSentThenIAPNhsAckReturned()
+    void whenPartiallyValidEdifactSentThenCorrectNhsAckReturned()
             throws IOException {
 
         final String content = new String(Files.readAllBytes(edifactIAPResource.getFile().toPath()));
@@ -117,7 +124,7 @@ class NhsAckResponseTest extends IntegrationBaseTest {
     }
 
     @Test
-    void whenAllEdifactMessagesAreInvalidThenIRANhsAckReturned()
+    void whenAllEdifactMessagesAreInvalidThenCorrectNhsAckReturned()
             throws IOException {
 
         final String content = new String(Files.readAllBytes(edifactIRAResource.getFile().toPath()));
@@ -139,7 +146,7 @@ class NhsAckResponseTest extends IntegrationBaseTest {
     }
 
     @Test
-    void whenInvalidInterchangeInEdifactSentThenIRINhsAckReturned()
+    void whenInvalidInterchangeInEdifactSentThenCorrectNhsAckReturned()
             throws IOException {
 
         final String content = new String(Files.readAllBytes(edifactIRIResource.getFile().toPath()));
@@ -161,7 +168,7 @@ class NhsAckResponseTest extends IntegrationBaseTest {
     }
 
     @Test
-    void whenEdifactMessagesCannotBeExtractedThenIRMNhsAckReturned()
+    void whenEdifactMessagesCannotBeExtractedThenCorrectNhsAckReturned()
             throws IOException {
 
         final String content = new String(Files.readAllBytes(edifactIRMResource.getFile().toPath()));
