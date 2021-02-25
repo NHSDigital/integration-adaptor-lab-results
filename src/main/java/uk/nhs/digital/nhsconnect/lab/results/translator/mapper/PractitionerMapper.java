@@ -26,7 +26,6 @@ public class PractitionerMapper {
             .findAny();
     }
 
-
     public Optional<Practitioner> mapPerformer(final Message message) {
         return message.getInvolvedParties().stream()
             .map(InvolvedParty::getPerformerNameAndAddress)
