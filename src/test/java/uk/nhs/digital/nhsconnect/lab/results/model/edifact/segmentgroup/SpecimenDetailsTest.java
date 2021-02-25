@@ -6,7 +6,6 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceDetails;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicFastingStatus;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCollectionDateTime;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCollectionReceiptDateTime;
@@ -52,19 +51,6 @@ class SpecimenDetailsTest {
             .isNotNull()
             .extracting(SpecimenCharacteristicType::getTypeOfSpecimen)
             .isEqualTo("BLOOD & URINE");
-    }
-
-    @Test
-    void testGetSpecimenCharacteristicFastingStatus() {
-        final var specimen = new SpecimenDetails(List.of(
-            "ignore me",
-            "SPC+FS+F",
-            "ignore me"
-        ));
-        assertThat(specimen.getCharacteristicFastingStatus())
-            .isPresent()
-            .map(SpecimenCharacteristicFastingStatus::getFastingStatus)
-            .hasValue("F");
     }
 
     @Test
@@ -188,7 +174,6 @@ class SpecimenDetailsTest {
             () -> assertThatThrownBy(specimen::getCharacteristicType)
                 .isExactlyInstanceOf(MissingSegmentException.class)
                 .hasMessage("EDIFACT section is missing segment SPC+TSP"),
-            () -> assertThat(specimen.getCharacteristicFastingStatus()).isEmpty(),
             () -> assertThat(specimen.getServiceRequesterReference()).isEmpty(),
             () -> assertThat(specimen.getServiceProviderReference()).isEmpty(),
             () -> assertThat(specimen.getQuantity()).isEmpty(),

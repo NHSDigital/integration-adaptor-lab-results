@@ -4,13 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.hl7.fhir.dstu3.model.Annotation;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Specimen;
-import org.hl7.fhir.dstu3.model.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicFastingStatus;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenQuantity;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.SpecimenDetails;
@@ -65,10 +63,7 @@ public class SpecimenMapper {
         edifact.getQuantity().map(SpecimenQuantity::getQuantityUnitOfMeasure)
             .ifPresent(unit -> fhir.getCollection().getQuantity().setUnit(unit));
         // fhir.collection.bodySite = [none]
-        // fhir.collection.extension[fastingStatus] = SG16.SPC.C832.7867
-        edifact.getCharacteristicFastingStatus().map(SpecimenCharacteristicFastingStatus::getFastingStatus)
-            // TODO find correct URL
-            .ifPresent(status -> fhir.getCollection().addExtension("fasting status url", new StringType(status)));
+        // fhir.collection.extension[fastingStatus] = [none]
         // fhir.note = SG16.FTX.C108.4440(1-5)
         edifact.getFreeTexts().stream()
             .map(FreeTextSegment::getTexts)

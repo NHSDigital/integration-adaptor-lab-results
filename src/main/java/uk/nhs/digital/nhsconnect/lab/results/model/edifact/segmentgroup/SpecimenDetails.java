@@ -7,7 +7,6 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceDetails;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicFastingStatus;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCollectionDateTime;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCollectionReceiptDateTime;
@@ -52,11 +51,6 @@ public class SpecimenDetails extends SegmentGroup {
     @Getter(lazy = true)
     private final SpecimenCharacteristicType characteristicType =
         SpecimenCharacteristicType.fromString(extractSegment(SpecimenCharacteristicType.KEY_QUALIFIER));
-
-    @Getter(lazy = true)
-    private final Optional<SpecimenCharacteristicFastingStatus> characteristicFastingStatus =
-        extractOptionalSegment(SpecimenCharacteristicFastingStatus.KEY_QUALIFIER)
-            .map(SpecimenCharacteristicFastingStatus::fromString);
 
     @Getter(lazy = true)
     private final Optional<Reference> serviceRequesterReference =

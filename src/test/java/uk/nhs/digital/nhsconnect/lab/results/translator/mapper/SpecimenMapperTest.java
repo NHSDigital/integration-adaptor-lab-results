@@ -186,25 +186,6 @@ class SpecimenMapperTest {
     }
 
     @Test
-    void testMapToSpecimensCharacteristicFastingStatus() {
-        final Message message = new Message(List.of(
-            "S02+02", // ServiceReportDetails
-            "S06+06", // InvestigationSubject
-            "S16+16", // SpecimenDetails
-            "SPC+TSP+:::Required", // SpecimenCharacteristicType
-
-            "SPC+FS+F" // SpecimenCharacteristicFastingStatus
-        ));
-
-        final var specimens = specimenMapper.mapToSpecimens(message);
-
-        assertThat(specimens).hasSize(1)
-            .first()
-            .satisfies(specimen -> assertThat(specimen.getCollection().getExtensionString("fasting status url"))
-                .isEqualTo("F"));
-    }
-
-    @Test
     void testMapToSpecimensFreeTexts() {
         final Message message = new Message(List.of(
             "S02+02", // ServiceReportDetails
