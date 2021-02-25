@@ -1,6 +1,7 @@
 package uk.nhs.digital.nhsconnect.lab.results.inbound;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -20,6 +21,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeFactory;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessagesParsingException;
+import uk.nhs.digital.nhsconnect.lab.results.sequence.SequenceService;
 import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.MessageProcessingResult.Success;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.MessageProcessingResult.Error;
@@ -35,6 +37,7 @@ import java.util.List;
 public class NhsAckProducerServiceTest {
 
     private static final Instant FIXED_TIME = Instant.parse("2020-04-27T16:37:00Z");
+    private static final Long FIXED_SEQUENCE_NUMBER = 1000L;
     private static final String NHSACK_IAF_RESPONSE_PATH = "/edifact/nhsAck_example_IAF.txt";
     private static final String NHSACK_IAP_RESPONSE_PATH = "/edifact/nhsAck_example_IAP.txt";
     private static final String NHSACK_IRA_RESPONSE_PATH = "/edifact/nhsAck_example_IRA.txt";
@@ -56,6 +59,9 @@ public class NhsAckProducerServiceTest {
     @Mock
     private TimestampService timestampService;
 
+    @Mock
+    private SequenceService sequenceService;
+
     private final EdifactParser edifactParser = new EdifactParser(new InterchangeFactory());
 
     private List<MessageProcessingResult> messageProcessingResults;
@@ -63,6 +69,7 @@ public class NhsAckProducerServiceTest {
     @BeforeEach
     void setUp() {
         when(timestampService.getCurrentTimestamp()).thenReturn(FIXED_TIME);
+        when(sequenceService.generateInterchangeSequence(any(), any())).thenReturn(FIXED_SEQUENCE_NUMBER);
         messageProcessingResults = new ArrayList<>();
     }
 

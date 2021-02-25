@@ -14,6 +14,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessagesParsingException;
+import uk.nhs.digital.nhsconnect.lab.results.sequence.SequenceService;
 import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.MessageProcessingResult.Success;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.MessageProcessingResult.Error;
@@ -33,6 +34,8 @@ public class NhsAckProducerService {
 
     private final TimestampService timestampService;
 
+    private final SequenceService sequenceService;
+
     private static final int COMMON_SEGMENT_COUNT = 5;
 
     public String createNhsAckEdifact(WorkflowId workflowId, Interchange interchange,
@@ -46,7 +49,9 @@ public class NhsAckProducerService {
         nhsAckContent.setInterchangeSender(interchangeHeader.getSender());
         nhsAckContent.setInterchangeRecipient(interchangeHeader.getRecipient());
         nhsAckContent.setInterchangeControlReference(String.valueOf(interchangeHeader.getSequenceNumber()));
-        nhsAckContent.setNhsAckControlReference(String.valueOf(interchangeHeader.getSequenceNumber()));
+
+        nhsAckContent.setNhsAckControlReference(String.valueOf(sequenceService.generateInterchangeSequence(
+                interchangeHeader.getRecipient(), interchangeHeader.getSender())));
 
         setDateTimes(nhsAckContent);
 
@@ -100,7 +105,9 @@ public class NhsAckProducerService {
         nhsAckContent.setInterchangeSender(exception.getSender());
         nhsAckContent.setInterchangeRecipient(exception.getRecipient());
         nhsAckContent.setInterchangeControlReference(String.valueOf(exception.getInterchangeSequenceNumber()));
-        nhsAckContent.setNhsAckControlReference(String.valueOf(exception.getInterchangeSequenceNumber()));
+
+        nhsAckContent.setNhsAckControlReference(String.valueOf(sequenceService.generateInterchangeSequence(
+                exception.getRecipient(), exception.getSender())));
 
         setDateTimes(nhsAckContent);
 
@@ -126,7 +133,9 @@ public class NhsAckProducerService {
         nhsAckContent.setInterchangeSender(exception.getSender());
         nhsAckContent.setInterchangeRecipient(exception.getRecipient());
         nhsAckContent.setInterchangeControlReference(String.valueOf(exception.getInterchangeSequenceNumber()));
-        nhsAckContent.setNhsAckControlReference(String.valueOf(exception.getInterchangeSequenceNumber()));
+
+        nhsAckContent.setNhsAckControlReference(String.valueOf(sequenceService.generateInterchangeSequence(
+                exception.getRecipient(), exception.getSender())));
 
         setDateTimes(nhsAckContent);
 
