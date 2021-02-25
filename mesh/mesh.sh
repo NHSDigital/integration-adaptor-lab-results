@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-#source env.sh #custom configuration (i.e. OpenTest)
-source env.sh
-
 MAILBOX_ID="$2"
 TO_MAILBOX=${TO_MAILBOX:-${MAILBOX_ID}}
 TOKEN=''
