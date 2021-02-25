@@ -27,25 +27,28 @@ public class OutboundMeshMessageBuilder {
             WorkflowId workflowId,
             Interchange interchange,
             List<MessageProcessingResult> messageProcessingResults) {
-        String nhsAck = nhsAckProducerService.createNhsAckEdifact(workflowId, interchange, messageProcessingResults);
+        WorkflowId ackWorkflowId = getOutboundWorkflowId(workflowId);
+        String nhsAck = nhsAckProducerService.createNhsAckEdifact(ackWorkflowId, interchange, messageProcessingResults);
         return new MeshMessage()
-            .setWorkflowId(getOutboundWorkflowId(workflowId))
+            .setWorkflowId(ackWorkflowId)
             .setRecipient(interchange.getInterchangeHeader().getSender())
             .setContent(nhsAck);
     }
 
     public OutboundMeshMessage buildNhsAck(WorkflowId workflowId, InterchangeParsingException exception) {
-        String nhsAck = nhsAckProducerService.createNhsAckEdifact(workflowId, exception);
+        WorkflowId ackWorkflowId = getOutboundWorkflowId(workflowId);
+        String nhsAck = nhsAckProducerService.createNhsAckEdifact(ackWorkflowId, exception);
         return new MeshMessage()
-            .setWorkflowId(getOutboundWorkflowId(workflowId))
+            .setWorkflowId(ackWorkflowId)
             .setRecipient(exception.getSender())
             .setContent(nhsAck);
     }
 
     public OutboundMeshMessage buildNhsAck(WorkflowId workflowId, MessagesParsingException exception) {
-        String nhsAck = nhsAckProducerService.createNhsAckEdifact(workflowId, exception);
+        WorkflowId ackWorkflowId = getOutboundWorkflowId(workflowId);
+        String nhsAck = nhsAckProducerService.createNhsAckEdifact(ackWorkflowId, exception);
         return new MeshMessage()
-            .setWorkflowId(getOutboundWorkflowId(workflowId))
+            .setWorkflowId(ackWorkflowId)
             .setRecipient(exception.getSender())
             .setContent(nhsAck);
     }
