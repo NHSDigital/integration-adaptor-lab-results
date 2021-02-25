@@ -141,4 +141,15 @@ class PractitionerMapperTest {
         Practitioner practitioner = result.get();
         assertThat(practitioner.getName()).isEmpty();
     }
+
+    @Test
+    void testMapMessageWherePerformerIsNotPractitioner() {
+        final var requestingParty = mock(InvolvedParty.class);
+        when(message.getInvolvedParties()).thenReturn(List.of(requestingParty));
+        when(requestingParty.getPerformerNameAndAddress()).thenReturn(Optional.of(performer));
+        when(performer.getIdentifier()).thenReturn(null);
+
+        Optional<Practitioner> result = mapper.mapPerformer(message);
+        assertThat(result).isEmpty();
+    }
 }

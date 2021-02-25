@@ -40,24 +40,21 @@ public class PerformerNameAndAddress extends Segment {
         String[] colonSplit = Split.byColon(keySplit[2]);
         String performerID = colonSplit[0];
 
-        if (performerID.isBlank()) {
+        final boolean isPerformingOrganisation = StringUtils.isBlank(performerID);
+        if (isPerformingOrganisation) {
             // if identifier is blank - organisation/department
             String performingOrganisationName = keySplit[PERFORMING_NAME_INDEX_IN_EDIFACT_STRING];
-            PerformerNameAndAddress performingOrganisation = PerformerNameAndAddress.builder()
+            return PerformerNameAndAddress.builder()
                 .performingOrganisationName(performingOrganisationName)
                 .build();
-
-            return performingOrganisation;
         } else {
             String performerCode = colonSplit[1];
             String performerName = keySplit[PERFORMING_NAME_INDEX_IN_EDIFACT_STRING];
-            PerformerNameAndAddress performer = PerformerNameAndAddress.builder()
+            return PerformerNameAndAddress.builder()
                 .identifier(performerID)
                 .code(HealthcareRegistrationIdentificationCode.fromCode(performerCode))
                 .performerName(performerName)
                 .build();
-
-            return performer;
         }
     }
 
@@ -68,10 +65,8 @@ public class PerformerNameAndAddress extends Segment {
 
     @Override
     public void validate() throws EdifactValidationException {
-        if (StringUtils.isBlank(identifier)) {
-            if (StringUtils.isBlank(performingOrganisationName)) {
-                throw new EdifactValidationException(getKey() + ": Attribute performingOrganisationName is required");
-            }
+        if (StringUtils.isBlank(identifier) && StringUtils.isBlank(performingOrganisationName)) {
+            throw new EdifactValidationException(getKey() + ": Attribute performingOrganisationName is required");
         } else {
             if (code == null || StringUtils.isBlank(code.getCode())) {
                 throw new EdifactValidationException(getKey() + ": Attribute code is required");

@@ -46,14 +46,9 @@ class BundleMapperTest {
     void testMapPathologyRecordToBundle() {
         when(uuidGenerator.generateUUID()).thenReturn(VALUE_UUID).thenReturn(ENTRY_UUID);
 
-        Practitioner generatedRequester = generatePractitioner(
-            NAME_TEXT,
-            GENDER
-        );
-        Practitioner generatedPerformer = generatePractitioner(
-            "Dr Darcy Lewis",
-            Enumerations.AdministrativeGender.FEMALE
-        );
+        Practitioner generatedRequester = generatePractitioner(NAME_TEXT, GENDER);
+        Practitioner generatedPerformer = generatePractitioner("Dr Darcy Lewis",
+            Enumerations.AdministrativeGender.FEMALE);
         Patient generatedPatient = generatePatient(NAME_TEXT, GENDER, BIRTH_DATE);
 
         final Bundle bundle = bundleMapper.mapToBundle(generatePathologyRecord(generatedRequester,
@@ -143,5 +138,42 @@ class BundleMapperTest {
             () -> assertThat(patient.getBirthDate())
                 .isEqualTo(Date.from(LocalDate.of(2001, 1, 12).atStartOfDay()
                     .atZone(ZoneId.systemDefault()).toInstant())));
+    }
+
+    @Test
+    void testMapMessageToBundleWithoutPerformerPractitioner() {
+        when(uuidGenerator.generateUUID()).thenReturn(VALUE_UUID).thenReturn(ENTRY_UUID);
+
+        Practitioner generatedRequester = generatePractitioner(NAME_TEXT, GENDER);
+        Patient generatedPatient = generatePatient(NAME_TEXT, GENDER, BIRTH_DATE);
+
+        final Bundle bundle = bundleMapper.mapToBundle(generatePathologyRecord(generatedRequester,
+            null, generatedPatient));
+
+        assertAll("bundle",
+            () -> assertNotNull(bundle.getMeta().getLastUpdated()),
+            () -> assertEquals(
+                "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1",
+                bundle.getMeta().getProfile().get(0).asStringValue()
+            ),
+            () -> assertEquals("https://tools.ietf.org/html/rfc4122", bundle.getIdentifier().getSystem()),
+            () -> assertEquals(VALUE_UUID, bundle.getIdentifier().getValue()),
+            () -> assertEquals(Bundle.BundleType.MESSAGE, bundle.getType()),
+            () -> assertEquals(2, bundle.getEntry().size())
+        );
+
+        Bundle.BundleEntryComponent bundleEntryComponentForRequesterResource = bundle.getEntry().get(0);
+        assertAll("bundle.entry[0]",
+            () -> assertNotNull(bundleEntryComponentForRequesterResource),
+            () -> assertEquals("urn:uuid:" + ENTRY_UUID, bundleEntryComponentForRequesterResource.getFullUrl()),
+            () -> assertThat(bundleEntryComponentForRequesterResource.getResource()).isInstanceOf(Practitioner.class)
+        );
+
+        Bundle.BundleEntryComponent bundleEntryComponentForPatientResource = bundle.getEntry().get(1);
+        assertAll("bundle.entry[1]",
+            () -> assertNotNull(bundleEntryComponentForPatientResource),
+            () -> assertEquals("urn:uuid:" + ENTRY_UUID, bundleEntryComponentForPatientResource.getFullUrl()),
+            () -> assertThat(bundleEntryComponentForPatientResource.getResource()).isInstanceOf(Patient.class)
+        );
     }
 }
