@@ -22,6 +22,7 @@ import uk.nhs.digital.nhsconnect.lab.results.inbound.MessageProcessingResult.Err
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import static uk.nhs.digital.nhsconnect.lab.results.utils.TemplateUtils.loadTemplate;
@@ -42,42 +43,47 @@ public class NhsAckProducerService {
                                       List<MessageProcessingResult> messageProcessingResults) {
         Mustache nhsAckTemplate = loadTemplate("nhsAck.mustache");
 
-        NhsAckContent nhsAckContent = new NhsAckContent();
+        var nhsAckContentBuilder = NhsAckContent.builder();
 
         InterchangeHeader interchangeHeader = interchange.getInterchangeHeader();
 
-        nhsAckContent.setInterchangeSender(interchangeHeader.getSender());
-        nhsAckContent.setInterchangeRecipient(interchangeHeader.getRecipient());
-        nhsAckContent.setInterchangeControlReference(String.valueOf(interchangeHeader.getSequenceNumber()));
+        nhsAckContentBuilder.interchangeSender(interchangeHeader.getSender());
+        nhsAckContentBuilder.interchangeRecipient(interchangeHeader.getRecipient());
+        nhsAckContentBuilder.interchangeControlReference(String.valueOf(interchangeHeader.getSequenceNumber()));
 
-        nhsAckContent.setNhsAckControlReference(String.valueOf(sequenceService.generateInterchangeSequence(
+        nhsAckContentBuilder.nhsAckControlReference(String.valueOf(sequenceService.generateInterchangeSequence(
                 interchangeHeader.getRecipient(), interchangeHeader.getSender())));
 
-        setDateTimes(nhsAckContent);
+        nhsAckContentBuilder.workflowId(workflowId.getWorkflowId());
 
-        nhsAckContent.setWorkflowId(workflowId.getWorkflowId());
+        nhsAckContentBuilder.messageStatus(new ArrayList<>());
+
+        NhsAckContent nhsAckContent = nhsAckContentBuilder.build();
 
         int acceptedMessages = 0;
         int rejectedMessages = 0;
         int totalMessages = messageProcessingResults.size();
 
         for (MessageProcessingResult messageProcessingResult : messageProcessingResults) {
-            NhsAckMessageContent nhsAckMessageContent = new NhsAckMessageContent();
+            NhsAckMessageContent nhsAckMessageContent;
             if (messageProcessingResult instanceof MessageProcessingResult.Success) {
                 Success currentMessageResult = (Success) messageProcessingResult;
                 MessageHeader messageHeader = currentMessageResult.getMessage().getMessageHeader();
-                nhsAckMessageContent.setMessageNumber(messageHeader.getSequenceNumber());
-                nhsAckMessageContent.setMessageStatus("MA");
+                nhsAckMessageContent = NhsAckMessageContent.builder()
+                        .messageNumber(messageHeader.getSequenceNumber())
+                        .messageStatus("MA")
+                        .build();
                 acceptedMessages++;
             } else {
                 Error currentMessageResult = (Error) messageProcessingResult;
                 MessageHeader messageHeader = currentMessageResult.getMessage().getMessageHeader();
-                nhsAckMessageContent.setMessageNumber(messageHeader.getSequenceNumber());
-                nhsAckMessageContent.setMessageStatus("MR");
+                nhsAckMessageContent = NhsAckMessageContent.builder()
+                        .messageNumber(messageHeader.getSequenceNumber())
+                        .messageStatus("MR")
+                        .messageError(true)
+                        .messageErrorDescription(currentMessageResult.getException().getMessage())
+                        .build();
                 rejectedMessages++;
-
-                nhsAckMessageContent.setMessageError(true);
-                nhsAckMessageContent.setMessageErrorDescription(currentMessageResult.getException().getMessage());
             }
             nhsAckContent.addMessageProcessingResult(nhsAckMessageContent);
         }
@@ -92,6 +98,8 @@ public class NhsAckProducerService {
 
         nhsAckContent.setSegmentCount(COMMON_SEGMENT_COUNT + acceptedMessages + (2 * rejectedMessages));
 
+        setDateTimes(nhsAckContent);
+
         String segments = fillTemplate(nhsAckTemplate, nhsAckContent);
 
         return segments.replace("\n", "");
@@ -100,25 +108,27 @@ public class NhsAckProducerService {
     public String createNhsAckEdifact(WorkflowId workflowId, InterchangeParsingException exception) {
         Mustache nhsAckTemplate = loadTemplate("nhsAck.mustache");
 
-        NhsAckContent nhsAckContent = new NhsAckContent();
+        var nhsAckContentBuilder = NhsAckContent.builder();
 
-        nhsAckContent.setInterchangeSender(exception.getSender());
-        nhsAckContent.setInterchangeRecipient(exception.getRecipient());
-        nhsAckContent.setInterchangeControlReference(String.valueOf(exception.getInterchangeSequenceNumber()));
+        nhsAckContentBuilder.interchangeSender(exception.getSender());
+        nhsAckContentBuilder.interchangeRecipient(exception.getRecipient());
+        nhsAckContentBuilder.interchangeControlReference(String.valueOf(exception.getInterchangeSequenceNumber()));
 
-        nhsAckContent.setNhsAckControlReference(String.valueOf(sequenceService.generateInterchangeSequence(
+        nhsAckContentBuilder.nhsAckControlReference(String.valueOf(sequenceService.generateInterchangeSequence(
                 exception.getRecipient(), exception.getSender())));
 
+        nhsAckContentBuilder.workflowId(workflowId.getWorkflowId());
+
+        nhsAckContentBuilder.interchangeStatusCode(NhsAckStatus.INTERCHANGE_REJECTED);
+
+        nhsAckContentBuilder.interchangeError(true);
+        nhsAckContentBuilder.interchangeErrorDescription(exception.getMessage());
+
+        nhsAckContentBuilder.segmentCount(COMMON_SEGMENT_COUNT + 1);
+
+        NhsAckContent nhsAckContent = nhsAckContentBuilder.build();
+
         setDateTimes(nhsAckContent);
-
-        nhsAckContent.setWorkflowId(workflowId.getWorkflowId());
-
-        nhsAckContent.setInterchangeStatusCode(NhsAckStatus.INTERCHANGE_REJECTED);
-
-        nhsAckContent.setInterchangeError(true);
-        nhsAckContent.setInterchangeErrorDescription(exception.getMessage());
-
-        nhsAckContent.setSegmentCount(COMMON_SEGMENT_COUNT + 1);
 
         String segments = fillTemplate(nhsAckTemplate, nhsAckContent);
 
@@ -128,25 +138,27 @@ public class NhsAckProducerService {
     public String createNhsAckEdifact(WorkflowId workflowId, MessagesParsingException exception) {
         Mustache nhsAckTemplate = loadTemplate("nhsAck.mustache");
 
-        NhsAckContent nhsAckContent = new NhsAckContent();
+        var nhsAckContentBuilder = NhsAckContent.builder();
 
-        nhsAckContent.setInterchangeSender(exception.getSender());
-        nhsAckContent.setInterchangeRecipient(exception.getRecipient());
-        nhsAckContent.setInterchangeControlReference(String.valueOf(exception.getInterchangeSequenceNumber()));
+        nhsAckContentBuilder.interchangeSender(exception.getSender());
+        nhsAckContentBuilder.interchangeRecipient(exception.getRecipient());
+        nhsAckContentBuilder.interchangeControlReference(String.valueOf(exception.getInterchangeSequenceNumber()));
 
-        nhsAckContent.setNhsAckControlReference(String.valueOf(sequenceService.generateInterchangeSequence(
+        nhsAckContentBuilder.nhsAckControlReference(String.valueOf(sequenceService.generateInterchangeSequence(
                 exception.getRecipient(), exception.getSender())));
 
+        nhsAckContentBuilder.workflowId(workflowId.getWorkflowId());
+
+        nhsAckContentBuilder.interchangeStatusCode(NhsAckStatus.MESSAGE_REJECTED);
+
+        nhsAckContentBuilder.interchangeError(true);
+        nhsAckContentBuilder.interchangeErrorDescription(exception.getMessage());
+
+        nhsAckContentBuilder.segmentCount(COMMON_SEGMENT_COUNT + 1);
+
+        NhsAckContent nhsAckContent = nhsAckContentBuilder.build();
+
         setDateTimes(nhsAckContent);
-
-        nhsAckContent.setWorkflowId(workflowId.getWorkflowId());
-
-        nhsAckContent.setInterchangeStatusCode(NhsAckStatus.MESSAGE_REJECTED);
-
-        nhsAckContent.setInterchangeError(true);
-        nhsAckContent.setInterchangeErrorDescription(exception.getMessage());
-
-        nhsAckContent.setSegmentCount(COMMON_SEGMENT_COUNT + 1);
 
         String segments = fillTemplate(nhsAckTemplate, nhsAckContent);
 

@@ -6,6 +6,8 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class InterchangeHeaderTest {
 
@@ -80,7 +82,7 @@ class InterchangeHeaderTest {
         assertEquals("SNDR", interchangeHeader.getSender());
         assertEquals("RECP", interchangeHeader.getRecipient());
         assertEquals(1L, interchangeHeader.getSequenceNumber());
-        assert (!interchangeHeader.isNhsAckRequested());
+        assertFalse(interchangeHeader.isNhsAckRequested());
     }
 
     @Test
@@ -100,7 +102,7 @@ class InterchangeHeaderTest {
         assertEquals("SNDR", interchangeHeader.getSender());
         assertEquals("RECP", interchangeHeader.getRecipient());
         assertEquals(1L, interchangeHeader.getSequenceNumber());
-        assert (interchangeHeader.isNhsAckRequested());
+        assertTrue(interchangeHeader.isNhsAckRequested());
     }
 
     @Test
@@ -112,6 +114,6 @@ class InterchangeHeaderTest {
         assertEquals("SNDR", interchangeHeader.getSender());
         assertEquals("RECP", interchangeHeader.getRecipient());
         assertEquals(1L, interchangeHeader.getSequenceNumber());
-        assert (!interchangeHeader.isNhsAckRequested());
+        assertFalse(interchangeHeader.isNhsAckRequested());
     }
 }

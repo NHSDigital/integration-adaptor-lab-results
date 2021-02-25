@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * with the expected FHIR representation of the original message sent (.json file having the same name as the .dat)
  */
 @Slf4j
-public class InboundUserAcceptanceTest extends IntegrationBaseTest {
+class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
     private static final String RECIPIENT = "XX11";
 
@@ -79,8 +79,7 @@ public class InboundUserAcceptanceTest extends IntegrationBaseTest {
             )
         );
 
-        //TODO: NIAD-1063 temporarily disabling NHSACK for v0.1
-        //assertOutboundNhsAckMessage();
+        assertOutboundNhsAckMessage();
     }
 
     private void assertOutboundNhsAckMessage()

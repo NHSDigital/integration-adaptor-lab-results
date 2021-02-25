@@ -39,6 +39,8 @@ public class InboundMessageHandler {
             if (ex.isNhsAckRequested()) {
                 var nhsack = outboundMeshMessageBuilder.buildNhsAck(meshMessage.getWorkflowId(), ex);
                 meshOutboundQueueService.publish(nhsack);
+            } else {
+                LOGGER.debug("NHSACK not requested for interchange: " + ex.getInterchangeSequenceNumber());
             }
             return;
         } catch (MessagesParsingException ex) {
@@ -46,6 +48,8 @@ public class InboundMessageHandler {
             if (ex.isNhsAckRequested()) {
                 var nhsack = outboundMeshMessageBuilder.buildNhsAck(meshMessage.getWorkflowId(), ex);
                 meshOutboundQueueService.publish(nhsack);
+            } else {
+                LOGGER.debug("NHSACK not requested for interchange: " + ex.getInterchangeSequenceNumber());
             }
             return;
         }
@@ -63,6 +67,9 @@ public class InboundMessageHandler {
                     meshMessage.getWorkflowId(),
                     interchange,
                     messageProcessingResults);
+        } else {
+            LOGGER.debug("NHSACK not requested for interchange: "
+                    + interchange.getInterchangeHeader().getSequenceNumber());
         }
 
         messageProcessingResults.stream()

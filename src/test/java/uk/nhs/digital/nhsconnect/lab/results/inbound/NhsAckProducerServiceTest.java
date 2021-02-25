@@ -5,7 +5,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +17,6 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageHeader;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeFactory;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessagesParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.sequence.SequenceService;
@@ -27,23 +25,26 @@ import uk.nhs.digital.nhsconnect.lab.results.inbound.MessageProcessingResult.Suc
 import uk.nhs.digital.nhsconnect.lab.results.inbound.MessageProcessingResult.Error;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ExtendWith(MockitoExtension.class)
-public class NhsAckProducerServiceTest {
+class NhsAckProducerServiceTest {
 
     private static final Instant FIXED_TIME = Instant.parse("2020-04-27T16:37:00Z");
     private static final Long FIXED_SEQUENCE_NUMBER = 1000L;
-    private static final String NHSACK_IAF_RESPONSE_PATH = "/edifact/nhsAck_example_IAF.txt";
-    private static final String NHSACK_IAP_RESPONSE_PATH = "/edifact/nhsAck_example_IAP.txt";
-    private static final String NHSACK_IRA_RESPONSE_PATH = "/edifact/nhsAck_example_IRA.txt";
-    private static final String NHSACK_IRI_RESPONSE_PATH = "/edifact/nhsAck_example_IRI.txt";
-    private static final String NHSACK_IRM_RESPONSE_PATH = "/edifact/nhsAck_example_IRM.txt";
-    private static final String NHSACK_SCREENING_RESPONSE_PATH = "/edifact/nhsAck_screening_example.txt";
+    private static final String NHSACK_IAF_RESPONSE_PATH = "src/test/resources/edifact/nhsAck_example_IAF.txt";
+    private static final String NHSACK_IAP_RESPONSE_PATH = "src/test/resources/edifact/nhsAck_example_IAP.txt";
+    private static final String NHSACK_IRA_RESPONSE_PATH = "src/test/resources/edifact/nhsAck_example_IRA.txt";
+    private static final String NHSACK_IRI_RESPONSE_PATH = "src/test/resources/edifact/nhsAck_example_IRI.txt";
+    private static final String NHSACK_IRM_RESPONSE_PATH = "src/test/resources/edifact/nhsAck_example_IRM.txt";
+    private static final String NHSACK_SCREENING_RESPONSE_PATH =
+            "src/test/resources/edifact/nhsAck_screening_example.txt";
 
     private static final String INTERCHANGE_SENDER = "000000004400001:80";
     private static final String INTERCHANGE_RECIPIENT = "000000024600002:80";
@@ -51,7 +52,6 @@ public class NhsAckProducerServiceTest {
     private static final Long MESSAGE_SEQUENCE_NUMBER_1 = 1L;
     private static final Long MESSAGE_SEQUENCE_NUMBER_2 = 2L;
     private static final Long MESSAGE_SEQUENCE_NUMBER_3 = 3L;
-
 
     @InjectMocks
     private NhsAckProducerService nhsAckProducerService;
@@ -61,8 +61,6 @@ public class NhsAckProducerServiceTest {
 
     @Mock
     private SequenceService sequenceService;
-
-    private final EdifactParser edifactParser = new EdifactParser(new InterchangeFactory());
 
     private List<MessageProcessingResult> messageProcessingResults;
 
@@ -230,8 +228,7 @@ public class NhsAckProducerServiceTest {
     }
 
     private String readFile(String path) throws IOException {
-        try (InputStream is = this.getClass().getResourceAsStream(path)) {
-            return IOUtils.toString(is, StandardCharsets.UTF_8);
-        }
+        Path filePath = FileSystems.getDefault().getPath(path);
+        return Files.lines(filePath).collect(Collectors.joining("\n"));
     }
 }

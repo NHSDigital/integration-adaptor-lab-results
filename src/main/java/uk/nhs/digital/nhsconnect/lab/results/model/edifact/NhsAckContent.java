@@ -1,13 +1,14 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
+@Builder
 public class NhsAckContent {
     private String interchangeSender;
     private String interchangeRecipient;
@@ -18,9 +19,9 @@ public class NhsAckContent {
     private String dateCCYYMMDD;
     private String interchangeControlReference;
     private NhsAckStatus interchangeStatusCode;
-    private boolean interchangeError; // This value is only set if an error occurred on the interchange level
+    private boolean interchangeError;
     private String interchangeErrorDescription;
-    private List<NhsAckMessageContent> messageStatus = new ArrayList<>();
+    private List<NhsAckMessageContent> messageStatus;
     private int segmentCount;
 
     public void addMessageProcessingResult(NhsAckMessageContent messageProcessingResult) {

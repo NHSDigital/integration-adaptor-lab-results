@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @DirtiesContext
-public class NhsAckResponseTest extends IntegrationBaseTest {
+class NhsAckResponseTest extends IntegrationBaseTest {
     @Value("classpath:edifact/pathology_edifact_IAF.dat")
     private Resource edifactIAFResource;
 
