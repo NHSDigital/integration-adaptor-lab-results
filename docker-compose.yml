@@ -2,7 +2,7 @@ version: '3'
 
 services:
   lab-results:
-    image: local/lab-results:${BUILD_TAG}
+    image: ${LAB_RESULTS_IMAGE:-local/lab-results:latest}
     build:
       context: .
       dockerfile: Dockerfile
