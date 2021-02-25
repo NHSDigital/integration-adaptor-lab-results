@@ -30,11 +30,10 @@ public class BundleMapper {
             .setFullUrl(FULL_URL_PREFIX.concat(pathologyRecord.getRequester().getId()))
             .setResource(pathologyRecord.getRequester());
 
-        Optional.ofNullable(pathologyRecord.getPerformer()).ifPresent(performer -> {
+        Optional.ofNullable(pathologyRecord.getPerformer()).ifPresent(performer ->
             bundle.addEntry()
                 .setFullUrl(FULL_URL_PREFIX.concat(performer.getId()))
-                .setResource(performer);
-            }
+                .setResource(performer)
         );
         return bundle;
     }
