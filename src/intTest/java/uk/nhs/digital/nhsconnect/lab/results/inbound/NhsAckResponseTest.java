@@ -1,55 +1,82 @@
 package uk.nhs.digital.nhsconnect.lab.results.inbound;
 
-import org.assertj.core.api.SoftAssertions;
-import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.skyscreamer.jsonassert.Customization;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.skyscreamer.jsonassert.JSONCompareMode;
-import org.skyscreamer.jsonassert.comparator.CustomComparator;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.Resource;
 import org.springframework.test.annotation.DirtiesContext;
 import uk.nhs.digital.nhsconnect.lab.results.IntegrationBaseTest;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
+import uk.nhs.digital.nhsconnect.lab.results.sequence.SequenceService;
+import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
 
-import javax.jms.JMSException;
-import javax.jms.Message;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @DirtiesContext
 public class NhsAckResponseTest extends IntegrationBaseTest {
-
-    @Value("classpath:edifact/multi_pathology.dat")
-    private Resource multiEdifactResource;
-
     @Value("classpath:edifact/pathology_edifact_IAF.dat")
-    private Resource edifact_IAF_resource;
+    private Resource edifactIAFResource;
 
     @Value("classpath:edifact/pathology_nhsAck_IAF.dat")
-    private Resource nhsAck_IAF_resource;
+    private Resource nhsAckIAFResource;
 
-    private String previousCorrelationId;
+    @Value("classpath:edifact/pathology_edifact_IAP.dat")
+    private Resource edifactIAPResource;
+
+    @Value("classpath:edifact/pathology_nhsAck_IAP.dat")
+    private Resource nhsAckIAPResource;
+
+    @Value("classpath:edifact/pathology_edifact_IRA.dat")
+    private Resource edifactIRAResource;
+
+    @Value("classpath:edifact/pathology_nhsAck_IRA.dat")
+    private Resource nhsAckIRAResource;
+
+    @Value("classpath:edifact/pathology_edifact_IRM.dat")
+    private Resource edifactIRMResource;
+
+    @Value("classpath:edifact/pathology_nhsAck_IRM.dat")
+    private Resource nhsAckIRMResource;
+
+    @Value("classpath:edifact/pathology_edifact_IRI.dat")
+    private Resource edifactIRIResource;
+
+    @Value("classpath:edifact/pathology_nhsAck_IRI.dat")
+    private Resource nhsAckIRIResource;
+
+    @Value("classpath:edifact/pathology_edifact_no_nhsAck.dat")
+    private Resource edifactNoNHSACKResource;
+
+    @MockBean
+    private TimestampService timestampService;
+
+    @MockBean
+    private SequenceService sequenceService;
+
+    private static final Instant FIXED_TIME = Instant.parse("2020-04-27T16:37:00Z");
+    private static final Long FIXED_SEQUENCE_NUMBER = 1000L;
 
     @BeforeEach
     void setUp() {
+        when(timestampService.getCurrentTimestamp()).thenReturn(FIXED_TIME);
+        when(sequenceService.generateInterchangeSequence(any(), any())).thenReturn(FIXED_SEQUENCE_NUMBER);
         clearGpOutboundQueue();
         clearMeshMailboxes();
     }
 
     @Test
-    void whenMeshInboundQueueMessageIsReceivedThenMessageIsHandled(SoftAssertions softly)
-            throws IOException, JMSException {
+    void whenValidEdifactSentThenIAFNhsAckReturned()
+            throws IOException {
 
-        final String content = new String(Files.readAllBytes(edifact_IAF_resource.getFile().toPath()));
+        final String content = new String(Files.readAllBytes(edifactIAFResource.getFile().toPath()));
 
         final MeshMessage meshMessage = new MeshMessage()
                 .setWorkflowId(WorkflowId.PATHOLOGY)
@@ -57,53 +84,101 @@ public class NhsAckResponseTest extends IntegrationBaseTest {
 
         sendToMeshInboundQueue(meshMessage);
 
-        final Message nhsAck = getMeshOutboundQueueMessage();
-        final String nhsAckContent = parseTextMessage(nhsAck);
+        final var nhsAck = waitForMeshMessage(getMeshClient());
 
-        final String expectedContent = new String(Files.readAllBytes(nhsAck_IAF_resource.getFile().toPath()));
+        assertThat(nhsAck.getWorkflowId()).isEqualTo(WorkflowId.PATHOLOGY_ACK);
 
+        final String nhsAckContent = nhsAck.getContent();
+        final String expectedContent = new String(Files.readAllBytes(nhsAckIAFResource.getFile().toPath())).
+                replace("\n", "");
         assertThat(nhsAckContent).isEqualTo(expectedContent);
-
-        //assertGpOutboundQueueMessages(softly);
     }
 
-    @SuppressWarnings("checkstyle:magicnumber")
-    private void assertGpOutboundQueueMessages(SoftAssertions softly) throws IOException, JMSException, JSONException {
-        final List<Message> gpOutboundQueueMessages = IntStream.range(0, 6)
-                .mapToObj(x -> getGpOutboundQueueMessage())
-                .collect(Collectors.toList());
+    @Test
+    void whenPartiallyValidEdifactSentThenIAPNhsAckReturned()
+            throws IOException {
 
-        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(0));
-        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(1));
-        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(2));
-        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(3));
-        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(4));
-        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(5));
+        final String content = new String(Files.readAllBytes(edifactIAPResource.getFile().toPath()));
+
+        final MeshMessage meshMessage = new MeshMessage()
+                .setWorkflowId(WorkflowId.PATHOLOGY)
+                .setContent(content);
+
+        sendToMeshInboundQueue(meshMessage);
+
+        final var nhsAck = waitForMeshMessage(getMeshClient());
+
+        assertThat(nhsAck.getWorkflowId()).isEqualTo(WorkflowId.PATHOLOGY_ACK);
+
+        final String nhsAckContent = nhsAck.getContent();
+        final String expectedContent = new String(Files.readAllBytes(nhsAckIAPResource.getFile().toPath())).
+                replace("\n", "");
+        assertThat(nhsAckContent).isEqualTo(expectedContent);
     }
 
-    private void assertGpOutboundQueueMessages(SoftAssertions softly, Message message)
-            throws IOException, JMSException, JSONException {
+    @Test
+    void whenAllEdifactMessagesAreInvalidThenIRANhsAckReturned()
+            throws IOException {
 
-        // all messages come from the same interchange and use the same correlation id
-        final String correlationId = message.getStringProperty("CorrelationId");
-        if (previousCorrelationId == null) {
-            previousCorrelationId = correlationId;
-        }
-        softly.assertThat(correlationId).isEqualTo(previousCorrelationId);
+        final String content = new String(Files.readAllBytes(edifactIRAResource.getFile().toPath()));
 
-        final String messageBody = parseTextMessage(message);
-        final String expectedMessageBody = new String(Files.readAllBytes(getFhirResource().getFile().toPath()));
+        final MeshMessage meshMessage = new MeshMessage()
+                .setWorkflowId(WorkflowId.PATHOLOGY)
+                .setContent(content);
 
-        JSONAssert.assertEquals(
-                expectedMessageBody,
-                messageBody,
-                new CustomComparator(
-                        JSONCompareMode.STRICT,
-                        new Customization("meta.lastUpdated", (c1, c2) -> true),
-                        new Customization("identifier.value", (c1, c2) -> true),
-                        new Customization("entry[*].fullUrl", (c1, c2) -> true)
-                )
-        );
+        sendToMeshInboundQueue(meshMessage);
+
+        final var nhsAck = waitForMeshMessage(getMeshClient());
+
+        assertThat(nhsAck.getWorkflowId()).isEqualTo(WorkflowId.PATHOLOGY_ACK);
+
+        final String nhsAckContent = nhsAck.getContent();
+        final String expectedContent = new String(Files.readAllBytes(nhsAckIRAResource.getFile().toPath())).
+                replace("\n", "");
+        assertThat(nhsAckContent).isEqualTo(expectedContent);
     }
 
+    @Test
+    void whenInvalidInterchangeInEdifactSentThenIRINhsAckReturned()
+            throws IOException {
+
+        final String content = new String(Files.readAllBytes(edifactIRIResource.getFile().toPath()));
+
+        final MeshMessage meshMessage = new MeshMessage()
+                .setWorkflowId(WorkflowId.PATHOLOGY)
+                .setContent(content);
+
+        sendToMeshInboundQueue(meshMessage);
+
+        final var nhsAck = waitForMeshMessage(getMeshClient());
+
+        assertThat(nhsAck.getWorkflowId()).isEqualTo(WorkflowId.PATHOLOGY_ACK);
+
+        final String nhsAckContent = nhsAck.getContent();
+        final String expectedContent = new String(Files.readAllBytes(nhsAckIRIResource.getFile().toPath())).
+                replace("\n", "");
+        assertThat(nhsAckContent).isEqualTo(expectedContent);
+    }
+
+    @Test
+    void whenEdifactMessagesCannotBeExtractedThenIRMNhsAckReturned()
+            throws IOException {
+
+        final String content = new String(Files.readAllBytes(edifactIRMResource.getFile().toPath()));
+
+        final MeshMessage meshMessage = new MeshMessage()
+                .setWorkflowId(WorkflowId.PATHOLOGY)
+                .setContent(content);
+
+        sendToMeshInboundQueue(meshMessage);
+
+        final var nhsAck = waitForMeshMessage(getMeshClient());
+
+        assertThat(nhsAck.getWorkflowId()).isEqualTo(WorkflowId.PATHOLOGY_ACK);
+
+        final String nhsAckContent = nhsAck.getContent();
+        final String expectedContent = new String(Files.readAllBytes(nhsAckIRMResource.getFile().toPath())).
+                replace("\n", "");
+        assertThat(nhsAckContent).isEqualTo(expectedContent);
+    }
 }
