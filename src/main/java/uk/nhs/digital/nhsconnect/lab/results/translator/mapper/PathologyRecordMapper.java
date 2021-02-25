@@ -12,11 +12,13 @@ import uk.nhs.digital.nhsconnect.lab.results.model.fhir.PathologyRecord.Patholog
 public class PathologyRecordMapper {
 
     private final PractitionerMapper practitionerMapper;
+    private final PatientMapper patientMapper;
 
     public PathologyRecord mapToPathologyRecord(final Message message) {
         final PathologyRecordBuilder pathologyRecordBuilder = PathologyRecord.builder();
 
         practitionerMapper.mapRequester(message).ifPresent(pathologyRecordBuilder::requester);
+        pathologyRecordBuilder.patient(patientMapper.mapToPatient(message));
 
         return pathologyRecordBuilder.build();
     }

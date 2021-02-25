@@ -2,6 +2,7 @@ package uk.nhs.digital.nhsconnect.lab.results.inbound.fhir;
 
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Enumerations;
+import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +38,7 @@ class EdifactToFhirServiceTest {
     @Test
     void testEdifactIsMappedToFhirBundle() {
         Practitioner requester = generateRequester("Dr Bob Hope", Enumerations.AdministrativeGender.MALE);
-        PathologyRecord pathologyRecord = generatePathologyRecord(requester);
+        PathologyRecord pathologyRecord = generatePathologyRecord(requester, new Patient());
         Bundle generatedBundle = generateBundle(pathologyRecord);
 
         when(pathologyRecordMapper.mapToPathologyRecord(message)).thenReturn(pathologyRecord);
@@ -47,9 +48,8 @@ class EdifactToFhirServiceTest {
 
         assertThat(bundle).isNotNull();
         assertThat(bundle.getEntry())
-            .hasSize(1)
-            .first()
+            .hasSize(2)
             .extracting(Bundle.BundleEntryComponent::getResource)
-            .isNotNull();
+            .containsExactly(pathologyRecord.getRequester(), pathologyRecord.getPatient());
     }
 }

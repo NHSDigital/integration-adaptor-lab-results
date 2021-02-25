@@ -5,6 +5,7 @@ import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.InstantType;
 import org.hl7.fhir.dstu3.model.Meta;
+import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.UriType;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.model.fhir.PathologyRecord;
@@ -27,6 +28,11 @@ public class BundleMapper {
         bundle.addEntry()
             .setFullUrl(FULL_URL_PREFIX.concat(uuidGenerator.generateUUID()))
             .setResource(pathologyRecord.getRequester());
+
+        final Patient patient = pathologyRecord.getPatient();
+        bundle.addEntry()
+            .setFullUrl(FULL_URL_PREFIX.concat(patient.getId()))
+            .setResource(patient);
 
         return bundle;
     }
