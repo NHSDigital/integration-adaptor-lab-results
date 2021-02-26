@@ -35,6 +35,8 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
     private Resource fhirMessage1;
     @Value("classpath:edifact/multi_pathology_msg2.fhir.json")
     private Resource fhirMessage2;
+    @Value("classpath:edifact/multi_pathology_msg3.fhir.json")
+    private Resource fhirMessage3;
 
     private String previousCorrelationId;
 
@@ -61,10 +63,12 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
 
     @SuppressWarnings("checkstyle:magicnumber")
     private void assertGpOutboundQueueMessages(SoftAssertions softly) throws IOException, JMSException, JSONException {
-        final List<Message> gpOutboundQueueMessages = List.of(getGpOutboundQueueMessage(), getGpOutboundQueueMessage());
+        final List<Message> gpOutboundQueueMessages = List.of(getGpOutboundQueueMessage(), getGpOutboundQueueMessage(),
+            getGpOutboundQueueMessage());
 
         assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(0), fhirMessage1);
         assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(1), fhirMessage2);
+        assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(2), fhirMessage3);
     }
 
     private void assertGpOutboundQueueMessages(SoftAssertions softly, Message message, Resource fhirMessage)

@@ -1,8 +1,9 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import lombok.RequiredArgsConstructor;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.fhir.PathologyRecord;
 import uk.nhs.digital.nhsconnect.lab.results.model.fhir.PathologyRecord.PathologyRecordBuilder;
@@ -19,6 +20,7 @@ public class PathologyRecordMapper {
         final PathologyRecordBuilder pathologyRecordBuilder = PathologyRecord.builder();
 
         practitionerMapper.mapRequester(message).ifPresent(pathologyRecordBuilder::requester);
+        practitionerMapper.mapPerformer(message).ifPresent(pathologyRecordBuilder::performer);
         pathologyRecordBuilder.patient(patientMapper.mapToPatient(message));
         pathologyRecordBuilder.specimens(specimenMapper.mapToSpecimens(message));
 

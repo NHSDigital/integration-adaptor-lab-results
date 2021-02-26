@@ -18,13 +18,18 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class BundleMapperTest {
+    private static final String SOME_UUID = randomUUID().toString();
+    private static final String FULL_URL = "urn:uuid:" + SOME_UUID;
+
     @Mock
     private UUIDGenerator uuidGenerator;
 
@@ -35,15 +40,19 @@ class BundleMapperTest {
 
     @BeforeEach
     void setUp() {
-        when(uuidGenerator.generateUUID()).thenReturn("some-uuid");
+        when(uuidGenerator.generateUUID()).thenReturn(SOME_UUID);
         // add members that are required:
+        final var mockRequester = mock(Practitioner.class);
+        lenient().when(mockRequester.getId()).thenReturn(SOME_UUID);
         pathologyRecordBuilder = PathologyRecord.builder()
+            .requester(mockRequester)
             .patient(mock(Patient.class));
     }
 
     @Test
     void testMapPathologyRecordToBundleWithPractitioner() {
         final var mockRequester = mock(Practitioner.class);
+        when(mockRequester.getId()).thenReturn(SOME_UUID);
         pathologyRecordBuilder.requester(mockRequester);
 
         final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
@@ -61,14 +70,14 @@ class BundleMapperTest {
             () -> assertThat(practitioners).hasSize(1).contains(mockRequester),
             () -> assertThat(practitionerBundleEntries).first()
                 .extracting(BundleEntryComponent::getFullUrl)
-                .isEqualTo("urn:uuid:some-uuid")
+                .isEqualTo(FULL_URL)
         );
     }
 
     @Test
     void testMapPathologyRecordToBundleWithPatient() {
         final var mockPatient = mock(Patient.class);
-        when(mockPatient.getId()).thenReturn("some-uuid");
+        when(mockPatient.getId()).thenReturn(SOME_UUID);
         pathologyRecordBuilder.patient(mockPatient);
 
         final Bundle bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
@@ -86,16 +95,42 @@ class BundleMapperTest {
             () -> assertThat(patients).hasSize(1).contains(mockPatient),
             () -> assertThat(patientBundleEntries).first()
                 .extracting(BundleEntryComponent::getFullUrl)
-                .isEqualTo("urn:uuid:some-uuid")
+                .isEqualTo(FULL_URL)
+        );
+    }
+
+    @Test
+    void testMapPathologyRecordToBundleWithPerformer() {
+        final var mockPerformer = mock(Practitioner.class);
+        when(mockPerformer.getId()).thenReturn(SOME_UUID);
+        pathologyRecordBuilder.performer(mockPerformer);
+
+        final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
+
+        final var performerBundleEntries = bundle.getEntry().stream()
+            .filter(entry -> entry.getResource() instanceof Practitioner)
+            .collect(Collectors.toList());
+        final var practitioners = performerBundleEntries.stream()
+            .map(BundleEntryComponent::getResource)
+            .map(Practitioner.class::cast)
+            .collect(Collectors.toList());
+
+        assertAll(
+            () -> verifyBundle(bundle),
+            () -> assertThat(practitioners).hasSize(2) // includes required requester
+                .contains(mockPerformer),
+            () -> assertThat(performerBundleEntries)
+                .extracting(BundleEntryComponent::getFullUrl)
+                .allMatch(FULL_URL::equals)
         );
     }
 
     @Test
     void testMapPathologyRecordToBundleWithSpecimens() {
         final var mockSpecimen1 = mock(Specimen.class);
-        when(mockSpecimen1.getId()).thenReturn("some-uuid");
+        when(mockSpecimen1.getId()).thenReturn(SOME_UUID);
         final var mockSpecimen2 = mock(Specimen.class);
-        when(mockSpecimen2.getId()).thenReturn("some-uuid");
+        when(mockSpecimen2.getId()).thenReturn(SOME_UUID);
         pathologyRecordBuilder.specimens(List.of(mockSpecimen1, mockSpecimen2));
 
         final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
@@ -114,7 +149,7 @@ class BundleMapperTest {
                 .contains(mockSpecimen1, mockSpecimen2),
             () -> assertThat(specimenBundleEntries)
                 .extracting(BundleEntryComponent::getFullUrl)
-                .allMatch("urn:uuid:some-uuid"::equals)
+                .allMatch(FULL_URL::equals)
         );
     }
 
@@ -124,7 +159,7 @@ class BundleMapperTest {
             () -> assertThat(bundle.getMeta().getProfile().get(0).asStringValue())
                 .isEqualTo("https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"),
             () -> assertThat(bundle.getIdentifier().getSystem()).isEqualTo("https://tools.ietf.org/html/rfc4122"),
-            () -> assertThat(bundle.getIdentifier().getValue()).isEqualTo("some-uuid"),
+            () -> assertThat(bundle.getIdentifier().getValue()).isEqualTo(SOME_UUID),
             () -> assertThat(bundle.getType()).isEqualTo(Bundle.BundleType.MESSAGE)
         );
     }
