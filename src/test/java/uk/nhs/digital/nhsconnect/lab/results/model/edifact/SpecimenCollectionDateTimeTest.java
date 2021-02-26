@@ -1,6 +1,8 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,6 +57,17 @@ class SpecimenCollectionDateTimeTest {
         assertThatThrownBy(specimenCollectionDateTime::validate)
             .isExactlyInstanceOf(EdifactValidationException.class)
             .hasMessage("DTM: Date/time of sample collection is required");
+    }
+
+    @ParameterizedTest
+    @CsvSource({"602,2021", "610,202101"})
+    void testValidateUnsupportedDateFormatThrowsException(final String format, final String value) {
+        final var specimenCollectionDateTime =
+            SpecimenCollectionDateTime.fromString("DTM+SCO:" + value + ":" + format);
+
+        assertThatThrownBy(specimenCollectionDateTime::validate)
+            .isExactlyInstanceOf(EdifactValidationException.class)
+            .hasMessage("DTM: Date format %s unsupported", format);
     }
 
     @Test
