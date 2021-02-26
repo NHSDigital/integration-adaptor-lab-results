@@ -1,6 +1,7 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
 import org.hl7.fhir.dstu3.model.Annotation;
+import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.DateTimeType;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.junit.jupiter.api.Test;
@@ -75,7 +76,10 @@ class SpecimenMapperTest {
         final var specimens = specimenMapper.mapToSpecimens(message);
 
         assertThat(specimens).hasSize(2)
-            .allSatisfy(specimen -> assertThat(specimen.getType().getText()).isEqualTo("Specimen type"))
+            .allSatisfy(specimen -> assertThat(specimen.getType().getCoding())
+                .hasSize(1)
+                .map(Coding::getDisplay)
+                .allMatch("Specimen type"::equals))
             .allSatisfy(specimen -> assertThat(specimen.getId()).isEqualTo("test-uuid"));
     }
 

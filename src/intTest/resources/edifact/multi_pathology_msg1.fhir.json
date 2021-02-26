@@ -70,10 +70,16 @@
         "resourceType": "Specimen",
         "id": "6117b6d6-d0a8-4930-a404-611ddece464a",
         "accessionIdentifier": {
+          "system": "http://lab.acme.org/specimens/2011",
           "value": "CH000037KA"
         },
         "type": {
-          "text": "VENOUS BLOOD"
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "display": "VENOUS BLOOD"
+            }
+          ]
         },
         "receivedTime": "2010-02-24T15:41:00+00:00",
         "collection": {

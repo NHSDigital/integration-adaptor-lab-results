@@ -65,7 +65,12 @@
         "resourceType": "Specimen",
         "id": "34a0625d-5517-42a2-99c3-3a621c989c73",
         "type": {
-          "text": "VENOUS BLOOD"
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "display": "VENOUS BLOOD"
+            }
+          ]
         },
         "receivedTime": "2010-02-24T15:41:00+00:00"
       }

@@ -23,6 +23,10 @@ import static java.util.stream.Collectors.toList;
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class SpecimenMapper {
+    private static final String IDENTIFIER_SYSTEM = "http://ehr.acme.org/identifiers/collections";
+    private static final String ACCESSION_IDENTIFIER_SYSTEM = "http://lab.acme.org/specimens/2011";
+    private static final String TYPE_SYSTEM = "http://snomed.info/sct";
+
     private final UUIDGenerator uuidGenerator;
     private final DateFormatMapper dateFormatMapper;
 
@@ -38,16 +42,22 @@ public class SpecimenMapper {
         // fhir.identifier = SG16.RFF.C506.1154 (requester)
         edifact.getServiceRequesterReference()
             .map(Reference::getNumber)
-            .ifPresent(identifier -> fhir.addIdentifier().setValue(identifier));
+            .ifPresent(identifier -> fhir.addIdentifier()
+                .setValue(identifier)
+                .setSystem(IDENTIFIER_SYSTEM));
         // fhir.accessionIdentifier = SG16.RFF.C506.1154 (provider)
         edifact.getServiceProviderReference()
             .map(Reference::getNumber)
-            .ifPresent(identifier -> fhir.setAccessionIdentifier(new Identifier().setValue(identifier)));
+            .ifPresent(identifier -> fhir.setAccessionIdentifier(new Identifier()
+                .setValue(identifier)
+                .setSystem(ACCESSION_IDENTIFIER_SYSTEM)));
         // fhir.status = [none]
         // fhir.type = SG16.SPC.C832.7866
         Optional.ofNullable(edifact.getCharacteristicType())
             .map(SpecimenCharacteristicType::getTypeOfSpecimen)
-            .ifPresent(specimenType -> fhir.getType().setText(specimenType));
+            .ifPresent(specimenType -> fhir.getType().addCoding()
+                .setDisplay(specimenType)
+                .setSystem(TYPE_SYSTEM));
         // fhir.receivedTime = SG16.DTM.C507.2380 (SRI)
         edifact.getCollectionReceiptDateTime()
             .map(date -> dateFormatMapper.mapToDate(date.getDateFormat(), date.getCollectionReceiptDateTime()))
