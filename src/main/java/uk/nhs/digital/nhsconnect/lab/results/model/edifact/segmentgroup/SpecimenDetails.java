@@ -24,8 +24,7 @@ import static uk.nhs.digital.nhsconnect.lab.results.model.edifact.Segment.PLUS_S
  * Segment group 16: {@code S16-SEQ-SPC-PRC-RFF-QTY-DTM-FTX}
  * <ul>
  *     <li>{@code SEQ} is optional.</li>
- *     <li>{@code SPC} is mandatory. Must be qualified with {@code +TSP}.
- *     May optionally also be present qualified with {@code +FS}.</li>
+ *     <li>{@code SPC} is mandatory. Must be qualified with {@code +TSP}.</li>
  *     <li>{@code PRC} is not used.</li>
  *     <li>{@code RFF} is optional. May be qualified with {@code +RTI} or {@code +STI}.
  *     May have up to 2 instances.</li>
