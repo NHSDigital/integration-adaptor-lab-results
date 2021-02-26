@@ -1,6 +1,0 @@
-version: '3'
-
-services:
-  lab-results:
-    ports:
-      - "80:8080"
