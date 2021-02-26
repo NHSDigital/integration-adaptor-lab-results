@@ -1,6 +1,5 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
-import org.hl7.fhir.dstu3.model.Enumerations.AdministrativeGender;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.hl7.fhir.dstu3.model.Specimen;
@@ -23,12 +22,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@SuppressWarnings("checkstyle:MagicNumber")
 class PathologyRecordMapperTest {
-
-    private static final String NAME_TEXT = "Dr Bob Hope";
-    private static final String BIRTH_DATE = "2001-01-12";
-    private static final AdministrativeGender GENDER = AdministrativeGender.MALE;
 
     @Mock
     private PractitionerMapper practitionerMapper;
@@ -76,7 +70,6 @@ class PathologyRecordMapperTest {
     }
 
     @Test
-    @SuppressWarnings("checkstyle:MagicNumber")
     void testMapMessageToPathologyRecordWithPerformer() {
         final Message message = new Message(emptyList());
         var mockPerformer = mock(Practitioner.class);
