@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.fhir.PathologyRecord;
 
@@ -21,8 +22,9 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.when;
+
 import static uk.nhs.digital.nhsconnect.lab.results.fixtures.FhirFixtures.generatePatient;
-import static uk.nhs.digital.nhsconnect.lab.results.fixtures.FhirFixtures.generateRequester;
+import static uk.nhs.digital.nhsconnect.lab.results.fixtures.FhirFixtures.generatePractitioner;
 
 @ExtendWith(MockitoExtension.class)
 class PathologyRecordMapperTest {
@@ -45,12 +47,19 @@ class PathologyRecordMapperTest {
     void testMapMessageToPathologyRecord() {
         final Message message = new Message(new ArrayList<>());
 
-        when(practitionerMapper.mapRequester(message)).thenReturn(Optional.of(generateRequester(NAME_TEXT, GENDER)));
         when(patientMapper.mapToPatient(message)).thenReturn(generatePatient(NAME_TEXT, GENDER, BIRTH_DATE));
+        when(practitionerMapper.mapRequester(message)).thenReturn(
+            Optional.of(generatePractitioner(NAME_TEXT, GENDER))
+        );
+
+        when(practitionerMapper.mapPerformer(message)).thenReturn(
+            Optional.of(generatePractitioner("Dr Darcy Lewis", AdministrativeGender.FEMALE))
+        );
 
         final PathologyRecord pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
 
-        final Practitioner requester = pathologyRecord.getRequester();
+        Practitioner requester = pathologyRecord.getRequester();
+
         assertAll(
             () -> assertThat(requester.getName())
                 .hasSize(1)
@@ -58,6 +67,17 @@ class PathologyRecordMapperTest {
                 .extracting(HumanName::getText)
                 .isEqualTo(NAME_TEXT),
             () -> assertThat(requester.getGender()).isEqualTo(GENDER)
+        );
+
+        Practitioner performer = pathologyRecord.getPerformer();
+
+        assertAll(
+            () -> assertThat(performer.getName())
+                .hasSize(1)
+                .first()
+                .extracting(HumanName::getText)
+                .isEqualTo("Dr Darcy Lewis"),
+            () -> assertThat(performer.getGender()).isEqualTo(AdministrativeGender.FEMALE)
         );
 
         final Patient patient = pathologyRecord.getPatient();

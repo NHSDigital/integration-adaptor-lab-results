@@ -16,6 +16,7 @@
       "fullUrl": "urn:uuid:fc037a5e-56ea-46ef-a6d5-2973b239dcd9",
       "resource": {
         "resourceType": "Practitioner",
+        "id": "314bcfae-c309-4413-abf6-a69cc8c48553",
         "identifier": [
           {
             "system": "https://fhir.nhs.uk/Id/sds-user-id",
