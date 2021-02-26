@@ -3,6 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.utils;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
+import com.github.mustachejava.MustacheNotFoundException;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -26,7 +27,7 @@ public final class TemplateUtils {
             template.execute(writer, content).flush();
             data += writer.toString();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new MustacheNotFoundException("Could not fill template " + template.getName(), e);
         }
 
         return data;

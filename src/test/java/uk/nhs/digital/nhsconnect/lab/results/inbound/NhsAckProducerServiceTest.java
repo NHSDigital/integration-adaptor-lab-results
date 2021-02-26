@@ -18,7 +18,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessagesParsingException;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessageParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.sequence.SequenceService;
 import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.MessageProcessingResult.Success;
@@ -183,14 +183,14 @@ class NhsAckProducerServiceTest {
 
     @Test
     void testCreateNhsAckMessageErrorIRMResponse() throws IOException {
-        final var interchangeParsingException = mock(MessagesParsingException.class);
-        when(interchangeParsingException.getSender()).thenReturn(INTERCHANGE_SENDER);
-        when(interchangeParsingException.getRecipient()).thenReturn(INTERCHANGE_RECIPIENT);
-        when(interchangeParsingException.getInterchangeSequenceNumber()).thenReturn(INTERCHANGE_CONTROL_REFERENCE);
-        when(interchangeParsingException.getMessage()).thenReturn("Messages could not be extracted.");
+        final var messageParsingException = mock(MessageParsingException.class);
+        when(messageParsingException.getSender()).thenReturn(INTERCHANGE_SENDER);
+        when(messageParsingException.getRecipient()).thenReturn(INTERCHANGE_RECIPIENT);
+        when(messageParsingException.getInterchangeSequenceNumber()).thenReturn(INTERCHANGE_CONTROL_REFERENCE);
+        when(messageParsingException.getMessage()).thenReturn("Messages could not be extracted.");
 
         String nhsAck = nhsAckProducerService.createNhsAckEdifact(
-                WorkflowId.PATHOLOGY_ACK, interchangeParsingException);
+                WorkflowId.PATHOLOGY_ACK, messageParsingException);
 
         String expectedNhsAck = readFile(NHSACK_IRM_RESPONSE_PATH).replace("\n", "");
 

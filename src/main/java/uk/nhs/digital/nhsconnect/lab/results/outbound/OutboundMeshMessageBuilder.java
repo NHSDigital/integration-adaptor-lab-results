@@ -10,7 +10,7 @@ import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessagesParsingException;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessageParsingException;
 
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class OutboundMeshMessageBuilder {
             .setContent(nhsAck);
     }
 
-    public OutboundMeshMessage buildNhsAck(WorkflowId workflowId, MessagesParsingException exception) {
+    public OutboundMeshMessage buildNhsAck(WorkflowId workflowId, MessageParsingException exception) {
         WorkflowId ackWorkflowId = getOutboundWorkflowId(workflowId);
         String nhsAck = nhsAckProducerService.createNhsAckEdifact(ackWorkflowId, exception);
         return new MeshMessage()

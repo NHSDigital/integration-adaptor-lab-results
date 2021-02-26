@@ -15,7 +15,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessagesParsingException;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessageParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.outbound.OutboundMeshMessageBuilder;
 import uk.nhs.digital.nhsconnect.lab.results.outbound.queue.GpOutboundQueueService;
 import uk.nhs.digital.nhsconnect.lab.results.outbound.queue.MeshOutboundQueueService;
@@ -72,7 +72,7 @@ class InboundMessageHandlerTest {
 
     @Test
     void handleInvalidInterchangeMeshMessageRaisesException()
-            throws InterchangeParsingException, MessagesParsingException {
+            throws InterchangeParsingException, MessageParsingException {
 
         final MeshMessage meshMessage = new MeshMessage()
             .setWorkflowId(WorkflowId.PATHOLOGY);
@@ -97,15 +97,15 @@ class InboundMessageHandlerTest {
     }
 
     @Test
-    void handleInvalidMessageMeshMessageRaisesException() throws InterchangeParsingException, MessagesParsingException {
+    void handleInvalidMessageMeshMessageRaisesException() throws InterchangeParsingException, MessageParsingException {
         final MeshMessage meshMessage = new MeshMessage()
             .setWorkflowId(WorkflowId.PATHOLOGY);
         when(edifactParser.parse(meshMessage.getContent())).thenThrow(
-                new MessagesParsingException(null, null, null, 1L, true, null));
+                new MessageParsingException(null, null, null, 1L, true, null));
 
         final OutboundMeshMessage outboundMeshMessage = new MeshMessage()
             .setWorkflowId(WorkflowId.PATHOLOGY_ACK);
-        when(outboundMeshMessageBuilder.buildNhsAck(eq(WorkflowId.PATHOLOGY), any(MessagesParsingException.class)))
+        when(outboundMeshMessageBuilder.buildNhsAck(eq(WorkflowId.PATHOLOGY), any(MessageParsingException.class)))
             .thenReturn(outboundMeshMessage);
 
         inboundMessageHandler.handle(meshMessage);
@@ -121,7 +121,7 @@ class InboundMessageHandlerTest {
 
     @Test
     void handleInboundMeshMessageNoMessagesDoesNotPublishToGpOutboundQueue()
-            throws InterchangeParsingException, MessagesParsingException {
+            throws InterchangeParsingException, MessageParsingException {
 
         final MeshMessage meshMessage = new MeshMessage()
             .setWorkflowId(WorkflowId.PATHOLOGY);
@@ -147,7 +147,7 @@ class InboundMessageHandlerTest {
 
     @Test
     void handleInboundMeshMessageWithMessageAndPublishesToGpOutboundQueue()
-            throws InterchangeParsingException, MessagesParsingException {
+            throws InterchangeParsingException, MessageParsingException {
 
         final MeshMessage meshMessage = new MeshMessage();
         when(edifactParser.parse(meshMessage.getContent())).thenReturn(interchange);
@@ -173,7 +173,7 @@ class InboundMessageHandlerTest {
 
     @Test
     void handleInboundMeshMessageWithMultipleMessagesAndPublishesToGpOutboundQueue()
-            throws InterchangeParsingException, MessagesParsingException {
+            throws InterchangeParsingException, MessageParsingException {
 
         final MeshMessage meshMessage = new MeshMessage();
         when(edifactParser.parse(meshMessage.getContent())).thenReturn(interchange);

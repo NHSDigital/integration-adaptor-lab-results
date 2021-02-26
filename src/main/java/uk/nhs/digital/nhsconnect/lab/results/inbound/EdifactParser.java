@@ -13,7 +13,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeCriticalException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeFactory;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessagesParsingException;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessageParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.ToEdifactParsingException;
 
@@ -39,7 +39,7 @@ public class EdifactParser {
     }
 
     public Interchange parse(String edifact)
-            throws InterchangeParsingException, MessagesParsingException, InterchangeCriticalException {
+            throws InterchangeParsingException, MessageParsingException, InterchangeCriticalException {
 
         var allEdifactSegments = Arrays.asList(Split.bySegmentTerminator(edifact.replaceAll("\\n", "").strip()));
 
@@ -47,7 +47,7 @@ public class EdifactParser {
     }
 
     private Interchange buildInterchange(List<String> allEdifactSegments)
-            throws InterchangeParsingException, InterchangeCriticalException, MessagesParsingException {
+            throws InterchangeParsingException, InterchangeCriticalException, MessageParsingException {
 
         final Interchange interchange = parseInterchange(allEdifactSegments);
         parseMessages(allEdifactSegments, interchange);
@@ -70,7 +70,7 @@ public class EdifactParser {
     }
 
     private void parseMessages(List<String> allEdifactSegments, Interchange interchange)
-            throws MessagesParsingException, InterchangeParsingException {
+            throws MessageParsingException, InterchangeParsingException {
 
         final List<Message> messages;
         try {
@@ -89,7 +89,7 @@ public class EdifactParser {
             interchange.setMessages(messages);
         } catch (Exception ex) {
             var interchangeHeader = interchange.getInterchangeHeader();
-            throw new MessagesParsingException(
+            throw new MessageParsingException(
                 "Error parsing messages",
                 interchangeHeader.getSender(),
                 interchangeHeader.getRecipient(),

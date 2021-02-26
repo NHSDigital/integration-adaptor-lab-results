@@ -11,7 +11,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessagesParsingException;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessageParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.outbound.OutboundMeshMessageBuilder;
 import uk.nhs.digital.nhsconnect.lab.results.outbound.queue.GpOutboundQueueService;
 import uk.nhs.digital.nhsconnect.lab.results.outbound.queue.MeshOutboundQueueService;
@@ -43,7 +43,7 @@ public class InboundMessageHandler {
                 LOGGER.debug("NHSACK not requested for interchange: " + ex.getInterchangeSequenceNumber());
             }
             return;
-        } catch (MessagesParsingException ex) {
+        } catch (MessageParsingException ex) {
             LOGGER.error("Error parsing Messages", ex);
             if (ex.isNhsAckRequested()) {
                 var nhsack = outboundMeshMessageBuilder.buildNhsAck(meshMessage.getWorkflowId(), ex);

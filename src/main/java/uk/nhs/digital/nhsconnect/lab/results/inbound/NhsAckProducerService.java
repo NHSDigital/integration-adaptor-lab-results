@@ -2,7 +2,6 @@ package uk.nhs.digital.nhsconnect.lab.results.inbound;
 
 import com.github.mustachejava.Mustache;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
@@ -13,7 +12,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.NhsAckMessageContent;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessagesParsingException;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessageParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.sequence.SequenceService;
 import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.MessageProcessingResult.Success;
@@ -28,7 +27,6 @@ import java.util.List;
 import static uk.nhs.digital.nhsconnect.lab.results.utils.TemplateUtils.loadTemplate;
 import static uk.nhs.digital.nhsconnect.lab.results.utils.TemplateUtils.fillTemplate;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class NhsAckProducerService {
@@ -39,9 +37,10 @@ public class NhsAckProducerService {
 
     private static final int COMMON_SEGMENT_COUNT = 5;
 
+    private Mustache nhsAckTemplate = loadTemplate("nhsAck.mustache");
+
     public String createNhsAckEdifact(WorkflowId workflowId, Interchange interchange,
                                       List<MessageProcessingResult> messageProcessingResults) {
-        Mustache nhsAckTemplate = loadTemplate("nhsAck.mustache");
 
         InterchangeHeader interchangeHeader = interchange.getInterchangeHeader();
 
@@ -58,6 +57,9 @@ public class NhsAckProducerService {
         int rejectedMessages = 0;
         int totalMessages = messageProcessingResults.size();
 
+        final String MESSAGE_ACCEPTED_STATUS_CODE = "MA";
+        final String MESSAGE_REJECTED_STATUS_CODE = "MR";
+
         for (MessageProcessingResult messageProcessingResult : messageProcessingResults) {
             NhsAckMessageContent nhsAckMessageContent;
             if (messageProcessingResult instanceof MessageProcessingResult.Success) {
@@ -65,7 +67,7 @@ public class NhsAckProducerService {
                 MessageHeader messageHeader = currentMessageResult.getMessage().getMessageHeader();
                 nhsAckMessageContent = NhsAckMessageContent.builder()
                         .messageNumber(messageHeader.getSequenceNumber())
-                        .messageStatus("MA")
+                        .messageStatus(MESSAGE_ACCEPTED_STATUS_CODE)
                         .build();
                 acceptedMessages++;
             } else {
@@ -73,7 +75,7 @@ public class NhsAckProducerService {
                 MessageHeader messageHeader = currentMessageResult.getMessage().getMessageHeader();
                 nhsAckMessageContent = NhsAckMessageContent.builder()
                         .messageNumber(messageHeader.getSequenceNumber())
-                        .messageStatus("MR")
+                        .messageStatus(MESSAGE_REJECTED_STATUS_CODE)
                         .messageError(true)
                         .messageErrorDescription(currentMessageResult.getException().getMessage())
                         .build();
@@ -100,8 +102,6 @@ public class NhsAckProducerService {
     }
 
     public String createNhsAckEdifact(WorkflowId workflowId, InterchangeParsingException exception) {
-        Mustache nhsAckTemplate = loadTemplate("nhsAck.mustache");
-
         var nhsAckContent = NhsAckContent.builder()
                 .interchangeSender(exception.getSender())
                 .interchangeRecipient(exception.getRecipient())
@@ -122,9 +122,7 @@ public class NhsAckProducerService {
         return segments.replace("\n", "");
     }
 
-    public String createNhsAckEdifact(WorkflowId workflowId, MessagesParsingException exception) {
-        Mustache nhsAckTemplate = loadTemplate("nhsAck.mustache");
-
+    public String createNhsAckEdifact(WorkflowId workflowId, MessageParsingException exception) {
         var nhsAckContent = NhsAckContent.builder()
             .interchangeSender(exception.getSender())
             .interchangeRecipient(exception.getRecipient())

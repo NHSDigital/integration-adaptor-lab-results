@@ -14,7 +14,7 @@ import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessagesParsingException;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessageParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.utils.JmsHeaders;
 
 import javax.jms.JMSException;
@@ -50,7 +50,7 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
     @Test
     void testSendEdifactIsProcessedAndPushedToGpOutboundQueue()
-            throws JMSException, IOException, InterchangeParsingException, MessagesParsingException, JSONException {
+            throws JMSException, IOException, InterchangeParsingException, MessageParsingException, JSONException {
 
         final String content = new String(Files.readAllBytes(getEdifactResource().getFile().toPath()));
 
@@ -83,7 +83,7 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
     }
 
     private void assertOutboundNhsAckMessage()
-            throws IOException, InterchangeParsingException, MessagesParsingException {
+            throws IOException, InterchangeParsingException, MessageParsingException {
 
         final var labResultMeshClient = getLabResultsMeshClient();
         final var edifactParser = getEdifactParser();
