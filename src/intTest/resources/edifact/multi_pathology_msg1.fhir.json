@@ -2,7 +2,9 @@
   "resourceType": "Bundle",
   "meta": {
     "lastUpdated": "2021-02-25T10:40:10.561+00:00",
-    "profile": [ "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1" ]
+    "profile": [
+      "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"
+    ]
   },
   "identifier": {
     "system": "https://tools.ietf.org/html/rfc4122",
@@ -61,7 +63,8 @@
           }
         ]
       }
-    }, {
+    },
+    {
       "fullUrl": "urn:uuid:6117b6d6-d0a8-4930-a404-611ddece464a",
       "resource": {
         "resourceType": "Specimen",
