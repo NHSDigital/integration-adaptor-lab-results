@@ -1,5 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
+import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.hl7.fhir.dstu3.model.Specimen;
@@ -27,10 +28,13 @@ import static org.mockito.Mockito.when;
 class PathologyRecordMapperTest {
 
     @Mock
+    private PatientMapper patientMapper;
+
+    @Mock
     private PractitionerMapper practitionerMapper;
 
     @Mock
-    private PatientMapper patientMapper;
+    private OrganizationMapper organizationMapper;
 
     @Mock
     private SpecimenMapper specimenMapper;
@@ -47,20 +51,6 @@ class PathologyRecordMapperTest {
     }
 
     @Test
-    @SuppressWarnings("checkstyle:MagicNumber")
-    void testMapMessageToPathologyRecordWithPractitioner() {
-        final Message message = new Message(emptyList());
-        var mockPractitioner = mock(Practitioner.class);
-
-        when(practitionerMapper.mapRequester(message))
-            .thenReturn(Optional.of(mockPractitioner));
-
-        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
-
-        assertThat(pathologyRecord.getRequester()).isEqualTo(mockPractitioner);
-    }
-
-    @Test
     void testMapMessageToPathologyRecordWithPatient() {
         final Message message = new Message(emptyList());
         var mockPatient = mock(Patient.class);
@@ -69,6 +59,32 @@ class PathologyRecordMapperTest {
         final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
 
         assertThat(pathologyRecord.getPatient()).isEqualTo(mockPatient);
+    }
+
+    @Test
+    void testMapMessageToPathologyRecordWithRequester() {
+        final Message message = new Message(emptyList());
+        var mockRequester = mock(Practitioner.class);
+
+        when(practitionerMapper.mapRequester(message))
+            .thenReturn(Optional.of(mockRequester));
+
+        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+
+        assertThat(pathologyRecord.getRequester()).isEqualTo(mockRequester);
+    }
+
+    @Test
+    void testMapMessageToPathologyRecordWithRequestingOrganization() {
+        final Message message = new Message(emptyList());
+        var mockRequestingOrganization = mock(Organization.class);
+
+        when(organizationMapper.mapToRequestingOrganization(message))
+            .thenReturn(Optional.of(mockRequestingOrganization));
+
+        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+
+        assertThat(pathologyRecord.getRequestingOrganization()).isEqualTo(mockRequestingOrganization);
     }
 
     @Test
@@ -81,6 +97,19 @@ class PathologyRecordMapperTest {
         final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
 
         assertThat(pathologyRecord.getPerformer()).isEqualTo(mockPerformer);
+    }
+
+    @Test
+    void testMapMessageToPathologyRecordWithPerformingOrganization() {
+        final Message message = new Message(emptyList());
+        var mockPerformingOrganization = mock(Organization.class);
+
+        when(organizationMapper.mapToPerformingOrganization(message))
+            .thenReturn(Optional.of(mockPerformingOrganization));
+
+        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+
+        assertThat(pathologyRecord.getPerformingOrganization()).isEqualTo(mockPerformingOrganization);
     }
 
     @Test

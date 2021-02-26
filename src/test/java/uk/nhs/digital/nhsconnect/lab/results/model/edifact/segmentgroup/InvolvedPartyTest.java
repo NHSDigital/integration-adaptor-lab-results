@@ -20,7 +20,7 @@ class InvolvedPartyTest {
     }
 
     @Test
-    void testGetPerformingOrganisationNameAndAddress() {
+    void testGetPerformerNameAndAddress() {
         final var involvedParty = new InvolvedParty(List.of(
             "ignore me",
             "NAD+SLA+++ST JAMES?'S UNIVERSITY HOSPITAL",

@@ -14,15 +14,20 @@ public class PathologyRecordMapper {
 
     private final PractitionerMapper practitionerMapper;
     private final PatientMapper patientMapper;
+    private final OrganizationMapper organizationMapper;
     private final SpecimenMapper specimenMapper;
 
     public PathologyRecord mapToPathologyRecord(final Message message) {
         final PathologyRecordBuilder pathologyRecordBuilder = PathologyRecord.builder();
 
-        practitionerMapper.mapRequester(message).ifPresent(pathologyRecordBuilder::requester);
-        practitionerMapper.mapPerformer(message).ifPresent(pathologyRecordBuilder::performer);
         final var patient = patientMapper.mapToPatient(message);
         pathologyRecordBuilder.patient(patient);
+        practitionerMapper.mapRequester(message).ifPresent(pathologyRecordBuilder::requester);
+        organizationMapper.mapToRequestingOrganization(message)
+            .ifPresent(pathologyRecordBuilder::requestingOrganization);
+        practitionerMapper.mapPerformer(message).ifPresent(pathologyRecordBuilder::performer);
+        organizationMapper.mapToPerformingOrganization(message)
+            .ifPresent(pathologyRecordBuilder::performingOrganization);
         pathologyRecordBuilder.specimens(specimenMapper.mapToSpecimens(message, patient));
 
         return pathologyRecordBuilder.build();

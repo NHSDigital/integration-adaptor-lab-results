@@ -26,11 +26,23 @@ public class BundleMapper {
     private final ResourceFullUrlGenerator fullUrlGenerator;
 
     public Bundle mapToBundle(final PathologyRecord pathologyRecord) {
-        Bundle bundle = generateInitialPathologyBundle();
+        final Bundle bundle = generateInitialPathologyBundle();
 
         bundle.addEntry()
-            .setFullUrl(fullUrlGenerator.generate(pathologyRecord.getRequester()))
-            .setResource(pathologyRecord.getRequester());
+            .setFullUrl(fullUrlGenerator.generate(pathologyRecord.getPatient()))
+            .setResource(pathologyRecord.getPatient());
+
+        Optional.ofNullable(pathologyRecord.getRequester()).ifPresent(requester ->
+            bundle.addEntry()
+                .setFullUrl(fullUrlGenerator.generate(requester))
+                .setResource(requester)
+        );
+
+        Optional.ofNullable(pathologyRecord.getRequestingOrganization()).ifPresent(requestingOrganization ->
+            bundle.addEntry()
+                .setFullUrl(fullUrlGenerator.generate(requestingOrganization))
+                .setResource(requestingOrganization)
+        );
 
         Optional.ofNullable(pathologyRecord.getPerformer()).ifPresent(performer ->
             bundle.addEntry()
@@ -38,9 +50,11 @@ public class BundleMapper {
                 .setResource(performer)
         );
 
-        bundle.addEntry()
-            .setFullUrl(fullUrlGenerator.generate(pathologyRecord.getPatient()))
-            .setResource(pathologyRecord.getPatient());
+        Optional.ofNullable(pathologyRecord.getPerformingOrganization()).ifPresent(performingOrganization ->
+            bundle.addEntry()
+                .setFullUrl(fullUrlGenerator.generate(performingOrganization))
+                .setResource(performingOrganization)
+        );
 
         pathologyRecord.getSpecimens().forEach(specimen ->
             bundle.addEntry()
@@ -51,15 +65,16 @@ public class BundleMapper {
     }
 
     private Bundle generateInitialPathologyBundle() {
-        Bundle bundle = new Bundle();
+        final Bundle bundle = new Bundle();
 
+        bundle.setId(uuidGenerator.generateUUID());
         bundle.setMeta(new Meta()
-                .setLastUpdatedElement((InstantType.now()))
-                .setProfile(BUNDLE_META_PROFILE)
+            .setLastUpdatedElement((InstantType.now()))
+            .setProfile(BUNDLE_META_PROFILE)
         );
         bundle.setIdentifier(new Identifier()
-                .setSystem(BUNDLE_IDENTIFIER_SYSTEM)
-                .setValue(uuidGenerator.generateUUID())
+            .setSystem(BUNDLE_IDENTIFIER_SYSTEM)
+            .setValue(uuidGenerator.generateUUID())
         );
         bundle.setType(Bundle.BundleType.MESSAGE);
 

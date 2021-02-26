@@ -11,7 +11,10 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 /**
  * Example: NAD+SLA+A2442389:902++DR J SMITH'
  * <br>
+ * Example: NAD+SLA+++Haematology'
+ * <br>
  * Example: NAD+SLA+++ST JAMES?'S UNIVERSITY HOSPITAL'
+ * <br>
  */
 @Getter
 @Builder
@@ -26,8 +29,8 @@ public class PerformerNameAndAddress extends Segment {
 
     private final String identifier;
     private final HealthcareRegistrationIdentificationCode code;
-    private final String performingOrganisationName;
     private final String performerName;
+    private final String performingOrganisationName;
 
     public static PerformerNameAndAddress fromString(String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {

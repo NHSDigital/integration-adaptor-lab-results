@@ -7,13 +7,14 @@ import java.util.List;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.DateType;
 import org.hl7.fhir.dstu3.model.Enumerations.AdministrativeGender;
+
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.InstantType;
 import org.hl7.fhir.dstu3.model.Meta;
+import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.hl7.fhir.dstu3.model.UriType;
-
 import uk.nhs.digital.nhsconnect.lab.results.model.fhir.PathologyRecord;
 
 @SuppressWarnings("checkstyle:hideutilityclassconstructor")
@@ -39,11 +40,20 @@ public final class FhirFixtures {
     public static Practitioner generatePractitioner(final String name, final AdministrativeGender gender) {
         Practitioner requester = new Practitioner();
 
+        requester.setId("some-entry-uuid");
         requester.addName().setText(name);
         requester.setGender(gender);
-        requester.setId("some-entry-uuid");
 
         return requester;
+    }
+
+    public static Organization generateOrganization(final String name) {
+        Organization organization = new Organization();
+
+        organization.setId("some-entry-uuid");
+        organization.setName(name);
+
+        return organization;
     }
 
     public static Bundle generateBundle(final PathologyRecord pathologyRecord) {
@@ -63,15 +73,23 @@ public final class FhirFixtures {
 
         bundle.addEntry()
             .setFullUrl("urn:uuid:some-entry-uuid")
-            .setResource(pathologyRecord.getRequester());
-
-        bundle.addEntry()
-                .setFullUrl("urn:uuid:some-entry-uuid")
-                .setResource(pathologyRecord.getPerformer());
+            .setResource(pathologyRecord.getPatient());
 
         bundle.addEntry()
             .setFullUrl("urn:uuid:some-entry-uuid")
-            .setResource(pathologyRecord.getPatient());
+            .setResource(pathologyRecord.getRequester());
+
+        bundle.addEntry()
+            .setFullUrl("urn:uuid:some-entry-uuid")
+            .setResource(pathologyRecord.getRequestingOrganization());
+
+        bundle.addEntry()
+            .setFullUrl("urn:uuid:some-entry-uuid")
+            .setResource(pathologyRecord.getPerformer());
+
+        bundle.addEntry()
+            .setFullUrl("urn:uuid:some-entry-uuid")
+            .setResource(pathologyRecord.getPerformingOrganization());
 
         return bundle;
     }
