@@ -25,6 +25,9 @@ class PathologyRecordMapperTest {
     @Mock
     private PractitionerMapper practitionerMapper;
 
+    @Mock
+    private ProcedureRequestMapper procedureRequestMapper;
+
     @InjectMocks
     private PathologyRecordMapper pathologyRecordMapper;
 
@@ -34,6 +37,10 @@ class PathologyRecordMapperTest {
 
         when(practitionerMapper.mapRequester(message)).thenReturn(
                 Optional.of(generateRequester("Dr Bob Hope", AdministrativeGender.MALE))
+        );
+
+        when(procedureRequestMapper.mapToProcedureRequest(message)).thenReturn(
+            Optional.empty()
         );
 
         final PathologyRecord pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);

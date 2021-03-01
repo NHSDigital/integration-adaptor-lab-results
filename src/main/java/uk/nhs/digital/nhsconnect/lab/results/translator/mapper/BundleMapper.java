@@ -11,6 +11,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.fhir.PathologyRecord;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -27,6 +28,12 @@ public class BundleMapper {
         bundle.addEntry()
             .setFullUrl(FULL_URL_PREFIX.concat(uuidGenerator.generateUUID()))
             .setResource(pathologyRecord.getRequester());
+
+        Optional.ofNullable(pathologyRecord.getTestRequestSummary()).ifPresent(testRequestSummary ->
+            bundle.addEntry()
+                .setFullUrl(FULL_URL_PREFIX.concat(pathologyRecord.getTestRequestSummary().getId()))
+                .setResource(pathologyRecord.getTestRequestSummary())
+        );
 
         return bundle;
     }
