@@ -31,8 +31,10 @@ import static uk.nhs.digital.nhsconnect.lab.results.utils.TemplateUtils.fillTemp
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class NhsAckProducerService {
 
+    @Autowired
     private final TimestampService timestampService;
 
+    @Autowired
     private final SequenceService sequenceService;
 
     private static final int COMMON_SEGMENT_COUNT = 5;
