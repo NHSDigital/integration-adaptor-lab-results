@@ -8,6 +8,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.skyscreamer.jsonassert.ValueMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -54,6 +55,8 @@ public abstract class IntegrationBaseTest {
     protected static final int POLL_DELAY_MS = 10;
     private static final int JMS_RECEIVE_TIMEOUT = 500;
     protected static final int TIMEOUT_SECONDS = 10;
+    protected static final ValueMatcher<Object> IGNORE = (a, b) -> true;
+
     @Autowired
     private JmsTemplate jmsTemplate;
 

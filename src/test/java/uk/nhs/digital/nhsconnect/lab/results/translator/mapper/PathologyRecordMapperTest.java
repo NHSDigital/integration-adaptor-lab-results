@@ -1,37 +1,30 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
-import org.hl7.fhir.dstu3.model.Enumerations.AdministrativeGender;
-import org.hl7.fhir.dstu3.model.HumanName;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
+import org.hl7.fhir.dstu3.model.Specimen;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
-import uk.nhs.digital.nhsconnect.lab.results.model.fhir.PathologyRecord;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
-
-import static uk.nhs.digital.nhsconnect.lab.results.fixtures.FhirFixtures.generatePatient;
-import static uk.nhs.digital.nhsconnect.lab.results.fixtures.FhirFixtures.generatePractitioner;
 
 @ExtendWith(MockitoExtension.class)
 class PathologyRecordMapperTest {
-
-    private static final String NAME_TEXT = "Dr Bob Hope";
-    private static final String BIRTH_DATE = "2001-01-12";
-    private static final AdministrativeGender GENDER = AdministrativeGender.MALE;
 
     @Mock
     private PractitionerMapper practitionerMapper;
@@ -39,58 +32,70 @@ class PathologyRecordMapperTest {
     @Mock
     private PatientMapper patientMapper;
 
+    @Mock
+    private SpecimenMapper specimenMapper;
+
     @InjectMocks
     private PathologyRecordMapper pathologyRecordMapper;
 
+    @BeforeEach
+    void setUp() {
+        when(practitionerMapper.mapRequester(any(Message.class))).thenReturn(Optional.empty());
+        when(practitionerMapper.mapPerformer(any(Message.class))).thenReturn(Optional.empty());
+        when(patientMapper.mapToPatient(any(Message.class))).thenReturn(new Patient());
+        when(specimenMapper.mapToSpecimens(any(Message.class), any(Patient.class))).thenReturn(Collections.emptyList());
+    }
+
     @Test
     @SuppressWarnings("checkstyle:MagicNumber")
-    void testMapMessageToPathologyRecord() {
-        final Message message = new Message(new ArrayList<>());
+    void testMapMessageToPathologyRecordWithPractitioner() {
+        final Message message = new Message(emptyList());
+        var mockPractitioner = mock(Practitioner.class);
 
-        when(patientMapper.mapToPatient(message)).thenReturn(generatePatient(NAME_TEXT, GENDER, BIRTH_DATE));
-        when(practitionerMapper.mapRequester(message)).thenReturn(
-            Optional.of(generatePractitioner(NAME_TEXT, GENDER))
-        );
+        when(practitionerMapper.mapRequester(message))
+            .thenReturn(Optional.of(mockPractitioner));
 
-        when(practitionerMapper.mapPerformer(message)).thenReturn(
-            Optional.of(generatePractitioner("Dr Darcy Lewis", AdministrativeGender.FEMALE))
-        );
+        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
 
-        final PathologyRecord pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+        assertThat(pathologyRecord.getRequester()).isEqualTo(mockPractitioner);
+    }
 
-        Practitioner requester = pathologyRecord.getRequester();
+    @Test
+    void testMapMessageToPathologyRecordWithPatient() {
+        final Message message = new Message(emptyList());
+        var mockPatient = mock(Patient.class);
+        when(patientMapper.mapToPatient(message)).thenReturn(mockPatient);
 
-        assertAll(
-            () -> assertThat(requester.getName())
-                .hasSize(1)
-                .first()
-                .extracting(HumanName::getText)
-                .isEqualTo(NAME_TEXT),
-            () -> assertThat(requester.getGender()).isEqualTo(GENDER)
-        );
+        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
 
-        Practitioner performer = pathologyRecord.getPerformer();
+        assertThat(pathologyRecord.getPatient()).isEqualTo(mockPatient);
+    }
 
-        assertAll(
-            () -> assertThat(performer.getName())
-                .hasSize(1)
-                .first()
-                .extracting(HumanName::getText)
-                .isEqualTo("Dr Darcy Lewis"),
-            () -> assertThat(performer.getGender()).isEqualTo(AdministrativeGender.FEMALE)
-        );
+    @Test
+    void testMapMessageToPathologyRecordWithPerformer() {
+        final Message message = new Message(emptyList());
+        var mockPerformer = mock(Practitioner.class);
 
-        final Patient patient = pathologyRecord.getPatient();
-        assertAll(
-            () -> assertThat(patient.getName())
-                .hasSize(1)
-                .first()
-                .extracting(HumanName::getText)
-                .isEqualTo(NAME_TEXT),
-            () -> assertThat(patient.getGender()).isEqualTo(GENDER),
-            () -> assertThat(patient.getBirthDate())
-                .isEqualTo(Date.from(LocalDate.of(2001, 1, 12).atStartOfDay()
-                    .atZone(ZoneId.systemDefault()).toInstant()))
-        );
+        when(practitionerMapper.mapPerformer(message)).thenReturn(Optional.of(mockPerformer));
+
+        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+
+        assertThat(pathologyRecord.getPerformer()).isEqualTo(mockPerformer);
+    }
+
+    @Test
+    void testMapMessageToPathologyRecordWithSpecimens() {
+        final Message message = new Message(emptyList());
+        final var mockSpecimen1 = mock(Specimen.class);
+        final var mockSpecimen2 = mock(Specimen.class);
+        reset(specimenMapper);
+        when(specimenMapper.mapToSpecimens(eq(message), any(Patient.class)))
+            .thenReturn(List.of(mockSpecimen1, mockSpecimen2));
+
+        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+
+        assertThat(pathologyRecord.getSpecimens())
+            .hasSize(2)
+            .contains(mockSpecimen1, mockSpecimen2);
     }
 }

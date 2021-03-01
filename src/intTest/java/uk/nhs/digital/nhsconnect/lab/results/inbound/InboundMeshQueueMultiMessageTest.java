@@ -89,10 +89,11 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
             messageBody,
             new CustomComparator(
                 JSONCompareMode.STRICT,
-                new Customization("meta.lastUpdated", (c1, c2) -> true),
-                new Customization("identifier.value", (c1, c2) -> true),
-                new Customization("entry[*].fullUrl", (c1, c2) -> true),
-                new Customization("entry[*].resource.id", (c1, c2) -> true)
+                new Customization("meta.lastUpdated", IGNORE),
+                new Customization("identifier.value", IGNORE),
+                new Customization("entry[*].fullUrl", IGNORE),
+                new Customization("entry[*].resource.subject.reference", IGNORE),
+                new Customization("entry[*].resource.id", IGNORE)
             )
         );
     }
