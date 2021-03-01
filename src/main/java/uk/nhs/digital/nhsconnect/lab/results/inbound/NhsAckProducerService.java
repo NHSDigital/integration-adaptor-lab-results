@@ -31,13 +31,14 @@ import static uk.nhs.digital.nhsconnect.lab.results.utils.TemplateUtils.fillTemp
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class NhsAckProducerService {
 
-    @Autowired
+    private static final String MESSAGE_ACCEPTED_STATUS_CODE = "MA";
+    private static final String MESSAGE_REJECTED_STATUS_CODE = "MR";
+
+    private static final int MESSAGE_COMMON_SEGMENT_COUNT = 5;
+
     private final TimestampService timestampService;
 
-    @Autowired
     private final SequenceService sequenceService;
-
-    private static final int COMMON_SEGMENT_COUNT = 5;
 
     private Mustache nhsAckTemplate = loadTemplate("nhsAck.mustache");
 
@@ -58,9 +59,6 @@ public class NhsAckProducerService {
         int acceptedMessages = 0;
         int rejectedMessages = 0;
         int totalMessages = messageProcessingResults.size();
-
-        final String MESSAGE_ACCEPTED_STATUS_CODE = "MA";
-        final String MESSAGE_REJECTED_STATUS_CODE = "MR";
 
         for (MessageProcessingResult messageProcessingResult : messageProcessingResults) {
             NhsAckMessageContent nhsAckMessageContent;
@@ -94,7 +92,7 @@ public class NhsAckProducerService {
             nhsAckContent.setInterchangeStatusCode(NhsAckStatus.PARTIALLY_ACCEPTED);
         }
 
-        nhsAckContent.setSegmentCount(COMMON_SEGMENT_COUNT + acceptedMessages + (2 * rejectedMessages));
+        nhsAckContent.setSegmentCount(MESSAGE_COMMON_SEGMENT_COUNT + acceptedMessages + (2 * rejectedMessages));
 
         setDateTimes(nhsAckContent);
 
@@ -114,7 +112,7 @@ public class NhsAckProducerService {
                 .interchangeStatusCode(NhsAckStatus.INTERCHANGE_REJECTED)
                 .interchangeError(true)
                 .interchangeErrorDescription(exception.getMessage())
-                .segmentCount(COMMON_SEGMENT_COUNT + 1)
+                .segmentCount(MESSAGE_COMMON_SEGMENT_COUNT + 1)
                 .build();
 
         setDateTimes(nhsAckContent);
@@ -135,7 +133,7 @@ public class NhsAckProducerService {
             .interchangeStatusCode(NhsAckStatus.MESSAGE_REJECTED)
             .interchangeError(true)
             .interchangeErrorDescription(exception.getMessage())
-            .segmentCount(COMMON_SEGMENT_COUNT + 1)
+            .segmentCount(MESSAGE_COMMON_SEGMENT_COUNT + 1)
             .build();
 
         setDateTimes(nhsAckContent);
