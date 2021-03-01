@@ -3,7 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.HealthcareRegistrationIdentificationCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageRecipientNameAndAddress;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PerformingOrganisationNameAndAddress;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PerformerNameAndAddress;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.RequesterNameAndAddress;
@@ -26,9 +26,9 @@ class InvolvedPartyTest {
             "NAD+SLA+++ST JAMES?'S UNIVERSITY HOSPITAL",
             "ignore me"
         ));
-        assertThat(involvedParty.getOrganisationNameAndAddress())
+        assertThat(involvedParty.getPerformerNameAndAddress())
             .isPresent()
-            .map(PerformingOrganisationNameAndAddress::getPerformingOrganisationName)
+            .map(PerformerNameAndAddress::getPerformingOrganisationName)
             .contains("ST JAMES?'S UNIVERSITY HOSPITAL");
     }
 

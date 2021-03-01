@@ -7,7 +7,6 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceDetails;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicFastingStatus;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCollectionDateTime;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCollectionReceiptDateTime;
@@ -25,8 +24,7 @@ import static uk.nhs.digital.nhsconnect.lab.results.model.edifact.Segment.PLUS_S
  * Segment group 16: {@code S16-SEQ-SPC-PRC-RFF-QTY-DTM-FTX}
  * <ul>
  *     <li>{@code SEQ} is optional.</li>
- *     <li>{@code SPC} is mandatory. Must be qualified with {@code +TSP}.
- *     May optionally also be present qualified with {@code +FS}.</li>
+ *     <li>{@code SPC} is mandatory. Must be qualified with {@code +TSP}.</li>
  *     <li>{@code PRC} is not used.</li>
  *     <li>{@code RFF} is optional. May be qualified with {@code +RTI} or {@code +STI}.
  *     May have up to 2 instances.</li>
@@ -52,11 +50,6 @@ public class SpecimenDetails extends SegmentGroup {
     @Getter(lazy = true)
     private final SpecimenCharacteristicType characteristicType =
         SpecimenCharacteristicType.fromString(extractSegment(SpecimenCharacteristicType.KEY_QUALIFIER));
-
-    @Getter(lazy = true)
-    private final Optional<SpecimenCharacteristicFastingStatus> characteristicFastingStatus =
-        extractOptionalSegment(SpecimenCharacteristicFastingStatus.KEY_QUALIFIER)
-            .map(SpecimenCharacteristicFastingStatus::fromString);
 
     @Getter(lazy = true)
     private final Optional<Reference> serviceRequesterReference =

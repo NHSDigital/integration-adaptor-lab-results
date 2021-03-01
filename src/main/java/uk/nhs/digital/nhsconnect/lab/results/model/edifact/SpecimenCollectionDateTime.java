@@ -7,16 +7,13 @@ import lombok.NonNull;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Set;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
  * Example 1: DTM+SCO:20100223:102'
- *
+ * <br>
  * Example 2: DTM+SCO:201002231541:203'
  */
 @Getter
@@ -26,8 +23,7 @@ public class SpecimenCollectionDateTime extends Segment {
     protected static final String KEY = "DTM";
     private static final String QUALIFIER = "SCO";
     public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
-    private static final DateTimeFormatter DATE_FORMATTER_CCYYMMDD = DateTimeFormatter.ofPattern("yyyyMMdd");
-    private static final DateTimeFormatter DATE_FORMATTER_CCYYMMDDHHMM = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
+    private static final Set<DateFormat> VALID_DATE_FORMATS = Set.of(DateFormat.CCYYMMDD, DateFormat.CCYYMMDDHHMM);
 
     @NonNull
     private final String collectionDateTime;
@@ -42,18 +38,15 @@ public class SpecimenCollectionDateTime extends Segment {
         final String input = Split.byPlus(edifactString)[1];
         final String collectionDateTime = Split.byColon(input)[1];
         final String format = Split.bySegmentTerminator(Split.byColon(input)[2])[0];
-        final SpecimenCollectionDateTimeBuilder collectionDateTimeBuilder = SpecimenCollectionDateTime.builder();
 
         if (isBlank(collectionDateTime) || isBlank(format)) {
             throw new IllegalArgumentException("Can't create " + SpecimenCollectionDateTime.class.getSimpleName()
                 + " from " + edifactString + " because of missing date-time and/or format definition");
         }
-        final String formattedFhirDate = getFormattedFhirDate(collectionDateTime, format);
-        collectionDateTimeBuilder
-            .collectionDateTime(formattedFhirDate)
-            .dateFormat(DateFormat.fromCode(format));
-
-        return collectionDateTimeBuilder.build();
+        return SpecimenCollectionDateTime.builder()
+            .collectionDateTime(collectionDateTime)
+            .dateFormat(DateFormat.fromCode(format))
+            .build();
     }
 
     @Override
@@ -66,24 +59,8 @@ public class SpecimenCollectionDateTime extends Segment {
         if (collectionDateTime.isBlank()) {
             throw new EdifactValidationException(KEY + ": Date/time of sample collection is required");
         }
-    }
-
-    private static String getFormattedFhirDate(final String collectionDateTime, final String dateFormat) {
-        if (dateFormat.equals(DateFormat.CCYYMMDD.getCode())) {
-            return LocalDate.parse(collectionDateTime, DATE_FORMATTER_CCYYMMDD).toString();
-        } else if (dateFormat.equals(DateFormat.CCYYMMDDHHMM.getCode())) {
-            LocalDateTime localDateTime = LocalDateTime.parse(collectionDateTime, DATE_FORMATTER_CCYYMMDDHHMM);
-            return localDateTime.toString() + "+00:00";
+        if (!VALID_DATE_FORMATS.contains(dateFormat)) {
+            throw new EdifactValidationException(KEY + ": Date format " + dateFormat.getCode() + " unsupported");
         }
-        throw new IllegalArgumentException(KEY + ": Date format code " + dateFormat + " is not supported");
-    }
-
-    private static String getFormattedEdifactDate(final String collectionDateTime, final DateFormat dateFormat) {
-        if (dateFormat.equals(DateFormat.CCYYMMDD)) {
-            return DATE_FORMATTER_CCYYMMDD.format(LocalDate.parse(collectionDateTime));
-        } else if (dateFormat.equals(DateFormat.CCYYMMDDHHMM)) {
-            return DATE_FORMATTER_CCYYMMDDHHMM.format(OffsetDateTime.parse(collectionDateTime));
-        }
-        throw new IllegalArgumentException(KEY + ": Date format " + dateFormat.name() + " is not supported");
     }
 }
