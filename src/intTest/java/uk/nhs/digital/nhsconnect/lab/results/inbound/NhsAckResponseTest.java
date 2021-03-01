@@ -35,31 +35,31 @@ class NhsAckResponseTest extends IntegrationBaseTest {
     @Value("classpath:edifact/pathology_IAF.edifact.dat")
     private Resource edifactIAFResource;
 
-    @Value("classpath:edifact/pathology_IAF.nhsack.dat")
+    @Value("classpath:edifact/pathology_IAF_regex.nhsack.dat")
     private Resource nhsAckIAFResource;
 
     @Value("classpath:edifact/pathology_IAP.edifact.dat")
     private Resource edifactIAPResource;
 
-    @Value("classpath:edifact/pathology_IAP.nhsack.dat")
+    @Value("classpath:edifact/pathology_IAP_regex.nhsack.dat")
     private Resource nhsAckIAPResource;
 
     @Value("classpath:edifact/pathology_IRA.edifact.dat")
     private Resource edifactIRAResource;
 
-    @Value("classpath:edifact/pathology_IRA.nhsack.dat")
+    @Value("classpath:edifact/pathology_IRA_regex.nhsack.dat")
     private Resource nhsAckIRAResource;
 
     @Value("classpath:edifact/pathology_IRM.edifact.dat")
     private Resource edifactIRMResource;
 
-    @Value("classpath:edifact/pathology_IRM.nhsack.dat")
+    @Value("classpath:edifact/pathology_IRM_regex.nhsack.dat")
     private Resource nhsAckIRMResource;
 
     @Value("classpath:edifact/pathology_IRI.edifact.dat")
     private Resource edifactIRIResource;
 
-    @Value("classpath:edifact/pathology_IRI.nhsack.dat")
+    @Value("classpath:edifact/pathology_IRI_regex.nhsack.dat")
     private Resource nhsAckIRIResource;
 
     @MockBean(name = "timestampService")
@@ -99,7 +99,7 @@ class NhsAckResponseTest extends IntegrationBaseTest {
         final String nhsAckContent = nhsAck.getContent();
         final String expectedContent = new String(Files.readAllBytes(nhsAckIAFResource.getFile().toPath())).
                 replace("\n", "");
-        assertThat(nhsAckContent).isEqualTo(expectedContent);
+        assertThat(nhsAckContent).matches(expectedContent);
     }
 
     @Test
@@ -121,7 +121,7 @@ class NhsAckResponseTest extends IntegrationBaseTest {
         final String nhsAckContent = nhsAck.getContent();
         final String expectedContent = new String(Files.readAllBytes(nhsAckIAPResource.getFile().toPath())).
                 replace("\n", "");
-        assertThat(nhsAckContent).isEqualTo(expectedContent);
+        assertThat(nhsAckContent).matches(expectedContent);
     }
 
     @Test
@@ -143,7 +143,7 @@ class NhsAckResponseTest extends IntegrationBaseTest {
         final String nhsAckContent = nhsAck.getContent();
         final String expectedContent = new String(Files.readAllBytes(nhsAckIRAResource.getFile().toPath())).
                 replace("\n", "");
-        assertThat(nhsAckContent).isEqualTo(expectedContent);
+        assertThat(nhsAckContent).matches(expectedContent);
     }
 
     @Test
@@ -165,7 +165,7 @@ class NhsAckResponseTest extends IntegrationBaseTest {
         final String nhsAckContent = nhsAck.getContent();
         final String expectedContent = new String(Files.readAllBytes(nhsAckIRIResource.getFile().toPath())).
                 replace("\n", "");
-        assertThat(nhsAckContent).isEqualTo(expectedContent);
+        assertThat(nhsAckContent).matches(expectedContent);
     }
 
     @Test
@@ -187,6 +187,6 @@ class NhsAckResponseTest extends IntegrationBaseTest {
         final String nhsAckContent = nhsAck.getContent();
         final String expectedContent = new String(Files.readAllBytes(nhsAckIRMResource.getFile().toPath())).
                 replace("\n", "");
-        assertThat(nhsAckContent).isEqualTo(expectedContent);
+        assertThat(nhsAckContent).matches(expectedContent);
     }
 }
