@@ -58,6 +58,25 @@
           }
         ]
       }
+    },
+    {
+      "fullUrl": "urn:uuid:34a0625d-5517-42a2-99c3-3a621c989c73",
+      "resource": {
+        "resourceType": "Specimen",
+        "id": "34a0625d-5517-42a2-99c3-3a621c989c73",
+        "type": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "display": "VENOUS BLOOD"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:eea77c68-0d47-412c-a7bc-321583a2c75f"
+        },
+        "receivedTime": "2010-02-24T15:41:00+00:00"
+      }
     }
   ]
 }

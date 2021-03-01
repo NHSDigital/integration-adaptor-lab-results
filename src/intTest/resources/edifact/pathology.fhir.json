@@ -63,6 +63,32 @@
           }
         ]
       }
+    },
+    {
+      "fullUrl": "urn:uuid:1cc2e06f-bbe8-47a0-854c-c3d0ddfb1354",
+      "resource": {
+        "resourceType": "Specimen",
+        "id": "1cc2e06f-bbe8-47a0-854c-c3d0ddfb1354",
+        "accessionIdentifier": {
+          "system": "http://lab.acme.org/specimens/2011",
+          "value": "CH000037KA"
+        },
+        "type": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "display": "VENOUS BLOOD"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:4ad99777-9863-4614-b929-16633f870f23"
+        },
+        "receivedTime": "2010-02-24T15:41:00+00:00",
+        "collection": {
+          "collectedDateTime": "2010-02-23T15:41:00+00:00"
+        }
+      }
     }
   ]
 }
