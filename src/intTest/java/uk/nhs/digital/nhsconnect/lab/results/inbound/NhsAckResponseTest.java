@@ -62,10 +62,10 @@ class NhsAckResponseTest extends IntegrationBaseTest {
     @Value("classpath:edifact/pathology_IRI.nhsack.dat")
     private Resource nhsAckIRIResource;
 
-    @MockBean
+    @MockBean(name = "timestampService")
     private TimestampService timestampService;
 
-    @MockBean
+    @MockBean(name = "sequenceService")
     private SequenceService sequenceService;
 
     private static final Instant FIXED_TIME = Instant.parse("2020-04-27T16:37:00Z");
@@ -77,6 +77,7 @@ class NhsAckResponseTest extends IntegrationBaseTest {
         when(sequenceService.generateInterchangeSequence(any(), any())).thenReturn(FIXED_SEQUENCE_NUMBER);
         clearGpOutboundQueue();
         clearMeshMailboxes();
+        clearMeshOutboundQueue();
     }
 
     @Test
