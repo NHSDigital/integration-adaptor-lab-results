@@ -35,15 +35,15 @@ class OutboundMeshMessageBuilderTest {
         when(interchange.getInterchangeHeader().getSender()).thenReturn("Sender");
 
         when(nhsAckProducerService.createNhsAckEdifact(
-                WorkflowId.PATHOLOGY_ACK, interchange, null)).thenReturn("NHSACK");
+            WorkflowId.PATHOLOGY_ACK, interchange, null)).thenReturn("NHSACK");
 
         OutboundMeshMessage outboundMeshMessage = outboundMeshMessageBuilder.buildNhsAck(
-                WorkflowId.PATHOLOGY, interchange, null);
+            WorkflowId.PATHOLOGY, interchange, null);
 
         assertAll(
-                () -> assertEquals(WorkflowId.PATHOLOGY_ACK, outboundMeshMessage.getWorkflowId()),
-                () -> assertEquals("Sender", outboundMeshMessage.getRecipient()),
-                () -> assertEquals("NHSACK", outboundMeshMessage.getContent())
+            () -> assertEquals(WorkflowId.PATHOLOGY_ACK, outboundMeshMessage.getWorkflowId()),
+            () -> assertEquals("Sender", outboundMeshMessage.getRecipient()),
+            () -> assertEquals("NHSACK", outboundMeshMessage.getContent())
         );
     }
 
@@ -54,15 +54,15 @@ class OutboundMeshMessageBuilderTest {
         when(interchange.getInterchangeHeader().getSender()).thenReturn("Sender");
 
         when(nhsAckProducerService.createNhsAckEdifact(
-                WorkflowId.SCREENING_ACK, interchange, null)).thenReturn("NHSACK");
+            WorkflowId.SCREENING_ACK, interchange, null)).thenReturn("NHSACK");
 
         OutboundMeshMessage outboundMeshMessage = outboundMeshMessageBuilder.buildNhsAck(
-                WorkflowId.SCREENING, interchange, null);
+            WorkflowId.SCREENING, interchange, null);
 
         assertAll(
-                () -> assertEquals(WorkflowId.SCREENING_ACK, outboundMeshMessage.getWorkflowId()),
-                () -> assertEquals("Sender", outboundMeshMessage.getRecipient()),
-                () -> assertEquals("NHSACK", outboundMeshMessage.getContent())
+            () -> assertEquals(WorkflowId.SCREENING_ACK, outboundMeshMessage.getWorkflowId()),
+            () -> assertEquals("Sender", outboundMeshMessage.getRecipient()),
+            () -> assertEquals("NHSACK", outboundMeshMessage.getContent())
         );
     }
 
@@ -75,12 +75,12 @@ class OutboundMeshMessageBuilderTest {
         when(nhsAckProducerService.createNhsAckEdifact(WorkflowId.PATHOLOGY_ACK, exception)).thenReturn("NHSACK");
 
         OutboundMeshMessage outboundMeshMessage = outboundMeshMessageBuilder.buildNhsAck(
-                WorkflowId.PATHOLOGY, exception);
+            WorkflowId.PATHOLOGY, exception);
 
         assertAll(
-                () -> assertEquals(WorkflowId.PATHOLOGY_ACK, outboundMeshMessage.getWorkflowId()),
-                () -> assertEquals("Sender", outboundMeshMessage.getRecipient()),
-                () -> assertEquals("NHSACK", outboundMeshMessage.getContent())
+            () -> assertEquals(WorkflowId.PATHOLOGY_ACK, outboundMeshMessage.getWorkflowId()),
+            () -> assertEquals("Sender", outboundMeshMessage.getRecipient()),
+            () -> assertEquals("NHSACK", outboundMeshMessage.getContent())
         );
     }
 
@@ -93,12 +93,12 @@ class OutboundMeshMessageBuilderTest {
         when(nhsAckProducerService.createNhsAckEdifact(WorkflowId.PATHOLOGY_ACK, exception)).thenReturn("NHSACK");
 
         OutboundMeshMessage outboundMeshMessage = outboundMeshMessageBuilder.buildNhsAck(
-                WorkflowId.PATHOLOGY, exception);
+            WorkflowId.PATHOLOGY, exception);
 
         assertAll(
-                () -> assertEquals(WorkflowId.PATHOLOGY_ACK, outboundMeshMessage.getWorkflowId()),
-                () -> assertEquals("Sender", outboundMeshMessage.getRecipient()),
-                () -> assertEquals("NHSACK", outboundMeshMessage.getContent())
+            () -> assertEquals(WorkflowId.PATHOLOGY_ACK, outboundMeshMessage.getWorkflowId()),
+            () -> assertEquals("Sender", outboundMeshMessage.getRecipient()),
+            () -> assertEquals("NHSACK", outboundMeshMessage.getContent())
         );
     }
 }
