@@ -2,6 +2,7 @@ package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
+import org.hl7.fhir.dstu3.model.ProcedureRequest;
 import org.hl7.fhir.dstu3.model.Specimen;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,6 +47,7 @@ class PathologyRecordMapperTest {
         when(practitionerMapper.mapRequester(any(Message.class))).thenReturn(Optional.empty());
         when(practitionerMapper.mapPerformer(any(Message.class))).thenReturn(Optional.empty());
         when(patientMapper.mapToPatient(any(Message.class))).thenReturn(new Patient());
+        when(procedureRequestMapper.mapToProcedureRequest(any(Message.class))).thenReturn(Optional.empty());
         when(specimenMapper.mapToSpecimens(any(Message.class), any(Patient.class))).thenReturn(Collections.emptyList());
     }
 
@@ -84,6 +86,18 @@ class PathologyRecordMapperTest {
         final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
 
         assertThat(pathologyRecord.getPerformer()).isEqualTo(mockPerformer);
+    }
+
+    @Test
+    void testMapMessageToPathologyRecordWithProcedureRequest() {
+        final Message message = new Message(emptyList());
+        var mockProcedureRequest = mock(ProcedureRequest.class);
+
+        when(procedureRequestMapper.mapToProcedureRequest(message)).thenReturn(Optional.of(mockProcedureRequest));
+
+        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+
+        assertThat(pathologyRecord.getTestRequestSummary()).isEqualTo(mockProcedureRequest);
     }
 
     @Test
