@@ -40,9 +40,9 @@ class ResourceFullUrlGeneratorTest {
         final var resource = mock(Resource.class);
         when(resource.getId()).thenReturn(null);
 
-        String result = fullUrlGenerator.generate(resource);
-
-        assertThat(result).isEqualTo("urn:uuid:null");
+        assertThatThrownBy(() -> fullUrlGenerator.generate(resource))
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("resource.id must be present and non-blank");
     }
 
     @Test
@@ -50,8 +50,18 @@ class ResourceFullUrlGeneratorTest {
         final var resource = mock(Resource.class);
         when(resource.getId()).thenReturn("");
 
-        String result = fullUrlGenerator.generate(resource);
+        assertThatThrownBy(() -> fullUrlGenerator.generate(resource))
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("resource.id must be present and non-blank");
+    }
 
-        assertThat(result).isEqualTo("urn:uuid:");
+    @Test
+    void testMapToFullUrlBlankId() {
+        final var resource = mock(Resource.class);
+        when(resource.getId()).thenReturn("  \t \n ");
+
+        assertThatThrownBy(() -> fullUrlGenerator.generate(resource))
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("resource.id must be present and non-blank");
     }
 }
