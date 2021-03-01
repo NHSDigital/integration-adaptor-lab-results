@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class ResourceFullUrlGenerator {
     private static final String FULL_URL_PREFIX = "urn:uuid:";
 
-    public String generateFullUrl(@NonNull final Resource resource) {
+    public String generate(@NonNull final Resource resource) {
         return FULL_URL_PREFIX + resource.getId();
     }
 }

@@ -224,7 +224,7 @@ class SpecimenMapperTest {
             "S16+16", // SpecimenDetails
             "SPC+TSP+:::Required" // SpecimenCharacteristicType
         ));
-        when(fullUrlGenerator.generateFullUrl(any(Patient.class))).thenReturn("patient-full-url");
+        when(fullUrlGenerator.generate(any(Patient.class))).thenReturn("patient-full-url");
 
         final var specimens = specimenMapper.mapToSpecimens(message, mock(Patient.class));
 

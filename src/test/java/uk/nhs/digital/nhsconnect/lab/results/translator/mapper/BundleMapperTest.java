@@ -47,7 +47,7 @@ class BundleMapperTest {
     @BeforeEach
     void setUp() {
         when(uuidGenerator.generateUUID()).thenReturn(SOME_UUID);
-        when(fullUrlGenerator.generateFullUrl(any(Resource.class))).thenReturn(FULL_URL);
+        when(fullUrlGenerator.generate(any(Resource.class))).thenReturn(FULL_URL);
         // add members that are required:
         final var mockRequester = mock(Practitioner.class);
         lenient().when(mockRequester.getId()).thenReturn(SOME_UUID);

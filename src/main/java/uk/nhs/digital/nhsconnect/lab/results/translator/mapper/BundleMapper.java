@@ -29,22 +29,22 @@ public class BundleMapper {
         Bundle bundle = generateInitialPathologyBundle();
 
         bundle.addEntry()
-            .setFullUrl(fullUrlGenerator.generateFullUrl(pathologyRecord.getRequester()))
+            .setFullUrl(fullUrlGenerator.generate(pathologyRecord.getRequester()))
             .setResource(pathologyRecord.getRequester());
 
         Optional.ofNullable(pathologyRecord.getPerformer()).ifPresent(performer ->
             bundle.addEntry()
-                .setFullUrl(fullUrlGenerator.generateFullUrl(performer))
+                .setFullUrl(fullUrlGenerator.generate(performer))
                 .setResource(performer)
         );
 
         bundle.addEntry()
-            .setFullUrl(fullUrlGenerator.generateFullUrl(pathologyRecord.getPatient()))
+            .setFullUrl(fullUrlGenerator.generate(pathologyRecord.getPatient()))
             .setResource(pathologyRecord.getPatient());
 
         pathologyRecord.getSpecimens().forEach(specimen ->
             bundle.addEntry()
-                .setFullUrl(fullUrlGenerator.generateFullUrl(specimen))
+                .setFullUrl(fullUrlGenerator.generate(specimen))
                 .setResource(specimen));
 
         return bundle;

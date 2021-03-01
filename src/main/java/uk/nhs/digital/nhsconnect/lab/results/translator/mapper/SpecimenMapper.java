@@ -87,7 +87,7 @@ public class SpecimenMapper {
         // fhir.collection.collector = [none]
 
         // and the reference to the patient
-        fhir.getSubject().setReference(fullUrlGenerator.generateFullUrl(patient));
+        fhir.getSubject().setReference(fullUrlGenerator.generate(patient));
 
         return fhir;
     }

@@ -22,7 +22,7 @@ class ResourceFullUrlGeneratorTest {
         final var resource = mock(Resource.class);
         when(resource.getId()).thenReturn("resource-id");
 
-        String result = fullUrlGenerator.generateFullUrl(resource);
+        String result = fullUrlGenerator.generate(resource);
 
         assertThat(result).isEqualTo("urn:uuid:resource-id");
     }
@@ -30,7 +30,7 @@ class ResourceFullUrlGeneratorTest {
     @Test
     @SuppressWarnings("ConstantConditions")
     void testMapToFullUrlNullResource() {
-        assertThatThrownBy(() -> fullUrlGenerator.generateFullUrl(null))
+        assertThatThrownBy(() -> fullUrlGenerator.generate(null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("resource is marked non-null but is null");
     }
@@ -40,7 +40,7 @@ class ResourceFullUrlGeneratorTest {
         final var resource = mock(Resource.class);
         when(resource.getId()).thenReturn(null);
 
-        String result = fullUrlGenerator.generateFullUrl(resource);
+        String result = fullUrlGenerator.generate(resource);
 
         assertThat(result).isEqualTo("urn:uuid:null");
     }
@@ -50,7 +50,7 @@ class ResourceFullUrlGeneratorTest {
         final var resource = mock(Resource.class);
         when(resource.getId()).thenReturn("");
 
-        String result = fullUrlGenerator.generateFullUrl(resource);
+        String result = fullUrlGenerator.generate(resource);
 
         assertThat(result).isEqualTo("urn:uuid:");
     }
