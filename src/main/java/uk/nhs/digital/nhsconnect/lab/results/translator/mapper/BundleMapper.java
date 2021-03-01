@@ -1,16 +1,19 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.Optional;
+
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.InstantType;
 import org.hl7.fhir.dstu3.model.Meta;
+import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.UriType;
 import org.springframework.stereotype.Component;
+
+import lombok.RequiredArgsConstructor;
 import uk.nhs.digital.nhsconnect.lab.results.model.fhir.PathologyRecord;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
-
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -25,8 +28,19 @@ public class BundleMapper {
         Bundle bundle = generateInitialPathologyBundle();
 
         bundle.addEntry()
-            .setFullUrl(FULL_URL_PREFIX.concat(uuidGenerator.generateUUID()))
+            .setFullUrl(FULL_URL_PREFIX.concat(pathologyRecord.getRequester().getId()))
             .setResource(pathologyRecord.getRequester());
+
+        Optional.ofNullable(pathologyRecord.getPerformer()).ifPresent(performer ->
+            bundle.addEntry()
+                .setFullUrl(FULL_URL_PREFIX.concat(performer.getId()))
+                .setResource(performer)
+        );
+
+        final Patient patient = pathologyRecord.getPatient();
+        bundle.addEntry()
+            .setFullUrl(FULL_URL_PREFIX.concat(patient.getId()))
+            .setResource(patient);
 
         return bundle;
     }
