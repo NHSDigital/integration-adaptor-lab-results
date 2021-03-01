@@ -3,6 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 import lombok.RequiredArgsConstructor;
 import org.hl7.fhir.dstu3.model.Annotation;
 import org.hl7.fhir.dstu3.model.Identifier;
+import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Specimen;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenQuantity;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.SpecimenDetails;
+import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 import java.util.Arrays;
@@ -29,14 +31,15 @@ public class SpecimenMapper {
 
     private final UUIDGenerator uuidGenerator;
     private final DateFormatMapper dateFormatMapper;
+    private final ResourceFullUrlGenerator fullUrlGenerator;
 
-    public List<Specimen> mapToSpecimens(final Message message) {
+    public List<Specimen> mapToSpecimens(final Message message, Patient patient) {
         return message.getServiceReportDetails().getSubject().getSpecimens().stream()
-            .map(this::edifactToFhir)
+            .map(edifact -> edifactToFhir(edifact, patient))
             .collect(toList());
     }
 
-    private Specimen edifactToFhir(final SpecimenDetails edifact) {
+    private Specimen edifactToFhir(final SpecimenDetails edifact, Patient patient) {
         final Specimen fhir = new Specimen();
         fhir.setId(uuidGenerator.generateUUID());
         // fhir.identifier = SG16.RFF.C506.1154 (requester)
@@ -82,6 +85,10 @@ public class SpecimenMapper {
             .map(text -> new Annotation().setText(text))
             .forEach(fhir::addNote);
         // fhir.collection.collector = [none]
+
+        // and the reference to the patient
+        fhir.getSubject().setReference(fullUrlGenerator.generateFullUrl(patient));
+
         return fhir;
     }
 }

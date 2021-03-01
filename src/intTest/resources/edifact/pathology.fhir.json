@@ -81,6 +81,9 @@
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:4ad99777-9863-4614-b929-16633f870f23"
+        },
         "receivedTime": "2010-02-24T15:41:00+00:00",
         "collection": {
           "collectedDateTime": "2010-02-23T15:41:00+00:00"

@@ -17,8 +17,10 @@ import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,7 +43,7 @@ class PathologyRecordMapperTest {
         when(practitionerMapper.mapRequester(any(Message.class))).thenReturn(Optional.empty());
         when(practitionerMapper.mapPerformer(any(Message.class))).thenReturn(Optional.empty());
         when(patientMapper.mapToPatient(any(Message.class))).thenReturn(new Patient());
-        when(specimenMapper.mapToSpecimens(any(Message.class))).thenReturn(Collections.emptyList());
+        when(specimenMapper.mapToSpecimens(any(Message.class), any(Patient.class))).thenReturn(Collections.emptyList());
     }
 
     @Test
@@ -86,7 +88,9 @@ class PathologyRecordMapperTest {
         final Message message = new Message(emptyList());
         final var mockSpecimen1 = mock(Specimen.class);
         final var mockSpecimen2 = mock(Specimen.class);
-        when(specimenMapper.mapToSpecimens(message)).thenReturn(List.of(mockSpecimen1, mockSpecimen2));
+        reset(specimenMapper);
+        when(specimenMapper.mapToSpecimens(eq(message), any(Patient.class)))
+            .thenReturn(List.of(mockSpecimen1, mockSpecimen2));
 
         final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
 

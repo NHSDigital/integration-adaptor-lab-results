@@ -21,8 +21,9 @@ public class PathologyRecordMapper {
 
         practitionerMapper.mapRequester(message).ifPresent(pathologyRecordBuilder::requester);
         practitionerMapper.mapPerformer(message).ifPresent(pathologyRecordBuilder::performer);
-        pathologyRecordBuilder.patient(patientMapper.mapToPatient(message));
-        pathologyRecordBuilder.specimens(specimenMapper.mapToSpecimens(message));
+        final var patient = patientMapper.mapToPatient(message);
+        pathologyRecordBuilder.patient(patient);
+        pathologyRecordBuilder.specimens(specimenMapper.mapToSpecimens(message, patient));
 
         return pathologyRecordBuilder.build();
     }

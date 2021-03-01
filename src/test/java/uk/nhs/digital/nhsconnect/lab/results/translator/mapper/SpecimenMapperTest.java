@@ -4,6 +4,8 @@ import org.hl7.fhir.dstu3.model.Annotation;
 import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.DateTimeType;
 import org.hl7.fhir.dstu3.model.Identifier;
+import org.hl7.fhir.dstu3.model.Patient;
+import org.hl7.fhir.dstu3.model.Reference;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DateFormat;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
+import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 import java.math.BigDecimal;
@@ -35,6 +38,9 @@ class SpecimenMapperTest {
     @Mock
     private DateFormatMapper dateFormatMapper;
 
+    @Mock
+    private ResourceFullUrlGenerator fullUrlGenerator;
+
     @InjectMocks
     private SpecimenMapper specimenMapper;
 
@@ -42,7 +48,7 @@ class SpecimenMapperTest {
     void testMapToSpecimensNonePresent() {
         final Message message = new Message(Collections.emptyList());
 
-        final var specimens = specimenMapper.mapToSpecimens(message);
+        final var specimens = specimenMapper.mapToSpecimens(message, null);
 
         assertThat(specimens).isEmpty();
     }
@@ -55,7 +61,7 @@ class SpecimenMapperTest {
             "S16+16"  // SpecimenDetails
         ));
 
-        assertThatThrownBy(() -> specimenMapper.mapToSpecimens(message))
+        assertThatThrownBy(() -> specimenMapper.mapToSpecimens(message, null))
             .isExactlyInstanceOf(MissingSegmentException.class)
             .hasMessageStartingWith("EDIFACT section is missing segment");
     }
@@ -73,7 +79,7 @@ class SpecimenMapperTest {
             "SPC+TSP+:::Specimen type" // SpecimenCharacteristicType
         ));
 
-        final var specimens = specimenMapper.mapToSpecimens(message);
+        final var specimens = specimenMapper.mapToSpecimens(message, null);
 
         assertThat(specimens).hasSize(2)
             .allSatisfy(specimen -> assertThat(specimen.getType().getCoding())
@@ -94,7 +100,7 @@ class SpecimenMapperTest {
             "RFF+RTI:Requester" // Reference - SPECIMEN_BY_REQUESTER
         ));
 
-        final var specimens = specimenMapper.mapToSpecimens(message);
+        final var specimens = specimenMapper.mapToSpecimens(message, null);
 
         assertThat(specimens).hasSize(1)
             .first()
@@ -115,7 +121,7 @@ class SpecimenMapperTest {
             "RFF+STI:Provider" // Reference - SPECIMEN_BY_PROVIDER
         ));
 
-        final var specimens = specimenMapper.mapToSpecimens(message);
+        final var specimens = specimenMapper.mapToSpecimens(message, null);
 
         assertThat(specimens).hasSize(1)
             .first()
@@ -139,7 +145,7 @@ class SpecimenMapperTest {
             "DTM+SRI:date:203" // SpecimenCollectionReceiptDateTime
         ));
 
-        final var specimens = specimenMapper.mapToSpecimens(message);
+        final var specimens = specimenMapper.mapToSpecimens(message, null);
 
         assertThat(specimens).hasSize(1)
             .first()
@@ -161,7 +167,7 @@ class SpecimenMapperTest {
             "DTM+SCO:date:203" // SpecimenCollectionDateTime
         ));
 
-        final var specimens = specimenMapper.mapToSpecimens(message);
+        final var specimens = specimenMapper.mapToSpecimens(message, null);
 
         assertThat(specimens).hasSize(1)
             .first()
@@ -179,7 +185,7 @@ class SpecimenMapperTest {
             "QTY+SVO:1+:::unit" // SpecimenQuantity
         ));
 
-        final var specimens = specimenMapper.mapToSpecimens(message);
+        final var specimens = specimenMapper.mapToSpecimens(message, null);
 
         assertThat(specimens).hasSize(1)
             .first()
@@ -201,12 +207,31 @@ class SpecimenMapperTest {
             "FTX+SPC+++item 2 part 1:item 2 part 2"  // FreeTextSegment
         ));
 
-        final var specimens = specimenMapper.mapToSpecimens(message);
+        final var specimens = specimenMapper.mapToSpecimens(message, null);
 
         assertThat(specimens).hasSize(1)
             .first()
             .satisfies(specimen -> assertThat(specimen.getNote())
                 .extracting(Annotation::getText)
                 .contains("item 1 part 1", "item 1 part 2", "item 2 part 1", "item 2 part 2"));
+    }
+
+    @Test
+    void testMapToSpecimensPatientReference() {
+        final Message message = new Message(List.of(
+            "S02+02", // ServiceReportDetails
+            "S06+06", // InvestigationSubject
+            "S16+16", // SpecimenDetails
+            "SPC+TSP+:::Required" // SpecimenCharacteristicType
+        ));
+        when(fullUrlGenerator.generateFullUrl(any(Patient.class))).thenReturn("patient-full-url");
+
+        final var specimens = specimenMapper.mapToSpecimens(message, mock(Patient.class));
+
+        assertThat(specimens).hasSize(1)
+            .first()
+            .satisfies(specimen -> assertThat(specimen.getSubject())
+                .extracting(Reference::getReference)
+                .isEqualTo("patient-full-url"));
     }
 }

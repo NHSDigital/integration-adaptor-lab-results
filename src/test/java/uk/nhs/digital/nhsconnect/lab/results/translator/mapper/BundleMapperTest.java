@@ -4,6 +4,7 @@ import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
+import org.hl7.fhir.dstu3.model.Resource;
 import org.hl7.fhir.dstu3.model.Specimen;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.model.fhir.PathologyRecord;
 import uk.nhs.digital.nhsconnect.lab.results.model.fhir.PathologyRecord.PathologyRecordBuilder;
+import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -33,6 +36,9 @@ class BundleMapperTest {
     @Mock
     private UUIDGenerator uuidGenerator;
 
+    @Mock
+    private ResourceFullUrlGenerator fullUrlGenerator;
+
     @InjectMocks
     private BundleMapper bundleMapper;
 
@@ -41,6 +47,7 @@ class BundleMapperTest {
     @BeforeEach
     void setUp() {
         when(uuidGenerator.generateUUID()).thenReturn(SOME_UUID);
+        when(fullUrlGenerator.generateFullUrl(any(Resource.class))).thenReturn(FULL_URL);
         // add members that are required:
         final var mockRequester = mock(Practitioner.class);
         lenient().when(mockRequester.getId()).thenReturn(SOME_UUID);
@@ -52,7 +59,6 @@ class BundleMapperTest {
     @Test
     void testMapPathologyRecordToBundleWithPractitioner() {
         final var mockRequester = mock(Practitioner.class);
-        when(mockRequester.getId()).thenReturn(SOME_UUID);
         pathologyRecordBuilder.requester(mockRequester);
 
         final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
@@ -77,7 +83,6 @@ class BundleMapperTest {
     @Test
     void testMapPathologyRecordToBundleWithPatient() {
         final var mockPatient = mock(Patient.class);
-        when(mockPatient.getId()).thenReturn(SOME_UUID);
         pathologyRecordBuilder.patient(mockPatient);
 
         final Bundle bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
@@ -102,7 +107,6 @@ class BundleMapperTest {
     @Test
     void testMapPathologyRecordToBundleWithPerformer() {
         final var mockPerformer = mock(Practitioner.class);
-        when(mockPerformer.getId()).thenReturn(SOME_UUID);
         pathologyRecordBuilder.performer(mockPerformer);
 
         final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
@@ -128,9 +132,7 @@ class BundleMapperTest {
     @Test
     void testMapPathologyRecordToBundleWithSpecimens() {
         final var mockSpecimen1 = mock(Specimen.class);
-        when(mockSpecimen1.getId()).thenReturn(SOME_UUID);
         final var mockSpecimen2 = mock(Specimen.class);
-        when(mockSpecimen2.getId()).thenReturn(SOME_UUID);
         pathologyRecordBuilder.specimens(List.of(mockSpecimen1, mockSpecimen2));
 
         final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());

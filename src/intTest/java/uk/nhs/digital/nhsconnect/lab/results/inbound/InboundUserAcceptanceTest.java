@@ -76,6 +76,7 @@ public class InboundUserAcceptanceTest extends IntegrationBaseTest {
                 new Customization("meta.lastUpdated", IGNORE),
                 new Customization("identifier.value", IGNORE),
                 new Customization("entry[*].fullUrl", IGNORE),
+                new Customization("entry[*].resource.subject.reference", IGNORE),
                 new Customization("entry[*].resource.id", IGNORE)
             )
         );
