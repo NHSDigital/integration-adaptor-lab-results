@@ -65,6 +65,23 @@
       }
     },
     {
+      "fullUrl": "urn:uuid:8aac2da2-5857-4c71-af22-461557c791ee",
+      "resource": {
+        "resourceType": "ProcedureRequest",
+        "id": "8aac2da2-5857-4c71-af22-461557c791ee",
+        "status": "unknown",
+        "intent": "?",
+        "code": {
+          "text": "unknown"
+        },
+        "note": [
+          {
+            "text": "TIRED ALL THE TIME, LOW Hb"
+          }
+        ]
+      }
+    },
+    {
       "fullUrl": "urn:uuid:6117b6d6-d0a8-4930-a404-611ddece464a",
       "resource": {
         "resourceType": "Specimen",

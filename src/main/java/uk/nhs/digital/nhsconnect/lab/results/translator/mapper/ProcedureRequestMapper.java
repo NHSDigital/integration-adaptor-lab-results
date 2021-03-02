@@ -33,7 +33,7 @@ public class ProcedureRequestMapper {
         mapFreeText(patientClinicalInfo, procedureRequest);
         mapStatus(patientClinicalInfo, procedureRequest);
         procedureRequest.setIntent(ProcedureRequest.ProcedureRequestIntent.NULL);
-        procedureRequest.setCode(new CodeableConcept());
+        procedureRequest.setCode(new CodeableConcept().setText("unknown"));
         procedureRequest.setId(uuidGenerator.generateUUID());
 
         return procedureRequest;

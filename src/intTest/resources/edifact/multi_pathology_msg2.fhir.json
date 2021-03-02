@@ -60,6 +60,23 @@
       }
     },
     {
+      "fullUrl": "urn:uuid:a519747b-ec83-477b-bf7a-b3fc6b7abeac",
+      "resource": {
+        "resourceType": "ProcedureRequest",
+        "id": "a519747b-ec83-477b-bf7a-b3fc6b7abeac",
+        "status": "unknown",
+        "intent": "?",
+        "code": {
+          "text": "unknown"
+        },
+        "note": [
+          {
+            "text": "PAINS HANDS AND FEET."
+          }
+        ]
+      }
+    },
+    {
       "fullUrl": "urn:uuid:34a0625d-5517-42a2-99c3-3a621c989c73",
       "resource": {
         "resourceType": "Specimen",
