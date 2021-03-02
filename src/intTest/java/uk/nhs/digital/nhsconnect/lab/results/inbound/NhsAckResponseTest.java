@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Tests that the correct NHSACK is returned for valid interchanges and when errors occur in processing.
  * There is an NHSACK status code for each type of response:
- * <p>
+ * <br>
  * IAF: Valid Interchange, all Messages accepted
  * IAP: Valid Interchange, some Messages accepted, some Messages rejected
  * IRA: Valid Interchange, but all Messages were rejected
