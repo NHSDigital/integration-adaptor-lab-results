@@ -52,8 +52,8 @@ class BundleMapperTest {
         final var mockRequester = mock(Practitioner.class);
         lenient().when(mockRequester.getId()).thenReturn(SOME_UUID);
         pathologyRecordBuilder = PathologyRecord.builder()
-            .requester(mockRequester)
-            .patient(mock(Patient.class));
+                .requester(mockRequester)
+                .patient(mock(Patient.class));
     }
 
     @Test
@@ -64,19 +64,19 @@ class BundleMapperTest {
         final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
 
         final var practitionerBundleEntries = bundle.getEntry().stream()
-            .filter(entry -> entry.getResource() instanceof Practitioner)
-            .collect(Collectors.toList());
+                .filter(entry -> entry.getResource() instanceof Practitioner)
+                .collect(Collectors.toList());
         final var practitioners = practitionerBundleEntries.stream()
-            .map(BundleEntryComponent::getResource)
-            .map(Practitioner.class::cast)
-            .collect(Collectors.toList());
+                .map(BundleEntryComponent::getResource)
+                .map(Practitioner.class::cast)
+                .collect(Collectors.toList());
 
         assertAll(
-            () -> verifyBundle(bundle),
-            () -> assertThat(practitioners).hasSize(1).contains(mockRequester),
-            () -> assertThat(practitionerBundleEntries).first()
-                .extracting(BundleEntryComponent::getFullUrl)
-                .isEqualTo(FULL_URL)
+                () -> verifyBundle(bundle),
+                () -> assertThat(practitioners).hasSize(1).contains(mockRequester),
+                () -> assertThat(practitionerBundleEntries).first()
+                        .extracting(BundleEntryComponent::getFullUrl)
+                        .isEqualTo(FULL_URL)
         );
     }
 
@@ -88,19 +88,19 @@ class BundleMapperTest {
         final Bundle bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
 
         final var patientBundleEntries = bundle.getEntry().stream()
-            .filter(entry -> entry.getResource() instanceof Patient)
-            .collect(Collectors.toList());
+                .filter(entry -> entry.getResource() instanceof Patient)
+                .collect(Collectors.toList());
         final var patients = patientBundleEntries.stream()
-            .map(BundleEntryComponent::getResource)
-            .map(Patient.class::cast)
-            .collect(Collectors.toList());
+                .map(BundleEntryComponent::getResource)
+                .map(Patient.class::cast)
+                .collect(Collectors.toList());
 
         assertAll(
-            () -> verifyBundle(bundle),
-            () -> assertThat(patients).hasSize(1).contains(mockPatient),
-            () -> assertThat(patientBundleEntries).first()
-                .extracting(BundleEntryComponent::getFullUrl)
-                .isEqualTo(FULL_URL)
+                () -> verifyBundle(bundle),
+                () -> assertThat(patients).hasSize(1).contains(mockPatient),
+                () -> assertThat(patientBundleEntries).first()
+                        .extracting(BundleEntryComponent::getFullUrl)
+                        .isEqualTo(FULL_URL)
         );
     }
 
@@ -112,20 +112,20 @@ class BundleMapperTest {
         final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
 
         final var performerBundleEntries = bundle.getEntry().stream()
-            .filter(entry -> entry.getResource() instanceof Practitioner)
-            .collect(Collectors.toList());
+                .filter(entry -> entry.getResource() instanceof Practitioner)
+                .collect(Collectors.toList());
         final var practitioners = performerBundleEntries.stream()
-            .map(BundleEntryComponent::getResource)
-            .map(Practitioner.class::cast)
-            .collect(Collectors.toList());
+                .map(BundleEntryComponent::getResource)
+                .map(Practitioner.class::cast)
+                .collect(Collectors.toList());
 
         assertAll(
-            () -> verifyBundle(bundle),
-            () -> assertThat(practitioners).hasSize(2) // includes required requester
-                .contains(mockPerformer),
-            () -> assertThat(performerBundleEntries)
-                .extracting(BundleEntryComponent::getFullUrl)
-                .allMatch(FULL_URL::equals)
+                () -> verifyBundle(bundle),
+                () -> assertThat(practitioners).hasSize(2) // includes required requester
+                        .contains(mockPerformer),
+                () -> assertThat(performerBundleEntries)
+                        .extracting(BundleEntryComponent::getFullUrl)
+                        .allMatch(FULL_URL::equals)
         );
     }
 
@@ -138,31 +138,31 @@ class BundleMapperTest {
         final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
 
         final var specimenBundleEntries = bundle.getEntry().stream()
-            .filter(entry -> entry.getResource() instanceof Specimen)
-            .collect(Collectors.toList());
+                .filter(entry -> entry.getResource() instanceof Specimen)
+                .collect(Collectors.toList());
         final var specimens = specimenBundleEntries.stream()
-            .map(BundleEntryComponent::getResource)
-            .map(Specimen.class::cast)
-            .collect(Collectors.toList());
+                .map(BundleEntryComponent::getResource)
+                .map(Specimen.class::cast)
+                .collect(Collectors.toList());
 
         assertAll(
-            () -> verifyBundle(bundle),
-            () -> assertThat(specimens).hasSize(2)
-                .contains(mockSpecimen1, mockSpecimen2),
-            () -> assertThat(specimenBundleEntries)
-                .extracting(BundleEntryComponent::getFullUrl)
-                .allMatch(FULL_URL::equals)
+                () -> verifyBundle(bundle),
+                () -> assertThat(specimens).hasSize(2)
+                        .contains(mockSpecimen1, mockSpecimen2),
+                () -> assertThat(specimenBundleEntries)
+                        .extracting(BundleEntryComponent::getFullUrl)
+                        .allMatch(FULL_URL::equals)
         );
     }
 
     private void verifyBundle(Bundle bundle) {
         assertAll(
-            () -> assertThat(bundle.getMeta().getLastUpdated()).isNotNull(),
-            () -> assertThat(bundle.getMeta().getProfile().get(0).asStringValue())
-                .isEqualTo("https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"),
-            () -> assertThat(bundle.getIdentifier().getSystem()).isEqualTo("https://tools.ietf.org/html/rfc4122"),
-            () -> assertThat(bundle.getIdentifier().getValue()).isEqualTo(SOME_UUID),
-            () -> assertThat(bundle.getType()).isEqualTo(Bundle.BundleType.MESSAGE)
+                () -> assertThat(bundle.getMeta().getLastUpdated()).isNotNull(),
+                () -> assertThat(bundle.getMeta().getProfile().get(0).asStringValue())
+                        .isEqualTo("https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"),
+                () -> assertThat(bundle.getIdentifier().getSystem()).isEqualTo("https://tools.ietf.org/html/rfc4122"),
+                () -> assertThat(bundle.getIdentifier().getValue()).isEqualTo(SOME_UUID),
+                () -> assertThat(bundle.getType()).isEqualTo(Bundle.BundleType.MESSAGE)
         );
     }
 }

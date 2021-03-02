@@ -22,22 +22,22 @@ class SpecimenQuantityTest {
     @Test
     void testFromStringWithInvalidEdifactStringThrowsException() {
         assertThatThrownBy(() -> SpecimenQuantity.fromString("wrong value"))
-            .isExactlyInstanceOf(IllegalArgumentException.class);
+                .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void testValidationQuantityUnitOfMeasureEmptyString() {
         SpecimenQuantity emptyFreeText = new SpecimenQuantity(SPECIMEN_QUANTITY, StringUtils.EMPTY);
         assertThatThrownBy(emptyFreeText::validate)
-            .isInstanceOf(EdifactValidationException.class)
-            .hasMessage("QTY: Unit of measure is required");
+                .isInstanceOf(EdifactValidationException.class)
+                .hasMessage("QTY: Unit of measure is required");
     }
 
     @Test
     void testValidationQuantityUnitOfMeasureBlankString() {
         SpecimenQuantity emptyFreeText = new SpecimenQuantity(SPECIMEN_QUANTITY, " ");
         assertThatThrownBy(emptyFreeText::validate)
-            .isInstanceOf(EdifactValidationException.class)
-            .hasMessage("QTY: Unit of measure is required");
+                .isInstanceOf(EdifactValidationException.class)
+                .hasMessage("QTY: Unit of measure is required");
     }
 }

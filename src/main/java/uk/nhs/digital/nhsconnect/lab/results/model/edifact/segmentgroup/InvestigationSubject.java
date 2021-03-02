@@ -35,41 +35,41 @@ public class InvestigationSubject extends SegmentGroup {
 
     @Getter(lazy = true)
     private final Optional<Reference> referenceServiceSubject =
-        extractOptionalSegment(Reference.KEY + PLUS_SEPARATOR + ReferenceType.SERVICE_SUBJECT.getQualifier())
-            .map(Reference::fromString);
+            extractOptionalSegment(Reference.KEY + PLUS_SEPARATOR + ReferenceType.SERVICE_SUBJECT.getQualifier())
+                    .map(Reference::fromString);
 
     @Getter(lazy = true)
     private final Optional<UnstructuredAddress> address =
-        extractOptionalSegment(UnstructuredAddress.KEY)
-            .map(UnstructuredAddress::fromString);
+            extractOptionalSegment(UnstructuredAddress.KEY)
+                    .map(UnstructuredAddress::fromString);
 
     @Getter(lazy = true)
     private final PatientDetails details = new PatientDetails(getEdifactSegments().stream()
-        .dropWhile(segment -> !segment.startsWith(PatientDetails.INDICATOR))
-        .takeWhile(segment -> !segment.startsWith(SpecimenDetails.INDICATOR))
-        .takeWhile(segment -> !segment.startsWith(MessageTrailer.KEY))
-        .collect(toList()));
+            .dropWhile(segment -> !segment.startsWith(PatientDetails.INDICATOR))
+            .takeWhile(segment -> !segment.startsWith(SpecimenDetails.INDICATOR))
+            .takeWhile(segment -> !segment.startsWith(MessageTrailer.KEY))
+            .collect(toList()));
 
     @Getter(lazy = true)
     private final Optional<PatientClinicalInfo> clinicalInfo = PatientClinicalInfo.createOptional(
-        getEdifactSegments().stream()
-            .dropWhile(segment -> !segment.startsWith(PatientClinicalInfo.INDICATOR))
-            .takeWhile(segment -> !segment.startsWith(SpecimenDetails.INDICATOR))
-            .collect(toList()));
+            getEdifactSegments().stream()
+                    .dropWhile(segment -> !segment.startsWith(PatientClinicalInfo.INDICATOR))
+                    .takeWhile(segment -> !segment.startsWith(SpecimenDetails.INDICATOR))
+                    .collect(toList()));
 
     @Getter(lazy = true)
     private final List<SpecimenDetails> specimens = SpecimenDetails.createMultiple(getEdifactSegments().stream()
-        .dropWhile(segment -> !segment.startsWith(SpecimenDetails.INDICATOR))
-        .takeWhile(segment -> !segment.startsWith(LabResult.INDICATOR))
-        .takeWhile(segment -> !segment.startsWith(MessageTrailer.KEY))
-        .collect(toList()));
+            .dropWhile(segment -> !segment.startsWith(SpecimenDetails.INDICATOR))
+            .takeWhile(segment -> !segment.startsWith(LabResult.INDICATOR))
+            .takeWhile(segment -> !segment.startsWith(MessageTrailer.KEY))
+            .collect(toList()));
 
     @Getter(lazy = true)
     private final List<LabResult> labResults =
-        LabResult.createMultiple(getEdifactSegments().stream()
-            .dropWhile(segment -> !segment.startsWith(LabResult.INDICATOR))
-            .takeWhile(segment -> !segment.startsWith(MessageTrailer.KEY))
-            .collect(toList()));
+            LabResult.createMultiple(getEdifactSegments().stream()
+                    .dropWhile(segment -> !segment.startsWith(LabResult.INDICATOR))
+                    .takeWhile(segment -> !segment.startsWith(MessageTrailer.KEY))
+                    .collect(toList()));
 
     public InvestigationSubject(final List<String> edifactSegments) {
         super(edifactSegments);

@@ -18,8 +18,8 @@ class SequenceDetailsTest {
     @Test
     void testFromStringWrongKey() {
         assertThatThrownBy(() -> SequenceDetails.fromString("WRONG++123"))
-            .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Can't create SequenceDetails from WRONG++123");
+                .isExactlyInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Can't create SequenceDetails from WRONG++123");
     }
 
     @Test
@@ -31,14 +31,14 @@ class SequenceDetailsTest {
     @Test
     void testFromStringInsufficientParts() {
         assertThatThrownBy(() -> SequenceDetails.fromString("SEQ+1"))
-            .isExactlyInstanceOf(ArrayIndexOutOfBoundsException.class);
+                .isExactlyInstanceOf(ArrayIndexOutOfBoundsException.class);
     }
 
     @Test
     void testValidationPasses() {
         final var sequence = new SequenceDetails("123456");
         assertAll(
-            () -> assertDoesNotThrow(sequence::validate)
+                () -> assertDoesNotThrow(sequence::validate)
         );
     }
 
@@ -46,9 +46,9 @@ class SequenceDetailsTest {
     void testValidationEmptyNumber() {
         final var sequence = new SequenceDetails("");
         assertAll(
-            () -> assertThatThrownBy(sequence::validate)
-                .isExactlyInstanceOf(EdifactValidationException.class)
-                .hasMessage("SEQ: attribute number must be an alphanumeric string of up to 6 characters")
+                () -> assertThatThrownBy(sequence::validate)
+                        .isExactlyInstanceOf(EdifactValidationException.class)
+                        .hasMessage("SEQ: attribute number must be an alphanumeric string of up to 6 characters")
         );
     }
 
@@ -56,9 +56,9 @@ class SequenceDetailsTest {
     void testValidationNonAlphaNumericNumber() {
         final var sequence = new SequenceDetails("1.00");
         assertAll(
-            () -> assertThatThrownBy(sequence::validate)
-                .isExactlyInstanceOf(EdifactValidationException.class)
-                .hasMessage("SEQ: attribute number must be an alphanumeric string of up to 6 characters")
+                () -> assertThatThrownBy(sequence::validate)
+                        .isExactlyInstanceOf(EdifactValidationException.class)
+                        .hasMessage("SEQ: attribute number must be an alphanumeric string of up to 6 characters")
         );
     }
 
@@ -66,9 +66,9 @@ class SequenceDetailsTest {
     void testValidationTooLongNumber() {
         final var sequence = new SequenceDetails("ABCDEFG");
         assertAll(
-            () -> assertThatThrownBy(sequence::validate)
-                .isExactlyInstanceOf(EdifactValidationException.class)
-                .hasMessage("SEQ: attribute number must be an alphanumeric string of up to 6 characters")
+                () -> assertThatThrownBy(sequence::validate)
+                        .isExactlyInstanceOf(EdifactValidationException.class)
+                        .hasMessage("SEQ: attribute number must be an alphanumeric string of up to 6 characters")
         );
 
     }

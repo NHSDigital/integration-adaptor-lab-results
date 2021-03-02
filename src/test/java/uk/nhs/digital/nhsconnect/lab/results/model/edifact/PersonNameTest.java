@@ -20,11 +20,11 @@ class PersonNameTest {
         var fromStringIdOnly = PersonName.fromString(ID_ONLY);
 
         assertAll("fromStringIdOnly",
-            () -> assertEquals(fromStringIdOnly.getNhsNumber(), "RAT56"),
-            () -> assertNull(fromStringIdOnly.getFirstForename()),
-            () -> assertNull(fromStringIdOnly.getSecondForename()),
-            () -> assertNull(fromStringIdOnly.getSurname()),
-            () -> assertNull(fromStringIdOnly.getTitle()));
+                () -> assertEquals(fromStringIdOnly.getNhsNumber(), "RAT56"),
+                () -> assertNull(fromStringIdOnly.getFirstForename()),
+                () -> assertNull(fromStringIdOnly.getSecondForename()),
+                () -> assertNull(fromStringIdOnly.getSurname()),
+                () -> assertNull(fromStringIdOnly.getTitle()));
     }
 
     @Test
@@ -32,11 +32,11 @@ class PersonNameTest {
         var fromStringIdAndNames = PersonName.fromString(ID_AND_NAMES_VALUE);
 
         assertAll("fromStringIdAndNames",
-            () -> assertEquals(fromStringIdAndNames.getNhsNumber(), "RAT56"),
-            () -> assertEquals(fromStringIdAndNames.getFirstForename(), "SARAH"),
-            () -> assertEquals(fromStringIdAndNames.getSecondForename(), "ANGELA"),
-            () -> assertEquals(fromStringIdAndNames.getSurname(), "KENNEDY"),
-            () -> assertEquals(fromStringIdAndNames.getTitle(), "MISS"));
+                () -> assertEquals(fromStringIdAndNames.getNhsNumber(), "RAT56"),
+                () -> assertEquals(fromStringIdAndNames.getFirstForename(), "SARAH"),
+                () -> assertEquals(fromStringIdAndNames.getSecondForename(), "ANGELA"),
+                () -> assertEquals(fromStringIdAndNames.getSurname(), "KENNEDY"),
+                () -> assertEquals(fromStringIdAndNames.getTitle(), "MISS"));
     }
 
     @Test
@@ -44,26 +44,26 @@ class PersonNameTest {
         var fromStringNamesOnly = PersonName.fromString(NAMES_ONLY_VALUE);
 
         assertAll("fromStringNamesOnly",
-            () -> assertNull(fromStringNamesOnly.getNhsNumber()),
-            () -> assertEquals(fromStringNamesOnly.getFirstForename(), "SARAH"),
-            () -> assertEquals(fromStringNamesOnly.getSecondForename(), "ANGELA"),
-            () -> assertEquals(fromStringNamesOnly.getSurname(), "KENNEDY"),
-            () -> assertEquals(fromStringNamesOnly.getTitle(), "MISS"));
+                () -> assertNull(fromStringNamesOnly.getNhsNumber()),
+                () -> assertEquals(fromStringNamesOnly.getFirstForename(), "SARAH"),
+                () -> assertEquals(fromStringNamesOnly.getSecondForename(), "ANGELA"),
+                () -> assertEquals(fromStringNamesOnly.getSurname(), "KENNEDY"),
+                () -> assertEquals(fromStringNamesOnly.getTitle(), "MISS"));
     }
 
     @Test
     void testFromStringWithInvalidEdifactStringThrowsException() {
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-            () -> PersonName.fromString("wrong value"));
+                () -> PersonName.fromString("wrong value"));
         assertEquals("Can't create PersonName from wrong value", exception.getMessage());
     }
 
     @Test
     void testFromStringWithBlankIdentificationAndBlankNamesThrowsException() {
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
-            () -> PersonName.fromString("PNA+PAT+ +++ "));
+                () -> PersonName.fromString("PNA+PAT+ +++ "));
         assertEquals("PNA: At least one of patient identification and person name details are required",
-            exception.getMessage());
+                exception.getMessage());
     }
 
     @Test

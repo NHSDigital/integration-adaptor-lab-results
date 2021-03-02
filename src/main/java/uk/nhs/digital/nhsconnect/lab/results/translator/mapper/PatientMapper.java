@@ -30,12 +30,12 @@ public class PatientMapper {
     public Patient mapToPatient(final Message message) {
 
         final Optional<InvestigationSubject> investigationSubject =
-            Optional.ofNullable(message.getServiceReportDetails())
-                .map(ServiceReportDetails::getSubject);
+                Optional.ofNullable(message.getServiceReportDetails())
+                        .map(ServiceReportDetails::getSubject);
 
         final PatientDetails patientDetails = investigationSubject
-            .map(InvestigationSubject::getDetails)
-            .orElseThrow(() -> new FhirValidationException("Unable to map message to patient details"));
+                .map(InvestigationSubject::getDetails)
+                .orElseThrow(() -> new FhirValidationException("Unable to map message to patient details"));
 
         final Patient patient = new Patient();
         patient.setId(uuidGenerator.generateUUID());
@@ -49,7 +49,7 @@ public class PatientMapper {
         mapDateOfBirth(patientDetails, patient);
 
         investigationSubject.flatMap(InvestigationSubject::getAddress)
-            .ifPresent(unstructuredAddress -> mapAddress(unstructuredAddress, patient));
+                .ifPresent(unstructuredAddress -> mapAddress(unstructuredAddress, patient));
 
         return patient;
     }
@@ -77,15 +77,15 @@ public class PatientMapper {
 
     private void mapDateOfBirth(final PatientDetails details, final Patient patient) {
         details.getDateOfBirth()
-            .map(personDateOfBirth -> new DateType(personDateOfBirth.getDateOfBirth()))
-            .ifPresent(patient::setBirthDateElement);
+                .map(personDateOfBirth -> new DateType(personDateOfBirth.getDateOfBirth()))
+                .ifPresent(patient::setBirthDateElement);
     }
 
     private void mapGender(final PatientDetails details, final Patient patient) {
         details.getSex()
-            .map(sex -> sex.getGender().name().toLowerCase())
-            .map(Enumerations.AdministrativeGender::fromCode)
-            .ifPresent(patient::setGender);
+                .map(sex -> sex.getGender().name().toLowerCase())
+                .map(Enumerations.AdministrativeGender::fromCode)
+                .ifPresent(patient::setGender);
     }
 
     private void mapName(final PersonName name, final Patient patient) {
@@ -95,7 +95,7 @@ public class PatientMapper {
         Optional.ofNullable(name.getFirstForename()).ifPresent(forename -> {
             humanName.addGiven(forename);
             Optional.ofNullable(name.getSecondForename())
-                .ifPresent(humanName::addGiven);
+                    .ifPresent(humanName::addGiven);
         });
         humanName.setFamily(name.getSurname());
 

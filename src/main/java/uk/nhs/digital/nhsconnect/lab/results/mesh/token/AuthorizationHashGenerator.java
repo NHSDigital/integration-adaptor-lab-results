@@ -15,11 +15,11 @@ class AuthorizationHashGenerator {
     @SneakyThrows
     public String computeHash(MeshConfig meshConfig, Nonce nonce, String timestamp) {
         final String hashInput = String.join(":", meshConfig.getMailboxId(), nonce.getValue(), Nonce.COUNT,
-            meshConfig.getMailboxPassword(), timestamp);
+                meshConfig.getMailboxPassword(), timestamp);
 
         final Mac sha256Hmac = Mac.getInstance(HMAC_SHA256_ALGORITHM_NAME);
         final SecretKeySpec secretKey = new SecretKeySpec(meshConfig.getSharedKey().getBytes(StandardCharsets.UTF_8),
-            HMAC_SHA256_ALGORITHM_NAME);
+                HMAC_SHA256_ALGORITHM_NAME);
         sha256Hmac.init(secretKey);
 
         return Hex.encodeHexString(sha256Hmac.doFinal(hashInput.getBytes(StandardCharsets.UTF_8)));

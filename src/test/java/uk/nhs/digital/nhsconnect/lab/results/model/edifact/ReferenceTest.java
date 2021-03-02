@@ -19,23 +19,23 @@ class ReferenceTest {
     @Test
     void testFromStringWrongKey() {
         assertThatThrownBy(() -> Reference.fromString("WRONG+ARL:1A2B3C"))
-            .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Can't create Reference from WRONG+ARL:1A2B3C");
+                .isExactlyInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Can't create Reference from WRONG+ARL:1A2B3C");
     }
 
     @Test
     void testFromStringUnrecognisedTarget() {
         assertThatThrownBy(() -> Reference.fromString("RFF+ZZZ:1A2B3C"))
-            .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessage("No reference qualifier for 'ZZZ'");
+                .isExactlyInstanceOf(IllegalArgumentException.class)
+                .hasMessage("No reference qualifier for 'ZZZ'");
     }
 
     @Test
     void testFromStringAllValues() {
         final var reference = Reference.fromString("RFF+ASL:1A2B3C");
         assertAll(
-            () -> assertThat(reference.getTarget()).isEqualTo(ReferenceType.SPECIMEN),
-            () -> assertThat(reference.getNumber()).isEqualTo("1A2B3C")
+                () -> assertThat(reference.getTarget()).isEqualTo(ReferenceType.SPECIMEN),
+                () -> assertThat(reference.getNumber()).isEqualTo("1A2B3C")
         );
     }
 
@@ -43,7 +43,7 @@ class ReferenceTest {
     void testValidationPasses() {
         final var reference = new Reference(ReferenceType.SPECIMEN, "9");
         assertAll(
-            () -> assertDoesNotThrow(reference::validate)
+                () -> assertDoesNotThrow(reference::validate)
         );
     }
 
@@ -51,9 +51,9 @@ class ReferenceTest {
     void testValidationEmptyNumber() {
         final var reference = new Reference(ReferenceType.SPECIMEN, "");
         assertAll(
-            () -> assertThatThrownBy(reference::validate)
-                .isExactlyInstanceOf(EdifactValidationException.class)
-                .hasMessage("RFF: attribute number must be an alphanumeric string of up to 6 characters")
+                () -> assertThatThrownBy(reference::validate)
+                        .isExactlyInstanceOf(EdifactValidationException.class)
+                        .hasMessage("RFF: attribute number must be an alphanumeric string of up to 6 characters")
         );
     }
 
@@ -61,9 +61,9 @@ class ReferenceTest {
     void testValidationTooLongNumber() {
         final var reference = new Reference(ReferenceType.SPECIMEN, "Qwertyuiop");
         assertAll(
-            () -> assertThatThrownBy(reference::validate)
-                .isExactlyInstanceOf(EdifactValidationException.class)
-                .hasMessage("RFF: attribute number must be an alphanumeric string of up to 6 characters")
+                () -> assertThatThrownBy(reference::validate)
+                        .isExactlyInstanceOf(EdifactValidationException.class)
+                        .hasMessage("RFF: attribute number must be an alphanumeric string of up to 6 characters")
         );
     }
 
@@ -71,9 +71,9 @@ class ReferenceTest {
     void testValidationNonAlphanumericNumber() {
         final var reference = new Reference(ReferenceType.SPECIMEN, "失 🤯");
         assertAll(
-            () -> assertThatThrownBy(reference::validate)
-                .isExactlyInstanceOf(EdifactValidationException.class)
-                .hasMessage("RFF: attribute number must be an alphanumeric string of up to 6 characters")
+                () -> assertThatThrownBy(reference::validate)
+                        .isExactlyInstanceOf(EdifactValidationException.class)
+                        .hasMessage("RFF: attribute number must be an alphanumeric string of up to 6 characters")
         );
     }
 }

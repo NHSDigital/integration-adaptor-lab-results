@@ -35,14 +35,14 @@ public class MessageHeader extends Segment {
         }
         if (sequenceNumber < 1 || sequenceNumber > MAX_MESSAGE_SEQUENCE) {
             throw new EdifactValidationException(KEY + ": Attribute sequenceNumber must be between 1 and "
-                + MAX_MESSAGE_SEQUENCE);
+                    + MAX_MESSAGE_SEQUENCE);
         }
     }
 
     public static MessageHeader fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY)) {
             throw new IllegalArgumentException("Can't create " + MessageHeader.class.getSimpleName()
-                + " from " + edifactString);
+                    + " from " + edifactString);
         }
         final String[] split = Split.byPlus(edifactString);
         return new MessageHeader(Long.valueOf(split[1]));

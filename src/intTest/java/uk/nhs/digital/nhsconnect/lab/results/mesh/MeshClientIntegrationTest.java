@@ -45,7 +45,7 @@ class MeshClientIntegrationTest extends IntegrationBaseTest {
     private static final String RECIPIENT = "XX11";
     private static final String CONTENT = "test_message";
     private static final OutboundMeshMessage OUTBOUND_MESH_MESSAGE = OutboundMeshMessage.create(
-        RECIPIENT, WorkflowId.PATHOLOGY, CONTENT, null);
+            RECIPIENT, WorkflowId.PATHOLOGY, CONTENT, null);
     private static final String INVALID_WORKFLOW_ID = "INVALID";
 
     @Autowired
@@ -81,8 +81,8 @@ class MeshClientIntegrationTest extends IntegrationBaseTest {
         final MeshMessageId testMessageId = sendLargeMessageWithWrongWorkflowId();
 
         assertThatThrownBy(() -> getLabResultsMeshClient().getEdifactMessage(testMessageId.getMessageID()))
-            .isInstanceOf(MeshWorkflowUnknownException.class)
-            .hasMessageContaining(INVALID_WORKFLOW_ID);
+                .isInstanceOf(MeshWorkflowUnknownException.class)
+                .hasMessageContaining(INVALID_WORKFLOW_ID);
     }
 
     @SneakyThrows
@@ -113,7 +113,7 @@ class MeshClientIntegrationTest extends IntegrationBaseTest {
         final MeshMessageId testMessageId = getMeshClient().sendEdifactMessage(OUTBOUND_MESH_MESSAGE);
 
         assertThatCode(() -> getLabResultsMeshClient().acknowledgeMessage(testMessageId.getMessageID()))
-            .doesNotThrowAnyException();
+                .doesNotThrowAnyException();
     }
 
     @Test
@@ -136,7 +136,7 @@ class MeshClientIntegrationTest extends IntegrationBaseTest {
     @Test
     void when_downloadMessageThatDoesNotExist_expect_throwException() {
         assertThatExceptionOfType(MeshApiConnectionException.class).isThrownBy(
-            () -> getMeshClient().getEdifactMessage("thisisaninvalidmessageid1234567890")
+                () -> getMeshClient().getEdifactMessage("thisisaninvalidmessageid1234567890")
         );
     }
 
@@ -147,7 +147,7 @@ class MeshClientIntegrationTest extends IntegrationBaseTest {
         getLabResultsMeshClient().acknowledgeMessage(messageId);
 
         assertThatExceptionOfType(MeshApiConnectionException.class).isThrownBy(
-            () -> getMeshClient().getEdifactMessage(messageId)
+                () -> getMeshClient().getEdifactMessage(messageId)
         );
     }
 }

@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class HealthAuthorityNameAndAddressTest {
     private final HealthAuthorityNameAndAddress healthAuthorityNameAndAddress
-        = new HealthAuthorityNameAndAddress("ABC", "code1");
+            = new HealthAuthorityNameAndAddress("ABC", "code1");
 
     @Test
     void testGetKey() {
@@ -19,16 +19,16 @@ class HealthAuthorityNameAndAddressTest {
     void testValidateEmptyIdentifier() {
         final var emptyIdentifier = new HealthAuthorityNameAndAddress("", "x");
         assertThatThrownBy(emptyIdentifier::validate)
-            .isExactlyInstanceOf(EdifactValidationException.class)
-            .hasMessage("NAD: Attribute identifier is required");
+                .isExactlyInstanceOf(EdifactValidationException.class)
+                .hasMessage("NAD: Attribute identifier is required");
     }
 
     @Test
     void testValidateEmptyCode() {
         final var emptyCode = new HealthAuthorityNameAndAddress("x", "");
         assertThatThrownBy(emptyCode::validate)
-            .isExactlyInstanceOf(EdifactValidationException.class)
-            .hasMessage("NAD: Attribute code is required");
+                .isExactlyInstanceOf(EdifactValidationException.class)
+                .hasMessage("NAD: Attribute code is required");
     }
 
     @Test
@@ -42,6 +42,6 @@ class HealthAuthorityNameAndAddressTest {
     @Test
     void testFromStringInvalidValue() {
         assertThatThrownBy(() -> HealthAuthorityNameAndAddress.fromString("wrong value"))
-            .isExactlyInstanceOf(IllegalArgumentException.class);
+                .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 }

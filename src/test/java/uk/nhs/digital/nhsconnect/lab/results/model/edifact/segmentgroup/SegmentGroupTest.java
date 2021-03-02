@@ -24,26 +24,26 @@ class SegmentGroupTest {
     void testSplitOnlyKey() {
         final List<List<String>> result = splitMultipleSegmentGroups(List.of("key", "key"), "key");
         assertThat(result)
-            .hasSize(2)
-            .allMatch(List.of("key")::equals);
+                .hasSize(2)
+                .allMatch(List.of("key")::equals);
     }
 
     @Test
     void testSplitOnlyOneGroup() {
         final List<List<String>> result = splitMultipleSegmentGroups(List.of("key", "content 1", "content 2"), "key");
         assertThat(result)
-            .hasSize(1)
-            .contains(List.of("key", "content 1", "content 2"));
+                .hasSize(1)
+                .contains(List.of("key", "content 1", "content 2"));
     }
 
     @Test
     void testSplitMultipleGroups() {
         final List<List<String>> result = splitMultipleSegmentGroups(
-            List.of("key", "content 1", "key", "content 2"), "key");
+                List.of("key", "content 1", "key", "content 2"), "key");
         assertThat(result)
-            .hasSize(2)
-            .contains(
-                List.of("key", "content 1"),
-                List.of("key", "content 2"));
+                .hasSize(2)
+                .contains(
+                        List.of("key", "content 1"),
+                        List.of("key", "content 2"));
     }
 }

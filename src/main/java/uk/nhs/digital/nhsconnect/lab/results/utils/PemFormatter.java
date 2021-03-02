@@ -13,7 +13,8 @@ public final class PemFormatter {
     private static final int BODY_GROUP = 2;
     private static final int FOOTER_GROUP = 3;
 
-    private PemFormatter() { }
+    private PemFormatter() {
+    }
 
     /**
      * Different methods of importing the certificates (application.yml, ENV, Cloud secret) can affect whitespace
@@ -35,9 +36,9 @@ public final class PemFormatter {
         final String footer = matcher.group(FOOTER_GROUP).strip();
 
         body = Arrays.stream(body.split("\\s+"))
-            .map(String::strip)
-            .filter(StringUtils::isNotBlank)
-            .collect(Collectors.joining("\n"));
+                .map(String::strip)
+                .filter(StringUtils::isNotBlank)
+                .collect(Collectors.joining("\n"));
 
         return String.join("\n", header, body, footer);
     }

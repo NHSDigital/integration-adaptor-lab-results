@@ -18,8 +18,8 @@ public enum FreeTextType {
 
     public static FreeTextType fromCode(final String code) {
         return Arrays.stream(FreeTextType.values())
-            .filter(c -> c.qualifier.equals(code))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("No free text type for '" + code + "'"));
+                .filter(c -> c.qualifier.equals(code))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No free text type for '" + code + "'"));
     }
 }

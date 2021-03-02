@@ -28,12 +28,12 @@ public class DiagnosticReportDateIssued extends Segment {
     private final LocalDateTime dateIssued;
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER =
-        DateTimeFormatter.ofPattern("yyyMMddHHmm").withZone(TimestampService.UK_ZONE);
+            DateTimeFormatter.ofPattern("yyyMMddHHmm").withZone(TimestampService.UK_ZONE);
 
     public static DiagnosticReportDateIssued fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException("Can't create " + DiagnosticReportDateIssued.class.getSimpleName()
-                + " from " + edifactString);
+                    + " from " + edifactString);
         }
 
         final String[] keySplit = Split.byPlus(edifactString);
@@ -49,5 +49,6 @@ public class DiagnosticReportDateIssued extends Segment {
     }
 
     @Override
-    public void validate() throws EdifactValidationException { }
+    public void validate() throws EdifactValidationException {
+    }
 }

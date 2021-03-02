@@ -9,12 +9,12 @@ class MappingUtilsTest {
     @Test
     void testUnescape() {
         assertThat(MappingUtils.unescape("Unescape?+greengrocer?'s??"))
-            .isEqualTo("Unescape+greengrocer's?");
+                .isEqualTo("Unescape+greengrocer's?");
     }
 
     @Test
     void testUnescapeNull() {
         assertThatThrownBy(() -> MappingUtils.unescape(null))
-            .isExactlyInstanceOf(NullPointerException.class);
+                .isExactlyInstanceOf(NullPointerException.class);
     }
 }

@@ -33,21 +33,21 @@ public class MessageTrailer extends Segment {
         }
         if (sequenceNumber <= 0) {
             throw new EdifactValidationException(KEY
-                + ": Attribute sequenceNumber must be greater than or equal to zero");
+                    + ": Attribute sequenceNumber must be greater than or equal to zero");
         }
         if (numberOfSegments <= 1) {
             throw new EdifactValidationException(KEY
-                + ": Attribute numberOfSegments must be greater than or equal to 2");
+                    + ": Attribute numberOfSegments must be greater than or equal to 2");
         }
     }
 
     public static MessageTrailer fromString(String edifactString) {
         if (!edifactString.startsWith(KEY)) {
             throw new IllegalArgumentException("Can't create " + MessageTrailer.class.getSimpleName()
-                + " from " + edifactString);
+                    + " from " + edifactString);
         }
         final String[] split = Split.byPlus(edifactString);
         return new MessageTrailer(Integer.parseInt(split[1]))
-            .setSequenceNumber(Long.parseLong(split[2]));
+                .setSequenceNumber(Long.parseLong(split[2]));
     }
 }

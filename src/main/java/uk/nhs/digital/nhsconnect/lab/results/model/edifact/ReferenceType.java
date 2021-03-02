@@ -20,8 +20,8 @@ public enum ReferenceType {
 
     public static ReferenceType fromCode(final String code) {
         return Arrays.stream(ReferenceType.values())
-            .filter(referenceType -> referenceType.qualifier.equals(code))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("No reference qualifier for '" + code + "'"));
+                .filter(referenceType -> referenceType.qualifier.equals(code))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No reference qualifier for '" + code + "'"));
     }
 }

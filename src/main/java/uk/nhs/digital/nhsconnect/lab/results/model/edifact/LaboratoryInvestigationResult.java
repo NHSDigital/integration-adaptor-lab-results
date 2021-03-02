@@ -44,15 +44,15 @@ public class LaboratoryInvestigationResult extends Segment {
         final String deviatingResultIndicator = extractDeviatingResultIndicator(keySplit);
 
         return LaboratoryInvestigationResult.builder()
-            .measurementValue(measurementValue)
-            .measurementValueComparator(StringUtils.isNotBlank(measurementValueComparator)
-                    ? MeasurementValueComparator.fromCode(measurementValueComparator)
-                    : null)
-            .measurementUnit(measurementUnit)
-            .deviatingResultIndicator(StringUtils.isNotBlank(deviatingResultIndicator)
-                    ? DeviatingResultIndicator.fromCode(deviatingResultIndicator)
-                    : null)
-            .build();
+                .measurementValue(measurementValue)
+                .measurementValueComparator(StringUtils.isNotBlank(measurementValueComparator)
+                        ? MeasurementValueComparator.fromCode(measurementValueComparator)
+                        : null)
+                .measurementUnit(measurementUnit)
+                .deviatingResultIndicator(StringUtils.isNotBlank(deviatingResultIndicator)
+                        ? DeviatingResultIndicator.fromCode(deviatingResultIndicator)
+                        : null)
+                .build();
     }
 
     private static BigDecimal extractMeasurementValue(String[] keySplit) {

@@ -1,4 +1,5 @@
 package uk.nhs.digital.nhsconnect.lab.results.fixtures;
+
 import java.util.List;
 
 @SuppressWarnings("checkstyle:hideutilityclassconstructor")

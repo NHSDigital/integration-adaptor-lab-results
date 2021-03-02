@@ -17,19 +17,19 @@ public abstract class Section {
 
     protected List<String> extractSegments(final String key) {
         return edifactSegments.stream()
-            .map(String::strip)
-            .filter(segment -> segment.startsWith(key))
-            .collect(Collectors.toList());
+                .map(String::strip)
+                .filter(segment -> segment.startsWith(key))
+                .collect(Collectors.toList());
     }
 
     protected Optional<String> extractOptionalSegment(final String key) {
         return extractSegments(key).stream()
-            .findFirst();
+                .findFirst();
     }
 
     protected String extractSegment(final String key) {
         return extractOptionalSegment(key)
-            .orElseThrow(() -> new MissingSegmentException("EDIFACT section is missing segment " + key));
+                .orElseThrow(() -> new MissingSegmentException("EDIFACT section is missing segment " + key));
     }
 
 }

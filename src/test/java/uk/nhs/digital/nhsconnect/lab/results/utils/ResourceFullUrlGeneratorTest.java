@@ -31,8 +31,8 @@ class ResourceFullUrlGeneratorTest {
     @SuppressWarnings("ConstantConditions")
     void testMapToFullUrlNullResource() {
         assertThatThrownBy(() -> fullUrlGenerator.generate(null))
-            .isExactlyInstanceOf(NullPointerException.class)
-            .hasMessage("resource is marked non-null but is null");
+                .isExactlyInstanceOf(NullPointerException.class)
+                .hasMessage("resource is marked non-null but is null");
     }
 
     @Test
@@ -41,8 +41,8 @@ class ResourceFullUrlGeneratorTest {
         when(resource.getId()).thenReturn(null);
 
         assertThatThrownBy(() -> fullUrlGenerator.generate(resource))
-            .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessage("resource.id must be present and non-blank");
+                .isExactlyInstanceOf(IllegalArgumentException.class)
+                .hasMessage("resource.id must be present and non-blank");
     }
 
     @Test
@@ -51,8 +51,8 @@ class ResourceFullUrlGeneratorTest {
         when(resource.getId()).thenReturn("");
 
         assertThatThrownBy(() -> fullUrlGenerator.generate(resource))
-            .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessage("resource.id must be present and non-blank");
+                .isExactlyInstanceOf(IllegalArgumentException.class)
+                .hasMessage("resource.id must be present and non-blank");
     }
 
     @Test
@@ -61,7 +61,7 @@ class ResourceFullUrlGeneratorTest {
         when(resource.getId()).thenReturn("  \t \n ");
 
         assertThatThrownBy(() -> fullUrlGenerator.generate(resource))
-            .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessage("resource.id must be present and non-blank");
+                .isExactlyInstanceOf(IllegalArgumentException.class)
+                .hasMessage("resource.id must be present and non-blank");
     }
 }

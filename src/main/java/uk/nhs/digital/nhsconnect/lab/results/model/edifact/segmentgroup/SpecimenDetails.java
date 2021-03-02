@@ -44,49 +44,49 @@ public class SpecimenDetails extends SegmentGroup {
 
     @Getter(lazy = true)
     private final Optional<SequenceDetails> sequenceDetails =
-        extractOptionalSegment(SequenceDetails.KEY)
-            .map(SequenceDetails::fromString);
+            extractOptionalSegment(SequenceDetails.KEY)
+                    .map(SequenceDetails::fromString);
 
     @Getter(lazy = true)
     private final SpecimenCharacteristicType characteristicType =
-        SpecimenCharacteristicType.fromString(extractSegment(SpecimenCharacteristicType.KEY_QUALIFIER));
+            SpecimenCharacteristicType.fromString(extractSegment(SpecimenCharacteristicType.KEY_QUALIFIER));
 
     @Getter(lazy = true)
     private final Optional<Reference> serviceRequesterReference =
-        extractOptionalSegment(Reference.KEY + PLUS_SEPARATOR + ReferenceType.SPECIMEN_BY_REQUESTER.getQualifier())
-            .map(Reference::fromString);
+            extractOptionalSegment(Reference.KEY + PLUS_SEPARATOR + ReferenceType.SPECIMEN_BY_REQUESTER.getQualifier())
+                    .map(Reference::fromString);
 
     @Getter(lazy = true)
     private final Optional<Reference> serviceProviderReference =
-        extractOptionalSegment(Reference.KEY + PLUS_SEPARATOR + ReferenceType.SPECIMEN_BY_PROVIDER.getQualifier())
-            .map(Reference::fromString);
+            extractOptionalSegment(Reference.KEY + PLUS_SEPARATOR + ReferenceType.SPECIMEN_BY_PROVIDER.getQualifier())
+                    .map(Reference::fromString);
 
     @Getter(lazy = true)
     private final Optional<SpecimenQuantity> quantity =
-        extractOptionalSegment(SpecimenQuantity.KEY_QUALIFIER)
-            .map(SpecimenQuantity::fromString);
+            extractOptionalSegment(SpecimenQuantity.KEY_QUALIFIER)
+                    .map(SpecimenQuantity::fromString);
 
     @Getter(lazy = true)
     private final Optional<SpecimenCollectionDateTime> collectionDateTime =
-        extractOptionalSegment(SpecimenCollectionDateTime.KEY_QUALIFIER)
-            .map(SpecimenCollectionDateTime::fromString);
+            extractOptionalSegment(SpecimenCollectionDateTime.KEY_QUALIFIER)
+                    .map(SpecimenCollectionDateTime::fromString);
 
     @Getter(lazy = true)
     private final Optional<SpecimenCollectionReceiptDateTime> collectionReceiptDateTime =
-        extractOptionalSegment(SpecimenCollectionReceiptDateTime.KEY_QUALIFIER)
-            .map(SpecimenCollectionReceiptDateTime::fromString);
+            extractOptionalSegment(SpecimenCollectionReceiptDateTime.KEY_QUALIFIER)
+                    .map(SpecimenCollectionReceiptDateTime::fromString);
 
     @Getter(lazy = true)
     private final List<FreeTextSegment> freeTexts =
-        extractSegments(FreeTextSegment.KEY + PLUS_SEPARATOR + FreeTextType.SERVICE_PROVIDER_COMMENT.getQualifier())
-            .stream()
-            .map(FreeTextSegment::fromString)
-            .collect(Collectors.toList());
+            extractSegments(FreeTextSegment.KEY + PLUS_SEPARATOR + FreeTextType.SERVICE_PROVIDER_COMMENT.getQualifier())
+                    .stream()
+                    .map(FreeTextSegment::fromString)
+                    .collect(Collectors.toList());
 
     public static List<SpecimenDetails> createMultiple(@NonNull final List<String> edifactSegments) {
         return splitMultipleSegmentGroups(edifactSegments, INDICATOR).stream()
-            .map(SpecimenDetails::new)
-            .collect(Collectors.toList());
+                .map(SpecimenDetails::new)
+                .collect(Collectors.toList());
     }
 
     public SpecimenDetails(final List<String> edifactSegments) {

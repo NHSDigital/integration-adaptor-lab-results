@@ -16,7 +16,7 @@ public class RecipientMailboxIdMappingsTest {
     @BeforeEach
     void setUp() {
         recipientMailboxIdMappings = new RecipientMailboxIdMappings(
-            "REC1=test_mailbox REC2=test_mailbox REC3=test_mailbox");
+                "REC1=test_mailbox REC2=test_mailbox REC3=test_mailbox");
     }
 
     @Test
@@ -33,7 +33,7 @@ public class RecipientMailboxIdMappingsTest {
         final OutboundMeshMessage message = new MeshMessage().setRecipient("INVALID");
 
         final MeshRecipientUnknownException exception = assertThrows(MeshRecipientUnknownException.class,
-            () -> recipientMailboxIdMappings.getRecipientMailboxId(message));
+                () -> recipientMailboxIdMappings.getRecipientMailboxId(message));
 
         assertEquals("Couldn't decode recipient: INVALID", exception.getMessage());
     }
@@ -46,10 +46,10 @@ public class RecipientMailboxIdMappingsTest {
         final OutboundMeshMessage message = new MeshMessage();
 
         final MeshRecipientUnknownException exception = assertThrows(MeshRecipientUnknownException.class,
-            () -> recipientMailboxIdMappings.getRecipientMailboxId(message));
+                () -> recipientMailboxIdMappings.getRecipientMailboxId(message));
 
         assertEquals("LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS env var doesn't contain valid "
-            + "recipient to mailbox mapping", exception.getMessage());
+                + "recipient to mailbox mapping", exception.getMessage());
     }
 
 }

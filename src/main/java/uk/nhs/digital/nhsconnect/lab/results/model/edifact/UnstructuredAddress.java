@@ -29,7 +29,7 @@ public class UnstructuredAddress extends Segment {
     public static UnstructuredAddress fromString(final String edifact) {
         if (!edifact.startsWith(KEY)) {
             throw new IllegalArgumentException("Can't create " + UnstructuredAddress.class.getSimpleName()
-                + " from " + edifact);
+                    + " from " + edifact);
         }
         final String[] splitByPlus = Split.byPlus(edifact);
         final String[] splitByColon = Split.byColon(splitByPlus[INDEX_ADDRESS]);
@@ -54,8 +54,8 @@ public class UnstructuredAddress extends Segment {
     private String getAddressValue() {
         if (FORMAT.equals(format)) {
             return format
-                + COLON_SEPARATOR
-                + String.join(COLON_SEPARATOR, addressLines);
+                    + COLON_SEPARATOR
+                    + String.join(COLON_SEPARATOR, addressLines);
         }
         return "";
     }
@@ -66,7 +66,7 @@ public class UnstructuredAddress extends Segment {
         if (StringUtils.isBlank(postCode)) {
             if (addressLines == null || addressLines.length <= 1) {
                 throw new EdifactValidationException(KEY
-                    + ": attribute addressLines is required when postcode is missing");
+                        + ": attribute addressLines is required when postcode is missing");
             }
         }
 
@@ -74,7 +74,7 @@ public class UnstructuredAddress extends Segment {
         if (addressLines != null && addressLines.length > 0) {
             if (!FORMAT.equals(format)) {
                 throw new EdifactValidationException(KEY + ": format of '" + FORMAT
-                    + "' is required when postCode is missing");
+                        + "' is required when postCode is missing");
             }
             if (StringUtils.isBlank(addressLines[0])) {
                 throw new EdifactValidationException(KEY + ": attribute addressLines[0] is required");

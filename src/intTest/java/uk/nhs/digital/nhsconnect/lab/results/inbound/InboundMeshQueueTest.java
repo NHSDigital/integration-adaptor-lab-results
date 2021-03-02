@@ -33,9 +33,9 @@ public class InboundMeshQueueTest extends IntegrationBaseTest {
     @Test
     void whenMeshInboundQueueMessageIsReceivedThenMessageIsHandled() throws IOException, JMSException, JSONException {
         final MeshMessage meshMessage = new MeshMessage()
-            .setWorkflowId(WorkflowId.PATHOLOGY)
-            .setContent(new String(Files.readAllBytes(getEdifactResource().getFile().toPath())))
-            .setMeshMessageId("12345");
+                .setWorkflowId(WorkflowId.PATHOLOGY)
+                .setContent(new String(Files.readAllBytes(getEdifactResource().getFile().toPath())))
+                .setMeshMessageId("12345");
 
         sendToMeshInboundQueue(meshMessage);
 
@@ -45,16 +45,16 @@ public class InboundMeshQueueTest extends IntegrationBaseTest {
         final String expectedContent = new String(Files.readAllBytes(getFhirResource().getFile().toPath()));
 
         JSONAssert.assertEquals(
-            expectedContent,
-            content,
-            new CustomComparator(
-                JSONCompareMode.STRICT,
-                new Customization("meta.lastUpdated", IGNORE),
-                new Customization("identifier.value", IGNORE),
-                new Customization("entry[*].fullUrl", IGNORE),
-                new Customization("entry[*].resource.subject.reference", IGNORE),
-                new Customization("entry[*].resource.id", IGNORE)
-            )
+                expectedContent,
+                content,
+                new CustomComparator(
+                        JSONCompareMode.STRICT,
+                        new Customization("meta.lastUpdated", IGNORE),
+                        new Customization("identifier.value", IGNORE),
+                        new Customization("entry[*].fullUrl", IGNORE),
+                        new Customization("entry[*].resource.subject.reference", IGNORE),
+                        new Customization("entry[*].resource.id", IGNORE)
+                )
         );
     }
 }

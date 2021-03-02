@@ -30,7 +30,7 @@ class SequenceRepositoryTest {
     @Test
     void when_getNextKey_expect_correctValue() {
         when(mongoOperations.findAndModify(any(Query.class), any(Update.class), any(FindAndModifyOptions.class),
-            eq(OutboundSequenceId.class))).thenReturn(SEQUENCE_ID);
+                eq(OutboundSequenceId.class))).thenReturn(SEQUENCE_ID);
 
         assertThat(sequenceRepository.getNext(NEW_KEY)).isEqualTo(1L);
     }
@@ -38,13 +38,13 @@ class SequenceRepositoryTest {
     @Test
     void when_getMaxNextKey_expect_valueReset() {
         when(mongoOperations.findAndModify(
-            any(Query.class),
-            any(Update.class),
-            any(FindAndModifyOptions.class),
-            eq(OutboundSequenceId.class)
+                any(Query.class),
+                any(Update.class),
+                any(FindAndModifyOptions.class),
+                eq(OutboundSequenceId.class)
         ))
-            .thenReturn(new OutboundSequenceId(MAX_KEY, SequenceRepository.MAX_SEQUENCE_NUMBER))
-            .thenReturn(new OutboundSequenceId(MAX_KEY, SequenceRepository.MAX_SEQUENCE_NUMBER + 1));
+                .thenReturn(new OutboundSequenceId(MAX_KEY, SequenceRepository.MAX_SEQUENCE_NUMBER))
+                .thenReturn(new OutboundSequenceId(MAX_KEY, SequenceRepository.MAX_SEQUENCE_NUMBER + 1));
 
         assertThat(sequenceRepository.getNext(MAX_KEY)).isEqualTo(1L);
     }

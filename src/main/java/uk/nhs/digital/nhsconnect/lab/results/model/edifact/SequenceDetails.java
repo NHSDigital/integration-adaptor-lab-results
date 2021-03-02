@@ -20,7 +20,7 @@ public class SequenceDetails extends Segment {
     public static SequenceDetails fromString(final String edifact) {
         if (!edifact.startsWith(KEY)) {
             throw new IllegalArgumentException(
-                "Can't create " + SequenceDetails.class.getSimpleName() + " from " + edifact);
+                    "Can't create " + SequenceDetails.class.getSimpleName() + " from " + edifact);
         }
         final String sequenceValue = Split.byPlus(edifact)[2];
         return new SequenceDetails(sequenceValue);
@@ -35,7 +35,7 @@ public class SequenceDetails extends Segment {
     public void validate() throws EdifactValidationException {
         if (!number.matches("\\p{Alnum}{1,6}")) {
             throw new EdifactValidationException(
-                KEY + ": attribute number must be an alphanumeric string of up to 6 characters");
+                    KEY + ": attribute number must be an alphanumeric string of up to 6 characters");
         }
     }
 }

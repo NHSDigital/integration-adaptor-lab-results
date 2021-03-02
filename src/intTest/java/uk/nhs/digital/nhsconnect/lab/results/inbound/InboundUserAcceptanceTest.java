@@ -55,7 +55,7 @@ public class InboundUserAcceptanceTest extends IntegrationBaseTest {
         final String content = new String(Files.readAllBytes(getEdifactResource().getFile().toPath()));
 
         final OutboundMeshMessage outboundMeshMessage = OutboundMeshMessage.create(RECIPIENT,
-            WorkflowId.PATHOLOGY, content, null);
+                WorkflowId.PATHOLOGY, content, null);
 
         getLabResultsMeshClient().sendEdifactMessage(outboundMeshMessage);
 
@@ -69,16 +69,16 @@ public class InboundUserAcceptanceTest extends IntegrationBaseTest {
         final String messageBody = parseTextMessage(gpOutboundQueueMessage);
 
         JSONAssert.assertEquals(
-            expectedMessageBody,
-            messageBody,
-            new CustomComparator(
-                JSONCompareMode.STRICT,
-                new Customization("meta.lastUpdated", IGNORE),
-                new Customization("identifier.value", IGNORE),
-                new Customization("entry[*].fullUrl", IGNORE),
-                new Customization("entry[*].resource.subject.reference", IGNORE),
-                new Customization("entry[*].resource.id", IGNORE)
-            )
+                expectedMessageBody,
+                messageBody,
+                new CustomComparator(
+                        JSONCompareMode.STRICT,
+                        new Customization("meta.lastUpdated", IGNORE),
+                        new Customization("identifier.value", IGNORE),
+                        new Customization("entry[*].fullUrl", IGNORE),
+                        new Customization("entry[*].resource.subject.reference", IGNORE),
+                        new Customization("entry[*].resource.id", IGNORE)
+                )
         );
 
         //TODO: NIAD-1063 temporarily disabling NHSACK for v0.1
@@ -126,8 +126,8 @@ public class InboundUserAcceptanceTest extends IntegrationBaseTest {
         assertThat(edifactSegments).anySatisfy(segment -> assertThat(segment).startsWith("DTM+815"));
 
         return edifactSegments.stream()
-            .filter(segment -> !segment.startsWith("BGM+"))
-            .filter(segment -> !segment.startsWith("DTM+815"))
-            .collect(Collectors.toList());
+                .filter(segment -> !segment.startsWith("BGM+"))
+                .filter(segment -> !segment.startsWith("DTM+815"))
+                .collect(Collectors.toList());
     }
 }

@@ -78,10 +78,10 @@ class MeshInboundQueueServiceTest {
         expectedMeshMessage.setWorkflowId(WorkflowId.PATHOLOGY);
 
         assertAll(
-            () -> verify(correlationIdService).applyCorrelationId(CORRELATION_ID),
-            () -> verify(inboundMessageHandler).handle(expectedMeshMessage),
-            () -> verify(message).acknowledge(),
-            () -> verify(correlationIdService).resetCorrelationId()
+                () -> verify(correlationIdService).applyCorrelationId(CORRELATION_ID),
+                () -> verify(inboundMessageHandler).handle(expectedMeshMessage),
+                () -> verify(message).acknowledge(),
+                () -> verify(correlationIdService).resetCorrelationId()
         );
     }
 
@@ -93,9 +93,9 @@ class MeshInboundQueueServiceTest {
         assertThrows(Exception.class, () -> meshInboundQueueService.receive(message));
 
         assertAll(
-            () -> verify(correlationIdService).applyCorrelationId(CORRELATION_ID),
-            () -> verify(message, never()).acknowledge(),
-            () -> verify(correlationIdService).resetCorrelationId()
+                () -> verify(correlationIdService).applyCorrelationId(CORRELATION_ID),
+                () -> verify(message, never()).acknowledge(),
+                () -> verify(correlationIdService).resetCorrelationId()
         );
     }
 
@@ -108,9 +108,9 @@ class MeshInboundQueueServiceTest {
         assertThrows(RuntimeException.class, () -> meshInboundQueueService.receive(message));
 
         assertAll(
-            () -> verify(correlationIdService).applyCorrelationId(CORRELATION_ID),
-            () -> verify(message, never()).acknowledge(),
-            () -> verify(correlationIdService).resetCorrelationId()
+                () -> verify(correlationIdService).applyCorrelationId(CORRELATION_ID),
+                () -> verify(message, never()).acknowledge(),
+                () -> verify(correlationIdService).resetCorrelationId()
         );
     }
 
@@ -120,14 +120,14 @@ class MeshInboundQueueServiceTest {
         when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"" + SCREENING_WORKFLOW_ID + "\"}");
 
         final UnknownWorkflowException exception =
-            assertThrows(UnknownWorkflowException.class, () -> meshInboundQueueService.receive(message));
+                assertThrows(UnknownWorkflowException.class, () -> meshInboundQueueService.receive(message));
 
         assertEquals("Unknown workflow id: " + SCREENING_WORKFLOW_ID, exception.getMessage());
 
         assertAll(
-            () -> verify(correlationIdService).applyCorrelationId(CORRELATION_ID),
-            () -> verify(message, never()).acknowledge(),
-            () -> verify(correlationIdService).resetCorrelationId()
+                () -> verify(correlationIdService).applyCorrelationId(CORRELATION_ID),
+                () -> verify(message, never()).acknowledge(),
+                () -> verify(correlationIdService).resetCorrelationId()
         );
     }
 
@@ -142,10 +142,10 @@ class MeshInboundQueueServiceTest {
         expectedMeshMessage.setWorkflowId(WorkflowId.PATHOLOGY);
 
         assertAll(
-            () -> verify(correlationIdService, never()).applyCorrelationId(CORRELATION_ID),
-            () -> verify(inboundMessageHandler).handle(expectedMeshMessage),
-            () -> verify(message).acknowledge(),
-            () -> verify(correlationIdService).resetCorrelationId()
+                () -> verify(correlationIdService, never()).applyCorrelationId(CORRELATION_ID),
+                () -> verify(inboundMessageHandler).handle(expectedMeshMessage),
+                () -> verify(message).acknowledge(),
+                () -> verify(correlationIdService).resetCorrelationId()
         );
     }
 
@@ -157,14 +157,14 @@ class MeshInboundQueueServiceTest {
         when(timestampService.formatInISO(now)).thenReturn(messageSentTimestamp);
 
         final InboundMeshMessage inboundMeshMessage = InboundMeshMessage.create(WorkflowId.PATHOLOGY,
-            "ASDF", null, "ID123");
+                "ASDF", null, "ID123");
 
         meshInboundQueueService.publish(inboundMeshMessage);
 
         // the method parameter is modified so another copy is needed. Timestamp set to expected value
         final InboundMeshMessage expectedInboundMeshMessage = InboundMeshMessage.create(WorkflowId.PATHOLOGY,
-            "ASDF", messageSentTimestamp,
-            "ID123");
+                "ASDF", messageSentTimestamp,
+                "ID123");
         final String expectedStringMessage = objectMapper.writeValueAsString(expectedInboundMeshMessage);
         verify(jmsTemplate).send((String) isNull(), jmsMessageCreatorCaptor.capture());
         final MessageCreator messageCreator = jmsMessageCreatorCaptor.getValue();

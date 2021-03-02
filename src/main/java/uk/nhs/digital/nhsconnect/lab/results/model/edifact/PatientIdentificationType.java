@@ -16,8 +16,9 @@ public enum PatientIdentificationType {
 
     public static PatientIdentificationType fromCode(final String code) {
         return Arrays.stream(PatientIdentificationType.values())
-            .filter(patientIdentificationType -> patientIdentificationType.getCode().equals(code))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("No patientIdentificationType name for '" + code + "'"));
+                .filter(patientIdentificationType -> patientIdentificationType.getCode().equals(code))
+                .findFirst()
+                .orElseThrow(
+                        () -> new IllegalArgumentException("No patientIdentificationType name for '" + code + "'"));
     }
 }

@@ -20,8 +20,8 @@ class PersonDateOfBirthTest {
         final PersonDateOfBirth personDateOfBirth = PersonDateOfBirth.fromString(VALID_EDIFACT_CCYY);
 
         assertAll("fromString date of birth format CCYY",
-            () -> assertEquals(PersonDateOfBirth.KEY, personDateOfBirth.getKey()),
-            () -> assertEquals(VALID_FHIR_DOB_CCYY, personDateOfBirth.getDateOfBirth()));
+                () -> assertEquals(PersonDateOfBirth.KEY, personDateOfBirth.getKey()),
+                () -> assertEquals(VALID_FHIR_DOB_CCYY, personDateOfBirth.getDateOfBirth()));
     }
 
     @Test
@@ -29,8 +29,8 @@ class PersonDateOfBirthTest {
         final PersonDateOfBirth personDateOfBirth = PersonDateOfBirth.fromString(VALID_EDIFACT_CCYYMM);
 
         assertAll("fromString date of birth format CCYYMM",
-            () -> assertEquals(PersonDateOfBirth.KEY, personDateOfBirth.getKey()),
-            () -> assertEquals(VALID_FHIR_DOB_CCYYMM, personDateOfBirth.getDateOfBirth()));
+                () -> assertEquals(PersonDateOfBirth.KEY, personDateOfBirth.getKey()),
+                () -> assertEquals(VALID_FHIR_DOB_CCYYMM, personDateOfBirth.getDateOfBirth()));
     }
 
     @Test
@@ -38,14 +38,14 @@ class PersonDateOfBirthTest {
         final PersonDateOfBirth personDateOfBirth = PersonDateOfBirth.fromString(VALID_EDIFACT_CCYYMMDD);
 
         assertAll("fromString date of birth format CCYYMMDD",
-            () -> assertEquals(PersonDateOfBirth.KEY, personDateOfBirth.getKey()),
-            () -> assertEquals(VALID_FHIR_DOB_CCYYMMDD, personDateOfBirth.getDateOfBirth()));
+                () -> assertEquals(PersonDateOfBirth.KEY, personDateOfBirth.getKey()),
+                () -> assertEquals(VALID_FHIR_DOB_CCYYMMDD, personDateOfBirth.getDateOfBirth()));
     }
 
     @Test
     void testFromStringWithInvalidEdifactStringThrowsException() {
         final IllegalArgumentException exception =
-            assertThrows(IllegalArgumentException.class, () -> PersonDateOfBirth.fromString("wrong value"));
+                assertThrows(IllegalArgumentException.class, () -> PersonDateOfBirth.fromString("wrong value"));
 
         assertEquals("Can't create PersonDateOfBirth from wrong value", exception.getMessage());
     }
@@ -53,7 +53,7 @@ class PersonDateOfBirthTest {
     @Test
     void testFromStringWithInvalidDateFormatCodeThrowsException() {
         final UnsupportedOperationException exception = assertThrows(UnsupportedOperationException.class,
-            () -> PersonDateOfBirth.fromString("DTM+329:19911106:100'"));
+                () -> PersonDateOfBirth.fromString("DTM+329:19911106:100'"));
 
         assertEquals("DTM: Date format code 100 is not supported", exception.getMessage());
     }

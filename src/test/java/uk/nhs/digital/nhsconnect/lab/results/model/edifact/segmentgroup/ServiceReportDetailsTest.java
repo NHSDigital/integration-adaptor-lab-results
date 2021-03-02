@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ServiceReportDetailsTest {
     private static final LocalDateTime EXPECTED_DATE_TIME =
-        LocalDateTime.of(2020, 1, 28, 9, 57);
+            LocalDateTime.of(2020, 1, 28, 9, 57);
 
     @Test
     void testIndicator() {
@@ -28,74 +28,74 @@ class ServiceReportDetailsTest {
     @Test
     void testGetDiagnosticReportCode() {
         final var report = new ServiceReportDetails(List.of(
-            "ignore me",
-            "GIS+N",
-            "ignore me"
+                "ignore me",
+                "GIS+N",
+                "ignore me"
         ));
         assertThat(report.getCode())
-            .isNotNull()
-            .extracting(DiagnosticReportCode::getCode)
-            .isEqualTo("N");
+                .isNotNull()
+                .extracting(DiagnosticReportCode::getCode)
+                .isEqualTo("N");
     }
 
     @Test
     void testGetReferenceDiagnosticReport() {
         final var report = new ServiceReportDetails(List.of(
-            "ignore me",
-            "RFF+SRI:13/CH001137K/211010191093",
-            "ignore me"
+                "ignore me",
+                "RFF+SRI:13/CH001137K/211010191093",
+                "ignore me"
         ));
         var reportReference = assertThat(report.getReference()).isNotNull();
 
         reportReference
-            .extracting(Reference::getNumber)
-            .isEqualTo("13/CH001137K/211010191093");
+                .extracting(Reference::getNumber)
+                .isEqualTo("13/CH001137K/211010191093");
         reportReference
-            .extracting(Reference::getTarget)
-            .extracting(ReferenceType::getQualifier)
-            .isEqualTo("SRI");
+                .extracting(Reference::getTarget)
+                .extracting(ReferenceType::getQualifier)
+                .isEqualTo("SRI");
     }
 
     @Test
     void testGetDiagnosticReportStatus() {
         final var report = new ServiceReportDetails(List.of(
-            "ignore me",
-            "STS++UN",
-            "ignore me"
+                "ignore me",
+                "STS++UN",
+                "ignore me"
         ));
         assertThat(report.getStatus())
-            .isNotNull()
-            .extracting(DiagnosticReportStatus::getEvent)
-            .isEqualTo(ReportStatusCode.UNSPECIFIED);
+                .isNotNull()
+                .extracting(DiagnosticReportStatus::getEvent)
+                .isEqualTo(ReportStatusCode.UNSPECIFIED);
     }
 
     @Test
     void testGetDiagnosticReportDateIssued() {
         final var report = new ServiceReportDetails(List.of(
-            "ignore me",
-            "DTM+ISR:202001280957:203",
-            "ignore me"
+                "ignore me",
+                "DTM+ISR:202001280957:203",
+                "ignore me"
         ));
         var reportDateIssued = assertThat(report.getDateIssued()).isNotNull();
 
         reportDateIssued
-            .extracting(DiagnosticReportDateIssued::getDateIssued)
-            .isEqualTo(EXPECTED_DATE_TIME);
+                .extracting(DiagnosticReportDateIssued::getDateIssued)
+                .isEqualTo(EXPECTED_DATE_TIME);
     }
 
     @Test
     void testGetInvestigationSubject() {
         final var report = new ServiceReportDetails(List.of(
-            "ignore me",
-            "S06",
-            "investigation subject content",
-            "UNT+18+00000003",
-            "ignore me"
+                "ignore me",
+                "S06",
+                "investigation subject content",
+                "UNT+18+00000003",
+                "ignore me"
         ));
         assertThat(report.getSubject())
-            .isNotNull()
-            .extracting(InvestigationSubject::getEdifactSegments)
-            .isEqualTo(List.of("S06", "investigation subject content"));
+                .isNotNull()
+                .extracting(InvestigationSubject::getEdifactSegments)
+                .isEqualTo(List.of("S06", "investigation subject content"));
     }
 
     @Test
@@ -103,22 +103,22 @@ class ServiceReportDetailsTest {
     void testLazyGettersWhenMissing() {
         final var report = new ServiceReportDetails(List.of());
         assertAll(
-            () -> assertThatThrownBy(report::getCode)
-                .isExactlyInstanceOf(MissingSegmentException.class)
-                .hasMessage("EDIFACT section is missing segment GIS"),
-            () -> assertThatThrownBy(report::getReference)
-                .isExactlyInstanceOf(MissingSegmentException.class)
-                .hasMessage("EDIFACT section is missing segment RFF+SRI"),
-            () -> assertThatThrownBy(report::getDateIssued)
-                .isExactlyInstanceOf(MissingSegmentException.class)
-                .hasMessage("EDIFACT section is missing segment DTM+ISR"),
-            () -> assertThatThrownBy(report::getStatus)
-                .isExactlyInstanceOf(MissingSegmentException.class)
-                .hasMessage("EDIFACT section is missing segment STS"),
-            () -> assertThat(report.getSubject())
-                .isNotNull()
-                .extracting(InvestigationSubject::getEdifactSegments)
-                .isEqualTo(List.of())
+                () -> assertThatThrownBy(report::getCode)
+                        .isExactlyInstanceOf(MissingSegmentException.class)
+                        .hasMessage("EDIFACT section is missing segment GIS"),
+                () -> assertThatThrownBy(report::getReference)
+                        .isExactlyInstanceOf(MissingSegmentException.class)
+                        .hasMessage("EDIFACT section is missing segment RFF+SRI"),
+                () -> assertThatThrownBy(report::getDateIssued)
+                        .isExactlyInstanceOf(MissingSegmentException.class)
+                        .hasMessage("EDIFACT section is missing segment DTM+ISR"),
+                () -> assertThatThrownBy(report::getStatus)
+                        .isExactlyInstanceOf(MissingSegmentException.class)
+                        .hasMessage("EDIFACT section is missing segment STS"),
+                () -> assertThat(report.getSubject())
+                        .isNotNull()
+                        .extracting(InvestigationSubject::getEdifactSegments)
+                        .isEqualTo(List.of())
         );
     }
 }

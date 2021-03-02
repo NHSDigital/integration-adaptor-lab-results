@@ -12,8 +12,8 @@ public final class ActiveMqContainer extends GenericContainer<ActiveMqContainer>
 
     private ActiveMqContainer() {
         super(new ImageFromDockerfile()
-            .withFileFromPath("activemq.xml", Path.of("./activemq/activemq.xml"))
-            .withFileFromPath("Dockerfile", Path.of("./activemq/Dockerfile"))
+                .withFileFromPath("activemq.xml", Path.of("./activemq/activemq.xml"))
+                .withFileFromPath("Dockerfile", Path.of("./activemq/Dockerfile"))
         );
         addExposedPort(ACTIVEMQ_PORT);
     }

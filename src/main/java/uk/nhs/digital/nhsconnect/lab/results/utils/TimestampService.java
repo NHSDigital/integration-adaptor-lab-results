@@ -18,7 +18,7 @@ public class TimestampService {
 
     public String formatInISO(Instant timestamp) {
         return DateTimeFormatter.ISO_DATE_TIME
-            .withZone(TimestampService.UK_ZONE)
-            .format(timestamp);
+                .withZone(TimestampService.UK_ZONE)
+                .format(timestamp);
     }
 }

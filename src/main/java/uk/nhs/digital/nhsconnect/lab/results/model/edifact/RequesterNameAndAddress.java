@@ -32,7 +32,7 @@ public class RequesterNameAndAddress extends Segment {
     public static RequesterNameAndAddress fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException("Can't create " + RequesterNameAndAddress.class.getSimpleName()
-                + " from " + edifactString);
+                    + " from " + edifactString);
         }
 
         final String[] keySplit = Split.byPlus(edifactString);
@@ -41,9 +41,9 @@ public class RequesterNameAndAddress extends Segment {
         final String requesterName = keySplit[REQUESTER_NAME_INDEX_IN_EDIFACT_STRING];
 
         return new RequesterNameAndAddress(
-            identifier,
-            HealthcareRegistrationIdentificationCode.fromCode(code),
-            requesterName
+                identifier,
+                HealthcareRegistrationIdentificationCode.fromCode(code),
+                requesterName
         );
     }
 
@@ -60,7 +60,7 @@ public class RequesterNameAndAddress extends Segment {
 
         if (healthcareRegistrationIdentificationCode.getCode().isBlank()) {
             throw new EdifactValidationException(
-                KEY + ": Attribute code in healthcareRegistrationIdentificationCode is required");
+                    KEY + ": Attribute code in healthcareRegistrationIdentificationCode is required");
         }
 
         if (requesterName.isBlank()) {

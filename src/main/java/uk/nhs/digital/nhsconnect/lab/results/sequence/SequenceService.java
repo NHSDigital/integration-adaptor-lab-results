@@ -25,7 +25,7 @@ public class SequenceService {
     private void validateSenderAndRecipient(final String sender, final String recipient) {
         if (StringUtils.isBlank(sender) || StringUtils.isBlank(recipient)) {
             throw new SequenceException(
-                String.format("Sender or recipient not valid. Sender: %s, recipient: %s", sender, recipient)
+                    String.format("Sender or recipient not valid. Sender: %s, recipient: %s", sender, recipient)
             );
         }
     }

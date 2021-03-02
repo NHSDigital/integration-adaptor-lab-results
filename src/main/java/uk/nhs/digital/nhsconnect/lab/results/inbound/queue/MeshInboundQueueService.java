@@ -52,7 +52,7 @@ public class MeshInboundQueueService {
             final WorkflowId workflowId = meshMessage.getWorkflowId();
 
             LOGGER.info("Processing MeshMessageId={} with MeshWorkflowId={}", meshMessage.getMeshMessageId(),
-                workflowId);
+                    workflowId);
 
             if (WorkflowId.PATHOLOGY.equals(workflowId)) {
                 inboundMessageHandler.handle(meshMessage);

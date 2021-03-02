@@ -108,6 +108,7 @@ spotbugs {
 }
 
 checkstyle {
+	toolVersion = '8.41'
 	configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
 }
 

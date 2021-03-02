@@ -14,7 +14,7 @@ class DiagnosticReportStatusTest {
     @Test
     void testBuildWithNullEventThrowsException() {
         final NullPointerException exception =
-            assertThrows(NullPointerException.class, () -> DiagnosticReportStatus.builder().build());
+                assertThrows(NullPointerException.class, () -> DiagnosticReportStatus.builder().build());
 
         assertEquals("event is marked non-null but is null", exception.getMessage());
     }
@@ -24,16 +24,16 @@ class DiagnosticReportStatusTest {
         final DiagnosticReportStatus diagnosticReportStatus = DiagnosticReportStatus.fromString(VALID_EDIFACT);
 
         assertAll(
-            () -> assertEquals(KEY, diagnosticReportStatus.getKey()),
-            () -> assertEquals(ReportStatusCode.UNSPECIFIED, diagnosticReportStatus.getEvent()),
-            () -> assertEquals("Details", diagnosticReportStatus.getDetail())
+                () -> assertEquals(KEY, diagnosticReportStatus.getKey()),
+                () -> assertEquals(ReportStatusCode.UNSPECIFIED, diagnosticReportStatus.getEvent()),
+                () -> assertEquals("Details", diagnosticReportStatus.getDetail())
         );
     }
 
     @Test
     void testFromStringWithInvalidEdifactStringThrowsException() {
         final IllegalArgumentException exception =
-            assertThrows(IllegalArgumentException.class, () -> DiagnosticReportStatus.fromString("wrong value"));
+                assertThrows(IllegalArgumentException.class, () -> DiagnosticReportStatus.fromString("wrong value"));
 
         assertEquals("Can't create DiagnosticReportStatus from wrong value", exception.getMessage());
     }

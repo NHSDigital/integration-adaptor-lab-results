@@ -34,26 +34,26 @@ public class ServiceReportDetails extends SegmentGroup {
 
     @Getter(lazy = true)
     private final DiagnosticReportCode code =
-        DiagnosticReportCode.fromString(extractSegment(DiagnosticReportCode.KEY));
+            DiagnosticReportCode.fromString(extractSegment(DiagnosticReportCode.KEY));
 
     @Getter(lazy = true)
     private final Reference reference =
-        Reference.fromString(extractSegment(Reference.KEY + PLUS_SEPARATOR
-            + ReferenceType.DIAGNOSTIC_REPORT.getQualifier()));
+            Reference.fromString(extractSegment(Reference.KEY + PLUS_SEPARATOR
+                    + ReferenceType.DIAGNOSTIC_REPORT.getQualifier()));
 
     @Getter(lazy = true)
     private final DiagnosticReportStatus status =
-        DiagnosticReportStatus.fromString(extractSegment(DiagnosticReportStatus.KEY));
+            DiagnosticReportStatus.fromString(extractSegment(DiagnosticReportStatus.KEY));
 
     @Getter(lazy = true)
     private final DiagnosticReportDateIssued dateIssued =
-        DiagnosticReportDateIssued.fromString(extractSegment(DiagnosticReportDateIssued.KEY_QUALIFIER));
+            DiagnosticReportDateIssued.fromString(extractSegment(DiagnosticReportDateIssued.KEY_QUALIFIER));
 
     @Getter(lazy = true)
     private final InvestigationSubject subject = new InvestigationSubject(getEdifactSegments().stream()
-        .dropWhile(segment -> !segment.startsWith(InvestigationSubject.INDICATOR))
-        .takeWhile(segment -> !segment.startsWith(MessageTrailer.KEY))
-        .collect(toList()));
+            .dropWhile(segment -> !segment.startsWith(InvestigationSubject.INDICATOR))
+            .takeWhile(segment -> !segment.startsWith(MessageTrailer.KEY))
+            .collect(toList()));
 
     public ServiceReportDetails(final List<String> edifactSegments) {
         super(edifactSegments);

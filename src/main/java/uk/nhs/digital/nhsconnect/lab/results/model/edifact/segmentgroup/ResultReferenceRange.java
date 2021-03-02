@@ -35,14 +35,14 @@ public class ResultReferenceRange extends SegmentGroup {
 
     @Getter(lazy = true)
     private final Optional<FreeTextSegment> freeTexts =
-        extractOptionalSegment(FreeTextSegment.KEY + PLUS_SEPARATOR
-            + FreeTextType.REFERENCE_POPULATION_DEFINITION.getQualifier())
-            .map(FreeTextSegment::fromString);
+            extractOptionalSegment(FreeTextSegment.KEY + PLUS_SEPARATOR
+                    + FreeTextType.REFERENCE_POPULATION_DEFINITION.getQualifier())
+                    .map(FreeTextSegment::fromString);
 
     public static List<ResultReferenceRange> createMultiple(@NonNull final List<String> edifactSegments) {
         return splitMultipleSegmentGroups(edifactSegments, INDICATOR).stream()
-            .map(ResultReferenceRange::new)
-            .collect(toList());
+                .map(ResultReferenceRange::new)
+                .collect(toList());
     }
 
     public ResultReferenceRange(final List<String> edifactSegments) {

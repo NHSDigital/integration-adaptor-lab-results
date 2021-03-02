@@ -19,8 +19,8 @@ public enum Gender {
 
     public static Gender fromCode(final String code) {
         return Arrays.stream(Gender.values())
-            .filter(gender -> gender.code.equals(code))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("No gender name for '" + code + "'"));
+                .filter(gender -> gender.code.equals(code))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No gender name for '" + code + "'"));
     }
 }

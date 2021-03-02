@@ -15,7 +15,7 @@ class OrganizationMapperTest {
         final Message message = new Message(new ArrayList<>());
 
         assertThat(new OrganizationMapper().mapToPerformingOrganization(message))
-            .isExactlyInstanceOf(Organization.class);
+                .isExactlyInstanceOf(Organization.class);
     }
 
     @Test
@@ -23,7 +23,7 @@ class OrganizationMapperTest {
         final Message message = new Message(new ArrayList<>());
 
         assertThat(new OrganizationMapper().mapToRequestingOrganization(message))
-            .isExactlyInstanceOf(Organization.class);
+                .isExactlyInstanceOf(Organization.class);
     }
 
     @Test
@@ -31,6 +31,6 @@ class OrganizationMapperTest {
         final Message message = new Message(new ArrayList<>());
 
         assertThat(new OrganizationMapper().mapToSpecimenCollectingOrganization(message))
-            .isExactlyInstanceOf(Organization.class);
+                .isExactlyInstanceOf(Organization.class);
     }
 }

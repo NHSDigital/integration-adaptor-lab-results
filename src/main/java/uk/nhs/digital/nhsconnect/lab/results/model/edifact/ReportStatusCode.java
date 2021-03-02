@@ -1,10 +1,10 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
-import java.util.Arrays;
-
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Arrays;
 
 @Getter
 @RequiredArgsConstructor
@@ -16,9 +16,9 @@ public enum ReportStatusCode {
 
     public static ReportStatusCode fromCode(@NonNull String code) {
         return Arrays.stream(ReportStatusCode.values())
-            .filter(c -> code.equals(c.getCode()))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("No Report Status Code for '" + code + "'"));
+                .filter(c -> code.equals(c.getCode()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No Report Status Code for '" + code + "'"));
     }
 
 }

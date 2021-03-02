@@ -16,7 +16,7 @@ public class RecipientMailboxIdMappings {
 
     @Autowired
     public RecipientMailboxIdMappings(
-        @Value("${labresults.mesh.recipientToMailboxIdMappings}") String recipientToMailboxIdMappings
+            @Value("${labresults.mesh.recipientToMailboxIdMappings}") String recipientToMailboxIdMappings
     ) {
         this.recipientToMailboxIdMappings = recipientToMailboxIdMappings;
     }
@@ -33,15 +33,15 @@ public class RecipientMailboxIdMappings {
 
     private Map<String, String> createMappings() {
         return Stream.of(recipientToMailboxIdMappings.split(" "))
-            .map(row -> row.split("="))
-            .peek(this::validateMappings)
-            .collect(Collectors.toMap(row -> row[0].strip(), row -> row[1].strip()));
+                .map(row -> row.split("="))
+                .peek(this::validateMappings)
+                .collect(Collectors.toMap(row -> row[0].strip(), row -> row[1].strip()));
     }
 
     private void validateMappings(String[] rows) {
         if (rows.length < 2) {
             throw new MeshRecipientUnknownException("LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS "
-                + "env var doesn't contain valid recipient to mailbox mapping");
+                    + "env var doesn't contain valid recipient to mailbox mapping");
         }
     }
 }

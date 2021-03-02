@@ -19,8 +19,8 @@ public enum DateFormat {
 
     public static DateFormat fromCode(final String code) {
         return Arrays.stream(DateFormat.values())
-            .filter(dateFormat -> dateFormat.code.equals(code))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("No dateFormat name for '" + code + "'"));
+                .filter(dateFormat -> dateFormat.code.equals(code))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No dateFormat name for '" + code + "'"));
     }
 }

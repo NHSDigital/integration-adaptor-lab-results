@@ -49,7 +49,7 @@ public class PersonDateOfBirth extends Segment {
     public static PersonDateOfBirth fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException("Can't create " + PersonDateOfBirth.class.getSimpleName()
-                + " from " + edifactString);
+                    + " from " + edifactString);
         }
         final String input = Split.byPlus(edifactString)[1];
         final String dateOfBirth = Split.byColon(input)[1];
@@ -61,8 +61,8 @@ public class PersonDateOfBirth extends Segment {
             final String formattedFhirDate = getFormattedFhirDate(dateOfBirth, format);
 
             dateOfBirthBuilder
-                .dateOfBirth(formattedFhirDate)
-                .dateFormat(DateFormat.fromCode(format));
+                    .dateOfBirth(formattedFhirDate)
+                    .dateFormat(DateFormat.fromCode(format));
         }
 
         return dateOfBirthBuilder.build();

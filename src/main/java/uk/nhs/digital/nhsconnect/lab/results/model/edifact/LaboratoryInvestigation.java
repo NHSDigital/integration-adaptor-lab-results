@@ -31,7 +31,7 @@ public class LaboratoryInvestigation extends Segment {
     public static LaboratoryInvestigation fromString(String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException("Can't create " + LaboratoryInvestigation.class.getSimpleName()
-                + " from " + edifactString);
+                    + " from " + edifactString);
         }
 
         final String[] keySplit = Split.byPlus(edifactString);

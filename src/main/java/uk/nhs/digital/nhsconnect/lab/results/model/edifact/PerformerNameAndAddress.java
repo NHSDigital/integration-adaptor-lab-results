@@ -1,10 +1,9 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
-import org.apache.commons.lang3.StringUtils;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
@@ -32,7 +31,7 @@ public class PerformerNameAndAddress extends Segment {
     public static PerformerNameAndAddress fromString(String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException(
-                "Can't create " + PerformerNameAndAddress.class.getSimpleName() + " from " + edifactString
+                    "Can't create " + PerformerNameAndAddress.class.getSimpleName() + " from " + edifactString
             );
         }
 
@@ -45,16 +44,16 @@ public class PerformerNameAndAddress extends Segment {
             // if identifier is blank - organisation/department
             String performingOrganisationName = keySplit[PERFORMING_NAME_INDEX_IN_EDIFACT_STRING];
             return PerformerNameAndAddress.builder()
-                .performingOrganisationName(performingOrganisationName)
-                .build();
+                    .performingOrganisationName(performingOrganisationName)
+                    .build();
         } else {
             String performerCode = colonSplit[1];
             String performerName = keySplit[PERFORMING_NAME_INDEX_IN_EDIFACT_STRING];
             return PerformerNameAndAddress.builder()
-                .identifier(performerID)
-                .code(HealthcareRegistrationIdentificationCode.fromCode(performerCode))
-                .performerName(performerName)
-                .build();
+                    .identifier(performerID)
+                    .code(HealthcareRegistrationIdentificationCode.fromCode(performerCode))
+                    .performerName(performerName)
+                    .build();
         }
     }
 

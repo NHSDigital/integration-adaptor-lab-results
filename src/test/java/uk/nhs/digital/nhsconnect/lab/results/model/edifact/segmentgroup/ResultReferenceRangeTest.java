@@ -25,33 +25,33 @@ class ResultReferenceRangeTest {
     @Test
     void testGetRangeDetail() {
         final var range = new ResultReferenceRange(List.of(
-            "ignore me",
-            "RND+U+170+1100",
-            "ignore me"
+                "ignore me",
+                "RND+U+170+1100",
+                "ignore me"
         ));
         var rangeDetails = range.getDetails();
         assertThat(rangeDetails)
-            .isNotNull()
-            .extracting(RangeDetail::getLowerLimit)
-            .isEqualTo(BigDecimal.valueOf(EXPECTED_RANGE_LOWER_LIMIT));
+                .isNotNull()
+                .extracting(RangeDetail::getLowerLimit)
+                .isEqualTo(BigDecimal.valueOf(EXPECTED_RANGE_LOWER_LIMIT));
         assertThat(rangeDetails)
-            .isNotNull()
-            .extracting(RangeDetail::getUpperLimit)
-            .isEqualTo(BigDecimal.valueOf(EXPECTED_RANGE_UPPER_LIMIT));
+                .isNotNull()
+                .extracting(RangeDetail::getUpperLimit)
+                .isEqualTo(BigDecimal.valueOf(EXPECTED_RANGE_UPPER_LIMIT));
     }
 
     @Test
     void testGetReferencePopulationDefinitionFreeText() {
         final var range = new ResultReferenceRange(List.of(
-            "ignore me",
-            "FTX+RPD+++Equivocal",
-            "ignore me"
+                "ignore me",
+                "FTX+RPD+++Equivocal",
+                "ignore me"
         ));
         assertThat(range.getFreeTexts())
-            .isPresent()
-            .map(FreeTextSegment::getTexts)
-            .map(texts -> texts[0])
-            .contains("Equivocal");
+                .isPresent()
+                .map(FreeTextSegment::getTexts)
+                .map(texts -> texts[0])
+                .contains("Equivocal");
     }
 
     @Test
@@ -59,10 +59,10 @@ class ResultReferenceRangeTest {
     void testLazyGettersWhenMissing() {
         final var range = new ResultReferenceRange(List.of());
         assertAll(
-            () -> assertThatThrownBy(range::getDetails)
-                .isExactlyInstanceOf(MissingSegmentException.class)
-                .hasMessage("EDIFACT section is missing segment RND+U"),
-            () -> assertThat(range.getFreeTexts()).isEmpty()
+                () -> assertThatThrownBy(range::getDetails)
+                        .isExactlyInstanceOf(MissingSegmentException.class)
+                        .hasMessage("EDIFACT section is missing segment RND+U"),
+                () -> assertThat(range.getFreeTexts()).isEmpty()
         );
     }
 }

@@ -18,7 +18,7 @@ class PersonIdentificationTypeTest {
     @Test
     void testFromCodeForInvalidCodeThrowsException() {
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-            () -> PatientIdentificationType.fromCode("INVALID"));
+                () -> PatientIdentificationType.fromCode("INVALID"));
         assertEquals("No patientIdentificationType name for 'INVALID'", exception.getMessage());
     }
 }

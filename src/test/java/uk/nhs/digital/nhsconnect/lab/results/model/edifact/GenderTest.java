@@ -18,7 +18,7 @@ class GenderTest {
     @Test
     void testFromCodeForInvalidCodeThrowsException() {
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-            () -> Gender.fromCode("INVALID"));
+                () -> Gender.fromCode("INVALID"));
         assertEquals("No gender name for 'INVALID'", exception.getMessage());
     }
 }

@@ -33,7 +33,7 @@ public class SpecimenCollectionDateTime extends Segment {
     public static SpecimenCollectionDateTime fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException(
-                "Can't create " + SpecimenCollectionDateTime.class.getSimpleName() + " from " + edifactString);
+                    "Can't create " + SpecimenCollectionDateTime.class.getSimpleName() + " from " + edifactString);
         }
         final String input = Split.byPlus(edifactString)[1];
         final String collectionDateTime = Split.byColon(input)[1];
@@ -41,12 +41,12 @@ public class SpecimenCollectionDateTime extends Segment {
 
         if (isBlank(collectionDateTime) || isBlank(format)) {
             throw new IllegalArgumentException("Can't create " + SpecimenCollectionDateTime.class.getSimpleName()
-                + " from " + edifactString + " because of missing date-time and/or format definition");
+                    + " from " + edifactString + " because of missing date-time and/or format definition");
         }
         return SpecimenCollectionDateTime.builder()
-            .collectionDateTime(collectionDateTime)
-            .dateFormat(DateFormat.fromCode(format))
-            .build();
+                .collectionDateTime(collectionDateTime)
+                .dateFormat(DateFormat.fromCode(format))
+                .build();
     }
 
     @Override

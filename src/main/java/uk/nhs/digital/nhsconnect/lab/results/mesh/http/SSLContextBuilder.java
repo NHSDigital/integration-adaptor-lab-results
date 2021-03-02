@@ -50,9 +50,9 @@ public class SSLContextBuilder {
         tmf.init(ts);
 
         SSLContext sslContext = SSLContexts.custom()
-            .loadKeyMaterial(ks, meshConfig.getMailboxPassword().toCharArray())
-            .loadTrustMaterial(TrustSelfSignedStrategy.INSTANCE)
-            .build();
+                .loadKeyMaterial(ks, meshConfig.getMailboxPassword().toCharArray())
+                .loadTrustMaterial(TrustSelfSignedStrategy.INSTANCE)
+                .build();
 
         sslContext.init(keyManagerFactory.getKeyManagers(), tmf.getTrustManagers(), new SecureRandom());
 
@@ -62,23 +62,23 @@ public class SSLContextBuilder {
     @SneakyThrows
     private SSLContext noValidationSSLContext() {
         return SSLContexts.custom()
-            .loadKeyMaterial(buildKeyStore(meshConfig), meshConfig.getMailboxPassword().toCharArray())
-            .loadTrustMaterial(TrustAllStrategy.INSTANCE)
-            .build();
+                .loadKeyMaterial(buildKeyStore(meshConfig), meshConfig.getMailboxPassword().toCharArray())
+                .loadTrustMaterial(TrustAllStrategy.INSTANCE)
+                .build();
     }
 
     @SneakyThrows
     private static KeyStore buildKeyStore(MeshConfig meshConfig) {
         return EnvKeyStore.createFromPEMStrings(
-            meshConfig.getEndpointPrivateKey(),
-            meshConfig.getEndpointCert(),
-            meshConfig.getMailboxPassword()).keyStore();
+                meshConfig.getEndpointPrivateKey(),
+                meshConfig.getEndpointCert(),
+                meshConfig.getMailboxPassword()).keyStore();
     }
 
     @SneakyThrows
     private static KeyStore buildTrustStore(MeshConfig meshConfig) {
         return EnvKeyStore.createFromPEMStrings(
-            meshConfig.getSubCAcert(),
-            meshConfig.getMailboxPassword()).keyStore();
+                meshConfig.getSubCAcert(),
+                meshConfig.getMailboxPassword()).keyStore();
     }
 }

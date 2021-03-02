@@ -7,7 +7,7 @@ public class MeshApiConnectionException extends LabResultsBaseException {
 
     public MeshApiConnectionException(String description, HttpStatus expectedStatus, HttpStatus actualStatus) {
         super(description + " Expected status code: " + expectedStatus.value()
-            + ", but received: " + actualStatus.value());
+                + ", but received: " + actualStatus.value());
     }
 
     public MeshApiConnectionException(String description,
@@ -15,7 +15,7 @@ public class MeshApiConnectionException extends LabResultsBaseException {
                                       HttpStatus actualStatus,
                                       String content) {
         super(description + " Expected status code: " + expectedStatus.value()
-            + ", but received: " + actualStatus.value() + " with response content\n" + content);
+                + ", but received: " + actualStatus.value() + " with response content\n" + content);
     }
 
     public MeshApiConnectionException(String message) {

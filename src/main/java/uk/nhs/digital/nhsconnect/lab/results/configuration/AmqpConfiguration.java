@@ -52,7 +52,7 @@ public class AmqpConfiguration {
 
     private void configureDeserializationPolicy(AmqpProperties properties, JmsConnectionFactory factory) {
         JmsDefaultDeserializationPolicy deserializationPolicy =
-            (JmsDefaultDeserializationPolicy) factory.getDeserializationPolicy();
+                (JmsDefaultDeserializationPolicy) factory.getDeserializationPolicy();
 
         if (hasLength(properties.getDeserializationPolicy().getWhiteList())) {
             deserializationPolicy.setAllowList(properties.getDeserializationPolicy().getWhiteList());
@@ -65,7 +65,7 @@ public class AmqpConfiguration {
 
     private void configureRedeliveryPolicy(AmqpProperties properties, JmsConnectionFactory factory) {
         factory.setRedeliveryPolicy(new CustomRedeliveryPolicy(
-            properties.getMaxRedeliveries(), JmsMessageSupport.MODIFIED_FAILED_UNDELIVERABLE));
+                properties.getMaxRedeliveries(), JmsMessageSupport.MODIFIED_FAILED_UNDELIVERABLE));
     }
 
     static class CustomRedeliveryPolicy implements JmsRedeliveryPolicy {

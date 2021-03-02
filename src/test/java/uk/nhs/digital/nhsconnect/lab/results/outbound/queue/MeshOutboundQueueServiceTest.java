@@ -81,8 +81,8 @@ class MeshOutboundQueueServiceTest {
             meshOutboundQueueService.publish(outboundMeshMessage);
 
             assertAll(
-                () -> verify(outboundMeshMessage).setMessageSentTimestamp(TIMESTAMP),
-                () -> verify(jmsTemplate).send(eq("queue"), messageCreatorCaptor.capture())
+                    () -> verify(outboundMeshMessage).setMessageSentTimestamp(TIMESTAMP),
+                    () -> verify(jmsTemplate).send(eq("queue"), messageCreatorCaptor.capture())
             );
 
             final var mockSession = mock(Session.class);
@@ -94,8 +94,8 @@ class MeshOutboundQueueServiceTest {
             final Message result = messageCreatorCaptor.getValue().createMessage(mockSession);
 
             assertAll(
-                () -> verify(mockTextMessage).setStringProperty(JmsHeaders.CORRELATION_ID, "CorrelationID"),
-                () -> assertEquals(mockTextMessage, result)
+                    () -> verify(mockTextMessage).setStringProperty(JmsHeaders.CORRELATION_ID, "CorrelationID"),
+                    () -> assertEquals(mockTextMessage, result)
             );
         }
     }
@@ -116,10 +116,10 @@ class MeshOutboundQueueServiceTest {
             meshOutboundQueueService.receive(message);
 
             assertAll(
-                () -> verify(correlationIdService).applyCorrelationId("CorrelationID"),
-                () -> verify(meshClient).authenticate(),
-                () -> verify(meshClient).sendEdifactMessage(outboundMeshMessage),
-                () -> verify(correlationIdService).resetCorrelationId()
+                    () -> verify(correlationIdService).applyCorrelationId("CorrelationID"),
+                    () -> verify(meshClient).authenticate(),
+                    () -> verify(meshClient).sendEdifactMessage(outboundMeshMessage),
+                    () -> verify(correlationIdService).resetCorrelationId()
             );
         }
 
@@ -128,7 +128,7 @@ class MeshOutboundQueueServiceTest {
         void testReceiveFailsToApplyCorrelationId() {
             final var message = mock(Message.class);
             when(message.getStringProperty(JmsHeaders.CORRELATION_ID))
-                .thenThrow(new JMSException("Expected exception"));
+                    .thenThrow(new JMSException("Expected exception"));
             when(message.getBody(String.class)).thenReturn("Message Body");
 
             final var outboundMeshMessage = mock(OutboundMeshMessage.class);
@@ -137,10 +137,10 @@ class MeshOutboundQueueServiceTest {
             meshOutboundQueueService.receive(message);
 
             assertAll(
-                () -> verify(correlationIdService, never()).applyCorrelationId("CorrelationID"),
-                () -> verify(meshClient).authenticate(),
-                () -> verify(meshClient).sendEdifactMessage(outboundMeshMessage),
-                () -> verify(correlationIdService).resetCorrelationId()
+                    () -> verify(correlationIdService, never()).applyCorrelationId("CorrelationID"),
+                    () -> verify(meshClient).authenticate(),
+                    () -> verify(meshClient).sendEdifactMessage(outboundMeshMessage),
+                    () -> verify(correlationIdService).resetCorrelationId()
             );
         }
 
@@ -154,14 +154,14 @@ class MeshOutboundQueueServiceTest {
 
             final var outboundMeshMessage = mock(OutboundMeshMessage.class);
             when(objectMapper.readValue("Message Body", OutboundMeshMessage.class))
-                .thenThrow(new JsonMappingException("Expected exception"));
+                    .thenThrow(new JsonMappingException("Expected exception"));
 
             assertAll(
-                () -> assertThrows(JsonMappingException.class, () -> meshOutboundQueueService.receive(message)),
-                () -> verify(correlationIdService).applyCorrelationId("CorrelationID"),
-                () -> verify(meshClient, never()).authenticate(),
-                () -> verify(meshClient, never()).sendEdifactMessage(outboundMeshMessage),
-                () -> verify(correlationIdService).resetCorrelationId()
+                    () -> assertThrows(JsonMappingException.class, () -> meshOutboundQueueService.receive(message)),
+                    () -> verify(correlationIdService).applyCorrelationId("CorrelationID"),
+                    () -> verify(meshClient, never()).authenticate(),
+                    () -> verify(meshClient, never()).sendEdifactMessage(outboundMeshMessage),
+                    () -> verify(correlationIdService).resetCorrelationId()
             );
         }
     }

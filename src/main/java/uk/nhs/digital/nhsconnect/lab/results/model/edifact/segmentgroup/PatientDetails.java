@@ -31,13 +31,13 @@ public class PatientDetails extends SegmentGroup {
 
     @Getter(lazy = true)
     private final Optional<PersonDateOfBirth> dateOfBirth =
-        extractOptionalSegment(PersonDateOfBirth.KEY_QUALIFIER)
-            .map(PersonDateOfBirth::fromString);
+            extractOptionalSegment(PersonDateOfBirth.KEY_QUALIFIER)
+                    .map(PersonDateOfBirth::fromString);
 
     @Getter(lazy = true)
     private final Optional<PersonSex> sex =
-        extractOptionalSegment(PersonSex.KEY)
-            .map(PersonSex::fromString);
+            extractOptionalSegment(PersonSex.KEY)
+                    .map(PersonSex::fromString);
 
     public PatientDetails(final List<String> edifactSegments) {
         super(edifactSegments);

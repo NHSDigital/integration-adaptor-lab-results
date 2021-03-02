@@ -18,8 +18,8 @@ public enum MeasurementValueComparator {
 
     public static MeasurementValueComparator fromCode(String code) {
         return Arrays.stream(MeasurementValueComparator.values())
-            .filter(c -> c.code.equals(code))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("No measurement value comparator for '" + code + "'"));
+                .filter(c -> c.code.equals(code))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No measurement value comparator for '" + code + "'"));
     }
 }

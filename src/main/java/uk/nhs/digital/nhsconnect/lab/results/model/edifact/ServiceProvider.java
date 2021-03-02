@@ -25,7 +25,7 @@ public class ServiceProvider extends Segment {
     public static ServiceProvider fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY)) {
             throw new IllegalArgumentException("Can't create " + ServiceProvider.class.getSimpleName()
-                + " from " + edifactString);
+                    + " from " + edifactString);
         }
 
         final String[] keySplit = Split.byPlus(edifactString);

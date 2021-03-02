@@ -45,50 +45,50 @@ public class LabResult extends SegmentGroup {
 
     @Getter(lazy = true)
     private final DiagnosticReportCode reportCode =
-        DiagnosticReportCode.fromString(extractSegment(DiagnosticReportCode.KEY));
+            DiagnosticReportCode.fromString(extractSegment(DiagnosticReportCode.KEY));
 
     @Getter(lazy = true)
     private final LaboratoryInvestigation investigation =
-        LaboratoryInvestigation.fromString(extractSegment(LaboratoryInvestigation.KEY_QUALIFIER));
+            LaboratoryInvestigation.fromString(extractSegment(LaboratoryInvestigation.KEY_QUALIFIER));
 
     @Getter(lazy = true)
     private final Optional<SequenceDetails> sequenceDetails =
-        extractOptionalSegment(SequenceDetails.KEY)
-            .map(SequenceDetails::fromString);
+            extractOptionalSegment(SequenceDetails.KEY)
+                    .map(SequenceDetails::fromString);
 
     @Getter(lazy = true)
     private final Optional<LaboratoryInvestigationResult> investigationResult =
-        extractOptionalSegment(LaboratoryInvestigationResult.KEY_QUALIFIER)
-            .map(LaboratoryInvestigationResult::fromString);
+            extractOptionalSegment(LaboratoryInvestigationResult.KEY_QUALIFIER)
+                    .map(LaboratoryInvestigationResult::fromString);
 
     @Getter(lazy = true)
     private final Optional<TestStatus> testStatus =
-        extractOptionalSegment(TestStatus.KEY)
-            .map(TestStatus::fromString);
+            extractOptionalSegment(TestStatus.KEY)
+                    .map(TestStatus::fromString);
 
     @Getter(lazy = true)
     private final List<FreeTextSegment> freeTexts =
-        extractSegments(FreeTextSegment.KEY).stream()
-            .map(FreeTextSegment::fromString)
-            .filter(segment -> List.of(FreeTextType.SERVICE_PROVIDER_COMMENT, FreeTextType.INVESTIGATION_RESULT,
-                FreeTextType.COMPLEX_REFERENCE_RANGE).contains(segment.getType()))
-            .collect(toList());
+            extractSegments(FreeTextSegment.KEY).stream()
+                    .map(FreeTextSegment::fromString)
+                    .filter(segment -> List.of(FreeTextType.SERVICE_PROVIDER_COMMENT, FreeTextType.INVESTIGATION_RESULT,
+                            FreeTextType.COMPLEX_REFERENCE_RANGE).contains(segment.getType()))
+                    .collect(toList());
 
     @Getter(lazy = true)
     private final Reference sequenceReference = Reference.fromString(
-        extractSegment(Reference.KEY));
+            extractSegment(Reference.KEY));
 
     @Getter(lazy = true)
     private final List<ResultReferenceRange> resultReferenceRanges =
-        ResultReferenceRange.createMultiple(getEdifactSegments().stream()
-            .dropWhile(segment -> !segment.startsWith(ResultReferenceRange.INDICATOR))
-            .takeWhile(segment -> !segment.startsWith(MessageTrailer.KEY))
-            .collect(toList()));
+            ResultReferenceRange.createMultiple(getEdifactSegments().stream()
+                    .dropWhile(segment -> !segment.startsWith(ResultReferenceRange.INDICATOR))
+                    .takeWhile(segment -> !segment.startsWith(MessageTrailer.KEY))
+                    .collect(toList()));
 
     public static List<LabResult> createMultiple(@NonNull final List<String> edifactSegments) {
         return splitMultipleSegmentGroups(edifactSegments, INDICATOR).stream()
-            .map(LabResult::new)
-            .collect(toList());
+                .map(LabResult::new)
+                .collect(toList());
     }
 
     public LabResult(final List<String> edifactSegments) {

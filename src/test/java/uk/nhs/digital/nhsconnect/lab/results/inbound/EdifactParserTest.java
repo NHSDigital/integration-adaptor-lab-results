@@ -57,7 +57,7 @@ class EdifactParserTest {
 
         // trailing empty string because we split by apostrophe and there's a trailing apostrophe
         verify(interchangeFactory).createInterchange(
-            List.of(EdifactFixtures.EDIFACT_HEADER, EdifactFixtures.EDIFACT_TRAILER, ""));
+                List.of(EdifactFixtures.EDIFACT_HEADER, EdifactFixtures.EDIFACT_TRAILER, ""));
     }
 
     @Test
@@ -71,9 +71,9 @@ class EdifactParserTest {
         when(interchangeFactory.createInterchange(any())).thenReturn(interchange);
 
         assertThatThrownBy(() ->
-            edifactParser.parse(String.join("\n", EdifactFixtures.TRAILER_BEFORE_HEADER_EDIFACT)))
-            .isInstanceOf(MessagesParsingException.class)
-            .hasMessage("Error parsing messages");
+                edifactParser.parse(String.join("\n", EdifactFixtures.TRAILER_BEFORE_HEADER_EDIFACT)))
+                .isInstanceOf(MessagesParsingException.class)
+                .hasMessage("Error parsing messages");
     }
 
     @Test
@@ -87,9 +87,9 @@ class EdifactParserTest {
         when(interchangeFactory.createInterchange(any())).thenReturn(interchange);
 
         assertThatThrownBy(() ->
-            edifactParser.parse(String.join("\n", EdifactFixtures.MISMATCH_MESSAGE_TRAILER_HEADER_EDIFACT)))
-            .isInstanceOf(MessagesParsingException.class)
-            .hasMessage("Error parsing messages");
+                edifactParser.parse(String.join("\n", EdifactFixtures.MISMATCH_MESSAGE_TRAILER_HEADER_EDIFACT)))
+                .isInstanceOf(MessagesParsingException.class)
+                .hasMessage("Error parsing messages");
     }
 
     @Test

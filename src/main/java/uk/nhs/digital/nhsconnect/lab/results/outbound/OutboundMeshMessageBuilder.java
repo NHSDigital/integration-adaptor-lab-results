@@ -29,25 +29,25 @@ public class OutboundMeshMessageBuilder {
             List<MessageProcessingResult> messageProcessingResults) {
         //TODO NIAD-1063: one of IAF, IAP, IRA
         return new MeshMessage()
-            .setWorkflowId(getOutboundWorkflowId(workflowId))
-            .setRecipient(interchange.getInterchangeHeader().getSender())
-            .setContent("TODO NIAD-1063");
+                .setWorkflowId(getOutboundWorkflowId(workflowId))
+                .setRecipient(interchange.getInterchangeHeader().getSender())
+                .setContent("TODO NIAD-1063");
     }
 
     public OutboundMeshMessage buildNhsAck(WorkflowId workflowId, InterchangeParsingException exception) {
         //TODO NIAD-1063: IAI
         return new MeshMessage()
-            .setWorkflowId(getOutboundWorkflowId(workflowId))
-            .setRecipient(exception.getSender())
-            .setContent("TODO NIAD-1063");
+                .setWorkflowId(getOutboundWorkflowId(workflowId))
+                .setRecipient(exception.getSender())
+                .setContent("TODO NIAD-1063");
     }
 
     public OutboundMeshMessage buildNhsAck(WorkflowId workflowId, MessagesParsingException exception) {
         //TODO NIAD-1063: IRM
         return new MeshMessage()
-            .setWorkflowId(getOutboundWorkflowId(workflowId))
-            .setRecipient(exception.getSender())
-            .setContent("TODO NIAD-1063");
+                .setWorkflowId(getOutboundWorkflowId(workflowId))
+                .setRecipient(exception.getSender())
+                .setContent("TODO NIAD-1063");
     }
 
     private WorkflowId getOutboundWorkflowId(WorkflowId workflowId) {

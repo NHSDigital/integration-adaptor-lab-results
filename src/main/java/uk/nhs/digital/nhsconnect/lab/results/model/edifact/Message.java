@@ -14,27 +14,27 @@ public class Message extends Section {
 
     @Getter(lazy = true)
     private final MessageHeader messageHeader =
-        MessageHeader.fromString(extractSegment(MessageHeader.KEY));
+            MessageHeader.fromString(extractSegment(MessageHeader.KEY));
 
     @Getter(lazy = true)
     private final HealthAuthorityNameAndAddress healthAuthorityNameAndAddress =
-        HealthAuthorityNameAndAddress.fromString(extractSegment(HealthAuthorityNameAndAddress.KEY_QUALIFIER));
+            HealthAuthorityNameAndAddress.fromString(extractSegment(HealthAuthorityNameAndAddress.KEY_QUALIFIER));
 
     @Getter(lazy = true)
     private final List<InvolvedParty> involvedParties = InvolvedParty.createMultiple(getEdifactSegments().stream()
-        .dropWhile(segment -> !segment.startsWith(InvolvedParty.INDICATOR))
-        .takeWhile(segment -> !segment.startsWith(ServiceReportDetails.INDICATOR))
-        .collect(toList()));
+            .dropWhile(segment -> !segment.startsWith(InvolvedParty.INDICATOR))
+            .takeWhile(segment -> !segment.startsWith(ServiceReportDetails.INDICATOR))
+            .collect(toList()));
 
     @Getter(lazy = true)
     private final ServiceReportDetails serviceReportDetails = new ServiceReportDetails(getEdifactSegments().stream()
-        .dropWhile(segment -> !segment.startsWith(ServiceReportDetails.INDICATOR))
-        .takeWhile(segment -> !segment.startsWith(MessageTrailer.KEY))
-        .collect(toList()));
+            .dropWhile(segment -> !segment.startsWith(ServiceReportDetails.INDICATOR))
+            .takeWhile(segment -> !segment.startsWith(MessageTrailer.KEY))
+            .collect(toList()));
 
     @Getter(lazy = true)
     private final MessageTrailer messageTrailer =
-        MessageTrailer.fromString(extractSegment(MessageTrailer.KEY));
+            MessageTrailer.fromString(extractSegment(MessageTrailer.KEY));
 
     @Getter
     @Setter
@@ -46,17 +46,17 @@ public class Message extends Section {
 
     public String findFirstGpCode() {
         return extractOptionalSegment(GpNameAndAddress.KEY_QUALIFIER)
-            .stream()
-            .map(GpNameAndAddress::fromString)
-            .map(GpNameAndAddress::getIdentifier)
-            .findFirst()
-            .orElse(DEFAULT_GP_CODE);
+                .stream()
+                .map(GpNameAndAddress::fromString)
+                .map(GpNameAndAddress::getIdentifier)
+                .findFirst()
+                .orElse(DEFAULT_GP_CODE);
     }
 
     @Override
     public String toString() {
         return String.format("Message{SIS: %s, SMS: %s}",
-            getInterchange().getInterchangeHeader().getSequenceNumber(),
-            getMessageHeader().getSequenceNumber());
+                getInterchange().getInterchangeHeader().getSequenceNumber(),
+                getMessageHeader().getSequenceNumber());
     }
 }

@@ -22,87 +22,87 @@ class InvolvedPartyTest {
     @Test
     void testGetPerformingOrganisationNameAndAddress() {
         final var involvedParty = new InvolvedParty(List.of(
-            "ignore me",
-            "NAD+SLA+++ST JAMES?'S UNIVERSITY HOSPITAL",
-            "ignore me"
+                "ignore me",
+                "NAD+SLA+++ST JAMES?'S UNIVERSITY HOSPITAL",
+                "ignore me"
         ));
         assertThat(involvedParty.getPerformerNameAndAddress())
-            .isPresent()
-            .map(PerformerNameAndAddress::getPerformingOrganisationName)
-            .contains("ST JAMES?'S UNIVERSITY HOSPITAL");
+                .isPresent()
+                .map(PerformerNameAndAddress::getPerformingOrganisationName)
+                .contains("ST JAMES?'S UNIVERSITY HOSPITAL");
     }
 
     @Test
     void testGetRequesterNameAndAddress() {
         final var involvedParty = new InvolvedParty(List.of(
-            "ignore me",
-            "NAD+PO+G3380314:900++SCOTT",
-            "ignore me"
+                "ignore me",
+                "NAD+PO+G3380314:900++SCOTT",
+                "ignore me"
         ));
         var requesterNameAndAddress = involvedParty.getRequesterNameAndAddress();
         assertThat(requesterNameAndAddress)
-            .isPresent()
-            .map(RequesterNameAndAddress::getRequesterName)
-            .hasValue("SCOTT");
+                .isPresent()
+                .map(RequesterNameAndAddress::getRequesterName)
+                .hasValue("SCOTT");
         assertThat(requesterNameAndAddress)
-            .isPresent()
-            .map(RequesterNameAndAddress::getHealthcareRegistrationIdentificationCode)
-            .hasValue(HealthcareRegistrationIdentificationCode.GP);
+                .isPresent()
+                .map(RequesterNameAndAddress::getHealthcareRegistrationIdentificationCode)
+                .hasValue(HealthcareRegistrationIdentificationCode.GP);
         assertThat(requesterNameAndAddress)
-            .isPresent()
-            .map(RequesterNameAndAddress::getIdentifier)
-            .hasValue("G3380314");
+                .isPresent()
+                .map(RequesterNameAndAddress::getIdentifier)
+                .hasValue("G3380314");
     }
 
     @Test
     void testGetMessageRecipientNameAndAddress() {
         final var involvedParty = new InvolvedParty(List.of(
-            "ignore me",
-            "NAD+MR+G3380314:900++SCOTT",
-            "ignore me"
+                "ignore me",
+                "NAD+MR+G3380314:900++SCOTT",
+                "ignore me"
         ));
         var recipientNameAndAddress = involvedParty.getRecipientNameAndAddress();
         assertThat(recipientNameAndAddress)
-            .isPresent()
-            .map(MessageRecipientNameAndAddress::getMessageRecipientName)
-            .hasValue("SCOTT");
+                .isPresent()
+                .map(MessageRecipientNameAndAddress::getMessageRecipientName)
+                .hasValue("SCOTT");
         assertThat(recipientNameAndAddress)
-            .isPresent()
-            .map(MessageRecipientNameAndAddress::getHealthcareRegistrationIdentificationCode)
-            .hasValue(HealthcareRegistrationIdentificationCode.GP);
+                .isPresent()
+                .map(MessageRecipientNameAndAddress::getHealthcareRegistrationIdentificationCode)
+                .hasValue(HealthcareRegistrationIdentificationCode.GP);
         assertThat(recipientNameAndAddress)
-            .isPresent()
-            .map(MessageRecipientNameAndAddress::getIdentifier)
-            .hasValue("G3380314");
+                .isPresent()
+                .map(MessageRecipientNameAndAddress::getIdentifier)
+                .hasValue("G3380314");
     }
 
     @Test
     void testGetPartnerAgreedIdentification() {
         final var involvedParty = new InvolvedParty(List.of(
-            "ignore me",
-            "RFF+AHI:agreed ID",
-            "ignore me"
+                "ignore me",
+                "RFF+AHI:agreed ID",
+                "ignore me"
         ));
         var partnerAgreedId = involvedParty.getPartnerAgreedId();
         assertThat(partnerAgreedId)
-            .isPresent()
-            .map(Reference::getTarget)
-            .map(ReferenceType::getQualifier)
-            .contains("AHI");
+                .isPresent()
+                .map(Reference::getTarget)
+                .map(ReferenceType::getQualifier)
+                .contains("AHI");
         assertThat(partnerAgreedId)
-            .isPresent()
-            .map(Reference::getNumber)
-            .contains("agreed ID");
+                .isPresent()
+                .map(Reference::getNumber)
+                .contains("agreed ID");
     }
 
     @Test
     void testGetServiceProvider() {
         final var involvedParty = new InvolvedParty(List.of(
-            "ignore me",
-            "SPR+ORG",
-            "ignore me"
+                "ignore me",
+                "SPR+ORG",
+                "ignore me"
         ));
         assertThat(involvedParty.getServiceProvider().getServiceProviderCode())
-            .isEqualTo(ServiceProviderCode.ORGANISATION);
+                .isEqualTo(ServiceProviderCode.ORGANISATION);
     }
 }

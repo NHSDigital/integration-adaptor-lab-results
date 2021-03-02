@@ -5,7 +5,8 @@ import org.hl7.fhir.dstu3.model.OperationOutcome;
 
 public final class OperationOutcomeUtils {
 
-    private OperationOutcomeUtils() { }
+    private OperationOutcomeUtils() {
+    }
 
     public static OperationOutcome createFromMessage(String message) {
         return createFromMessage(message, OperationOutcome.IssueType.UNKNOWN);

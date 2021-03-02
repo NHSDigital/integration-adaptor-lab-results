@@ -40,9 +40,9 @@ class EdifactToFhirServiceTest {
         final Bundle bundle = service.convertToFhir(message);
 
         assertAll(
-            () -> assertThat(bundle).isSameAs(generatedBundle),
-            () -> verifyNoInteractions(pathologyRecord),
-            () -> verifyNoInteractions(generatedBundle)
+                () -> assertThat(bundle).isSameAs(generatedBundle),
+                () -> verifyNoInteractions(pathologyRecord),
+                () -> verifyNoInteractions(generatedBundle)
         );
     }
 }

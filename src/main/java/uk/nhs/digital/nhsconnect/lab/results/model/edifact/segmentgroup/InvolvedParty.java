@@ -36,31 +36,31 @@ public class InvolvedParty extends SegmentGroup {
 
     @Getter(lazy = true)
     private final Optional<PerformerNameAndAddress> performerNameAndAddress =
-        extractOptionalSegment(PerformerNameAndAddress.KEY_QUALIFIER)
-            .map(PerformerNameAndAddress::fromString);
+            extractOptionalSegment(PerformerNameAndAddress.KEY_QUALIFIER)
+                    .map(PerformerNameAndAddress::fromString);
 
     @Getter(lazy = true)
     private final Optional<RequesterNameAndAddress> requesterNameAndAddress =
-        extractOptionalSegment(RequesterNameAndAddress.KEY_QUALIFIER)
-            .map(RequesterNameAndAddress::fromString);
+            extractOptionalSegment(RequesterNameAndAddress.KEY_QUALIFIER)
+                    .map(RequesterNameAndAddress::fromString);
 
     @Getter(lazy = true)
     private final Optional<MessageRecipientNameAndAddress> recipientNameAndAddress =
-        extractOptionalSegment(MessageRecipientNameAndAddress.KEY_QUALIFIER)
-            .map(MessageRecipientNameAndAddress::fromString);
+            extractOptionalSegment(MessageRecipientNameAndAddress.KEY_QUALIFIER)
+                    .map(MessageRecipientNameAndAddress::fromString);
 
     @Getter(lazy = true)
     private final Optional<Reference> partnerAgreedId =
-        extractOptionalSegment(Reference.KEY + PLUS_SEPARATOR + ReferenceType.PARTNER_AGREED_ID.getQualifier())
-            .map(Reference::fromString);
+            extractOptionalSegment(Reference.KEY + PLUS_SEPARATOR + ReferenceType.PARTNER_AGREED_ID.getQualifier())
+                    .map(Reference::fromString);
 
     @Getter(lazy = true)
     private final ServiceProvider serviceProvider = ServiceProvider.fromString(extractSegment(ServiceProvider.KEY));
 
     public static List<InvolvedParty> createMultiple(@NonNull final List<String> edifactSegments) {
         return splitMultipleSegmentGroups(edifactSegments, INDICATOR).stream()
-            .map(InvolvedParty::new)
-            .collect(toList());
+                .map(InvolvedParty::new)
+                .collect(toList());
     }
 
     public InvolvedParty(final List<String> edifactSegments) {

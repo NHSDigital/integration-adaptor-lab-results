@@ -19,16 +19,16 @@ class GpNameAndAddressTest {
     void testValidateEmptyIdentifier() {
         final GpNameAndAddress emptyIdentifier = new GpNameAndAddress("", "x");
         assertThatThrownBy(emptyIdentifier::validate)
-            .isExactlyInstanceOf(EdifactValidationException.class)
-            .hasMessage("NAD: Attribute identifier is required");
+                .isExactlyInstanceOf(EdifactValidationException.class)
+                .hasMessage("NAD: Attribute identifier is required");
     }
 
     @Test
     void testValidateEmptyCode() {
         final GpNameAndAddress emptyCode = new GpNameAndAddress("x", "");
         assertThatThrownBy(emptyCode::validate)
-            .isExactlyInstanceOf(EdifactValidationException.class)
-            .hasMessage("NAD: Attribute code is required");
+                .isExactlyInstanceOf(EdifactValidationException.class)
+                .hasMessage("NAD: Attribute code is required");
     }
 
     @Test
@@ -38,7 +38,7 @@ class GpNameAndAddressTest {
         assertThat(fromString.getIdentifier()).isEqualTo(gpNameAndAddress.getIdentifier());
         assertThat(fromString.getCode()).isEqualTo(gpNameAndAddress.getCode());
         assertThatThrownBy(() -> GpNameAndAddress.fromString("wrong value"))
-            .isExactlyInstanceOf(IllegalArgumentException.class);
+                .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

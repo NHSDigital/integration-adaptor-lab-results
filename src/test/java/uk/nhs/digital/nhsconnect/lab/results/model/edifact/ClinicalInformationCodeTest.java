@@ -14,8 +14,8 @@ class ClinicalInformationCodeTest {
         var edifactString = "CIN+";
 
         assertThatThrownBy(() -> ClinicalInformationCode.fromString(edifactString).validate())
-            .isInstanceOf(EdifactValidationException.class)
-            .hasMessage("CIN: Clinical Information Code is required");
+                .isInstanceOf(EdifactValidationException.class)
+                .hasMessage("CIN: Clinical Information Code is required");
     }
 
     @Test
@@ -23,18 +23,18 @@ class ClinicalInformationCodeTest {
         var edifactString = "CIN+UN";
 
         var clinicalInformationCode = ClinicalInformationCode.builder()
-            .code("UN")
-            .build();
+                .code("UN")
+                .build();
 
         assertThat(ClinicalInformationCode.fromString(edifactString))
-            .usingRecursiveComparison()
-            .isEqualTo(clinicalInformationCode);
+                .usingRecursiveComparison()
+                .isEqualTo(clinicalInformationCode);
     }
 
     @Test
     void testFromStringWithInvalidInput() {
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-            () -> ClinicalInformationCode.fromString("wrong value"));
+                () -> ClinicalInformationCode.fromString("wrong value"));
 
         assertEquals("Can't create ClinicalInformationCode from wrong value", exception.getMessage());
     }

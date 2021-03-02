@@ -22,7 +22,7 @@ public class ClinicalInformationCode extends Segment {
     public static ClinicalInformationCode fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY)) {
             throw new IllegalArgumentException("Can't create " + ClinicalInformationCode.class.getSimpleName()
-                + " from " + edifactString);
+                    + " from " + edifactString);
         }
         final String[] keySplit = Split.byPlus(edifactString);
         final String code = keySplit[1];

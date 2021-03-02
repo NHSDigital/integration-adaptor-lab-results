@@ -41,17 +41,17 @@ public class InterchangeTrailer extends Segment {
     public static InterchangeTrailer fromString(String edifactString) {
         if (!edifactString.startsWith(KEY)) {
             throw new IllegalArgumentException("Can't create " + InterchangeTrailer.class.getSimpleName()
-                + " from " + edifactString);
+                    + " from " + edifactString);
         }
 
         final var split = Split.byPlus(edifactString);
 
         return InterchangeTrailer.builder()
-            .sequenceNumber(
-                split.length > SEQUENCE_NUMBER_INDEX ? parseLong(split[SEQUENCE_NUMBER_INDEX]) : null)
-            .numberOfMessages(
-                split.length > NUMBER_OF_MESSAGES_INDEX ? parseInt(split[NUMBER_OF_MESSAGES_INDEX]) : null)
-            .build();
+                .sequenceNumber(
+                        split.length > SEQUENCE_NUMBER_INDEX ? parseLong(split[SEQUENCE_NUMBER_INDEX]) : null)
+                .numberOfMessages(
+                        split.length > NUMBER_OF_MESSAGES_INDEX ? parseInt(split[NUMBER_OF_MESSAGES_INDEX]) : null)
+                .build();
     }
 
     private static Long parseLong(String longString) {

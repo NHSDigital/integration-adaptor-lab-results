@@ -49,12 +49,12 @@ class SchedulerTimestampRepositoryExtensionTest {
         when(timestampService.getCurrentTimestamp()).thenReturn(timestamp);
 
         final boolean updated = schedulerTimestampRepositoryExtensions.updateTimestamp(
-            SCHEDULER_TYPE, timestamp, SECONDS);
+                SCHEDULER_TYPE, timestamp, SECONDS);
         final var expected = new SchedulerTimestamp(SCHEDULER_TYPE, timestamp);
 
         assertAll(
-            () -> assertThat(updated).isFalse(),
-            () -> verify(mongoOperations).save(expected, MESH_TIMESTAMP_COLLECTION_NAME)
+                () -> assertThat(updated).isFalse(),
+                () -> verify(mongoOperations).save(expected, MESH_TIMESTAMP_COLLECTION_NAME)
         );
     }
 
@@ -66,7 +66,7 @@ class SchedulerTimestampRepositoryExtensionTest {
         when(mongoOperations.save(any(), eq(MESH_TIMESTAMP_COLLECTION_NAME))).thenThrow(exception);
 
         final boolean updated = schedulerTimestampRepositoryExtensions.updateTimestamp(
-            SCHEDULER_TYPE, Instant.now(), SECONDS);
+                SCHEDULER_TYPE, Instant.now(), SECONDS);
 
         assertThat(updated).isFalse();
     }
@@ -79,7 +79,7 @@ class SchedulerTimestampRepositoryExtensionTest {
         when(mongoOperations.save(any(), eq(MESH_TIMESTAMP_COLLECTION_NAME))).thenThrow(exception);
 
         final boolean updated = schedulerTimestampRepositoryExtensions.updateTimestamp(
-            SCHEDULER_TYPE, Instant.now(), SECONDS);
+                SCHEDULER_TYPE, Instant.now(), SECONDS);
 
         assertThat(updated).isFalse();
     }
@@ -89,12 +89,12 @@ class SchedulerTimestampRepositoryExtensionTest {
         when(mongoOperations.count(any(Query.class), eq(MESH_TIMESTAMP_COLLECTION_NAME))).thenReturn(1L);
 
         when(mongoOperations.updateFirst(any(Query.class), any(UpdateDefinition.class), any(String.class)))
-            .thenReturn(updateResult);
+                .thenReturn(updateResult);
         when(updateResult.getModifiedCount()).thenReturn(1L);
         when(timestampService.getCurrentTimestamp()).thenReturn(Instant.now());
 
         final boolean updated = schedulerTimestampRepositoryExtensions.updateTimestamp(
-            SCHEDULER_TYPE, Instant.now(), SECONDS);
+                SCHEDULER_TYPE, Instant.now(), SECONDS);
 
         assertThat(updated).isTrue();
     }
@@ -104,12 +104,12 @@ class SchedulerTimestampRepositoryExtensionTest {
         when(mongoOperations.count(any(Query.class), eq(MESH_TIMESTAMP_COLLECTION_NAME))).thenReturn(2L);
 
         when(mongoOperations.updateFirst(any(Query.class), any(UpdateDefinition.class), any(String.class)))
-            .thenReturn(updateResult);
+                .thenReturn(updateResult);
         when(updateResult.getModifiedCount()).thenReturn(1L);
         when(timestampService.getCurrentTimestamp()).thenReturn(Instant.now());
 
         final boolean updated = schedulerTimestampRepositoryExtensions.updateTimestamp(
-            SCHEDULER_TYPE, Instant.now(), SECONDS);
+                SCHEDULER_TYPE, Instant.now(), SECONDS);
 
         assertThat(updated).isTrue();
     }
@@ -119,12 +119,12 @@ class SchedulerTimestampRepositoryExtensionTest {
         when(mongoOperations.count(any(Query.class), eq(MESH_TIMESTAMP_COLLECTION_NAME))).thenReturn(1L);
 
         when(mongoOperations.updateFirst(any(Query.class), any(UpdateDefinition.class), any(String.class)))
-            .thenReturn(updateResult);
+                .thenReturn(updateResult);
         when(updateResult.getModifiedCount()).thenReturn(0L);
         when(timestampService.getCurrentTimestamp()).thenReturn(Instant.now());
 
         final boolean updated = schedulerTimestampRepositoryExtensions.updateTimestamp(
-            SCHEDULER_TYPE, Instant.now(), SECONDS);
+                SCHEDULER_TYPE, Instant.now(), SECONDS);
 
         assertThat(updated).isFalse();
     }

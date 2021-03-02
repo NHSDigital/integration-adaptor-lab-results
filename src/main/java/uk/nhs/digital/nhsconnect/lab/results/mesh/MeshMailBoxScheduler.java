@@ -32,6 +32,6 @@ public class MeshMailBoxScheduler {
 
     private boolean updateTimestamp(long seconds) {
         return schedulerTimestampRepository.updateTimestamp(
-            SCHEDULER_TYPE, timestampService.getCurrentTimestamp(), seconds);
+                SCHEDULER_TYPE, timestampService.getCurrentTimestamp(), seconds);
     }
 }

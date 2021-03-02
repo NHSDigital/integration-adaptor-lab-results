@@ -9,7 +9,8 @@ public final class Split {
     private static final char FIELD_TERMINATOR = '+';
     private static final char SUB_FIELD_TERMINATOR = ':';
 
-    private Split() { }
+    private Split() {
+    }
 
     public static String[] bySegmentTerminator(String input) {
         return splitString(input, SEGMENT_TERMINATOR);

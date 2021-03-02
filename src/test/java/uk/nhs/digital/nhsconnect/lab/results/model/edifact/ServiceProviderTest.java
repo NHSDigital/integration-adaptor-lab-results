@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ServiceProviderTest {
 
     private final ServiceProvider serviceProvider = new ServiceProvider(
-        ServiceProviderCode.ORGANISATION
+            ServiceProviderCode.ORGANISATION
     );
 
     @Test
@@ -20,8 +20,8 @@ class ServiceProviderTest {
     @Test
     void when_edifactStringIsPassed_expect_returnAServiceProviderObject() {
         assertThat(serviceProvider)
-            .usingRecursiveComparison()
-            .isEqualTo(ServiceProvider.fromString("SPR+ORG"));
+                .usingRecursiveComparison()
+                .isEqualTo(ServiceProvider.fromString("SPR+ORG"));
     }
 
     @Test

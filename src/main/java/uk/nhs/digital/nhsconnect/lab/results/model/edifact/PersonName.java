@@ -43,14 +43,14 @@ public class PersonName extends Segment {
     public void validate() throws EdifactValidationException {
         if (isBlank(nhsNumber) && patientIdentificationType == null && isBlank(surname)) {
             throw new EdifactValidationException(KEY + ": At least one of patient identification and person "
-                + "name details are required");
+                    + "name details are required");
         }
     }
 
     public static PersonName fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException("Can't create " + PersonName.class.getSimpleName()
-                + " from " + edifactString);
+                    + " from " + edifactString);
         }
 
         final String nhsNumber = extractNhsNumber(edifactString);
@@ -59,17 +59,17 @@ public class PersonName extends Segment {
 
         if (isBlank(nhsNumber) && patientIdentificationType == null && isBlank(surname)) {
             throw new EdifactValidationException(KEY + ": At least one of patient identification and person name "
-                + "details are required");
+                    + "details are required");
         }
 
         return PersonName.builder()
-            .nhsNumber(nhsNumber)
-            .patientIdentificationType(patientIdentificationType)
-            .surname(surname)
-            .firstForename(extractNamePart(FIRST_NAME_QUALIFIER, edifactString))
-            .title(extractNamePart(TITLE_QUALIFIER, edifactString))
-            .secondForename(extractNamePart(MIDDLE_NAME_QUALIFIER, edifactString))
-            .build();
+                .nhsNumber(nhsNumber)
+                .patientIdentificationType(patientIdentificationType)
+                .surname(surname)
+                .firstForename(extractNamePart(FIRST_NAME_QUALIFIER, edifactString))
+                .title(extractNamePart(TITLE_QUALIFIER, edifactString))
+                .secondForename(extractNamePart(MIDDLE_NAME_QUALIFIER, edifactString))
+                .build();
     }
 
     private static String extractNhsNumber(final String edifactString) {
@@ -90,10 +90,10 @@ public class PersonName extends Segment {
 
     private static String extractNamePart(final String qualifier, final String text) {
         return Arrays.stream(Split.byPlus(text))
-            .filter(value -> value.startsWith(qualifier))
-            .map(value -> Split.byColon(value)[1])
-            .findFirst()
-            .orElse(null);
+                .filter(value -> value.startsWith(qualifier))
+                .map(value -> Split.byColon(value)[1])
+                .findFirst()
+                .orElse(null);
     }
 
 }

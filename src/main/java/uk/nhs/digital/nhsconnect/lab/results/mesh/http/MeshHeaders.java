@@ -40,7 +40,7 @@ public class MeshHeaders {
 
     public Header[] createMinimalHeaders() {
         final List<BasicHeader> authorization = List.of(
-            new BasicHeader("Authorization", new MeshAuthorizationToken(meshConfig).getValue()));
+                new BasicHeader("Authorization", new MeshAuthorizationToken(meshConfig).getValue()));
         return Stream.concat(OS_HEADERS.stream(), authorization.stream())
                 .toArray(Header[]::new);
     }

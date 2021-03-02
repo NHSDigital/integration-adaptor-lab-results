@@ -22,7 +22,7 @@ public class InterchangeHeader extends Segment {
 
     protected static final String KEY = "UNB";
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyMMdd:HHmm")
-        .withZone(TimestampService.UK_ZONE);
+            .withZone(TimestampService.UK_ZONE);
     public static final long MAX_INTERCHANGE_SEQUENCE = 99_999_999L;
 
     private static final int SENDER_INDEX = 2;
@@ -38,19 +38,19 @@ public class InterchangeHeader extends Segment {
     public static InterchangeHeader fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY)) {
             throw new IllegalArgumentException("Can't create " + InterchangeHeader.class.getSimpleName()
-                + " from " + edifactString);
+                    + " from " + edifactString);
         }
 
         final var split = Split.byPlus(edifactString);
 
         return InterchangeHeader.builder()
-            .sender(SENDER_INDEX < split.length ? split[SENDER_INDEX] : null)
-            .recipient(RECIPIENT_INDEX < split.length ? split[RECIPIENT_INDEX] : null)
-            .sequenceNumber(SEQUENCE_NUMBER_INDEX < split.length ? parseLong(split[SEQUENCE_NUMBER_INDEX]) : null)
-            .translationTime(TRANSLATION_TIME_INDEX < split.length
-                ? getTranslationTime(split[TRANSLATION_TIME_INDEX])
-                : null)
-            .build();
+                .sender(SENDER_INDEX < split.length ? split[SENDER_INDEX] : null)
+                .recipient(RECIPIENT_INDEX < split.length ? split[RECIPIENT_INDEX] : null)
+                .sequenceNumber(SEQUENCE_NUMBER_INDEX < split.length ? parseLong(split[SEQUENCE_NUMBER_INDEX]) : null)
+                .translationTime(TRANSLATION_TIME_INDEX < split.length
+                        ? getTranslationTime(split[TRANSLATION_TIME_INDEX])
+                        : null)
+                .build();
     }
 
     @Override
@@ -74,7 +74,7 @@ public class InterchangeHeader extends Segment {
         }
         if (getSequenceNumber() < 1 || getSequenceNumber() > MAX_INTERCHANGE_SEQUENCE) {
             throw new EdifactValidationException(
-                getKey() + ": Attribute sequenceNumber must be between 1 and " + MAX_INTERCHANGE_SEQUENCE);
+                    getKey() + ": Attribute sequenceNumber must be between 1 and " + MAX_INTERCHANGE_SEQUENCE);
         }
     }
 
@@ -95,8 +95,8 @@ public class InterchangeHeader extends Segment {
         }
         try {
             var translationTime = ZonedDateTime.parse(
-                translationTimeStr,
-                DateTimeFormatter.ofPattern("yyMMdd:HHmm").withZone(TimestampService.UK_ZONE));
+                    translationTimeStr,
+                    DateTimeFormatter.ofPattern("yyMMdd:HHmm").withZone(TimestampService.UK_ZONE));
             return translationTime.toInstant();
         } catch (Exception ex) {
             throw new EdifactValidationException(KEY + ": Error parsing time", ex);

@@ -16,7 +16,7 @@ public class MeshAuthorizationToken {
     private final String hash;
 
     public MeshAuthorizationToken(MeshConfig meshConfig, Instant timestamp, Nonce nonce,
-        AuthorizationHashGenerator authorizationHashGenerator) {
+                                  AuthorizationHashGenerator authorizationHashGenerator) {
         final String prefix = MESSAGE_TYPE + meshConfig.getMailboxId();
         final String currentTimeFormatted = new TokenTimestamp(timestamp).getValue();
         this.data = String.join(":", prefix, nonce.getValue(), Nonce.COUNT, currentTimeFormatted);

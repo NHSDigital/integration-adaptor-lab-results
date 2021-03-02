@@ -118,10 +118,10 @@ public abstract class IntegrationBaseTest {
 
     protected void waitForCondition(Supplier<Boolean> supplier) {
         await()
-            .atMost(WAIT_FOR_IN_SECONDS, SECONDS)
-            .pollInterval(POLL_INTERVAL_MS, MILLISECONDS)
-            .pollDelay(POLL_DELAY_MS, MILLISECONDS)
-            .until(supplier::get);
+                .atMost(WAIT_FOR_IN_SECONDS, SECONDS)
+                .pollInterval(POLL_INTERVAL_MS, MILLISECONDS)
+                .pollDelay(POLL_DELAY_MS, MILLISECONDS)
+                .until(supplier::get);
     }
 
     protected void clearMeshMailboxes() {
@@ -150,18 +150,18 @@ public abstract class IntegrationBaseTest {
     private MeshClient buildMeshClientForLabResultsMailbox() {
         // getting this from config is
         final String labResultsMailboxId = recipientMailboxIdMappings.getRecipientMailboxId(
-            new MeshMessage().setRecipient("XX11"));
+                new MeshMessage().setRecipient("XX11"));
         final String gpMailboxId = meshConfig.getMailboxId();
         final RecipientMailboxIdMappings mockRecipientMailboxIdMappings = mock(RecipientMailboxIdMappings.class);
         when(mockRecipientMailboxIdMappings.getRecipientMailboxId(any(OutboundMeshMessage.class)))
-            .thenReturn(gpMailboxId);
+                .thenReturn(gpMailboxId);
         // getters perform a transformation
         final String endpointCert = (String) FieldUtils.readField(meshConfig, "endpointCert", true);
         final String endpointPrivateKey = (String) FieldUtils.readField(meshConfig, "endpointPrivateKey", true);
         final String subCaCert = (String) FieldUtils.readField(meshConfig, "subCAcert", true);
         final MeshConfig labResultsMailboxConfig = new MeshConfig(labResultsMailboxId, meshConfig.getMailboxPassword(),
-            meshConfig.getSharedKey(), meshConfig.getHost(), meshConfig.getCertValidation(), endpointCert,
-            endpointPrivateKey, subCaCert);
+                meshConfig.getSharedKey(), meshConfig.getHost(), meshConfig.getCertValidation(), endpointCert,
+                endpointPrivateKey, subCaCert);
         final MeshHeaders meshHeaders = new MeshHeaders(labResultsMailboxConfig);
         final MeshRequests meshRequests = new MeshRequests(labResultsMailboxConfig, meshHeaders);
         return new MeshClient(meshRequests, mockRecipientMailboxIdMappings, meshHttpClientBuilder);
@@ -180,17 +180,17 @@ public abstract class IntegrationBaseTest {
     protected <T> T waitFor(Supplier<T> supplier) {
         var dataToReturn = new AtomicReference<T>();
         await()
-            .atMost(WAIT_FOR_IN_SECONDS, SECONDS)
-            .pollInterval(POLL_INTERVAL_MS, MILLISECONDS)
-            .pollDelay(POLL_DELAY_MS, MILLISECONDS)
-            .until(() -> {
-                var data = supplier.get();
-                if (data != null) {
-                    dataToReturn.set(data);
-                    return true;
-                }
-                return false;
-            });
+                .atMost(WAIT_FOR_IN_SECONDS, SECONDS)
+                .pollInterval(POLL_INTERVAL_MS, MILLISECONDS)
+                .pollDelay(POLL_DELAY_MS, MILLISECONDS)
+                .until(() -> {
+                    var data = supplier.get();
+                    if (data != null) {
+                        dataToReturn.set(data);
+                        return true;
+                    }
+                    return false;
+                });
 
         return dataToReturn.get();
     }

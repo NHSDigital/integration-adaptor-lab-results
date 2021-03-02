@@ -29,7 +29,7 @@ public class FreeTextSegment extends Segment {
     public static FreeTextSegment fromString(final String edifact) {
         if (!edifact.startsWith(KEY)) {
             throw new IllegalArgumentException(
-                "Can't create " + FreeTextSegment.class.getSimpleName() + " from " + edifact);
+                    "Can't create " + FreeTextSegment.class.getSimpleName() + " from " + edifact);
         }
 
         final String[] split = Split.byPlus(edifact);
@@ -39,13 +39,13 @@ public class FreeTextSegment extends Segment {
         final String[] freeTexts = Split.byColon(freeTextComponent);
         if (freeTexts.length > MAXIMUM_FREE_TEXTS) {
             throw new IllegalArgumentException(
-                "Can't create " + FreeTextSegment.class.getSimpleName() + " from " + edifact
-                    + " because too many free texts");
+                    "Can't create " + FreeTextSegment.class.getSimpleName() + " from " + edifact
+                            + " because too many free texts");
         }
 
         final var texts = Arrays.stream(freeTexts)
-            .filter(line -> !StringUtils.isBlank(line))
-            .toArray(String[]::new);
+                .filter(line -> !StringUtils.isBlank(line))
+                .toArray(String[]::new);
         return new FreeTextSegment(FreeTextType.fromCode(typeCode), texts);
     }
 
@@ -58,12 +58,12 @@ public class FreeTextSegment extends Segment {
     public void validate() throws EdifactValidationException {
         if (texts.length == 0 || texts[0].isBlank()) {
             throw new EdifactValidationException(KEY + PLUS_SEPARATOR + type.getQualifier()
-                + ": At least one free text must be given.");
+                    + ": At least one free text must be given.");
         }
 
         if (texts.length > MAXIMUM_FREE_TEXTS) {
             throw new EdifactValidationException(KEY + PLUS_SEPARATOR + type.getQualifier()
-                + ": At most " + MAXIMUM_FREE_TEXTS + " free texts may be given.");
+                    + ": At most " + MAXIMUM_FREE_TEXTS + " free texts may be given.");
         }
     }
 }

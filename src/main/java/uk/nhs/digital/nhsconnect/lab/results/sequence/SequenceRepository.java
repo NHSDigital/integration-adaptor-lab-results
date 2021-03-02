@@ -32,10 +32,10 @@ public class SequenceRepository {
 
     private Long increment(final String key, final Long maxSequenceNumber) {
         return Objects.requireNonNull(mongoOperations.findAndModify(
-            query(where(KEY).is(key)),
-            new Update().inc(SEQUENCE_NUMBER, 1),
-            options().returnNew(true).upsert(true),
-            OutboundSequenceId.class
+                query(where(KEY).is(key)),
+                new Update().inc(SEQUENCE_NUMBER, 1),
+                options().returnNew(true).upsert(true),
+                OutboundSequenceId.class
         )).getSequenceNumber() % maxSequenceNumber;
     }
 }

@@ -18,7 +18,7 @@ class DateFormatTest {
     @Test
     void testFromCodeForInvalidCodeThrowsException() {
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-            () -> DateFormat.fromCode("INVALID"));
+                () -> DateFormat.fromCode("INVALID"));
         assertEquals("No dateFormat name for 'INVALID'", exception.getMessage());
     }
 }

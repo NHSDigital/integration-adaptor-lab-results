@@ -18,22 +18,22 @@ class SpecimenCharacteristicTypeTest {
     @Test
     void testFromStringWithInvalidEdifactStringThrowsException() {
         assertThatThrownBy(() -> SpecimenCharacteristicType.fromString("wrong value"))
-            .isExactlyInstanceOf(IllegalArgumentException.class);
+                .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void testValidationEmptyString() {
         SpecimenCharacteristicType emptyFreeText = new SpecimenCharacteristicType(StringUtils.EMPTY);
         assertThatThrownBy(emptyFreeText::validate)
-            .isInstanceOf(EdifactValidationException.class)
-            .hasMessage("SPC: Attribute typeOfSpecimen is blank or missing");
+                .isInstanceOf(EdifactValidationException.class)
+                .hasMessage("SPC: Attribute typeOfSpecimen is blank or missing");
     }
 
     @Test
     void testValidationBlankString() {
         SpecimenCharacteristicType blankFreeText = new SpecimenCharacteristicType(" ");
         assertThatThrownBy(blankFreeText::validate)
-            .isInstanceOf(EdifactValidationException.class)
-            .hasMessage("SPC: Attribute typeOfSpecimen is blank or missing");
+                .isInstanceOf(EdifactValidationException.class)
+                .hasMessage("SPC: Attribute typeOfSpecimen is blank or missing");
     }
 }

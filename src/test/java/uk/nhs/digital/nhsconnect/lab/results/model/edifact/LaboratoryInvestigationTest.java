@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class LaboratoryInvestigationTest {
 
     private final LaboratoryInvestigation laboratoryInvestigation = new LaboratoryInvestigation(
-        "42R4.", "Serum ferritin"
+            "42R4.", "Serum ferritin"
     );
 
     @Test
@@ -23,8 +23,8 @@ class LaboratoryInvestigationTest {
     @Test
     void when_edifactStringIsPassed_expect_returnALaboratoryInvestigationObject() {
         assertThat(laboratoryInvestigation)
-            .usingRecursiveComparison()
-            .isEqualTo(LaboratoryInvestigation.fromString("INV+MQ+42R4.:911::Serum ferritin"));
+                .usingRecursiveComparison()
+                .isEqualTo(LaboratoryInvestigation.fromString("INV+MQ+42R4.:911::Serum ferritin"));
     }
 
     @Test

@@ -53,8 +53,8 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
         final String content = new String(Files.readAllBytes(multiEdifactResource.getFile().toPath()));
 
         final MeshMessage meshMessage = new MeshMessage()
-            .setWorkflowId(WorkflowId.PATHOLOGY)
-            .setContent(content);
+                .setWorkflowId(WorkflowId.PATHOLOGY)
+                .setContent(content);
 
         sendToMeshInboundQueue(meshMessage);
 
@@ -64,7 +64,7 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
     @SuppressWarnings("checkstyle:magicnumber")
     private void assertGpOutboundQueueMessages(SoftAssertions softly) throws IOException, JMSException, JSONException {
         final List<Message> gpOutboundQueueMessages = List.of(getGpOutboundQueueMessage(), getGpOutboundQueueMessage(),
-            getGpOutboundQueueMessage());
+                getGpOutboundQueueMessage());
 
         assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(0), fhirMessage1);
         assertGpOutboundQueueMessages(softly, gpOutboundQueueMessages.get(1), fhirMessage2);
@@ -85,16 +85,16 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
         final String expectedMessageBody = new String(Files.readAllBytes(fhirMessage.getFile().toPath()));
 
         JSONAssert.assertEquals(
-            expectedMessageBody,
-            messageBody,
-            new CustomComparator(
-                JSONCompareMode.STRICT,
-                new Customization("meta.lastUpdated", IGNORE),
-                new Customization("identifier.value", IGNORE),
-                new Customization("entry[*].fullUrl", IGNORE),
-                new Customization("entry[*].resource.subject.reference", IGNORE),
-                new Customization("entry[*].resource.id", IGNORE)
-            )
+                expectedMessageBody,
+                messageBody,
+                new CustomComparator(
+                        JSONCompareMode.STRICT,
+                        new Customization("meta.lastUpdated", IGNORE),
+                        new Customization("identifier.value", IGNORE),
+                        new Customization("entry[*].fullUrl", IGNORE),
+                        new Customization("entry[*].resource.subject.reference", IGNORE),
+                        new Customization("entry[*].resource.id", IGNORE)
+                )
         );
     }
 

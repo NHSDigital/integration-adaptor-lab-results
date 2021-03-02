@@ -12,10 +12,10 @@ class InterchangeHeaderTest {
     @Test
     void testValidateSequenceNumberNullThrowsException() {
         final InterchangeHeader interchangeHeader =
-            InterchangeHeader.fromString("UNB+UNOA:2+SNDR+RECP+190523:0900");
+                InterchangeHeader.fromString("UNB+UNOA:2+SNDR+RECP+190523:0900");
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
-            interchangeHeader::validate);
+                interchangeHeader::validate);
 
         assertEquals("UNB: Attribute sequenceNumber is required", exception.getMessage());
     }
@@ -23,10 +23,10 @@ class InterchangeHeaderTest {
     @Test
     void testValidateSequenceNumberLessThanOneThrowsException() {
         final InterchangeHeader interchangeHeader =
-            InterchangeHeader.fromString("UNB+UNOA:2+SNDR+RECP+190523:0900+00000000");
+                InterchangeHeader.fromString("UNB+UNOA:2+SNDR+RECP+190523:0900+00000000");
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
-            interchangeHeader::validate);
+                interchangeHeader::validate);
 
         assertEquals("UNB: Attribute sequenceNumber must be between 1 and 99999999", exception.getMessage());
     }
@@ -34,10 +34,10 @@ class InterchangeHeaderTest {
     @Test
     void testValidateSequenceNumberMoreThanMaxThrowsException() {
         final InterchangeHeader interchangeHeader =
-            InterchangeHeader.fromString("UNB+UNOA:2+SNDR+RECP+190523:0900+100000000");
+                InterchangeHeader.fromString("UNB+UNOA:2+SNDR+RECP+190523:0900+100000000");
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
-            interchangeHeader::validate);
+                interchangeHeader::validate);
 
         assertEquals("UNB: Attribute sequenceNumber must be between 1 and 99999999", exception.getMessage());
     }
@@ -45,7 +45,7 @@ class InterchangeHeaderTest {
     @Test
     void testValidateSequenceNumberWithinMinMaxDoesNotThrowException() {
         final InterchangeHeader interchangeHeader =
-            InterchangeHeader.fromString("UNB+UNOA:2+SNDR+RECP+190523:0900+00000001");
+                InterchangeHeader.fromString("UNB+UNOA:2+SNDR+RECP+190523:0900+00000001");
 
         assertDoesNotThrow(interchangeHeader::validate);
     }
@@ -53,10 +53,10 @@ class InterchangeHeaderTest {
     @Test
     void testValidationEmptySenderThrowsException() {
         final InterchangeHeader interchangeHeader =
-            InterchangeHeader.fromString("UNB+UNOA:2++RECP+190523:0900+00000001");
+                InterchangeHeader.fromString("UNB+UNOA:2++RECP+190523:0900+00000001");
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
-            interchangeHeader::validate);
+                interchangeHeader::validate);
 
         assertEquals("UNB: Attribute sender is required", exception.getMessage());
     }
@@ -64,10 +64,10 @@ class InterchangeHeaderTest {
     @Test
     void testValidationEmptyRecipientThrowsException() {
         final InterchangeHeader interchangeHeader =
-            InterchangeHeader.fromString("UNB+UNOA:2+SNDR++190523:0900+00000001");
+                InterchangeHeader.fromString("UNB+UNOA:2+SNDR++190523:0900+00000001");
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
-            interchangeHeader::validate);
+                interchangeHeader::validate);
 
         assertEquals("UNB: Attribute recipient is required", exception.getMessage());
     }
@@ -85,7 +85,7 @@ class InterchangeHeaderTest {
     @Test
     void testFromStringWithInvalidEdifactStringThrowsException() {
         final IllegalArgumentException exception =
-            assertThrows(IllegalArgumentException.class, () -> InterchangeHeader.fromString("wrong value"));
+                assertThrows(IllegalArgumentException.class, () -> InterchangeHeader.fromString("wrong value"));
 
         assertEquals("Can't create InterchangeHeader from wrong value", exception.getMessage());
     }

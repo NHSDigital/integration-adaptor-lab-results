@@ -21,33 +21,33 @@ class PatientClinicalInfoTest {
     @Test
     void testGetClinicalInformationCode() {
         final var patientInfo = new PatientClinicalInfo(List.of(
-            "ignore me",
-            "CIN+UN",
-            "ignore me"
+                "ignore me",
+                "CIN+UN",
+                "ignore me"
         ));
         assertThat(patientInfo.getCode())
-            .isNotNull()
-            .extracting(ClinicalInformationCode::getCode)
-            .isEqualTo("UN");
+                .isNotNull()
+                .extracting(ClinicalInformationCode::getCode)
+                .isEqualTo("UN");
     }
 
     @Test
     void testGetClinicalInformationFreeTexts() {
         final var patientInfo = new PatientClinicalInfo(List.of(
-            "ignore me",
-            "FTX+CID+++TIRED ALL THE TIME, LOW Hb",
-            "ignore me",
-            "FTX+CID+++PAINS HANDS AND FEET.",
-            "ignore me"
+                "ignore me",
+                "FTX+CID+++TIRED ALL THE TIME, LOW Hb",
+                "ignore me",
+                "FTX+CID+++PAINS HANDS AND FEET.",
+                "ignore me"
         ));
         var patientInfoFreeTexts = assertThat(patientInfo.getFreeTexts()).hasSize(2);
 
         patientInfoFreeTexts
-            .extracting(FreeTextSegment::getType)
-            .allMatch(value -> value == FreeTextType.CLINICAL_INFO);
+                .extracting(FreeTextSegment::getType)
+                .allMatch(value -> value == FreeTextType.CLINICAL_INFO);
         patientInfoFreeTexts.extracting(FreeTextSegment::getTexts)
-            .map(values -> values[0])
-            .isEqualTo(List.of("TIRED ALL THE TIME, LOW Hb", "PAINS HANDS AND FEET."));
+                .map(values -> values[0])
+                .isEqualTo(List.of("TIRED ALL THE TIME, LOW Hb", "PAINS HANDS AND FEET."));
     }
 
     @Test
@@ -55,10 +55,10 @@ class PatientClinicalInfoTest {
     void testLazyGettersWhenMissing() {
         final var patientInfo = new PatientClinicalInfo(List.of());
         assertAll(
-            () -> assertThatThrownBy(patientInfo::getCode)
-                .isExactlyInstanceOf(MissingSegmentException.class)
-                .hasMessage("EDIFACT section is missing segment CIN"),
-            () -> assertThat(patientInfo.getFreeTexts()).isEmpty()
+                () -> assertThatThrownBy(patientInfo::getCode)
+                        .isExactlyInstanceOf(MissingSegmentException.class)
+                        .hasMessage("EDIFACT section is missing segment CIN"),
+                () -> assertThat(patientInfo.getFreeTexts()).isEmpty()
         );
     }
 }

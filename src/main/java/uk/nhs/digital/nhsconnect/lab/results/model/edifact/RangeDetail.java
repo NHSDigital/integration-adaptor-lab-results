@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 
 /**
  * Examples:
- *
+ * <p>
  * {@code RND+U+170+1100'}: between 170 and 1100<br/>
  * {@code RND+U++999'}: less than 999<br/>
  */
@@ -31,16 +31,16 @@ public class RangeDetail extends Segment {
     public static RangeDetail fromString(final String edifact) {
         if (!edifact.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException("Can't create " + RangeDetail.class.getSimpleName()
-                + " from " + edifact);
+                    + " from " + edifact);
         }
 
         final String[] split = Split.byPlus(edifact);
         final BigDecimal lowerLimit = split[INDEX_LOWER_LIMIT].isBlank()
-            ? null
-            : new BigDecimal(split[INDEX_LOWER_LIMIT]);
+                ? null
+                : new BigDecimal(split[INDEX_LOWER_LIMIT]);
         final BigDecimal upperLimit = split[INDEX_UPPER_LIMIT].isBlank()
-            ? null
-            : new BigDecimal(split[INDEX_UPPER_LIMIT]);
+                ? null
+                : new BigDecimal(split[INDEX_UPPER_LIMIT]);
 
         return new RangeDetail(lowerLimit, upperLimit);
     }
@@ -54,7 +54,7 @@ public class RangeDetail extends Segment {
     public void validate() throws EdifactValidationException {
         if (lowerLimit == null && upperLimit == null) {
             throw new EdifactValidationException(KEY
-                + ": At least one of lower reference limit and upper reference limit is required");
+                    + ": At least one of lower reference limit and upper reference limit is required");
         }
     }
 }

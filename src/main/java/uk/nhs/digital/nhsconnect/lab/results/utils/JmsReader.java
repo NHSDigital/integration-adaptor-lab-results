@@ -10,7 +10,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public final class JmsReader {
 
-    private JmsReader() { }
+    private JmsReader() {
+    }
 
     public static String readMessage(Message message) throws JMSException {
         if (message instanceof JmsTextMessage) {

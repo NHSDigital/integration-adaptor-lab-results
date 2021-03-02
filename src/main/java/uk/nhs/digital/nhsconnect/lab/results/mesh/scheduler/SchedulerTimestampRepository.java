@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SchedulerTimestampRepository
-    extends CrudRepository<SchedulerTimestamp, String>, SchedulerTimestampRepositoryExtensions {
+        extends CrudRepository<SchedulerTimestamp, String>, SchedulerTimestampRepositoryExtensions {
 }

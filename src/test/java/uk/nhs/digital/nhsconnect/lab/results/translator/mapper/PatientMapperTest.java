@@ -69,8 +69,8 @@ class PatientMapperTest {
     @Test
     void testMapMessageToPatientThrowsExceptionWhenServiceReportDetailsAreNull() {
         assertThatThrownBy(() -> patientMapper.mapToPatient(message))
-            .isInstanceOf(FhirValidationException.class)
-            .hasMessage("Unable to map message to patient details");
+                .isInstanceOf(FhirValidationException.class)
+                .hasMessage("Unable to map message to patient details");
     }
 
     @Test
@@ -78,8 +78,8 @@ class PatientMapperTest {
         when(message.getServiceReportDetails()).thenReturn(serviceReportDetails);
 
         assertThatThrownBy(() -> patientMapper.mapToPatient(message))
-            .isInstanceOf(FhirValidationException.class)
-            .hasMessage("Unable to map message to patient details");
+                .isInstanceOf(FhirValidationException.class)
+                .hasMessage("Unable to map message to patient details");
     }
 
     @Test
@@ -88,8 +88,8 @@ class PatientMapperTest {
         when(serviceReportDetails.getSubject()).thenReturn(investigationSubject);
 
         assertThatThrownBy(() -> patientMapper.mapToPatient(message))
-            .isInstanceOf(FhirValidationException.class)
-            .hasMessage("Unable to map message to patient details");
+                .isInstanceOf(FhirValidationException.class)
+                .hasMessage("Unable to map message to patient details");
     }
 
     @Test
@@ -100,17 +100,17 @@ class PatientMapperTest {
         when(uuidGenerator.generateUUID()).thenReturn(UUID);
 
         final PersonName personName = PersonName.builder()
-            .title(TITLE)
-            .firstForename(FIRST_FORENAME)
-            .secondForename(SECOND_FORENAME)
-            .surname(SURNAME)
-            .nhsNumber(NHS_NUMBER)
-            .build();
+                .title(TITLE)
+                .firstForename(FIRST_FORENAME)
+                .secondForename(SECOND_FORENAME)
+                .surname(SURNAME)
+                .nhsNumber(NHS_NUMBER)
+                .build();
         when(patientDetails.getName()).thenReturn(personName);
 
         final Optional<PersonSex> personSex = Optional.of(PersonSex.builder()
-            .gender(Gender.FEMALE)
-            .build());
+                .gender(Gender.FEMALE)
+                .build());
         when(patientDetails.getSex()).thenReturn(personSex);
 
         stubDateOfBirth(BIRTH_DATE_FULL, DateFormat.CCYYMMDD);
@@ -121,37 +121,38 @@ class PatientMapperTest {
         final Patient patient = patientMapper.mapToPatient(message);
 
         assertAll("patient",
-            () -> assertThat(patient).isNotNull(),
+                () -> assertThat(patient).isNotNull(),
 
-            () -> assertThat(patient.getIdentifier()).hasSize(1).first()
-                .satisfies(identifier -> assertAll(
-                    () -> assertThat(identifier.getValue()).isEqualTo(NHS_NUMBER),
-                    () -> assertThat(identifier.getSystem()).isEqualTo(PatientMapper.NHS_NUMBER_SYSTEM))),
+                () -> assertThat(patient.getIdentifier()).hasSize(1).first()
+                        .satisfies(identifier -> assertAll(
+                                () -> assertThat(identifier.getValue()).isEqualTo(NHS_NUMBER),
+                                () -> assertThat(identifier.getSystem()).isEqualTo(PatientMapper.NHS_NUMBER_SYSTEM))),
 
-            () -> assertThat(patient.getName()).hasSize(1).first()
-                .satisfies(name -> assertAll(
-                    () -> assertThat(name.getPrefixAsSingleString()).isEqualTo(TITLE),
-                    () -> assertThat(name.getGivenAsSingleString()).isEqualTo(FIRST_FORENAME + " " + SECOND_FORENAME),
-                    () -> assertThat(name.getFamily()).isEqualTo(SURNAME))),
+                () -> assertThat(patient.getName()).hasSize(1).first()
+                        .satisfies(name -> assertAll(
+                                () -> assertThat(name.getPrefixAsSingleString()).isEqualTo(TITLE),
+                                () -> assertThat(name.getGivenAsSingleString())
+                                        .isEqualTo(FIRST_FORENAME + " " + SECOND_FORENAME),
+                                () -> assertThat(name.getFamily()).isEqualTo(SURNAME))),
 
-            () -> assertThat(patient.getGender()).isEqualTo(Enumerations.AdministrativeGender.FEMALE),
+                () -> assertThat(patient.getGender()).isEqualTo(Enumerations.AdministrativeGender.FEMALE),
 
-            () -> {
-                final Date birthDate = Date.from(LOCAL_DATE_FULL.atStartOfDay()
-                    .atZone(ZoneId.systemDefault()).toInstant());
-                assertThat(patient.getBirthDate()).isEqualTo(birthDate);
-            },
+                () -> {
+                    final Date birthDate = Date.from(LOCAL_DATE_FULL.atStartOfDay()
+                            .atZone(ZoneId.systemDefault()).toInstant());
+                    assertThat(patient.getBirthDate()).isEqualTo(birthDate);
+                },
 
-            () -> assertThat(patient.getAddress()).hasSize(1).first()
-                .satisfies(address -> assertAll(
-                    () -> {
-                        final List<StringType> lines = List.of(new StringType(ADDRESS_LINE_1),
-                            new StringType(ADDRESS_LINE_2), new StringType(ADDRESS_LINE_3),
-                            new StringType(ADDRESS_LINE_4), new StringType(ADDRESS_LINE_5));
+                () -> assertThat(patient.getAddress()).hasSize(1).first()
+                        .satisfies(address -> assertAll(
+                                () -> {
+                                    final List<StringType> lines = List.of(new StringType(ADDRESS_LINE_1),
+                                            new StringType(ADDRESS_LINE_2), new StringType(ADDRESS_LINE_3),
+                                            new StringType(ADDRESS_LINE_4), new StringType(ADDRESS_LINE_5));
 
-                        assertThat(address.getLine()).usingRecursiveComparison().isEqualTo(lines);
-                    },
-                    () -> assertThat(address.getPostalCode()).isEqualTo(POSTCODE)))
+                                    assertThat(address.getLine()).usingRecursiveComparison().isEqualTo(lines);
+                                },
+                                () -> assertThat(address.getPostalCode()).isEqualTo(POSTCODE)))
         );
     }
 
@@ -163,21 +164,21 @@ class PatientMapperTest {
         when(uuidGenerator.generateUUID()).thenReturn(UUID);
 
         final PersonName personName = PersonName.builder()
-            .title(TITLE)
-            .secondForename(SECOND_FORENAME)
-            .surname(SURNAME)
-            .build();
+                .title(TITLE)
+                .secondForename(SECOND_FORENAME)
+                .surname(SURNAME)
+                .build();
         when(patientDetails.getName()).thenReturn(personName);
 
         final Patient patient = patientMapper.mapToPatient(message);
 
         assertAll("patient",
-            () -> assertThat(patient).isNotNull(),
-            () -> assertThat(patient.getName()).hasSize(1).first()
-                .satisfies(name -> assertAll(
-                    () -> assertThat(name.getPrefixAsSingleString()).isEqualTo(TITLE),
-                    () -> assertThat(name.getGivenAsSingleString()).isEmpty(),
-                    () -> assertThat(name.getFamily()).isEqualTo(SURNAME))));
+                () -> assertThat(patient).isNotNull(),
+                () -> assertThat(patient.getName()).hasSize(1).first()
+                        .satisfies(name -> assertAll(
+                                () -> assertThat(name.getPrefixAsSingleString()).isEqualTo(TITLE),
+                                () -> assertThat(name.getGivenAsSingleString()).isEmpty(),
+                                () -> assertThat(name.getFamily()).isEqualTo(SURNAME))));
     }
 
     @Test
@@ -188,21 +189,21 @@ class PatientMapperTest {
         when(uuidGenerator.generateUUID()).thenReturn(UUID);
 
         final PersonName personName = PersonName.builder()
-            .title(TITLE)
-            .firstForename(FIRST_FORENAME)
-            .surname(SURNAME)
-            .build();
+                .title(TITLE)
+                .firstForename(FIRST_FORENAME)
+                .surname(SURNAME)
+                .build();
         when(patientDetails.getName()).thenReturn(personName);
 
         final Patient patient = patientMapper.mapToPatient(message);
 
         assertAll("patient",
-            () -> assertThat(patient).isNotNull(),
-            () -> assertThat(patient.getName()).hasSize(1).first()
-                .satisfies(name -> assertAll(
-                    () -> assertThat(name.getPrefixAsSingleString()).isEqualTo(TITLE),
-                    () -> assertThat(name.getGivenAsSingleString()).isEqualTo(FIRST_FORENAME),
-                    () -> assertThat(name.getFamily()).isEqualTo(SURNAME))));
+                () -> assertThat(patient).isNotNull(),
+                () -> assertThat(patient.getName()).hasSize(1).first()
+                        .satisfies(name -> assertAll(
+                                () -> assertThat(name.getPrefixAsSingleString()).isEqualTo(TITLE),
+                                () -> assertThat(name.getGivenAsSingleString()).isEqualTo(FIRST_FORENAME),
+                                () -> assertThat(name.getFamily()).isEqualTo(SURNAME))));
     }
 
     @Test
@@ -215,11 +216,11 @@ class PatientMapperTest {
         final Patient patient = patientMapper.mapToPatient(message);
 
         assertAll("patient",
-            () -> assertThat(patient).isNotNull(),
-            () -> assertThat(patient.getIdentifier()).isEmpty(),
-            () -> assertThat(patient.getName()).isEmpty(),
-            () -> assertThat(patient.getGender()).isNull(),
-            () -> assertThat(patient.getBirthDate()).isNull());
+                () -> assertThat(patient).isNotNull(),
+                () -> assertThat(patient.getIdentifier()).isEmpty(),
+                () -> assertThat(patient.getName()).isEmpty(),
+                () -> assertThat(patient.getGender()).isNull(),
+                () -> assertThat(patient.getBirthDate()).isNull());
     }
 
     @Test
@@ -234,16 +235,16 @@ class PatientMapperTest {
         final Patient patient = patientMapper.mapToPatient(message);
 
         assertAll("patient",
-            () -> assertThat(patient).isNotNull(),
-            () -> assertThat(patient.getIdentifier()).isEmpty(),
-            () -> assertThat(patient.getName()).isEmpty(),
-            () -> assertThat(patient.getGender()).isNull(),
+                () -> assertThat(patient).isNotNull(),
+                () -> assertThat(patient.getIdentifier()).isEmpty(),
+                () -> assertThat(patient.getName()).isEmpty(),
+                () -> assertThat(patient.getGender()).isNull(),
 
-            () -> {
-                final Date birthDate = Date.from(LOCAL_DATE_FOR_YEAR_ONLY.atStartOfDay()
-                    .atZone(ZoneId.systemDefault()).toInstant());
-                assertThat(patient.getBirthDate()).isEqualTo(birthDate);
-            });
+                () -> {
+                    final Date birthDate = Date.from(LOCAL_DATE_FOR_YEAR_ONLY.atStartOfDay()
+                            .atZone(ZoneId.systemDefault()).toInstant());
+                    assertThat(patient.getBirthDate()).isEqualTo(birthDate);
+                });
     }
 
     @Test
@@ -258,16 +259,16 @@ class PatientMapperTest {
         final Patient patient = patientMapper.mapToPatient(message);
 
         assertAll("patient",
-            () -> assertThat(patient).isNotNull(),
-            () -> assertThat(patient.getIdentifier()).isEmpty(),
-            () -> assertThat(patient.getName()).isEmpty(),
-            () -> assertThat(patient.getGender()).isNull(),
+                () -> assertThat(patient).isNotNull(),
+                () -> assertThat(patient.getIdentifier()).isEmpty(),
+                () -> assertThat(patient.getName()).isEmpty(),
+                () -> assertThat(patient.getGender()).isNull(),
 
-            () -> {
-                final Date birthDate = Date.from(LOCAL_DATE_FOR_YEAR_AND_MONTH.atStartOfDay()
-                    .atZone(ZoneId.systemDefault()).toInstant());
-                assertThat(patient.getBirthDate()).isEqualTo(birthDate);
-            });
+                () -> {
+                    final Date birthDate = Date.from(LOCAL_DATE_FOR_YEAR_AND_MONTH.atStartOfDay()
+                            .atZone(ZoneId.systemDefault()).toInstant());
+                    assertThat(patient.getBirthDate()).isEqualTo(birthDate);
+                });
     }
 
     @Test
@@ -278,25 +279,26 @@ class PatientMapperTest {
         when(uuidGenerator.generateUUID()).thenReturn(UUID);
 
         final PersonName personName = PersonName.builder()
-            .title(TITLE)
-            .firstForename(FIRST_FORENAME)
-            .secondForename(SECOND_FORENAME)
-            .surname(SURNAME)
-            .nhsNumber(NHS_NUMBER)
-            .build();
+                .title(TITLE)
+                .firstForename(FIRST_FORENAME)
+                .secondForename(SECOND_FORENAME)
+                .surname(SURNAME)
+                .nhsNumber(NHS_NUMBER)
+                .build();
         when(patientDetails.getName()).thenReturn(personName);
 
         final Patient patient = patientMapper.mapToPatient(message);
 
         assertAll("patient",
-            () -> assertThat(patient).isNotNull(),
-            () -> assertThat(patient.getName()).hasSize(1).first()
-                .satisfies(name -> assertAll(
-                    () -> assertThat(name.getPrefixAsSingleString()).isEqualTo(TITLE),
-                    () -> assertThat(name.getGivenAsSingleString()).isEqualTo(FIRST_FORENAME + " " + SECOND_FORENAME),
-                    () -> assertThat(name.getFamily()).isEqualTo(SURNAME))),
+                () -> assertThat(patient).isNotNull(),
+                () -> assertThat(patient.getName()).hasSize(1).first()
+                        .satisfies(name -> assertAll(
+                                () -> assertThat(name.getPrefixAsSingleString()).isEqualTo(TITLE),
+                                () -> assertThat(name.getGivenAsSingleString())
+                                        .isEqualTo(FIRST_FORENAME + " " + SECOND_FORENAME),
+                                () -> assertThat(name.getFamily()).isEqualTo(SURNAME))),
 
-            () -> assertThat(patient.getAddress()).isEmpty());
+                () -> assertThat(patient.getAddress()).isEmpty());
     }
 
     @Test
@@ -307,10 +309,10 @@ class PatientMapperTest {
         when(uuidGenerator.generateUUID()).thenReturn(UUID);
 
         final PersonName personName = PersonName.builder()
-            .title(TITLE)
-            .firstForename(FIRST_FORENAME)
-            .surname(SURNAME)
-            .build();
+                .title(TITLE)
+                .firstForename(FIRST_FORENAME)
+                .surname(SURNAME)
+                .build();
         when(patientDetails.getName()).thenReturn(personName);
 
         stubAddress(null);
@@ -318,26 +320,26 @@ class PatientMapperTest {
         final Patient patient = patientMapper.mapToPatient(message);
 
         assertAll("patient",
-            () -> assertThat(patient).isNotNull(),
+                () -> assertThat(patient).isNotNull(),
 
-            () -> assertThat(patient.getName()).hasSize(1).first()
-                .satisfies(name -> assertAll(
-                    () -> assertThat(name.getPrefixAsSingleString()).isEqualTo(TITLE),
-                    () -> assertThat(name.getGivenAsSingleString()).isEqualTo(FIRST_FORENAME),
-                    () -> assertThat(name.getFamily()).isEqualTo(SURNAME))),
+                () -> assertThat(patient.getName()).hasSize(1).first()
+                        .satisfies(name -> assertAll(
+                                () -> assertThat(name.getPrefixAsSingleString()).isEqualTo(TITLE),
+                                () -> assertThat(name.getGivenAsSingleString()).isEqualTo(FIRST_FORENAME),
+                                () -> assertThat(name.getFamily()).isEqualTo(SURNAME))),
 
-            () -> assertThat(patient.getAddress()).hasSize(1).first()
-                .satisfies(address -> assertAll(
-                    () -> assertThat(address.getLine()).isEmpty(),
-                    () -> assertThat(address.getPostalCode()).isEqualTo(POSTCODE)))
+                () -> assertThat(patient.getAddress()).hasSize(1).first()
+                        .satisfies(address -> assertAll(
+                                () -> assertThat(address.getLine()).isEmpty(),
+                                () -> assertThat(address.getPostalCode()).isEqualTo(POSTCODE)))
         );
     }
 
     private void stubDateOfBirth(final String dateOfBirth, final DateFormat dateFormat) {
         final Optional<PersonDateOfBirth> personDateOfBirth = Optional.of(PersonDateOfBirth.builder()
-            .dateOfBirth(dateOfBirth)
-            .dateFormat(dateFormat)
-            .build());
+                .dateOfBirth(dateOfBirth)
+                .dateFormat(dateFormat)
+                .build());
         when(patientDetails.getDateOfBirth()).thenReturn(personDateOfBirth);
     }
 

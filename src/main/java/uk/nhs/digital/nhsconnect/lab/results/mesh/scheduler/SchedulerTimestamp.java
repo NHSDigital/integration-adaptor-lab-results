@@ -7,12 +7,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
 
-@CompoundIndexes({
-    @CompoundIndex(
+@CompoundIndexes(@CompoundIndex(
         name = "unique_document",
         def = "{'schedulerType': 1}",
         unique = true)
-})
+)
 @Data
 @Document
 public class SchedulerTimestamp {

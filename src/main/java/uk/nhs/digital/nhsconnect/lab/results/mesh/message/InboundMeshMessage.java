@@ -5,9 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public interface InboundMeshMessage {
     WorkflowId getWorkflowId();
+
     String getContent();
+
     String getMessageSentTimestamp();
+
     InboundMeshMessage setMessageSentTimestamp(String timestamp);
+
     String getMeshMessageId();
 
     @JsonCreator

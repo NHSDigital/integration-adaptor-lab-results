@@ -14,7 +14,7 @@ public final class FakeMeshContainer extends GenericContainer<FakeMeshContainer>
 
     private FakeMeshContainer() {
         super(new ImageFromDockerfile()
-            .withFileFromPath("Dockerfile", Path.of("./fake-mesh/Dockerfile"))
+                .withFileFromPath("Dockerfile", Path.of("./fake-mesh/Dockerfile"))
         );
         addExposedPort(FAKE_MESH_PORT);
     }
@@ -29,7 +29,8 @@ public final class FakeMeshContainer extends GenericContainer<FakeMeshContainer>
     @Override
     public void start() {
         super.start();
-        var fakeMeshUri = "https://" + getContainerIpAddress() + ":" + getMappedPort(FAKE_MESH_PORT) + "/messageexchange/";
+        var fakeMeshUri =
+                "https://" + getContainerIpAddress() + ":" + getMappedPort(FAKE_MESH_PORT) + "/messageexchange/";
         LOGGER.info("Changing fake MESH URI (LAB_RESULTS_MESH_HOST) to {}", fakeMeshUri);
         System.setProperty("LAB_RESULTS_MESH_HOST", fakeMeshUri);
     }

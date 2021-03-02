@@ -24,29 +24,29 @@ class TestStatusTest {
     @Test
     void when_edifactStringIsPassed_expect_returnATestStatusObject() {
         var valueMap = Map.of(
-            TestStatusCode.CORRECTED, "CO",
-            TestStatusCode.UNKNOWN, "UN",
-            TestStatusCode.AMENDED, "AM",
-            TestStatusCode.CANCELLED, "CA",
-            TestStatusCode.ENTERED_IN_ERROR, "EN",
-            TestStatusCode.FINAL, "FI",
-            TestStatusCode.PRELIMINARY, "PR",
-            TestStatusCode.REGISTERED, "RE");
+                TestStatusCode.CORRECTED, "CO",
+                TestStatusCode.UNKNOWN, "UN",
+                TestStatusCode.AMENDED, "AM",
+                TestStatusCode.CANCELLED, "CA",
+                TestStatusCode.ENTERED_IN_ERROR, "EN",
+                TestStatusCode.FINAL, "FI",
+                TestStatusCode.PRELIMINARY, "PR",
+                TestStatusCode.REGISTERED, "RE");
 
         assertThat(valueMap).hasSameSizeAs(TestStatusCode.values());
 
         for (TestStatusCode testStatusCode : TestStatusCode.values()) {
             assertThat(new TestStatus(testStatusCode)).usingRecursiveComparison()
-                .isEqualTo(TestStatus.fromString("STS++" + valueMap.get(testStatusCode)));
+                    .isEqualTo(TestStatus.fromString("STS++" + valueMap.get(testStatusCode)));
         }
 
         assertAll(
-            () -> assertThatThrownBy(() -> TestStatus.fromString("STS++XX"))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("No test status code for 'XX'"),
-            () -> assertThatThrownBy(() -> TestStatus.fromString("STS++"))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("No test status code for ''")
+                () -> assertThatThrownBy(() -> TestStatus.fromString("STS++XX"))
+                        .isInstanceOf(IllegalArgumentException.class)
+                        .hasMessage("No test status code for 'XX'"),
+                () -> assertThatThrownBy(() -> TestStatus.fromString("STS++"))
+                        .isInstanceOf(IllegalArgumentException.class)
+                        .hasMessage("No test status code for ''")
         );
     }
 

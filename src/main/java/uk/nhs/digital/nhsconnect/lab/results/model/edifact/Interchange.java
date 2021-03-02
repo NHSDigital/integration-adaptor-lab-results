@@ -12,11 +12,11 @@ public class Interchange extends Section {
 
     @Getter(lazy = true)
     private final InterchangeHeader interchangeHeader =
-        InterchangeHeader.fromString(extractSegment(InterchangeHeader.KEY));
+            InterchangeHeader.fromString(extractSegment(InterchangeHeader.KEY));
 
     @Getter(lazy = true)
     private final InterchangeTrailer interchangeTrailer =
-        InterchangeTrailer.fromString(extractSegment(InterchangeTrailer.KEY));
+            InterchangeTrailer.fromString(extractSegment(InterchangeTrailer.KEY));
 
     @Getter
     @Setter
@@ -42,15 +42,15 @@ public class Interchange extends Section {
             getInterchangeTrailer().validate();
             if (!getInterchangeHeader().getSequenceNumber().equals(getInterchangeTrailer().getSequenceNumber())) {
                 throw new EdifactValidationException(
-                    "Interchange header sequence number does not match trailer sequence number");
+                        "Interchange header sequence number does not match trailer sequence number");
             }
         } catch (Exception ex) {
             throw new InterchangeParsingException(
-                "Error while parsing interchange",
-                getInterchangeHeader().getSender(),
-                getInterchangeHeader().getRecipient(),
-                getInterchangeHeader().getSequenceNumber(),
-                ex);
+                    "Error while parsing interchange",
+                    getInterchangeHeader().getSender(),
+                    getInterchangeHeader().getRecipient(),
+                    getInterchangeHeader().getSequenceNumber(),
+                    ex);
         }
     }
 }

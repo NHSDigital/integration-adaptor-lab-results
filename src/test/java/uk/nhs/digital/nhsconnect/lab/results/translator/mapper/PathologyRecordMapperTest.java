@@ -53,7 +53,7 @@ class PathologyRecordMapperTest {
         var mockPractitioner = mock(Practitioner.class);
 
         when(practitionerMapper.mapRequester(message))
-            .thenReturn(Optional.of(mockPractitioner));
+                .thenReturn(Optional.of(mockPractitioner));
 
         final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
 
@@ -90,12 +90,12 @@ class PathologyRecordMapperTest {
         final var mockSpecimen2 = mock(Specimen.class);
         reset(specimenMapper);
         when(specimenMapper.mapToSpecimens(eq(message), any(Patient.class)))
-            .thenReturn(List.of(mockSpecimen1, mockSpecimen2));
+                .thenReturn(List.of(mockSpecimen1, mockSpecimen2));
 
         final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
 
         assertThat(pathologyRecord.getSpecimens())
-            .hasSize(2)
-            .contains(mockSpecimen1, mockSpecimen2);
+                .hasSize(2)
+                .contains(mockSpecimen1, mockSpecimen2);
     }
 }

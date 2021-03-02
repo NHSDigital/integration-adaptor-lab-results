@@ -28,18 +28,18 @@ public class MessageRecipientNameAndAddress extends Segment {
     public static MessageRecipientNameAndAddress fromString(final String edifact) {
         if (!edifact.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException(
-                "Can't create " + MessageRecipientNameAndAddress.class.getSimpleName() + " from " + edifact);
+                    "Can't create " + MessageRecipientNameAndAddress.class.getSimpleName() + " from " + edifact);
         }
 
         String[] keySplit = Split.byPlus(edifact);
         String identifier = Split.byColon(keySplit[2])[0];
         String code = Split.byColon(keySplit[2])[1];
         String recipientName = keySplit.length > MESSAGE_RECIPIENT_NAME_INDEX
-            ? keySplit[MESSAGE_RECIPIENT_NAME_INDEX]
-            : null;
+                ? keySplit[MESSAGE_RECIPIENT_NAME_INDEX]
+                : null;
 
         return new MessageRecipientNameAndAddress(identifier, HealthcareRegistrationIdentificationCode.fromCode(code),
-            recipientName);
+                recipientName);
     }
 
     @Override

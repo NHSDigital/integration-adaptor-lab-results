@@ -15,7 +15,7 @@ class DiagnosticReportDateIssuedTest {
     @Test
     void testBuildWithEmptyTimestampThrowsException() {
         final NullPointerException exception =
-            assertThrows(NullPointerException.class, () -> DiagnosticReportDateIssued.builder().build());
+                assertThrows(NullPointerException.class, () -> DiagnosticReportDateIssued.builder().build());
 
         assertEquals("dateIssued is marked non-null but is null", exception.getMessage());
     }
@@ -31,7 +31,8 @@ class DiagnosticReportDateIssuedTest {
     @Test
     void testFromStringWithInvalidEdifactStringThrowsException() {
         final IllegalArgumentException exception =
-            assertThrows(IllegalArgumentException.class, () -> DiagnosticReportDateIssued.fromString("wrong value"));
+                assertThrows(IllegalArgumentException.class,
+                        () -> DiagnosticReportDateIssued.fromString("wrong value"));
 
         assertEquals("Can't create DiagnosticReportDateIssued from wrong value", exception.getMessage());
     }

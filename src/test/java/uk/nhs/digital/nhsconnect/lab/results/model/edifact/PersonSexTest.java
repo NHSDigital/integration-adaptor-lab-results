@@ -15,14 +15,14 @@ class PersonSexTest {
         final PersonSex personSex = PersonSex.fromString(VALID_EDIFACT);
 
         assertAll("fromString",
-            () -> assertEquals(PersonSex.KEY, personSex.getKey()),
-            () -> assertEquals(Gender.MALE, personSex.getGender()));
+                () -> assertEquals(PersonSex.KEY, personSex.getKey()),
+                () -> assertEquals(Gender.MALE, personSex.getGender()));
     }
 
     @Test
     void testFromStringWithInvalidEdifactStringThrowsException() {
         final IllegalArgumentException exception =
-            assertThrows(IllegalArgumentException.class, () -> PersonSex.fromString("wrong value"));
+                assertThrows(IllegalArgumentException.class, () -> PersonSex.fromString("wrong value"));
 
         assertEquals("Can't create PersonSex from wrong value", exception.getMessage());
     }

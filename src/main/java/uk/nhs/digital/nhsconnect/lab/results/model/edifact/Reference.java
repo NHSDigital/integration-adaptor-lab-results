@@ -23,10 +23,10 @@ public class Reference extends Segment {
     public static Reference fromString(final String edifact) {
         if (!edifact.startsWith(KEY)) {
             throw new IllegalArgumentException(
-                "Can't create " + Reference.class.getSimpleName() + " from " + edifact);
+                    "Can't create " + Reference.class.getSimpleName() + " from " + edifact);
         }
         String[] data = Split.byColon(
-            Split.byPlus(edifact)[1]
+                Split.byPlus(edifact)[1]
         );
         return new Reference(ReferenceType.fromCode(data[0]), data[1]);
     }
@@ -40,7 +40,7 @@ public class Reference extends Segment {
     public void validate() throws EdifactValidationException {
         if (!number.matches("\\p{Alnum}{1,6}")) {
             throw new EdifactValidationException(
-                KEY + ": attribute number must be an alphanumeric string of up to 6 characters");
+                    KEY + ": attribute number must be an alphanumeric string of up to 6 characters");
         }
     }
 }

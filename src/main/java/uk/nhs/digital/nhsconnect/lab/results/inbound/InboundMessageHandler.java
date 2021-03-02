@@ -50,15 +50,15 @@ public class InboundMessageHandler {
         final List<MessageProcessingResult> messageProcessingResults = getFhirDataToSend(interchange.getMessages());
 
         var nhsack = outboundMeshMessageBuilder.buildNhsAck(
-            meshMessage.getWorkflowId(),
-            interchange,
-            messageProcessingResults);
+                meshMessage.getWorkflowId(),
+                interchange,
+                messageProcessingResults);
 
         messageProcessingResults.stream()
-            .filter(MessageProcessingResult.Success.class::isInstance)
-            .map(MessageProcessingResult.Success.class::cast)
-            .map(MessageProcessingResult.Success::getBundle)
-            .forEach(gpOutboundQueueService::publish);
+                .filter(MessageProcessingResult.Success.class::isInstance)
+                .map(MessageProcessingResult.Success.class::cast)
+                .map(MessageProcessingResult.Success::getBundle)
+                .forEach(gpOutboundQueueService::publish);
 
         logSentFor(interchange);
 
@@ -69,8 +69,8 @@ public class InboundMessageHandler {
 
     private List<MessageProcessingResult> getFhirDataToSend(List<Message> messages) {
         return messages.stream()
-            .map(this::convertToFhir)
-            .collect(Collectors.toList());
+                .map(this::convertToFhir)
+                .collect(Collectors.toList());
     }
 
     private MessageProcessingResult convertToFhir(Message message) {
@@ -88,8 +88,8 @@ public class InboundMessageHandler {
         if (LOGGER.isInfoEnabled()) {
             final InterchangeHeader interchangeHeader = interchange.getInterchangeHeader();
             LOGGER.info("Translating EDIFACT interchange from Sender={} to Recipient={} with RIS={} "
-                    + "containing {} messages", interchangeHeader.getSender(), interchangeHeader.getRecipient(),
-                interchangeHeader.getSequenceNumber(), interchange.getMessages().size());
+                            + "containing {} messages", interchangeHeader.getSender(), interchangeHeader.getRecipient(),
+                    interchangeHeader.getSequenceNumber(), interchange.getMessages().size());
         }
     }
 
@@ -97,8 +97,8 @@ public class InboundMessageHandler {
         if (LOGGER.isInfoEnabled()) {
             final InterchangeHeader interchangeHeader = interchange.getInterchangeHeader();
             LOGGER.info("Published FHIR for the interchange from Sender={} to Recipient={} with RIS={}",
-                interchangeHeader.getSender(), interchangeHeader.getRecipient(),
-                interchangeHeader.getSequenceNumber());
+                    interchangeHeader.getSender(), interchangeHeader.getRecipient(),
+                    interchangeHeader.getSequenceNumber());
         }
     }
 
@@ -106,8 +106,8 @@ public class InboundMessageHandler {
         if (LOGGER.isInfoEnabled()) {
             final var header = interchange.getInterchangeHeader();
             LOGGER.info("Published for async send to MESH an NHSACK for the interchange from "
-                    + "Sender={} to Recipient={} with RIS={}",
-                header.getSender(), header.getRecipient(), header.getSequenceNumber());
+                            + "Sender={} to Recipient={} with RIS={}",
+                    header.getSender(), header.getRecipient(), header.getSequenceNumber());
         }
     }
 }

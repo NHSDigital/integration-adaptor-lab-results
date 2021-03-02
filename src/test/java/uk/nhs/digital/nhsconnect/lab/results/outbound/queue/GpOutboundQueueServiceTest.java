@@ -63,8 +63,8 @@ class GpOutboundQueueServiceTest {
         gpOutboundQueueService.publish(bundle);
 
         assertAll(
-            () -> verify(serializer).serialize(bundle),
-            () -> verify(jmsTemplate).send(eq(gpOutboundQueueName), messageCreatorArgumentCaptor.capture())
+                () -> verify(serializer).serialize(bundle),
+                () -> verify(jmsTemplate).send(eq(gpOutboundQueueName), messageCreatorArgumentCaptor.capture())
         );
 
         when(session.createTextMessage(serializedData)).thenReturn(textMessage);
@@ -72,9 +72,9 @@ class GpOutboundQueueServiceTest {
         messageCreatorArgumentCaptor.getValue().createMessage(session);
 
         assertAll(
-            () -> verify(session).createTextMessage(eq(serializedData)),
-            () -> verify(textMessage).setStringProperty(JmsHeaders.CORRELATION_ID, CONSERVATION_ID),
-            () -> verify(correlationIdService).getCurrentCorrelationId()
+                () -> verify(session).createTextMessage(eq(serializedData)),
+                () -> verify(textMessage).setStringProperty(JmsHeaders.CORRELATION_ID, CONSERVATION_ID),
+                () -> verify(correlationIdService).getCurrentCorrelationId()
         );
     }
 }

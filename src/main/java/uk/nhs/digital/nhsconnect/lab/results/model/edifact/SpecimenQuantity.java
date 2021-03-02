@@ -25,7 +25,7 @@ public class SpecimenQuantity extends Segment {
     public static SpecimenQuantity fromString(String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException(
-                "Can't create " + SpecimenQuantity.class.getSimpleName() + " from " + edifactString);
+                    "Can't create " + SpecimenQuantity.class.getSimpleName() + " from " + edifactString);
         }
         final String[] splitByColon = Split.byColon(edifactString);
         final int quantity = Integer.parseInt(Split.byPlus(splitByColon[1])[0]);

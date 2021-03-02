@@ -4,5 +4,6 @@ public final class JmsHeaders {
 
     public static final String CORRELATION_ID = "CorrelationId";
 
-    private JmsHeaders() { }
+    private JmsHeaders() {
+    }
 }

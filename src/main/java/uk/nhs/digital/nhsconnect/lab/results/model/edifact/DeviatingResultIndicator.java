@@ -18,8 +18,8 @@ public enum DeviatingResultIndicator {
 
     public static DeviatingResultIndicator fromCode(String code) {
         return Arrays.stream(DeviatingResultIndicator.values())
-            .filter(c -> c.code.equals(code))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("No deviating result indicator for '" + code + "'"));
+                .filter(c -> c.code.equals(code))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No deviating result indicator for '" + code + "'"));
     }
 }

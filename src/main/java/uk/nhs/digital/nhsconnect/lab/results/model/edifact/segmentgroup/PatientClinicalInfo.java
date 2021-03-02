@@ -31,14 +31,14 @@ public class PatientClinicalInfo extends SegmentGroup {
 
     @Getter(lazy = true)
     private final ClinicalInformationCode code =
-        ClinicalInformationCode.fromString(extractSegment(ClinicalInformationCode.KEY));
+            ClinicalInformationCode.fromString(extractSegment(ClinicalInformationCode.KEY));
 
     @Getter(lazy = true)
     private final List<FreeTextSegment> freeTexts =
-        extractSegments(FreeTextSegment.KEY).stream()
-            .map(FreeTextSegment::fromString)
-            .filter(segment -> FreeTextType.CLINICAL_INFO.equals(segment.getType()))
-            .collect(toList());
+            extractSegments(FreeTextSegment.KEY).stream()
+                    .map(FreeTextSegment::fromString)
+                    .filter(segment -> FreeTextType.CLINICAL_INFO.equals(segment.getType()))
+                    .collect(toList());
 
     public static Optional<PatientClinicalInfo> createOptional(@NonNull final List<String> edifactSegments) {
         if (edifactSegments.isEmpty() || !edifactSegments.get(0).startsWith(INDICATOR)) {

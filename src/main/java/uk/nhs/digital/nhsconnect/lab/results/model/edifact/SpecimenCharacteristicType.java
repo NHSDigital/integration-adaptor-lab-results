@@ -24,7 +24,7 @@ public class SpecimenCharacteristicType extends Segment {
     public static SpecimenCharacteristicType fromString(String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException(
-                "Can't create " + SpecimenCharacteristicType.class.getSimpleName() + " from " + edifactString);
+                    "Can't create " + SpecimenCharacteristicType.class.getSimpleName() + " from " + edifactString);
         }
         final String[] split = Split.byColon(edifactString);
         return new SpecimenCharacteristicType(split[TYPE_OF_SPECIMEN_DETAILS_INDEX]);

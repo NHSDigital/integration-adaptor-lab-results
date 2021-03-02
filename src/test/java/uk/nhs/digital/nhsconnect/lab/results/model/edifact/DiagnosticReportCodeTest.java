@@ -10,7 +10,7 @@ class DiagnosticReportCodeTest {
     @Test
     void testBuildWithNullCodeThrowsException() {
         final NullPointerException exception =
-            assertThrows(NullPointerException.class, () -> DiagnosticReportCode.builder().build());
+                assertThrows(NullPointerException.class, () -> DiagnosticReportCode.builder().build());
 
         assertEquals("code is marked non-null but is null", exception.getMessage());
     }
@@ -25,7 +25,7 @@ class DiagnosticReportCodeTest {
     @Test
     void testFromStringWithInvalidInput() {
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-            () -> DiagnosticReportCode.fromString("wrong value"));
+                () -> DiagnosticReportCode.fromString("wrong value"));
 
         assertEquals("Can't create DiagnosticReportCode from wrong value", exception.getMessage());
     }

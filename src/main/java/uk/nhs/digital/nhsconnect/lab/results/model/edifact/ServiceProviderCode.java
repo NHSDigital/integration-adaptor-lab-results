@@ -18,8 +18,8 @@ public enum ServiceProviderCode {
 
     public static ServiceProviderCode fromCode(@NonNull String code) {
         return Arrays.stream(ServiceProviderCode.values())
-            .filter(c -> code.equals(c.getCode()))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("No service provider code for '" + code + "'"));
+                .filter(c -> code.equals(c.getCode()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No service provider code for '" + code + "'"));
     }
 }
