@@ -9,9 +9,13 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 /**
- * Example: NAD+PO+G3380314:900++SCOTT'
+ * Example: Details of requesting practitioner
+ * NAD+PO+G3380314:900++SCOTT'
+ * SPR+PRO'
  * <br>
- * Example: NAD+PO+++NORTH DOWN GP'
+ * Example: Details of requesting organization
+ * NAD+PO+++NORTH DOWN GP'
+ * SPR+ORG'
  */
 @Getter
 @Setter
@@ -24,9 +28,9 @@ public class RequesterNameAndAddress extends Segment {
     public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
 
     private final String identifier;
-    private final HealthcareRegistrationIdentificationCode healthcareRegistrationIdentificationCode;
-    private final String requesterName;
-    private final String requestingOrganizationName;
+    private final HealthcareRegistrationIdentificationCode code;
+    private final String practitionerName;
+    private final String organizationName;
 
     @SuppressWarnings("checkstyle:MagicNumber")
     public static RequesterNameAndAddress fromString(final String edifactString) {
@@ -37,20 +41,24 @@ public class RequesterNameAndAddress extends Segment {
 
         String[] keySplit = Split.byPlus(edifactString);
         String identifier = Split.byColon(keySplit[2])[0];
-        String name = keySplit[4];
 
-        if (identifier.isBlank()) {
+        final boolean isOrganization = StringUtils.isBlank(identifier);
+        if (isOrganization) {
+            // if identifier is blank - organization
+            String organizationName = keySplit[4].replaceAll("\\?'", "'");
+
             return RequesterNameAndAddress.builder()
-                .requestingOrganizationName(name)
+                .organizationName(organizationName)
                 .build();
         }
 
         String code = Split.byColon(keySplit[2])[1];
+        String practitionerName = keySplit[4];
 
         return RequesterNameAndAddress.builder()
             .identifier(identifier)
-            .healthcareRegistrationIdentificationCode(HealthcareRegistrationIdentificationCode.fromCode(code))
-            .requesterName(name)
+            .code(HealthcareRegistrationIdentificationCode.fromCode(code))
+            .practitionerName(practitionerName)
             .build();
     }
 
@@ -61,21 +69,23 @@ public class RequesterNameAndAddress extends Segment {
 
     @Override
     public void validate() throws EdifactValidationException {
-        if (!StringUtils.isBlank(requesterName) && StringUtils.isBlank(identifier)) {
-            throw new EdifactValidationException(KEY + ": Attribute identifier is required");
-        }
+        if (StringUtils.isBlank(identifier)) {
+            if (!StringUtils.isBlank(practitionerName)) {
+                throw new EdifactValidationException(KEY + ": Attribute identifier is required");
+            }
 
-        if (!StringUtils.isBlank(identifier) && healthcareRegistrationIdentificationCode == null) {
-            throw new EdifactValidationException(
-                KEY + ": Attribute healthcareRegistrationIdentificationCode is required");
-        }
+            if (StringUtils.isBlank(organizationName)) {
+                throw new EdifactValidationException(KEY + ": Attribute organizationName is required");
+            }
+        } else {
+            if (code == null) {
+                throw new EdifactValidationException(
+                    KEY + ": Attribute code is required");
+            }
 
-        if (!StringUtils.isBlank(identifier) && StringUtils.isBlank(requesterName)) {
-            throw new EdifactValidationException(KEY + ": Attribute requesterName is required");
-        }
-
-        if (StringUtils.isBlank(identifier) && StringUtils.isBlank(requestingOrganizationName)) {
-            throw new EdifactValidationException(KEY + ": Attribute requestingOrganizationName is required");
+            if (StringUtils.isBlank(practitionerName)) {
+                throw new EdifactValidationException(KEY + ": Attribute practitionerName is required");
+            }
         }
     }
 }

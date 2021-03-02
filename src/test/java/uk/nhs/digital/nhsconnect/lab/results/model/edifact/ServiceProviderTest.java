@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ServiceProviderTest {
 
     private final ServiceProvider serviceProvider = new ServiceProvider(
-        ServiceProviderCode.ORGANISATION
+        ServiceProviderCode.ORGANIZATION
     );
 
     @Test

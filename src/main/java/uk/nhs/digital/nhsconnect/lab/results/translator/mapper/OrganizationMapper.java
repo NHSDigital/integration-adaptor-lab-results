@@ -13,12 +13,11 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PerformerNameAndAddre
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvolvedParty;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import static uk.nhs.digital.nhsconnect.lab.results.model.edifact.ServiceProviderCode.DEPARTMENT;
-import static uk.nhs.digital.nhsconnect.lab.results.model.edifact.ServiceProviderCode.ORGANISATION;
+import static uk.nhs.digital.nhsconnect.lab.results.model.edifact.ServiceProviderCode.ORGANIZATION;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -28,16 +27,16 @@ public class OrganizationMapper {
 
     public Optional<Organization> mapToRequestingOrganization(final Message message) {
         return message.getInvolvedParties().stream()
-            .filter(party -> party.getServiceProvider().getServiceProviderCode().equals(ORGANISATION))
+            .filter(party -> party.getServiceProvider().getServiceProviderCode().equals(ORGANIZATION))
             .map(InvolvedParty::getRequesterNameAndAddress)
             .flatMap(Optional::stream)
             .findFirst()
-            .map(requester -> mapToOrganization(requester.getRequestingOrganizationName(), null));
+            .map(requester -> mapToOrganization(requester.getOrganizationName(), null));
     }
 
     public Optional<Organization> mapToPerformingOrganization(final Message message) {
         Stream<InvolvedParty> organizationStream = message.getInvolvedParties().stream()
-            .filter(party -> party.getServiceProvider().getServiceProviderCode().equals(ORGANISATION));
+            .filter(party -> party.getServiceProvider().getServiceProviderCode().equals(ORGANIZATION));
 
         String performingOrganizationName = mapToPerformerName(organizationStream);
 
@@ -56,7 +55,7 @@ public class OrganizationMapper {
     private String mapToPerformerName(Stream<InvolvedParty> involvedPartyStream) {
         return involvedPartyStream.map(InvolvedParty::getPerformerNameAndAddress)
             .flatMap(Optional::stream)
-            .map(PerformerNameAndAddress::getPerformingOrganisationName)
+            .map(PerformerNameAndAddress::getOrganizationName)
             .findFirst()
             .orElse(null);
     }
@@ -71,8 +70,8 @@ public class OrganizationMapper {
             Coding coding = new Coding()
                 .setCode(OrganizationType.DEPT.toCode())
                 .setDisplay(departmentName);
-            CodeableConcept type = new CodeableConcept().setCoding(List.of(coding));
-            organization.setType(List.of(type));
+            CodeableConcept type = new CodeableConcept().addCoding(coding);
+            organization.addType(type);
         }
 
         return organization;

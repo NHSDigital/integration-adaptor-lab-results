@@ -45,7 +45,7 @@ class PractitionerMapperTest {
     void testMapMessageToPractitionerNoRequester() {
         when(message.getInvolvedParties()).thenReturn(Collections.emptyList());
 
-        assertThat(mapper.mapRequester(message)).isEmpty();
+        assertThat(mapper.mapToRequestingPractitioner(message)).isEmpty();
     }
 
     @Test
@@ -53,10 +53,10 @@ class PractitionerMapperTest {
         final var requestingParty = mock(InvolvedParty.class);
         when(message.getInvolvedParties()).thenReturn(List.of(requestingParty));
         when(requestingParty.getRequesterNameAndAddress()).thenReturn(Optional.of(requester));
-        when(requester.getRequesterName()).thenReturn("Alan Turing");
+        when(requester.getPractitionerName()).thenReturn("Alan Turing");
         when(requester.getIdentifier()).thenReturn("Identifier");
 
-        Optional<Practitioner> result = mapper.mapRequester(message);
+        Optional<Practitioner> result = mapper.mapToRequestingPractitioner(message);
         assertThat(result).isNotEmpty();
 
         Practitioner practitioner = result.get();
@@ -83,7 +83,7 @@ class PractitionerMapperTest {
         when(message.getInvolvedParties()).thenReturn(List.of(requestingParty));
         when(requestingParty.getRequesterNameAndAddress()).thenReturn(Optional.of(requester));
 
-        Optional<Practitioner> result = mapper.mapRequester(message);
+        Optional<Practitioner> result = mapper.mapToRequestingPractitioner(message);
         assertThat(result).isNotEmpty();
 
         Practitioner practitioner = result.get();
@@ -94,7 +94,7 @@ class PractitionerMapperTest {
     void testMapMessageToPractitionerNoPerformer() {
         when(message.getInvolvedParties()).thenReturn(Collections.emptyList());
 
-        assertThat(mapper.mapRequester(message)).isEmpty();
+        assertThat(mapper.mapToRequestingPractitioner(message)).isEmpty();
     }
 
     @Test
@@ -102,10 +102,10 @@ class PractitionerMapperTest {
         final var requestingParty = mock(InvolvedParty.class);
         when(message.getInvolvedParties()).thenReturn(List.of(requestingParty));
         when(requestingParty.getPerformerNameAndAddress()).thenReturn(Optional.of(performer));
-        when(performer.getPerformerName()).thenReturn("Jane Doe");
+        when(performer.getPractitionerName()).thenReturn("Jane Doe");
         when(performer.getIdentifier()).thenReturn("Identifier");
 
-        Optional<Practitioner> result = mapper.mapPerformer(message);
+        Optional<Practitioner> result = mapper.mapToPerformingPractitioner(message);
         assertThat(result).isNotEmpty();
 
         Practitioner practitioner = result.get();
@@ -135,7 +135,7 @@ class PractitionerMapperTest {
         when(performer.getIdentifier()).thenReturn("Identifier");
 
 
-        Optional<Practitioner> result = mapper.mapPerformer(message);
+        Optional<Practitioner> result = mapper.mapToPerformingPractitioner(message);
         assertThat(result).isNotEmpty();
 
         Practitioner practitioner = result.get();
@@ -149,7 +149,7 @@ class PractitionerMapperTest {
         when(requestingParty.getPerformerNameAndAddress()).thenReturn(Optional.of(performer));
         when(performer.getIdentifier()).thenReturn(null);
 
-        Optional<Practitioner> result = mapper.mapPerformer(message);
+        Optional<Practitioner> result = mapper.mapToPerformingPractitioner(message);
         assertThat(result).isEmpty();
     }
 }

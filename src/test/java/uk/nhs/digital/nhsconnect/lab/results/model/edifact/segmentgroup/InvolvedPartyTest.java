@@ -20,7 +20,7 @@ class InvolvedPartyTest {
     }
 
     @Test
-    void testGetPerformingOrganisationNameAndAddress() {
+    void testGetPerformingOrganizationNameAndAddress() {
         final var involvedParty = new InvolvedParty(List.of(
             "ignore me",
             "NAD+SLA+++ST JAMES?'S UNIVERSITY HOSPITAL",
@@ -28,8 +28,8 @@ class InvolvedPartyTest {
         ));
         assertThat(involvedParty.getPerformerNameAndAddress())
             .isPresent()
-            .map(PerformerNameAndAddress::getPerformingOrganisationName)
-            .contains("ST JAMES?'S UNIVERSITY HOSPITAL");
+            .map(PerformerNameAndAddress::getOrganizationName)
+            .contains("ST JAMES'S UNIVERSITY HOSPITAL");
     }
 
     @Test
@@ -42,11 +42,11 @@ class InvolvedPartyTest {
         var requesterNameAndAddress = involvedParty.getRequesterNameAndAddress();
         assertThat(requesterNameAndAddress)
             .isPresent()
-            .map(RequesterNameAndAddress::getRequesterName)
+            .map(RequesterNameAndAddress::getPractitionerName)
             .hasValue("SCOTT");
         assertThat(requesterNameAndAddress)
             .isPresent()
-            .map(RequesterNameAndAddress::getHealthcareRegistrationIdentificationCode)
+            .map(RequesterNameAndAddress::getCode)
             .hasValue(HealthcareRegistrationIdentificationCode.GP);
         assertThat(requesterNameAndAddress)
             .isPresent()
@@ -103,6 +103,6 @@ class InvolvedPartyTest {
             "ignore me"
         ));
         assertThat(involvedParty.getServiceProvider().getServiceProviderCode())
-            .isEqualTo(ServiceProviderCode.ORGANISATION);
+            .isEqualTo(ServiceProviderCode.ORGANIZATION);
     }
 }

@@ -19,20 +19,20 @@ public class PractitionerMapper {
 
     private static final String SDS_USER_SYSTEM = "https://fhir.nhs.uk/Id/sds-user-id";
 
-    public Optional<Practitioner> mapRequester(final Message message) {
+    public Optional<Practitioner> mapToRequestingPractitioner(final Message message) {
         return message.getInvolvedParties().stream()
             .map(InvolvedParty::getRequesterNameAndAddress)
             .flatMap(Optional::stream)
-            .map(r -> mapToPractitioner(r.getIdentifier(), r.getRequesterName()))
+            .map(r -> mapToPractitioner(r.getIdentifier(), r.getPractitionerName()))
             .findAny();
     }
 
-    public Optional<Practitioner> mapPerformer(final Message message) {
+    public Optional<Practitioner> mapToPerformingPractitioner(final Message message) {
         return message.getInvolvedParties().stream()
             .map(InvolvedParty::getPerformerNameAndAddress)
             .flatMap(Optional::stream)
             .filter(p -> !StringUtils.isBlank(p.getIdentifier()))
-            .map(p -> mapToPractitioner(p.getIdentifier(), p.getPerformerName()))
+            .map(p -> mapToPractitioner(p.getIdentifier(), p.getPractitionerName()))
             .findAny();
     }
 

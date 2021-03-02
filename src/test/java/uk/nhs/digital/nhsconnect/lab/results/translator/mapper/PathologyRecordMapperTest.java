@@ -44,8 +44,8 @@ class PathologyRecordMapperTest {
 
     @BeforeEach
     void setUp() {
-        when(practitionerMapper.mapRequester(any(Message.class))).thenReturn(Optional.empty());
-        when(practitionerMapper.mapPerformer(any(Message.class))).thenReturn(Optional.empty());
+        when(practitionerMapper.mapToRequestingPractitioner(any(Message.class))).thenReturn(Optional.empty());
+        when(practitionerMapper.mapToPerformingPractitioner(any(Message.class))).thenReturn(Optional.empty());
         when(patientMapper.mapToPatient(any(Message.class))).thenReturn(new Patient());
         when(specimenMapper.mapToSpecimens(any(Message.class), any(Patient.class))).thenReturn(Collections.emptyList());
     }
@@ -66,12 +66,12 @@ class PathologyRecordMapperTest {
         final Message message = new Message(emptyList());
         var mockRequester = mock(Practitioner.class);
 
-        when(practitionerMapper.mapRequester(message))
+        when(practitionerMapper.mapToRequestingPractitioner(message))
             .thenReturn(Optional.of(mockRequester));
 
         final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
 
-        assertThat(pathologyRecord.getRequester()).isEqualTo(mockRequester);
+        assertThat(pathologyRecord.getRequestingPractitioner()).isEqualTo(mockRequester);
     }
 
     @Test
@@ -92,11 +92,11 @@ class PathologyRecordMapperTest {
         final Message message = new Message(emptyList());
         var mockPerformer = mock(Practitioner.class);
 
-        when(practitionerMapper.mapPerformer(message)).thenReturn(Optional.of(mockPerformer));
+        when(practitionerMapper.mapToPerformingPractitioner(message)).thenReturn(Optional.of(mockPerformer));
 
         final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
 
-        assertThat(pathologyRecord.getPerformer()).isEqualTo(mockPerformer);
+        assertThat(pathologyRecord.getPerformingPractitioner()).isEqualTo(mockPerformer);
     }
 
     @Test

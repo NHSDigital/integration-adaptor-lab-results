@@ -9,12 +9,17 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 /**
- * Example: NAD+SLA+A2442389:902++DR J SMITH'
+ * Example: Details of performing practitioner
+ * NAD+SLA+A2442389:902++DR J SMITH'
+ * SPR+PRO'
  * <br>
- * Example: NAD+SLA+++Haematology'
+ * Example: Details of performing organization's department
+ * NAD+SLA+++Haematology'
+ * SPR+DPT'
  * <br>
- * Example: NAD+SLA+++ST JAMES?'S UNIVERSITY HOSPITAL'
- * <br>
+ * Example: Details of performing organization
+ * NAD+SLA+++ST JAMES?'S UNIVERSITY HOSPITAL'
+ * SPR+ORG'
  */
 @Getter
 @Builder
@@ -25,13 +30,12 @@ public class PerformerNameAndAddress extends Segment {
     private static final String QUALIFIER = "SLA";
     public static final String KEY_QUALIFIER = KEY + "+" + QUALIFIER;
 
-    private static final int PERFORMING_NAME_INDEX_IN_EDIFACT_STRING = 4;
-
     private final String identifier;
     private final HealthcareRegistrationIdentificationCode code;
-    private final String performerName;
-    private final String performingOrganisationName;
+    private final String practitionerName;
+    private final String organizationName;
 
+    @SuppressWarnings("checkstyle:MagicNumber")
     public static PerformerNameAndAddress fromString(String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException(
@@ -41,24 +45,26 @@ public class PerformerNameAndAddress extends Segment {
 
         String[] keySplit = Split.byPlus(edifactString);
         String[] colonSplit = Split.byColon(keySplit[2]);
-        String performerID = colonSplit[0];
+        String identifier = colonSplit[0];
 
-        final boolean isPerformingOrganisation = StringUtils.isBlank(performerID);
-        if (isPerformingOrganisation) {
-            // if identifier is blank - organisation/department
-            String performingOrganisationName = keySplit[PERFORMING_NAME_INDEX_IN_EDIFACT_STRING];
+        final boolean isOrganization = StringUtils.isBlank(identifier);
+        if (isOrganization) {
+            // if identifier is blank - organization/department
+            String organizationName = keySplit[4].replaceAll("\\?'", "'");
+
             return PerformerNameAndAddress.builder()
-                .performingOrganisationName(performingOrganisationName)
-                .build();
-        } else {
-            String performerCode = colonSplit[1];
-            String performerName = keySplit[PERFORMING_NAME_INDEX_IN_EDIFACT_STRING];
-            return PerformerNameAndAddress.builder()
-                .identifier(performerID)
-                .code(HealthcareRegistrationIdentificationCode.fromCode(performerCode))
-                .performerName(performerName)
+                .organizationName(organizationName)
                 .build();
         }
+
+        String code = colonSplit[1];
+        String practitionerName = keySplit[4];
+
+        return PerformerNameAndAddress.builder()
+            .identifier(identifier)
+            .code(HealthcareRegistrationIdentificationCode.fromCode(code))
+            .practitionerName(practitionerName)
+            .build();
     }
 
     @Override
@@ -68,14 +74,14 @@ public class PerformerNameAndAddress extends Segment {
 
     @Override
     public void validate() throws EdifactValidationException {
-        if (StringUtils.isBlank(identifier) && StringUtils.isBlank(performingOrganisationName)) {
-            throw new EdifactValidationException(getKey() + ": Attribute performingOrganisationName is required");
+        if (StringUtils.isBlank(identifier) && StringUtils.isBlank(organizationName)) {
+            throw new EdifactValidationException(getKey() + ": Attribute organizationName is required");
         } else {
             if (code == null || StringUtils.isBlank(code.getCode())) {
                 throw new EdifactValidationException(getKey() + ": Attribute code is required");
             }
-            if (StringUtils.isBlank(performerName)) {
-                throw new EdifactValidationException(getKey() + ": Attribute performerName is required");
+            if (StringUtils.isBlank(practitionerName)) {
+                throw new EdifactValidationException(getKey() + ": Attribute practitionerName is required");
             }
         }
     }

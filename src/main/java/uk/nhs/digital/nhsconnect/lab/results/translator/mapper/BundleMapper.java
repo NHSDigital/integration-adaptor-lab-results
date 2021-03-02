@@ -32,10 +32,10 @@ public class BundleMapper {
             .setFullUrl(fullUrlGenerator.generate(pathologyRecord.getPatient()))
             .setResource(pathologyRecord.getPatient());
 
-        Optional.ofNullable(pathologyRecord.getRequester()).ifPresent(requester ->
+        Optional.ofNullable(pathologyRecord.getRequestingPractitioner()).ifPresent(requestingPractitioner ->
             bundle.addEntry()
-                .setFullUrl(fullUrlGenerator.generate(requester))
-                .setResource(requester)
+                .setFullUrl(fullUrlGenerator.generate(requestingPractitioner))
+                .setResource(requestingPractitioner)
         );
 
         Optional.ofNullable(pathologyRecord.getRequestingOrganization()).ifPresent(requestingOrganization ->
@@ -44,10 +44,10 @@ public class BundleMapper {
                 .setResource(requestingOrganization)
         );
 
-        Optional.ofNullable(pathologyRecord.getPerformer()).ifPresent(performer ->
+        Optional.ofNullable(pathologyRecord.getPerformingPractitioner()).ifPresent(performingPractitioner ->
             bundle.addEntry()
-                .setFullUrl(fullUrlGenerator.generate(performer))
-                .setResource(performer)
+                .setFullUrl(fullUrlGenerator.generate(performingPractitioner))
+                .setResource(performingPractitioner)
         );
 
         Optional.ofNullable(pathologyRecord.getPerformingOrganization()).ifPresent(performingOrganization ->

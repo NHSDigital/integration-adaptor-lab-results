@@ -53,7 +53,7 @@ class BundleMapperTest {
         final var mockRequester = mock(Practitioner.class);
         lenient().when(mockRequester.getId()).thenReturn(SOME_UUID);
         pathologyRecordBuilder = PathologyRecord.builder()
-            .requester(mockRequester)
+            .requestingPractitioner(mockRequester)
             .patient(mock(Patient.class));
     }
 
@@ -84,7 +84,7 @@ class BundleMapperTest {
     @Test
     void testMapPathologyRecordToBundleWithRequester() {
         final var mockRequester = mock(Practitioner.class);
-        pathologyRecordBuilder.requester(mockRequester);
+        pathologyRecordBuilder.requestingPractitioner(mockRequester);
 
         final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
 
@@ -132,7 +132,7 @@ class BundleMapperTest {
     @Test
     void testMapPathologyRecordToBundleWithPerformer() {
         final var mockPerformer = mock(Practitioner.class);
-        pathologyRecordBuilder.performer(mockPerformer);
+        pathologyRecordBuilder.performingPractitioner(mockPerformer);
 
         final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
 

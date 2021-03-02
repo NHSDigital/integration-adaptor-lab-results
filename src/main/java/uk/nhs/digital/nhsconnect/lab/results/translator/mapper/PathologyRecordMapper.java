@@ -22,10 +22,12 @@ public class PathologyRecordMapper {
 
         final var patient = patientMapper.mapToPatient(message);
         pathologyRecordBuilder.patient(patient);
-        practitionerMapper.mapRequester(message).ifPresent(pathologyRecordBuilder::requester);
+        practitionerMapper.mapToRequestingPractitioner(message)
+            .ifPresent(pathologyRecordBuilder::requestingPractitioner);
         organizationMapper.mapToRequestingOrganization(message)
             .ifPresent(pathologyRecordBuilder::requestingOrganization);
-        practitionerMapper.mapPerformer(message).ifPresent(pathologyRecordBuilder::performer);
+        practitionerMapper.mapToPerformingPractitioner(message)
+            .ifPresent(pathologyRecordBuilder::performingPractitioner);
         organizationMapper.mapToPerformingOrganization(message)
             .ifPresent(pathologyRecordBuilder::performingOrganization);
         pathologyRecordBuilder.specimens(specimenMapper.mapToSpecimens(message, patient));
