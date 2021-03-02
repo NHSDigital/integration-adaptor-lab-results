@@ -44,7 +44,7 @@ class NhsAckProducerServiceTest {
     private static final String NHSACK_IRI_RESPONSE_PATH = "src/test/resources/edifact/nhsAck_example_IRI.txt";
     private static final String NHSACK_IRM_RESPONSE_PATH = "src/test/resources/edifact/nhsAck_example_IRM.txt";
     private static final String NHSACK_SCREENING_RESPONSE_PATH =
-            "src/test/resources/edifact/nhsAck_screening_example.txt";
+        "src/test/resources/edifact/nhsAck_screening_example.txt";
 
     private static final String INTERCHANGE_SENDER = "000000004400001:80";
     private static final String INTERCHANGE_RECIPIENT = "000000024600002:80";
@@ -75,11 +75,11 @@ class NhsAckProducerServiceTest {
     void testCreateValidNhsAckFromValidInterchangeIAFResponse() throws IOException {
         final var interchange = mock(Interchange.class);
         when(interchange.getInterchangeHeader()).thenReturn(InterchangeHeader.builder()
-                .sender(INTERCHANGE_SENDER)
-                .recipient(INTERCHANGE_RECIPIENT)
-                .translationTime(FIXED_TIME)
-                .sequenceNumber(INTERCHANGE_CONTROL_REFERENCE)
-                .build());
+            .sender(INTERCHANGE_SENDER)
+            .recipient(INTERCHANGE_RECIPIENT)
+            .translationTime(FIXED_TIME)
+            .sequenceNumber(INTERCHANGE_CONTROL_REFERENCE)
+            .build());
 
         Message message1 = mock(Message.class);
         when(message1.getMessageHeader()).thenReturn(new MessageHeader().setSequenceNumber(MESSAGE_SEQUENCE_NUMBER_1));
@@ -94,7 +94,7 @@ class NhsAckProducerServiceTest {
         messageProcessingResults.add(new Success(message3, null));
 
         String nhsAck = nhsAckProducerService.createNhsAckEdifact(
-                WorkflowId.PATHOLOGY_ACK, interchange, messageProcessingResults);
+            WorkflowId.PATHOLOGY_ACK, interchange, messageProcessingResults);
 
         String expectedNhsAck = readFile(NHSACK_IAF_RESPONSE_PATH).replace("\n", "");
 
@@ -105,11 +105,11 @@ class NhsAckProducerServiceTest {
     void testCreateNhsAckPartialAcceptanceIAPResponse() throws IOException {
         final var interchange = mock(Interchange.class);
         when(interchange.getInterchangeHeader()).thenReturn(InterchangeHeader.builder()
-                .sender(INTERCHANGE_SENDER)
-                .recipient(INTERCHANGE_RECIPIENT)
-                .translationTime(FIXED_TIME)
-                .sequenceNumber(INTERCHANGE_CONTROL_REFERENCE)
-                .build());
+            .sender(INTERCHANGE_SENDER)
+            .recipient(INTERCHANGE_RECIPIENT)
+            .translationTime(FIXED_TIME)
+            .sequenceNumber(INTERCHANGE_CONTROL_REFERENCE)
+            .build());
 
         Message message1 = mock(Message.class);
         when(message1.getMessageHeader()).thenReturn(new MessageHeader().setSequenceNumber(MESSAGE_SEQUENCE_NUMBER_1));
@@ -125,7 +125,7 @@ class NhsAckProducerServiceTest {
         messageProcessingResults.add(new Success(message3, null));
 
         String nhsAck = nhsAckProducerService.createNhsAckEdifact(
-                WorkflowId.PATHOLOGY_ACK, interchange, messageProcessingResults);
+            WorkflowId.PATHOLOGY_ACK, interchange, messageProcessingResults);
 
         String expectedNhsAck = readFile(NHSACK_IAP_RESPONSE_PATH).replace("\n", "");
 
@@ -136,11 +136,11 @@ class NhsAckProducerServiceTest {
     void testCreateNhsAckAllMessagesErrorIRAResponse() throws IOException {
         final var interchange = mock(Interchange.class);
         when(interchange.getInterchangeHeader()).thenReturn(InterchangeHeader.builder()
-                .sender(INTERCHANGE_SENDER)
-                .recipient(INTERCHANGE_RECIPIENT)
-                .translationTime(FIXED_TIME)
-                .sequenceNumber(INTERCHANGE_CONTROL_REFERENCE)
-                .build());
+            .sender(INTERCHANGE_SENDER)
+            .recipient(INTERCHANGE_RECIPIENT)
+            .translationTime(FIXED_TIME)
+            .sequenceNumber(INTERCHANGE_CONTROL_REFERENCE)
+            .build());
 
         Message message1 = mock(Message.class);
         when(message1.getMessageHeader()).thenReturn(new MessageHeader().setSequenceNumber(MESSAGE_SEQUENCE_NUMBER_1));
@@ -158,7 +158,7 @@ class NhsAckProducerServiceTest {
         messageProcessingResults.add(new Error(message3, exception3));
 
         String nhsAck = nhsAckProducerService.createNhsAckEdifact(
-                WorkflowId.PATHOLOGY_ACK, interchange, messageProcessingResults);
+            WorkflowId.PATHOLOGY_ACK, interchange, messageProcessingResults);
 
         String expectedNhsAck = readFile(NHSACK_IRA_RESPONSE_PATH).replace("\n", "");
 
@@ -174,7 +174,7 @@ class NhsAckProducerServiceTest {
         when(interchangeParsingException.getMessage()).thenReturn("Interchange could not be processed.");
 
         String nhsAck = nhsAckProducerService.createNhsAckEdifact(
-                WorkflowId.PATHOLOGY_ACK, interchangeParsingException);
+            WorkflowId.PATHOLOGY_ACK, interchangeParsingException);
 
         String expectedNhsAck = readFile(NHSACK_IRI_RESPONSE_PATH).replace("\n", "");
 
@@ -190,7 +190,7 @@ class NhsAckProducerServiceTest {
         when(messageParsingException.getMessage()).thenReturn("Messages could not be extracted.");
 
         String nhsAck = nhsAckProducerService.createNhsAckEdifact(
-                WorkflowId.PATHOLOGY_ACK, messageParsingException);
+            WorkflowId.PATHOLOGY_ACK, messageParsingException);
 
         String expectedNhsAck = readFile(NHSACK_IRM_RESPONSE_PATH).replace("\n", "");
 
@@ -201,11 +201,11 @@ class NhsAckProducerServiceTest {
     void testCreateNhsAckMessageForScreeningReport() throws IOException {
         final var interchange = mock(Interchange.class);
         when(interchange.getInterchangeHeader()).thenReturn(InterchangeHeader.builder()
-                .sender(INTERCHANGE_SENDER)
-                .recipient(INTERCHANGE_RECIPIENT)
-                .translationTime(FIXED_TIME)
-                .sequenceNumber(INTERCHANGE_CONTROL_REFERENCE)
-                .build());
+            .sender(INTERCHANGE_SENDER)
+            .recipient(INTERCHANGE_RECIPIENT)
+            .translationTime(FIXED_TIME)
+            .sequenceNumber(INTERCHANGE_CONTROL_REFERENCE)
+            .build());
 
         Message message1 = mock(Message.class);
         when(message1.getMessageHeader()).thenReturn(new MessageHeader().setSequenceNumber(MESSAGE_SEQUENCE_NUMBER_1));
@@ -220,7 +220,7 @@ class NhsAckProducerServiceTest {
         messageProcessingResults.add(new Success(message3, null));
 
         String nhsAck = nhsAckProducerService.createNhsAckEdifact(
-                WorkflowId.SCREENING_ACK, interchange, messageProcessingResults);
+            WorkflowId.SCREENING_ACK, interchange, messageProcessingResults);
 
         String expectedNhsAck = readFile(NHSACK_SCREENING_RESPONSE_PATH).replace("\n", "");
 

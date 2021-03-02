@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Tests that the correct NHSACK is returned for valid interchanges and when errors occur in processing.
  * There is an NHSACK status code for each type of response:
- *
+ * <p>
  * IAF: Valid Interchange, all Messages accepted
  * IAP: Valid Interchange, some Messages accepted, some Messages rejected
  * IRA: Valid Interchange, but all Messages were rejected
@@ -65,13 +65,13 @@ class NhsAckResponseTest extends IntegrationBaseTest {
 
     @Test
     void whenValidEdifactSentThenCorrectNhsAckReturned()
-            throws IOException {
+        throws IOException {
 
         final String content = new String(Files.readAllBytes(edifactIAFResource.getFile().toPath()));
 
         final MeshMessage meshMessage = new MeshMessage()
-                .setWorkflowId(WorkflowId.PATHOLOGY)
-                .setContent(content);
+            .setWorkflowId(WorkflowId.PATHOLOGY)
+            .setContent(content);
 
         sendToMeshInboundQueue(meshMessage);
 
@@ -81,19 +81,19 @@ class NhsAckResponseTest extends IntegrationBaseTest {
 
         final String nhsAckContent = nhsAck.getContent();
         final String expectedContent = new String(Files.readAllBytes(nhsAckIAFResource.getFile().toPath()))
-                .replace("\n", "");
+            .replace("\n", "");
         assertThat(nhsAckContent).matches(expectedContent);
     }
 
     @Test
     void whenPartiallyValidEdifactSentThenCorrectNhsAckReturned()
-            throws IOException {
+        throws IOException {
 
         final String content = new String(Files.readAllBytes(edifactIAPResource.getFile().toPath()));
 
         final MeshMessage meshMessage = new MeshMessage()
-                .setWorkflowId(WorkflowId.PATHOLOGY)
-                .setContent(content);
+            .setWorkflowId(WorkflowId.PATHOLOGY)
+            .setContent(content);
 
         sendToMeshInboundQueue(meshMessage);
 
@@ -103,19 +103,19 @@ class NhsAckResponseTest extends IntegrationBaseTest {
 
         final String nhsAckContent = nhsAck.getContent();
         final String expectedContent = new String(Files.readAllBytes(nhsAckIAPResource.getFile().toPath()))
-                .replace("\n", "");
+            .replace("\n", "");
         assertThat(nhsAckContent).matches(expectedContent);
     }
 
     @Test
     void whenAllEdifactMessagesAreInvalidThenCorrectNhsAckReturned()
-            throws IOException {
+        throws IOException {
 
         final String content = new String(Files.readAllBytes(edifactIRAResource.getFile().toPath()));
 
         final MeshMessage meshMessage = new MeshMessage()
-                .setWorkflowId(WorkflowId.PATHOLOGY)
-                .setContent(content);
+            .setWorkflowId(WorkflowId.PATHOLOGY)
+            .setContent(content);
 
         sendToMeshInboundQueue(meshMessage);
 
@@ -125,19 +125,19 @@ class NhsAckResponseTest extends IntegrationBaseTest {
 
         final String nhsAckContent = nhsAck.getContent();
         final String expectedContent = new String(Files.readAllBytes(nhsAckIRAResource.getFile().toPath()))
-                .replace("\n", "");
+            .replace("\n", "");
         assertThat(nhsAckContent).matches(expectedContent);
     }
 
     @Test
     void whenInvalidInterchangeInEdifactSentThenCorrectNhsAckReturned()
-            throws IOException {
+        throws IOException {
 
         final String content = new String(Files.readAllBytes(edifactIRIResource.getFile().toPath()));
 
         final MeshMessage meshMessage = new MeshMessage()
-                .setWorkflowId(WorkflowId.PATHOLOGY)
-                .setContent(content);
+            .setWorkflowId(WorkflowId.PATHOLOGY)
+            .setContent(content);
 
         sendToMeshInboundQueue(meshMessage);
 
@@ -147,19 +147,19 @@ class NhsAckResponseTest extends IntegrationBaseTest {
 
         final String nhsAckContent = nhsAck.getContent();
         final String expectedContent = new String(Files.readAllBytes(nhsAckIRIResource.getFile().toPath()))
-                .replace("\n", "");
+            .replace("\n", "");
         assertThat(nhsAckContent).matches(expectedContent);
     }
 
     @Test
     void whenEdifactMessagesCannotBeExtractedThenCorrectNhsAckReturned()
-            throws IOException {
+        throws IOException {
 
         final String content = new String(Files.readAllBytes(edifactIRMResource.getFile().toPath()));
 
         final MeshMessage meshMessage = new MeshMessage()
-                .setWorkflowId(WorkflowId.PATHOLOGY)
-                .setContent(content);
+            .setWorkflowId(WorkflowId.PATHOLOGY)
+            .setContent(content);
 
         sendToMeshInboundQueue(meshMessage);
 
@@ -169,7 +169,7 @@ class NhsAckResponseTest extends IntegrationBaseTest {
 
         final String nhsAckContent = nhsAck.getContent();
         final String expectedContent = new String(Files.readAllBytes(nhsAckIRMResource.getFile().toPath()))
-                .replace("\n", "");
+            .replace("\n", "");
         assertThat(nhsAckContent).matches(expectedContent);
     }
 }

@@ -13,6 +13,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessageParsingException;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessageResultException;
 import uk.nhs.digital.nhsconnect.lab.results.sequence.SequenceService;
 import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.MessageProcessingResult.Success;
@@ -48,8 +49,8 @@ public class NhsAckProducerService {
         InterchangeHeader interchangeHeader = interchange.getInterchangeHeader();
 
         var nhsAckContent = NhsAckContent.builder()
-            .interchangeSender(interchangeHeader.getSender())
-            .interchangeRecipient(interchangeHeader.getRecipient())
+            .interchangeRecipient(interchangeHeader.getSender())
+            .interchangeSender(interchangeHeader.getRecipient())
             .interchangeControlReference(String.valueOf(interchangeHeader.getSequenceNumber()))
             .nhsAckControlReference(String.valueOf(sequenceService.generateInterchangeSequence(
                 interchangeHeader.getRecipient(), interchangeHeader.getSender())))
@@ -66,20 +67,22 @@ public class NhsAckProducerService {
                 Success currentMessageResult = (Success) messageProcessingResult;
                 MessageHeader messageHeader = currentMessageResult.getMessage().getMessageHeader();
                 nhsAckMessageContent = NhsAckMessageContent.builder()
-                        .messageNumber(messageHeader.getSequenceNumber())
-                        .messageStatus(MESSAGE_ACCEPTED_STATUS_CODE)
-                        .build();
+                    .messageNumber(messageHeader.getSequenceNumber())
+                    .messageStatus(MESSAGE_ACCEPTED_STATUS_CODE)
+                    .build();
                 acceptedMessages++;
-            } else {
+            } else if (messageProcessingResult instanceof MessageProcessingResult.Error) {
                 Error currentMessageResult = (Error) messageProcessingResult;
                 MessageHeader messageHeader = currentMessageResult.getMessage().getMessageHeader();
                 nhsAckMessageContent = NhsAckMessageContent.builder()
-                        .messageNumber(messageHeader.getSequenceNumber())
-                        .messageStatus(MESSAGE_REJECTED_STATUS_CODE)
-                        .messageError(true)
-                        .messageErrorDescription(currentMessageResult.getException().getMessage())
-                        .build();
+                    .messageNumber(messageHeader.getSequenceNumber())
+                    .messageStatus(MESSAGE_REJECTED_STATUS_CODE)
+                    .messageError(true)
+                    .messageErrorDescription(currentMessageResult.getException().getMessage())
+                    .build();
                 rejectedMessages++;
+            } else {
+                throw new MessageResultException("Unsupported message processing result", messageProcessingResult);
             }
             nhsAckContent.addMessageProcessingResult(nhsAckMessageContent);
         }
@@ -103,17 +106,17 @@ public class NhsAckProducerService {
 
     public String createNhsAckEdifact(WorkflowId workflowId, InterchangeParsingException exception) {
         var nhsAckContent = NhsAckContent.builder()
-                .interchangeSender(exception.getSender())
-                .interchangeRecipient(exception.getRecipient())
-                .interchangeControlReference(String.valueOf(exception.getInterchangeSequenceNumber()))
-                .nhsAckControlReference(String.valueOf(sequenceService.generateInterchangeSequence(
-                    exception.getRecipient(), exception.getSender())))
-                .workflowId(workflowId.getWorkflowId())
-                .interchangeStatusCode(NhsAckStatus.INTERCHANGE_REJECTED)
-                .interchangeError(true)
-                .interchangeErrorDescription(exception.getMessage())
-                .segmentCount(MESSAGE_COMMON_SEGMENT_COUNT + 1)
-                .build();
+            .interchangeRecipient(exception.getSender())
+            .interchangeSender(exception.getRecipient())
+            .interchangeControlReference(String.valueOf(exception.getInterchangeSequenceNumber()))
+            .nhsAckControlReference(String.valueOf(sequenceService.generateInterchangeSequence(
+                exception.getRecipient(), exception.getSender())))
+            .workflowId(workflowId.getWorkflowId())
+            .interchangeStatusCode(NhsAckStatus.INTERCHANGE_REJECTED)
+            .interchangeError(true)
+            .interchangeErrorDescription(exception.getMessage())
+            .segmentCount(MESSAGE_COMMON_SEGMENT_COUNT + 1)
+            .build();
 
         setDateTimes(nhsAckContent);
 
@@ -124,8 +127,8 @@ public class NhsAckProducerService {
 
     public String createNhsAckEdifact(WorkflowId workflowId, MessageParsingException exception) {
         var nhsAckContent = NhsAckContent.builder()
-            .interchangeSender(exception.getSender())
-            .interchangeRecipient(exception.getRecipient())
+            .interchangeRecipient(exception.getSender())
+            .interchangeSender(exception.getRecipient())
             .interchangeControlReference(String.valueOf(exception.getInterchangeSequenceNumber()))
             .nhsAckControlReference(String.valueOf(sequenceService.generateInterchangeSequence(
                 exception.getRecipient(), exception.getSender())))
@@ -148,10 +151,10 @@ public class NhsAckProducerService {
         ZoneId timezone = TimestampService.UK_ZONE;
 
         nhsAckContent.setDateCCYYMMDD(DateTimeFormatter.ofPattern("yyyyMMdd")
-                .withZone(timezone).format(nhsAckGenerationTime));
+            .withZone(timezone).format(nhsAckGenerationTime));
         nhsAckContent.setDateYYMMDD(DateTimeFormatter.ofPattern("yyMMdd")
-                .withZone(timezone).format(nhsAckGenerationTime));
+            .withZone(timezone).format(nhsAckGenerationTime));
         nhsAckContent.setTimeHHMM(DateTimeFormatter.ofPattern("HHmm")
-                .withZone(timezone).format(nhsAckGenerationTime));
+            .withZone(timezone).format(nhsAckGenerationTime));
     }
 }

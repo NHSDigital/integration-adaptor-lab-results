@@ -21,10 +21,10 @@ import static uk.nhs.digital.nhsconnect.lab.results.utils.TemplateUtils.fillTemp
 class TemplateUtilsTest {
 
     private static final String TEMPLATE_FILLED_WITH_VALUES_PATH =
-            "src/test/resources/templates/filled_template_with_value.txt";
+        "src/test/resources/templates/filled_template_with_value.txt";
 
     private static final String TEMPLATE_FILLED_NO_VALUES_PATH =
-            "src/test/resources/templates/filled_template_no_value.txt";
+        "src/test/resources/templates/filled_template_no_value.txt";
 
     private static final String TEMPLATE_NAME = "template_test.mustache";
 

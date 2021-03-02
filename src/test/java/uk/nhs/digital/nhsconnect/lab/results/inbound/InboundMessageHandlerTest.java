@@ -73,12 +73,12 @@ class InboundMessageHandlerTest {
 
     @Test
     void handleInvalidInterchangeMeshMessageRaisesException()
-            throws InterchangeParsingException, MessageParsingException {
+        throws InterchangeParsingException, MessageParsingException {
 
         final MeshMessage meshMessage = new MeshMessage()
             .setWorkflowId(WorkflowId.PATHOLOGY);
         when(edifactParser.parse(meshMessage.getContent())).thenThrow(new InterchangeParsingException(
-                null, null, null, 1L, true
+            null, null, null, 1L, true
         ));
 
         final OutboundMeshMessage outboundMeshMessage = new MeshMessage()
@@ -102,7 +102,7 @@ class InboundMessageHandlerTest {
         final MeshMessage meshMessage = new MeshMessage()
             .setWorkflowId(WorkflowId.PATHOLOGY);
         when(edifactParser.parse(meshMessage.getContent())).thenThrow(
-                new MessageParsingException(null, null, null, 1L, true, null));
+            new MessageParsingException(null, null, null, 1L, true, null));
 
         final OutboundMeshMessage outboundMeshMessage = new MeshMessage()
             .setWorkflowId(WorkflowId.PATHOLOGY_ACK);
@@ -122,7 +122,7 @@ class InboundMessageHandlerTest {
 
     @Test
     void handleInboundMeshMessageNoMessagesDoesNotPublishToGpOutboundQueue()
-            throws InterchangeParsingException, MessageParsingException {
+        throws InterchangeParsingException, MessageParsingException {
 
         final MeshMessage meshMessage = new MeshMessage()
             .setWorkflowId(WorkflowId.PATHOLOGY);
@@ -148,7 +148,7 @@ class InboundMessageHandlerTest {
 
     @Test
     void handleInboundMeshMessageWithMessageAndPublishesToGpOutboundQueue()
-            throws InterchangeParsingException, MessageParsingException {
+        throws InterchangeParsingException, MessageParsingException {
 
         final MeshMessage meshMessage = new MeshMessage();
         when(edifactParser.parse(meshMessage.getContent())).thenReturn(interchange);
@@ -174,7 +174,7 @@ class InboundMessageHandlerTest {
 
     @Test
     void handleInboundMeshMessageWithMultipleMessagesAndPublishesToGpOutboundQueue()
-            throws InterchangeParsingException, MessageParsingException {
+        throws InterchangeParsingException, MessageParsingException {
 
         final MeshMessage meshMessage = new MeshMessage();
         when(edifactParser.parse(meshMessage.getContent())).thenReturn(interchange);
@@ -203,18 +203,18 @@ class InboundMessageHandlerTest {
 
     @Test
     void handleInboundMeshMessageWithNoNhsAckRequestedAndPublishesToGpOutboundQueue()
-            throws InterchangeParsingException, MessageParsingException {
+        throws InterchangeParsingException, MessageParsingException {
 
         Interchange interchangeNoAckRequested = mock(Interchange.class);
 
         when(interchangeNoAckRequested.getInterchangeHeader()).thenReturn(
-                InterchangeHeader.builder()
-                        .sender("some_sender")
-                        .recipient("some_recipient")
-                        .sequenceNumber(SEQUENCE_NUMBER)
-                        .translationTime(Instant.now())
-                        .nhsAckRequested(false)
-                        .build());
+            InterchangeHeader.builder()
+                .sender("some_sender")
+                .recipient("some_recipient")
+                .sequenceNumber(SEQUENCE_NUMBER)
+                .translationTime(Instant.now())
+                .nhsAckRequested(false)
+                .build());
 
         final MeshMessage meshMessage = new MeshMessage();
         when(edifactParser.parse(meshMessage.getContent())).thenReturn(interchangeNoAckRequested);
@@ -228,21 +228,21 @@ class InboundMessageHandlerTest {
         inboundMessageHandler.handle(meshMessage);
 
         assertAll(
-                () -> verify(edifactParser).parse(any()),
-                () -> verify(edifactToFhirService).convertToFhir(message),
-                () -> verify(edifactToFhirService).convertToFhir(message1),
-                () -> verify(gpOutboundQueueService, times(2)).publish(any(Bundle.class)),
-                () -> verify(outboundMeshMessageBuilder, never()).buildNhsAck(any(), any(), anyList()),
-                () -> verify(meshOutboundQueueService, never()).publish(any())
+            () -> verify(edifactParser).parse(any()),
+            () -> verify(edifactToFhirService).convertToFhir(message),
+            () -> verify(edifactToFhirService).convertToFhir(message1),
+            () -> verify(gpOutboundQueueService, times(2)).publish(any(Bundle.class)),
+            () -> verify(outboundMeshMessageBuilder, never()).buildNhsAck(any(), any(), anyList()),
+            () -> verify(meshOutboundQueueService, never()).publish(any())
         );
     }
 
     @Test
     void handleInboundMeshMessageWithInvalidInterchangeThrowsExceptionAndIsNotPublishedToGpOutboundQueue()
-            throws InterchangeParsingException, MessageParsingException {
+        throws InterchangeParsingException, MessageParsingException {
 
         when(edifactParser.parse(any())).thenThrow(new InterchangeParsingException(
-                "message", "sender", "recipient", SEQUENCE_NUMBER, true
+            "message", "sender", "recipient", SEQUENCE_NUMBER, true
         ));
 
         final MeshMessage meshMessage = new MeshMessage();
@@ -250,19 +250,19 @@ class InboundMessageHandlerTest {
         inboundMessageHandler.handle(meshMessage);
 
         assertAll(
-                () -> verify(edifactParser).parse(any()),
-                () -> verify(gpOutboundQueueService, never()).publish(any(Bundle.class)),
-                () -> verify(outboundMeshMessageBuilder).buildNhsAck(any(), (InterchangeParsingException) any()),
-                () -> verify(meshOutboundQueueService).publish(any())
+            () -> verify(edifactParser).parse(any()),
+            () -> verify(gpOutboundQueueService, never()).publish(any(Bundle.class)),
+            () -> verify(outboundMeshMessageBuilder).buildNhsAck(any(), (InterchangeParsingException) any()),
+            () -> verify(meshOutboundQueueService).publish(any())
         );
     }
 
     @Test
     void handleInboundMeshMessageWithInvalidMessageThrowsExceptionAndIsNotPublishedToGpOutboundQueue()
-            throws InterchangeParsingException, MessageParsingException {
+        throws InterchangeParsingException, MessageParsingException {
 
         when(edifactParser.parse(any())).thenThrow(new MessageParsingException(
-                "message", "sender", "recipient", SEQUENCE_NUMBER, true, new Exception("error message")
+            "message", "sender", "recipient", SEQUENCE_NUMBER, true, new Exception("error message")
         ));
 
         final MeshMessage meshMessage = new MeshMessage();
@@ -270,10 +270,10 @@ class InboundMessageHandlerTest {
         inboundMessageHandler.handle(meshMessage);
 
         assertAll(
-                () -> verify(edifactParser).parse(any()),
-                () -> verify(gpOutboundQueueService, never()).publish(any(Bundle.class)),
-                () -> verify(outboundMeshMessageBuilder).buildNhsAck(any(), (MessageParsingException) any()),
-                () -> verify(meshOutboundQueueService).publish(any())
+            () -> verify(edifactParser).parse(any()),
+            () -> verify(gpOutboundQueueService, never()).publish(any(Bundle.class)),
+            () -> verify(outboundMeshMessageBuilder).buildNhsAck(any(), (MessageParsingException) any()),
+            () -> verify(meshOutboundQueueService).publish(any())
         );
     }
 }
