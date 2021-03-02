@@ -3,22 +3,16 @@ package uk.nhs.digital.nhsconnect.lab.results.inbound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.Resource;
 import org.springframework.test.annotation.DirtiesContext;
 import uk.nhs.digital.nhsconnect.lab.results.IntegrationBaseTest;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
-import uk.nhs.digital.nhsconnect.lab.results.sequence.SequenceService;
-import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 /**
  * Tests that the correct NHSACK is returned for valid interchanges and when errors occur in processing.
@@ -62,19 +56,8 @@ class NhsAckResponseTest extends IntegrationBaseTest {
     @Value("classpath:edifact/pathology_IRI_regex.nhsack.dat")
     private Resource nhsAckIRIResource;
 
-    @MockBean
-    private TimestampService timestampService;
-
-    @MockBean
-    private SequenceService sequenceService;
-
-    private static final Instant FIXED_TIME = Instant.parse("2020-04-27T16:37:00Z");
-    private static final Long FIXED_SEQUENCE_NUMBER = 1000L;
-
     @BeforeEach
     void setUp() {
-        when(timestampService.getCurrentTimestamp()).thenReturn(FIXED_TIME);
-        when(sequenceService.generateInterchangeSequence(any(), any())).thenReturn(FIXED_SEQUENCE_NUMBER);
         clearGpOutboundQueue();
         clearMeshMailboxes();
         clearMeshOutboundQueue();
