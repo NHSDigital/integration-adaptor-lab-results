@@ -10,16 +10,20 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 /**
  * Example: Details of performing practitioner
+ * <pre>
  * NAD+SLA+A2442389:902++DR J SMITH'
  * SPR+PRO'
- * <br>
+ * </pre>
  * Example: Details of performing organization's department
+ * <pre>
  * NAD+SLA+++Haematology'
  * SPR+DPT'
- * <br>
+ * </pre>
  * Example: Details of performing organization
+ * <pre>
  * NAD+SLA+++ST JAMES?'S UNIVERSITY HOSPITAL'
  * SPR+ORG'
+ * </pre>
  */
 @Getter
 @Builder
@@ -33,7 +37,8 @@ public class PerformerNameAndAddress extends Segment {
     private final String identifier;
     private final HealthcareRegistrationIdentificationCode code;
     private final String practitionerName;
-    private final String organizationName;
+    // Organization or department name
+    private final String partyName;
 
     @SuppressWarnings("checkstyle:MagicNumber")
     public static PerformerNameAndAddress fromString(String edifactString) {
@@ -50,10 +55,10 @@ public class PerformerNameAndAddress extends Segment {
         final boolean isOrganization = StringUtils.isBlank(identifier);
         if (isOrganization) {
             // if identifier is blank - organization/department
-            String organizationName = keySplit[4].replaceAll("\\?'", "'");
+            String partyName = keySplit[4];
 
             return PerformerNameAndAddress.builder()
-                .organizationName(organizationName)
+                .partyName(partyName)
                 .build();
         }
 
@@ -74,14 +79,21 @@ public class PerformerNameAndAddress extends Segment {
 
     @Override
     public void validate() throws EdifactValidationException {
-        if (StringUtils.isBlank(identifier) && StringUtils.isBlank(organizationName)) {
-            throw new EdifactValidationException(getKey() + ": Attribute organizationName is required");
-        } else {
-            if (code == null || StringUtils.isBlank(code.getCode())) {
-                throw new EdifactValidationException(getKey() + ": Attribute code is required");
+        if (StringUtils.isBlank(identifier)) {
+            if (!StringUtils.isBlank(practitionerName)) {
+                throw new EdifactValidationException(KEY + ": Attribute identifier is required");
             }
+
+            if (StringUtils.isBlank(partyName)) {
+                throw new EdifactValidationException(KEY + ": Attribute partyName is required");
+            }
+        } else {
+            if (code == null) {
+                throw new EdifactValidationException(KEY + ": Attribute code is required");
+            }
+
             if (StringUtils.isBlank(practitionerName)) {
-                throw new EdifactValidationException(getKey() + ": Attribute practitionerName is required");
+                throw new EdifactValidationException(KEY + ": Attribute practitionerName is required");
             }
         }
     }

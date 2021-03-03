@@ -10,12 +10,15 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 /**
  * Example: Details of requesting practitioner
+ * <pre>
  * NAD+PO+G3380314:900++SCOTT'
  * SPR+PRO'
- * <br>
+ * </pre>
  * Example: Details of requesting organization
+ * <pre>
  * NAD+PO+++NORTH DOWN GP'
  * SPR+ORG'
+ * </pre>
  */
 @Getter
 @Setter
@@ -45,7 +48,7 @@ public class RequesterNameAndAddress extends Segment {
         final boolean isOrganization = StringUtils.isBlank(identifier);
         if (isOrganization) {
             // if identifier is blank - organization
-            String organizationName = keySplit[4].replaceAll("\\?'", "'");
+            String organizationName = keySplit[4];
 
             return RequesterNameAndAddress.builder()
                 .organizationName(organizationName)
@@ -79,8 +82,7 @@ public class RequesterNameAndAddress extends Segment {
             }
         } else {
             if (code == null) {
-                throw new EdifactValidationException(
-                    KEY + ": Attribute code is required");
+                throw new EdifactValidationException(KEY + ": Attribute code is required");
             }
 
             if (StringUtils.isBlank(practitionerName)) {

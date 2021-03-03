@@ -2,7 +2,6 @@ package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
@@ -18,28 +17,20 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PerformerNameAndAddress;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.RequesterNameAndAddress;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvolvedParty;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 @ExtendWith(MockitoExtension.class)
 class PractitionerMapperTest {
 
-    @InjectMocks
-    private PractitionerMapper mapper;
-
     @Mock
     private Message message;
 
     @Mock
-    private RequesterNameAndAddress requester;
-
-    @Mock
-    private PerformerNameAndAddress performer;
-
-    @Mock
     private UUIDGenerator uuidGenerator;
+
+    @InjectMocks
+    private PractitionerMapper mapper;
 
     @Test
     void testMapMessageToPractitionerNoRequester() {
@@ -50,11 +41,14 @@ class PractitionerMapperTest {
 
     @Test
     void testMapMessageToPractitionerWithRequester() {
-        final var requestingParty = mock(InvolvedParty.class);
-        when(message.getInvolvedParties()).thenReturn(List.of(requestingParty));
-        when(requestingParty.getRequesterNameAndAddress()).thenReturn(Optional.of(requester));
-        when(requester.getPractitionerName()).thenReturn("Alan Turing");
-        when(requester.getIdentifier()).thenReturn("Identifier");
+        final var performingParty = new InvolvedParty(List.of(
+            "ignore me",
+            "NAD+PO+DEF:900++Alan Turing",
+            "SPR+PRO",
+            "ignore me"
+        ));
+
+        when(message.getInvolvedParties()).thenReturn(List.of(performingParty));
 
         Optional<Practitioner> result = mapper.mapToRequestingPractitioner(message);
         assertThat(result).isNotEmpty();
@@ -63,31 +57,18 @@ class PractitionerMapperTest {
 
         assertAll(
             () -> assertThat(practitioner.getName())
-                    .hasSize(1)
-                    .first()
-                    .extracting(HumanName::getText)
-                    .isEqualTo("Alan Turing"),
+                .hasSize(1)
+                .first()
+                .extracting(HumanName::getText)
+                .isEqualTo("Alan Turing"),
             () -> assertThat(practitioner.getIdentifier())
-                    .hasSize(1)
-                    .first()
-                    .satisfies(identifier -> assertAll(
-                        () -> assertThat(identifier.getValue()).isEqualTo("Identifier"),
-                        () -> assertThat(identifier.getSystem()).isEqualTo("https://fhir.nhs.uk/Id/sds-user-id")
-                    ))
+                .hasSize(1)
+                .first()
+                .satisfies(identifier -> assertAll(
+                    () -> assertThat(identifier.getValue()).isEqualTo("DEF"),
+                    () -> assertThat(identifier.getSystem()).isEqualTo("https://fhir.nhs.uk/Id/sds-user-id")
+                ))
         );
-    }
-
-    @Test
-    void testMapMessageToPractitionerWithUnnamedRequester() {
-        final var requestingParty = mock(InvolvedParty.class);
-        when(message.getInvolvedParties()).thenReturn(List.of(requestingParty));
-        when(requestingParty.getRequesterNameAndAddress()).thenReturn(Optional.of(requester));
-
-        Optional<Practitioner> result = mapper.mapToRequestingPractitioner(message);
-        assertThat(result).isNotEmpty();
-
-        Practitioner practitioner = result.get();
-        assertThat(practitioner.getName()).isEmpty();
     }
 
     @Test
@@ -99,55 +80,46 @@ class PractitionerMapperTest {
 
     @Test
     void testMapMessageToPractitionerWithPerformer() {
-        final var requestingParty = mock(InvolvedParty.class);
-        when(message.getInvolvedParties()).thenReturn(List.of(requestingParty));
-        when(requestingParty.getPerformerNameAndAddress()).thenReturn(Optional.of(performer));
-        when(performer.getPractitionerName()).thenReturn("Jane Doe");
-        when(performer.getIdentifier()).thenReturn("Identifier");
+        final var performingParty = new InvolvedParty(List.of(
+            "ignore me",
+            "NAD+SLA+ABC:900++Jane Doe",
+            "SPR+PRO",
+            "ignore me"
+        ));
 
-        Optional<Practitioner> result = mapper.mapToPerformingPractitioner(message);
-        assertThat(result).isNotEmpty();
+        when(message.getInvolvedParties()).thenReturn(List.of(performingParty));
 
-        Practitioner practitioner = result.get();
+        Optional<Practitioner> performer = mapper.mapToPerformingPractitioner(message);
+        assertThat(performer).isNotEmpty();
+
+        Practitioner performingPractitioner = performer.get();
 
         assertAll(
-            () -> assertThat(practitioner.getName())
+            () -> assertThat(performingPractitioner.getName())
                 .hasSize(1)
                 .first()
                 .extracting(HumanName::getText)
                 .isEqualTo("Jane Doe"),
-            () -> assertThat(practitioner.getIdentifier())
+            () -> assertThat(performingPractitioner.getIdentifier())
                 .hasSize(1)
                 .first()
                 .satisfies(identifier -> assertAll(
-                    () -> assertThat(identifier.getValue()).isEqualTo("Identifier"),
+                    () -> assertThat(identifier.getValue()).isEqualTo("ABC"),
                     () -> assertThat(identifier.getSystem()).isEqualTo("https://fhir.nhs.uk/Id/sds-user-id")
                 ))
         );
-
-    }
-
-    @Test
-    void testMapMessageToPractitionerWithUnnamedPerformer() {
-        final var requestingParty = mock(InvolvedParty.class);
-        when(message.getInvolvedParties()).thenReturn(List.of(requestingParty));
-        when(requestingParty.getPerformerNameAndAddress()).thenReturn(Optional.of(performer));
-        when(performer.getIdentifier()).thenReturn("Identifier");
-
-
-        Optional<Practitioner> result = mapper.mapToPerformingPractitioner(message);
-        assertThat(result).isNotEmpty();
-
-        Practitioner practitioner = result.get();
-        assertThat(practitioner.getName()).isEmpty();
     }
 
     @Test
     void testMapMessageWherePerformerIsNotPractitioner() {
-        final var requestingParty = mock(InvolvedParty.class);
-        when(message.getInvolvedParties()).thenReturn(List.of(requestingParty));
-        when(requestingParty.getPerformerNameAndAddress()).thenReturn(Optional.of(performer));
-        when(performer.getIdentifier()).thenReturn(null);
+        final var involvedParty = new InvolvedParty(List.of(
+            "ignore me",
+            "NAD+PO+++Some Org",
+            "SPR+ORG",
+            "ignore me"
+        ));
+
+        when(message.getInvolvedParties()).thenReturn(List.of(involvedParty));
 
         Optional<Practitioner> result = mapper.mapToPerformingPractitioner(message);
         assertThat(result).isEmpty();

@@ -13,8 +13,9 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PerformerNameAndAddre
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvolvedParty;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 import static uk.nhs.digital.nhsconnect.lab.results.model.edifact.ServiceProviderCode.DEPARTMENT;
 import static uk.nhs.digital.nhsconnect.lab.results.model.edifact.ServiceProviderCode.ORGANIZATION;
@@ -35,36 +36,33 @@ public class OrganizationMapper {
     }
 
     public Optional<Organization> mapToPerformingOrganization(final Message message) {
-        Stream<InvolvedParty> organizationStream = message.getInvolvedParties().stream()
-            .filter(party -> party.getServiceProvider().getServiceProviderCode().equals(ORGANIZATION));
+        List<InvolvedParty> organizationList = message.getInvolvedParties().stream()
+            .filter(party -> party.getServiceProvider().getServiceProviderCode().equals(ORGANIZATION))
+            .collect(Collectors.toList());
 
-        String performingOrganizationName = mapToPerformerName(organizationStream);
+        return mapToPerformingPartyName(organizationList).map(organizationName -> {
+            List<InvolvedParty> departmentList = message.getInvolvedParties().stream()
+                .filter(party -> party.getServiceProvider().getServiceProviderCode().equals(DEPARTMENT))
+                .collect(Collectors.toList());
 
-        if (performingOrganizationName != null) {
-            Stream<InvolvedParty> departmentStream = message.getInvolvedParties().stream()
-                .filter(party -> party.getServiceProvider().getServiceProviderCode().equals(DEPARTMENT));
-
-            String performingOrganizationDepartmentName = mapToPerformerName(departmentStream);
-
-            return Optional.of(mapToOrganization(performingOrganizationName, performingOrganizationDepartmentName));
-        }
-
-        return Optional.empty();
+            return mapToPerformingPartyName(departmentList)
+                .map(departmentName -> mapToOrganization(organizationName, departmentName))
+                .orElseGet(() -> mapToOrganization(organizationName, null));
+        });
     }
 
-    private String mapToPerformerName(Stream<InvolvedParty> involvedPartyStream) {
-        return involvedPartyStream.map(InvolvedParty::getPerformerNameAndAddress)
+    private Optional<String> mapToPerformingPartyName(List<InvolvedParty> involvedPartyList) {
+        return involvedPartyList.stream().map(InvolvedParty::getPerformerNameAndAddress)
             .flatMap(Optional::stream)
-            .map(PerformerNameAndAddress::getOrganizationName)
             .findFirst()
-            .orElse(null);
+            .map(PerformerNameAndAddress::getPartyName);
     }
 
     private Organization mapToOrganization(final String organizationName, final String departmentName) {
         final var organization = new Organization();
 
         organization.setId(uuidGenerator.generateUUID());
-        organization.setName(organizationName);
+        organization.setName(organizationName.replaceAll("\\?'", "'"));
 
         if (!StringUtils.isBlank(departmentName)) {
             Coding coding = new Coding()

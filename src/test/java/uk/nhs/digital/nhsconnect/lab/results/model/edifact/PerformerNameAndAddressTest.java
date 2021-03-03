@@ -9,14 +9,14 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 
 class PerformerNameAndAddressTest {
 
-    private final PerformerNameAndAddress performingOrganizationNameAndAddress = PerformerNameAndAddress.builder()
-        .organizationName("ST JAMES'S UNIVERSITY HOSPITAL")
-        .build();
-
-    private final PerformerNameAndAddress performerNameAndAddress = PerformerNameAndAddress.builder()
+    private final PerformerNameAndAddress performingPractitioner = PerformerNameAndAddress.builder()
         .identifier("A2442389")
         .code(HealthcareRegistrationIdentificationCode.CONSULTANT)
         .practitionerName("DR J SMITH")
+        .build();
+
+    private final PerformerNameAndAddress performingOrganization = PerformerNameAndAddress.builder()
+        .partyName("ST JAMES?'S UNIVERSITY HOSPITAL")
         .build();
 
     @Test
@@ -28,23 +28,23 @@ class PerformerNameAndAddressTest {
 
     @Test
     void when_edifactStringIsPassed_expect_returnAPerformingOrganizationNameAndAddressObject() {
-        assertThat(performingOrganizationNameAndAddress)
+        assertThat(PerformerNameAndAddress.fromString("NAD+SLA+++ST JAMES?'S UNIVERSITY HOSPITAL"))
             .usingRecursiveComparison()
-            .isEqualTo(PerformerNameAndAddress.fromString("NAD+SLA+++ST JAMES?'S UNIVERSITY HOSPITAL"));
+            .isEqualTo(performingOrganization);
     }
 
     @Test
-    void when_edifactStringIsPassed_expect_returnAPerformerNameAndAddressObject() {
-        assertThat(performerNameAndAddress)
+    void when_edifactStringIsPassed_expect_returnAPerformingPractitionerNameAndAddressObject() {
+        assertThat(PerformerNameAndAddress.fromString("NAD+SLA+A2442389:902++DR J SMITH"))
             .usingRecursiveComparison()
-            .isEqualTo(PerformerNameAndAddress.fromString("NAD+SLA+A2442389:902++DR J SMITH"));
+            .isEqualTo(performingPractitioner);
     }
 
     @Test
     void when_buildingSegmentObjectWithEmptyHealthcareCode_expect_illegalArgumentExceptionIsThrown() {
         final var builder = PerformerNameAndAddress.builder()
             .identifier("A2442389")
-            .organizationName(null)
+            .partyName(null)
             .practitionerName(null);
 
         assertThatThrownBy(() -> builder.code(HealthcareRegistrationIdentificationCode.fromCode("")))
@@ -55,32 +55,32 @@ class PerformerNameAndAddressTest {
 
     @Test
     void testGetKey() {
-        assertThat(performingOrganizationNameAndAddress.getKey()).isEqualTo("NAD");
+        assertThat(performingOrganization.getKey()).isEqualTo("NAD");
     }
 
     @Test
     void testGetPerformingOrganizationName() {
-        assertThat(performingOrganizationNameAndAddress.getOrganizationName())
-            .isEqualTo("ST JAMES'S UNIVERSITY HOSPITAL");
+        assertThat(performingOrganization.getPartyName())
+            .isEqualTo("ST JAMES?'S UNIVERSITY HOSPITAL");
     }
 
     @Test
     void testGetPractitionerName() {
-        assertThat(performerNameAndAddress.getPractitionerName()).isEqualTo("DR J SMITH");
+        assertThat(performingPractitioner.getPractitionerName()).isEqualTo("DR J SMITH");
     }
 
     @Test
-    void testValidateMissingOrganizationName() {
-        var emptyPerformingOrganizationName = PerformerNameAndAddress.builder()
+    void testValidateMissingIdentifier() {
+        var emptyIdentifier = PerformerNameAndAddress.builder()
             .identifier(null)
-            .code(null)
-            .practitionerName(null)
-            .organizationName(null)
+            .code(HealthcareRegistrationIdentificationCode.GP)
+            .practitionerName("SMITH")
+            .partyName(null)
             .build();
 
-        assertThatThrownBy(emptyPerformingOrganizationName::validate)
+        assertThatThrownBy(emptyIdentifier::validate)
             .isExactlyInstanceOf(EdifactValidationException.class)
-            .hasMessage("NAD: Attribute organizationName is required");
+            .hasMessage("NAD: Attribute identifier is required");
     }
 
     @Test
@@ -89,7 +89,7 @@ class PerformerNameAndAddressTest {
             .identifier("identifier")
             .code(null)
             .practitionerName("DR J SMITH")
-            .organizationName(null)
+            .partyName(null)
             .build();
 
         assertThatThrownBy(emptyCode::validate)
@@ -98,16 +98,30 @@ class PerformerNameAndAddressTest {
     }
 
     @Test
-    void testValidateMissingPerformerName() {
+    void testValidateMissingPractitionerName() {
         var emptyPerformerName = PerformerNameAndAddress.builder()
             .identifier("identifier")
             .code(HealthcareRegistrationIdentificationCode.CONSULTANT)
             .practitionerName(null)
-            .organizationName(null)
+            .partyName(null)
             .build();
 
         assertThatThrownBy(emptyPerformerName::validate)
             .isExactlyInstanceOf(EdifactValidationException.class)
             .hasMessage("NAD: Attribute practitionerName is required");
+    }
+
+    @Test
+    void testValidateMissingPartyName() {
+        var emptyPerformingOrganizationName = PerformerNameAndAddress.builder()
+            .identifier(null)
+            .code(null)
+            .practitionerName(null)
+            .partyName(null)
+            .build();
+
+        assertThatThrownBy(emptyPerformingOrganizationName::validate)
+            .isExactlyInstanceOf(EdifactValidationException.class)
+            .hasMessage("NAD: Attribute partyName is required");
     }
 }

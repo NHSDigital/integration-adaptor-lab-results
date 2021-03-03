@@ -28,8 +28,8 @@ class InvolvedPartyTest {
         ));
         assertThat(involvedParty.getPerformerNameAndAddress())
             .isPresent()
-            .map(PerformerNameAndAddress::getOrganizationName)
-            .contains("ST JAMES'S UNIVERSITY HOSPITAL");
+            .map(PerformerNameAndAddress::getPartyName)
+            .contains("ST JAMES?'S UNIVERSITY HOSPITAL");
     }
 
     @Test

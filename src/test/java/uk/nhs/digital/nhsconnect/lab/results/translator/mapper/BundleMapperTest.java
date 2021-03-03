@@ -124,8 +124,8 @@ class BundleMapperTest {
             () -> verifyBundle(bundle),
             () -> assertThat(practitioners).hasSize(1).contains(mockRequestingOrganization),
             () -> assertThat(requestingOrganizationBundleEntries).first()
-                    .extracting(BundleEntryComponent::getFullUrl)
-                    .isEqualTo(FULL_URL)
+                .extracting(BundleEntryComponent::getFullUrl)
+                .isEqualTo(FULL_URL)
         );
     }
 
@@ -173,8 +173,8 @@ class BundleMapperTest {
             () -> verifyBundle(bundle),
             () -> assertThat(practitioners).hasSize(1).contains(mockPerformingOrganization),
             () -> assertThat(performingOrganizationBundleEntries).first()
-                    .extracting(BundleEntryComponent::getFullUrl)
-                    .isEqualTo(FULL_URL)
+                .extracting(BundleEntryComponent::getFullUrl)
+                .isEqualTo(FULL_URL)
         );
     }
 

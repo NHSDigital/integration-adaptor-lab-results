@@ -5,6 +5,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -12,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RequesterNameAndAddressTest {
 
-    private final RequesterNameAndAddress requester = RequesterNameAndAddress.builder()
+    private final RequesterNameAndAddress requestingPractitioner = RequesterNameAndAddress.builder()
         .identifier("ABC")
         .code(HealthcareRegistrationIdentificationCode.GP)
         .practitionerName("SMITH")
@@ -23,7 +24,7 @@ class RequesterNameAndAddressTest {
         .identifier(null)
         .code(null)
         .practitionerName(null)
-        .organizationName("Matthew's GP")
+        .organizationName("MATTHEW?'s GP")
         .build();
 
     @Test
@@ -33,16 +34,16 @@ class RequesterNameAndAddressTest {
 
     @Test
     void when_edifactStringIsPassed_expect_returnARequesterObject() {
-        assertThat(requester)
+        assertThat(RequesterNameAndAddress.fromString("NAD+PO+ABC:900++SMITH"))
             .usingRecursiveComparison()
-            .isEqualTo(RequesterNameAndAddress.fromString("NAD+PO+ABC:900++SMITH"));
+            .isEqualTo(requestingPractitioner);
     }
 
     @Test
     void when_edifactStringIsPassed_expect_returnARequestingOrganizationObject() {
-        assertThat(requestingOrganization)
+        assertThat(RequesterNameAndAddress.fromString("NAD+PO+++MATTHEW?'s GP"))
             .usingRecursiveComparison()
-            .isEqualTo(RequesterNameAndAddress.fromString("NAD+PO+++Matthew?'s GP"));
+            .isEqualTo(requestingOrganization);
     }
 
     @Test
@@ -51,34 +52,36 @@ class RequesterNameAndAddressTest {
 
         var requesterResult = RequesterNameAndAddress.fromString(edifactString);
 
-        assertThat(requesterResult.getIdentifier()).isEqualTo("ABC");
-        assertThat(requesterResult.getPractitionerName()).isEqualTo("SMITH");
-        assertThat(requesterResult.getCode())
-            .isEqualTo(HealthcareRegistrationIdentificationCode.GP);
-        assertNull(requesterResult.getOrganizationName());
+        assertAll(
+            () -> assertThat(requesterResult.getIdentifier()).isEqualTo("ABC"),
+            () -> assertThat(requesterResult.getPractitionerName()).isEqualTo("SMITH"),
+            () -> assertThat(requesterResult.getCode()).isEqualTo(HealthcareRegistrationIdentificationCode.GP),
+            () -> assertNull(requesterResult.getOrganizationName())
+        );
     }
 
     @Test
     void when_parsingEdifactStringToRequestingOrganizationObject_expect_returnCorrectRequestingOrganizationObject() {
-        String edifactString = "NAD+PO+++Matthew?'s GP";
+        String edifactString = "NAD+PO+++MATTHEW?'s GP";
 
         var requestingOrganizationResult = RequesterNameAndAddress.fromString(edifactString);
 
-        assertNull(requestingOrganizationResult.getIdentifier());
-        assertNull(requestingOrganizationResult.getPractitionerName());
-        assertNull(requestingOrganizationResult.getCode());
-        assertThat(requestingOrganizationResult.getOrganizationName())
-            .isEqualTo("Matthew's GP");
+        assertAll(
+            () -> assertNull(requestingOrganizationResult.getIdentifier()),
+            () -> assertNull(requestingOrganizationResult.getPractitionerName()),
+            () -> assertNull(requestingOrganizationResult.getCode()),
+            () -> assertThat(requestingOrganizationResult.getOrganizationName()).isEqualTo("MATTHEW?'s GP")
+        );
     }
 
     @Test
     void testGetKey() {
-        assertEquals(requester.getKey(), "NAD");
+        assertEquals(requestingPractitioner.getKey(), "NAD");
     }
 
     @Test
     void testValidateDoesNotThrowException() {
-        assertDoesNotThrow(requester::validate);
+        assertDoesNotThrow(requestingPractitioner::validate);
         assertDoesNotThrow(requestingOrganization::validate);
     }
 
