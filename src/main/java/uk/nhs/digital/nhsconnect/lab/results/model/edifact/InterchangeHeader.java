@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 /**
  * A specialisation of a segment for the specific use case of an interchange header
  * takes in specific values required to generate an interchange header
- * example: UNB+UNOA:2+TES5+XX11+920113:1317+00000002'
+ * example: UNB+UNOA:2+000000004400001+000000024600002+920113:1317+00000002'
  */
 @Getter
 @Builder
