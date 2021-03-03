@@ -52,7 +52,7 @@ public class InboundUserAcceptanceTest extends IntegrationBaseTest {
         final String content = new String(Files.readAllBytes(getEdifactResource().getFile().toPath()));
 
         final OutboundMeshMessage outboundMeshMessage = OutboundMeshMessage.create(RECIPIENT,
-            WorkflowId.PATHOLOGY, content, null, null);
+            WorkflowId.PATHOLOGY, content, null);
 
         getLabResultsMeshClient().sendEdifactMessage(outboundMeshMessage);
 

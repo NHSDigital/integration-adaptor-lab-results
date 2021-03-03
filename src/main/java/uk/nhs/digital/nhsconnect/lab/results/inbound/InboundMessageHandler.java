@@ -88,7 +88,7 @@ public class InboundMessageHandler {
 
     private OutboundMeshMessage buildRecepMeshMessage(final String edifactRecep, final Interchange recep) {
         return new MeshMessage()
-            .setHaTradingPartnerCode(recep.getInterchangeHeader().getRecipient())
+            .setRecipient(recep.getInterchangeHeader().getRecipient())
             .setWorkflowId(WorkflowId.PATHOLOGY_ACK)
             .setContent(edifactRecep);
     }
