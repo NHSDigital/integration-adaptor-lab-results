@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.MessageProcessingResult;
-import uk.nhs.digital.nhsconnect.lab.results.inbound.NhsackProducerService;
+import uk.nhs.digital.nhsconnect.lab.results.inbound.NhsAckProducerService;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessagesParsingException;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessageParsingException;
 
 import java.util.List;
 
@@ -21,33 +21,36 @@ import static uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId.SCRE
 @Component
 public class OutboundMeshMessageBuilder {
 
-    private final NhsackProducerService nhsackProducerService;
+    private final NhsAckProducerService nhsAckProducerService;
 
     public OutboundMeshMessage buildNhsAck(
             WorkflowId workflowId,
             Interchange interchange,
             List<MessageProcessingResult> messageProcessingResults) {
-        //TODO NIAD-1063: one of IAF, IAP, IRA
+        WorkflowId ackWorkflowId = getOutboundWorkflowId(workflowId);
+        String nhsAck = nhsAckProducerService.createNhsAckEdifact(ackWorkflowId, interchange, messageProcessingResults);
         return new MeshMessage()
-            .setWorkflowId(getOutboundWorkflowId(workflowId))
+            .setWorkflowId(ackWorkflowId)
             .setRecipient(interchange.getInterchangeHeader().getSender())
-            .setContent("TODO NIAD-1063");
+            .setContent(nhsAck);
     }
 
     public OutboundMeshMessage buildNhsAck(WorkflowId workflowId, InterchangeParsingException exception) {
-        //TODO NIAD-1063: IAI
+        WorkflowId ackWorkflowId = getOutboundWorkflowId(workflowId);
+        String nhsAck = nhsAckProducerService.createNhsAckEdifact(ackWorkflowId, exception);
         return new MeshMessage()
-            .setWorkflowId(getOutboundWorkflowId(workflowId))
+            .setWorkflowId(ackWorkflowId)
             .setRecipient(exception.getSender())
-            .setContent("TODO NIAD-1063");
+            .setContent(nhsAck);
     }
 
-    public OutboundMeshMessage buildNhsAck(WorkflowId workflowId, MessagesParsingException exception) {
-        //TODO NIAD-1063: IRM
+    public OutboundMeshMessage buildNhsAck(WorkflowId workflowId, MessageParsingException exception) {
+        WorkflowId ackWorkflowId = getOutboundWorkflowId(workflowId);
+        String nhsAck = nhsAckProducerService.createNhsAckEdifact(ackWorkflowId, exception);
         return new MeshMessage()
-            .setWorkflowId(getOutboundWorkflowId(workflowId))
+            .setWorkflowId(ackWorkflowId)
             .setRecipient(exception.getSender())
-            .setContent("TODO NIAD-1063");
+            .setContent(nhsAck);
     }
 
     private WorkflowId getOutboundWorkflowId(WorkflowId workflowId) {

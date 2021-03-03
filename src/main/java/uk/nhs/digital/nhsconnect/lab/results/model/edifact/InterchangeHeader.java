@@ -29,11 +29,13 @@ public class InterchangeHeader extends Segment {
     private static final int RECIPIENT_INDEX = 3;
     private static final int TRANSLATION_TIME_INDEX = 4;
     private static final int SEQUENCE_NUMBER_INDEX = 5;
+    private static final int NHSACK_INDEX = 9;
 
     private final String sender;
     private final String recipient;
     private final Long sequenceNumber;
     private final Instant translationTime;
+    private final boolean nhsAckRequested;
 
     public static InterchangeHeader fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY)) {
@@ -50,6 +52,7 @@ public class InterchangeHeader extends Segment {
             .translationTime(TRANSLATION_TIME_INDEX < split.length
                 ? getTranslationTime(split[TRANSLATION_TIME_INDEX])
                 : null)
+            .nhsAckRequested(NHSACK_INDEX < split.length && split[NHSACK_INDEX].equals("1"))
             .build();
     }
 

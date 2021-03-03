@@ -16,10 +16,6 @@
         <Bug pattern="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE " />
     </Match>
     <Match>
-        <Class name="uk.nhs.digital.nhsconnect.lab.results.model.edifact.RecepHeader" />
-        <Bug pattern="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE " />
-    </Match>
-    <Match>
         <Class name="uk.nhs.digital.nhsconnect.lab.results.sequence.SequenceRepository" />
         <Or>
             <Method name="increment" />

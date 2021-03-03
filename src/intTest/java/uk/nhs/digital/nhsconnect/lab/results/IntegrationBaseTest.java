@@ -32,6 +32,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.jms.JMSException;
 import javax.jms.Message;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
@@ -96,8 +97,8 @@ public abstract class IntegrationBaseTest {
     private Resource fhirResource;
 
     @Getter
-    @Value("classpath:edifact/pathology_recep.edifact.dat")
-    private Resource recepResource;
+    @Value("classpath:edifact/pathology.nhsack.dat")
+    private Resource nhsAckResource;
 
     private long originalReceiveTimeout;
 
@@ -195,8 +196,20 @@ public abstract class IntegrationBaseTest {
         return dataToReturn.get();
     }
 
+    protected InboundMeshMessage waitForMeshMessage(MeshClient meshClient) {
+        List<String> messageIds = waitFor(() -> {
+            List<String> inboxMessageIds = meshClient.getInboxMessageIds();
+            return inboxMessageIds.isEmpty() ? null : inboxMessageIds;
+        });
+        return meshClient.getEdifactMessage(messageIds.get(0));
+    }
+
     protected void clearGpOutboundQueue() {
         waitForCondition(() -> jmsTemplate.receive(gpOutboundQueueName) == null);
+    }
+
+    protected void clearMeshOutboundQueue() {
+        waitForCondition(() -> jmsTemplate.receive(meshOutboundQueueName) == null);
     }
 
     @SneakyThrows

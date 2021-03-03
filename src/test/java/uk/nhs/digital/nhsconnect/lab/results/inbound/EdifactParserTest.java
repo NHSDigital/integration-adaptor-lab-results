@@ -12,7 +12,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeTrailer;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeCriticalException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeFactory;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessagesParsingException;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessageParsingException;
 
 import java.util.List;
 
@@ -44,7 +44,7 @@ class EdifactParserTest {
     private EdifactParser edifactParser;
 
     @Test
-    void testParseCreatesInterchangeWithSameMessage() throws InterchangeParsingException, MessagesParsingException {
+    void testParseCreatesInterchangeWithSameMessage() throws InterchangeParsingException, MessageParsingException {
         when(interchangeTrailer.getNumberOfMessages()).thenReturn(1);
         when(interchange.getInterchangeTrailer()).thenReturn(interchangeTrailer);
 
@@ -72,7 +72,7 @@ class EdifactParserTest {
 
         assertThatThrownBy(() ->
             edifactParser.parse(String.join("\n", EdifactFixtures.TRAILER_BEFORE_HEADER_EDIFACT)))
-            .isInstanceOf(MessagesParsingException.class)
+            .isInstanceOf(MessageParsingException.class)
             .hasMessage("Error parsing messages");
     }
 
@@ -88,7 +88,7 @@ class EdifactParserTest {
 
         assertThatThrownBy(() ->
             edifactParser.parse(String.join("\n", EdifactFixtures.MISMATCH_MESSAGE_TRAILER_HEADER_EDIFACT)))
-            .isInstanceOf(MessagesParsingException.class)
+            .isInstanceOf(MessageParsingException.class)
             .hasMessage("Error parsing messages");
     }
 
