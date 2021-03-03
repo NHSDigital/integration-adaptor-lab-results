@@ -4,6 +4,7 @@ import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
+import org.hl7.fhir.dstu3.model.ProcedureRequest;
 import org.hl7.fhir.dstu3.model.Resource;
 import org.hl7.fhir.dstu3.model.Specimen;
 import org.junit.jupiter.api.BeforeEach;
@@ -124,6 +125,31 @@ class BundleMapperTest {
             () -> assertThat(practitioners).hasSize(2) // includes required requester
                 .contains(mockPerformer),
             () -> assertThat(performerBundleEntries)
+                .extracting(BundleEntryComponent::getFullUrl)
+                .allMatch(FULL_URL::equals)
+        );
+    }
+
+    @Test
+    void testMapPathologyRecordToBundleWithProcedureRequest() {
+        final var mockProcedureRequest = mock(ProcedureRequest.class);
+        pathologyRecordBuilder.testRequestSummary(mockProcedureRequest);
+
+        final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
+
+        final var procedureRequestBundleEntries = bundle.getEntry().stream()
+            .filter(entry -> entry.getResource() instanceof ProcedureRequest)
+            .collect(Collectors.toList());
+        final var procedureRequests = procedureRequestBundleEntries.stream()
+            .map(BundleEntryComponent::getResource)
+            .map(ProcedureRequest.class::cast)
+            .collect(Collectors.toList());
+
+        assertAll(
+            () -> verifyBundle(bundle),
+            () -> assertThat(procedureRequests).hasSize(1)
+                .contains(mockProcedureRequest),
+            () -> assertThat(procedureRequestBundleEntries)
                 .extracting(BundleEntryComponent::getFullUrl)
                 .allMatch(FULL_URL::equals)
         );
