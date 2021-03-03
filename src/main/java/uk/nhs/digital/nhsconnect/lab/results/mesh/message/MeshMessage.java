@@ -12,7 +12,7 @@ import lombok.ToString;
 public class MeshMessage implements InboundMeshMessage, OutboundMeshMessage {
 
     /**
-     * If SENDING TO MESH: set to the NHS code (recipient)
+     * If SENDING TO MESH: set to the NHS Code (recipient)
      * If DOWNLOADING FROM MESH: DO NOT USE
      */
     private String recipient;

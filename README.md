@@ -198,7 +198,6 @@ Navigate to: IntegrationAdapterLabResultsApplication -> right click -> Run
 
 **Inside a container**
 
-    export BUILD_TAG=latest
     docker-compose build lab-results
     docker-compose up lab-results
 
@@ -206,7 +205,6 @@ Navigate to: IntegrationAdapterLabResultsApplication -> right click -> Run
 
 Docker Compose allows running multiple instances behind a nginx load balancer in using round-robin routing.
 
-    export BUILD_TAG=latest
     docker-compose build lab-results
     docker-compose -f docker-compose.yml -f docker-compose.lb.override.yml up --scale lab-results=3 lab-results
 
