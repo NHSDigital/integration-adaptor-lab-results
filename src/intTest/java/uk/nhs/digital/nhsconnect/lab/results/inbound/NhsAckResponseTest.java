@@ -5,8 +5,6 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.test.annotation.DirtiesContext;
 import uk.nhs.digital.nhsconnect.lab.results.IntegrationBaseTest;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
@@ -29,35 +27,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @DirtiesContext
 class NhsAckResponseTest extends IntegrationBaseTest {
-    @Value("classpath:edifact/pathology_IAF.edifact.dat")
-    private Resource edifactIAFResource;
-
-    @Value("classpath:edifact/pathology_IAF_regex.nhsack.dat")
-    private Resource nhsAckIAFResource;
-
-    @Value("classpath:edifact/pathology_IAP.edifact.dat")
-    private Resource edifactIAPResource;
-
-    @Value("classpath:edifact/pathology_IAP_regex.nhsack.dat")
-    private Resource nhsAckIAPResource;
-
-    @Value("classpath:edifact/pathology_IRA.edifact.dat")
-    private Resource edifactIRAResource;
-
-    @Value("classpath:edifact/pathology_IRA_regex.nhsack.dat")
-    private Resource nhsAckIRAResource;
-
-    @Value("classpath:edifact/pathology_IRM.edifact.dat")
-    private Resource edifactIRMResource;
-
-    @Value("classpath:edifact/pathology_IRM_regex.nhsack.dat")
-    private Resource nhsAckIRMResource;
-
-    @Value("classpath:edifact/pathology_IRI.edifact.dat")
-    private Resource edifactIRIResource;
-
-    @Value("classpath:edifact/pathology_IRI_regex.nhsack.dat")
-    private Resource nhsAckIRIResource;
 
     @BeforeEach
     void setUp() {
