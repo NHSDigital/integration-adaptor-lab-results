@@ -1,7 +1,10 @@
 package uk.nhs.digital.nhsconnect.lab.results.inbound;
 
+import lombok.NonNull;
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.test.annotation.DirtiesContext;
@@ -10,7 +13,7 @@ import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
 
 import java.io.IOException;
-import java.nio.file.Files;
+import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -63,15 +66,22 @@ class NhsAckResponseTest extends IntegrationBaseTest {
         clearMeshOutboundQueue();
     }
 
-    @Test
-    void whenValidEdifactSentThenCorrectNhsAckReturned()
-        throws IOException {
+    @ParameterizedTest
+    @CsvSource({
+        "pathology_IAF.edifact.dat,pathology_IAF_regex.nhsack.dat",
+        "pathology_IAP.edifact.dat,pathology_IAP_regex.nhsack.dat",
+        "pathology_IRA.edifact.dat,pathology_IRA_regex.nhsack.dat",
+        "pathology_IRM.edifact.dat,pathology_IRM_regex.nhsack.dat",
+        "pathology_IRI.edifact.dat,pathology_IRI_regex.nhsack.dat"
+    })
+    void testReturnCorrectNhsAckForGivenEdifact(String edifactFile, String expectedNhsAckFile) throws IOException {
+        final String inputEdifact = readResource(edifactFile);
 
-        final String content = new String(Files.readAllBytes(edifactIAFResource.getFile().toPath()));
+        final String expectedNhsAck = readResource(expectedNhsAckFile).replace("\n", "");
 
         final MeshMessage meshMessage = new MeshMessage()
             .setWorkflowId(WorkflowId.PATHOLOGY)
-            .setContent(content);
+            .setContent(inputEdifact);
 
         sendToMeshInboundQueue(meshMessage);
 
@@ -80,96 +90,17 @@ class NhsAckResponseTest extends IntegrationBaseTest {
         assertThat(nhsAck.getWorkflowId()).isEqualTo(WorkflowId.PATHOLOGY_ACK);
 
         final String nhsAckContent = nhsAck.getContent();
-        final String expectedContent = new String(Files.readAllBytes(nhsAckIAFResource.getFile().toPath()))
-            .replace("\n", "");
-        assertThat(nhsAckContent).matches(expectedContent);
+
+        assertThat(nhsAckContent).matches(expectedNhsAck);
     }
 
-    @Test
-    void whenPartiallyValidEdifactSentThenCorrectNhsAckReturned()
-        throws IOException {
+    private String readResource(@NonNull String fileName) throws IOException {
+        var resourceStream = getClass().getClassLoader().getResourceAsStream("edifact/" + fileName);
 
-        final String content = new String(Files.readAllBytes(edifactIAPResource.getFile().toPath()));
+        if (resourceStream == null) {
+            throw new IllegalArgumentException("Content file is missing or empty");
+        }
 
-        final MeshMessage meshMessage = new MeshMessage()
-            .setWorkflowId(WorkflowId.PATHOLOGY)
-            .setContent(content);
-
-        sendToMeshInboundQueue(meshMessage);
-
-        final var nhsAck = waitForMeshMessage(getMeshClient());
-
-        assertThat(nhsAck.getWorkflowId()).isEqualTo(WorkflowId.PATHOLOGY_ACK);
-
-        final String nhsAckContent = nhsAck.getContent();
-        final String expectedContent = new String(Files.readAllBytes(nhsAckIAPResource.getFile().toPath()))
-            .replace("\n", "");
-        assertThat(nhsAckContent).matches(expectedContent);
-    }
-
-    @Test
-    void whenAllEdifactMessagesAreInvalidThenCorrectNhsAckReturned()
-        throws IOException {
-
-        final String content = new String(Files.readAllBytes(edifactIRAResource.getFile().toPath()));
-
-        final MeshMessage meshMessage = new MeshMessage()
-            .setWorkflowId(WorkflowId.PATHOLOGY)
-            .setContent(content);
-
-        sendToMeshInboundQueue(meshMessage);
-
-        final var nhsAck = waitForMeshMessage(getMeshClient());
-
-        assertThat(nhsAck.getWorkflowId()).isEqualTo(WorkflowId.PATHOLOGY_ACK);
-
-        final String nhsAckContent = nhsAck.getContent();
-        final String expectedContent = new String(Files.readAllBytes(nhsAckIRAResource.getFile().toPath()))
-            .replace("\n", "");
-        assertThat(nhsAckContent).matches(expectedContent);
-    }
-
-    @Test
-    void whenInvalidInterchangeInEdifactSentThenCorrectNhsAckReturned()
-        throws IOException {
-
-        final String content = new String(Files.readAllBytes(edifactIRIResource.getFile().toPath()));
-
-        final MeshMessage meshMessage = new MeshMessage()
-            .setWorkflowId(WorkflowId.PATHOLOGY)
-            .setContent(content);
-
-        sendToMeshInboundQueue(meshMessage);
-
-        final var nhsAck = waitForMeshMessage(getMeshClient());
-
-        assertThat(nhsAck.getWorkflowId()).isEqualTo(WorkflowId.PATHOLOGY_ACK);
-
-        final String nhsAckContent = nhsAck.getContent();
-        final String expectedContent = new String(Files.readAllBytes(nhsAckIRIResource.getFile().toPath()))
-            .replace("\n", "");
-        assertThat(nhsAckContent).matches(expectedContent);
-    }
-
-    @Test
-    void whenEdifactMessagesCannotBeExtractedThenCorrectNhsAckReturned()
-        throws IOException {
-
-        final String content = new String(Files.readAllBytes(edifactIRMResource.getFile().toPath()));
-
-        final MeshMessage meshMessage = new MeshMessage()
-            .setWorkflowId(WorkflowId.PATHOLOGY)
-            .setContent(content);
-
-        sendToMeshInboundQueue(meshMessage);
-
-        final var nhsAck = waitForMeshMessage(getMeshClient());
-
-        assertThat(nhsAck.getWorkflowId()).isEqualTo(WorkflowId.PATHOLOGY_ACK);
-
-        final String nhsAckContent = nhsAck.getContent();
-        final String expectedContent = new String(Files.readAllBytes(nhsAckIRMResource.getFile().toPath()))
-            .replace("\n", "");
-        assertThat(nhsAckContent).matches(expectedContent);
+        return IOUtils.toString(resourceStream, StandardCharsets.UTF_8);
     }
 }
