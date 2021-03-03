@@ -6,6 +6,9 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class InterchangeHeaderTest {
 
@@ -76,10 +79,13 @@ class InterchangeHeaderTest {
     void testFromStringWithValidEdifactStringReturnsInterchangeHeader() {
         final var interchangeHeader = InterchangeHeader.fromString("UNB+UNOA:2+SNDR+RECP+190323:0900+00000001");
 
-        assertEquals(InterchangeHeader.KEY, interchangeHeader.getKey());
-        assertEquals("SNDR", interchangeHeader.getSender());
-        assertEquals("RECP", interchangeHeader.getRecipient());
-        assertEquals(1L, interchangeHeader.getSequenceNumber());
+        assertAll(
+            () -> assertEquals(InterchangeHeader.KEY, interchangeHeader.getKey()),
+            () -> assertEquals("SNDR", interchangeHeader.getSender()),
+            () -> assertEquals("RECP", interchangeHeader.getRecipient()),
+            () -> assertEquals(1L, interchangeHeader.getSequenceNumber()),
+            () -> assertFalse(interchangeHeader.isNhsAckRequested())
+        );
     }
 
     @Test
@@ -88,5 +94,33 @@ class InterchangeHeaderTest {
             assertThrows(IllegalArgumentException.class, () -> InterchangeHeader.fromString("wrong value"));
 
         assertEquals("Can't create InterchangeHeader from wrong value", exception.getMessage());
+    }
+
+    @Test
+    void testFromStringWithNhsAckRequestedSetsTrue() {
+        final var interchangeHeader = InterchangeHeader.fromString(
+                "UNB+UNOA:2+SNDR+RECP+190323:0900+00000001++MEDRPT++1");
+
+        assertAll(
+            () -> assertEquals(InterchangeHeader.KEY, interchangeHeader.getKey()),
+            () -> assertEquals("SNDR", interchangeHeader.getSender()),
+            () -> assertEquals("RECP", interchangeHeader.getRecipient()),
+            () -> assertEquals(1L, interchangeHeader.getSequenceNumber()),
+            () -> assertTrue(interchangeHeader.isNhsAckRequested())
+        );
+    }
+
+    @Test
+    void testFromStringWithNoNhsAckRequestedSetsFalse() {
+        final var interchangeHeader = InterchangeHeader.fromString(
+                "UNB+UNOA:2+SNDR+RECP+190323:0900+00000001++MEDRPT++0");
+
+        assertAll(
+            () -> assertEquals(InterchangeHeader.KEY, interchangeHeader.getKey()),
+            () -> assertEquals("SNDR", interchangeHeader.getSender()),
+            () -> assertEquals("RECP", interchangeHeader.getRecipient()),
+            () -> assertEquals(1L, interchangeHeader.getSequenceNumber()),
+            () -> assertFalse(interchangeHeader.isNhsAckRequested())
+        );
     }
 }

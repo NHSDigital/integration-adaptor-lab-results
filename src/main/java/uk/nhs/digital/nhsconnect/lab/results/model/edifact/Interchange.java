@@ -50,6 +50,7 @@ public class Interchange extends Section {
                 getInterchangeHeader().getSender(),
                 getInterchangeHeader().getRecipient(),
                 getInterchangeHeader().getSequenceNumber(),
+                getInterchangeHeader().isNhsAckRequested(),
                 ex);
         }
     }

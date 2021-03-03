@@ -57,7 +57,7 @@ class MeshRequestsTest {
     }
 
     @Test
-    void when_sendingRecepMessage_expect_httpPostAndCorrectUri() {
+    void when_sendingNhsAckMessage_expect_httpPostAndCorrectUri() {
         final MeshRequests meshRequests = new MeshRequests(meshConfig, meshHeaders);
 
         final var request = meshRequests.sendMessage(MESSAGE_RECIPIENT, WorkflowId.PATHOLOGY_ACK);
