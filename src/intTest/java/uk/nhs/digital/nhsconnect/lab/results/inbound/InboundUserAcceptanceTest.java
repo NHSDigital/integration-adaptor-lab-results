@@ -34,7 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
-    private static final String RECIPIENT = "XX11";
+    private static final String RECIPIENT = "000000024600002";
 
     @BeforeEach
     void beforeEach() {
@@ -50,7 +50,7 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
     @Test
     void testSendEdifactIsProcessedAndPushedToGpOutboundQueue()
-            throws JMSException, IOException, InterchangeParsingException, MessageParsingException, JSONException {
+        throws JMSException, IOException, InterchangeParsingException, MessageParsingException, JSONException {
 
         final String content = new String(Files.readAllBytes(getEdifactResource().getFile().toPath()));
 
@@ -85,7 +85,7 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
     }
 
     private void assertOutboundNhsAckMessage()
-            throws IOException, InterchangeParsingException, MessageParsingException {
+        throws IOException, InterchangeParsingException, MessageParsingException {
 
         final var labResultMeshClient = getLabResultsMeshClient();
         final var edifactParser = getEdifactParser();
