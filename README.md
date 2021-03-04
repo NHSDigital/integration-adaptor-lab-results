@@ -41,7 +41,7 @@ Screening examples can be found here //TODO
 
 [Messaging Specification](https://hscic.kahootz.com/connect.ti/PathologyandDiagnostics/view?objectId=13046960#13046960)
 
-[Edifact Specification](https://webarchive.nationalarchives.gov.uk/20150107145848/http:/www.isb.nhs.uk/documents/isb-1557/amd-39-2003)
+[EDIFACT Specification](https://webarchive.nationalarchives.gov.uk/20150107145848/http:/www.isb.nhs.uk/documents/isb-1557/amd-39-2003)
 
 [FHIR UK Core](https://digital.nhs.uk/services/fhir-uk-core)
 

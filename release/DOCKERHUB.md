@@ -23,7 +23,7 @@ git clone https://github.com/nhsconnect/integration-adaptor-lab-results.git
 
 ## Pull the latest changes and checkout the release tag
 
-Every tagged container on Docker hub has a corresponding tag in the git repository. Checkout the tag of the release 
+Every tagged container on Docker Hub has a corresponding tag in the GitHub repository. Checkout the tag of the release 
 you are testing to ensure compatibility with configurations and scripts.
 
 ```bash
@@ -33,9 +33,9 @@ git checkout 0.0.1
 
 ## Configure the application
 
-docker-compose.yml is preconfigured with environment values to run a standalone version of the adadptor using fake mesh.
+`docker-compose.yml` is preconfigured with environment values to run a standalone version of the adaptor using fake mesh.
 
-If you would like to run the adaptor against any other Mesh service or using any other database or message queue broker, modify required environment variables as described in to  [README](https://github.com/nhsconnect/integration-adaptor-lab-results/blob/0.0.1/README.md)
+If you would like to run the adaptor against any other Mesh service or using any other database or message queue broker, modify required environment variables as described in to the [README](https://github.com/nhsconnect/integration-adaptor-lab-results/blob/main/README.md)
 
 ## Find the release directory
 
@@ -63,7 +63,7 @@ from the Dockerfiles in the repository.
 We provide shell scripts in the release/tests directory to help you start testing.
 
 * `healthcheck.sh` verifies that the adaptor's healthcheck endpoint is available
-* `send_message.sh` puts an example Edifact message on the fake mesh allowing it to be consumed and translated to FHIR by the adaptor
+* `send_message.sh` puts an example EDIFACT message on the fake mesh allowing it to be consumed and translated to FHIR by the adaptor
 
 ```bash
 cd tests/

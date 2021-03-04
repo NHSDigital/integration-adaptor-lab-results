@@ -20,7 +20,7 @@ variable must be correct for the given id.
 
 Invoke the desired `env.sh` file to load environment variables that will be used by the mesh client
 
-You own values:
+Your own values:
 
     source env.sh
 
