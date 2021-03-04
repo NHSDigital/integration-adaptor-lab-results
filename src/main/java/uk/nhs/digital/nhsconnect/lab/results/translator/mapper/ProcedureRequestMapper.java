@@ -13,6 +13,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.PatientC
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -20,6 +21,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ProcedureRequestMapper {
     private final UUIDGenerator uuidGenerator;
+    private final Map<ReportStatusCode, ProcedureRequest.ProcedureRequestStatus> statusCodeMapping = Map.of(
+        ReportStatusCode.UNSPECIFIED, ProcedureRequest.ProcedureRequestStatus.UNKNOWN
+    );
 
     public Optional<ProcedureRequest> mapToProcedureRequest(final Message message) {
         return message.getServiceReportDetails().getSubject().getClinicalInfo()
@@ -62,8 +66,7 @@ public class ProcedureRequestMapper {
 
     private void mapStatus(final PatientClinicalInfo patientClinicalInfo, final ProcedureRequest procedureRequest) {
         Optional.ofNullable(patientClinicalInfo)
-            .ifPresent(n -> procedureRequest.setStatus(
-                ReportStatusCode.mapToProcedureRequestStatus(
+            .ifPresent(n -> procedureRequest.setStatus(statusCodeMapping.get(
                     ReportStatusCode.fromCode(patientClinicalInfo.getCode().getCode()))));
     }
 }
