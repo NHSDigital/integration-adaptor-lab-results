@@ -51,15 +51,12 @@ class OrganizationMapperTest {
 
         when(message.getInvolvedParties()).thenReturn(List.of(requestingParty));
 
-        Optional<Organization> result = mapper.mapToRequestingOrganization(message);
-        assertThat(result).isNotEmpty();
-
-        Organization organization = result.get();
-
-        assertAll(
-            () -> assertThat(organization.getName()).isEqualTo("MATTHEW'S GP"),
-            () -> assertThat(organization.getType()).isEmpty()
-        );
+        Optional<Organization> organization = mapper.mapToRequestingOrganization(message);
+        assertThat(organization).isNotEmpty()
+            .hasValueSatisfying(org -> assertAll(
+                () -> assertThat(org.getName()).isEqualTo("MATTHEW'S GP"),
+                () -> assertThat(org.getType()).isEmpty()
+            ));
     }
 
     @Test
@@ -91,8 +88,8 @@ class OrganizationMapperTest {
         assertThat(result).isNotEmpty();
 
         Organization organization = result.get();
-
         Coding type = organization.getType().get(0).getCoding().get(0);
+
         assertAll(
             () -> assertThat(organization.getName()).isEqualTo("ST JAMES'S UNIVERSITY HOSPITAL"),
             () -> assertThat(type.getCode()).isEqualTo(OrganizationType.DEPT.toCode()),
@@ -111,15 +108,12 @@ class OrganizationMapperTest {
 
         when(message.getInvolvedParties()).thenReturn(List.of(performingParty));
 
-        Optional<Organization> result = mapper.mapToPerformingOrganization(message);
-        assertThat(result).isNotEmpty();
-
-        Organization organization = result.get();
-
-        assertAll(
-            () -> assertThat(organization.getName()).isEqualTo("ST JAMES'S UNIVERSITY HOSPITAL"),
-            () -> assertThat(organization.getType()).isEmpty()
-        );
+        Optional<Organization> organization = mapper.mapToPerformingOrganization(message);
+        assertThat(organization).isNotEmpty()
+            .hasValueSatisfying(org -> assertAll(
+                () -> assertThat(org.getName()).isEqualTo("ST JAMES'S UNIVERSITY HOSPITAL"),
+                () -> assertThat(org.getType()).isEmpty()
+            ));
     }
 
     @Test

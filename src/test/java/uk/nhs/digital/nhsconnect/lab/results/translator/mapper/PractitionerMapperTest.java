@@ -33,14 +33,14 @@ class PractitionerMapperTest {
     private PractitionerMapper mapper;
 
     @Test
-    void testMapMessageToPractitionerNoRequester() {
+    void testMapMessageToRequestingPractitionerWithNoRequester() {
         when(message.getInvolvedParties()).thenReturn(Collections.emptyList());
 
         assertThat(mapper.mapToRequestingPractitioner(message)).isEmpty();
     }
 
     @Test
-    void testMapMessageToPractitionerWithRequester() {
+    void testMapMessageToRequestingPractitionerWithRequester() {
         final var performingParty = new InvolvedParty(List.of(
             "ignore me",
             "NAD+PO+DEF:900++Alan Turing",
@@ -50,36 +50,33 @@ class PractitionerMapperTest {
 
         when(message.getInvolvedParties()).thenReturn(List.of(performingParty));
 
-        Optional<Practitioner> result = mapper.mapToRequestingPractitioner(message);
-        assertThat(result).isNotEmpty();
-
-        Practitioner practitioner = result.get();
-
-        assertAll(
-            () -> assertThat(practitioner.getName())
-                .hasSize(1)
-                .first()
-                .extracting(HumanName::getText)
-                .isEqualTo("Alan Turing"),
-            () -> assertThat(practitioner.getIdentifier())
-                .hasSize(1)
-                .first()
-                .satisfies(identifier -> assertAll(
-                    () -> assertThat(identifier.getValue()).isEqualTo("DEF"),
-                    () -> assertThat(identifier.getSystem()).isEqualTo("https://fhir.nhs.uk/Id/sds-user-id")
-                ))
-        );
+        Optional<Practitioner> requestingPractitioner = mapper.mapToRequestingPractitioner(message);
+        assertThat(requestingPractitioner).isNotEmpty()
+            .hasValueSatisfying(practitioner -> assertAll(
+                () -> assertThat(practitioner.getName())
+                    .hasSize(1)
+                    .first()
+                    .extracting(HumanName::getText)
+                    .isEqualTo("Alan Turing"),
+                () -> assertThat(practitioner.getIdentifier())
+                    .hasSize(1)
+                    .first()
+                    .satisfies(identifier -> assertAll(
+                        () -> assertThat(identifier.getValue()).isEqualTo("DEF"),
+                        () -> assertThat(identifier.getSystem()).isEqualTo("https://fhir.nhs.uk/Id/sds-user-id")
+                    ))
+            ));
     }
 
     @Test
-    void testMapMessageToPractitionerNoPerformer() {
+    void testMapMessageToPerformingPractitionerWithNoPerformer() {
         when(message.getInvolvedParties()).thenReturn(Collections.emptyList());
 
-        assertThat(mapper.mapToRequestingPractitioner(message)).isEmpty();
+        assertThat(mapper.mapToPerformingPractitioner(message)).isEmpty();
     }
 
     @Test
-    void testMapMessageToPractitionerWithPerformer() {
+    void testMapMessageToPerformingPractitionerWithPerformer() {
         final var performingParty = new InvolvedParty(List.of(
             "ignore me",
             "NAD+SLA+ABC:900++Jane Doe",
@@ -89,25 +86,22 @@ class PractitionerMapperTest {
 
         when(message.getInvolvedParties()).thenReturn(List.of(performingParty));
 
-        Optional<Practitioner> performer = mapper.mapToPerformingPractitioner(message);
-        assertThat(performer).isNotEmpty();
-
-        Practitioner performingPractitioner = performer.get();
-
-        assertAll(
-            () -> assertThat(performingPractitioner.getName())
-                .hasSize(1)
-                .first()
-                .extracting(HumanName::getText)
-                .isEqualTo("Jane Doe"),
-            () -> assertThat(performingPractitioner.getIdentifier())
-                .hasSize(1)
-                .first()
-                .satisfies(identifier -> assertAll(
-                    () -> assertThat(identifier.getValue()).isEqualTo("ABC"),
-                    () -> assertThat(identifier.getSystem()).isEqualTo("https://fhir.nhs.uk/Id/sds-user-id")
-                ))
-        );
+        Optional<Practitioner> performingPractitioner = mapper.mapToPerformingPractitioner(message);
+        assertThat(performingPractitioner).isNotEmpty()
+            .hasValueSatisfying(practitioner -> assertAll(
+                () -> assertThat(practitioner.getName())
+                    .hasSize(1)
+                    .first()
+                    .extracting(HumanName::getText)
+                    .isEqualTo("Jane Doe"),
+                () -> assertThat(practitioner.getIdentifier())
+                    .hasSize(1)
+                    .first()
+                    .satisfies(identifier -> assertAll(
+                        () -> assertThat(identifier.getValue()).isEqualTo("ABC"),
+                        () -> assertThat(identifier.getSystem()).isEqualTo("https://fhir.nhs.uk/Id/sds-user-id")
+                    ))
+            ));
     }
 
     @Test
