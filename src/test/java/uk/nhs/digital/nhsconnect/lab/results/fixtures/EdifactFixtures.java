@@ -4,7 +4,7 @@ import java.util.List;
 
 @SuppressWarnings("checkstyle:hideutilityclassconstructor")
 public final class EdifactFixtures {
-    public static final String EDIFACT_HEADER = "UNB+UNOA:2+000000004400001+000000024600002+020114:1619+00000003";
+    public static final String EDIFACT_HEADER = "UNB+UNOA:2+000000004400001:80+000000024600002:80+020114:1619+00000003";
     public static final String EDIFACT_TRAILER = "UNZ+1+00000003";
 
     public static final List<String> SAMPLE_EDIFACT = List.of(

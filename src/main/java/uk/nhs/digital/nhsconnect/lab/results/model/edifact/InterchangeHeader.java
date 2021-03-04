@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 /**
  * A specialisation of a segment for the specific use case of an interchange header
  * takes in specific values required to generate an interchange header
- * example: UNB+UNOA:2+000000004400001+000000024600002+920113:1317+00000002'
+ * example: UNB+UNOA:2+000000004400001:80+000000024600002:80+920113:1317+00000002'
  */
 @Getter
 @Builder
@@ -30,6 +30,8 @@ public class InterchangeHeader extends Segment {
     private static final int TRANSLATION_TIME_INDEX = 4;
     private static final int SEQUENCE_NUMBER_INDEX = 5;
     private static final int NHSACK_INDEX = 9;
+    private static final int SENDER_ID_INDEX = 0;
+    private static final int RECIPIENT_ID_INDEX = 0;
 
     private final String sender;
     private final String recipient;
@@ -45,9 +47,13 @@ public class InterchangeHeader extends Segment {
 
         final var split = Split.byPlus(edifactString);
 
+        final String sender = SENDER_INDEX < split.length ? Split.byColon(split[SENDER_INDEX])[SENDER_ID_INDEX] : null;
+        final String recipient = RECIPIENT_INDEX < split.length
+            ? Split.byColon(split[RECIPIENT_INDEX])[RECIPIENT_ID_INDEX] : null;
+
         return InterchangeHeader.builder()
-            .sender(SENDER_INDEX < split.length ? split[SENDER_INDEX] : null)
-            .recipient(RECIPIENT_INDEX < split.length ? split[RECIPIENT_INDEX] : null)
+            .sender(sender)
+            .recipient(recipient)
             .sequenceNumber(SEQUENCE_NUMBER_INDEX < split.length ? parseLong(split[SEQUENCE_NUMBER_INDEX]) : null)
             .translationTime(TRANSLATION_TIME_INDEX < split.length
                 ? getTranslationTime(split[TRANSLATION_TIME_INDEX])
