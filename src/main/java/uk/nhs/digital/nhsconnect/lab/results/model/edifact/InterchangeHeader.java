@@ -30,8 +30,8 @@ public class InterchangeHeader extends Segment {
     private static final int TRANSLATION_TIME_INDEX = 4;
     private static final int SEQUENCE_NUMBER_INDEX = 5;
     private static final int NHSACK_INDEX = 9;
-    private static final int SENDER_ID_INDEX = 0;
-    private static final int RECIPIENT_ID_INDEX = 0;
+    private static final int SENDER_SUBSECTION_ID_INDEX = 0;
+    private static final int RECIPIENT_SUBSECTION_ID_INDEX = 0;
 
     private final String sender;
     private final String recipient;
@@ -47,9 +47,10 @@ public class InterchangeHeader extends Segment {
 
         final var split = Split.byPlus(edifactString);
 
-        final String sender = SENDER_INDEX < split.length ? Split.byColon(split[SENDER_INDEX])[SENDER_ID_INDEX] : null;
+        final String sender = SENDER_INDEX < split.length
+            ? Split.byColon(split[SENDER_INDEX])[SENDER_SUBSECTION_ID_INDEX] : null;
         final String recipient = RECIPIENT_INDEX < split.length
-            ? Split.byColon(split[RECIPIENT_INDEX])[RECIPIENT_ID_INDEX] : null;
+            ? Split.byColon(split[RECIPIENT_INDEX])[RECIPIENT_SUBSECTION_ID_INDEX] : null;
 
         return InterchangeHeader.builder()
             .sender(sender)
