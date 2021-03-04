@@ -76,7 +76,8 @@ class ProcedureRequestMapperTest {
         final var procedureRequest = procedureRequestMapper.mapToProcedureRequest(message).get();
 
         assertThat(procedureRequest.getNote()).hasSize(1)
-            .satisfies(note -> assertThat(note.get(0).getText()).isEqualTo("COELIAC"));
+            .first()
+            .satisfies(note -> assertThat(note.getText()).isEqualTo("COELIAC"));
     }
 
     @Test
