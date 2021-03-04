@@ -88,7 +88,7 @@ class ProcedureRequestMapperTest {
             "S10+10",
             "CIN+UN",
             "FTX+CID+++COELIAC",
-            "FTX+CID+++ON AZATHIOPRINE",
+            "FTX+CID+++JAUNDICE  ??OBSTRUCTIVE",
             "FTX+CID+++GASTRIC ULCER DECLINE"
         ));
 
@@ -96,7 +96,7 @@ class ProcedureRequestMapperTest {
 
         assertThat(procedureRequest.getNote()).hasSize(3)
             .extracting(Annotation::getText)
-            .containsExactly("COELIAC", "ON AZATHIOPRINE", "GASTRIC ULCER DECLINE");
+            .containsExactly("COELIAC", "JAUNDICE  ?OBSTRUCTIVE", "GASTRIC ULCER DECLINE");
     }
 
     @Test

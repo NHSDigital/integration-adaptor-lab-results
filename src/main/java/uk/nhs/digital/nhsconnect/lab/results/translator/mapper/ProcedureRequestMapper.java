@@ -12,7 +12,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReportStatusCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.PatientClinicalInfo;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -43,18 +43,13 @@ public class ProcedureRequestMapper {
     }
 
     private void mapFreeText(final PatientClinicalInfo patientClinicalInfo, final ProcedureRequest procedureRequest) {
-        final ArrayList<Annotation> annotations = new ArrayList<>();
-
-        var textualClinicalInformationList = patientClinicalInfo.getFreeTexts()
-            .stream()
+        final List<Annotation> annotations = patientClinicalInfo.getFreeTexts().stream()
             .map(FreeTextSegment::getTexts)
+            .map(texts -> {
+                final var text = MappingUtils.unescape(String.join(":", texts));
+                return new Annotation().setText(text);
+            })
             .collect(Collectors.toList());
-
-        for (var freeTextItem : textualClinicalInformationList) {
-            Annotation annotation = new Annotation();
-            annotation.setText(freeTextItem[0]);
-            annotations.add(annotation);
-        }
 
         if (annotations.isEmpty()) {
             throw new FhirValidationException("Unable to map message. "
@@ -67,6 +62,6 @@ public class ProcedureRequestMapper {
     private void mapStatus(final PatientClinicalInfo patientClinicalInfo, final ProcedureRequest procedureRequest) {
         Optional.ofNullable(patientClinicalInfo)
             .ifPresent(n -> procedureRequest.setStatus(statusCodeMapping.get(
-                    ReportStatusCode.fromCode(patientClinicalInfo.getCode().getCode()))));
+                ReportStatusCode.fromCode(patientClinicalInfo.getCode().getCode()))));
     }
 }
