@@ -3,12 +3,9 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 import lombok.Getter;
 import lombok.Setter;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvolvedParty;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.PatientClinicalInfo;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.ServiceReportDetails;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.SpecimenDetails;
 
 import java.util.List;
-import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -34,13 +31,6 @@ public class Message extends Section {
         .dropWhile(segment -> !segment.startsWith(ServiceReportDetails.INDICATOR))
         .takeWhile(segment -> !segment.startsWith(MessageTrailer.KEY))
         .collect(toList()));
-
-    @Getter(lazy = true)
-    private final Optional<PatientClinicalInfo> patientClinicalInfo = PatientClinicalInfo.createOptional(
-        getEdifactSegments().stream()
-            .dropWhile(segment -> !segment.startsWith(PatientClinicalInfo.INDICATOR))
-            .takeWhile(segment -> !segment.startsWith(SpecimenDetails.INDICATOR))
-            .collect(toList()));
 
     @Getter(lazy = true)
     private final MessageTrailer messageTrailer =

@@ -37,6 +37,8 @@ class ProcedureRequestMapperTest {
     @Test
     void testMapToProcedureRequestThrowsExceptionWhenFreeTextIsMissing() {
         final Message message = new Message(List.of(
+            "S02+02", // ServiceReportDetails
+            "S06+06", // InvestigationSubject
             "S10+10",
             "CIN+UN"
         ));
@@ -50,6 +52,8 @@ class ProcedureRequestMapperTest {
     @Test
     void testMapToProcedureRequestThrowsExceptionWhenTypeOfClinicalObservationIsMissing() {
         final Message message = new Message(List.of(
+            "S02+02", // ServiceReportDetails
+            "S06+06", // InvestigationSubject
             "S10+10",
             "FTX+CID+++COELIAC"
         ));
@@ -62,6 +66,8 @@ class ProcedureRequestMapperTest {
     @Test
     void testMapToProcedureRequestFreeText() {
         final Message message = new Message(List.of(
+            "S02+02", // ServiceReportDetails
+            "S06+06", // InvestigationSubject
             "S10+10",
             "CIN+UN",
             "FTX+CID+++COELIAC"
@@ -76,6 +82,8 @@ class ProcedureRequestMapperTest {
     @Test
     void testMapToProcedureRequestFreeTexts() {
         final Message message = new Message(List.of(
+            "S02+02", // ServiceReportDetails
+            "S06+06", // InvestigationSubject
             "S10+10",
             "CIN+UN",
             "FTX+CID+++COELIAC",
@@ -96,6 +104,8 @@ class ProcedureRequestMapperTest {
     @Test
     void testMapToProcedureRequestStatus() {
         final Message message = new Message(List.of(
+            "S02+02", // ServiceReportDetails
+            "S06+06", // InvestigationSubject
             "S10+10",
             "CIN+UN",
             "FTX+CID+++COELIAC"
@@ -109,6 +119,8 @@ class ProcedureRequestMapperTest {
     @Test
     void testMapToProcedureRequestIntent() {
         final Message message = new Message(List.of(
+            "S02+02", // ServiceReportDetails
+            "S06+06", // InvestigationSubject
             "S10+10",
             "CIN+UN",
             "FTX+CID+++COELIAC"

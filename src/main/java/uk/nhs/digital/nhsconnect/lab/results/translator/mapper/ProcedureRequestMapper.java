@@ -22,9 +22,8 @@ public class ProcedureRequestMapper {
     private final UUIDGenerator uuidGenerator;
 
     public Optional<ProcedureRequest> mapToProcedureRequest(final Message message) {
-        return message.getPatientClinicalInfo().stream()
-            .map(patientClinicalInfo -> mapPatientClinicalInfo(patientClinicalInfo))
-            .findAny();
+        return message.getServiceReportDetails().getSubject().getClinicalInfo()
+            .map(this::mapPatientClinicalInfo);
     }
 
     private ProcedureRequest mapPatientClinicalInfo(final PatientClinicalInfo patientClinicalInfo) {
@@ -47,7 +46,7 @@ public class ProcedureRequestMapper {
             .map(FreeTextSegment::getTexts)
             .collect(Collectors.toList());
 
-        for (var freeTextItem: textualClinicalInformationList) {
+        for (var freeTextItem : textualClinicalInformationList) {
             Annotation annotation = new Annotation();
             annotation.setText(freeTextItem[0]);
             annotations.add(annotation);
