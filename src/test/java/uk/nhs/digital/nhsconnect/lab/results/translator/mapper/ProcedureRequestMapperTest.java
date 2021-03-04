@@ -1,5 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
+import org.hl7.fhir.dstu3.model.Annotation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,7 +15,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("checkstyle:magicnumber")
 @ExtendWith(MockitoExtension.class)
@@ -95,11 +95,8 @@ class ProcedureRequestMapperTest {
         var procedureRequest = procedureRequestMapper.mapToProcedureRequest(message).get();
 
         assertThat(procedureRequest.getNote()).hasSize(3)
-            .satisfies(note -> assertAll(
-                () -> assertThat(note.get(0).getText()).isEqualTo("COELIAC"),
-                () -> assertThat(note.get(1).getText()).isEqualTo("ON AZATHIOPRINE"),
-                () -> assertThat(note.get(2).getText()).isEqualTo("GASTRIC ULCER DECLINE")
-            ));
+            .extracting(Annotation::getText)
+            .containsExactly("COELIAC", "ON AZATHIOPRINE", "GASTRIC ULCER DECLINE");
     }
 
     @Test
