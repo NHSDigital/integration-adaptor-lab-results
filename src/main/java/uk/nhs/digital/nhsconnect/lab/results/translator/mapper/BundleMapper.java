@@ -15,7 +15,6 @@ import uk.nhs.digital.nhsconnect.lab.results.model.fhir.PathologyRecord;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
-
 @Component
 @RequiredArgsConstructor
 public class BundleMapper {
