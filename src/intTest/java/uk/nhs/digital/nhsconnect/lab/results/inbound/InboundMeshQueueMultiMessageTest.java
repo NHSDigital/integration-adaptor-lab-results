@@ -48,7 +48,7 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
 
     @Test
     void whenMeshInboundQueueMessageIsReceivedThenMessageIsHandled(SoftAssertions softly)
-            throws IOException, JMSException, JSONException {
+        throws IOException, JMSException, JSONException {
 
         final String content = new String(Files.readAllBytes(multiEdifactResource.getFile().toPath()));
 
@@ -72,7 +72,7 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
     }
 
     private void assertGpOutboundQueueMessages(SoftAssertions softly, Message message, Resource fhirMessage)
-            throws IOException, JMSException, JSONException {
+        throws IOException, JMSException, JSONException {
 
         // all messages come from the same interchange and use the same correlation id
         final String correlationId = message.getStringProperty("CorrelationId");

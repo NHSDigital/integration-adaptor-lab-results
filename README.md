@@ -41,7 +41,7 @@ Screening examples can be found here //TODO
 
 [Messaging Specification](https://hscic.kahootz.com/connect.ti/PathologyandDiagnostics/view?objectId=13046960#13046960)
 
-[Edifact Specification](https://webarchive.nationalarchives.gov.uk/20150107145848/http:/www.isb.nhs.uk/documents/isb-1557/amd-39-2003)
+[EDIFACT Specification](https://webarchive.nationalarchives.gov.uk/20150107145848/http:/www.isb.nhs.uk/documents/isb-1557/amd-39-2003)
 
 [FHIR UK Core](https://digital.nhs.uk/services/fhir-uk-core)
 
@@ -198,7 +198,6 @@ Navigate to: IntegrationAdapterLabResultsApplication -> right click -> Run
 
 **Inside a container**
 
-    export BUILD_TAG=latest
     docker-compose build lab-results
     docker-compose up lab-results
 
@@ -206,7 +205,6 @@ Navigate to: IntegrationAdapterLabResultsApplication -> right click -> Run
 
 Docker Compose allows running multiple instances behind a nginx load balancer in using round-robin routing.
 
-    export BUILD_TAG=latest
     docker-compose build lab-results
     docker-compose -f docker-compose.yml -f docker-compose.lb.override.yml up --scale lab-results=3 lab-results
 

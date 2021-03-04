@@ -16,6 +16,18 @@ accordingly)
 For all commands `[mailbox_id]` is the id of the mailbox used for the request. The `MAILBOX_PASSWORD` environment
 variable must be correct for the given id.
 
+### Environment set up
+
+Invoke the desired `env.sh` file to load environment variables that will be used by the mesh client
+
+Your own values:
+
+    source env.sh
+
+Predefined fake mesh values:
+
+    source env.fake-mesh.sh
+
 ### Authenticate
 
 MESH API docs says to do this first, but in our experience it seems that it's not needed.
