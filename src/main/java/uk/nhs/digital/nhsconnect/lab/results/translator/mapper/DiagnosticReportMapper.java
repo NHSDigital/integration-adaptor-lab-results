@@ -19,6 +19,7 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +40,7 @@ public class DiagnosticReportMapper {
         ServiceReportDetails serviceReportDetails = message.getServiceReportDetails();
 
         // fhir.issued = SG2.DTM
-        mapDateToLong(serviceReportDetails.getDateIssued(), fhir);
+        mapIssued(serviceReportDetails.getDateIssued(), fhir);
         // fhir.status
         fhir.setStatus(statusMap.get(serviceReportDetails.getStatus().getEvent()));
         // fhir.identifier
@@ -64,11 +65,10 @@ public class DiagnosticReportMapper {
         return fhir;
     }
 
-    private void mapDateToLong(final DiagnosticReportDateIssued reportIssuedDate, final DiagnosticReport fhir) {
+    private void mapIssued(final DiagnosticReportDateIssued reportIssuedDate, final DiagnosticReport fhir) {
         LocalDateTime dateIssued = reportIssuedDate.getDateIssued();
         ZonedDateTime zonedDateTime = dateIssued.atZone(TimestampService.UK_ZONE);
-
-        fhir.getIssued().setTime(zonedDateTime.toInstant().toEpochMilli());
+        fhir.setIssued(Date.from(zonedDateTime.toInstant()));
     }
 
     private void mapIdentifier(final Reference reference, final DiagnosticReport fhir) {
