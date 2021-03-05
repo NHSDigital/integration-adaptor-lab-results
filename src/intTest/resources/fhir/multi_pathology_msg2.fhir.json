@@ -1,5 +1,6 @@
 {
   "resourceType": "Bundle",
+  "id": "44e7d979-bfc4-4755-9381-9f439bdcacec",
   "meta": {
     "lastUpdated": "2021-02-24T14:21:45.512+00:00",
     "profile": [
@@ -12,24 +13,6 @@
   },
   "type": "message",
   "entry": [
-    {
-      "fullUrl": "urn:uuid:b6909753-80ec-41d7-b269-4c12e7c7b906",
-      "resource": {
-        "resourceType": "Practitioner",
-        "id": "b6909753-80ec-41d7-b269-4c12e7c7b906",
-        "identifier": [
-          {
-            "system": "https://fhir.nhs.uk/Id/sds-user-id",
-            "value": "G3380314"
-          }
-        ],
-        "name": [
-          {
-            "text": "SCOTT"
-          }
-        ]
-      }
-    },
     {
       "fullUrl": "urn:uuid:eea77c68-0d47-412c-a7bc-321583a2c75f",
       "resource": {
@@ -57,6 +40,50 @@
             "postalCode": "HX6 1JQ"
           }
         ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:b6909753-80ec-41d7-b269-4c12e7c7b906",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "b6909753-80ec-41d7-b269-4c12e7c7b906",
+        "identifier": [
+          {
+            "system": "https://fhir.nhs.uk/Id/sds-user-id",
+            "value": "G3380314"
+          }
+        ],
+        "name": [
+          {
+            "text": "SCOTT"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:1395dd50-5440-424c-bd30-a2f62e3e24c3",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "1395dd50-5440-424c-bd30-a2f62e3e24c3",
+        "name": "NORTH DOWN GP"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d5229278-191d-4801-9332-2faae4e9761d",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "d5229278-191d-4801-9332-2faae4e9761d",
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "dept",
+                "display": "Microbiology"
+              }
+            ]
+          }
+        ],
+        "name": "ST JAMES'S UNIVERSITY HOSPITAL"
       }
     },
     {

@@ -2,6 +2,7 @@ package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
+import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.hl7.fhir.dstu3.model.Resource;
@@ -52,32 +53,8 @@ class BundleMapperTest {
         final var mockRequester = mock(Practitioner.class);
         lenient().when(mockRequester.getId()).thenReturn(SOME_UUID);
         pathologyRecordBuilder = PathologyRecord.builder()
-            .requester(mockRequester)
+            .requestingPractitioner(mockRequester)
             .patient(mock(Patient.class));
-    }
-
-    @Test
-    void testMapPathologyRecordToBundleWithPractitioner() {
-        final var mockRequester = mock(Practitioner.class);
-        pathologyRecordBuilder.requester(mockRequester);
-
-        final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
-
-        final var practitionerBundleEntries = bundle.getEntry().stream()
-            .filter(entry -> entry.getResource() instanceof Practitioner)
-            .collect(Collectors.toList());
-        final var practitioners = practitionerBundleEntries.stream()
-            .map(BundleEntryComponent::getResource)
-            .map(Practitioner.class::cast)
-            .collect(Collectors.toList());
-
-        assertAll(
-            () -> verifyBundle(bundle),
-            () -> assertThat(practitioners).hasSize(1).contains(mockRequester),
-            () -> assertThat(practitionerBundleEntries).first()
-                .extracting(BundleEntryComponent::getFullUrl)
-                .isEqualTo(FULL_URL)
-        );
     }
 
     @Test
@@ -105,27 +82,99 @@ class BundleMapperTest {
     }
 
     @Test
-    void testMapPathologyRecordToBundleWithPerformer() {
-        final var mockPerformer = mock(Practitioner.class);
-        pathologyRecordBuilder.performer(mockPerformer);
+    void testMapPathologyRecordToBundleWithRequestingPractitioner() {
+        final var mockRequestingPractitioner = mock(Practitioner.class);
+        pathologyRecordBuilder.requestingPractitioner(mockRequestingPractitioner);
 
         final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
 
-        final var performerBundleEntries = bundle.getEntry().stream()
+        final var requesterBundleEntries = bundle.getEntry().stream()
             .filter(entry -> entry.getResource() instanceof Practitioner)
             .collect(Collectors.toList());
-        final var practitioners = performerBundleEntries.stream()
+        final var requestingPractitioners = requesterBundleEntries.stream()
             .map(BundleEntryComponent::getResource)
             .map(Practitioner.class::cast)
             .collect(Collectors.toList());
 
         assertAll(
             () -> verifyBundle(bundle),
-            () -> assertThat(practitioners).hasSize(2) // includes required requester
-                .contains(mockPerformer),
+            () -> assertThat(requestingPractitioners).hasSize(1).contains(mockRequestingPractitioner),
+            () -> assertThat(requesterBundleEntries).first()
+                .extracting(BundleEntryComponent::getFullUrl)
+                .isEqualTo(FULL_URL)
+        );
+    }
+
+    @Test
+    void testMapPathologyRecordToBundleWithRequestingOrganization() {
+        final var mockRequestingOrganization = mock(Organization.class);
+        pathologyRecordBuilder.requestingOrganization(mockRequestingOrganization);
+
+        final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
+
+        final var requestingOrganizationBundleEntries = bundle.getEntry().stream()
+            .filter(entry -> entry.getResource() instanceof Organization)
+            .collect(Collectors.toList());
+        final var requestingOrganizations = requestingOrganizationBundleEntries.stream()
+            .map(BundleEntryComponent::getResource)
+            .map(Organization.class::cast)
+            .collect(Collectors.toList());
+
+        assertAll(
+            () -> verifyBundle(bundle),
+            () -> assertThat(requestingOrganizations).hasSize(1).contains(mockRequestingOrganization),
+            () -> assertThat(requestingOrganizationBundleEntries).first()
+                .extracting(BundleEntryComponent::getFullUrl)
+                .isEqualTo(FULL_URL)
+        );
+    }
+
+    @Test
+    void testMapPathologyRecordToBundleWithPerformingPractitioner() {
+        final var mockPerformingPractitioner = mock(Practitioner.class);
+        pathologyRecordBuilder.performingPractitioner(mockPerformingPractitioner);
+
+        final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
+
+        final var performerBundleEntries = bundle.getEntry().stream()
+            .filter(entry -> entry.getResource() instanceof Practitioner)
+            .collect(Collectors.toList());
+        final var performingPractitioners = performerBundleEntries.stream()
+            .map(BundleEntryComponent::getResource)
+            .map(Practitioner.class::cast)
+            .collect(Collectors.toList());
+
+        assertAll(
+            () -> verifyBundle(bundle),
+            () -> assertThat(performingPractitioners).hasSize(2) // includes required requester
+                .contains(mockPerformingPractitioner),
             () -> assertThat(performerBundleEntries)
                 .extracting(BundleEntryComponent::getFullUrl)
                 .allMatch(FULL_URL::equals)
+        );
+    }
+
+    @Test
+    void testMapPathologyRecordToBundleWithPerformingOrganization() {
+        final var mockPerformingOrganization = mock(Organization.class);
+        pathologyRecordBuilder.performingOrganization(mockPerformingOrganization);
+
+        final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
+
+        final var performingOrganizationBundleEntries = bundle.getEntry().stream()
+            .filter(entry -> entry.getResource() instanceof Organization)
+            .collect(Collectors.toList());
+        final var performingOrganizations = performingOrganizationBundleEntries.stream()
+            .map(BundleEntryComponent::getResource)
+            .map(Organization.class::cast)
+            .collect(Collectors.toList());
+
+        assertAll(
+            () -> verifyBundle(bundle),
+            () -> assertThat(performingOrganizations).hasSize(1).contains(mockPerformingOrganization),
+            () -> assertThat(performingOrganizationBundleEntries).first()
+                .extracting(BundleEntryComponent::getFullUrl)
+                .isEqualTo(FULL_URL)
         );
     }
 
