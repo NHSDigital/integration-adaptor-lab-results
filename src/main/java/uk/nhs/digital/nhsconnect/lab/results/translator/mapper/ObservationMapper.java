@@ -95,7 +95,7 @@ public class ObservationMapper {
     private void mapCode(final LabResult labResult, final Observation observation) {
         // Observation.code = SG18.INV.C847.9930 and SG18.INV.C847.9931
         final var coding = observation.getCode().addCoding();
-        coding.setCode(labResult.getInvestigation().getInvestigationCode());
+        labResult.getInvestigation().getInvestigationCode().ifPresent(coding::setCode);
         coding.setDisplay(labResult.getInvestigation().getInvestigationDescription());
         coding.setSystem(CODING_SYSTEM);
     }

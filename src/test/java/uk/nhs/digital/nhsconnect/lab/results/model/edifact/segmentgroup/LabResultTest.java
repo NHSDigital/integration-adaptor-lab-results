@@ -56,7 +56,7 @@ class LabResultTest {
 
         labResultInvestigation
             .extracting(LaboratoryInvestigation::getInvestigationCode)
-            .isEqualTo("42R4.");
+            .isEqualTo(Optional.of("42R4."));
         labResultInvestigation
             .extracting(LaboratoryInvestigation::getInvestigationDescription)
             .isEqualTo("Serum ferritin");

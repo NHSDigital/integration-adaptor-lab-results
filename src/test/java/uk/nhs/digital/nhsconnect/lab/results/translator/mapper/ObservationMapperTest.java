@@ -80,6 +80,28 @@ class ObservationMapperTest {
     }
 
     @Test
+    void testMapToObservationsLaboratoryInvestigationMissingCode() {
+        final Message message = new Message(List.of(
+            "S02+02", // ServiceReportDetails
+            "S06+06", // InvestigationSubject
+            "GIS+N", // LabResult
+            "INV+MQ+:911::description" // LaboratoryInvestigation
+        ));
+
+        final var observations = mapper.mapToTestGroupsAndResults(message);
+
+        assertThat(observations).hasSize(1)
+            .first()
+            .satisfies(observation -> assertThat(observation.getCode().getCoding()).hasSize(1)
+                .first()
+                .satisfies(coding -> assertAll(
+                    () -> assertThat(coding.hasCode()).isFalse(),
+                    () -> assertThat(coding.getDisplay()).isEqualTo("description"),
+                    () -> assertThat(coding.getSystem()).isEqualTo("http://loinc.org")
+                )));
+    }
+
+    @Test
     void testMapToTestGroupsAndResultsLaboratoryInvestigationResult() {
         final Message message = new Message(List.of(
             "S02+02", // ServiceReportDetails
