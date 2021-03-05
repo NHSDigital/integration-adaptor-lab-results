@@ -31,7 +31,7 @@ import static uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId.SCRE
 
 class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
-    static final String ACK_REQUESTED_REGEX = "^[\\S\\s]*UNB\\+UNOC.*\\+\\+1'\\s*UNH[\\S\\s]*$";
+    static final String ACK_REQUESTED_REGEX = "(?s)^.*UNB\\+UNOC.*\\+\\+1'\\s*UNH.*$";
 
     static final int GP_OUTBOUND_QUEUE_POLLING_DELAY = 2000;
     static final int GP_OUTBOUND_QUEUE_POLLING_TIMEOUT = 10;
