@@ -22,6 +22,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import org.hl7.fhir.dstu3.model.ProcedureRequest.ProcedureRequestIntent;
+
 @SuppressWarnings("checkstyle:magicnumber")
 @ExtendWith(MockitoExtension.class)
 class ProcedureRequestMapperTest {
@@ -149,7 +151,7 @@ class ProcedureRequestMapperTest {
 
         final var procedureRequest = procedureRequestMapper.mapToProcedureRequest(message, null).get();
 
-        assertThat(procedureRequest.getIntent()).isEqualTo(null);
+        assertThat(procedureRequest.getIntent()).isEqualTo(ProcedureRequestIntent.NULL);
     }
 
     @Test
