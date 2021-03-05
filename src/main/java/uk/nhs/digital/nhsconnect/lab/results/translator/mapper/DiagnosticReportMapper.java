@@ -6,6 +6,7 @@ import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.DiagnosticReport;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Patient;
+import org.hl7.fhir.dstu3.model.Specimen;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportDateIssued;
@@ -33,7 +34,9 @@ public class DiagnosticReportMapper {
         ReportStatusCode.UNSPECIFIED, DiagnosticReport.DiagnosticReportStatus.UNKNOWN
     );
 
-    public DiagnosticReport map(final Message message, Patient patient) {
+    public DiagnosticReport map(final Message message,
+                                Patient patient,
+                                List<Specimen> specimens) {
         DiagnosticReport fhir = new DiagnosticReport();
         fhir.setId(uuidGenerator.generateUUID());
 
@@ -53,12 +56,13 @@ public class DiagnosticReportMapper {
         fhir.setCode(new CodeableConcept().setCoding(List.of(coding)));
         // fhir.subject
         fhir.getSubject().setReference(fullUrlGenerator.generate(patient));
+        // fhir.specimens
+        mapSpecimens(specimens, fhir);
 
         /*
             TODO: Add the following
                 - BasedOn - ProcedureReport
                 - Performer - Practitioner/Organization
-                - Specimen - could be a list?
                 - Result - Observation
          */
 
@@ -77,5 +81,9 @@ public class DiagnosticReportMapper {
         identifier.setValue(reference.getNumber());
 
         fhir.addIdentifier(identifier);
+    }
+
+    private void mapSpecimens(final List<Specimen> specimens, final DiagnosticReport fhir) {
+        specimens.forEach(specimen -> fhir.addSpecimen().setReference(fullUrlGenerator.generate(specimen)));
     }
 }
