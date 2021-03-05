@@ -1,9 +1,9 @@
 UNA:+.? '
-UNB+UNOC:3+{{interchangeSender}}+{{interchangeRecipient}}+{{dateYYMMDD}}:{{timeHHMM}}+{{nhsAckControlReference}}++{{workflowId}}'
+UNB+UNOC:3+{{interchangeSender}}:80+{{interchangeRecipient}}:80+{{dateYYMMDD}}:{{timeHHMM}}+{{nhsAckControlReference}}++{{workflowId}}'
 UNH+1+NHSACK:D:1:NH:NHS001'
 BGM+AKR'
 DTM+137:{{dateCCYYMMDD}}:102'
-NIR+SIR:{{interchangeControlReference}}+{{interchangeRecipient}}+{{interchangeSender}}+{{interchangeStatusCode}}'
+NIR+SIR:{{interchangeControlReference}}+{{interchangeRecipient}}:80+{{interchangeSender}}:80+{{interchangeStatusCode}}'
 {{#interchangeError}}
 FTX+ERD+++{{interchangeErrorDescription}}'
 {{/interchangeError}}

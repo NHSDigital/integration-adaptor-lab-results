@@ -9,8 +9,8 @@ import java.util.Arrays;
 @Getter
 @RequiredArgsConstructor
 public enum ServiceProviderCode {
-    DEPARTMENT("DPT", "Department (within an organisation)"),
-    ORGANISATION("ORG", "Healthcare organisation"),
+    DEPARTMENT("DPT", "Department (within an organization)"),
+    ORGANIZATION("ORG", "Healthcare organization"),
     PROFESSIONAL("PRO", "Healthcare professional");
 
     private final String code;

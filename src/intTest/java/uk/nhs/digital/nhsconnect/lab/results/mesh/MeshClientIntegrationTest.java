@@ -42,7 +42,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class MeshClientIntegrationTest extends IntegrationBaseTest {
 
     private static final int MB_100 = 100_000_000;
-    private static final String RECIPIENT = "XX11";
+    private static final String RECIPIENT = "000000024600002";
     private static final String CONTENT = "test_message";
     private static final OutboundMeshMessage OUTBOUND_MESH_MESSAGE = OutboundMeshMessage.create(
         RECIPIENT, WorkflowId.PATHOLOGY, CONTENT, null);
@@ -87,7 +87,7 @@ class MeshClientIntegrationTest extends IntegrationBaseTest {
 
     @SneakyThrows
     private MeshMessageId sendLargeMessageWithWrongWorkflowId() {
-        OutboundMeshMessage messageForMappingMailboxId = new MeshMessage().setRecipient("XX11");
+        OutboundMeshMessage messageForMappingMailboxId = new MeshMessage().setRecipient(RECIPIENT);
         var recipientMailbox = recipientMailboxIdMappings.getRecipientMailboxId(messageForMappingMailboxId);
 
         try (CloseableHttpClient client = meshHttpClientBuilder.build()) {

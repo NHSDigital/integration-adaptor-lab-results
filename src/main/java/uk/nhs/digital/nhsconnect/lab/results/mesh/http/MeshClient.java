@@ -77,7 +77,7 @@ public class MeshClient {
                         content);
                 }
                 final MeshMessageId meshMessageId = parseInto(MeshMessageId.class, response, loggingName);
-                LOGGER.info("Successfully sent message MeshMailboxId={} in MeshMessageId={}",
+                LOGGER.info("Successfully sent message to MeshMailboxId={} in MeshMessageId={}",
                     recipientMailbox, meshMessageId.getMessageID());
                 return meshMessageId;
             }

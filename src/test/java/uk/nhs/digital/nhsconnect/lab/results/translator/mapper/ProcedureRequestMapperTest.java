@@ -126,6 +126,6 @@ class ProcedureRequestMapperTest {
 
         final var procedureRequest = procedureRequestMapper.mapToProcedureRequest(message).get();
 
-        assertThat(procedureRequest.getIntent().toCode()).isEqualTo("?");
+        assertThat(procedureRequest.getIntent().toCode()).isEqualTo(null);
     }
 }

@@ -125,13 +125,8 @@ labresults:
       3WJ4bVSmp3MOQ2EF4zrAl4fXEd4lS3JxKtzbHFbSogAmPFnuP8wIDWTDgfEq
       -----END RSA PRIVATE KEY-----
     subCAcert:
-    recipientToMailboxIdMappings: XX11=lab_results_mailbox
-      TES5=lab_results_mailbox
-      YY21=lab_results_mailbox
-      KC01=lab_results_mailbox
-      WHI5=lab_results_mailbox
-      SO01=lab_results_mailbox
-      UNY5=lab_results_mailbox
+    recipientToMailboxIdMappings: 000000004400001=lab_results_mailbox
+      000000024600002=lab_results_mailbox
     wakeupIntervalInMilliseconds: 500
     pollingCycleMinimumIntervalInSeconds: 1
     pollingCycleDurationInSeconds: 1

@@ -93,7 +93,7 @@ public abstract class IntegrationBaseTest {
     private Resource edifactResource;
 
     @Getter
-    @Value("classpath:edifact/pathology.fhir.json")
+    @Value("classpath:fhir/pathology.fhir.json")
     private Resource fhirResource;
 
     @Getter
@@ -151,7 +151,7 @@ public abstract class IntegrationBaseTest {
     private MeshClient buildMeshClientForLabResultsMailbox() {
         // getting this from config is
         final String labResultsMailboxId = recipientMailboxIdMappings.getRecipientMailboxId(
-            new MeshMessage().setRecipient("XX11"));
+            new MeshMessage().setRecipient("000000024600002"));
         final String gpMailboxId = meshConfig.getMailboxId();
         final RecipientMailboxIdMappings mockRecipientMailboxIdMappings = mock(RecipientMailboxIdMappings.class);
         when(mockRecipientMailboxIdMappings.getRecipientMailboxId(any(OutboundMeshMessage.class)))

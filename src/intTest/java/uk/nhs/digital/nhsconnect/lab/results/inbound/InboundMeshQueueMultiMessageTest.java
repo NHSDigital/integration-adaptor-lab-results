@@ -31,11 +31,11 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
     @Value("classpath:edifact/multi_pathology.edifact.dat")
     private Resource multiEdifactResource;
 
-    @Value("classpath:edifact/multi_pathology_msg1.fhir.json")
+    @Value("classpath:fhir/multi_pathology_msg1.fhir.json")
     private Resource fhirMessage1;
-    @Value("classpath:edifact/multi_pathology_msg2.fhir.json")
+    @Value("classpath:fhir/multi_pathology_msg2.fhir.json")
     private Resource fhirMessage2;
-    @Value("classpath:edifact/multi_pathology_msg3.fhir.json")
+    @Value("classpath:fhir/multi_pathology_msg3.fhir.json")
     private Resource fhirMessage3;
 
     private String previousCorrelationId;
@@ -48,7 +48,7 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
 
     @Test
     void whenMeshInboundQueueMessageIsReceivedThenMessageIsHandled(SoftAssertions softly)
-            throws IOException, JMSException, JSONException {
+        throws IOException, JMSException, JSONException {
 
         final String content = new String(Files.readAllBytes(multiEdifactResource.getFile().toPath()));
 
@@ -72,7 +72,7 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
     }
 
     private void assertGpOutboundQueueMessages(SoftAssertions softly, Message message, Resource fhirMessage)
-            throws IOException, JMSException, JSONException {
+        throws IOException, JMSException, JSONException {
 
         // all messages come from the same interchange and use the same correlation id
         final String correlationId = message.getStringProperty("CorrelationId");
@@ -89,6 +89,7 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
             messageBody,
             new CustomComparator(
                 JSONCompareMode.STRICT,
+                new Customization("id", IGNORE),
                 new Customization("meta.lastUpdated", IGNORE),
                 new Customization("identifier.value", IGNORE),
                 new Customization("entry[*].fullUrl", IGNORE),

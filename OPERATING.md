@@ -59,7 +59,7 @@ Properties:
 Example:
 
     {
-        "_id" : "SIS-TES5-XX11",
+        "_id" : "SIS-000000004400001-000000024600002",
         "sequenceNumber" : 2
     }
 
