@@ -45,10 +45,9 @@ public class ProcedureRequestMapper {
     private void mapFreeText(final PatientClinicalInfo patientClinicalInfo, final ProcedureRequest procedureRequest) {
         final List<Annotation> annotations = patientClinicalInfo.getFreeTexts().stream()
             .map(FreeTextSegment::getTexts)
-            .map(texts -> {
-                final var text = MappingUtils.unescape(String.join(":", texts));
-                return new Annotation().setText(text);
-            })
+            .map(texts -> String.join(" ", texts))
+            .map(MappingUtils::unescape)
+            .map(text -> new Annotation().setText(text))
             .collect(Collectors.toList());
 
         if (annotations.isEmpty()) {
