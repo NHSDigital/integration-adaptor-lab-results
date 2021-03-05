@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ProcedureRequestMapper {
     private final UUIDGenerator uuidGenerator;
-    private static final Map<ReportStatusCode, ProcedureRequest.ProcedureRequestStatus> statusCodeMapping = Map.of(
+    private static final Map<ReportStatusCode, ProcedureRequest.ProcedureRequestStatus> STATUS_CODE_MAPPING = Map.of(
         ReportStatusCode.UNSPECIFIED, ProcedureRequest.ProcedureRequestStatus.UNKNOWN
     );
 
@@ -61,7 +61,7 @@ public class ProcedureRequestMapper {
 
     private void mapStatus(final PatientClinicalInfo patientClinicalInfo, final ProcedureRequest procedureRequest) {
         Optional.ofNullable(patientClinicalInfo)
-            .ifPresent(n -> procedureRequest.setStatus(statusCodeMapping.get(
+            .ifPresent(n -> procedureRequest.setStatus(STATUS_CODE_MAPPING.get(
                 ReportStatusCode.fromCode(patientClinicalInfo.getCode().getCode()))));
     }
 }
