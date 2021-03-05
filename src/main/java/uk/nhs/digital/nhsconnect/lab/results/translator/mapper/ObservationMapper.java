@@ -57,17 +57,17 @@ public class ObservationMapper {
             .collect(Collectors.toList());
     }
 
-    private void mapStatus(LabResult labResult, Observation result) {
+    private void mapStatus(final LabResult labResult, final Observation observation) {
         // Observation.status = SG18.STS.C555.9011
         labResult.getTestStatus()
             .map(TestStatus::getTestStatusCode)
             .map(TestStatusCode::getDescription)
             .map(String::toLowerCase)
             .map(ObservationStatus::fromCode)
-            .ifPresent(result::setStatus);
+            .ifPresent(observation::setStatus);
     }
 
-    private void mapValueQuantity(LabResult labResult, Observation result) {
+    private void mapValueQuantity(final LabResult labResult, final Observation observation) {
         // Observation.value.valueQuantity.*
         labResult.getInvestigationResult().ifPresent(investigationResult -> {
             final var quantity = new Quantity();
@@ -84,17 +84,17 @@ public class ObservationMapper {
                 .map(QuantityComparator::fromCode)
                 .ifPresent(quantity::setComparator);
 
-            result.setValue(quantity);
+            observation.setValue(quantity);
         });
     }
 
-    private void mapCode(LabResult labResult, Observation result) {
+    private void mapCode(final LabResult labResult, final Observation observation) {
         // Observation.code = SG18.INV.C847.9930 and SG18.INV.C847.9931
-        result.getCode().setText(labResult.getInvestigation().getInvestigationDescription());
-        result.getCode().addCoding().setCode(labResult.getInvestigation().getInvestigationCode());
+        observation.getCode().setText(labResult.getInvestigation().getInvestigationDescription());
+        observation.getCode().addCoding().setCode(labResult.getInvestigation().getInvestigationCode());
     }
 
-    private void mapReferenceRange(LabResult labResult, Observation result) {
+    private void mapReferenceRange(final LabResult labResult, final Observation observation) {
         // Observation.referenceRange.*
         labResult.getResultReferenceRanges().stream()
             .map(ResultReferenceRange::getDetails)
@@ -113,17 +113,17 @@ public class ObservationMapper {
 
                 return range;
             })
-            .forEach(result::addReferenceRange);
+            .forEach(observation::addReferenceRange);
     }
 
-    private void mapComment(LabResult labResult, Observation result) {
+    private void mapComment(final LabResult labResult, final Observation observation) {
         // Observation.comment = SG18.FTX.C108.4440(1-5)
         Optional.of(labResult.getFreeTexts().stream()
             .map(FreeTextSegment::getTexts)
             .map(texts -> String.join(" ", texts))
             .collect(Collectors.joining("\n")))
             .filter(StringUtils::isNotBlank)
-            .ifPresent(result::setComment);
+            .ifPresent(observation::setComment);
     }
 
     private SimpleQuantity toSimpleQuantity(final BigDecimal value) {

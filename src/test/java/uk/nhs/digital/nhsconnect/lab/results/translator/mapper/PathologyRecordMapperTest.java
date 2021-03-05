@@ -136,14 +136,14 @@ class PathologyRecordMapperTest {
     @Test
     void testMapMessageToPathologyRecordWithTestResults() {
         final Message message = new Message(emptyList());
-        final var mockObsersation1 = mock(Observation.class);
-        final var mockObsersation2 = mock(Observation.class);
+        final var mockObservation1 = mock(Observation.class);
+        final var mockObservation2 = mock(Observation.class);
         when(observationMapper.mapToTestGroupsAndResults(message))
-            .thenReturn(List.of(mockObsersation1, mockObsersation2));
+            .thenReturn(List.of(mockObservation1, mockObservation2));
 
         final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
 
         assertThat(pathologyRecord.getTestResults())
-            .containsExactly(mockObsersation1, mockObsersation2);
+            .containsExactly(mockObservation1, mockObservation2);
     }
 }

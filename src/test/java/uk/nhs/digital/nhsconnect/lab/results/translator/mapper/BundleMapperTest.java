@@ -75,7 +75,7 @@ class BundleMapperTest {
 
         assertAll(
             () -> verifyBundle(bundle),
-            () -> assertThat(patients).hasSize(1).contains(mockPatient),
+            () -> assertThat(patients).containsExactly(mockPatient),
             () -> assertThat(patientBundleEntries).first()
                 .extracting(BundleEntryComponent::getFullUrl)
                 .isEqualTo(FULL_URL)
@@ -99,7 +99,7 @@ class BundleMapperTest {
 
         assertAll(
             () -> verifyBundle(bundle),
-            () -> assertThat(requestingPractitioners).hasSize(1).contains(mockRequestingPractitioner),
+            () -> assertThat(requestingPractitioners).containsExactly(mockRequestingPractitioner),
             () -> assertThat(requesterBundleEntries).first()
                 .extracting(BundleEntryComponent::getFullUrl)
                 .isEqualTo(FULL_URL)
@@ -123,7 +123,7 @@ class BundleMapperTest {
 
         assertAll(
             () -> verifyBundle(bundle),
-            () -> assertThat(requestingOrganizations).hasSize(1).contains(mockRequestingOrganization),
+            () -> assertThat(requestingOrganizations).containsExactly(mockRequestingOrganization),
             () -> assertThat(requestingOrganizationBundleEntries).first()
                 .extracting(BundleEntryComponent::getFullUrl)
                 .isEqualTo(FULL_URL)
@@ -172,7 +172,7 @@ class BundleMapperTest {
 
         assertAll(
             () -> verifyBundle(bundle),
-            () -> assertThat(performingOrganizations).hasSize(1).contains(mockPerformingOrganization),
+            () -> assertThat(performingOrganizations).containsExactly(mockPerformingOrganization),
             () -> assertThat(performingOrganizationBundleEntries).first()
                 .extracting(BundleEntryComponent::getFullUrl)
                 .isEqualTo(FULL_URL)
@@ -197,8 +197,8 @@ class BundleMapperTest {
 
         assertAll(
             () -> verifyBundle(bundle),
-            () -> assertThat(specimens).hasSize(2)
-                .contains(mockSpecimen1, mockSpecimen2),
+            () -> assertThat(specimens)
+                .containsExactly(mockSpecimen1, mockSpecimen2),
             () -> assertThat(specimenBundleEntries)
                 .extracting(BundleEntryComponent::getFullUrl)
                 .allMatch(FULL_URL::equals)
@@ -223,8 +223,8 @@ class BundleMapperTest {
 
         assertAll(
             () -> verifyBundle(bundle),
-            () -> assertThat(observations).hasSize(2)
-                .contains(mockTestResult1, mockTestResult2),
+            () -> assertThat(observations)
+                .containsExactly(mockTestResult1, mockTestResult2),
             () -> assertThat(observationBundleEntries)
                 .extracting(BundleEntryComponent::getFullUrl)
                 .allMatch(FULL_URL::equals)
