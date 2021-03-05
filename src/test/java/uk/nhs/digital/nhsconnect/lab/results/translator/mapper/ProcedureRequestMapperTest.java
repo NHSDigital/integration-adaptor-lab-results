@@ -123,6 +123,21 @@ class ProcedureRequestMapperTest {
     }
 
     @Test
+    void testMapToProcedureRequestUndefinedStatus() {
+        final Message message = new Message(List.of(
+            "S02+02", // ServiceReportDetails
+            "S06+06", // InvestigationSubject
+            "S10+10",
+            "CIN+Undefined Status",
+            "FTX+CID+++COELIAC"
+        ));
+
+        assertThatThrownBy(() -> procedureRequestMapper.mapToProcedureRequest(message, null))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("No Report Status Code for 'Undefined Status'");
+    }
+
+    @Test
     void testMapToProcedureRequestIntent() {
         final Message message = new Message(List.of(
             "S02+02", // ServiceReportDetails
