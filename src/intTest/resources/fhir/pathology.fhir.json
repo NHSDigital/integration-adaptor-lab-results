@@ -126,10 +126,11 @@
         "code": {
           "coding": [
             {
-              "code": "42R4."
+              "system": "http://loinc.org",
+              "code": "42R4.",
+              "display": "Serum ferritin"
             }
-          ],
-          "text": "Serum ferritin"
+          ]
         },
         "valueQuantity": {
           "value": 11,

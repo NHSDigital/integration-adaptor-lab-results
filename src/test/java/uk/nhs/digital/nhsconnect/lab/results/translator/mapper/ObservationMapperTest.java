@@ -1,6 +1,5 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
-import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.Observation.ObservationReferenceRangeComponent;
 import org.hl7.fhir.dstu3.model.Observation.ObservationStatus;
@@ -70,12 +69,13 @@ class ObservationMapperTest {
         final var observations = mapper.mapToTestGroupsAndResults(message);
 
         assertThat(observations).hasSize(2)
-            .allSatisfy(observation -> assertThat(observation.getCode()).satisfies(codeConcept -> assertAll(
-                () -> assertThat(codeConcept.getText()).isEqualTo("description"),
-                () -> assertThat(codeConcept.getCoding()).hasSize(1).first()
-                    .extracting(Coding::getCode)
-                    .isEqualTo("code")
-            )))
+            .allSatisfy(observation -> assertThat(observation.getCode().getCoding()).hasSize(1)
+                .first()
+                .satisfies(coding -> assertAll(
+                    () -> assertThat(coding.getCode()).isEqualTo("code"),
+                    () -> assertThat(coding.getDisplay()).isEqualTo("description"),
+                    () -> assertThat(coding.getSystem()).isEqualTo("http://loinc.org")
+                )))
             .allSatisfy(specimen -> assertThat(specimen.getId()).isEqualTo("test-uuid"));
     }
 

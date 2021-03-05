@@ -114,10 +114,11 @@
         "code": {
           "coding": [
             {
-              "code": "43F3."
+              "system": "http://loinc.org",
+              "code": "43F3.",
+              "display": "R.A. latex test"
             }
-          ],
-          "text": "R.A. latex test"
+          ]
         },
         "comment": "NEGATIVE"
       }

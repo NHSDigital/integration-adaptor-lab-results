@@ -28,6 +28,8 @@ import java.util.stream.Collectors;
 @Component
 @AllArgsConstructor(onConstructor_ = @Autowired)
 public class ObservationMapper {
+    private static final String CODING_SYSTEM = "http://loinc.org";
+
     private final UUIDGenerator uuidGenerator;
 
     public List<Observation> mapToTestGroupsAndResults(final Message message) {
@@ -92,8 +94,10 @@ public class ObservationMapper {
 
     private void mapCode(final LabResult labResult, final Observation observation) {
         // Observation.code = SG18.INV.C847.9930 and SG18.INV.C847.9931
-        observation.getCode().setText(labResult.getInvestigation().getInvestigationDescription());
-        observation.getCode().addCoding().setCode(labResult.getInvestigation().getInvestigationCode());
+        final var coding = observation.getCode().addCoding();
+        coding.setCode(labResult.getInvestigation().getInvestigationCode());
+        coding.setDisplay(labResult.getInvestigation().getInvestigationDescription());
+        coding.setSystem(CODING_SYSTEM);
     }
 
     private void mapReferenceRange(final LabResult labResult, final Observation observation) {
