@@ -59,12 +59,14 @@ public class ObservationMapper {
 
     private void mapStatus(final LabResult labResult, final Observation observation) {
         // Observation.status = SG18.STS.C555.9011
-        labResult.getTestStatus()
+        final var status = labResult.getTestStatus()
             .map(TestStatus::getTestStatusCode)
             .map(TestStatusCode::getDescription)
             .map(String::toLowerCase)
             .map(ObservationStatus::fromCode)
-            .ifPresent(observation::setStatus);
+            .orElse(ObservationStatus.UNKNOWN);
+
+        observation.setStatus(status);
     }
 
     private void mapValueQuantity(final LabResult labResult, final Observation observation) {

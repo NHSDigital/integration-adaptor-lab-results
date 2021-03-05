@@ -110,6 +110,7 @@
       "resource": {
         "resourceType": "Observation",
         "id": "6d53dfea-9ed1-405c-964c-ab32197251e7",
+        "status": "unknown",
         "code": {
           "coding": [
             {

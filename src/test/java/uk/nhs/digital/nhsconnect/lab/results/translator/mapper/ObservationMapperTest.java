@@ -120,6 +120,23 @@ class ObservationMapperTest {
     }
 
     @Test
+    void testMapToTestGroupsAndResultsTestStatusCodeUnknown() {
+        final Message message = new Message(List.of(
+            "S02+02", // ServiceReportDetails
+            "S06+06", // InvestigationSubject
+            "GIS+N", // LabResult
+            "INV+MQ+c:911::d" // LaboratoryInvestigation
+        ));
+
+        final var observations = mapper.mapToTestGroupsAndResults(message);
+
+        assertThat(observations).hasSize(1)
+            .first()
+            .extracting(Observation::getStatus)
+            .isEqualTo(ObservationStatus.UNKNOWN);
+    }
+
+    @Test
     void testMapToTestGroupsAndResultsFreeTexts() {
         final Message message = new Message(List.of(
             "S02+02", // ServiceReportDetails

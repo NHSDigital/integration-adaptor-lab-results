@@ -122,6 +122,7 @@
       "resource": {
         "resourceType": "Observation",
         "id": "899d7b43-9e83-4f82-af3a-f0a742acf16f",
+        "status": "unknown",
         "code": {
           "coding": [
             {
