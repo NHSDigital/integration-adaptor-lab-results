@@ -170,6 +170,7 @@ class ObservationMapperTest {
             "INV+MQ+c:911::d", // LaboratoryInvestigation
 
             "FTX+RIT+++multi:line", // FreeTextSegment
+            "FTX+RIT+++",
             "FTX+RIT+++comment"
         ));
 
@@ -178,7 +179,7 @@ class ObservationMapperTest {
         assertThat(observations).hasSize(1)
             .first()
             .extracting(Observation::getComment)
-            .isEqualTo("multi line\ncomment");
+            .isEqualTo("multi line\n\ncomment");
     }
 
     @Test
