@@ -101,6 +101,9 @@
         "code": {
           "text": "unknown"
         },
+        "subject": {
+          "reference": "urn:uuid:4ad99777-9863-4614-b929-16633f870f23"
+        },
         "note": [
           {
             "text": "TIRED ALL THE TIME, LOW Hb"

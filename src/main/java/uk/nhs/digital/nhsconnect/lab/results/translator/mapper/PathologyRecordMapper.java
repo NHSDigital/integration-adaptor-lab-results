@@ -31,9 +31,9 @@ public class PathologyRecordMapper {
             .ifPresent(pathologyRecordBuilder::performingPractitioner);
         organizationMapper.mapToPerformingOrganization(message)
             .ifPresent(pathologyRecordBuilder::performingOrganization);
+        procedureRequestMapper.mapToProcedureRequest(message, patient)
+            .ifPresent(pathologyRecordBuilder::testRequestSummary);
         pathologyRecordBuilder.specimens(specimenMapper.mapToSpecimens(message, patient));
-
-        procedureRequestMapper.mapToProcedureRequest(message).ifPresent(pathologyRecordBuilder::testRequestSummary);
 
         return pathologyRecordBuilder.build();
     }

@@ -51,7 +51,8 @@ class PathologyRecordMapperTest {
         when(practitionerMapper.mapToRequestingPractitioner(any(Message.class))).thenReturn(Optional.empty());
         when(practitionerMapper.mapToPerformingPractitioner(any(Message.class))).thenReturn(Optional.empty());
         when(patientMapper.mapToPatient(any(Message.class))).thenReturn(new Patient());
-        when(procedureRequestMapper.mapToProcedureRequest(any(Message.class))).thenReturn(Optional.empty());
+        when(procedureRequestMapper.mapToProcedureRequest(any(Message.class), any(Patient.class)))
+            .thenReturn(Optional.empty());
         when(specimenMapper.mapToSpecimens(any(Message.class), any(Patient.class))).thenReturn(Collections.emptyList());
     }
 
@@ -122,8 +123,9 @@ class PathologyRecordMapperTest {
     void testMapMessageToPathologyRecordWithProcedureRequest() {
         final Message message = new Message(emptyList());
         var mockProcedureRequest = mock(ProcedureRequest.class);
-
-        when(procedureRequestMapper.mapToProcedureRequest(message)).thenReturn(Optional.of(mockProcedureRequest));
+        reset(procedureRequestMapper);
+        when(procedureRequestMapper.mapToProcedureRequest(eq(message), any(Patient.class)))
+            .thenReturn(Optional.of(mockProcedureRequest));
 
         final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
 
