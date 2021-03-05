@@ -15,7 +15,7 @@ class InterchangeHeaderTest {
     @Test
     void testValidateSequenceNumberNullThrowsException() {
         final InterchangeHeader interchangeHeader =
-            InterchangeHeader.fromString("UNB+UNOA:2+SNDR+RECP+190523:0900");
+            InterchangeHeader.fromString("UNB+UNOA:2+SNDR:80+RECP:80+190523:0900");
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
             interchangeHeader::validate);
@@ -26,7 +26,7 @@ class InterchangeHeaderTest {
     @Test
     void testValidateSequenceNumberLessThanOneThrowsException() {
         final InterchangeHeader interchangeHeader =
-            InterchangeHeader.fromString("UNB+UNOA:2+SNDR+RECP+190523:0900+00000000");
+            InterchangeHeader.fromString("UNB+UNOA:2+SNDR:80+RECP:80+190523:0900+00000000");
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
             interchangeHeader::validate);
@@ -37,7 +37,7 @@ class InterchangeHeaderTest {
     @Test
     void testValidateSequenceNumberMoreThanMaxThrowsException() {
         final InterchangeHeader interchangeHeader =
-            InterchangeHeader.fromString("UNB+UNOA:2+SNDR+RECP+190523:0900+100000000");
+            InterchangeHeader.fromString("UNB+UNOA:2+SNDR:80+RECP:80+190523:0900+100000000");
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
             interchangeHeader::validate);
@@ -48,7 +48,7 @@ class InterchangeHeaderTest {
     @Test
     void testValidateSequenceNumberWithinMinMaxDoesNotThrowException() {
         final InterchangeHeader interchangeHeader =
-            InterchangeHeader.fromString("UNB+UNOA:2+SNDR+RECP+190523:0900+00000001");
+            InterchangeHeader.fromString("UNB+UNOA:2+SNDR:80+RECP:80+190523:0900+00000001");
 
         assertDoesNotThrow(interchangeHeader::validate);
     }
@@ -56,7 +56,7 @@ class InterchangeHeaderTest {
     @Test
     void testValidationEmptySenderThrowsException() {
         final InterchangeHeader interchangeHeader =
-            InterchangeHeader.fromString("UNB+UNOA:2++RECP+190523:0900+00000001");
+            InterchangeHeader.fromString("UNB+UNOA:2++RECP:80+190523:0900+00000001");
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
             interchangeHeader::validate);
@@ -67,7 +67,7 @@ class InterchangeHeaderTest {
     @Test
     void testValidationEmptyRecipientThrowsException() {
         final InterchangeHeader interchangeHeader =
-            InterchangeHeader.fromString("UNB+UNOA:2+SNDR++190523:0900+00000001");
+            InterchangeHeader.fromString("UNB+UNOA:2+SNDR:80++190523:0900+00000001");
 
         final EdifactValidationException exception = assertThrows(EdifactValidationException.class,
             interchangeHeader::validate);
@@ -77,7 +77,7 @@ class InterchangeHeaderTest {
 
     @Test
     void testFromStringWithValidEdifactStringReturnsInterchangeHeader() {
-        final var interchangeHeader = InterchangeHeader.fromString("UNB+UNOA:2+SNDR+RECP+190323:0900+00000001");
+        final var interchangeHeader = InterchangeHeader.fromString("UNB+UNOA:2+SNDR:80+RECP:80+190323:0900+00000001");
 
         assertAll(
             () -> assertEquals(InterchangeHeader.KEY, interchangeHeader.getKey()),
@@ -99,7 +99,7 @@ class InterchangeHeaderTest {
     @Test
     void testFromStringWithNhsAckRequestedSetsTrue() {
         final var interchangeHeader = InterchangeHeader.fromString(
-                "UNB+UNOA:2+SNDR+RECP+190323:0900+00000001++MEDRPT++1");
+            "UNB+UNOA:2+SNDR:80+RECP:80+190323:0900+00000001++MEDRPT++1");
 
         assertAll(
             () -> assertEquals(InterchangeHeader.KEY, interchangeHeader.getKey()),
@@ -113,7 +113,7 @@ class InterchangeHeaderTest {
     @Test
     void testFromStringWithNoNhsAckRequestedSetsFalse() {
         final var interchangeHeader = InterchangeHeader.fromString(
-                "UNB+UNOA:2+SNDR+RECP+190323:0900+00000001++MEDRPT++0");
+            "UNB+UNOA:2+SNDR:80+RECP:80+190323:0900+00000001++MEDRPT++0");
 
         assertAll(
             () -> assertEquals(InterchangeHeader.KEY, interchangeHeader.getKey()),
