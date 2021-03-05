@@ -97,6 +97,37 @@
         ],
         "name": "ST JAMES'S UNIVERSITY HOSPITAL"
       }
+    },
+    {
+      "fullUrl": "urn:uuid:1c2ffccb-186a-4193-a12e-f1b2c0bb6cee",
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "1c2ffccb-186a-4193-a12e-f1b2c0bb6cee",
+        "identifier": [ {
+          "value": "15/CH000063K/200010191704"
+        } ],
+        "status": "unknown",
+        "code": {
+          "coding": [ {
+            "system": "http://snomed.info/sct",
+            "code": "721981007",
+            "display": "Diagnostic studies report"
+          } ]
+        },
+        "subject": {
+          "reference": "urn:uuid:eea77c68-0d47-412c-a7bc-321583a2c75f"
+        },
+        "issued": "2010-02-25T15:41:00.000+00:00",
+        "performer": [ {
+          "actor": {
+            "reference": "urn:uuid:c8363588-7bf2-427f-8be1-da637b6ea464"
+          }
+        }, {
+          "actor": {
+            "reference": "urn:uuid:4fb0cd2b-dfdc-49c6-beda-44d43ab4cbaa"
+          }
+        } ]
+      }
     }
   ]
 }

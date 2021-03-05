@@ -92,6 +92,36 @@
       }
     },
     {
+      "fullUrl": "urn:uuid:1c2ffccb-186a-4193-a12e-f1b2c0bb6cee",
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "1c2ffccb-186a-4193-a12e-f1b2c0bb6cee",
+        "identifier": [ {
+          "value": "15/CH000037K/200010191704"
+        } ],
+        "status": "unknown",
+        "code": {
+          "coding": [ {
+            "system": "http://snomed.info/sct",
+            "code": "721981007",
+            "display": "Diagnostic studies report"
+          } ]
+        },
+        "subject": {
+          "reference": "urn:uuid:4ad99777-9863-4614-b929-16633f870f23"
+        },
+        "issued": "2010-02-25T15:41:00.000+00:00",
+        "performer": [ {
+          "actor": {
+            "reference": "urn:uuid:254f1964-f0b7-45e6-ae86-ca1c06810705"
+          }
+        } ],
+        "specimen": [ {
+          "reference": "urn:uuid:1cc2e06f-bbe8-47a0-854c-c3d0ddfb1354"
+        } ]
+      }
+    },
+    {
       "fullUrl": "urn:uuid:1cc2e06f-bbe8-47a0-854c-c3d0ddfb1354",
       "resource": {
         "resourceType": "Specimen",
