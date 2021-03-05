@@ -1,8 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
 import lombok.RequiredArgsConstructor;
-import org.hl7.fhir.dstu3.model.CodeableConcept;
-import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.DiagnosticReport;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Patient;
@@ -27,12 +25,14 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class DiagnosticReportMapper {
+    private static final Map<ReportStatusCode, DiagnosticReport.DiagnosticReportStatus> STATUS_MAP = Map.of(
+        ReportStatusCode.UNSPECIFIED, DiagnosticReport.DiagnosticReportStatus.UNKNOWN);
+    private static final String CODE_SYSTEM = "http://snomed.info/sct";
+    private static final String CODE_DISPLAY = "Diagnostic studies report";
+    private static final String CODE_NUMBER = "721981007";
 
     private final UUIDGenerator uuidGenerator;
     private final ResourceFullUrlGenerator fullUrlGenerator;
-    private static final Map<ReportStatusCode, DiagnosticReport.DiagnosticReportStatus> STATUS_MAP = Map.of(
-        ReportStatusCode.UNSPECIFIED, DiagnosticReport.DiagnosticReportStatus.UNKNOWN
-    );
 
     public DiagnosticReport map(final Message message,
                                 Patient patient,
@@ -48,12 +48,9 @@ public class DiagnosticReportMapper {
         fhir.setStatus(STATUS_MAP.get(serviceReportDetails.getStatus().getEvent()));
         // fhir.identifier
         mapIdentifier(serviceReportDetails.getReference(), fhir);
-        Coding coding = new Coding();
-        coding.setCode("721981007");
-        coding.setSystem("http://snomed.info/sct");
-        coding.setDisplay("Diagnostic studies report");
         // fhir.code
-        fhir.setCode(new CodeableConcept().setCoding(List.of(coding)));
+        mapCode(fhir);
+
         // fhir.subject
         fhir.getSubject().setReference(fullUrlGenerator.generate(patient));
         // fhir.specimens
@@ -85,5 +82,12 @@ public class DiagnosticReportMapper {
 
     private void mapSpecimens(final List<Specimen> specimens, final DiagnosticReport fhir) {
         specimens.forEach(specimen -> fhir.addSpecimen().setReference(fullUrlGenerator.generate(specimen)));
+    }
+
+    private void mapCode(final DiagnosticReport fhir) {
+        fhir.getCode().addCoding()
+            .setDisplay(CODE_DISPLAY)
+            .setCode(CODE_NUMBER)
+            .setSystem(CODE_SYSTEM);
     }
 }
