@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ProcedureRequestMapper {
     private final UUIDGenerator uuidGenerator;
-    private final Map<ReportStatusCode, ProcedureRequest.ProcedureRequestStatus> statusCodeMapping = Map.of(
+    private static final Map<ReportStatusCode, ProcedureRequest.ProcedureRequestStatus> statusCodeMapping = Map.of(
         ReportStatusCode.UNSPECIFIED, ProcedureRequest.ProcedureRequestStatus.UNKNOWN
     );
 
