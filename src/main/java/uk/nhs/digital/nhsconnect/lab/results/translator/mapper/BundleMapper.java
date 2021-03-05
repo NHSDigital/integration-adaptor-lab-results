@@ -1,19 +1,18 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
-import java.util.List;
-import java.util.Optional;
-
+import lombok.RequiredArgsConstructor;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.InstantType;
 import org.hl7.fhir.dstu3.model.Meta;
 import org.hl7.fhir.dstu3.model.UriType;
 import org.springframework.stereotype.Component;
-
-import lombok.RequiredArgsConstructor;
 import uk.nhs.digital.nhsconnect.lab.results.model.fhir.PathologyRecord;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
+
+import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -54,6 +53,12 @@ public class BundleMapper {
             bundle.addEntry()
                 .setFullUrl(fullUrlGenerator.generate(performingOrganization))
                 .setResource(performingOrganization)
+        );
+
+        Optional.ofNullable(pathologyRecord.getTestReport()).ifPresent(diagnosticReport ->
+            bundle.addEntry()
+                .setFullUrl(fullUrlGenerator.generate(diagnosticReport))
+                .setResource(diagnosticReport)
         );
 
         pathologyRecord.getSpecimens().forEach(specimen ->
