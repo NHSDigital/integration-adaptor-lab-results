@@ -35,9 +35,9 @@ class SpecimenDetailsTest {
             "ignore me"
         ));
         assertThat(specimen.getSequenceDetails())
-            .isPresent()
-            .map(SequenceDetails::getNumber)
-            .contains("123ABC");
+            .isNotNull()
+            .extracting(SequenceDetails::getNumber)
+            .isEqualTo("123ABC");
     }
 
     @Test
@@ -170,7 +170,9 @@ class SpecimenDetailsTest {
     void testLazyGettersWhenMissing() {
         final var specimen = new SpecimenDetails(List.of());
         assertAll(
-            () -> assertThat(specimen.getSequenceDetails()).isEmpty(),
+            () -> assertThatThrownBy(specimen::getSequenceDetails)
+                .isExactlyInstanceOf(MissingSegmentException.class)
+                .hasMessage("EDIFACT section is missing segment SEQ"),
             () -> assertThatThrownBy(specimen::getCharacteristicType)
                 .isExactlyInstanceOf(MissingSegmentException.class)
                 .hasMessage("EDIFACT section is missing segment SPC+TSP"),

@@ -16,10 +16,12 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.any;
@@ -60,8 +62,9 @@ class PathologyRecordMapperTest {
             nullable(Practitioner.class), nullable(Organization.class),
             nullable(Practitioner.class), nullable(Organization.class)))
             .thenReturn(Optional.empty());
-        when(specimenMapper.mapToSpecimens(any(Message.class), any(Patient.class))).thenReturn(Collections.emptyList());
-        when(observationMapper.mapToTestGroupsAndResults(any(Message.class))).thenReturn(Collections.emptyList());
+        when(specimenMapper.mapToSpecimens(any(Message.class), any(Patient.class))).thenReturn(Collections.emptyMap());
+        when(observationMapper.mapToObservations(any(), any(), any(), any(), any()))
+            .thenReturn(Collections.emptyList());
     }
 
     @Test
@@ -149,12 +152,12 @@ class PathologyRecordMapperTest {
         final var mockSpecimen2 = mock(Specimen.class);
         reset(specimenMapper);
         when(specimenMapper.mapToSpecimens(eq(message), any(Patient.class)))
-            .thenReturn(List.of(mockSpecimen1, mockSpecimen2));
+            .thenReturn(Map.of("1", mockSpecimen1, "2", mockSpecimen2));
 
         final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
 
         assertThat(pathologyRecord.getSpecimens())
-            .containsExactly(mockSpecimen1, mockSpecimen2);
+            .containsOnly(mockSpecimen1, mockSpecimen2);
     }
 
     @Test
@@ -162,7 +165,9 @@ class PathologyRecordMapperTest {
         final Message message = new Message(emptyList());
         final var mockObservation1 = mock(Observation.class);
         final var mockObservation2 = mock(Observation.class);
-        when(observationMapper.mapToTestGroupsAndResults(message))
+        reset(observationMapper);
+        when(observationMapper.mapToObservations(eq(message), nullable(Patient.class), anyMap(),
+            nullable(Organization.class), nullable(Practitioner.class)))
             .thenReturn(List.of(mockObservation1, mockObservation2));
 
         final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);

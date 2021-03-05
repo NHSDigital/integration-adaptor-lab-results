@@ -1,8 +1,6 @@
-package uk.nhs.digital.nhsconnect.lab.segments.model.edifact;
+package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
 import org.junit.jupiter.api.Test;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 
 import static org.assertj.core.api.Assertions.assertThat;

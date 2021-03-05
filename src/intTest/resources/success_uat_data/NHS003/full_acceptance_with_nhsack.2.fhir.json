@@ -148,7 +148,98 @@
               "display": "Full blood count - FBC"
             }
           ]
-        }
+        },
+        "subject": {
+          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+          }
+        ],
+        "specimen": {
+          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
+        },
+        "related": [
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:36d0b706-a9e1-442e-8ab2-9adc766a5b9c"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:590fd294-b573-406c-b46a-f0b59ece5da9"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:8b75b9fb-4182-4d7b-ac34-fd67ff4abb19"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:89a4c516-be4e-4d6d-b6f8-1bed944de685"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:4867afeb-0467-4e8e-9e79-98a5e14ded49"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:8705321a-18fa-49de-9515-14473032757a"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:8834fb5a-9757-4729-a7ae-3e608899705f"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:7b736f8a-ab6a-44b4-a804-b50e7e7b0abb"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:bcc702d1-b557-47b7-bf37-ded54dad86fc"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:9431a68c-a2dd-44a9-86ee-13630f3da0d6"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:099ad994-9203-441e-9971-1e2b822947c1"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:55e15e47-a6f0-4fe6-9a1d-845f0f1d7862"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:4ac0f7da-f5c7-4d79-9064-35de8bf186fe"
+            }
+          }
+        ]
       }
     },
     {
@@ -166,9 +257,20 @@
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+          }
+        ],
         "valueQuantity": {
           "value": 7.6,
           "unit": "10*9/L"
+        },
+        "specimen": {
+          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
         },
         "referenceRange": [
           {
@@ -177,6 +279,13 @@
             },
             "high": {
               "value": 11.0
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
             }
           }
         ]
@@ -197,9 +306,20 @@
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+          }
+        ],
         "valueQuantity": {
           "value": 2.84,
           "unit": "10*12/L"
+        },
+        "specimen": {
+          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
         },
         "referenceRange": [
           {
@@ -208,6 +328,13 @@
             },
             "high": {
               "value": 5.4
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
             }
           }
         ]
@@ -228,9 +355,20 @@
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+          }
+        ],
         "valueQuantity": {
           "value": 11.0,
           "unit": "g/dL"
+        },
+        "specimen": {
+          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
         },
         "referenceRange": [
           {
@@ -239,6 +377,13 @@
             },
             "high": {
               "value": 15.0
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
             }
           }
         ]
@@ -259,9 +404,20 @@
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+          }
+        ],
         "valueQuantity": {
           "value": 0.315,
           "unit": "%"
+        },
+        "specimen": {
+          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
         },
         "referenceRange": [
           {
@@ -270,6 +426,13 @@
             },
             "high": {
               "value": 0.470
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
             }
           }
         ]
@@ -290,9 +453,20 @@
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+          }
+        ],
         "valueQuantity": {
           "value": 111.1,
           "unit": "fL"
+        },
+        "specimen": {
+          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
         },
         "referenceRange": [
           {
@@ -301,6 +475,13 @@
             },
             "high": {
               "value": 100
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
             }
           }
         ]
@@ -321,9 +502,20 @@
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+          }
+        ],
         "valueQuantity": {
           "value": 38.7,
           "unit": "pg"
+        },
+        "specimen": {
+          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
         },
         "referenceRange": [
           {
@@ -332,6 +524,13 @@
             },
             "high": {
               "value": 32
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
             }
           }
         ]
@@ -352,9 +551,20 @@
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+          }
+        ],
         "valueQuantity": {
           "value": 34.8,
           "unit": "g/dL"
+        },
+        "specimen": {
+          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
         },
         "referenceRange": [
           {
@@ -363,6 +573,13 @@
             },
             "high": {
               "value": 37
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
             }
           }
         ]
@@ -383,9 +600,20 @@
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+          }
+        ],
         "valueQuantity": {
           "value": 220,
           "unit": "10*9/L"
+        },
+        "specimen": {
+          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
         },
         "referenceRange": [
           {
@@ -394,6 +622,13 @@
             },
             "high": {
               "value": 600
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
             }
           }
         ]
@@ -414,9 +649,20 @@
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+          }
+        ],
         "valueQuantity": {
           "value": 7.4,
           "unit": "10*9/L"
+        },
+        "specimen": {
+          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
         },
         "referenceRange": [
           {
@@ -425,6 +671,13 @@
             },
             "high": {
               "value": 7.5
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
             }
           }
         ]
@@ -445,9 +698,20 @@
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+          }
+        ],
         "valueQuantity": {
           "value": 0.1,
           "unit": "10*9/L"
+        },
+        "specimen": {
+          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
         },
         "referenceRange": [
           {
@@ -456,6 +720,13 @@
             },
             "high": {
               "value": 4.0
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
             }
           }
         ]
@@ -476,9 +747,20 @@
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+          }
+        ],
         "valueQuantity": {
           "value": 0.1,
           "unit": "10*9/L"
+        },
+        "specimen": {
+          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
         },
         "referenceRange": [
           {
@@ -487,6 +769,13 @@
             },
             "high": {
               "value": 1.0
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
             }
           }
         ]
@@ -507,10 +796,21 @@
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+          }
+        ],
         "valueQuantity": {
           "value": 0.1,
           "comparator": "<",
           "unit": "10*9/L"
+        },
+        "specimen": {
+          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
         },
         "referenceRange": [
           {
@@ -519,6 +819,13 @@
             },
             "high": {
               "value": 0.6
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
             }
           }
         ]
@@ -539,9 +846,20 @@
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+          }
+        ],
         "valueQuantity": {
           "value": 0.0,
           "unit": "10*9/L"
+        },
+        "specimen": {
+          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
         },
         "referenceRange": [
           {
@@ -550,6 +868,13 @@
             },
             "high": {
               "value": 0.3
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
             }
           }
         ]

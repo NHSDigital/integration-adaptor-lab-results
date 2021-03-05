@@ -30,7 +30,7 @@ class ResourceFullUrlGeneratorTest {
     @Test
     @SuppressWarnings("ConstantConditions")
     void testMapToFullUrlNullResource() {
-        assertThatThrownBy(() -> fullUrlGenerator.generate(null))
+        assertThatThrownBy(() -> fullUrlGenerator.generate((Resource) null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("resource is marked non-null but is null");
     }

@@ -43,9 +43,7 @@ public class SpecimenDetails extends SegmentGroup {
     public static final String INDICATOR = "S16";
 
     @Getter(lazy = true)
-    private final Optional<SequenceDetails> sequenceDetails =
-        extractOptionalSegment(SequenceDetails.KEY)
-            .map(SequenceDetails::fromString);
+    private final SequenceDetails sequenceDetails = SequenceDetails.fromString(extractSegment(SequenceDetails.KEY));
 
     @Getter(lazy = true)
     private final SpecimenCharacteristicType characteristicType =

@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -67,21 +68,24 @@ class SpecimenMapperTest {
     }
 
     @Test
-    void testMapToSpecimensOnlyRequiredSegmentCharacteristicType() {
+    void testMapToSpecimensOnlyRequiredSegments() {
         when(uuidGenerator.generateUUID()).thenReturn("test-uuid");
         final Message message = new Message(List.of(
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
+
             "S16+16", // SpecimenDetails
             "SPC+TSP+:::Specimen type", // SpecimenCharacteristicType
-            "S16+16", // SpecimenDetails
+            "SEQ++1", // SequenceDetails
 
-            "SPC+TSP+:::Specimen type" // SpecimenCharacteristicType
+            "S16+16", // SpecimenDetails
+            "SPC+TSP+:::Specimen type", // SpecimenCharacteristicType
+            "SEQ++2" // SequenceDetails
         ));
 
         final var specimens = specimenMapper.mapToSpecimens(message, null);
 
-        assertThat(specimens).hasSize(2)
+        assertThat(specimens.values()).hasSize(2)
             .allSatisfy(specimen -> assertThat(specimen.getType().getCoding())
                 .hasSize(1)
                 .map(Coding::getDisplay)
@@ -96,13 +100,14 @@ class SpecimenMapperTest {
             "S06+06", // InvestigationSubject
             "S16+16", // SpecimenDetails
             "SPC+TSP+:::Required", // SpecimenCharacteristicType
+            "SEQ++1", // SequenceDetails
 
             "RFF+RTI:Requester" // Reference - SPECIMEN_BY_REQUESTER
         ));
 
         final var specimens = specimenMapper.mapToSpecimens(message, null);
 
-        assertThat(specimens).hasSize(1)
+        assertThat(specimens.values()).hasSize(1)
             .first()
             .satisfies(specimen -> assertThat(specimen.getIdentifier()).hasSize(1)
                 .first()
@@ -117,13 +122,14 @@ class SpecimenMapperTest {
             "S06+06", // InvestigationSubject
             "S16+16", // SpecimenDetails
             "SPC+TSP+:::Required", // SpecimenCharacteristicType
+            "SEQ++1", // SequenceDetails
 
             "RFF+STI:Provider" // Reference - SPECIMEN_BY_PROVIDER
         ));
 
         final var specimens = specimenMapper.mapToSpecimens(message, null);
 
-        assertThat(specimens).hasSize(1)
+        assertThat(specimens.values()).hasSize(1)
             .first()
             .satisfies(specimen -> assertThat(specimen.getAccessionIdentifier())
                 .extracting(Identifier::getValue)
@@ -141,13 +147,14 @@ class SpecimenMapperTest {
             "S06+06", // InvestigationSubject
             "S16+16", // SpecimenDetails
             "SPC+TSP+:::Required", // SpecimenCharacteristicType
+            "SEQ++1", // SequenceDetails
 
             "DTM+SRI:date:203" // SpecimenCollectionReceiptDateTime
         ));
 
         final var specimens = specimenMapper.mapToSpecimens(message, null);
 
-        assertThat(specimens).hasSize(1)
+        assertThat(specimens.values()).hasSize(1)
             .first()
             .satisfies(specimen -> assertThat(specimen.getReceivedTime()).isEqualTo(expectedDate));
     }
@@ -162,6 +169,7 @@ class SpecimenMapperTest {
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
             "S16+16", // SpecimenDetails
+            "SEQ++1", // SequenceDetails
             "SPC+TSP+:::Required", // SpecimenCharacteristicType
 
             "DTM+SCO:date:203" // SpecimenCollectionDateTime
@@ -169,7 +177,7 @@ class SpecimenMapperTest {
 
         final var specimens = specimenMapper.mapToSpecimens(message, null);
 
-        assertThat(specimens).hasSize(1)
+        assertThat(specimens.values()).hasSize(1)
             .first()
             .satisfies(specimen -> assertThat(specimen.getCollection().getCollected()).isEqualTo(expectedDate));
     }
@@ -180,6 +188,7 @@ class SpecimenMapperTest {
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
             "S16+16", // SpecimenDetails
+            "SEQ++1", // SequenceDetails
             "SPC+TSP+:::Required", // SpecimenCharacteristicType
 
             "QTY+SVO:1+:::unit" // SpecimenQuantity
@@ -187,7 +196,7 @@ class SpecimenMapperTest {
 
         final var specimens = specimenMapper.mapToSpecimens(message, null);
 
-        assertThat(specimens).hasSize(1)
+        assertThat(specimens.values()).hasSize(1)
             .first()
             .satisfies(specimen -> assertAll(
                 () -> assertThat(specimen.getCollection().getQuantity().getValue()).isEqualTo(BigDecimal.ONE),
@@ -202,6 +211,7 @@ class SpecimenMapperTest {
             "S06+06", // InvestigationSubject
             "S16+16", // SpecimenDetails
             "SPC+TSP+:::Required", // SpecimenCharacteristicType
+            "SEQ++1", // SequenceDetails
 
             "FTX+SPC+++item 1 part 1:item 1 part 2", // FreeTextSegment
             "FTX+SPC+++item 2 part 1:item 2 part 2"  // FreeTextSegment
@@ -209,7 +219,7 @@ class SpecimenMapperTest {
 
         final var specimens = specimenMapper.mapToSpecimens(message, null);
 
-        assertThat(specimens).hasSize(1)
+        assertThat(specimens.values()).hasSize(1)
             .first()
             .satisfies(specimen -> assertThat(specimen.getNote())
                 .extracting(Annotation::getText)
@@ -222,16 +232,51 @@ class SpecimenMapperTest {
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
             "S16+16", // SpecimenDetails
+            "SEQ++1", // SequenceDetails
             "SPC+TSP+:::Required" // SpecimenCharacteristicType
         ));
         when(fullUrlGenerator.generate(any(Patient.class))).thenReturn("patient-full-url");
 
         final var specimens = specimenMapper.mapToSpecimens(message, mock(Patient.class));
 
-        assertThat(specimens).hasSize(1)
+        assertThat(specimens.values()).hasSize(1)
             .first()
             .satisfies(specimen -> assertThat(specimen.getSubject())
                 .extracting(Reference::getReference)
                 .isEqualTo("patient-full-url"));
+    }
+
+    @Test
+    void testMapToSpecimensNoSequenceReference() {
+        final Message message = new Message(List.of(
+            "S02+02", // ServiceReportDetails
+            "S06+06", // InvestigationSubject
+            "S16+16", // SpecimenDetails
+            "SPC+TSP+:::Required" // SpecimenCharacteristicType
+        ));
+
+        assertThatThrownBy(() -> specimenMapper.mapToSpecimens(message, mock(Patient.class)))
+            .isExactlyInstanceOf(MissingSegmentException.class)
+            .hasMessage("EDIFACT section is missing segment SEQ");
+    }
+
+    @Test
+    void testMapToSpecimensWithSequenceReference() {
+        final Message message = new Message(List.of(
+            "S02+02", // ServiceReportDetails
+            "S06+06", // InvestigationSubject
+            "S16+16", // SpecimenDetails
+            "SPC+TSP+:::First", // SpecimenCharacteristicType
+            "SEQ++1", // SequenceDetails
+            "S16+16", // SpecimenDetails
+            "SPC+TSP+:::Second", // SpecimenCharacteristicType
+            "SEQ++2" // SequenceDetails
+        ));
+
+        final var specimens = specimenMapper.mapToSpecimens(message, mock(Patient.class));
+
+        assertThat(specimens).hasSize(2)
+            .allSatisfy((seq, specimen) -> assertThat(specimen.getType().getCoding().get(0).getDisplay())
+                .isEqualTo(Map.of("1", "First", "2", "Second").get(seq)));
     }
 }

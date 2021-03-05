@@ -28,8 +28,6 @@ public class PathologyRecord {
     private Practitioner specimenCollector;
     @Builder.Default
     private List<Specimen> specimens = Collections.emptyList();
-    @Builder.Default
-    private List<Observation> testGroups = Collections.emptyList();
     private DiagnosticReport testReport;
     private ProcedureRequest testRequestSummary;
     @Builder.Default

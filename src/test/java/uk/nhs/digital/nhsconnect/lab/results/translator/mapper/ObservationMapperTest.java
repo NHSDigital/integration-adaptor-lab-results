@@ -2,9 +2,16 @@ package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
 import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.Observation.ObservationReferenceRangeComponent;
+import org.hl7.fhir.dstu3.model.Observation.ObservationRelationshipType;
 import org.hl7.fhir.dstu3.model.Observation.ObservationStatus;
+import org.hl7.fhir.dstu3.model.Organization;
+import org.hl7.fhir.dstu3.model.Patient;
+import org.hl7.fhir.dstu3.model.Practitioner;
 import org.hl7.fhir.dstu3.model.Quantity.QuantityComparator;
+import org.hl7.fhir.dstu3.model.Reference;
 import org.hl7.fhir.dstu3.model.SimpleQuantity;
+import org.hl7.fhir.dstu3.model.Specimen;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,15 +19,20 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
+import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SuppressWarnings("checkstyle:MagicNumber")
@@ -29,44 +41,68 @@ class ObservationMapperTest {
     @Mock
     private UUIDGenerator uuidGenerator;
 
+    @Mock
+    private ResourceFullUrlGenerator fullUrlGenerator;
+
+    @Mock
+    private Patient mockPatient;
+
+    @Mock
+    private Organization mockOrganization;
+
+    @Mock
+    private Practitioner mockPractitioner;
+
     @InjectMocks
     private ObservationMapper mapper;
 
-    @Test
-    void testMapToObservationsNonePresent() {
-        final Message message = new Message(Collections.emptyList());
+    @BeforeEach
+    void setUp() {
+        lenient().when(fullUrlGenerator.generate(mockPatient)).thenReturn("");
+        lenient().when(fullUrlGenerator.generate(mockOrganization)).thenReturn("");
+        lenient().when(fullUrlGenerator.generate(mockPractitioner)).thenReturn("");
+    }
 
-        final var observations = mapper.mapToTestGroupsAndResults(message);
+    @Test
+    void testMapNonePresent() {
+        final var message = new Message(Collections.emptyList());
+
+        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
+            mockPractitioner);
 
         assertThat(observations).isEmpty();
     }
 
     @Test
-    void testMapToObservationsMissingRequiredSegments() {
-        final Message message = new Message(List.of(
+    void testMapMissingRequiredSegments() {
+        final var message = new Message(List.of(
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
             "GIS+N" // LabResult
         ));
 
-        assertThatThrownBy(() -> mapper.mapToTestGroupsAndResults(message))
+        assertThatThrownBy(() -> mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
+            mockPractitioner))
             .isExactlyInstanceOf(MissingSegmentException.class)
             .hasMessageStartingWith("EDIFACT section is missing segment");
     }
 
     @Test
-    void testMapToObservationsOnlyRequiredSegmentLaboratoryInvestigation() {
+    void testMapOnlyRequiredSegments() {
         when(uuidGenerator.generateUUID()).thenReturn("test-uuid");
-        final Message message = new Message(List.of(
+        final var message = new Message(List.of(
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
             "GIS+N", // LabResult
             "INV+MQ+code:911::description", // LaboratoryInvestigation
+            "RFF+ASL:1", // Reference
             "GIS+N", // LabResult
-            "INV+MQ+code:911::description" // LaboratoryInvestigation
+            "INV+MQ+code:911::description", // LaboratoryInvestigation
+            "RFF+ASL:1" // Reference
         ));
 
-        final var observations = mapper.mapToTestGroupsAndResults(message);
+        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
+            mockPractitioner);
 
         assertThat(observations).hasSize(2)
             .allSatisfy(observation -> assertThat(observation.getCode().getCoding()).hasSize(1)
@@ -80,15 +116,17 @@ class ObservationMapperTest {
     }
 
     @Test
-    void testMapToObservationsLaboratoryInvestigationMissingCode() {
-        final Message message = new Message(List.of(
+    void testMapLaboratoryInvestigationMissingCode() {
+        final var message = new Message(List.of(
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
             "GIS+N", // LabResult
-            "INV+MQ+:911::description" // LaboratoryInvestigation
+            "INV+MQ+:911::description", // LaboratoryInvestigation
+            "RFF+ASL:1" // Reference
         ));
 
-        final var observations = mapper.mapToTestGroupsAndResults(message);
+        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
+            mockPractitioner);
 
         assertThat(observations).hasSize(1)
             .first()
@@ -102,17 +140,19 @@ class ObservationMapperTest {
     }
 
     @Test
-    void testMapToTestGroupsAndResultsLaboratoryInvestigationResult() {
-        final Message message = new Message(List.of(
+    void testMapLaboratoryInvestigationResult() {
+        final var message = new Message(List.of(
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
             "GIS+N", // LabResult
             "INV+MQ+c:911::d", // LaboratoryInvestigation
+            "RFF+ASL:1", // Reference
 
             "RSL+NV+1.23:7++:::units" // LaboratoryInvestigationResult
         ));
 
-        final var observations = mapper.mapToTestGroupsAndResults(message);
+        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
+            mockPractitioner);
 
         assertThat(observations).hasSize(1)
             .first()
@@ -126,17 +166,19 @@ class ObservationMapperTest {
     }
 
     @Test
-    void testMapToTestGroupsAndResultsTestStatusCode() {
-        final Message message = new Message(List.of(
+    void testMapTestStatusCode() {
+        final var message = new Message(List.of(
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
             "GIS+N", // LabResult
             "INV+MQ+c:911::d", // LaboratoryInvestigation
+            "RFF+ASL:1", // Reference
 
             "STS++PR" // TestStatus
         ));
 
-        final var observations = mapper.mapToTestGroupsAndResults(message);
+        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
+            mockPractitioner);
 
         assertThat(observations).hasSize(1)
             .first()
@@ -145,15 +187,17 @@ class ObservationMapperTest {
     }
 
     @Test
-    void testMapToTestGroupsAndResultsTestStatusCodeUnknown() {
-        final Message message = new Message(List.of(
+    void testMapTestStatusCodeUnknown() {
+        final var message = new Message(List.of(
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
             "GIS+N", // LabResult
-            "INV+MQ+c:911::d" // LaboratoryInvestigation
+            "INV+MQ+c:911::d", // LaboratoryInvestigation
+            "RFF+ASL:1" // Reference
         ));
 
-        final var observations = mapper.mapToTestGroupsAndResults(message);
+        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
+            mockPractitioner);
 
         assertThat(observations).hasSize(1)
             .first()
@@ -162,19 +206,21 @@ class ObservationMapperTest {
     }
 
     @Test
-    void testMapToTestGroupsAndResultsFreeTexts() {
-        final Message message = new Message(List.of(
+    void testMapFreeTexts() {
+        final var message = new Message(List.of(
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
             "GIS+N", // LabResult
             "INV+MQ+c:911::d", // LaboratoryInvestigation
+            "RFF+ASL:1", // Reference
 
             "FTX+RIT+++multi:line", // FreeTextSegment
             "FTX+RIT+++",
             "FTX+RIT+++comment"
         ));
 
-        final var observations = mapper.mapToTestGroupsAndResults(message);
+        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
+            mockPractitioner);
 
         assertThat(observations).hasSize(1)
             .first()
@@ -183,18 +229,20 @@ class ObservationMapperTest {
     }
 
     @Test
-    void testMapToTestGroupsAndResultsRange() {
-        final Message message = new Message(List.of(
+    void testMapRange() {
+        final var message = new Message(List.of(
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
             "GIS+N", // LabResult
             "INV+MQ+c:911::d", // LaboratoryInvestigation
+            "RFF+ASL:1", // Reference
 
             "S20+20", // ResultReferenceRange
             "RND+U+-1.0+1.0" // RangeDetail
         ));
 
-        final var observations = mapper.mapToTestGroupsAndResults(message);
+        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
+            mockPractitioner);
 
         final var assertReferenceRange = assertThat(observations).hasSize(1)
             .first()
@@ -212,20 +260,218 @@ class ObservationMapperTest {
     }
 
     @Test
+    void testMapPatientAsSubject() {
+        final var message = new Message(List.of(
+            "S02+02", // ServiceReportDetails
+            "S06+06", // InvestigationSubject
+            "GIS+N", // LabResult
+            "INV+MQ+c:911::d", // LaboratoryInvestigation
+            "RFF+ASL:1" // Reference
+        ));
+        when(fullUrlGenerator.generate(mockPatient)).thenReturn("url-patient");
+
+        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
+            mockPractitioner);
+
+        assertThat(observations).hasSize(1).first()
+            .extracting(Observation::getSubject)
+            .extracting(Reference::getReference)
+            .isEqualTo("url-patient");
+    }
+
+    @Test
+    void testMapOrganizationAsPerformer() {
+        final var message = new Message(List.of(
+            "S02+02", // ServiceReportDetails
+            "S06+06", // InvestigationSubject
+            "GIS+N", // LabResult
+            "INV+MQ+c:911::d", // LaboratoryInvestigation
+            "RFF+ASL:1" // Reference
+        ));
+        when(fullUrlGenerator.generate(mockOrganization)).thenReturn("url-organization");
+
+        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization, null);
+
+        assertThat(observations).hasSize(1).first()
+            .extracting(Observation::getPerformer)
+            .satisfies(performers -> assertThat(performers).hasSize(1).first()
+                .extracting(Reference::getReference)
+                .isEqualTo("url-organization"));
+    }
+
+    @Test
+    void testMapPractitionerAsPerformer() {
+        final var message = new Message(List.of(
+            "S02+02", // ServiceReportDetails
+            "S06+06", // InvestigationSubject
+            "GIS+N", // LabResult
+            "INV+MQ+c:911::d", // LaboratoryInvestigation
+            "RFF+ASL:1" // Reference
+        ));
+        when(fullUrlGenerator.generate(mockPractitioner)).thenReturn("url-practitioner");
+
+        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), null,
+            mockPractitioner);
+
+        assertThat(observations).hasSize(1).first()
+            .extracting(Observation::getPerformer)
+            .satisfies(performers -> assertThat(performers).hasSize(1).first()
+                .extracting(Reference::getReference)
+                .isEqualTo("url-practitioner"));
+    }
+
+    @Test
+    void testMapBothOrganizationAndPractitionerAsPerfomers() {
+        final var message = new Message(List.of(
+            "S02+02", // ServiceReportDetails
+            "S06+06", // InvestigationSubject
+            "GIS+N", // LabResult
+            "INV+MQ+c:911::d", // LaboratoryInvestigation
+            "RFF+ASL:1" // Reference
+        ));
+        when(fullUrlGenerator.generate(mockOrganization)).thenReturn("url-organization");
+        when(fullUrlGenerator.generate(mockPractitioner)).thenReturn("url-practitioner");
+
+        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
+            mockPractitioner);
+
+        assertThat(observations).hasSize(1).first()
+            .extracting(Observation::getPerformer)
+            .satisfies(performers -> assertThat(performers).hasSize(2)
+                .map(Reference::getReference)
+                .containsExactly("url-organization", "url-practitioner"));
+    }
+
+    @Test
+    void testMapNoPerformers() {
+        final var message = new Message(List.of(
+            "S02+02", // ServiceReportDetails
+            "S06+06", // InvestigationSubject
+            "GIS+N", // LabResult
+            "INV+MQ+c:911::d", // LaboratoryInvestigation
+            "RFF+ASL:1" // Reference
+        ));
+
+        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), null, null);
+
+        assertThat(observations).hasSize(1).first()
+            .extracting(Observation::getPerformer)
+            .satisfies(performers -> assertThat(performers).isEmpty());
+    }
+
+    @Test
     void testCanMapMultipleTestResults() {
-        final Message message = new Message(List.of(
+        final var message = new Message(List.of(
             "S02+02",
             "S06+06",
             "GIS+N",
             "INV+MQ+c:911::d",
+            "RFF+ASL:1",
             "GIS+N",
             "INV+MQ+c:911::d",
+            "RFF+ASL:1",
             "GIS+N",
-            "INV+MQ+c:911::d"
+            "INV+MQ+c:911::d",
+            "RFF+ASL:1"
         ));
 
-        final List<Observation> actual = mapper.mapToTestGroupsAndResults(message);
+        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
+            mockPractitioner);
 
-        assertThat(actual).hasSize(3);
+        assertThat(observations).hasSize(3);
+    }
+
+    @Test
+    void testMapSpecimen() {
+        final var message = new Message(List.of(
+            "S02+02",
+            "S06+06",
+            "S16+16",
+            "SEQ++1",
+            "GIS+N",
+            "INV+MQ+c:911::group",
+            "RFF+ASL:1"
+        ));
+        var mockSpecimen = mock(Specimen.class);
+        when(mockSpecimen.getId()).thenReturn("uuid-specimen");
+        when(fullUrlGenerator.generate("uuid-specimen")).thenReturn("url-specimen");
+
+        final var observations = mapper.mapToObservations(message, mockPatient, Map.of("1", mockSpecimen),
+            mockOrganization, mockPractitioner);
+
+        assertThat(observations).hasSize(1)
+            .map(Observation::getSpecimen)
+            .map(Reference::getReference)
+            .first()
+            .isEqualTo("url-specimen");
+    }
+
+    @Test
+    void testMapTestGroupsWithBidirectionalReferences() {
+        final var message = new Message(List.of(
+            "S02+02",
+            "S06+06",
+
+            "GIS+N",
+            "INV+MQ+c:911::group",
+            "SEQ++1",
+            "RFF+ASL:1",
+
+            "GIS+N",
+            "INV+MQ+c:911::result",
+            "RFF+ARL:1"
+        ));
+
+        /* We don't know whether the test group or test result will be processed first, so we don't know which
+         * observation is given which UUID. But, we can still check the references by training the fullUrlGenerator
+         * with known mappings and then verify the actual ID of one matches the actual reference of the other. */
+        final var uuidToUrlMap = Map.of("uuid-1", "url-1", "uuid-2", "url-2");
+        when(uuidGenerator.generateUUID()).thenReturn("uuid-1", "uuid-2");
+        uuidToUrlMap.forEach((uuid, url) ->
+            when(fullUrlGenerator.generate(uuid)).thenReturn(url));
+
+        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
+            mockPractitioner);
+
+        final var group = getByCodingDisplay(observations, "group");
+        final var result = getByCodingDisplay(observations, "result");
+
+        assertAll(
+            () -> assertThat(group.getRelated()).as("the group references the result")
+                .hasSize(1).first()
+                .satisfies(related -> assertAll(
+                    () -> assertThat(related.getType()).isEqualTo(ObservationRelationshipType.HASMEMBER),
+                    () -> assertThat(related.getTarget().getReference()).isEqualTo(uuidToUrlMap.get(result.getId()))
+                )),
+
+            () -> assertThat(result.getRelated()).as("the result references the group")
+                .hasSize(1).first()
+                .satisfies(related ->
+                    assertThat(related.getTarget().getReference()).isEqualTo(uuidToUrlMap.get(group.getId())))
+        );
+    }
+
+    @Test
+    void testMapTestResultsWithNoGroup() {
+        final var message = new Message(List.of(
+            "S02+02",
+            "S06+06",
+
+            "GIS+N",
+            "INV+MQ+c:911::result",
+            "RFF+ASL:1"
+        ));
+
+        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
+            mockPractitioner);
+
+        final var result = getByCodingDisplay(observations, "result");
+        assertThat(result.getRelated()).isEmpty();
+    }
+
+    private static Observation getByCodingDisplay(final List<Observation> actual, final String display) {
+        return actual.stream()
+            .filter(ob -> display.equals(ob.getCode().getCoding().get(0).getDisplay()))
+            .findAny().orElseThrow();
     }
 }

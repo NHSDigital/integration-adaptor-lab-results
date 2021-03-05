@@ -158,22 +158,131 @@
           "coding": [
             {
               "system": "http://loinc.org",
-              "code": "42R4.",
-              "display": "Serum ferritin"
+              "display": "B12/FOLATE"
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:4ad99777-9863-4614-b929-16633f870f23"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:254f1964-f0b7-45e6-ae86-ca1c06810705"
+          }
+        ],
+        "comment": "Results repeated Low plasma Folate",
+        "specimen": {
+          "reference": "urn:uuid:1cc2e06f-bbe8-47a0-854c-c3d0ddfb1354"
+        },
+        "related": [
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:3b383fc0-f731-426e-94da-177cd70e7940"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:1c0d099e-b5be-4d93-839d-131d27d8761b"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:3b383fc0-f731-426e-94da-177cd70e7940",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "3b383fc0-f731-426e-94da-177cd70e7940",
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "42T..",
+              "display": "Serum vitamin B12"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:4ad99777-9863-4614-b929-16633f870f23"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:254f1964-f0b7-45e6-ae86-ca1c06810705"
+          }
+        ],
         "valueQuantity": {
-          "value": 11,
-          "unit": "ng/mL"
+          "value": 1001,
+          "unit": "ng/L"
+        },
+        "specimen": {
+          "reference": "urn:uuid:1cc2e06f-bbe8-47a0-854c-c3d0ddfb1354"
         },
         "referenceRange": [
           {
             "low": {
-              "value": 10
+              "value": 170
             },
             "high": {
-              "value": 200
+              "value": 1100
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:0d124e8d-6447-44e8-9d7d-9f5595b1a0c9"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:1c0d099e-b5be-4d93-839d-131d27d8761b",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "1c0d099e-b5be-4d93-839d-131d27d8761b",
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "42UE.",
+              "display": "Plasma folate level"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:4ad99777-9863-4614-b929-16633f870f23"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:254f1964-f0b7-45e6-ae86-ca1c06810705"
+          }
+        ],
+        "valueQuantity": {
+          "value": 0.8,
+          "unit": "ng/mL"
+        },
+        "specimen": {
+          "reference": "urn:uuid:1cc2e06f-bbe8-47a0-854c-c3d0ddfb1354"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 2.0
+            },
+            "high": {
+              "value": 20.0
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:0d124e8d-6447-44e8-9d7d-9f5595b1a0c9"
             }
           }
         ]

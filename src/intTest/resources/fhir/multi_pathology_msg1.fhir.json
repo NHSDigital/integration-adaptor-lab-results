@@ -163,9 +163,20 @@
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:4ad99777-9863-4614-b929-16633f870f23"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:b019bdf7-53fe-42a6-89f4-24a6ab5be2c4"
+          }
+        ],
         "valueQuantity": {
           "value": 11,
           "unit": "ng/mL"
+        },
+        "specimen": {
+          "reference": "urn:uuid:6117b6d6-d0a8-4930-a404-611ddece464a"
         },
         "referenceRange": [
           {

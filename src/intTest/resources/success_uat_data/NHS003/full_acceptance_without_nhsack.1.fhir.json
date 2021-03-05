@@ -145,7 +145,32 @@
             }
           ]
         },
-        "comment": "Results repeated Low plasma Folate"
+        "subject": {
+          "reference": "urn:uuid:9b57f7ad-7273-42f7-8072-f4a162eb3091"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:9aec0c9e-6a81-45ed-9055-fe1d5d3d3eb8"
+          }
+        ],
+        "comment": "Results repeated Low plasma Folate",
+        "specimen": {
+          "reference": "urn:uuid:b24ba4f9-9c60-4e71-8493-0bd4d331ca9e"
+        },
+        "related": [
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:4a84669e-1c00-4cbc-b206-cc7c29b1ffdb"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:9606f5aa-cbb8-4043-9abf-5f4bba16e28d"
+            }
+          }
+        ]
       }
     },
     {
@@ -163,9 +188,20 @@
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:9b57f7ad-7273-42f7-8072-f4a162eb3091"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:9aec0c9e-6a81-45ed-9055-fe1d5d3d3eb8"
+          }
+        ],
         "valueQuantity": {
           "value": 1001,
           "unit": "ng/L"
+        },
+        "specimen": {
+          "reference": "urn:uuid:b24ba4f9-9c60-4e71-8493-0bd4d331ca9e"
         },
         "referenceRange": [
           {
@@ -174,6 +210,13 @@
             },
             "high": {
               "value": 1100
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:c6f1da85-0230-4264-8398-ebf6cec2fecc"
             }
           }
         ]
@@ -194,9 +237,20 @@
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:9b57f7ad-7273-42f7-8072-f4a162eb3091"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:9aec0c9e-6a81-45ed-9055-fe1d5d3d3eb8"
+          }
+        ],
         "valueQuantity": {
           "value": 0.8,
           "unit": "ng/mL"
+        },
+        "specimen": {
+          "reference": "urn:uuid:b24ba4f9-9c60-4e71-8493-0bd4d331ca9e"
         },
         "referenceRange": [
           {
@@ -205,6 +259,13 @@
             },
             "high": {
               "value": 20.0
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:c6f1da85-0230-4264-8398-ebf6cec2fecc"
             }
           }
         ]

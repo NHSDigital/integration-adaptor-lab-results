@@ -14,6 +14,10 @@ public class ResourceFullUrlGenerator {
         if (StringUtils.isBlank(resourceId)) {
             throw new IllegalArgumentException("resource.id must be present and non-blank");
         }
-        return FULL_URL_PREFIX + resourceId;
+        return generate(resourceId);
+    }
+
+    public String generate(@NonNull final String reference) {
+        return FULL_URL_PREFIX + reference;
     }
 }
