@@ -1,5 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
+import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.Observation.ObservationReferenceRangeComponent;
@@ -7,6 +8,7 @@ import org.hl7.fhir.dstu3.model.Observation.ObservationStatus;
 import org.hl7.fhir.dstu3.model.Quantity;
 import org.hl7.fhir.dstu3.model.Quantity.QuantityComparator;
 import org.hl7.fhir.dstu3.model.SimpleQuantity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MeasurementValueComparator;
@@ -16,6 +18,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.TestStatusCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvestigationSubject;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.LabResult;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.ResultReferenceRange;
+import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -23,7 +26,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
+@AllArgsConstructor(onConstructor_ = @Autowired)
 public class ObservationMapper {
+    private final UUIDGenerator uuidGenerator;
+
     public List<Observation> mapToTestGroupsAndResults(final Message message) {
         // test groups are GIS+N blocks with SEQ segments
         // they should have RFF+ASL:X where X is the SEQ value of the S16
@@ -37,6 +43,8 @@ public class ObservationMapper {
         // start by assuming everything is a test result
         return labResults.stream().map(labResult -> {
             final var result = new Observation();
+
+            result.setId(uuidGenerator.generateUUID());
 
             mapStatus(labResult, result);
             mapValueQuantity(labResult, result);

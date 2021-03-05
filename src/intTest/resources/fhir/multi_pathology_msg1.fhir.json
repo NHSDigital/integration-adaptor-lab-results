@@ -116,6 +116,35 @@
           "collectedDateTime": "2010-02-23T15:41:00+00:00"
         }
       }
+    },
+    {
+      "fullUrl": "urn:uuid:899d7b43-9e83-4f82-af3a-f0a742acf16f",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "899d7b43-9e83-4f82-af3a-f0a742acf16f",
+        "code": {
+          "coding": [
+            {
+              "code": "42R4."
+            }
+          ],
+          "text": "Serum ferritin"
+        },
+        "valueQuantity": {
+          "value": 11,
+          "unit": "ng/mL"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 10
+            },
+            "high": {
+              "value": 200
+            }
+          }
+        ]
+      }
     }
   ]
 }

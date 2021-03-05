@@ -104,6 +104,22 @@
         },
         "receivedTime": "2010-02-24T15:41:00+00:00"
       }
+    },
+    {
+      "fullUrl": "urn:uuid:6d53dfea-9ed1-405c-964c-ab32197251e7",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "6d53dfea-9ed1-405c-964c-ab32197251e7",
+        "code": {
+          "coding": [
+            {
+              "code": "43F3."
+            }
+          ],
+          "text": "R.A. latex test"
+        },
+        "comment": "NEGATIVE"
+      }
     }
   ]
 }

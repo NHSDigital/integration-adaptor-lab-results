@@ -6,11 +6,15 @@ import org.hl7.fhir.dstu3.model.Observation.ObservationReferenceRangeComponent;
 import org.hl7.fhir.dstu3.model.Observation.ObservationStatus;
 import org.hl7.fhir.dstu3.model.Quantity.QuantityComparator;
 import org.hl7.fhir.dstu3.model.SimpleQuantity;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
+import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -21,13 +25,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("checkstyle:MagicNumber")
+@ExtendWith(MockitoExtension.class)
 class ObservationMapperTest {
-    private ObservationMapper mapper;
+    @Mock
+    private UUIDGenerator uuidGenerator;
 
-    @BeforeEach
-    void setUp() {
-        mapper = new ObservationMapper();
-    }
+    @InjectMocks
+    private ObservationMapper mapper;
 
     @Test
     void testMapToObservationsNonePresent() {
