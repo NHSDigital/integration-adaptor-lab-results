@@ -1,5 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
+import org.hl7.fhir.dstu3.model.DiagnosticReport;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
@@ -18,8 +19,10 @@ import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
@@ -39,6 +42,9 @@ class PathologyRecordMapperTest {
     @Mock
     private SpecimenMapper specimenMapper;
 
+    @Mock
+    private DiagnosticReportMapper diagnosticReportMapper;
+
     @InjectMocks
     private PathologyRecordMapper pathologyRecordMapper;
 
@@ -48,6 +54,8 @@ class PathologyRecordMapperTest {
         when(practitionerMapper.mapToPerformingPractitioner(any(Message.class))).thenReturn(Optional.empty());
         when(patientMapper.mapToPatient(any(Message.class))).thenReturn(new Patient());
         when(specimenMapper.mapToSpecimens(any(Message.class), any(Patient.class))).thenReturn(Collections.emptyList());
+        lenient().when(diagnosticReportMapper.map(any(Message.class), any(Patient.class), anyList(),
+            any(Practitioner.class), any(Organization.class))).thenReturn(new DiagnosticReport());
     }
 
     @Test
