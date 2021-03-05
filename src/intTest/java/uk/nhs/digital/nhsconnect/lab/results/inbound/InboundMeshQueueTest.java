@@ -49,6 +49,7 @@ public class InboundMeshQueueTest extends IntegrationBaseTest {
             content,
             new CustomComparator(
                 JSONCompareMode.STRICT,
+                new Customization("id", IGNORE),
                 new Customization("meta.lastUpdated", IGNORE),
                 new Customization("identifier.value", IGNORE),
                 new Customization("entry[*].fullUrl", IGNORE),

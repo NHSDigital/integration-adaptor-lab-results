@@ -2,7 +2,6 @@ package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
 import java.util.Optional;
 
-import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,6 +11,8 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvolvedParty;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
+import static uk.nhs.digital.nhsconnect.lab.results.model.edifact.ServiceProviderCode.PROFESSIONAL;
+
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class PractitionerMapper {
@@ -19,21 +20,22 @@ public class PractitionerMapper {
 
     private static final String SDS_USER_SYSTEM = "https://fhir.nhs.uk/Id/sds-user-id";
 
-    public Optional<Practitioner> mapRequester(final Message message) {
+    public Optional<Practitioner> mapToRequestingPractitioner(final Message message) {
         return message.getInvolvedParties().stream()
+            .filter(party -> party.getServiceProvider().getServiceProviderCode().equals(PROFESSIONAL))
             .map(InvolvedParty::getRequesterNameAndAddress)
             .flatMap(Optional::stream)
-            .map(r -> mapToPractitioner(r.getIdentifier(), r.getRequesterName()))
-            .findAny();
+            .map(r -> mapToPractitioner(r.getIdentifier(), r.getPractitionerName()))
+            .findFirst();
     }
 
-    public Optional<Practitioner> mapPerformer(final Message message) {
+    public Optional<Practitioner> mapToPerformingPractitioner(final Message message) {
         return message.getInvolvedParties().stream()
+            .filter(party -> party.getServiceProvider().getServiceProviderCode().equals(PROFESSIONAL))
             .map(InvolvedParty::getPerformerNameAndAddress)
             .flatMap(Optional::stream)
-            .filter(p -> !StringUtils.isBlank(p.getIdentifier()))
-            .map(p -> mapToPractitioner(p.getIdentifier(), p.getPerformerName()))
-            .findAny();
+            .map(p -> mapToPractitioner(p.getIdentifier(), p.getPractitionerName()))
+            .findFirst();
     }
 
     private Practitioner mapToPractitioner(final String identifier, final String name) {

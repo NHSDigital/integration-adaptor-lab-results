@@ -1,17 +1,13 @@
 package uk.nhs.digital.nhsconnect.lab.results.inbound;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
+import uk.nhs.digital.nhsconnect.lab.results.inbound.MessageProcessingResult.Error;
+import uk.nhs.digital.nhsconnect.lab.results.inbound.MessageProcessingResult.Success;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
@@ -21,8 +17,6 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangePa
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessageParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.sequence.SequenceService;
 import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
-import uk.nhs.digital.nhsconnect.lab.results.inbound.MessageProcessingResult.Success;
-import uk.nhs.digital.nhsconnect.lab.results.inbound.MessageProcessingResult.Error;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -32,6 +26,11 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class NhsAckProducerServiceTest {
@@ -46,8 +45,8 @@ class NhsAckProducerServiceTest {
     private static final String NHSACK_SCREENING_RESPONSE_PATH =
         "src/test/resources/edifact/nhsAck_screening_example.txt";
 
-    private static final String INTERCHANGE_SENDER = "000000004400001:80";
-    private static final String INTERCHANGE_RECIPIENT = "000000024600002:80";
+    private static final String INTERCHANGE_SENDER = "000000004400001";
+    private static final String INTERCHANGE_RECIPIENT = "000000024600002";
     private static final Long INTERCHANGE_CONTROL_REFERENCE = 1015L;
     private static final Long MESSAGE_SEQUENCE_NUMBER_1 = 1L;
     private static final Long MESSAGE_SEQUENCE_NUMBER_2 = 2L;

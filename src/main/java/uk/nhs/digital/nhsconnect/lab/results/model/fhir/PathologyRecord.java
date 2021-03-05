@@ -20,9 +20,9 @@ import java.util.List;
 public class PathologyRecord {
 
     private Patient patient;
-    private Practitioner performer;
+    private Practitioner performingPractitioner;
     private Organization performingOrganization;
-    private Practitioner requester;
+    private Practitioner requestingPractitioner;
     private Organization requestingOrganization;
     private Organization specimenCollectingOrganization;
     private Practitioner specimenCollector;

@@ -1,5 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
+import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.hl7.fhir.dstu3.model.Specimen;
@@ -27,10 +28,13 @@ import static org.mockito.Mockito.when;
 class PathologyRecordMapperTest {
 
     @Mock
+    private PatientMapper patientMapper;
+
+    @Mock
     private PractitionerMapper practitionerMapper;
 
     @Mock
-    private PatientMapper patientMapper;
+    private OrganizationMapper organizationMapper;
 
     @Mock
     private SpecimenMapper specimenMapper;
@@ -40,24 +44,10 @@ class PathologyRecordMapperTest {
 
     @BeforeEach
     void setUp() {
-        when(practitionerMapper.mapRequester(any(Message.class))).thenReturn(Optional.empty());
-        when(practitionerMapper.mapPerformer(any(Message.class))).thenReturn(Optional.empty());
+        when(practitionerMapper.mapToRequestingPractitioner(any(Message.class))).thenReturn(Optional.empty());
+        when(practitionerMapper.mapToPerformingPractitioner(any(Message.class))).thenReturn(Optional.empty());
         when(patientMapper.mapToPatient(any(Message.class))).thenReturn(new Patient());
         when(specimenMapper.mapToSpecimens(any(Message.class), any(Patient.class))).thenReturn(Collections.emptyList());
-    }
-
-    @Test
-    @SuppressWarnings("checkstyle:MagicNumber")
-    void testMapMessageToPathologyRecordWithPractitioner() {
-        final Message message = new Message(emptyList());
-        var mockPractitioner = mock(Practitioner.class);
-
-        when(practitionerMapper.mapRequester(message))
-            .thenReturn(Optional.of(mockPractitioner));
-
-        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
-
-        assertThat(pathologyRecord.getRequester()).isEqualTo(mockPractitioner);
     }
 
     @Test
@@ -72,15 +62,55 @@ class PathologyRecordMapperTest {
     }
 
     @Test
-    void testMapMessageToPathologyRecordWithPerformer() {
+    void testMapMessageToPathologyRecordWithRequester() {
         final Message message = new Message(emptyList());
-        var mockPerformer = mock(Practitioner.class);
+        var mockRequestingPractitioner = mock(Practitioner.class);
 
-        when(practitionerMapper.mapPerformer(message)).thenReturn(Optional.of(mockPerformer));
+        when(practitionerMapper.mapToRequestingPractitioner(message))
+            .thenReturn(Optional.of(mockRequestingPractitioner));
 
         final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
 
-        assertThat(pathologyRecord.getPerformer()).isEqualTo(mockPerformer);
+        assertThat(pathologyRecord.getRequestingPractitioner()).isEqualTo(mockRequestingPractitioner);
+    }
+
+    @Test
+    void testMapMessageToPathologyRecordWithRequestingOrganization() {
+        final Message message = new Message(emptyList());
+        var mockRequestingOrganization = mock(Organization.class);
+
+        when(organizationMapper.mapToRequestingOrganization(message))
+            .thenReturn(Optional.of(mockRequestingOrganization));
+
+        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+
+        assertThat(pathologyRecord.getRequestingOrganization()).isEqualTo(mockRequestingOrganization);
+    }
+
+    @Test
+    void testMapMessageToPathologyRecordWithPerformer() {
+        final Message message = new Message(emptyList());
+        var mockPerformingPractitioner = mock(Practitioner.class);
+
+        when(practitionerMapper.mapToPerformingPractitioner(message))
+            .thenReturn(Optional.of(mockPerformingPractitioner));
+
+        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+
+        assertThat(pathologyRecord.getPerformingPractitioner()).isEqualTo(mockPerformingPractitioner);
+    }
+
+    @Test
+    void testMapMessageToPathologyRecordWithPerformingOrganization() {
+        final Message message = new Message(emptyList());
+        var mockPerformingOrganization = mock(Organization.class);
+
+        when(organizationMapper.mapToPerformingOrganization(message))
+            .thenReturn(Optional.of(mockPerformingOrganization));
+
+        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+
+        assertThat(pathologyRecord.getPerformingOrganization()).isEqualTo(mockPerformingOrganization);
     }
 
     @Test

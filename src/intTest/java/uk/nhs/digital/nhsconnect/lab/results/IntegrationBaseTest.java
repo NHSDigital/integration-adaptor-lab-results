@@ -93,7 +93,7 @@ public abstract class IntegrationBaseTest {
     private Resource edifactResource;
 
     @Getter
-    @Value("classpath:edifact/pathology.fhir.json")
+    @Value("classpath:fhir/pathology.fhir.json")
     private Resource fhirResource;
 
     @Getter

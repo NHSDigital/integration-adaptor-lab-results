@@ -1,5 +1,6 @@
 {
   "resourceType": "Bundle",
+  "id": "157cefd0-d1ba-4638-9511-ecb695076a33",
   "meta": {
     "lastUpdated": "2021-02-24T12:24:35.734+00:00",
     "profile": [
@@ -12,42 +13,6 @@
   },
   "type": "message",
   "entry": [
-    {
-      "fullUrl": "urn:uuid:1896e090-962b-4c66-aa41-8154e4623b49",
-      "resource": {
-        "resourceType": "Practitioner",
-        "id": "1896e090-962b-4c66-aa41-8154e4623b49",
-        "identifier": [
-          {
-            "system": "https://fhir.nhs.uk/Id/sds-user-id",
-            "value": "G8040642"
-          }
-        ],
-        "name": [
-          {
-            "text": "HOLMES"
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:c8363588-7bf2-427f-8be1-da637b6ea464",
-      "resource": {
-        "resourceType": "Practitioner",
-        "id": "c8363588-7bf2-427f-8be1-da637b6ea464",
-        "identifier": [
-          {
-            "system": "https://fhir.nhs.uk/Id/sds-user-id",
-            "value": "C1357930"
-          }
-        ],
-        "name": [
-          {
-            "text": "DR C CURLEY"
-          }
-        ]
-      }
-    },
     {
       "fullUrl": "urn:uuid:eea77c68-0d47-412c-a7bc-321583a2c75f",
       "resource": {
@@ -69,6 +34,68 @@
         ],
         "gender": "female",
         "birthDate": "1967-05-31"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:1896e090-962b-4c66-aa41-8154e4623b49",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "1896e090-962b-4c66-aa41-8154e4623b49",
+        "identifier": [
+          {
+            "system": "https://fhir.nhs.uk/Id/sds-user-id",
+            "value": "G8040642"
+          }
+        ],
+        "name": [
+          {
+            "text": "HOLMES"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:40744751-c663-4f52-a15b-365a22b6b6a4",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "40744751-c663-4f52-a15b-365a22b6b6a4",
+        "name": "NORTH DOWN GP"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:c8363588-7bf2-427f-8be1-da637b6ea464",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "c8363588-7bf2-427f-8be1-da637b6ea464",
+        "identifier": [
+          {
+            "system": "https://fhir.nhs.uk/Id/sds-user-id",
+            "value": "C1357930"
+          }
+        ],
+        "name": [
+          {
+            "text": "DR C CURLEY"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:4fb0cd2b-dfdc-49c6-beda-44d43ab4cbaa",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "4fb0cd2b-dfdc-49c6-beda-44d43ab4cbaa",
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "dept",
+                "display": "Microbiology"
+              }
+            ]
+          }
+        ],
+        "name": "ST JAMES'S UNIVERSITY HOSPITAL"
       }
     }
   ]
