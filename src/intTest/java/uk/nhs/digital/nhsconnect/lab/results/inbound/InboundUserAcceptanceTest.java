@@ -1,10 +1,10 @@
 package uk.nhs.digital.nhsconnect.lab.results.inbound;
 
-import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.skyscreamer.jsonassert.Customization;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
@@ -12,34 +12,36 @@ import org.skyscreamer.jsonassert.comparator.CustomComparator;
 import uk.nhs.digital.nhsconnect.lab.results.IntegrationBaseTest;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessageParsingException;
+import uk.nhs.digital.nhsconnect.lab.results.uat.common.FailureArgumentsProvider;
+import uk.nhs.digital.nhsconnect.lab.results.uat.common.SuccessArgumentsProvider;
+import uk.nhs.digital.nhsconnect.lab.results.uat.common.TestData;
 import uk.nhs.digital.nhsconnect.lab.results.utils.JmsHeaders;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.List;
-import java.util.stream.Collectors;
 
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
+import static uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId.PATHOLOGY_ACK;
+import static uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId.SCREENING_ACK;
 
-/**
- * The test EDIFACT message (.dat file) is sent to the MESH mailbox where the adaptor receives inbound messages.
- * The test waits for the messages to be processed and compares the FHIR message published to the GP Outbound Queue
- * with the expected FHIR representation of the original message sent (.json file having the same name as the .dat)
- */
-@Slf4j
 class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
-    private static final String RECIPIENT = "000000024600002";
+    static final String ACK_REQUESTED_REGEX = "^.*UNB\\+UNOC.*\\+\\+1'UNH.*$";
+
+    static final int GP_OUTBOUND_QUEUE_POLLING_DELAY = 2000;
+    static final int GP_OUTBOUND_QUEUE_POLLING_TIMEOUT = 10;
 
     @BeforeEach
     void beforeEach() {
         clearMeshMailboxes();
         clearGpOutboundQueue();
+        clearMeshOutboundQueue();
         System.setProperty("LAB_RESULTS_SCHEDULER_ENABLED", "true"); //enable scheduling
     }
 
@@ -48,14 +50,33 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
         System.setProperty("LAB_RESULTS_SCHEDULER_ENABLED", "false");
     }
 
-    @Test
-    void testSendEdifactIsProcessedAndPushedToGpOutboundQueue()
-        throws JMSException, IOException, InterchangeParsingException, MessageParsingException, JSONException {
+    /**
+     * The test EDIFACT message (.dat file) is sent to the MESH mailbox where the adaptor receives inbound messages.
+     * The test waits for the messages to be processed and compares the FHIR message published to the GP Outbound Queue
+     * with the expected FHIR representation of the original message sent (.json file having the same name as the .dat)
+     */
+    @ParameterizedTest(name = "[{index}] - {0}")
+    @ArgumentsSource(SuccessArgumentsProvider.class)
+    void testEdifactIsSuccessfullyProcessedAndPushedToGpOutboundQueue(String category, TestData testData)
+            throws JMSException, InterchangeParsingException, MessageParsingException, JSONException {
 
-        final String content = new String(Files.readAllBytes(getEdifactResource().getFile().toPath()));
+        final String recipient = getEdifactParser().parse(testData.getEdifact())
+            .getInterchangeHeader().getRecipient();
 
-        final OutboundMeshMessage outboundMeshMessage = OutboundMeshMessage.create(RECIPIENT,
-            WorkflowId.PATHOLOGY, content, null);
+        WorkflowId workflowId;
+        if (testData.getEdifact().contains(WorkflowId.PATHOLOGY.getWorkflowId())) {
+            workflowId = WorkflowId.PATHOLOGY;
+        } else if (testData.getEdifact().contains(WorkflowId.SCREENING.getWorkflowId())) {
+            workflowId = WorkflowId.SCREENING;
+        } else {
+            throw new RuntimeException("Unsupported Workflow ID");
+        }
+
+        final boolean ackRequested = testData.getEdifact().replace("\n", "")
+            .matches(ACK_REQUESTED_REGEX);
+
+        final OutboundMeshMessage outboundMeshMessage = OutboundMeshMessage.create(recipient,
+            workflowId, testData.getEdifact(), null);
 
         getLabResultsMeshClient().sendEdifactMessage(outboundMeshMessage);
 
@@ -65,7 +86,7 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
         final String correlationId = gpOutboundQueueMessage.getStringProperty(JmsHeaders.CORRELATION_ID);
         assertThat(correlationId).isNotEmpty();
 
-        final String expectedMessageBody = new String(Files.readAllBytes(getFhirResource().getFile().toPath()));
+        final String expectedMessageBody = testData.getJson();
         final String messageBody = parseTextMessage(gpOutboundQueueMessage);
 
         JSONAssert.assertEquals(
@@ -82,52 +103,79 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
             )
         );
 
-        assertOutboundNhsAckMessage();
-    }
-
-    private void assertOutboundNhsAckMessage()
-        throws IOException, InterchangeParsingException, MessageParsingException {
-
-        final var labResultMeshClient = getLabResultsMeshClient();
-        final var edifactParser = getEdifactParser();
-        final var nhsAck = new String(Files.readAllBytes(getNhsAckResource().getFile().toPath()));
-
-        // Acting as a lab results system, receive and validate the NHSACK returned by the adaptor.
-        final List<String> messageIds = waitFor(() -> {
-            final List<String> inboxMessageIds = labResultMeshClient.getInboxMessageIds();
-            return inboxMessageIds.isEmpty() ? null : inboxMessageIds;
-        });
-        var meshMessage = labResultMeshClient.getEdifactMessage(messageIds.get(0));
-
-        //TODO NIAD-851 UAT framework
-//        Interchange expectedNhsAck = edifactParser.parse(nhsAck);
-//        Interchange actualNhsAck = edifactParser.parse(meshMessage.getContent());
-//
-//        assertThat(meshMessage.getWorkflowId())
-//            .isEqualTo(WorkflowId.PATHOLOGY_ACK);
-//        assertThat(actualNhsAck.getInterchangeHeader().getRecipient())
-//            .isEqualTo(expectedNhsAck.getInterchangeHeader().getRecipient());
-//        assertThat(actualNhsAck.getInterchangeHeader().getSender())
-//            .isEqualTo(expectedNhsAck.getInterchangeHeader().getSender());
-//        assertThat(actualNhsAck.getInterchangeHeader().getSequenceNumber())
-//            .isEqualTo(expectedNhsAck.getInterchangeHeader().getSequenceNumber());
-//        assertThat(filterTimestampedSegments(actualNhsAck))
-//            .containsExactlyElementsOf(filterTimestampedSegments(expectedNhsAck));
-//        assertThat(actualNhsAck.getInterchangeTrailer().getNumberOfMessages())
-//            .isEqualTo(expectedNhsAck.getInterchangeTrailer().getNumberOfMessages());
-//        assertThat(actualNhsAck.getInterchangeTrailer().getSequenceNumber())
-//            .isEqualTo(expectedNhsAck.getInterchangeTrailer().getSequenceNumber());
+        if (ackRequested) {
+            assertOutboundNhsAckMessage(workflowId);
+        } else {
+            assertTrue(getMeshClient().getInboxMessageIds().isEmpty());
+        }
 
     }
 
-    private List<String> filterTimestampedSegments(Interchange nhsAck) {
-        final List<String> edifactSegments = nhsAck.getMessages().get(0).getEdifactSegments();
-        assertThat(edifactSegments).anySatisfy(segment -> assertThat(segment).startsWith("BGM+"));
-        assertThat(edifactSegments).anySatisfy(segment -> assertThat(segment).startsWith("DTM+815"));
+    /**
+     * The test EDIFACT message (.dat file) is sent to the MESH mailbox where the adaptor receives inbound messages.
+     * The test waits for the messages to be processed confirms that the outbound queue is empty.
+     */
+    @ParameterizedTest(name = "[{index}] - {0}")
+    @ArgumentsSource(FailureArgumentsProvider.class)
+    void testEdifactFailsToBeProcessedAndNothingPushedToGpOutboundQueue(String category, TestData testData) {
 
-        return edifactSegments.stream()
-            .filter(segment -> !segment.startsWith("BGM+"))
-            .filter(segment -> !segment.startsWith("DTM+815"))
-            .collect(Collectors.toList());
+        String recipient;
+        try {
+            recipient = getEdifactParser().parse(testData.getEdifact())
+                .getInterchangeHeader().getRecipient();
+        } catch (InterchangeParsingException e) {
+            recipient = e.getRecipient();
+        } catch (MessageParsingException e) {
+            recipient = e.getRecipient();
+        }
+
+        WorkflowId workflowId;
+        if (testData.getEdifact().contains(WorkflowId.PATHOLOGY.getWorkflowId())) {
+            workflowId = WorkflowId.PATHOLOGY;
+        } else if (testData.getEdifact().contains(WorkflowId.SCREENING.getWorkflowId())) {
+            workflowId = WorkflowId.SCREENING;
+        } else {
+            throw new RuntimeException("Unsupported Workflow ID");
+        }
+
+        final boolean ackRequested = testData.getEdifact().replace("\n", "")
+            .matches(ACK_REQUESTED_REGEX);
+
+        final OutboundMeshMessage outboundMeshMessage = OutboundMeshMessage.create(recipient,
+            workflowId, testData.getEdifact(), null);
+
+        getLabResultsMeshClient().sendEdifactMessage(outboundMeshMessage);
+
+        await().pollDelay(GP_OUTBOUND_QUEUE_POLLING_DELAY, TimeUnit.MILLISECONDS)
+            .atMost(GP_OUTBOUND_QUEUE_POLLING_TIMEOUT, TimeUnit.SECONDS)
+            .untilAsserted(() -> assertTrue(gpOutboundQueueIsEmpty()));
+
+        if (ackRequested) {
+            assertOutboundNhsAckMessage(workflowId);
+        } else {
+            assertTrue(getMeshClient().getInboxMessageIds().isEmpty());
+        }
+
+    }
+
+    private void assertOutboundNhsAckMessage(WorkflowId edifactWorkflowId) {
+        final var nhsAck = waitForMeshMessage(getMeshClient());
+
+        assertThat(nhsAck).isNotNull();
+
+        WorkflowId nhsAckWorkflowID = getNhsAckWorkflowId(edifactWorkflowId);
+
+        assertThat(nhsAck.getWorkflowId()).isEqualTo(nhsAckWorkflowID);
+    }
+
+    private WorkflowId getNhsAckWorkflowId(WorkflowId workflowId) {
+        switch (workflowId) {
+            case PATHOLOGY:
+                return PATHOLOGY_ACK;
+            case SCREENING:
+                return SCREENING_ACK;
+            default:
+                throw new IllegalArgumentException(workflowId.name() + " workflow has no corresponding ACK one");
+        }
     }
 }

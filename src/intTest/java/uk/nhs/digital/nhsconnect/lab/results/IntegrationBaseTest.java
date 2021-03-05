@@ -204,6 +204,10 @@ public abstract class IntegrationBaseTest {
         return meshClient.getEdifactMessage(messageIds.get(0));
     }
 
+    protected boolean gpOutboundQueueIsEmpty() {
+        return jmsTemplate.receive(gpOutboundQueueName) == null;
+    }
+
     protected void clearGpOutboundQueue() {
         waitForCondition(() -> jmsTemplate.receive(gpOutboundQueueName) == null);
     }
