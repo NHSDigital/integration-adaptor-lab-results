@@ -3,7 +3,9 @@ package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 import lombok.RequiredArgsConstructor;
 import org.hl7.fhir.dstu3.model.DiagnosticReport;
 import org.hl7.fhir.dstu3.model.Identifier;
+import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
+import org.hl7.fhir.dstu3.model.Practitioner;
 import org.hl7.fhir.dstu3.model.Specimen;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,6 +23,7 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -34,9 +37,9 @@ public class DiagnosticReportMapper {
     private final UUIDGenerator uuidGenerator;
     private final ResourceFullUrlGenerator fullUrlGenerator;
 
-    public DiagnosticReport map(final Message message,
-                                Patient patient,
-                                List<Specimen> specimens) {
+    public DiagnosticReport map(final Message message, Patient patient, List<Specimen> specimens,
+                                Practitioner performingPractitioner,
+                                Organization performingOrganization) {
         DiagnosticReport fhir = new DiagnosticReport();
         fhir.setId(uuidGenerator.generateUUID());
 
@@ -50,16 +53,16 @@ public class DiagnosticReportMapper {
         mapIdentifier(serviceReportDetails.getReference(), fhir);
         // fhir.code
         mapCode(fhir);
-
         // fhir.subject
         fhir.getSubject().setReference(fullUrlGenerator.generate(patient));
         // fhir.specimens
         mapSpecimens(specimens, fhir);
+        // fhir.performer
+        mapPerformer(performingPractitioner, performingOrganization, fhir);
 
         /*
             TODO: Add the following
                 - BasedOn - ProcedureReport
-                - Performer - Practitioner/Organization
                 - Result - Observation
          */
 
@@ -89,5 +92,13 @@ public class DiagnosticReportMapper {
             .setDisplay(CODE_DISPLAY)
             .setCode(CODE_NUMBER)
             .setSystem(CODE_SYSTEM);
+    }
+
+    private void mapPerformer(Practitioner performingPractitioner, Organization performingOrganization,
+                              final DiagnosticReport fhir) {
+        Optional.ofNullable(performingOrganization).ifPresent(organization ->
+            fhir.addPerformer().getActor().setReference(fullUrlGenerator.generate(organization)));
+        Optional.ofNullable(performingPractitioner).ifPresent(performer ->
+            fhir.addPerformer().getActor().setReference(fullUrlGenerator.generate(performer)));
     }
 }
