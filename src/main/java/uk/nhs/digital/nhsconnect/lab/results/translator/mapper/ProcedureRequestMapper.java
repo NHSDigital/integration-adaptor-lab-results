@@ -19,13 +19,16 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.hl7.fhir.dstu3.model.ProcedureRequest.ProcedureRequestStatus;
+import org.hl7.fhir.dstu3.model.ProcedureRequest.ProcedureRequestIntent;
+
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ProcedureRequestMapper {
     private final UUIDGenerator uuidGenerator;
     private final ResourceFullUrlGenerator fullUrlGenerator;
-    private static final Map<ReportStatusCode, ProcedureRequest.ProcedureRequestStatus> STATUS_CODE_MAPPING = Map.of(
-        ReportStatusCode.UNSPECIFIED, ProcedureRequest.ProcedureRequestStatus.UNKNOWN
+    private static final Map<ReportStatusCode, ProcedureRequestStatus> STATUS_CODE_MAPPING = Map.of(
+        ReportStatusCode.UNSPECIFIED, ProcedureRequestStatus.UNKNOWN
     );
 
     public Optional<ProcedureRequest> mapToProcedureRequest(final Message message, Patient patient) {
@@ -38,7 +41,7 @@ public class ProcedureRequestMapper {
 
         mapFreeText(patientClinicalInfo, procedureRequest);
         mapStatus(patientClinicalInfo, procedureRequest);
-        procedureRequest.setIntent(ProcedureRequest.ProcedureRequestIntent.NULL);
+        procedureRequest.setIntent(ProcedureRequestIntent.NULL);
         procedureRequest.setCode(new CodeableConcept().setText("unknown"));
         procedureRequest.setId(uuidGenerator.generateUUID());
         procedureRequest.getSubject().setReference(fullUrlGenerator.generate(patient));
