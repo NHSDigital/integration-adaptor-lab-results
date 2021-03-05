@@ -29,7 +29,7 @@ public class DiagnosticReportMapper {
 
     private final UUIDGenerator uuidGenerator;
     private final ResourceFullUrlGenerator fullUrlGenerator;
-    private final Map<ReportStatusCode, DiagnosticReport.DiagnosticReportStatus> statusMap = Map.of(
+    private static final Map<ReportStatusCode, DiagnosticReport.DiagnosticReportStatus> STATUS_MAP = Map.of(
         ReportStatusCode.UNSPECIFIED, DiagnosticReport.DiagnosticReportStatus.UNKNOWN
     );
 
@@ -42,7 +42,7 @@ public class DiagnosticReportMapper {
         // fhir.issued = SG2.DTM
         mapIssued(serviceReportDetails.getDateIssued(), fhir);
         // fhir.status
-        fhir.setStatus(statusMap.get(serviceReportDetails.getStatus().getEvent()));
+        fhir.setStatus(STATUS_MAP.get(serviceReportDetails.getStatus().getEvent()));
         // fhir.identifier
         mapIdentifier(serviceReportDetails.getReference(), fhir);
         Coding coding = new Coding();
