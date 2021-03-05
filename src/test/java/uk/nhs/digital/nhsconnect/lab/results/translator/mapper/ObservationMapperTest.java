@@ -22,6 +22,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.Mockito.when;
 
 @SuppressWarnings("checkstyle:MagicNumber")
 @ExtendWith(MockitoExtension.class)
@@ -56,6 +57,7 @@ class ObservationMapperTest {
 
     @Test
     void testMapToObservationsOnlyRequiredSegmentLaboratoryInvestigation() {
+        when(uuidGenerator.generateUUID()).thenReturn("test-uuid");
         final Message message = new Message(List.of(
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
@@ -73,7 +75,8 @@ class ObservationMapperTest {
                 () -> assertThat(codeConcept.getCoding()).hasSize(1).first()
                     .extracting(Coding::getCode)
                     .isEqualTo("code")
-            )));
+            )))
+            .allSatisfy(specimen -> assertThat(specimen.getId()).isEqualTo("test-uuid"));
     }
 
     @Test
