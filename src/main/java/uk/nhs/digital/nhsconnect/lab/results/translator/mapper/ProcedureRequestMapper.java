@@ -66,8 +66,7 @@ public class ProcedureRequestMapper {
     }
 
     private void mapStatus(final PatientClinicalInfo patientClinicalInfo, final ProcedureRequest procedureRequest) {
-        Optional.ofNullable(patientClinicalInfo)
-            .ifPresent(n -> procedureRequest.setStatus(STATUS_CODE_MAPPING.get(
-                ReportStatusCode.fromCode(patientClinicalInfo.getCode().getCode()))));
+        procedureRequest.setStatus(STATUS_CODE_MAPPING.get(
+            ReportStatusCode.fromCode(patientClinicalInfo.getCode().getCode())));
     }
 }
