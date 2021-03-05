@@ -5,6 +5,7 @@ import org.hl7.fhir.dstu3.model.Observation.ObservationReferenceRangeComponent;
 import org.hl7.fhir.dstu3.model.Observation.ObservationStatus;
 import org.hl7.fhir.dstu3.model.Quantity.QuantityComparator;
 import org.hl7.fhir.dstu3.model.SimpleQuantity;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -227,5 +228,30 @@ class ObservationMapperTest {
         final List<Observation> actual = mapper.mapToTestGroupsAndResults(message);
 
         assertThat(actual).hasSize(3);
+    }
+
+    @Test
+    @Disabled
+    void testCanMapTestGroupWithOneResult() {
+        final Message message = new Message(List.of(
+            "S02+02",
+            "S06+06",
+            "GIS+N",
+            "INV+MQ+44O..:911::Test group",
+            "SEQ++1",
+            "FTX+SPC+++This is a test group",
+            "RFF+ASL:1",
+            "GIS+N",
+            "INV+MQ+:::Test result",
+            "FTX+RIT+++This is a test result:belonging to the test group",
+            "RFF+ARL:1"
+        ));
+
+        final List<Observation> actual = mapper.mapToTestGroupsAndResults(message);
+
+        final var assertObservations = assertThat(actual).hasSize(2);
+        assertAll(
+            () -> assertObservations.first()
+        );
     }
 }
