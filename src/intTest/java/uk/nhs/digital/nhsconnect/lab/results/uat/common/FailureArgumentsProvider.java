@@ -21,17 +21,17 @@ public class FailureArgumentsProvider extends AbstractArgumentsProvider {
 
         var grouped = groupedResources(resources).entrySet()
             .stream()
-            .peek(es -> {
-                if (es.getValue().size() != 1) {
+            .peek(entry -> {
+                if (entry.getValue().size() != 1) {
                     throw new IllegalStateException(String.format(
                         "There should be 1 test data file: '<any>%s': %s",
-                        EDIFACT_FILE_ENDING, es.getKey()));
+                        EDIFACT_FILE_ENDING, entry.getKey()));
                 }
             })
             .collect(Collectors.toMap(
                 Map.Entry::getKey,
-                es -> TestData.builder()
-                    .edifact(readResource(es.getValue(), EDIFACT_FILE_ENDING))
+                entry -> TestData.builder()
+                    .edifact(readResource(entry.getValue(), EDIFACT_FILE_ENDING))
                     .build()));
 
         return grouped.entrySet().stream()

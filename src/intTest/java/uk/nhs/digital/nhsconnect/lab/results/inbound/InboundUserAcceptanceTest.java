@@ -24,7 +24,6 @@ import javax.jms.Message;
 
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId.PATHOLOGY_ACK;
@@ -32,7 +31,7 @@ import static uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId.SCRE
 
 class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
-    static final String ACK_REQUESTED_REGEX = "^.*UNB\\+UNOC.*\\+\\+1'UNH.*$";
+    static final String ACK_REQUESTED_REGEX = "^[\\S\\s]*UNB\\+UNOC.*\\+\\+1'\\s*UNH[\\S\\s]*$";
 
     static final int GP_OUTBOUND_QUEUE_POLLING_DELAY = 2000;
     static final int GP_OUTBOUND_QUEUE_POLLING_TIMEOUT = 10;
@@ -72,8 +71,7 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
             throw new RuntimeException("Unsupported Workflow ID");
         }
 
-        final boolean ackRequested = testData.getEdifact().replace("\n", "")
-            .matches(ACK_REQUESTED_REGEX);
+        final boolean ackRequested = testData.getEdifact().matches(ACK_REQUESTED_REGEX);
 
         final OutboundMeshMessage outboundMeshMessage = OutboundMeshMessage.create(recipient,
             workflowId, testData.getEdifact(), null);
@@ -106,7 +104,7 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
         if (ackRequested) {
             assertOutboundNhsAckMessage(workflowId);
         } else {
-            assertTrue(getMeshClient().getInboxMessageIds().isEmpty());
+            assertThat(getMeshClient().getInboxMessageIds()).isEmpty();
         }
 
     }
@@ -138,8 +136,7 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
             throw new RuntimeException("Unsupported Workflow ID");
         }
 
-        final boolean ackRequested = testData.getEdifact().replace("\n", "")
-            .matches(ACK_REQUESTED_REGEX);
+        final boolean ackRequested = testData.getEdifact().matches(ACK_REQUESTED_REGEX);
 
         final OutboundMeshMessage outboundMeshMessage = OutboundMeshMessage.create(recipient,
             workflowId, testData.getEdifact(), null);
@@ -148,12 +145,12 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
         await().pollDelay(GP_OUTBOUND_QUEUE_POLLING_DELAY, TimeUnit.MILLISECONDS)
             .atMost(GP_OUTBOUND_QUEUE_POLLING_TIMEOUT, TimeUnit.SECONDS)
-            .untilAsserted(() -> assertTrue(gpOutboundQueueIsEmpty()));
+            .untilAsserted(() -> assertThat(gpOutboundQueueIsEmpty()).isTrue());
 
         if (ackRequested) {
             assertOutboundNhsAckMessage(workflowId);
         } else {
-            assertTrue(getMeshClient().getInboxMessageIds().isEmpty());
+            assertThat(getMeshClient().getInboxMessageIds()).isEmpty();
         }
 
     }
