@@ -127,22 +127,82 @@
           "coding": [
             {
               "system": "http://loinc.org",
-              "code": "42R4.",
-              "display": "Serum ferritin"
+              "display": "B12/FOLATE"
             }
           ]
         },
+        "comment": "Results repeated Low plasma Folate"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:3b383fc0-f731-426e-94da-177cd70e7940",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "3b383fc0-f731-426e-94da-177cd70e7940",
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "code": "42T.."
+            }
+          ],
+          "text": "Serum vitamin B12"
+        },
         "valueQuantity": {
-          "value": 11,
+          "value": 1001,
+          "unit": "ng/L"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 170
+            },
+            "high": {
+              "value": 1100
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "0d124e8d-6447-44e8-9d7d-9f5595b1a0c9"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:1c0d099e-b5be-4d93-839d-131d27d8761b",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "1c0d099e-b5be-4d93-839d-131d27d8761b",
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "code": "42UE."
+            }
+          ],
+          "text": "Plasma folate level"
+        },
+        "valueQuantity": {
+          "value": 0.8,
           "unit": "ng/mL"
         },
         "referenceRange": [
           {
             "low": {
-              "value": 10
+              "value": 2.0
             },
             "high": {
-              "value": 200
+              "value": 20.0
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "0d124e8d-6447-44e8-9d7d-9f5595b1a0c9"
             }
           }
         ]

@@ -54,6 +54,7 @@ public class InboundMeshQueueTest extends IntegrationBaseTest {
                 new Customization("identifier.value", IGNORE),
                 new Customization("entry[*].fullUrl", IGNORE),
                 new Customization("entry[*].resource.subject.reference", IGNORE),
+                new Customization("entry[*].resource.related[*].target.reference", IGNORE),
                 new Customization("entry[*].resource.id", IGNORE)
             )
         );

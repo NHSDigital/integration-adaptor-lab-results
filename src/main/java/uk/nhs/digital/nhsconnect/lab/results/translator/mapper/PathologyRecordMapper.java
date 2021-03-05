@@ -32,7 +32,7 @@ public class PathologyRecordMapper {
         organizationMapper.mapToPerformingOrganization(message)
             .ifPresent(pathologyRecordBuilder::performingOrganization);
         pathologyRecordBuilder.specimens(specimenMapper.mapToSpecimens(message, patient));
-        pathologyRecordBuilder.testResults(observationMapper.mapToTestGroupsAndResults(message));
+        pathologyRecordBuilder.testResults(observationMapper.mapToObservations(message));
 
         return pathologyRecordBuilder.build();
     }

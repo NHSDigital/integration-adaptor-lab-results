@@ -36,7 +36,7 @@ class ObservationMapperTest {
     void testMapToObservationsNonePresent() {
         final Message message = new Message(Collections.emptyList());
 
-        final var observations = mapper.mapToTestGroupsAndResults(message);
+        final var observations = mapper.mapToObservations(message);
 
         assertThat(observations).isEmpty();
     }
@@ -49,7 +49,7 @@ class ObservationMapperTest {
             "GIS+N" // LabResult
         ));
 
-        assertThatThrownBy(() -> mapper.mapToTestGroupsAndResults(message))
+        assertThatThrownBy(() -> mapper.mapToObservations(message))
             .isExactlyInstanceOf(MissingSegmentException.class)
             .hasMessageStartingWith("EDIFACT section is missing segment");
     }
@@ -62,11 +62,13 @@ class ObservationMapperTest {
             "S06+06", // InvestigationSubject
             "GIS+N", // LabResult
             "INV+MQ+code:911::description", // LaboratoryInvestigation
+            "RFF+ASL:1", // Reference
             "GIS+N", // LabResult
-            "INV+MQ+code:911::description" // LaboratoryInvestigation
+            "INV+MQ+code:911::description", // LaboratoryInvestigation
+            "RFF+ASL:1" // Reference
         ));
 
-        final var observations = mapper.mapToTestGroupsAndResults(message);
+        final var observations = mapper.mapToObservations(message);
 
         assertThat(observations).hasSize(2)
             .allSatisfy(observation -> assertThat(observation.getCode().getCoding()).hasSize(1)
@@ -108,11 +110,12 @@ class ObservationMapperTest {
             "S06+06", // InvestigationSubject
             "GIS+N", // LabResult
             "INV+MQ+c:911::d", // LaboratoryInvestigation
+            "RFF+ASL:1", // Reference
 
             "RSL+NV+1.23:7++:::units" // LaboratoryInvestigationResult
         ));
 
-        final var observations = mapper.mapToTestGroupsAndResults(message);
+        final var observations = mapper.mapToObservations(message);
 
         assertThat(observations).hasSize(1)
             .first()
@@ -132,11 +135,12 @@ class ObservationMapperTest {
             "S06+06", // InvestigationSubject
             "GIS+N", // LabResult
             "INV+MQ+c:911::d", // LaboratoryInvestigation
+            "RFF+ASL:1", // Reference
 
             "STS++PR" // TestStatus
         ));
 
-        final var observations = mapper.mapToTestGroupsAndResults(message);
+        final var observations = mapper.mapToObservations(message);
 
         assertThat(observations).hasSize(1)
             .first()
@@ -168,13 +172,14 @@ class ObservationMapperTest {
             "S06+06", // InvestigationSubject
             "GIS+N", // LabResult
             "INV+MQ+c:911::d", // LaboratoryInvestigation
+            "RFF+ASL:1", // Reference
 
             "FTX+RIT+++multi:line", // FreeTextSegment
             "FTX+RIT+++",
             "FTX+RIT+++comment"
         ));
 
-        final var observations = mapper.mapToTestGroupsAndResults(message);
+        final var observations = mapper.mapToObservations(message);
 
         assertThat(observations).hasSize(1)
             .first()
@@ -189,12 +194,13 @@ class ObservationMapperTest {
             "S06+06", // InvestigationSubject
             "GIS+N", // LabResult
             "INV+MQ+c:911::d", // LaboratoryInvestigation
+            "RFF+ASL:1", // Reference
 
             "S20+20", // ResultReferenceRange
             "RND+U+-1.0+1.0" // RangeDetail
         ));
 
-        final var observations = mapper.mapToTestGroupsAndResults(message);
+        final var observations = mapper.mapToObservations(message);
 
         final var assertReferenceRange = assertThat(observations).hasSize(1)
             .first()
@@ -218,13 +224,16 @@ class ObservationMapperTest {
             "S06+06",
             "GIS+N",
             "INV+MQ+c:911::d",
+            "RFF+ASL:1",
             "GIS+N",
             "INV+MQ+c:911::d",
+            "RFF+ASL:1",
             "GIS+N",
-            "INV+MQ+c:911::d"
+            "INV+MQ+c:911::d",
+            "RFF+ASL:1"
         ));
 
-        final List<Observation> actual = mapper.mapToTestGroupsAndResults(message);
+        final List<Observation> actual = mapper.mapToObservations(message);
 
         assertThat(actual).hasSize(3);
     }

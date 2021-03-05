@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MeasurementValueComparator;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.TestStatus;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.TestStatusCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvestigationSubject;
@@ -21,42 +22,88 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.ResultRe
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ObservationMapper {
     private static final String CODING_SYSTEM = "http://loinc.org";
 
+    private static final Function<Boolean, List<LabResult>> EMPTY_LIST = $ -> Collections.emptyList();
+
     private final UUIDGenerator uuidGenerator;
 
-    public List<Observation> mapToTestGroupsAndResults(final Message message) {
+    public List<Observation> mapToObservations(final Message message) {
+        final InvestigationSubject subject = message.getServiceReportDetails().getSubject();
+
+        final Map<Boolean, List<LabResult>> testGroupsAndResults = subject.getLabResults().stream()
+            .collect(groupingBy(result -> result.getSequenceDetails().isPresent()));
+
         // test groups are GIS+N blocks with SEQ segments
         // they should have RFF+ASL:X where X is the SEQ value of the S16
+        final List<LabResult> testGroups = testGroupsAndResults.computeIfAbsent(true, EMPTY_LIST);
+        final var edifactToFhirIdMap = new HashMap<String, String>(testGroups.size());
+        final List<Observation> mappedGroups = testGroups.stream()
+            .map(labResult -> mapTestGroup(edifactToFhirIdMap, labResult))
+            .collect(Collectors.toList());
 
         // test results are GIS+N blocks without SEQ segments
         // they should have RFF+ARL:Y where Y is the SEQ value of the test group
-
-        final InvestigationSubject subject = message.getServiceReportDetails().getSubject();
-        final List<LabResult> labResults = subject.getLabResults();
-
-        // start by assuming everything is a test result
-        return labResults.stream().map(labResult -> {
-            final var result = new Observation();
-
-            result.setId(uuidGenerator.generateUUID());
-
-            mapStatus(labResult, result);
-            mapValueQuantity(labResult, result);
-            mapCode(labResult, result);
-            mapReferenceRange(labResult, result);
-            mapComment(labResult, result);
-
-            return result;
-        })
+        final List<LabResult> testResults = testGroupsAndResults.computeIfAbsent(false, EMPTY_LIST);
+        final List<Observation> mappedResults = testResults.stream()
+            .map(labResult -> mepTestResult(edifactToFhirIdMap, labResult))
             .collect(Collectors.toList());
+
+        return Stream.concat(mappedGroups.stream(), mappedResults.stream())
+            .collect(Collectors.toList());
+    }
+
+    private Observation mepTestResult(Map<?, ? extends String> edifactToFhirIdMap, LabResult labResult) {
+        final var result = new Observation();
+
+        result.setId(uuidGenerator.generateUUID());
+
+        mapContents(labResult, result);
+
+        if (labResult.getSequenceReference().getTarget() == ReferenceType.INVESTIGATION) {
+            final var edifactId = labResult.getSequenceReference().getNumber();
+            final var fhirId = edifactToFhirIdMap.get(edifactId);
+            result.addRelated().getTarget().setReference(fhirId);
+        }
+
+        return result;
+    }
+
+    private Observation mapTestGroup(Map<? super String, ? super String> edifactToFhirIdMap, LabResult labResult) {
+        final var result = new Observation();
+
+        final var fhirId = uuidGenerator.generateUUID();
+        result.setId(fhirId);
+
+        //noinspection OptionalGetWithoutIsPresent Previous logic guarantees its presence
+        final var edifactId = labResult.getSequenceDetails().get().getNumber();
+        edifactToFhirIdMap.put(edifactId, fhirId);
+
+        mapContents(labResult, result);
+
+        return result;
+    }
+
+    private void mapContents(final LabResult labResult, final Observation observation) {
+        mapStatus(labResult, observation);
+        mapValueQuantity(labResult, observation);
+        mapCode(labResult, observation);
+        mapReferenceRange(labResult, observation);
+        mapComment(labResult, observation);
     }
 
     private void mapStatus(final LabResult labResult, final Observation observation) {
