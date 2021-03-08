@@ -21,6 +21,7 @@ import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
@@ -53,8 +54,8 @@ class PathologyRecordMapperTest {
         when(practitionerMapper.mapToPerformingPractitioner(any(Message.class))).thenReturn(Optional.empty());
         when(patientMapper.mapToPatient(any(Message.class))).thenReturn(new Patient());
         when(specimenMapper.mapToSpecimens(any(Message.class), any(Patient.class))).thenReturn(Collections.emptyList());
-        when(diagnosticReportMapper.mapToDiagnosticReport(any(Message.class), any(Patient.class), anyList(),
-            any(Practitioner.class), any(Organization.class))).thenReturn(new DiagnosticReport());
+        when(diagnosticReportMapper.mapToDiagnosticReport(nullable(Message.class), nullable(Patient.class), anyList(),
+            nullable(Practitioner.class), nullable(Organization.class))).thenReturn(new DiagnosticReport());
     }
 
     @Test
@@ -134,5 +135,18 @@ class PathologyRecordMapperTest {
         assertThat(pathologyRecord.getSpecimens())
             .hasSize(2)
             .contains(mockSpecimen1, mockSpecimen2);
+    }
+
+    @Test
+    void testMapMessageToPathologyRecordWithDiagnosticReport() {
+        final Message message = new Message(emptyList());
+        final var diagnosticReport = mock(DiagnosticReport.class);
+        reset(diagnosticReportMapper);
+        when(diagnosticReportMapper.mapToDiagnosticReport(eq(message), nullable(Patient.class), anyList(),
+            nullable(Practitioner.class), nullable(Organization.class))).thenReturn(diagnosticReport);
+
+        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+
+        assertThat(pathologyRecord.getTestReport()).isEqualTo(diagnosticReport);
     }
 }
