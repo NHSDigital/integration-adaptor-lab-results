@@ -68,17 +68,19 @@ public class ProcedureRequestMapper {
     }
 
     private void mapFreeText(final PatientClinicalInfo patientClinicalInfo, final ProcedureRequest procedureRequest) {
-        final List<Annotation> annotations = patientClinicalInfo.getFreeTexts().stream()
+        List<FreeTextSegment> patientClinicalInfoFreeTexts = patientClinicalInfo.getFreeTexts();
+
+        if (patientClinicalInfoFreeTexts.isEmpty()) {
+            throw new FhirValidationException("Unable to map message. "
+                + "The FreeText segment is mandatory in Clinical Information");
+        }
+
+        final List<Annotation> annotations = patientClinicalInfoFreeTexts.stream()
             .map(FreeTextSegment::getTexts)
             .map(texts -> String.join(" ", texts))
             .map(MappingUtils::unescape)
             .map(text -> new Annotation().setText(text))
             .collect(Collectors.toList());
-
-        if (annotations.isEmpty()) {
-            throw new FhirValidationException("Unable to map message. "
-                + "The FreeText segment is mandatory in Clinical Information");
-        }
 
         procedureRequest.setNote(annotations);
     }
