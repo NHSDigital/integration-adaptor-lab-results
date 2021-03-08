@@ -2,11 +2,11 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 /**
  * Examples:
@@ -15,7 +15,6 @@ import java.math.BigDecimal;
  * {@code RND+U++999'}: less than 999<br/>
  */
 @EqualsAndHashCode(callSuper = false)
-@Getter
 @AllArgsConstructor
 public class RangeDetail extends Segment {
     private static final String KEY = "RND";
@@ -43,6 +42,14 @@ public class RangeDetail extends Segment {
             : new BigDecimal(split[INDEX_UPPER_LIMIT]);
 
         return new RangeDetail(lowerLimit, upperLimit);
+    }
+
+    public Optional<BigDecimal> getLowerLimit() {
+        return Optional.ofNullable(lowerLimit);
+    }
+
+    public Optional<BigDecimal> getUpperLimit() {
+        return Optional.ofNullable(upperLimit);
     }
 
     @Override

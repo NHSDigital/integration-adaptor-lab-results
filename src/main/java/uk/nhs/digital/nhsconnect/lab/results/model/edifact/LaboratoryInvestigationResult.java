@@ -8,6 +8,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 /**
  * Example: RSL+NV+11.9:7++:::ng/mL+HI'
@@ -85,6 +86,10 @@ public class LaboratoryInvestigationResult extends Segment {
         }
 
         return null;
+    }
+
+    public Optional<MeasurementValueComparator> getMeasurementValueComparator() {
+        return Optional.ofNullable(measurementValueComparator);
     }
 
     @Override

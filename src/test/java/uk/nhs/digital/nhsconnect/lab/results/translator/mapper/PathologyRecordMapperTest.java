@@ -1,5 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
+import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.DiagnosticReport;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
@@ -43,6 +44,9 @@ class PathologyRecordMapperTest {
     private SpecimenMapper specimenMapper;
 
     @Mock
+    private ObservationMapper observationMapper;
+
+    @Mock
     private DiagnosticReportMapper diagnosticReportMapper;
 
     @InjectMocks
@@ -54,6 +58,7 @@ class PathologyRecordMapperTest {
         when(practitionerMapper.mapToPerformingPractitioner(any(Message.class))).thenReturn(Optional.empty());
         when(patientMapper.mapToPatient(any(Message.class))).thenReturn(new Patient());
         when(specimenMapper.mapToSpecimens(any(Message.class), any(Patient.class))).thenReturn(Collections.emptyList());
+        when(observationMapper.mapToTestGroupsAndResults(any(Message.class))).thenReturn(Collections.emptyList());
         when(diagnosticReportMapper.mapToDiagnosticReport(nullable(Message.class), nullable(Patient.class), anyList(),
             nullable(Practitioner.class), nullable(Organization.class))).thenReturn(new DiagnosticReport());
     }
@@ -133,8 +138,21 @@ class PathologyRecordMapperTest {
         final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
 
         assertThat(pathologyRecord.getSpecimens())
-            .hasSize(2)
-            .contains(mockSpecimen1, mockSpecimen2);
+            .containsExactly(mockSpecimen1, mockSpecimen2);
+    }
+
+    @Test
+    void testMapMessageToPathologyRecordWithTestResults() {
+        final Message message = new Message(emptyList());
+        final var mockObservation1 = mock(Observation.class);
+        final var mockObservation2 = mock(Observation.class);
+        when(observationMapper.mapToTestGroupsAndResults(message))
+            .thenReturn(List.of(mockObservation1, mockObservation2));
+
+        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+
+        assertThat(pathologyRecord.getTestResults())
+            .containsExactly(mockObservation1, mockObservation2);
     }
 
     @Test

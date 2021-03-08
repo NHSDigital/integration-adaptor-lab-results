@@ -146,6 +146,37 @@
           "collectedDateTime": "2010-02-23T15:41:00+00:00"
         }
       }
+    },
+    {
+      "fullUrl": "urn:uuid:0d124e8d-6447-44e8-9d7d-9f5595b1a0c9",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "0d124e8d-6447-44e8-9d7d-9f5595b1a0c9",
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "42R4.",
+              "display": "Serum ferritin"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 11,
+          "unit": "ng/mL"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 10
+            },
+            "high": {
+              "value": 200
+            }
+          }
+        ]
+      }
     }
   ]
 }

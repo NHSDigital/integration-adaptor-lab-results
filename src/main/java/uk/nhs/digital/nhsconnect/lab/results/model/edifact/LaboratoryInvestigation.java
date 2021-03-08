@@ -8,11 +8,12 @@ import org.apache.commons.lang3.StringUtils;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
+import java.util.Optional;
+
 /**
  * Example: INV+MQ+42R4.:911::Serum ferritin'
  */
 @AllArgsConstructor
-@Getter
 @Builder
 public class LaboratoryInvestigation extends Segment {
 
@@ -25,6 +26,8 @@ public class LaboratoryInvestigation extends Segment {
     private static final int INVESTIGATION_DESCRIPTION_INDEX = 3;
 
     private final String investigationCode;
+
+    @Getter
     @NonNull
     private final String investigationDescription;
 
@@ -39,6 +42,10 @@ public class LaboratoryInvestigation extends Segment {
         final String investigationDescription = Split.byColon(keySplit[2])[INVESTIGATION_DESCRIPTION_INDEX];
 
         return new LaboratoryInvestigation(investigationCode, investigationDescription);
+    }
+
+    public Optional<String> getInvestigationCode() {
+        return Optional.ofNullable(investigationCode);
     }
 
     @Override

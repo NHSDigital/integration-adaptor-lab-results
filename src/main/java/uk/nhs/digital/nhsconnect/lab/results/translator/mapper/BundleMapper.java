@@ -5,6 +5,7 @@ import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.InstantType;
 import org.hl7.fhir.dstu3.model.Meta;
+import org.hl7.fhir.dstu3.model.Resource;
 import org.hl7.fhir.dstu3.model.UriType;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.model.fhir.PathologyRecord;
@@ -13,6 +14,7 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @Component
 @RequiredArgsConstructor
@@ -26,45 +28,19 @@ public class BundleMapper {
 
     public Bundle mapToBundle(final PathologyRecord pathologyRecord) {
         final Bundle bundle = generateInitialPathologyBundle();
+        final Consumer<Resource> addToBundle = resource -> addResourceToBundle(bundle, resource);
 
-        bundle.addEntry()
-            .setFullUrl(fullUrlGenerator.generate(pathologyRecord.getPatient()))
-            .setResource(pathologyRecord.getPatient());
+        addToBundle.accept(pathologyRecord.getPatient());
 
-        Optional.ofNullable(pathologyRecord.getRequestingPractitioner()).ifPresent(requestingPractitioner ->
-            bundle.addEntry()
-                .setFullUrl(fullUrlGenerator.generate(requestingPractitioner))
-                .setResource(requestingPractitioner)
-        );
+        Optional.ofNullable(pathologyRecord.getRequestingPractitioner()).ifPresent(addToBundle);
+        Optional.ofNullable(pathologyRecord.getRequestingOrganization()).ifPresent(addToBundle);
+        Optional.ofNullable(pathologyRecord.getPerformingPractitioner()).ifPresent(addToBundle);
+        Optional.ofNullable(pathologyRecord.getPerformingOrganization()).ifPresent(addToBundle);
+        Optional.ofNullable(pathologyRecord.getTestReport()).ifPresent(addToBundle);
 
-        Optional.ofNullable(pathologyRecord.getRequestingOrganization()).ifPresent(requestingOrganization ->
-            bundle.addEntry()
-                .setFullUrl(fullUrlGenerator.generate(requestingOrganization))
-                .setResource(requestingOrganization)
-        );
+        pathologyRecord.getSpecimens().forEach(addToBundle);
 
-        Optional.ofNullable(pathologyRecord.getPerformingPractitioner()).ifPresent(performingPractitioner ->
-            bundle.addEntry()
-                .setFullUrl(fullUrlGenerator.generate(performingPractitioner))
-                .setResource(performingPractitioner)
-        );
-
-        Optional.ofNullable(pathologyRecord.getPerformingOrganization()).ifPresent(performingOrganization ->
-            bundle.addEntry()
-                .setFullUrl(fullUrlGenerator.generate(performingOrganization))
-                .setResource(performingOrganization)
-        );
-
-        Optional.ofNullable(pathologyRecord.getTestReport()).ifPresent(diagnosticReport ->
-            bundle.addEntry()
-                .setFullUrl(fullUrlGenerator.generate(diagnosticReport))
-                .setResource(diagnosticReport)
-        );
-
-        pathologyRecord.getSpecimens().forEach(specimen ->
-            bundle.addEntry()
-                .setFullUrl(fullUrlGenerator.generate(specimen))
-                .setResource(specimen));
+        pathologyRecord.getTestResults().forEach(addToBundle);
 
         return bundle;
     }
@@ -84,5 +60,11 @@ public class BundleMapper {
         bundle.setType(Bundle.BundleType.MESSAGE);
 
         return bundle;
+    }
+
+    private void addResourceToBundle(final Bundle bundle, final Resource resource) {
+        bundle.addEntry()
+            .setFullUrl(fullUrlGenerator.generate(resource))
+            .setResource(resource);
     }
 }

@@ -16,6 +16,7 @@ public class PathologyRecordMapper {
     private final OrganizationMapper organizationMapper;
     private final SpecimenMapper specimenMapper;
     private final DiagnosticReportMapper diagnosticReportMapper;
+    private final ObservationMapper observationMapper;
 
     public PathologyRecord mapToPathologyRecord(final Message message) {
         final PathologyRecordBuilder pathologyRecordBuilder = PathologyRecord.builder();
@@ -38,6 +39,7 @@ public class PathologyRecordMapper {
         performingOrganization.ifPresent(pathologyRecordBuilder::performingOrganization);
         pathologyRecordBuilder.testReport(diagnosticReport);
         pathologyRecordBuilder.specimens(specimens);
+        pathologyRecordBuilder.testResults(observationMapper.mapToTestGroupsAndResults(message));
 
         return pathologyRecordBuilder.build();
     }
