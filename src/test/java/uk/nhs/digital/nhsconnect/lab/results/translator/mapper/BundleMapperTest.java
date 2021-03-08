@@ -2,6 +2,7 @@ package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
+import org.hl7.fhir.dstu3.model.DiagnosticReport;
 import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
@@ -55,7 +56,8 @@ class BundleMapperTest {
         lenient().when(mockRequester.getId()).thenReturn(SOME_UUID);
         pathologyRecordBuilder = PathologyRecord.builder()
             .requestingPractitioner(mockRequester)
-            .patient(mock(Patient.class));
+            .patient(mock(Patient.class))
+            .testReport(mock(DiagnosticReport.class));
     }
 
     @Test
@@ -228,6 +230,30 @@ class BundleMapperTest {
             () -> assertThat(observationBundleEntries)
                 .extracting(BundleEntryComponent::getFullUrl)
                 .allMatch(FULL_URL::equals)
+        );
+    }
+
+    @Test
+    void testMapPathologyRecordToBundleWithDiagnosticReport() {
+        final var mockDiagnosticReport = mock(DiagnosticReport.class);
+        pathologyRecordBuilder.testReport(mockDiagnosticReport);
+
+        final Bundle bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
+
+        final var diagnosticReportBundleEntries = bundle.getEntry().stream()
+            .filter(entry -> entry.getResource() instanceof DiagnosticReport)
+            .collect(Collectors.toList());
+        final var diagnosticReports = diagnosticReportBundleEntries.stream()
+            .map(BundleEntryComponent::getResource)
+            .map(DiagnosticReport.class::cast)
+            .collect(Collectors.toList());
+
+        assertAll(
+            () -> verifyBundle(bundle),
+            () -> assertThat(diagnosticReports).containsExactly(mockDiagnosticReport),
+            () -> assertThat(diagnosticReportBundleEntries).first()
+                .extracting(BundleEntryComponent::getFullUrl)
+                .isEqualTo(FULL_URL)
         );
     }
 
