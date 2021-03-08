@@ -1,0 +1,91 @@
+{
+  "resourceType": "Bundle",
+  "id": "87afc92f-1c58-4b3d-927d-ae2caa607330",
+  "meta": {
+    "lastUpdated": "2021-03-08T09:23:24.896+00:00",
+    "profile": [
+      "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"
+    ]
+  },
+  "identifier": {
+    "system": "https://tools.ietf.org/html/rfc4122",
+    "value": "f3369cf2-20ee-4f1c-b810-2f0ab8e736fa"
+  },
+  "type": "message",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:86158326-c5ba-4d3d-afae-3a1f1908980e",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "86158326-c5ba-4d3d-afae-3a1f1908980e",
+        "identifier": [
+          {
+            "system": "https://fhir.nhs.uk/Id/nhs-number"
+          }
+        ],
+        "name": [
+          {
+            "family": "ABLE",
+            "given": [
+              "JEREMIAS"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1915-12-01"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:b4382fa1-e7dc-438d-80e5-852f5c648b58",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "b4382fa1-e7dc-438d-80e5-852f5c648b58",
+        "identifier": [
+          {
+            "system": "https://fhir.nhs.uk/Id/sds-user-id"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:af1d2678-29a5-41c2-95a8-01616f9f4471",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "af1d2678-29a5-41c2-95a8-01616f9f4471",
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "dept",
+                "display": "Haematology"
+              }
+            ]
+          }
+        ],
+        "name": "ST JAMES'S UNIVERSITY HOSPITAL"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:aed08a29-6511-41e3-b4a5-ce854aa5b1c7",
+      "resource": {
+        "resourceType": "Specimen",
+        "id": "aed08a29-6511-41e3-b4a5-ce854aa5b1c7",
+        "type": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "display": "VENOUS BLOOD"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:86158326-c5ba-4d3d-afae-3a1f1908980e"
+        },
+        "receivedTime": "2010-02-24T15:41:00+00:00",
+        "collection": {
+          "collectedDateTime": "2010-02-23"
+        }
+      }
+    }
+  ]
+}
