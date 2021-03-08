@@ -143,10 +143,11 @@
         "code": {
           "coding": [
             {
-              "code": "42T.."
+              "system": "http://loinc.org",
+              "code": "42T..",
+              "display": "Serum vitamin B12"
             }
-          ],
-          "text": "Serum vitamin B12"
+          ]
         },
         "valueQuantity": {
           "value": 1001,
@@ -180,10 +181,11 @@
         "code": {
           "coding": [
             {
-              "code": "42UE."
+              "system": "http://loinc.org",
+              "code": "42UE.",
+              "display": "Plasma folate level"
             }
-          ],
-          "text": "Plasma folate level"
+          ]
         },
         "valueQuantity": {
           "value": 0.8,

@@ -87,10 +87,11 @@ class ObservationMapperTest {
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
             "GIS+N", // LabResult
-            "INV+MQ+:911::description" // LaboratoryInvestigation
+            "INV+MQ+:911::description", // LaboratoryInvestigation
+            "RFF+ASL:1" // Reference
         ));
 
-        final var observations = mapper.mapToTestGroupsAndResults(message);
+        final var observations = mapper.mapToObservations(message);
 
         assertThat(observations).hasSize(1)
             .first()
@@ -154,10 +155,11 @@ class ObservationMapperTest {
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
             "GIS+N", // LabResult
-            "INV+MQ+c:911::d" // LaboratoryInvestigation
+            "INV+MQ+c:911::d", // LaboratoryInvestigation
+            "RFF+ASL:1" // Reference
         ));
 
-        final var observations = mapper.mapToTestGroupsAndResults(message);
+        final var observations = mapper.mapToObservations(message);
 
         assertThat(observations).hasSize(1)
             .first()
