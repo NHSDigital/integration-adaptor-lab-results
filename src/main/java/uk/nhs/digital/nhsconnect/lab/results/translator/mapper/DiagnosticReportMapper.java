@@ -84,7 +84,8 @@ public class DiagnosticReportMapper {
     }
 
     private void mapSpecimens(final List<Specimen> specimens, final DiagnosticReport fhir) {
-        specimens.forEach(specimen -> fhir.addSpecimen().setReference(fullUrlGenerator.generate(specimen)));
+        Optional.ofNullable(specimens).ifPresent(
+            s -> s.forEach(specimen -> fhir.addSpecimen().setReference(fullUrlGenerator.generate(specimen))));
     }
 
     private void mapCode(final DiagnosticReport fhir) {
