@@ -43,13 +43,12 @@
         "id": "1896e090-962b-4c66-aa41-8154e4623b49",
         "identifier": [
           {
-            "system": "https://fhir.nhs.uk/Id/sds-user-id",
-            "value": "G8040642"
+            "system": "https://fhir.nhs.uk/Id/sds-user-id"
           }
         ],
         "name": [
           {
-            "text": "HOLMES"
+            "text": "SCOTT"
           }
         ]
       }
