@@ -17,6 +17,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmen
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -55,7 +56,7 @@ class LabResultTest {
 
         labResultInvestigation
             .extracting(LaboratoryInvestigation::getInvestigationCode)
-            .isEqualTo("42R4.");
+            .isEqualTo(Optional.of("42R4."));
         labResultInvestigation
             .extracting(LaboratoryInvestigation::getInvestigationDescription)
             .isEqualTo("Serum ferritin");
@@ -94,7 +95,7 @@ class LabResultTest {
             .hasValue(BigDecimal.valueOf(EXPECTED_MEASUREMENT_VALUE));
         labResultInvestigationResult
             .map(LaboratoryInvestigationResult::getMeasurementValueComparator)
-            .hasValue(MeasurementValueComparator.LESS_THAN);
+            .contains(Optional.of(MeasurementValueComparator.LESS_THAN));
     }
 
     @Test

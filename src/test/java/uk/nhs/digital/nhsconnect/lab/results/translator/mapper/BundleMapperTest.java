@@ -2,6 +2,7 @@ package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
+import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
@@ -75,7 +76,7 @@ class BundleMapperTest {
 
         assertAll(
             () -> verifyBundle(bundle),
-            () -> assertThat(patients).hasSize(1).contains(mockPatient),
+            () -> assertThat(patients).containsExactly(mockPatient),
             () -> assertThat(patientBundleEntries).first()
                 .extracting(BundleEntryComponent::getFullUrl)
                 .isEqualTo(FULL_URL)
@@ -99,7 +100,7 @@ class BundleMapperTest {
 
         assertAll(
             () -> verifyBundle(bundle),
-            () -> assertThat(requestingPractitioners).hasSize(1).contains(mockRequestingPractitioner),
+            () -> assertThat(requestingPractitioners).containsExactly(mockRequestingPractitioner),
             () -> assertThat(requesterBundleEntries).first()
                 .extracting(BundleEntryComponent::getFullUrl)
                 .isEqualTo(FULL_URL)
@@ -123,7 +124,7 @@ class BundleMapperTest {
 
         assertAll(
             () -> verifyBundle(bundle),
-            () -> assertThat(requestingOrganizations).hasSize(1).contains(mockRequestingOrganization),
+            () -> assertThat(requestingOrganizations).containsExactly(mockRequestingOrganization),
             () -> assertThat(requestingOrganizationBundleEntries).first()
                 .extracting(BundleEntryComponent::getFullUrl)
                 .isEqualTo(FULL_URL)
@@ -172,7 +173,7 @@ class BundleMapperTest {
 
         assertAll(
             () -> verifyBundle(bundle),
-            () -> assertThat(performingOrganizations).hasSize(1).contains(mockPerformingOrganization),
+            () -> assertThat(performingOrganizations).containsExactly(mockPerformingOrganization),
             () -> assertThat(performingOrganizationBundleEntries).first()
                 .extracting(BundleEntryComponent::getFullUrl)
                 .isEqualTo(FULL_URL)
@@ -222,9 +223,35 @@ class BundleMapperTest {
 
         assertAll(
             () -> verifyBundle(bundle),
-            () -> assertThat(specimens).hasSize(2)
-                .contains(mockSpecimen1, mockSpecimen2),
+            () -> assertThat(specimens)
+                .containsExactly(mockSpecimen1, mockSpecimen2),
             () -> assertThat(specimenBundleEntries)
+                .extracting(BundleEntryComponent::getFullUrl)
+                .allMatch(FULL_URL::equals)
+        );
+    }
+
+    @Test
+    void testMapPathologyRecordToBundleWithTestResults() {
+        final var mockTestResult1 = mock(Observation.class);
+        final var mockTestResult2 = mock(Observation.class);
+        pathologyRecordBuilder.testResults(List.of(mockTestResult1, mockTestResult2));
+
+        final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
+
+        final var observationBundleEntries = bundle.getEntry().stream()
+            .filter(entry -> entry.getResource() instanceof Observation)
+            .collect(Collectors.toList());
+        final var observations = observationBundleEntries.stream()
+            .map(BundleEntryComponent::getResource)
+            .map(Observation.class::cast)
+            .collect(Collectors.toList());
+
+        assertAll(
+            () -> verifyBundle(bundle),
+            () -> assertThat(observations)
+                .containsExactly(mockTestResult1, mockTestResult2),
+            () -> assertThat(observationBundleEntries)
                 .extracting(BundleEntryComponent::getFullUrl)
                 .allMatch(FULL_URL::equals)
         );
