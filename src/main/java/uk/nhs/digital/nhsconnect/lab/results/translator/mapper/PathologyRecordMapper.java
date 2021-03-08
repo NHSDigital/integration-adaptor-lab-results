@@ -22,16 +22,19 @@ public class PathologyRecordMapper {
         final PathologyRecordBuilder pathologyRecordBuilder = PathologyRecord.builder();
 
         final var patient = patientMapper.mapToPatient(message);
+        final var requestingPractitioner = practitionerMapper.mapToRequestingPractitioner(message);
+        final var requestingOrganization = organizationMapper.mapToRequestingOrganization(message);
+        final var performingPractitioner = practitionerMapper.mapToPerformingPractitioner(message);
+        final var performingOrganization = organizationMapper.mapToPerformingOrganization(message);
+
         pathologyRecordBuilder.patient(patient);
-        practitionerMapper.mapToRequestingPractitioner(message)
-            .ifPresent(pathologyRecordBuilder::requestingPractitioner);
-        organizationMapper.mapToRequestingOrganization(message)
-            .ifPresent(pathologyRecordBuilder::requestingOrganization);
-        practitionerMapper.mapToPerformingPractitioner(message)
-            .ifPresent(pathologyRecordBuilder::performingPractitioner);
-        organizationMapper.mapToPerformingOrganization(message)
-            .ifPresent(pathologyRecordBuilder::performingOrganization);
-        procedureRequestMapper.mapToProcedureRequest(message, patient)
+        requestingPractitioner.ifPresent(pathologyRecordBuilder::requestingPractitioner);
+        requestingOrganization.ifPresent(pathologyRecordBuilder::requestingOrganization);
+        performingPractitioner.ifPresent(pathologyRecordBuilder::performingPractitioner);
+        performingOrganization.ifPresent(pathologyRecordBuilder::performingOrganization);
+        procedureRequestMapper.mapToProcedureRequest(message, patient, requestingPractitioner.orElse(null),
+            requestingOrganization.orElse(null), performingPractitioner.orElse(null),
+            performingOrganization.orElse(null))
             .ifPresent(pathologyRecordBuilder::testRequestSummary);
         pathologyRecordBuilder.specimens(specimenMapper.mapToSpecimens(message, patient));
 

@@ -104,6 +104,14 @@
         "subject": {
           "reference": "urn:uuid:4ad99777-9863-4614-b929-16633f870f23"
         },
+        "requester": {
+          "agent": {
+            "reference": "urn:uuid:7b38873c-978b-461d-8100-a1534afe7103"
+          }
+        },
+        "performer": {
+          "reference": "urn:uuid:254f1964-f0b7-45e6-ae86-ca1c06810705"
+        },
         "note": [
           {
             "text": "TIRED ALL THE TIME, LOW Hb"

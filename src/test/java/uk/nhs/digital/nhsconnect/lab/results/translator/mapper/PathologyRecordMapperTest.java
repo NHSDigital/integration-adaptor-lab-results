@@ -20,6 +20,7 @@ import java.util.Optional;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
@@ -51,7 +52,9 @@ class PathologyRecordMapperTest {
         when(practitionerMapper.mapToRequestingPractitioner(any(Message.class))).thenReturn(Optional.empty());
         when(practitionerMapper.mapToPerformingPractitioner(any(Message.class))).thenReturn(Optional.empty());
         when(patientMapper.mapToPatient(any(Message.class))).thenReturn(new Patient());
-        when(procedureRequestMapper.mapToProcedureRequest(any(Message.class), any(Patient.class)))
+        when(procedureRequestMapper.mapToProcedureRequest(any(Message.class), any(Patient.class),
+            nullable(Practitioner.class), nullable(Organization.class),
+            nullable(Practitioner.class), nullable(Organization.class)))
             .thenReturn(Optional.empty());
         when(specimenMapper.mapToSpecimens(any(Message.class), any(Patient.class))).thenReturn(Collections.emptyList());
     }
@@ -124,7 +127,9 @@ class PathologyRecordMapperTest {
         final Message message = new Message(emptyList());
         var mockProcedureRequest = mock(ProcedureRequest.class);
         reset(procedureRequestMapper);
-        when(procedureRequestMapper.mapToProcedureRequest(eq(message), any(Patient.class)))
+        when(procedureRequestMapper.mapToProcedureRequest(eq(message), any(Patient.class),
+            nullable(Practitioner.class), nullable(Organization.class),
+            nullable(Practitioner.class), nullable(Organization.class)))
             .thenReturn(Optional.of(mockProcedureRequest));
 
         final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
