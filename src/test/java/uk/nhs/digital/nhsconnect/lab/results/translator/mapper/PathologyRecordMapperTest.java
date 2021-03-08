@@ -22,7 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
@@ -54,7 +53,7 @@ class PathologyRecordMapperTest {
         when(practitionerMapper.mapToPerformingPractitioner(any(Message.class))).thenReturn(Optional.empty());
         when(patientMapper.mapToPatient(any(Message.class))).thenReturn(new Patient());
         when(specimenMapper.mapToSpecimens(any(Message.class), any(Patient.class))).thenReturn(Collections.emptyList());
-        lenient().when(diagnosticReportMapper.mapToDiagnosticReport(any(Message.class), any(Patient.class), anyList(),
+        when(diagnosticReportMapper.mapToDiagnosticReport(any(Message.class), any(Patient.class), anyList(),
             any(Practitioner.class), any(Organization.class))).thenReturn(new DiagnosticReport());
     }
 
