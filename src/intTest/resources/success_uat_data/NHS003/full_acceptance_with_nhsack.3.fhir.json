@@ -1,23 +1,23 @@
 {
   "resourceType": "Bundle",
-  "id": "87afc92f-1c58-4b3d-927d-ae2caa607330",
+  "id": "661a0aea-c425-4a80-91cf-de6cc47f7df9",
   "meta": {
-    "lastUpdated": "2021-03-08T09:23:24.896+00:00",
+    "lastUpdated": "2021-03-08T12:43:29.733+00:00",
     "profile": [
       "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"
     ]
   },
   "identifier": {
     "system": "https://tools.ietf.org/html/rfc4122",
-    "value": "f3369cf2-20ee-4f1c-b810-2f0ab8e736fa"
+    "value": "09c2bba4-48d6-4f0d-b4dc-d33ceed8b21d"
   },
   "type": "message",
   "entry": [
     {
-      "fullUrl": "urn:uuid:86158326-c5ba-4d3d-afae-3a1f1908980e",
+      "fullUrl": "urn:uuid:95ec28bb-cb1c-4bec-8321-568be9ae6eca",
       "resource": {
         "resourceType": "Patient",
-        "id": "86158326-c5ba-4d3d-afae-3a1f1908980e",
+        "id": "95ec28bb-cb1c-4bec-8321-568be9ae6eca",
         "identifier": [
           {
             "system": "https://fhir.nhs.uk/Id/nhs-number"
@@ -25,39 +25,55 @@
         ],
         "name": [
           {
-            "family": "ABLE",
+            "family": "TALEBI",
             "given": [
-              "JEREMIAS"
+              "WASEEMA"
             ]
           }
         ],
-        "gender": "male",
-        "birthDate": "1915-12-01"
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:b4382fa1-e7dc-438d-80e5-852f5c648b58",
-      "resource": {
-        "resourceType": "Practitioner",
-        "id": "b4382fa1-e7dc-438d-80e5-852f5c648b58",
-        "identifier": [
+        "gender": "female",
+        "birthDate": "1961-08-14",
+        "address": [
           {
-            "system": "https://fhir.nhs.uk/Id/sds-user-id"
+            "line": [
+              "FLAT2",
+              "40 COPPICE WOOD GROVE",
+              "LEEDS"
+            ],
+            "postalCode": "LS20 9JU"
           }
         ]
       }
     },
     {
-      "fullUrl": "urn:uuid:af1d2678-29a5-41c2-95a8-01616f9f4471",
+      "fullUrl": "urn:uuid:10fa1513-0a76-4296-92ef-06eaa1b3f5c4",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "10fa1513-0a76-4296-92ef-06eaa1b3f5c4",
+        "identifier": [
+          {
+            "system": "https://fhir.nhs.uk/Id/sds-user-id",
+            "value": "G3380314"
+          }
+        ],
+        "name": [
+          {
+            "text": "SCOTT"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:98c26f9a-20c3-4609-80b7-802817717c18",
       "resource": {
         "resourceType": "Organization",
-        "id": "af1d2678-29a5-41c2-95a8-01616f9f4471",
+        "id": "98c26f9a-20c3-4609-80b7-802817717c18",
         "type": [
           {
             "coding": [
               {
                 "code": "dept",
-                "display": "Haematology"
+                "display": "HAEMATOLOGY"
               }
             ]
           }
@@ -66,10 +82,14 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:aed08a29-6511-41e3-b4a5-ce854aa5b1c7",
+      "fullUrl": "urn:uuid:fa1bae56-fc54-48e1-b7a6-6a9060345055",
       "resource": {
         "resourceType": "Specimen",
-        "id": "aed08a29-6511-41e3-b4a5-ce854aa5b1c7",
+        "id": "fa1bae56-fc54-48e1-b7a6-6a9060345055",
+        "accessionIdentifier": {
+          "system": "http://lab.acme.org/specimens/2011",
+          "value": "CH000040NB"
+        },
         "type": {
           "coding": [
             {
@@ -79,12 +99,87 @@
           ]
         },
         "subject": {
-          "reference": "urn:uuid:86158326-c5ba-4d3d-afae-3a1f1908980e"
-        },
-        "receivedTime": "2010-02-24T15:41:00+00:00",
-        "collection": {
-          "collectedDateTime": "2010-02-23"
+          "reference": "urn:uuid:95ec28bb-cb1c-4bec-8321-568be9ae6eca"
         }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:bc127c04-f722-4bff-b3c0-ab2a0b615f9a",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "bc127c04-f722-4bff-b3c0-ab2a0b615f9a",
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "display": "B12/FOLATE"
+            }
+          ]
+        },
+        "comment": "Results repeated Low plasma Folate"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:10313846-52e2-4937-bd59-c92f7529cd4e",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "10313846-52e2-4937-bd59-c92f7529cd4e",
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "42T..",
+              "display": "Serum vitamin B12"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 1001,
+          "unit": "ng/L"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 170
+            },
+            "high": {
+              "value": 1100
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d5c70985-8b33-47c5-b8a4-5dbe110ab43e",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "d5c70985-8b33-47c5-b8a4-5dbe110ab43e",
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "42UE.",
+              "display": "Plasma folate level"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 0.8,
+          "unit": "ng/mL"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 2.0
+            },
+            "high": {
+              "value": 20.0
+            }
+          }
+        ]
       }
     }
   ]

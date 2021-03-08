@@ -108,8 +108,6 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
             );
         }
 
-        assertThat(gpOutboundQueueIsEmpty()).isTrue();
-
         if (ackRequested) {
             assertOutboundNhsAckMessage(workflowId);
         } else {

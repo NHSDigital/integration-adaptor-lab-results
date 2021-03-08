@@ -1,23 +1,23 @@
 {
   "resourceType": "Bundle",
-  "id": "a0826320-7710-45b8-ab00-0dec83107b17",
+  "id": "661a0aea-c425-4a80-91cf-de6cc47f7df9",
   "meta": {
-    "lastUpdated": "2021-03-05T10:36:07.669+00:00",
+    "lastUpdated": "2021-03-08T12:43:29.733+00:00",
     "profile": [
       "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"
     ]
   },
   "identifier": {
     "system": "https://tools.ietf.org/html/rfc4122",
-    "value": "6945d6af-5a7c-42bb-aeb8-1c7fe81e8836"
+    "value": "09c2bba4-48d6-4f0d-b4dc-d33ceed8b21d"
   },
   "type": "message",
   "entry": [
     {
-      "fullUrl": "urn:uuid:d2aeb571-6161-4931-b729-8b00ea694449",
+      "fullUrl": "urn:uuid:95ec28bb-cb1c-4bec-8321-568be9ae6eca",
       "resource": {
         "resourceType": "Patient",
-        "id": "d2aeb571-6161-4931-b729-8b00ea694449",
+        "id": "95ec28bb-cb1c-4bec-8321-568be9ae6eca",
         "identifier": [
           {
             "system": "https://fhir.nhs.uk/Id/nhs-number"
@@ -46,10 +46,10 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:f47017b9-49b4-49cd-8338-aedba04174d4",
+      "fullUrl": "urn:uuid:10fa1513-0a76-4296-92ef-06eaa1b3f5c4",
       "resource": {
         "resourceType": "Practitioner",
-        "id": "f47017b9-49b4-49cd-8338-aedba04174d4",
+        "id": "10fa1513-0a76-4296-92ef-06eaa1b3f5c4",
         "identifier": [
           {
             "system": "https://fhir.nhs.uk/Id/sds-user-id",
@@ -64,10 +64,10 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:3d2f069f-67eb-4b3c-b404-1eb18dfe3027",
+      "fullUrl": "urn:uuid:98c26f9a-20c3-4609-80b7-802817717c18",
       "resource": {
         "resourceType": "Organization",
-        "id": "3d2f069f-67eb-4b3c-b404-1eb18dfe3027",
+        "id": "98c26f9a-20c3-4609-80b7-802817717c18",
         "type": [
           {
             "coding": [
@@ -82,10 +82,10 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:6982fc1f-98a5-4804-9d6b-f1990f30b9cd",
+      "fullUrl": "urn:uuid:fa1bae56-fc54-48e1-b7a6-6a9060345055",
       "resource": {
         "resourceType": "Specimen",
-        "id": "6982fc1f-98a5-4804-9d6b-f1990f30b9cd",
+        "id": "fa1bae56-fc54-48e1-b7a6-6a9060345055",
         "accessionIdentifier": {
           "system": "http://lab.acme.org/specimens/2011",
           "value": "CH000040NB"
@@ -99,8 +99,87 @@
           ]
         },
         "subject": {
-          "reference": "urn:uuid:d2aeb571-6161-4931-b729-8b00ea694449"
+          "reference": "urn:uuid:95ec28bb-cb1c-4bec-8321-568be9ae6eca"
         }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:bc127c04-f722-4bff-b3c0-ab2a0b615f9a",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "bc127c04-f722-4bff-b3c0-ab2a0b615f9a",
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "display": "B12/FOLATE"
+            }
+          ]
+        },
+        "comment": "Results repeated Low plasma Folate"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:10313846-52e2-4937-bd59-c92f7529cd4e",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "10313846-52e2-4937-bd59-c92f7529cd4e",
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "42T..",
+              "display": "Serum vitamin B12"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 1001,
+          "unit": "ng/L"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 170
+            },
+            "high": {
+              "value": 1100
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d5c70985-8b33-47c5-b8a4-5dbe110ab43e",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "d5c70985-8b33-47c5-b8a4-5dbe110ab43e",
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "42UE.",
+              "display": "Plasma folate level"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 0.8,
+          "unit": "ng/mL"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 2.0
+            },
+            "high": {
+              "value": 20.0
+            }
+          }
+        ]
       }
     }
   ]
