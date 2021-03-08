@@ -196,8 +196,8 @@ class BundleMapperTest {
 
         assertAll(
             () -> verifyBundle(bundle),
-            () -> assertThat(procedureRequests).hasSize(1)
-                .contains(mockProcedureRequest),
+            () -> assertThat(procedureRequests)
+                .containsExactly(mockProcedureRequest),
             () -> assertThat(procedureRequestBundleEntries)
                 .extracting(BundleEntryComponent::getFullUrl)
                 .allMatch(FULL_URL::equals)
