@@ -34,6 +34,14 @@ abstract class AbstractArgumentsProvider implements ArgumentsProvider {
             .orElseThrow();
     }
 
+    protected List<String> readResources(List<Resource> resources, String fileEnding) {
+        return resources.stream()
+            .filter(resource -> resource.getFilename() != null)
+            .filter(resource -> resource.getFilename().endsWith(fileEnding))
+            .map(this::readFile)
+            .collect(Collectors.toList());
+    }
+
     @SneakyThrows
     private String readFile(Resource resource) {
         return new String(Files.readAllBytes(resource.getFile().toPath()));

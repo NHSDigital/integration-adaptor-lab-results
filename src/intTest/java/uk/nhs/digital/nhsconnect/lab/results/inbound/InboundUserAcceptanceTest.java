@@ -12,6 +12,7 @@ import org.skyscreamer.jsonassert.comparator.CustomComparator;
 import uk.nhs.digital.nhsconnect.lab.results.IntegrationBaseTest;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessageParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.uat.common.FailureArgumentsProvider;
@@ -34,7 +35,7 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
     static final String ACK_REQUESTED_REGEX = "(?s)^.*UNB\\+UNOC.*\\+\\+1'\\s*UNH.*$";
 
     static final int GP_OUTBOUND_QUEUE_POLLING_DELAY = 2000;
-    static final int GP_OUTBOUND_QUEUE_POLLING_TIMEOUT = 10;
+    static final int GP_OUTBOUND_QUEUE_POLLING_TIMEOUT = 10000;
 
     @BeforeEach
     void beforeEach() {
@@ -50,17 +51,22 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
     }
 
     /**
-     * The test EDIFACT message (.dat file) is sent to the MESH mailbox where the adaptor receives inbound messages.
-     * The test waits for the messages to be processed and compares the FHIR message published to the GP Outbound Queue
-     * with the expected FHIR representation of the original message sent (.json file having the same name as the .dat)
+     * The test EDIFACT message (.edifact.dat file) is sent to the MESH mailbox where the adaptor receives inbound
+     * messages. The test waits for the messages to be processed and compares the FHIR message published to the
+     * GP Outbound Queue with the expected FHIR representation of the original message sent
+     * (.[messageNumber].fhir.json file having the same name as the .dat). The json files must be numbered in the same
+     * order as the messages in the EDIFACT.
+     *
+     * E.g: testMessage.edifact.dat, testMessage.1.fhir.json, testMessage.2.fhir.json
      */
     @ParameterizedTest(name = "[{index}] - {0}")
     @ArgumentsSource(SuccessArgumentsProvider.class)
     void testEdifactIsSuccessfullyProcessedAndPushedToGpOutboundQueue(String category, TestData testData)
             throws JMSException, InterchangeParsingException, MessageParsingException, JSONException {
 
-        final String recipient = getEdifactParser().parse(testData.getEdifact())
-            .getInterchangeHeader().getRecipient();
+        final Interchange interchange = getEdifactParser().parse(testData.getEdifact());
+
+        final String recipient = interchange.getInterchangeHeader().getRecipient();
 
         WorkflowId workflowId;
         if (testData.getEdifact().contains(WorkflowId.PATHOLOGY.getWorkflowId())) {
@@ -78,28 +84,31 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
         getLabResultsMeshClient().sendEdifactMessage(outboundMeshMessage);
 
-        final Message gpOutboundQueueMessage = getGpOutboundQueueMessage();
-        assertThat(gpOutboundQueueMessage).isNotNull();
+        for (String expectedMessageBody: testData.getJsonList()) {
+            Message gpOutboundQueueMessage = getGpOutboundQueueMessage();
+            assertThat(gpOutboundQueueMessage).isNotNull();
 
-        final String correlationId = gpOutboundQueueMessage.getStringProperty(JmsHeaders.CORRELATION_ID);
-        assertThat(correlationId).isNotEmpty();
+            String correlationId = gpOutboundQueueMessage.getStringProperty(JmsHeaders.CORRELATION_ID);
+            assertThat(correlationId).isNotEmpty();
 
-        final String expectedMessageBody = testData.getJson();
-        final String messageBody = parseTextMessage(gpOutboundQueueMessage);
+            String messageBody = parseTextMessage(gpOutboundQueueMessage);
 
-        JSONAssert.assertEquals(
-            expectedMessageBody,
-            messageBody,
-            new CustomComparator(
-                JSONCompareMode.STRICT,
-                new Customization("id", IGNORE),
-                new Customization("meta.lastUpdated", IGNORE),
-                new Customization("identifier.value", IGNORE),
-                new Customization("entry[*].fullUrl", IGNORE),
-                new Customization("entry[*].resource.subject.reference", IGNORE),
-                new Customization("entry[*].resource.id", IGNORE)
-            )
-        );
+            JSONAssert.assertEquals(
+                expectedMessageBody,
+                messageBody,
+                new CustomComparator(
+                    JSONCompareMode.STRICT,
+                    new Customization("id", IGNORE),
+                    new Customization("meta.lastUpdated", IGNORE),
+                    new Customization("identifier.value", IGNORE),
+                    new Customization("entry[*].fullUrl", IGNORE),
+                    new Customization("entry[*].resource.subject.reference", IGNORE),
+                    new Customization("entry[*].resource.id", IGNORE)
+                )
+            );
+        }
+
+        assertThat(gpOutboundQueueIsEmpty()).isTrue();
 
         if (ackRequested) {
             assertOutboundNhsAckMessage(workflowId);
@@ -110,8 +119,8 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
     }
 
     /**
-     * The test EDIFACT message (.dat file) is sent to the MESH mailbox where the adaptor receives inbound messages.
-     * The test waits for the messages to be processed confirms that the outbound queue is empty.
+     * The test EDIFACT message (.edifact.dat file) is sent to the MESH mailbox where the adaptor receives inbound
+     * messages. The test waits for the messages to be processed and confirms that the outbound queue is empty.
      */
     @ParameterizedTest(name = "[{index}] - {0}")
     @ArgumentsSource(FailureArgumentsProvider.class)
@@ -119,8 +128,7 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
         String recipient;
         try {
-            recipient = getEdifactParser().parse(testData.getEdifact())
-                .getInterchangeHeader().getRecipient();
+            recipient = getEdifactParser().parse(testData.getEdifact()).getInterchangeHeader().getRecipient();
         } catch (InterchangeParsingException e) {
             recipient = e.getRecipient();
         } catch (MessageParsingException e) {
@@ -144,7 +152,7 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
         getLabResultsMeshClient().sendEdifactMessage(outboundMeshMessage);
 
         await().pollDelay(GP_OUTBOUND_QUEUE_POLLING_DELAY, TimeUnit.MILLISECONDS)
-            .atMost(GP_OUTBOUND_QUEUE_POLLING_TIMEOUT, TimeUnit.SECONDS)
+            .atMost(GP_OUTBOUND_QUEUE_POLLING_TIMEOUT, TimeUnit.MILLISECONDS)
             .untilAsserted(() -> assertThat(gpOutboundQueueIsEmpty()).isTrue());
 
         if (ackRequested) {
@@ -175,4 +183,5 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
                 throw new IllegalArgumentException(workflowId.name() + " workflow has no corresponding ACK one");
         }
     }
+
 }

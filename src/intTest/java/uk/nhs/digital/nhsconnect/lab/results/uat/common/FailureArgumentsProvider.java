@@ -36,7 +36,7 @@ public class FailureArgumentsProvider extends AbstractArgumentsProvider {
 
         return grouped.entrySet().stream()
             .sorted(Map.Entry.comparingByKey())
-            .map(es -> Arguments.of(es.getKey(), es.getValue()));
+            .map(entry -> Arguments.of(entry.getKey(), entry.getValue()));
     }
 
 }

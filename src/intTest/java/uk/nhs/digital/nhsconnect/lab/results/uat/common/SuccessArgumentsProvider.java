@@ -22,9 +22,9 @@ public class SuccessArgumentsProvider extends AbstractArgumentsProvider {
         var grouped = groupedResources(resources).entrySet()
             .stream()
             .peek(entry -> {
-                if (entry.getValue().size() != 2) {
+                if (entry.getValue().size() < 2) {
                     throw new IllegalStateException(String.format(
-                        "There should be 2 test data files: '<any>%s' and '<any>%s': %s",
+                        "There should be at least 2 test data files: 1 '<any>%s' and at least 1 '<any>%s': %s",
                         EDIFACT_FILE_ENDING, FHIR_FILE_ENDING, entry.getKey()));
                 }
             })
@@ -32,12 +32,12 @@ public class SuccessArgumentsProvider extends AbstractArgumentsProvider {
                 Map.Entry::getKey,
                 entry -> TestData.builder()
                     .edifact(readResource(entry.getValue(), EDIFACT_FILE_ENDING))
-                    .json(readResource(entry.getValue(), FHIR_FILE_ENDING))
+                    .jsonList(readResources(entry.getValue(), FHIR_FILE_ENDING))
                     .build()));
 
         return grouped.entrySet().stream()
             .sorted(Map.Entry.comparingByKey())
-            .map(es -> Arguments.of(es.getKey(), es.getValue()));
+            .map(entry -> Arguments.of(entry.getKey(), entry.getValue()));
     }
 
 }
