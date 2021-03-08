@@ -7,6 +7,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmen
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -33,11 +34,11 @@ class ResultReferenceRangeTest {
         assertThat(rangeDetails)
             .isNotNull()
             .extracting(RangeDetail::getLowerLimit)
-            .isEqualTo(BigDecimal.valueOf(EXPECTED_RANGE_LOWER_LIMIT));
+            .isEqualTo(Optional.of(BigDecimal.valueOf(EXPECTED_RANGE_LOWER_LIMIT)));
         assertThat(rangeDetails)
             .isNotNull()
             .extracting(RangeDetail::getUpperLimit)
-            .isEqualTo(BigDecimal.valueOf(EXPECTED_RANGE_UPPER_LIMIT));
+            .isEqualTo(Optional.of(BigDecimal.valueOf(EXPECTED_RANGE_UPPER_LIMIT)));
     }
 
     @Test
