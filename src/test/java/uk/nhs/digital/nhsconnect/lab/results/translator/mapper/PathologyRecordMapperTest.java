@@ -54,7 +54,7 @@ class PathologyRecordMapperTest {
         when(practitionerMapper.mapToPerformingPractitioner(any(Message.class))).thenReturn(Optional.empty());
         when(patientMapper.mapToPatient(any(Message.class))).thenReturn(new Patient());
         when(specimenMapper.mapToSpecimens(any(Message.class), any(Patient.class))).thenReturn(Collections.emptyList());
-        lenient().when(diagnosticReportMapper.map(any(Message.class), any(Patient.class), anyList(),
+        lenient().when(diagnosticReportMapper.mapToDiagnosticReport(any(Message.class), any(Patient.class), anyList(),
             any(Practitioner.class), any(Organization.class))).thenReturn(new DiagnosticReport());
     }
 

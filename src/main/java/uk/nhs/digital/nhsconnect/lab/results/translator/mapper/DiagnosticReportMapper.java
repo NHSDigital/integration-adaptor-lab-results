@@ -37,7 +37,7 @@ public class DiagnosticReportMapper {
     private final UUIDGenerator uuidGenerator;
     private final ResourceFullUrlGenerator fullUrlGenerator;
 
-    public DiagnosticReport map(final Message message, Patient patient, List<Specimen> specimens,
+    public DiagnosticReport mapToDiagnosticReport(final Message message, Patient patient, List<Specimen> specimens,
                                 Practitioner performingPractitioner,
                                 Organization performingOrganization) {
         DiagnosticReport fhir = new DiagnosticReport();
