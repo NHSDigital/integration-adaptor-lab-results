@@ -9,7 +9,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 /**
- * Example: Details of requesting practitioner
+ * Example: Details of requesting practitioner with identifier
  * <pre>
  * NAD+PO+G3380314:900++SCOTT'
  * SPR+PRO'
@@ -49,9 +49,13 @@ public class RequesterNameAndAddress extends Segment {
         final String[] keySplit = Split.byPlus(edifactString);
         final String[] colonSplit = Split.byColon(keySplit[2]);
 
-        final String identifier = colonSplit[0];
-        final HealthcareRegistrationIdentificationCode code = colonSplit.length > 1 && !colonSplit[1].isEmpty()
-            ? HealthcareRegistrationIdentificationCode.fromCode(colonSplit[1]) : null;
+        String identifier = null;
+        HealthcareRegistrationIdentificationCode code = null;
+        if (colonSplit.length > 1 && StringUtils.isNotBlank(colonSplit[0])) {
+            identifier = colonSplit[0];
+            code = StringUtils.isNotBlank(colonSplit[1])
+                ? HealthcareRegistrationIdentificationCode.fromCode(colonSplit[1]) : null;
+        }
 
         final String name = keySplit[4];
 

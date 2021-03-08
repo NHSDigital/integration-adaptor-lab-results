@@ -87,12 +87,7 @@ class PractitionerMapperTest {
                     .extracting(HumanName::getText)
                     .isEqualTo("Alan Turing"),
                 () -> assertThat(practitioner.getIdentifier())
-                    .hasSize(1)
-                    .first()
-                    .satisfies(identifier -> assertAll(
-                        () -> assertThat(identifier.getValue()).isNull(),
-                        () -> assertThat(identifier.getSystem()).isEqualTo("https://fhir.nhs.uk/Id/sds-user-id")
-                    ))
+                    .hasSize(0)
             ));
     }
 

@@ -50,7 +50,7 @@ class RequesterNameAndAddressTest {
         var requesterResult = RequesterNameAndAddress.fromString(edifactString);
 
         assertAll(
-            () -> assertThat(requesterResult.getIdentifier()).isEmpty(),
+            () -> assertThat(requesterResult.getIdentifier()).isNull(),
             () -> assertThat(requesterResult.getName()).isEqualTo("SMITH"),
             () -> assertThat(requesterResult.getCode()).isNull()
         );
@@ -63,9 +63,9 @@ class RequesterNameAndAddressTest {
         var requesterResult = RequesterNameAndAddress.fromString(edifactString);
 
         assertAll(
-            () -> assertThat(requesterResult.getIdentifier()).isEmpty(),
+            () -> assertThat(requesterResult.getIdentifier()).isNull(),
             () -> assertThat(requesterResult.getName()).isEqualTo("SMITH"),
-            () -> assertThat(requesterResult.getCode()).isEqualTo(HealthcareRegistrationIdentificationCode.GP)
+            () -> assertThat(requesterResult.getCode()).isNull()
         );
     }
 

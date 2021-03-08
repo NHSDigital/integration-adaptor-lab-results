@@ -40,9 +40,9 @@ public class PractitionerMapper {
     private Practitioner mapToPractitioner(final String identifier, final String name) {
         final var result = new Practitioner();
 
-        result.addIdentifier()
-            .setValue(identifier)
-            .setSystem(SDS_USER_SYSTEM);
+        Optional.ofNullable(identifier)
+            .ifPresent(id -> result.addIdentifier().setValue(id).setSystem(SDS_USER_SYSTEM));
+
         Optional.ofNullable(name)
             .ifPresent(n -> result.addName().setText(n));
         result.setId(uuidGenerator.generateUUID());
