@@ -17,12 +17,16 @@ import javax.jms.Message;
 import java.io.IOException;
 import java.nio.file.Files;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Tests the processing of a PATHOLOGY interchange by publishing it onto the inbound MESH message queue.
  * This bypasses the MESH polling loop / MESH Client / MESH API.
  */
 @DirtiesContext
 public class InboundMeshQueueTest extends IntegrationBaseTest {
+
+    private static final String EXPECTED_CHECKSUM = "BAE9833404E34D8F67B3815FC4C51091";
 
     @BeforeEach
     void setUp() {
@@ -43,6 +47,8 @@ public class InboundMeshQueueTest extends IntegrationBaseTest {
         final String content = parseTextMessage(message);
 
         final String expectedContent = new String(Files.readAllBytes(getFhirResource().getFile().toPath()));
+
+        assertThat(message.getStringProperty("Checksum")).isEqualTo(EXPECTED_CHECKSUM);
 
         JSONAssert.assertEquals(
             expectedContent,

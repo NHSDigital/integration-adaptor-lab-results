@@ -1,13 +1,5 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.Mockito.when;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 import org.hl7.fhir.dstu3.model.HumanName;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.junit.jupiter.api.Test;
@@ -15,10 +7,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvolvedParty;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PractitionerMapperTest {
@@ -65,6 +64,30 @@ class PractitionerMapperTest {
                         () -> assertThat(identifier.getValue()).isEqualTo("DEF"),
                         () -> assertThat(identifier.getSystem()).isEqualTo("https://fhir.nhs.uk/Id/sds-user-id")
                     ))
+            ));
+    }
+
+    @Test
+    void testMapMessageToRequestingPractitionerWithRequesterWithoutIdentifier() {
+        final var performingParty = new InvolvedParty(List.of(
+            "ignore me",
+            "NAD+PO+++Alan Turing",
+            "SPR+PRO",
+            "ignore me"
+        ));
+
+        when(message.getInvolvedParties()).thenReturn(List.of(performingParty));
+
+        Optional<Practitioner> requestingPractitioner = mapper.mapToRequestingPractitioner(message);
+        assertThat(requestingPractitioner).isNotEmpty()
+            .hasValueSatisfying(practitioner -> assertAll(
+                () -> assertThat(practitioner.getName())
+                    .hasSize(1)
+                    .first()
+                    .extracting(HumanName::getText)
+                    .isEqualTo("Alan Turing"),
+                () -> assertThat(practitioner.getIdentifier())
+                    .isEmpty()
             ));
     }
 
