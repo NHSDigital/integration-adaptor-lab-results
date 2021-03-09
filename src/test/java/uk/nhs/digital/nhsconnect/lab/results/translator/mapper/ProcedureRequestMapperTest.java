@@ -98,7 +98,7 @@ class ProcedureRequestMapperTest {
     }
 
     @Test
-    void testMapToProcedureRequestFreeTexts() {
+    void testMapToProcedureRequestWithMultipleFreeTextSegments() {
         final Message message = new Message(List.of(
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
