@@ -25,11 +25,8 @@ public class PathologyRecordMapper {
         final var specimens = specimenMapper.mapToSpecimens(message, patient);
         final var performingPractitioner = practitionerMapper.mapToPerformingPractitioner(message);
         final var performingOrganization = organizationMapper.mapToPerformingOrganization(message);
-        final var diagnosticReport = diagnosticReportMapper.mapToDiagnosticReport(message,
-            patient,
-            specimens,
-            performingPractitioner.orElse(null),
-            performingOrganization.orElse(null));
+        final var diagnosticReport = diagnosticReportMapper.mapToDiagnosticReport(message, patient, specimens,
+            performingPractitioner.orElse(null), performingOrganization.orElse(null));
         pathologyRecordBuilder.patient(patient);
         practitionerMapper.mapToRequestingPractitioner(message)
             .ifPresent(pathologyRecordBuilder::requestingPractitioner);

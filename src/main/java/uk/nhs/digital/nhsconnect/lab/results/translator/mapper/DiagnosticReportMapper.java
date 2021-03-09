@@ -59,13 +59,7 @@ public class DiagnosticReportMapper {
         mapSpecimens(specimens, fhir);
         // fhir.performer
         mapPerformer(performingPractitioner, performingOrganization, fhir);
-
-        /*
-            TODO: Add the following
-                - BasedOn - ProcedureReport
-                - Result - Observation
-         */
-
+        /* TODO: Add BasedOn - ProcedureReport & Result - Observation */
         return fhir;
     }
 
@@ -77,9 +71,7 @@ public class DiagnosticReportMapper {
 
     private void mapIdentifier(final Reference reference, final DiagnosticReport fhir) {
         final Identifier identifier = new Identifier();
-
         identifier.setValue(reference.getNumber());
-
         fhir.addIdentifier(identifier);
     }
 
