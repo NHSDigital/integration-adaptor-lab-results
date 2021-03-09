@@ -32,7 +32,7 @@ public class OrganizationMapper {
             .map(InvolvedParty::getRequesterNameAndAddress)
             .flatMap(Optional::stream)
             .findFirst()
-            .map(requester -> mapToOrganization(requester.getOrganizationName(), null));
+            .map(requester -> mapToOrganization(requester.getName(), null));
     }
 
     public Optional<Organization> mapToPerformingOrganization(final Message message) {

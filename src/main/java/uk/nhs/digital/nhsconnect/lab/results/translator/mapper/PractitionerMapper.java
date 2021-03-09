@@ -1,15 +1,14 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
-import java.util.Optional;
-
+import lombok.RequiredArgsConstructor;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import lombok.RequiredArgsConstructor;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvolvedParty;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
+
+import java.util.Optional;
 
 import static uk.nhs.digital.nhsconnect.lab.results.model.edifact.ServiceProviderCode.PROFESSIONAL;
 
@@ -25,7 +24,7 @@ public class PractitionerMapper {
             .filter(party -> party.getServiceProvider().getServiceProviderCode().equals(PROFESSIONAL))
             .map(InvolvedParty::getRequesterNameAndAddress)
             .flatMap(Optional::stream)
-            .map(r -> mapToPractitioner(r.getIdentifier(), r.getPractitionerName()))
+            .map(r -> mapToPractitioner(r.getIdentifier(), r.getName()))
             .findFirst();
     }
 
@@ -41,9 +40,9 @@ public class PractitionerMapper {
     private Practitioner mapToPractitioner(final String identifier, final String name) {
         final var result = new Practitioner();
 
-        result.addIdentifier()
-            .setValue(identifier)
-            .setSystem(SDS_USER_SYSTEM);
+        Optional.ofNullable(identifier)
+            .ifPresent(id -> result.addIdentifier().setValue(id).setSystem(SDS_USER_SYSTEM));
+
         Optional.ofNullable(name)
             .ifPresent(n -> result.addName().setText(n));
         result.setId(uuidGenerator.generateUUID());

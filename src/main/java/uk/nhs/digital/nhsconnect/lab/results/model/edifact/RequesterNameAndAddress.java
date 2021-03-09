@@ -9,9 +9,14 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 /**
- * Example: Details of requesting practitioner
+ * Example: Details of requesting practitioner with identifier
  * <pre>
  * NAD+PO+G3380314:900++SCOTT'
+ * SPR+PRO'
+ * </pre>
+ * Example: Details of requesting practitioner without identifier
+ * <pre>
+ * NAD+PO+++SCOTT'
  * SPR+PRO'
  * </pre>
  * Example: Details of requesting organization
@@ -32,8 +37,7 @@ public class RequesterNameAndAddress extends Segment {
 
     private final String identifier;
     private final HealthcareRegistrationIdentificationCode code;
-    private final String practitionerName;
-    private final String organizationName;
+    private final String name;
 
     @SuppressWarnings("checkstyle:MagicNumber")
     public static RequesterNameAndAddress fromString(final String edifactString) {
@@ -42,26 +46,23 @@ public class RequesterNameAndAddress extends Segment {
                 + " from " + edifactString);
         }
 
-        String[] keySplit = Split.byPlus(edifactString);
-        String identifier = Split.byColon(keySplit[2])[0];
+        final String[] keySplit = Split.byPlus(edifactString);
+        final String[] colonSplit = Split.byColon(keySplit[2]);
 
-        final boolean isOrganization = StringUtils.isBlank(identifier);
-        if (isOrganization) {
-            // if identifier is blank - organization
-            String organizationName = keySplit[4];
-
-            return RequesterNameAndAddress.builder()
-                .organizationName(organizationName)
-                .build();
+        String identifier = null;
+        HealthcareRegistrationIdentificationCode code = null;
+        if (colonSplit.length > 1 && StringUtils.isNotBlank(colonSplit[0])) {
+            identifier = colonSplit[0];
+            code = StringUtils.isNotBlank(colonSplit[1])
+                ? HealthcareRegistrationIdentificationCode.fromCode(colonSplit[1]) : null;
         }
 
-        String code = Split.byColon(keySplit[2])[1];
-        String practitionerName = keySplit[4];
+        final String name = keySplit[4];
 
         return RequesterNameAndAddress.builder()
             .identifier(identifier)
-            .code(HealthcareRegistrationIdentificationCode.fromCode(code))
-            .practitionerName(practitionerName)
+            .code(code)
+            .name(name)
             .build();
     }
 
@@ -72,22 +73,8 @@ public class RequesterNameAndAddress extends Segment {
 
     @Override
     public void validate() throws EdifactValidationException {
-        if (StringUtils.isBlank(identifier)) {
-            if (!StringUtils.isBlank(practitionerName)) {
-                throw new EdifactValidationException(KEY + ": Attribute identifier is required");
-            }
-
-            if (StringUtils.isBlank(organizationName)) {
-                throw new EdifactValidationException(KEY + ": Attribute organizationName is required");
-            }
-        } else {
-            if (code == null) {
-                throw new EdifactValidationException(KEY + ": Attribute code is required");
-            }
-
-            if (StringUtils.isBlank(practitionerName)) {
-                throw new EdifactValidationException(KEY + ": Attribute practitionerName is required");
-            }
+        if (StringUtils.isBlank(name)) {
+            throw new EdifactValidationException(KEY + ": Attribute name is required");
         }
     }
 }
