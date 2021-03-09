@@ -80,7 +80,7 @@ class ProcedureRequestMapperTest {
     }
 
     @Test
-    void testMapToProcedureRequestFreeText() {
+    void testMapToProcedureRequestWithOneFreeTextSegment() {
         final Message message = new Message(List.of(
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
