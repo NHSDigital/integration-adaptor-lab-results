@@ -87,7 +87,7 @@ class PractitionerMapperTest {
                     .extracting(HumanName::getText)
                     .isEqualTo("Alan Turing"),
                 () -> assertThat(practitioner.getIdentifier())
-                    .hasSize(0)
+                    .isEmpty()
             ));
     }
 
