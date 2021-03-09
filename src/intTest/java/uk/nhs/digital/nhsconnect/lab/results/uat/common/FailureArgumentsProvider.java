@@ -31,7 +31,7 @@ public class FailureArgumentsProvider extends AbstractArgumentsProvider {
             .collect(Collectors.toMap(
                 Map.Entry::getKey,
                 entry -> TestData.builder()
-                    .edifact(readResource(entry.getValue(), EDIFACT_FILE_ENDING))
+                    .edifact(readEdifactResource(entry.getValue()))
                     .build()));
 
         return grouped.entrySet().stream()

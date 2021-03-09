@@ -12,7 +12,7 @@ import org.skyscreamer.jsonassert.comparator.CustomComparator;
 import uk.nhs.digital.nhsconnect.lab.results.IntegrationBaseTest;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessageParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.uat.common.FailureArgumentsProvider;
@@ -34,8 +34,8 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
     static final String ACK_REQUESTED_REGEX = "(?s)^.*UNB\\+UNOC.*\\+\\+1'\\s*UNH.*$";
 
-    static final int GP_OUTBOUND_QUEUE_POLLING_DELAY = 2000;
-    static final int GP_OUTBOUND_QUEUE_POLLING_TIMEOUT = 10000;
+    private static final int GP_OUTBOUND_QUEUE_POLLING_DELAY = 2000;
+    private static final int GP_OUTBOUND_QUEUE_POLLING_TIMEOUT = 10000;
 
     @BeforeEach
     void beforeEach() {
@@ -61,26 +61,23 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
      */
     @ParameterizedTest(name = "[{index}] - {0}")
     @ArgumentsSource(SuccessArgumentsProvider.class)
-    void testEdifactIsSuccessfullyProcessedAndPushedToGpOutboundQueue(String category, TestData testData)
+    void testEdifactIsSuccessfullyProcessedAndPushedToGpOutboundQueue(String testGroupName, TestData testData)
             throws JMSException, InterchangeParsingException, MessageParsingException, JSONException {
 
-        final Interchange interchange = getEdifactParser().parse(testData.getEdifact());
+        final String edifact = testData.getEdifact();
 
-        final String recipient = interchange.getInterchangeHeader().getRecipient();
+        final InterchangeHeader interchangeHeader = getEdifactParser().parse(edifact).getInterchangeHeader();
 
-        WorkflowId workflowId;
-        if (testData.getEdifact().contains(WorkflowId.PATHOLOGY.getWorkflowId())) {
-            workflowId = WorkflowId.PATHOLOGY;
-        } else if (testData.getEdifact().contains(WorkflowId.SCREENING.getWorkflowId())) {
-            workflowId = WorkflowId.SCREENING;
-        } else {
-            throw new RuntimeException("Unsupported Workflow ID");
-        }
+        final String recipient = interchangeHeader.getRecipient();
 
-        final boolean ackRequested = testData.getEdifact().matches(ACK_REQUESTED_REGEX);
+        final String sender = interchangeHeader.getSender();
+
+        final WorkflowId workflowId = getEdifactWorkflowId(edifact);
+
+        final boolean ackRequested = edifact.matches(ACK_REQUESTED_REGEX);
 
         final OutboundMeshMessage outboundMeshMessage = OutboundMeshMessage.create(recipient,
-            workflowId, testData.getEdifact(), null);
+            workflowId, edifact, null);
 
         getLabResultsMeshClient().sendEdifactMessage(outboundMeshMessage);
 
@@ -109,7 +106,7 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
         }
 
         if (ackRequested) {
-            assertOutboundNhsAckMessage(workflowId);
+            assertOutboundNhsAckMessage(workflowId, recipient, sender);
         } else {
             assertThat(getMeshClient().getInboxMessageIds()).isEmpty();
         }
@@ -122,30 +119,31 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
      */
     @ParameterizedTest(name = "[{index}] - {0}")
     @ArgumentsSource(FailureArgumentsProvider.class)
-    void testEdifactFailsToBeProcessedAndNothingPushedToGpOutboundQueue(String category, TestData testData) {
+    void testEdifactFailsToBeProcessedAndNothingPushedToGpOutboundQueue(String testGroupName, TestData testData)
+        throws InterchangeParsingException, MessageParsingException {
+
+        final String edifact = testData.getEdifact();
 
         String recipient;
+        String sender;
         try {
-            recipient = getEdifactParser().parse(testData.getEdifact()).getInterchangeHeader().getRecipient();
+            InterchangeHeader interchangeHeader = getEdifactParser().parse(edifact).getInterchangeHeader();
+            recipient = interchangeHeader.getRecipient();
+            sender = interchangeHeader.getSender();
         } catch (InterchangeParsingException e) {
             recipient = e.getRecipient();
+            sender = e.getSender();
         } catch (MessageParsingException e) {
             recipient = e.getRecipient();
+            sender = e.getSender();
         }
 
-        WorkflowId workflowId;
-        if (testData.getEdifact().contains(WorkflowId.PATHOLOGY.getWorkflowId())) {
-            workflowId = WorkflowId.PATHOLOGY;
-        } else if (testData.getEdifact().contains(WorkflowId.SCREENING.getWorkflowId())) {
-            workflowId = WorkflowId.SCREENING;
-        } else {
-            throw new RuntimeException("Unsupported Workflow ID");
-        }
+        final WorkflowId workflowId = getEdifactWorkflowId(edifact);
 
-        final boolean ackRequested = testData.getEdifact().matches(ACK_REQUESTED_REGEX);
+        final boolean ackRequested = edifact.matches(ACK_REQUESTED_REGEX);
 
         final OutboundMeshMessage outboundMeshMessage = OutboundMeshMessage.create(recipient,
-            workflowId, testData.getEdifact(), null);
+            workflowId, edifact, null);
 
         getLabResultsMeshClient().sendEdifactMessage(outboundMeshMessage);
 
@@ -154,14 +152,17 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
             .untilAsserted(() -> assertThat(gpOutboundQueueIsEmpty()).isTrue());
 
         if (ackRequested) {
-            assertOutboundNhsAckMessage(workflowId);
+            assertOutboundNhsAckMessage(workflowId, recipient, sender);
         } else {
             assertThat(getMeshClient().getInboxMessageIds()).isEmpty();
         }
 
     }
 
-    private void assertOutboundNhsAckMessage(WorkflowId edifactWorkflowId) {
+    private void assertOutboundNhsAckMessage(WorkflowId edifactWorkflowId,
+                                             String edifactRecipient,
+                                             String edifactSender)
+        throws InterchangeParsingException, MessageParsingException {
         final var nhsAck = waitForMeshMessage(getMeshClient());
 
         assertThat(nhsAck).isNotNull();
@@ -169,6 +170,27 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
         WorkflowId nhsAckWorkflowID = getNhsAckWorkflowId(edifactWorkflowId);
 
         assertThat(nhsAck.getWorkflowId()).isEqualTo(nhsAckWorkflowID);
+
+        InterchangeHeader nhsAckInterchangeHeader = getEdifactParser().parse(nhsAck.getContent())
+            .getInterchangeHeader();
+
+        String nhsAckSender = nhsAckInterchangeHeader.getSender();
+
+        String nhsAckRecipient = nhsAckInterchangeHeader.getRecipient();
+
+        assertThat(edifactSender).isEqualTo(nhsAckRecipient);
+
+        assertThat(edifactRecipient).isEqualTo(nhsAckSender);
+    }
+
+    private WorkflowId getEdifactWorkflowId(String edifact) {
+        if (edifact.contains(WorkflowId.PATHOLOGY.getWorkflowId())) {
+            return WorkflowId.PATHOLOGY;
+        } else if (edifact.contains(WorkflowId.SCREENING.getWorkflowId())) {
+            return WorkflowId.SCREENING;
+        } else {
+            throw new RuntimeException("Unsupported Workflow ID");
+        }
     }
 
     private WorkflowId getNhsAckWorkflowId(WorkflowId workflowId) {

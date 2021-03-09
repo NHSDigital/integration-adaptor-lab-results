@@ -31,8 +31,8 @@ public class SuccessArgumentsProvider extends AbstractArgumentsProvider {
             .collect(Collectors.toMap(
                 Map.Entry::getKey,
                 entry -> TestData.builder()
-                    .edifact(readResource(entry.getValue(), EDIFACT_FILE_ENDING))
-                    .jsonList(readResources(entry.getValue(), FHIR_FILE_ENDING))
+                    .edifact(readEdifactResource(entry.getValue()))
+                    .jsonList(readJSONResources(entry.getValue()))
                     .build()));
 
         return grouped.entrySet().stream()

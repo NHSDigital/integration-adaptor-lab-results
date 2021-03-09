@@ -25,19 +25,19 @@ abstract class AbstractArgumentsProvider implements ArgumentsProvider {
 
     public abstract Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception;
 
-    protected String readResource(List<Resource> resources, String fileEnding) {
+    protected String readEdifactResource(List<Resource> resources) {
         return resources.stream()
             .filter(resource -> resource.getFilename() != null)
-            .filter(resource -> resource.getFilename().endsWith(fileEnding))
+            .filter(resource -> resource.getFilename().endsWith(AbstractArgumentsProvider.EDIFACT_FILE_ENDING))
             .map(this::readFile)
             .findFirst()
             .orElseThrow();
     }
 
-    protected List<String> readResources(List<Resource> resources, String fileEnding) {
+    protected List<String> readJSONResources(List<Resource> resources) {
         return resources.stream()
             .filter(resource -> resource.getFilename() != null)
-            .filter(resource -> resource.getFilename().endsWith(fileEnding))
+            .filter(resource -> resource.getFilename().endsWith(AbstractArgumentsProvider.FHIR_FILE_ENDING))
             .map(this::readFile)
             .collect(Collectors.toList());
     }
@@ -55,6 +55,7 @@ abstract class AbstractArgumentsProvider implements ArgumentsProvider {
 
     protected Map<String, List<Resource>> groupedResources(Resource[] resources) {
         return Arrays.stream(resources)
+            .filter(r -> r.getFilename() != null)
             .filter(r -> !r.getFilename().endsWith("txt")) // ignore notes
             .filter(r -> !r.getFilename().contains("ignore")) // ignore ignored
             .collect(Collectors.groupingBy(resource -> {
