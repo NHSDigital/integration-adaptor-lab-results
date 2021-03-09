@@ -42,7 +42,7 @@ class InvolvedPartyTest {
         var requesterNameAndAddress = involvedParty.getRequesterNameAndAddress();
         assertThat(requesterNameAndAddress)
             .isPresent()
-            .map(RequesterNameAndAddress::getPractitionerName)
+            .map(RequesterNameAndAddress::getName)
             .hasValue("SCOTT");
         assertThat(requesterNameAndAddress)
             .isPresent()

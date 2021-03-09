@@ -8,23 +8,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RequesterNameAndAddressTest {
 
-    private final RequesterNameAndAddress requestingPractitioner = RequesterNameAndAddress.builder()
+    private final RequesterNameAndAddress requesterNameAndAddress = RequesterNameAndAddress.builder()
         .identifier("ABC")
         .code(HealthcareRegistrationIdentificationCode.GP)
-        .practitionerName("SMITH")
-        .organizationName(null)
-        .build();
-
-    private final RequesterNameAndAddress requestingOrganization = RequesterNameAndAddress.builder()
-        .identifier(null)
-        .code(null)
-        .practitionerName(null)
-        .organizationName("MATTHEW?'s GP")
+        .name("SMITH")
         .build();
 
     @Test
@@ -36,14 +27,7 @@ class RequesterNameAndAddressTest {
     void when_edifactStringIsPassed_expect_returnARequesterObject() {
         assertThat(RequesterNameAndAddress.fromString("NAD+PO+ABC:900++SMITH"))
             .usingRecursiveComparison()
-            .isEqualTo(requestingPractitioner);
-    }
-
-    @Test
-    void when_edifactStringIsPassed_expect_returnARequestingOrganizationObject() {
-        assertThat(RequesterNameAndAddress.fromString("NAD+PO+++MATTHEW?'s GP"))
-            .usingRecursiveComparison()
-            .isEqualTo(requestingOrganization);
+            .isEqualTo(requesterNameAndAddress);
     }
 
     @Test
@@ -54,90 +38,71 @@ class RequesterNameAndAddressTest {
 
         assertAll(
             () -> assertThat(requesterResult.getIdentifier()).isEqualTo("ABC"),
-            () -> assertThat(requesterResult.getPractitionerName()).isEqualTo("SMITH"),
-            () -> assertThat(requesterResult.getCode()).isEqualTo(HealthcareRegistrationIdentificationCode.GP),
-            () -> assertNull(requesterResult.getOrganizationName())
+            () -> assertThat(requesterResult.getName()).isEqualTo("SMITH"),
+            () -> assertThat(requesterResult.getCode()).isEqualTo(HealthcareRegistrationIdentificationCode.GP)
         );
     }
 
     @Test
-    void when_parsingEdifactStringToRequestingOrganizationObject_expect_returnCorrectRequestingOrganizationObject() {
-        String edifactString = "NAD+PO+++MATTHEW?'s GP";
+    void when_parsingEdifactStringToRequesterObjectWithoutIdentifierAndCode_expect_returnCorrectRequesterObject() {
+        String edifactString = "NAD+PO+++SMITH";
 
-        var requestingOrganizationResult = RequesterNameAndAddress.fromString(edifactString);
+        var requesterResult = RequesterNameAndAddress.fromString(edifactString);
 
         assertAll(
-            () -> assertNull(requestingOrganizationResult.getIdentifier()),
-            () -> assertNull(requestingOrganizationResult.getPractitionerName()),
-            () -> assertNull(requestingOrganizationResult.getCode()),
-            () -> assertThat(requestingOrganizationResult.getOrganizationName()).isEqualTo("MATTHEW?'s GP")
+            () -> assertThat(requesterResult.getIdentifier()).isNull(),
+            () -> assertThat(requesterResult.getName()).isEqualTo("SMITH"),
+            () -> assertThat(requesterResult.getCode()).isNull()
         );
     }
+
+    @Test
+    void when_parsingEdifactStringToRequesterObjectWithoutIdentifier_expect_returnCorrectRequesterObject() {
+        String edifactString = "NAD+PO+:900++SMITH";
+
+        var requesterResult = RequesterNameAndAddress.fromString(edifactString);
+
+        assertAll(
+            () -> assertThat(requesterResult.getIdentifier()).isNull(),
+            () -> assertThat(requesterResult.getName()).isEqualTo("SMITH"),
+            () -> assertThat(requesterResult.getCode()).isNull()
+        );
+    }
+
+    @Test
+    void when_parsingEdifactStringToRequesterObjectWithoutCode_expect_returnCorrectRequesterObject() {
+        String edifactString = "NAD+PO+ABC:++SMITH";
+
+        var requesterResult = RequesterNameAndAddress.fromString(edifactString);
+
+        assertAll(
+            () -> assertThat(requesterResult.getIdentifier()).isEqualTo("ABC"),
+            () -> assertThat(requesterResult.getName()).isEqualTo("SMITH"),
+            () -> assertThat(requesterResult.getCode()).isNull()
+        );
+    }
+
 
     @Test
     void testGetKey() {
-        assertEquals(requestingPractitioner.getKey(), "NAD");
+        assertEquals(requesterNameAndAddress.getKey(), "NAD");
     }
 
     @Test
     void testValidateDoesNotThrowException() {
-        assertDoesNotThrow(requestingPractitioner::validate);
-        assertDoesNotThrow(requestingOrganization::validate);
+        assertDoesNotThrow(requesterNameAndAddress::validate);
     }
 
     @Test
-    void testValidateMissingIdentifier() {
-        RequesterNameAndAddress emptyIdentifier = RequesterNameAndAddress.builder()
-            .identifier(null)
-            .code(HealthcareRegistrationIdentificationCode.GP)
-            .practitionerName("SMITH")
-            .organizationName(null)
-            .build();
-
-        assertThatThrownBy(emptyIdentifier::validate)
-            .isExactlyInstanceOf(EdifactValidationException.class)
-            .hasMessage("NAD: Attribute identifier is required");
-    }
-
-    @Test
-    void testValidateMissingCode() {
-        RequesterNameAndAddress emptyCode = RequesterNameAndAddress.builder()
-            .identifier("ABC")
-            .code(null)
-            .practitionerName("SMITH")
-            .organizationName(null)
-            .build();
-
-        assertThatThrownBy(emptyCode::validate)
-            .isExactlyInstanceOf(EdifactValidationException.class)
-            .hasMessage("NAD: Attribute code is required");
-    }
-
-    @Test
-    void testValidateMissingPractitionerName() {
+    void testValidateMissingName() {
         RequesterNameAndAddress emptyRequesterName = RequesterNameAndAddress.builder()
             .identifier("ABC")
             .code(HealthcareRegistrationIdentificationCode.GP)
-            .practitionerName(null)
-            .organizationName(null)
+            .name(null)
             .build();
 
         assertThatThrownBy(emptyRequesterName::validate)
             .isExactlyInstanceOf(EdifactValidationException.class)
-            .hasMessage("NAD: Attribute practitionerName is required");
-    }
-
-    @Test
-    void testValidateMissingOrganizationName() {
-        RequesterNameAndAddress emptyRequestingOrganizationName = RequesterNameAndAddress.builder()
-            .identifier(null)
-            .code(null)
-            .practitionerName(null)
-            .organizationName(null)
-            .build();
-
-        assertThatThrownBy(emptyRequestingOrganizationName::validate)
-            .isExactlyInstanceOf(EdifactValidationException.class)
-            .hasMessage("NAD: Attribute organizationName is required");
+            .hasMessage("NAD: Attribute name is required");
     }
 }
