@@ -75,7 +75,6 @@ public class InboundMessageHandler {
         messageProcessingResults.stream()
             .filter(MessageProcessingResult.Success.class::isInstance)
             .map(MessageProcessingResult.Success.class::cast)
-            .map(MessageProcessingResult.Success::getBundle)
             .forEach(gpOutboundQueueService::publish);
 
         logSentFor(interchange);

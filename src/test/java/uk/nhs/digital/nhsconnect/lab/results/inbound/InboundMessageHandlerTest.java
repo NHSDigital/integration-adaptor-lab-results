@@ -91,7 +91,7 @@ class InboundMessageHandlerTest {
         assertAll(
             () -> verify(edifactParser).parse(any()),
             () -> verify(edifactToFhirService, never()).convertToFhir(any(Message.class)),
-            () -> verify(gpOutboundQueueService, never()).publish(any(Bundle.class)),
+            () -> verify(gpOutboundQueueService, never()).publish(any(MessageProcessingResult.Success.class)),
             () -> verify(outboundMeshMessageBuilder, never()).buildNhsAck(any(), any(), anyList()),
             () -> verify(meshOutboundQueueService).publish(outboundMeshMessage)
         );
@@ -114,7 +114,7 @@ class InboundMessageHandlerTest {
         assertAll(
             () -> verify(edifactParser).parse(any()),
             () -> verify(edifactToFhirService, never()).convertToFhir(any(Message.class)),
-            () -> verify(gpOutboundQueueService, never()).publish(any(Bundle.class)),
+            () -> verify(gpOutboundQueueService, never()).publish(any(MessageProcessingResult.Success.class)),
             () -> verify(outboundMeshMessageBuilder, never()).buildNhsAck(any(), any(), anyList()),
             () -> verify(meshOutboundQueueService).publish(outboundMeshMessage)
         );
@@ -139,7 +139,7 @@ class InboundMessageHandlerTest {
         assertAll(
             () -> verify(edifactParser).parse(any()),
             () -> verify(edifactToFhirService, never()).convertToFhir(any(Message.class)),
-            () -> verify(gpOutboundQueueService, never()).publish(any(Bundle.class)),
+            () -> verify(gpOutboundQueueService, never()).publish(any(MessageProcessingResult.Success.class)),
             () -> verify(outboundMeshMessageBuilder)
                 .buildNhsAck(WorkflowId.PATHOLOGY, interchange, Collections.emptyList()),
             () -> verify(meshOutboundQueueService).publish(outboundMeshMessage)
@@ -166,7 +166,7 @@ class InboundMessageHandlerTest {
         assertAll(
             () -> verify(edifactParser).parse(any()),
             () -> verify(edifactToFhirService).convertToFhir(message),
-            () -> verify(gpOutboundQueueService).publish(any(Bundle.class)),
+            () -> verify(gpOutboundQueueService).publish(any(MessageProcessingResult.Success.class)),
             () -> verify(outboundMeshMessageBuilder).buildNhsAck(any(), eq(interchange), anyList()),
             () -> verify(meshOutboundQueueService).publish(outboundMeshMessage)
         );
@@ -195,7 +195,8 @@ class InboundMessageHandlerTest {
             () -> verify(edifactParser).parse(any()),
             () -> verify(edifactToFhirService).convertToFhir(message),
             () -> verify(edifactToFhirService).convertToFhir(message1),
-            () -> verify(gpOutboundQueueService, times(2)).publish(any(Bundle.class)),
+            () -> verify(gpOutboundQueueService, times(2))
+                .publish(any(MessageProcessingResult.Success.class)),
             () -> verify(outboundMeshMessageBuilder).buildNhsAck(any(), eq(interchange), anyList()),
             () -> verify(meshOutboundQueueService).publish(outboundMeshMessage)
         );
@@ -231,7 +232,8 @@ class InboundMessageHandlerTest {
             () -> verify(edifactParser).parse(any()),
             () -> verify(edifactToFhirService).convertToFhir(message),
             () -> verify(edifactToFhirService).convertToFhir(message1),
-            () -> verify(gpOutboundQueueService, times(2)).publish(any(Bundle.class)),
+            () -> verify(gpOutboundQueueService, times(2))
+                .publish(any(MessageProcessingResult.Success.class)),
             () -> verify(outboundMeshMessageBuilder, never()).buildNhsAck(any(), any(), anyList()),
             () -> verify(meshOutboundQueueService, never()).publish(any())
         );
@@ -251,7 +253,7 @@ class InboundMessageHandlerTest {
 
         assertAll(
             () -> verify(edifactParser).parse(any()),
-            () -> verify(gpOutboundQueueService, never()).publish(any(Bundle.class)),
+            () -> verify(gpOutboundQueueService, never()).publish(any(MessageProcessingResult.Success.class)),
             () -> verify(outboundMeshMessageBuilder).buildNhsAck(any(), (InterchangeParsingException) any()),
             () -> verify(meshOutboundQueueService).publish(any())
         );
@@ -271,7 +273,7 @@ class InboundMessageHandlerTest {
 
         assertAll(
             () -> verify(edifactParser).parse(any()),
-            () -> verify(gpOutboundQueueService, never()).publish(any(Bundle.class)),
+            () -> verify(gpOutboundQueueService, never()).publish(any(MessageProcessingResult.Success.class)),
             () -> verify(outboundMeshMessageBuilder).buildNhsAck(any(), (MessageParsingException) any()),
             () -> verify(meshOutboundQueueService).publish(any())
         );
