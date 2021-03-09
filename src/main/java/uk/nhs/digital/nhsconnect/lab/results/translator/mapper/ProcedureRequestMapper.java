@@ -1,5 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.hl7.fhir.dstu3.model.Annotation;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
@@ -41,78 +42,81 @@ public class ProcedureRequestMapper {
         Practitioner performingPractitioner,
         Organization performingOrganization
     ) {
-        return message.getServiceReportDetails().getSubject().getClinicalInfo()
-            .map(clinicalInfo -> mapPatientClinicalInfo(clinicalInfo, patient, requestingPractitioner,
-                requestingOrganization, performingPractitioner, performingOrganization));
+        return new InternalMapper(message, patient, requestingPractitioner,
+            requestingOrganization, performingPractitioner, performingOrganization).map();
     }
 
-    private ProcedureRequest mapPatientClinicalInfo(
-        final PatientClinicalInfo patientClinicalInfo,
-        Patient patient, Practitioner requestingPractitioner,
-        Organization requestingOrganization,
-        Practitioner performingPractitioner,
-        Organization performingOrganization
-    ) {
-        final ProcedureRequest procedureRequest = new ProcedureRequest();
+    @AllArgsConstructor
+    private class InternalMapper {
+        private final Message message;
+        private final Patient patient;
+        private final Practitioner requestingPractitioner;
+        private final Organization requestingOrganization;
+        private final Practitioner performingPractitioner;
+        private final Organization performingOrganization;
 
-        mapFreeText(patientClinicalInfo, procedureRequest);
-        mapStatus(patientClinicalInfo, procedureRequest);
-        procedureRequest.setIntent(ProcedureRequestIntent.NULL);
-        procedureRequest.setCode(new CodeableConcept().setText("unknown"));
-        procedureRequest.setId(uuidGenerator.generateUUID());
-        procedureRequest.getSubject().setReference(fullUrlGenerator.generate(patient));
-        setRequesterReference(requestingPractitioner, requestingOrganization, procedureRequest);
-        setPerformerReference(performingPractitioner, performingOrganization, procedureRequest);
-
-        return procedureRequest;
-    }
-
-    private void mapFreeText(final PatientClinicalInfo patientClinicalInfo, final ProcedureRequest procedureRequest) {
-        List<FreeTextSegment> patientClinicalInfoFreeTexts = patientClinicalInfo.getFreeTexts();
-
-        if (patientClinicalInfoFreeTexts.isEmpty()) {
-            throw new FhirValidationException("Unable to map message. "
-                + "The FreeText segment is mandatory in Clinical Information");
+        public Optional<ProcedureRequest> map() {
+            return message.getServiceReportDetails().getSubject().getClinicalInfo()
+                .map(this::mapPatientClinicalInfo);
         }
 
-        final List<Annotation> annotations = patientClinicalInfoFreeTexts.stream()
-            .map(FreeTextSegment::getTexts)
-            .map(texts -> String.join(" ", texts))
-            .map(MappingUtils::unescape)
-            .map(text -> new Annotation().setText(text))
-            .collect(Collectors.toList());
+        private ProcedureRequest mapPatientClinicalInfo(PatientClinicalInfo patientClinicalInfo) {
+            final ProcedureRequest procedureRequest = new ProcedureRequest();
 
-        procedureRequest.setNote(annotations);
-    }
+            mapFreeText(patientClinicalInfo, procedureRequest);
+            mapStatus(patientClinicalInfo, procedureRequest);
+            procedureRequest.setIntent(ProcedureRequestIntent.NULL);
+            procedureRequest.setCode(new CodeableConcept().setText("unknown"));
+            procedureRequest.setId(uuidGenerator.generateUUID());
+            procedureRequest.getSubject().setReference(fullUrlGenerator.generate(patient));
+            setRequesterReference(procedureRequest);
+            setPerformerReference(procedureRequest);
 
-    private void mapStatus(final PatientClinicalInfo patientClinicalInfo, final ProcedureRequest procedureRequest) {
-        procedureRequest.setStatus(STATUS_CODE_MAPPING.get(
-            ReportStatusCode.fromCode(patientClinicalInfo.getCode().getCode())));
-    }
-
-    private void setRequesterReference(
-        Practitioner requestingPractitioner,
-        Organization requestingOrganization,
-        final ProcedureRequest procedureRequest
-    ) {
-        if (requestingOrganization != null) {
-            procedureRequest.getRequester().getAgent()
-                .setReference(fullUrlGenerator.generate(requestingOrganization));
-        } else if (requestingPractitioner != null) {
-            procedureRequest.getRequester().getAgent()
-                .setReference(fullUrlGenerator.generate(requestingPractitioner));
+            return procedureRequest;
         }
-    }
 
-    private void setPerformerReference(
-        Practitioner performingPractitioner,
-        Organization performingOrganization,
-        final ProcedureRequest procedureRequest
-    ) {
-        if (performingOrganization != null) {
-            procedureRequest.getPerformer().setReference(fullUrlGenerator.generate(performingOrganization));
-        } else if (performingPractitioner != null) {
-            procedureRequest.getPerformer().setReference(fullUrlGenerator.generate(performingPractitioner));
+        private void mapFreeText(
+            final PatientClinicalInfo patientClinicalInfo,
+            final ProcedureRequest procedureRequest
+        ) {
+            List<FreeTextSegment> patientClinicalInfoFreeTexts = patientClinicalInfo.getFreeTexts();
+
+            if (patientClinicalInfoFreeTexts.isEmpty()) {
+                throw new FhirValidationException("Unable to map message. "
+                    + "The FreeText segment is mandatory in Clinical Information");
+            }
+
+            final List<Annotation> annotations = patientClinicalInfoFreeTexts.stream()
+                .map(FreeTextSegment::getTexts)
+                .map(texts -> String.join(" ", texts))
+                .map(MappingUtils::unescape)
+                .map(text -> new Annotation().setText(text))
+                .collect(Collectors.toList());
+
+            procedureRequest.setNote(annotations);
+        }
+
+        private void mapStatus(final PatientClinicalInfo patientClinicalInfo, final ProcedureRequest procedureRequest) {
+            procedureRequest.setStatus(STATUS_CODE_MAPPING.get(
+                ReportStatusCode.fromCode(patientClinicalInfo.getCode().getCode())));
+        }
+
+        private void setRequesterReference(final ProcedureRequest procedureRequest) {
+            if (requestingOrganization != null) {
+                procedureRequest.getRequester().getAgent()
+                    .setReference(fullUrlGenerator.generate(requestingOrganization));
+            } else if (requestingPractitioner != null) {
+                procedureRequest.getRequester().getAgent()
+                    .setReference(fullUrlGenerator.generate(requestingPractitioner));
+            }
+        }
+
+        private void setPerformerReference(final ProcedureRequest procedureRequest) {
+            if (performingOrganization != null) {
+                procedureRequest.getPerformer().setReference(fullUrlGenerator.generate(performingOrganization));
+            } else if (performingPractitioner != null) {
+                procedureRequest.getPerformer().setReference(fullUrlGenerator.generate(performingPractitioner));
+            }
         }
     }
 }
