@@ -178,9 +178,9 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
         String nhsAckRecipient = nhsAckInterchangeHeader.getRecipient();
 
-        assertThat(edifactSender).isEqualTo(nhsAckRecipient);
+        assertThat(nhsAckRecipient).isEqualTo(edifactSender);
 
-        assertThat(edifactRecipient).isEqualTo(nhsAckSender);
+        assertThat(nhsAckSender).isEqualTo(edifactRecipient);
     }
 
     private WorkflowId getEdifactWorkflowId(String edifact) {
