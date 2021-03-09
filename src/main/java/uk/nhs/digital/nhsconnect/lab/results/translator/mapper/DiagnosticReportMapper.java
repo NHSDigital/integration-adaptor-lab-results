@@ -3,6 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 import lombok.RequiredArgsConstructor;
 import org.hl7.fhir.dstu3.model.DiagnosticReport;
 import org.hl7.fhir.dstu3.model.Identifier;
+import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
@@ -38,8 +39,8 @@ public class DiagnosticReportMapper {
     private final ResourceFullUrlGenerator fullUrlGenerator;
 
     public DiagnosticReport mapToDiagnosticReport(final Message message, Patient patient, List<Specimen> specimens,
-                                Practitioner performingPractitioner,
-                                Organization performingOrganization) {
+                                                  List<Observation> observations, Practitioner performingPractitioner,
+                                                  Organization performingOrganization) {
         DiagnosticReport fhir = new DiagnosticReport();
         fhir.setId(uuidGenerator.generateUUID());
 
@@ -57,6 +58,8 @@ public class DiagnosticReportMapper {
         fhir.getSubject().setReference(fullUrlGenerator.generate(patient));
         // fhir.specimens
         mapSpecimens(specimens, fhir);
+        // fhir.results
+        mapObservations(observations, fhir);
         // fhir.performer
         mapPerformer(performingPractitioner, performingOrganization, fhir);
         /* TODO: Add BasedOn - ProcedureReport & Result - Observation */
@@ -93,5 +96,10 @@ public class DiagnosticReportMapper {
             fhir.addPerformer().getActor().setReference(fullUrlGenerator.generate(organization)));
         Optional.ofNullable(performingPractitioner).ifPresent(performer ->
             fhir.addPerformer().getActor().setReference(fullUrlGenerator.generate(performer)));
+    }
+
+    private void mapObservations(final List<Observation> observations, final DiagnosticReport fhir) {
+        Optional.ofNullable(observations).ifPresent(
+            obs -> obs.forEach(observation -> fhir.addResult().setReference(fullUrlGenerator.generate(observation))));
     }
 }

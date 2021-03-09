@@ -1,6 +1,7 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
 import org.hl7.fhir.dstu3.model.DiagnosticReport;
+import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
@@ -50,7 +51,7 @@ class DiagnosticReportMapperTest {
             "S06+06" // InvestigationSubject
         ));
 
-        assertThatThrownBy(() -> mapper.mapToDiagnosticReport(message, null, null, null, null))
+        assertThatThrownBy(() -> mapper.mapToDiagnosticReport(message, null, null, null, null, null))
             .isExactlyInstanceOf(MissingSegmentException.class)
             .hasMessageStartingWith("EDIFACT section is missing segment");
     }
@@ -65,7 +66,7 @@ class DiagnosticReportMapperTest {
             "DTM+ISR:201002251541:203"
         ));
 
-        final var result = mapper.mapToDiagnosticReport(message, null, null, null, null);
+        final var result = mapper.mapToDiagnosticReport(message, null, null, null, null, null);
         ZonedDateTime dateIssued = LocalDateTime.of(2010, 02, 25, 15, 41).atZone(TimestampService.UK_ZONE);
 
         assertAll(
@@ -100,7 +101,7 @@ class DiagnosticReportMapperTest {
         final var patient = mock(Patient.class);
         when(resourceFullUrlGenerator.generate(any(Patient.class))).thenReturn("patient-full-url");
 
-        final var result = mapper.mapToDiagnosticReport(message, patient, null, null, null);
+        final var result = mapper.mapToDiagnosticReport(message, patient, null, null, null, null);
 
         assertAll(
             () -> assertThat(result.getSubject())
@@ -123,7 +124,7 @@ class DiagnosticReportMapperTest {
         final var specimen2 = mock(Specimen.class);
 
         when(resourceFullUrlGenerator.generate(nullable(Specimen.class))).thenReturn("some-specimen-id");
-        final var result = mapper.mapToDiagnosticReport(message, null, List.of(specimen1, specimen2), null, null);
+        final var result = mapper.mapToDiagnosticReport(message, null, List.of(specimen1, specimen2), null, null, null);
 
         assertAll(
             () -> assertThat(result.getSpecimen()).hasSize(2),
@@ -135,6 +136,36 @@ class DiagnosticReportMapperTest {
                 .element(1)
                 .extracting(Reference::getReference)
                 .isEqualTo("some-specimen-id")
+        );
+    }
+
+    @Test
+    void testMapToDiagnosticReportWithObservationResources() {
+        final Message message = new Message(List.of(
+            "S02+02",
+            "GIS+N",
+            "RFF+SRI:15/CH000042P/200010191704",
+            "STS++UN",
+            "DTM+ISR:201002251541:203"
+        ));
+
+        final var observation1 = mock(Observation.class);
+        final var observation2 = mock(Observation.class);
+
+        when(resourceFullUrlGenerator.generate(nullable(Observation.class))).thenReturn("some-observation-id");
+        final var result = mapper.mapToDiagnosticReport(message, null, null, List.of(observation1, observation2), null,
+            null);
+
+        assertAll(
+            () -> assertThat(result.getResult()).hasSize(2),
+            () -> assertThat(result.getResult())
+                .first()
+                .extracting(Reference::getReference)
+                .isEqualTo("some-observation-id"),
+            () -> assertThat(result.getResult())
+                .element(1)
+                .extracting(Reference::getReference)
+                .isEqualTo("some-observation-id")
         );
     }
 
@@ -151,7 +182,7 @@ class DiagnosticReportMapperTest {
         final var practitioner = mock(Practitioner.class);
 
         when(resourceFullUrlGenerator.generate(nullable(Practitioner.class))).thenReturn("practitioner-id");
-        final var result = mapper.mapToDiagnosticReport(message, null, null, practitioner, null);
+        final var result = mapper.mapToDiagnosticReport(message, null, null, null, practitioner, null);
 
         assertAll(
             () -> assertThat(result.getPerformer()).hasSize(1),
@@ -174,7 +205,7 @@ class DiagnosticReportMapperTest {
         final var organization = mock(Organization.class);
 
         when(resourceFullUrlGenerator.generate(nullable(Organization.class))).thenReturn("organization-id");
-        final var result = mapper.mapToDiagnosticReport(message, null, null, null, organization);
+        final var result = mapper.mapToDiagnosticReport(message, null, null, null, null, organization);
 
         assertAll(
             () -> assertThat(result.getPerformer()).hasSize(1),

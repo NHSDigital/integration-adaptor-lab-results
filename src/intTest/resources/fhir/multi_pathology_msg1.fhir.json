@@ -118,6 +118,9 @@
         } ],
         "specimen": [ {
           "reference": "urn:uuid:6117b6d6-d0a8-4930-a404-611ddece464a"
+        } ],
+        "result": [ {
+          "reference": "urn:uuid:899d7b43-9e83-4f82-af3a-f0a742acf16f"
         } ]
       }
     },

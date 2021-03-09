@@ -96,7 +96,8 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
                 new Customization("entry[*].resource.subject.reference", IGNORE),
                 new Customization("entry[*].resource.id", IGNORE),
                 new Customization("entry[*].resource.performer[*].actor.reference", IGNORE),
-                new Customization("entry[*].resource.specimen[*].reference", IGNORE)
+                new Customization("entry[*].resource.specimen[*].reference", IGNORE),
+                new Customization("entry[*].resource.result[*].reference", IGNORE)
             )
         );
     }
