@@ -65,7 +65,7 @@ class ProcedureRequestMapperTest {
     }
 
     @Test
-    void testMapToProcedureRequestThrowsExceptionWhenTypeOfClinicalObservationIsMissing() {
+    void testMapToProcedureRequestThrowsExceptionWhenClinicalInformationCodeIsMissing() {
         final Message message = new Message(List.of(
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
