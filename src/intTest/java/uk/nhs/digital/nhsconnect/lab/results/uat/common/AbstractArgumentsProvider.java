@@ -28,7 +28,7 @@ abstract class AbstractArgumentsProvider implements ArgumentsProvider {
     protected String readEdifactResource(List<Resource> resources) {
         return resources.stream()
             .filter(resource -> resource.getFilename() != null)
-            .filter(resource -> resource.getFilename().endsWith(AbstractArgumentsProvider.EDIFACT_FILE_ENDING))
+            .filter(resource -> resource.getFilename().endsWith(EDIFACT_FILE_ENDING))
             .map(this::readFile)
             .findFirst()
             .orElseThrow();
@@ -37,7 +37,7 @@ abstract class AbstractArgumentsProvider implements ArgumentsProvider {
     protected List<String> readJSONResources(List<Resource> resources) {
         return resources.stream()
             .filter(resource -> resource.getFilename() != null)
-            .filter(resource -> resource.getFilename().endsWith(AbstractArgumentsProvider.FHIR_FILE_ENDING))
+            .filter(resource -> resource.getFilename().endsWith(FHIR_FILE_ENDING))
             .map(this::readFile)
             .collect(Collectors.toList());
     }
