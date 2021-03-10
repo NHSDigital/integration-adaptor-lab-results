@@ -12,6 +12,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.fhir.PathologyRecord.Patholog
 public class PathologyRecordMapper {
 
     private final PractitionerMapper practitionerMapper;
+    private final ProcedureRequestMapper procedureRequestMapper;
     private final PatientMapper patientMapper;
     private final OrganizationMapper organizationMapper;
     private final SpecimenMapper specimenMapper;
@@ -20,18 +21,29 @@ public class PathologyRecordMapper {
 
     public PathologyRecord mapToPathologyRecord(final Message message) {
         final var patient = patientMapper.mapToPatient(message);
-        final var specimens = specimenMapper.mapToSpecimens(message, patient);
+        final var requestingPractitioner = practitionerMapper.mapToRequestingPractitioner(message);
+        final var requestingOrganization = organizationMapper.mapToRequestingOrganization(message);
         final var performingPractitioner = practitionerMapper.mapToPerformingPractitioner(message);
         final var performingOrganization = organizationMapper.mapToPerformingOrganization(message);
+
+        final var specimens = specimenMapper.mapToSpecimens(message, patient);
         final var observations = observationMapper.mapToTestGroupsAndResults(message);
         final var diagnosticReport = diagnosticReportMapper.mapToDiagnosticReport(message, patient, specimens,
             observations, performingPractitioner.orElse(null), performingOrganization.orElse(null));
-        final var requestingPractitioner = practitionerMapper.mapToRequestingPractitioner(message);
-        final var requestingOrganization = organizationMapper.mapToRequestingOrganization(message);
 
         final PathologyRecordBuilder pathologyRecordBuilder = PathologyRecord.builder();
 
         pathologyRecordBuilder.patient(patient);
+        requestingPractitioner.ifPresent(pathologyRecordBuilder::requestingPractitioner);
+        requestingOrganization.ifPresent(pathologyRecordBuilder::requestingOrganization);
+        performingPractitioner.ifPresent(pathologyRecordBuilder::performingPractitioner);
+        performingOrganization.ifPresent(pathologyRecordBuilder::performingOrganization);
+        procedureRequestMapper.mapToProcedureRequest(message, patient, requestingPractitioner.orElse(null),
+            requestingOrganization.orElse(null), performingPractitioner.orElse(null),
+            performingOrganization.orElse(null))
+            .ifPresent(pathologyRecordBuilder::testRequestSummary);
+        pathologyRecordBuilder.specimens(specimenMapper.mapToSpecimens(message, patient));
+        pathologyRecordBuilder.testResults(observationMapper.mapToTestGroupsAndResults(message));
         requestingPractitioner.ifPresent(pathologyRecordBuilder::requestingPractitioner);
         requestingOrganization.ifPresent(pathologyRecordBuilder::requestingOrganization);
         performingPractitioner.ifPresent(pathologyRecordBuilder::performingPractitioner);

@@ -92,6 +92,37 @@
       }
     },
     {
+      "fullUrl": "urn:uuid:8aac2da2-5857-4c71-af22-461557c791ee",
+      "resource": {
+        "resourceType": "ProcedureRequest",
+        "id": "8aac2da2-5857-4c71-af22-461557c791ee",
+        "status": "unknown",
+        "intent": "?",
+        "code": {
+          "text": "unknown"
+        },
+        "subject": {
+          "reference": "urn:uuid:4ad99777-9863-4614-b929-16633f870f23"
+        },
+        "requester": {
+          "agent": {
+            "reference": "urn:uuid:5c94279a-905d-435f-b6dc-149cf790d2cc"
+          }
+        },
+        "performer": {
+          "reference": "urn:uuid:b019bdf7-53fe-42a6-89f4-24a6ab5be2c4"
+        },
+        "note": [
+          {
+            "text": "TIRED ALL THE TIME, LOW Hb"
+          },
+          {
+            "text": "COELIAC"
+          }
+        ]
+      }
+    },
+    {
       "fullUrl": "urn:uuid:1c2ffccb-186a-4193-a12e-f1b2c0bb6cee",
       "resource": {
         "resourceType": "DiagnosticReport",
