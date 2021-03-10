@@ -36,6 +36,7 @@ public class BundleMapper {
         Optional.ofNullable(pathologyRecord.getRequestingOrganization()).ifPresent(addToBundle);
         Optional.ofNullable(pathologyRecord.getPerformingPractitioner()).ifPresent(addToBundle);
         Optional.ofNullable(pathologyRecord.getPerformingOrganization()).ifPresent(addToBundle);
+        Optional.ofNullable(pathologyRecord.getTestRequestSummary()).ifPresent(addToBundle);
 
         pathologyRecord.getSpecimens().forEach(addToBundle);
 

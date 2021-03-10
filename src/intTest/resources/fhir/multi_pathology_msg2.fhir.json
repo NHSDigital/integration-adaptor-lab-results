@@ -87,6 +87,34 @@
       }
     },
     {
+      "fullUrl": "urn:uuid:a519747b-ec83-477b-bf7a-b3fc6b7abeac",
+      "resource": {
+        "resourceType": "ProcedureRequest",
+        "id": "a519747b-ec83-477b-bf7a-b3fc6b7abeac",
+        "status": "unknown",
+        "intent": "?",
+        "code": {
+          "text": "unknown"
+        },
+        "subject": {
+          "reference": "urn:uuid:eea77c68-0d47-412c-a7bc-321583a2c75f"
+        },
+        "requester": {
+          "agent": {
+            "reference": "urn:uuid:1395dd50-5440-424c-bd30-a2f62e3e24c3"
+          }
+        },
+        "performer": {
+          "reference": "urn:uuid:d5229278-191d-4801-9332-2faae4e9761d"
+        },
+        "note": [
+          {
+            "text": "PAINS HANDS AND FEET."
+          }
+        ]
+      }
+    },
+    {
       "fullUrl": "urn:uuid:34a0625d-5517-42a2-99c3-3a621c989c73",
       "resource": {
         "resourceType": "Specimen",

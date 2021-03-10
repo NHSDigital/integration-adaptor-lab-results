@@ -82,6 +82,34 @@
       }
     },
     {
+      "fullUrl": "urn:uuid:3cb08233-f421-4f3b-bf93-eed2b46b8e55",
+      "resource": {
+        "resourceType": "ProcedureRequest",
+        "id": "3cb08233-f421-4f3b-bf93-eed2b46b8e55",
+        "status": "unknown",
+        "intent": "?",
+        "code": {
+          "text": "unknown"
+        },
+        "subject": {
+          "reference": "urn:uuid:95ec28bb-cb1c-4bec-8321-568be9ae6eca"
+        },
+        "requester": {
+          "agent": {
+            "reference": "urn:uuid:10fa1513-0a76-4296-92ef-06eaa1b3f5c4"
+          }
+        },
+        "performer": {
+          "reference": "urn:uuid:98c26f9a-20c3-4609-80b7-802817717c18"
+        },
+        "note": [
+          {
+            "text": "COELIAC"
+          }
+        ]
+      }
+    },
+    {
       "fullUrl": "urn:uuid:fa1bae56-fc54-48e1-b7a6-6a9060345055",
       "resource": {
         "resourceType": "Specimen",

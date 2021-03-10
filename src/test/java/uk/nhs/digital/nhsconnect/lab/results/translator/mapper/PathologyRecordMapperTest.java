@@ -4,6 +4,7 @@ import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
+import org.hl7.fhir.dstu3.model.ProcedureRequest;
 import org.hl7.fhir.dstu3.model.Specimen;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import java.util.Optional;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
@@ -38,6 +40,9 @@ class PathologyRecordMapperTest {
     private OrganizationMapper organizationMapper;
 
     @Mock
+    private ProcedureRequestMapper procedureRequestMapper;
+
+    @Mock
     private SpecimenMapper specimenMapper;
 
     @Mock
@@ -51,6 +56,10 @@ class PathologyRecordMapperTest {
         when(practitionerMapper.mapToRequestingPractitioner(any(Message.class))).thenReturn(Optional.empty());
         when(practitionerMapper.mapToPerformingPractitioner(any(Message.class))).thenReturn(Optional.empty());
         when(patientMapper.mapToPatient(any(Message.class))).thenReturn(new Patient());
+        when(procedureRequestMapper.mapToProcedureRequest(any(Message.class), any(Patient.class),
+            nullable(Practitioner.class), nullable(Organization.class),
+            nullable(Practitioner.class), nullable(Organization.class)))
+            .thenReturn(Optional.empty());
         when(specimenMapper.mapToSpecimens(any(Message.class), any(Patient.class))).thenReturn(Collections.emptyList());
         when(observationMapper.mapToTestGroupsAndResults(any(Message.class))).thenReturn(Collections.emptyList());
     }
@@ -116,6 +125,21 @@ class PathologyRecordMapperTest {
         final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
 
         assertThat(pathologyRecord.getPerformingOrganization()).isEqualTo(mockPerformingOrganization);
+    }
+
+    @Test
+    void testMapMessageToPathologyRecordWithProcedureRequest() {
+        final Message message = new Message(emptyList());
+        var mockProcedureRequest = mock(ProcedureRequest.class);
+        reset(procedureRequestMapper);
+        when(procedureRequestMapper.mapToProcedureRequest(eq(message), any(Patient.class),
+            nullable(Practitioner.class), nullable(Organization.class),
+            nullable(Practitioner.class), nullable(Organization.class)))
+            .thenReturn(Optional.of(mockProcedureRequest));
+
+        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+
+        assertThat(pathologyRecord.getTestRequestSummary()).isEqualTo(mockProcedureRequest);
     }
 
     @Test

@@ -20,5 +20,4 @@ public enum ReportStatusCode {
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("No Report Status Code for '" + code + "'"));
     }
-
 }

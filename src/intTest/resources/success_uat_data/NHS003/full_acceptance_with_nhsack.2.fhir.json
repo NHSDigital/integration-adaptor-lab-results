@@ -82,6 +82,34 @@
       }
     },
     {
+      "fullUrl": "urn:uuid:46de5ca6-fb83-4ab0-b826-52adae5a9a4e",
+      "resource": {
+        "resourceType": "ProcedureRequest",
+        "id": "46de5ca6-fb83-4ab0-b826-52adae5a9a4e",
+        "status": "unknown",
+        "intent": "?",
+        "code": {
+          "text": "unknown"
+        },
+        "subject": {
+          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+        },
+        "requester": {
+          "agent": {
+            "reference": "urn:uuid:97b9fbfd-c5aa-4665-a2c9-6d504151a168"
+          }
+        },
+        "performer": {
+          "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+        },
+        "note": [
+          {
+            "text": "ON AZATHIOPRINE"
+          }
+        ]
+      }
+    },
+    {
       "fullUrl": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287",
       "resource": {
         "resourceType": "Specimen",
