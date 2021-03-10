@@ -20,6 +20,7 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -51,7 +52,7 @@ class DiagnosticReportMapperTest {
             "S06+06" // InvestigationSubject
         ));
 
-        assertThatThrownBy(() -> mapper.mapToDiagnosticReport(message, null, null, null, null, null))
+        assertThatThrownBy(() -> mapper.mapToDiagnosticReport(message, null, null, Collections.emptyList(), null, null))
             .isExactlyInstanceOf(MissingSegmentException.class)
             .hasMessageStartingWith("EDIFACT section is missing segment");
     }
@@ -66,7 +67,7 @@ class DiagnosticReportMapperTest {
             "DTM+ISR:201002251541:203"
         ));
 
-        final var result = mapper.mapToDiagnosticReport(message, null, null, null, null, null);
+        final var result = mapper.mapToDiagnosticReport(message, null, null, Collections.emptyList(), null, null);
         ZonedDateTime dateIssued = LocalDateTime.of(2010, 02, 25, 15, 41).atZone(TimestampService.UK_ZONE);
 
         assertAll(
@@ -101,7 +102,7 @@ class DiagnosticReportMapperTest {
         final var patient = mock(Patient.class);
         when(resourceFullUrlGenerator.generate(any(Patient.class))).thenReturn("patient-full-url");
 
-        final var result = mapper.mapToDiagnosticReport(message, patient, null, null, null, null);
+        final var result = mapper.mapToDiagnosticReport(message, patient, null, Collections.emptyList(), null, null);
 
         assertAll(
             () -> assertThat(result.getSubject())
@@ -124,7 +125,8 @@ class DiagnosticReportMapperTest {
         final var specimen2 = mock(Specimen.class);
 
         when(resourceFullUrlGenerator.generate(nullable(Specimen.class))).thenReturn("some-specimen-id");
-        final var result = mapper.mapToDiagnosticReport(message, null, List.of(specimen1, specimen2), null, null, null);
+        final var result = mapper.mapToDiagnosticReport(message, null, List.of(specimen1, specimen2),
+            Collections.emptyList(), null, null);
 
         assertAll(
             () -> assertThat(result.getSpecimen()).hasSize(2),
@@ -182,7 +184,8 @@ class DiagnosticReportMapperTest {
         final var practitioner = mock(Practitioner.class);
 
         when(resourceFullUrlGenerator.generate(nullable(Practitioner.class))).thenReturn("practitioner-id");
-        final var result = mapper.mapToDiagnosticReport(message, null, null, null, practitioner, null);
+        final var result = mapper.mapToDiagnosticReport(message, null, null, Collections.emptyList(), practitioner,
+            null);
 
         assertAll(
             () -> assertThat(result.getPerformer()).hasSize(1),
@@ -205,7 +208,8 @@ class DiagnosticReportMapperTest {
         final var organization = mock(Organization.class);
 
         when(resourceFullUrlGenerator.generate(nullable(Organization.class))).thenReturn("organization-id");
-        final var result = mapper.mapToDiagnosticReport(message, null, null, null, null, organization);
+        final var result = mapper.mapToDiagnosticReport(message, null, null, Collections.emptyList(), null,
+            organization);
 
         assertAll(
             () -> assertThat(result.getPerformer()).hasSize(1),

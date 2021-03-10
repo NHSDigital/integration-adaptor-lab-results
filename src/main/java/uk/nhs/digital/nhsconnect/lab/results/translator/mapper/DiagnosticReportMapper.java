@@ -99,7 +99,8 @@ public class DiagnosticReportMapper {
     }
 
     private void mapObservations(final List<Observation> observations, final DiagnosticReport fhir) {
-        Optional.ofNullable(observations).ifPresent(
-            obs -> obs.forEach(observation -> fhir.addResult().setReference(fullUrlGenerator.generate(observation))));
+        observations.stream()
+            .map(fullUrlGenerator::generate)
+            .forEach(reference -> fhir.addResult().setReference(reference));
     }
 }
