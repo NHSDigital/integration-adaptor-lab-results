@@ -1,6 +1,5 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.hl7.fhir.dstu3.model.Annotation;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
@@ -46,7 +45,7 @@ public class ProcedureRequestMapper {
             requestingOrganization, performingPractitioner, performingOrganization).map();
     }
 
-    @AllArgsConstructor
+    @RequiredArgsConstructor
     private class InternalMapper {
         private final Message message;
         private final Patient patient;
@@ -54,6 +53,8 @@ public class ProcedureRequestMapper {
         private final Organization requestingOrganization;
         private final Practitioner performingPractitioner;
         private final Organization performingOrganization;
+        private PatientClinicalInfo patientClinicalInfo;
+        private ProcedureRequest procedureRequest;
 
         public Optional<ProcedureRequest> map() {
             return message.getServiceReportDetails().getSubject().getClinicalInfo()
@@ -61,24 +62,21 @@ public class ProcedureRequestMapper {
         }
 
         private ProcedureRequest mapPatientClinicalInfo(PatientClinicalInfo patientClinicalInfo) {
-            final ProcedureRequest procedureRequest = new ProcedureRequest();
-
-            mapFreeText(patientClinicalInfo, procedureRequest);
-            mapStatus(patientClinicalInfo, procedureRequest);
+            this.patientClinicalInfo = patientClinicalInfo;
+            this.procedureRequest = new ProcedureRequest();
+            mapFreeText();
+            mapStatus();
             procedureRequest.setIntent(ProcedureRequestIntent.NULL);
             procedureRequest.setCode(new CodeableConcept().setText("unknown"));
             procedureRequest.setId(uuidGenerator.generateUUID());
             procedureRequest.getSubject().setReference(fullUrlGenerator.generate(patient));
-            setRequesterReference(procedureRequest);
-            setPerformerReference(procedureRequest);
+            setRequesterReference();
+            setPerformerReference();
 
             return procedureRequest;
         }
 
-        private void mapFreeText(
-            final PatientClinicalInfo patientClinicalInfo,
-            final ProcedureRequest procedureRequest
-        ) {
+        private void mapFreeText() {
             List<FreeTextSegment> patientClinicalInfoFreeTexts = patientClinicalInfo.getFreeTexts();
 
             if (patientClinicalInfoFreeTexts.isEmpty()) {
@@ -96,12 +94,12 @@ public class ProcedureRequestMapper {
             procedureRequest.setNote(annotations);
         }
 
-        private void mapStatus(final PatientClinicalInfo patientClinicalInfo, final ProcedureRequest procedureRequest) {
+        private void mapStatus() {
             procedureRequest.setStatus(STATUS_CODE_MAPPING.get(
                 ReportStatusCode.fromCode(patientClinicalInfo.getCode().getCode())));
         }
 
-        private void setRequesterReference(final ProcedureRequest procedureRequest) {
+        private void setRequesterReference() {
             if (requestingOrganization != null) {
                 procedureRequest.getRequester().getAgent()
                     .setReference(fullUrlGenerator.generate(requestingOrganization));
@@ -111,7 +109,7 @@ public class ProcedureRequestMapper {
             }
         }
 
-        private void setPerformerReference(final ProcedureRequest procedureRequest) {
+        private void setPerformerReference() {
             if (performingOrganization != null) {
                 procedureRequest.getPerformer().setReference(fullUrlGenerator.generate(performingOrganization));
             } else if (performingPractitioner != null) {
