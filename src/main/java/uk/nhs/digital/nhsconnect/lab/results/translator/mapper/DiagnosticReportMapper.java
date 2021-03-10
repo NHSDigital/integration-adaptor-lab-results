@@ -11,9 +11,7 @@ import org.hl7.fhir.dstu3.model.Practitioner;
 import org.hl7.fhir.dstu3.model.Specimen;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportDateIssued;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReportStatusCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.ServiceReportDetails;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
@@ -64,39 +62,39 @@ public class DiagnosticReportMapper {
 
             fhir.setId(uuidGenerator.generateUUID());
             // fhir.issued = SG2.DTM
-            mapIssued(serviceReportDetails.getDateIssued());
+            mapIssued();
             // fhir.status
             fhir.setStatus(STATUS_MAP.get(serviceReportDetails.getStatus().getEvent()));
             // fhir.identifier
-            mapIdentifier(serviceReportDetails.getReference());
+            mapIdentifier();
             // fhir.code
             mapCode();
             // fhir.subject
             fhir.getSubject().setReference(fullUrlGenerator.generate(patient));
             // fhir.specimens
-            mapSpecimens(specimens);
+            mapSpecimens();
             // fhir.results
-            mapObservations(observations);
+            mapObservations();
             // fhir.performer
-            mapPerformer(performingPractitioner, performingOrganization);
+            mapPerformer();
             /* TODO: Add BasedOn - ProcedureReport & Result - Observation */
 
             return fhir;
         }
 
-        private void mapIssued(final DiagnosticReportDateIssued reportIssuedDate) {
-            LocalDateTime dateIssued = reportIssuedDate.getDateIssued();
+        private void mapIssued() {
+            LocalDateTime dateIssued = serviceReportDetails.getDateIssued().getDateIssued();
             ZonedDateTime zonedDateTime = dateIssued.atZone(TimestampService.UK_ZONE);
             fhir.setIssued(Date.from(zonedDateTime.toInstant()));
         }
 
-        private void mapIdentifier(final Reference reference) {
+        private void mapIdentifier() {
             final Identifier identifier = new Identifier();
-            identifier.setValue(reference.getNumber());
+            identifier.setValue(serviceReportDetails.getReference().getNumber());
             fhir.addIdentifier(identifier);
         }
 
-        private void mapSpecimens(final List<Specimen> specimens) {
+        private void mapSpecimens() {
             specimens.stream()
                 .map(fullUrlGenerator::generate)
                 .forEach(reference -> fhir.addSpecimen().setReference(reference));
@@ -109,14 +107,14 @@ public class DiagnosticReportMapper {
                 .setSystem(CODE_SYSTEM);
         }
 
-        private void mapPerformer(Practitioner performingPractitioner, Organization performingOrganization) {
+        private void mapPerformer() {
             Optional.ofNullable(performingOrganization).ifPresent(organization ->
                 fhir.addPerformer().getActor().setReference(fullUrlGenerator.generate(organization)));
             Optional.ofNullable(performingPractitioner).ifPresent(performer ->
                 fhir.addPerformer().getActor().setReference(fullUrlGenerator.generate(performer)));
         }
 
-        private void mapObservations(final List<Observation> observations) {
+        private void mapObservations() {
             observations.stream()
                 .map(fullUrlGenerator::generate)
                 .forEach(reference -> fhir.addResult().setReference(reference));
