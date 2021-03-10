@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.lenient;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -213,7 +213,7 @@ class ProcedureRequestMapperTest {
             "CIN+UN",
             "FTX+CID+++COELIAC"
         ));
-        lenient().when(fullUrlGenerator.generate(any(Organization.class)))
+        when(fullUrlGenerator.generate(nullable(Organization.class)))
             .thenReturn("requesting-organisation-full-url");
 
         final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
@@ -235,7 +235,7 @@ class ProcedureRequestMapperTest {
             "CIN+UN",
             "FTX+CID+++COELIAC"
         ));
-        lenient().when(fullUrlGenerator.generate(any(Practitioner.class)))
+        when(fullUrlGenerator.generate(nullable(Practitioner.class)))
             .thenReturn("requesting-practitioner-full-url");
 
         final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
@@ -257,7 +257,7 @@ class ProcedureRequestMapperTest {
             "CIN+UN",
             "FTX+CID+++COELIAC"
         ));
-        lenient().when(fullUrlGenerator.generate(any(Organization.class)))
+        when(fullUrlGenerator.generate(nullable(Organization.class)))
             .thenReturn("performing-organisation-full-url");
 
         final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
@@ -279,7 +279,7 @@ class ProcedureRequestMapperTest {
             "CIN+UN",
             "FTX+CID+++COELIAC"
         ));
-        lenient().when(fullUrlGenerator.generate(any(Practitioner.class)))
+        when(fullUrlGenerator.generate(nullable(Practitioner.class)))
             .thenReturn("performing-practitioner-full-url");
 
         final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
