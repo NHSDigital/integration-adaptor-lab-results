@@ -30,6 +30,10 @@ public class PathologyRecordMapper {
         final var observations = observationMapper.mapToTestGroupsAndResults(message);
         final var diagnosticReport = diagnosticReportMapper.mapToDiagnosticReport(message, patient, specimens,
             observations, performingPractitioner.orElse(null), performingOrganization.orElse(null));
+        final var procedureRequest = procedureRequestMapper.mapToProcedureRequest(message, patient,
+            requestingPractitioner.orElse(null), requestingOrganization.orElse(null),
+            performingPractitioner.orElse(null), performingOrganization.orElse(null));
+
 
         final PathologyRecordBuilder pathologyRecordBuilder = PathologyRecord.builder();
 
@@ -38,16 +42,7 @@ public class PathologyRecordMapper {
         requestingOrganization.ifPresent(pathologyRecordBuilder::requestingOrganization);
         performingPractitioner.ifPresent(pathologyRecordBuilder::performingPractitioner);
         performingOrganization.ifPresent(pathologyRecordBuilder::performingOrganization);
-        procedureRequestMapper.mapToProcedureRequest(message, patient, requestingPractitioner.orElse(null),
-            requestingOrganization.orElse(null), performingPractitioner.orElse(null),
-            performingOrganization.orElse(null))
-            .ifPresent(pathologyRecordBuilder::testRequestSummary);
-        pathologyRecordBuilder.specimens(specimenMapper.mapToSpecimens(message, patient));
-        pathologyRecordBuilder.testResults(observationMapper.mapToTestGroupsAndResults(message));
-        requestingPractitioner.ifPresent(pathologyRecordBuilder::requestingPractitioner);
-        requestingOrganization.ifPresent(pathologyRecordBuilder::requestingOrganization);
-        performingPractitioner.ifPresent(pathologyRecordBuilder::performingPractitioner);
-        performingOrganization.ifPresent(pathologyRecordBuilder::performingOrganization);
+        procedureRequest.ifPresent(pathologyRecordBuilder::testRequestSummary);
         pathologyRecordBuilder.testReport(diagnosticReport);
         pathologyRecordBuilder.specimens(specimens);
         pathologyRecordBuilder.testResults(observations);
