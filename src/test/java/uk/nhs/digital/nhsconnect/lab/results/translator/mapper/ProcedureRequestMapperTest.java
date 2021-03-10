@@ -4,6 +4,7 @@ import org.hl7.fhir.dstu3.model.Annotation;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
+import org.hl7.fhir.dstu3.model.ProcedureRequest;
 import org.hl7.fhir.dstu3.model.Reference;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +18,7 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -42,7 +44,7 @@ class ProcedureRequestMapperTest {
     void testMapMessageToProcedureRequestNoPatientClinicalInfo() {
         final Message message = new Message(Collections.emptyList());
 
-        final var procedureRequest = procedureRequestMapper.mapToProcedureRequest(
+        final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
             message, null, null, null, null, null);
 
         assertThat(procedureRequest).isEmpty();
@@ -89,12 +91,14 @@ class ProcedureRequestMapperTest {
             "FTX+CID+++COELIAC"
         ));
 
-        final var procedureRequest = procedureRequestMapper.mapToProcedureRequest(
-            message, null, null, null, null, null).get();
-
-        assertThat(procedureRequest.getNote()).hasSize(1)
+        final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
+            message, null, null, null, null, null);
+        assertThat(procedureRequest).isNotEmpty();
+        assertThat(procedureRequest.get().getNote())
+            .hasSize(1)
             .first()
-            .satisfies(note -> assertThat(note.getText()).isEqualTo("COELIAC"));
+            .extracting(Annotation::getText)
+            .isEqualTo("COELIAC");
     }
 
     @Test
@@ -109,10 +113,11 @@ class ProcedureRequestMapperTest {
             "FTX+CID+++GASTRIC ULCER DECLINE"
         ));
 
-        var procedureRequest = procedureRequestMapper.mapToProcedureRequest(
-            message, null, null, null, null, null).get();
+        final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
+            message, null, null, null, null, null);
 
-        assertThat(procedureRequest.getNote()).hasSize(3)
+        assertThat(procedureRequest).isNotEmpty();
+        assertThat(procedureRequest.get().getNote()).hasSize(3)
             .extracting(Annotation::getText)
             .containsExactly("COELIAC", "JAUNDICE  ?OBSTRUCTIVE", "GASTRIC ULCER DECLINE");
     }
@@ -127,10 +132,11 @@ class ProcedureRequestMapperTest {
             "FTX+CID+++COELIAC"
         ));
 
-        final var procedureRequest = procedureRequestMapper.mapToProcedureRequest(
-            message, null, null, null, null, null).get();
+        final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
+            message, null, null, null, null, null);
 
-        assertThat(procedureRequest.getStatus().toCode()).isEqualTo("unknown");
+        assertThat(procedureRequest).isNotEmpty();
+        assertThat(procedureRequest.get().getStatus().toCode()).isEqualTo("unknown");
     }
 
     @Test
@@ -159,10 +165,11 @@ class ProcedureRequestMapperTest {
             "FTX+CID+++COELIAC"
         ));
 
-        final var procedureRequest = procedureRequestMapper.mapToProcedureRequest(
-            message, null, null, null, null, null).get();
+        final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
+            message, null, null, null, null, null);
 
-        assertThat(procedureRequest.getIntent()).isEqualTo(ProcedureRequestIntent.NULL);
+        assertThat(procedureRequest).isNotEmpty();
+        assertThat(procedureRequest.get().getIntent()).isEqualTo(ProcedureRequestIntent.NULL);
     }
 
     @Test
@@ -176,11 +183,12 @@ class ProcedureRequestMapperTest {
         ));
         when(fullUrlGenerator.generate(any(Patient.class))).thenReturn("patient-full-url");
 
-        final var procedureRequest = procedureRequestMapper.mapToProcedureRequest(
-            message, mock(Patient.class), null, null, null, null).get();
+        final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
+            message, mock(Patient.class), null, null, null, null);
 
+        assertThat(procedureRequest).isNotEmpty();
         assertThat(procedureRequest)
-            .satisfies(subject -> assertThat(subject.getSubject()).extracting(Reference::getReference)
+            .satisfies(subject -> assertThat(subject.get().getSubject()).extracting(Reference::getReference)
                 .isEqualTo("patient-full-url"));
     }
 
@@ -196,12 +204,13 @@ class ProcedureRequestMapperTest {
         lenient().when(fullUrlGenerator.generate(any(Organization.class)))
             .thenReturn("requesting-organisation-full-url");
 
-        final var procedureRequest = procedureRequestMapper.mapToProcedureRequest(
-            message, null, mock(Practitioner.class), mock(Organization.class), null, null).get();
+        final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
+            message, null, mock(Practitioner.class), mock(Organization.class), null, null);
 
+        assertThat(procedureRequest).isNotEmpty();
         assertThat(procedureRequest)
-            .satisfies(requester -> assertThat(requester.getRequester().getAgent()).extracting(Reference::getReference)
-                .isEqualTo("requesting-organisation-full-url"));
+            .satisfies(requester -> assertThat(requester.get().getRequester().getAgent())
+                .extracting(Reference::getReference).isEqualTo("requesting-organisation-full-url"));
     }
 
     @Test
@@ -216,12 +225,13 @@ class ProcedureRequestMapperTest {
         lenient().when(fullUrlGenerator.generate(any(Practitioner.class)))
             .thenReturn("requesting-practitioner-full-url");
 
-        final var procedureRequest = procedureRequestMapper.mapToProcedureRequest(
-            message, null, mock(Practitioner.class), null, null, null).get();
+        final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
+            message, null, mock(Practitioner.class), null, null, null);
 
+        assertThat(procedureRequest).isNotEmpty();
         assertThat(procedureRequest)
-            .satisfies(requester -> assertThat(requester.getRequester().getAgent()).extracting(Reference::getReference)
-                .isEqualTo("requesting-practitioner-full-url"));
+            .satisfies(requester -> assertThat(requester.get().getRequester().getAgent())
+                .extracting(Reference::getReference).isEqualTo("requesting-practitioner-full-url"));
     }
 
     @Test
@@ -236,11 +246,12 @@ class ProcedureRequestMapperTest {
         lenient().when(fullUrlGenerator.generate(any(Organization.class)))
             .thenReturn("performing-organisation-full-url");
 
-        final var procedureRequest = procedureRequestMapper.mapToProcedureRequest(
-            message, null, null, null, mock(Practitioner.class), mock(Organization.class)).get();
+        final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
+            message, null, null, null, mock(Practitioner.class), mock(Organization.class));
 
+        assertThat(procedureRequest).isNotEmpty();
         assertThat(procedureRequest)
-            .satisfies(performer -> assertThat(performer.getPerformer()).extracting(Reference::getReference)
+            .satisfies(performer -> assertThat(performer.get().getPerformer()).extracting(Reference::getReference)
                 .isEqualTo("performing-organisation-full-url"));
     }
 
@@ -256,11 +267,12 @@ class ProcedureRequestMapperTest {
         lenient().when(fullUrlGenerator.generate(any(Practitioner.class)))
             .thenReturn("performing-practitioner-full-url");
 
-        final var procedureRequest = procedureRequestMapper.mapToProcedureRequest(
-            message, null, null, null, mock(Practitioner.class), null).get();
+        final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
+            message, null, null, null, mock(Practitioner.class), null);
 
+        assertThat(procedureRequest).isNotEmpty();
         assertThat(procedureRequest)
-            .satisfies(performer -> assertThat(performer.getPerformer()).extracting(Reference::getReference)
+            .satisfies(performer -> assertThat(performer.get().getPerformer()).extracting(Reference::getReference)
                 .isEqualTo("performing-practitioner-full-url"));
     }
 }
