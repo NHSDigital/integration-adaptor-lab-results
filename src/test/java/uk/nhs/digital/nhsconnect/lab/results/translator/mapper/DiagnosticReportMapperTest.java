@@ -107,11 +107,9 @@ class DiagnosticReportMapperTest {
         final var result = mapper.mapToDiagnosticReport(message, patient, Collections.emptyList(),
             Collections.emptyList(), null, null);
 
-        assertAll(
-            () -> assertThat(result.getSubject())
-                .extracting(Reference::getReference)
-                .isEqualTo("patient-full-url")
-        );
+        assertThat(result.getSubject())
+            .extracting(Reference::getReference)
+            .isEqualTo("patient-full-url");
     }
 
     @Test
