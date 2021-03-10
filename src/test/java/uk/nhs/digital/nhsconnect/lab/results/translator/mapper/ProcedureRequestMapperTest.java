@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
@@ -83,6 +84,7 @@ class ProcedureRequestMapperTest {
 
     @Test
     void testMapToProcedureRequestWithOneFreeTextSegment() {
+        when(uuidGenerator.generateUUID()).thenReturn("test-uuid");
         final Message message = new Message(List.of(
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
@@ -93,12 +95,15 @@ class ProcedureRequestMapperTest {
 
         final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
             message, null, null, null, null, null);
-        assertThat(procedureRequest).isNotEmpty();
-        assertThat(procedureRequest.get().getNote())
-            .hasSize(1)
-            .first()
-            .extracting(Annotation::getText)
-            .isEqualTo("COELIAC");
+        assertAll(
+            () -> assertThat(procedureRequest).isNotEmpty(),
+            () -> assertThat(procedureRequest.get().getNote())
+                .hasSize(1)
+                .first()
+                .extracting(Annotation::getText)
+                .isEqualTo("COELIAC"),
+            () -> assertThat(procedureRequest.get().getId()).isEqualTo("test-uuid")
+        );
     }
 
     @Test
