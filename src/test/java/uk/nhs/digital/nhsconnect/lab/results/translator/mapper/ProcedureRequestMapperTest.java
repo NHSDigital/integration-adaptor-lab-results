@@ -191,10 +191,10 @@ class ProcedureRequestMapperTest {
         final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
             message, mock(Patient.class), null, null, null, null);
 
-        assertThat(procedureRequest).isNotEmpty();
         assertThat(procedureRequest)
-            .satisfies(subject -> assertThat(subject.get().getSubject()).extracting(Reference::getReference)
-                .isEqualTo("patient-full-url"));
+            .isNotEmpty()
+            .hasValueSatisfying(procedure ->
+                assertThat(procedure.getSubject().getReference()).isEqualTo("patient-full-url"));
     }
 
     @Test
