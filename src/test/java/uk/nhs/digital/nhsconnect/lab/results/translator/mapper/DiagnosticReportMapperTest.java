@@ -68,11 +68,14 @@ class DiagnosticReportMapperTest {
             "DTM+ISR:201002251541:203"
         ));
 
+        when(uuidGenerator.generateUUID()).thenReturn("resource-id");
+
         final var result = mapper.mapToDiagnosticReport(message, null, Collections.emptyList(),
             Collections.emptyList(), null, null);
         ZonedDateTime dateIssued = LocalDateTime.of(2010, 02, 25, 15, 41).atZone(TimestampService.UK_ZONE);
 
         assertAll(
+            () -> assertThat(result.getId()).isEqualTo("resource-id"),
             () -> assertThat(result.getIdentifier())
                 .first()
                 .satisfies(identifier -> assertAll(
@@ -129,17 +132,10 @@ class DiagnosticReportMapperTest {
         final var result = mapper.mapToDiagnosticReport(message, null, List.of(specimen1, specimen2),
             Collections.emptyList(), null, null);
 
-        assertAll(
-            () -> assertThat(result.getSpecimen()).hasSize(2),
-            () -> assertThat(result.getSpecimen())
-                .first()
-                .extracting(Reference::getReference)
-                .isEqualTo("some-specimen-id"),
-            () -> assertThat(result.getSpecimen())
-                .element(1)
-                .extracting(Reference::getReference)
-                .isEqualTo("some-specimen-id")
-        );
+        assertThat(result.getSpecimen())
+            .hasSize(2)
+            .extracting(Reference::getReference)
+            .containsExactly("some-specimen-id", "some-specimen-id");
     }
 
     @Test
@@ -159,17 +155,10 @@ class DiagnosticReportMapperTest {
         final var result = mapper.mapToDiagnosticReport(message, null, Collections.emptyList(),
             List.of(observation1, observation2), null, null);
 
-        assertAll(
-            () -> assertThat(result.getResult()).hasSize(2),
-            () -> assertThat(result.getResult())
-                .first()
-                .extracting(Reference::getReference)
-                .isEqualTo("some-observation-id"),
-            () -> assertThat(result.getResult())
-                .element(1)
-                .extracting(Reference::getReference)
-                .isEqualTo("some-observation-id")
-        );
+        assertThat(result.getResult())
+            .hasSize(2)
+            .extracting(Reference::getReference)
+            .containsExactly("some-observation-id", "some-observation-id");
     }
 
     @Test
