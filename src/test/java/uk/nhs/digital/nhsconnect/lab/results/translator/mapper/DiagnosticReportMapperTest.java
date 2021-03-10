@@ -52,7 +52,8 @@ class DiagnosticReportMapperTest {
             "S06+06" // InvestigationSubject
         ));
 
-        assertThatThrownBy(() -> mapper.mapToDiagnosticReport(message, null, null, Collections.emptyList(), null, null))
+        assertThatThrownBy(() -> mapper.mapToDiagnosticReport(message, null, Collections.emptyList(),
+            Collections.emptyList(), null, null))
             .isExactlyInstanceOf(MissingSegmentException.class)
             .hasMessageStartingWith("EDIFACT section is missing segment");
     }
@@ -67,7 +68,8 @@ class DiagnosticReportMapperTest {
             "DTM+ISR:201002251541:203"
         ));
 
-        final var result = mapper.mapToDiagnosticReport(message, null, null, Collections.emptyList(), null, null);
+        final var result = mapper.mapToDiagnosticReport(message, null, Collections.emptyList(),
+            Collections.emptyList(), null, null);
         ZonedDateTime dateIssued = LocalDateTime.of(2010, 02, 25, 15, 41).atZone(TimestampService.UK_ZONE);
 
         assertAll(
@@ -102,7 +104,8 @@ class DiagnosticReportMapperTest {
         final var patient = mock(Patient.class);
         when(resourceFullUrlGenerator.generate(any(Patient.class))).thenReturn("patient-full-url");
 
-        final var result = mapper.mapToDiagnosticReport(message, patient, null, Collections.emptyList(), null, null);
+        final var result = mapper.mapToDiagnosticReport(message, patient, Collections.emptyList(),
+            Collections.emptyList(), null, null);
 
         assertAll(
             () -> assertThat(result.getSubject())
@@ -155,8 +158,8 @@ class DiagnosticReportMapperTest {
         final var observation2 = mock(Observation.class);
 
         when(resourceFullUrlGenerator.generate(nullable(Observation.class))).thenReturn("some-observation-id");
-        final var result = mapper.mapToDiagnosticReport(message, null, null, List.of(observation1, observation2), null,
-            null);
+        final var result = mapper.mapToDiagnosticReport(message, null, Collections.emptyList(),
+            List.of(observation1, observation2), null, null);
 
         assertAll(
             () -> assertThat(result.getResult()).hasSize(2),
@@ -184,8 +187,8 @@ class DiagnosticReportMapperTest {
         final var practitioner = mock(Practitioner.class);
 
         when(resourceFullUrlGenerator.generate(nullable(Practitioner.class))).thenReturn("practitioner-id");
-        final var result = mapper.mapToDiagnosticReport(message, null, null, Collections.emptyList(), practitioner,
-            null);
+        final var result = mapper.mapToDiagnosticReport(message, null, Collections.emptyList(),
+            Collections.emptyList(), practitioner, null);
 
         assertAll(
             () -> assertThat(result.getPerformer()).hasSize(1),
@@ -208,8 +211,8 @@ class DiagnosticReportMapperTest {
         final var organization = mock(Organization.class);
 
         when(resourceFullUrlGenerator.generate(nullable(Organization.class))).thenReturn("organization-id");
-        final var result = mapper.mapToDiagnosticReport(message, null, null, Collections.emptyList(), null,
-            organization);
+        final var result = mapper.mapToDiagnosticReport(message, null, Collections.emptyList(),
+            Collections.emptyList(), null, organization);
 
         assertAll(
             () -> assertThat(result.getPerformer()).hasSize(1),
