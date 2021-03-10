@@ -291,7 +291,7 @@ To view messages in the ActiveMQ Web Console:
 #### MESH API
 
 A `mesh.sh` bash script exists for testing or debugging MESH. For more information see: [mesh/README.md](/mesh/README.md)
-The `release/tests/send_message.sh` is an example script how to send messages to MESH mailbox.
+The `release/tests/send_message.sh` is a test script that sends [example](https://github.com/nhsconnect/integration-adaptor-lab-results/blob/main/src/intTest/resources/edifact/pathology.edifact.dat) message to MESH mailbox.
 
 #### Fake MESH
 
