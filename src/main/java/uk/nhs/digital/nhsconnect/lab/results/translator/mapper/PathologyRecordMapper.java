@@ -19,8 +19,6 @@ public class PathologyRecordMapper {
     private final ObservationMapper observationMapper;
 
     public PathologyRecord mapToPathologyRecord(final Message message) {
-        final PathologyRecordBuilder pathologyRecordBuilder = PathologyRecord.builder();
-
         final var patient = patientMapper.mapToPatient(message);
         final var specimens = specimenMapper.mapToSpecimens(message, patient);
         final var performingPractitioner = practitionerMapper.mapToPerformingPractitioner(message);
@@ -28,11 +26,14 @@ public class PathologyRecordMapper {
         final var observations = observationMapper.mapToTestGroupsAndResults(message);
         final var diagnosticReport = diagnosticReportMapper.mapToDiagnosticReport(message, patient, specimens,
             observations, performingPractitioner.orElse(null), performingOrganization.orElse(null));
+        final var requestingPractitioner = practitionerMapper.mapToRequestingPractitioner(message);
+        final var requestingOrganization = organizationMapper.mapToRequestingOrganization(message);
+
+        final PathologyRecordBuilder pathologyRecordBuilder = PathologyRecord.builder();
+
         pathologyRecordBuilder.patient(patient);
-        practitionerMapper.mapToRequestingPractitioner(message)
-            .ifPresent(pathologyRecordBuilder::requestingPractitioner);
-        organizationMapper.mapToRequestingOrganization(message)
-            .ifPresent(pathologyRecordBuilder::requestingOrganization);
+        requestingPractitioner.ifPresent(pathologyRecordBuilder::requestingPractitioner);
+        requestingOrganization.ifPresent(pathologyRecordBuilder::requestingOrganization);
         performingPractitioner.ifPresent(pathologyRecordBuilder::performingPractitioner);
         performingOrganization.ifPresent(pathologyRecordBuilder::performingOrganization);
         pathologyRecordBuilder.testReport(diagnosticReport);
