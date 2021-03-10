@@ -250,14 +250,15 @@ The `--continue` flag ensures that all tests and checks will run.
 
 Run `lab-results`, `mongodb`, `activemq`, `fake-mesh` containers:
 
-    docker-compose build; docker-compose up
+    docker-compose build
+    docker-compose up
 
 Run test script:
 
     cd ./release/tests
     ./send_message.sh
 
-that will send an [example EDIFACT message](https://github.com/nhsconnect/integration-adaptor-lab-results/blob/main/src/intTest/resources/edifact/pathology.edifact.dat) to the `fake-mesh` container. `lab-results` container app will fetch this message and put the translated to FHIR format result to `activemq` container's `lab_results_gp_outbound` queue.
+that will send an [example EDIFACT message](https://github.com/nhsconnect/integration-adaptor-lab-results/blob/main/src/intTest/resources/edifact/pathology.edifact.dat) to the `fake-mesh` container. `lab-results` container app will fetch this message and put the translated to FHIR format result on `activemq` container's `lab_results_gp_outbound` queue.
 Check [ActiveMQ admin console](http://localhost:8161/admin/queues.jsp) (user: admin, password: admin) to download the result which will match the [example FHIR message](https://github.com/nhsconnect/integration-adaptor-lab-results/blob/main/src/intTest/resources/fhir/pathology.fhir.json). Additionally `mesh/mesh.sh` can be used to fetch the generated NHSACK from `fake-mesh`.
 
 Notice that depending on the `lab-result` configuration, it can take several seconds until `fake-mesh` is scanned for new messages.
