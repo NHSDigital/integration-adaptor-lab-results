@@ -2,6 +2,7 @@ package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.hl7.fhir.dstu3.model.DiagnosticReport;
+import org.hl7.fhir.dstu3.model.DiagnosticReport.DiagnosticReportStatus;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.Organization;
@@ -29,8 +30,8 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class DiagnosticReportMapper {
-    private static final Map<ReportStatusCode, DiagnosticReport.DiagnosticReportStatus> STATUS_MAP = Map.of(
-        ReportStatusCode.UNSPECIFIED, DiagnosticReport.DiagnosticReportStatus.UNKNOWN);
+    private static final Map<ReportStatusCode, DiagnosticReportStatus> STATUS_MAP = Map.of(
+        ReportStatusCode.UNSPECIFIED, DiagnosticReportStatus.UNKNOWN);
     private static final String CODE_SYSTEM = "http://snomed.info/sct";
     private static final String CODE_DISPLAY = "Diagnostic studies report";
     private static final String CODE_NUMBER = "721981007";
