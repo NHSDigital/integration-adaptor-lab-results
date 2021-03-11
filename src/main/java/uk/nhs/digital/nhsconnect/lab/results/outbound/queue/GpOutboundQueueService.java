@@ -39,8 +39,7 @@ public class GpOutboundQueueService {
 
     @SneakyThrows
     public void publish(MessageProcessingResult.Success processingResult) {
-        final var messageType = MessageType.fromCode(processingResult.getMessage().getMessageHeader()
-            .getMessageType());
+        final var messageType = processingResult.getMessage().getMessageHeader().getMessageType();
         final var type = Optional.ofNullable(MESSAGE_TYPE_HEADER_VALUES.get(messageType)).orElseThrow(
             () -> new IllegalStateException("Invalid message type: " + messageType));
 

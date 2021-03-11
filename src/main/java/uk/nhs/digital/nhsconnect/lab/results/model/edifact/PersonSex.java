@@ -8,7 +8,12 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 /**
- * Example PDI+2'
+ * <pre>
+ * Example: PDI+1'
+ * </pre>
+ * <pre>
+ * Example: PDI+2'
+ * </pre>
  */
 @Getter
 @EqualsAndHashCode(callSuper = false)

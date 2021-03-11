@@ -6,7 +6,8 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigation;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigationResult;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigationCodedResult;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigationNumericalResult;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageTrailer;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceDetails;
@@ -57,9 +58,14 @@ public class LabResult extends SegmentGroup {
             .map(SequenceDetails::fromString);
 
     @Getter(lazy = true)
-    private final Optional<LaboratoryInvestigationResult> investigationResult =
-        extractOptionalSegment(LaboratoryInvestigationResult.KEY_QUALIFIER)
-            .map(LaboratoryInvestigationResult::fromString);
+    private final Optional<LaboratoryInvestigationNumericalResult> investigationNumericalResult =
+        extractOptionalSegment(LaboratoryInvestigationNumericalResult.KEY_QUALIFIER)
+            .map(LaboratoryInvestigationNumericalResult::fromString);
+
+    @Getter(lazy = true)
+    private final Optional<LaboratoryInvestigationCodedResult> investigationCodedResult =
+        extractOptionalSegment(LaboratoryInvestigationCodedResult.KEY_QUALIFIER)
+            .map(LaboratoryInvestigationCodedResult::fromString);
 
     @Getter(lazy = true)
     private final Optional<TestStatus> testStatus =

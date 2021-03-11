@@ -6,7 +6,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigation;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigationResult;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigationNumericalResult;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MeasurementValueComparator;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceType;
@@ -76,25 +76,25 @@ class LabResultTest {
     }
 
     @Test
-    void testGetLaboratoryInvestigationResult() {
+    void testGetLaboratoryInvestigationNumericalResult() {
         final var labResult = new LabResult(List.of(
             "ignore me",
             "RSL+NV+11.9:7++:::ng/mL+HI",
             "ignore me"
         ));
-        var labResultInvestigationResult = assertThat(labResult.getInvestigationResult()).isPresent();
+        var labResultInvestigationResult = assertThat(labResult.getInvestigationNumericalResult()).isPresent();
 
         labResultInvestigationResult
-            .map(LaboratoryInvestigationResult::getDeviatingResultIndicator)
+            .map(LaboratoryInvestigationNumericalResult::getDeviatingResultIndicator)
             .hasValue(DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT);
         labResultInvestigationResult
-            .map(LaboratoryInvestigationResult::getMeasurementUnit)
+            .map(LaboratoryInvestigationNumericalResult::getMeasurementUnit)
             .hasValue("ng/mL");
         labResultInvestigationResult
-            .map(LaboratoryInvestigationResult::getMeasurementValue)
+            .map(LaboratoryInvestigationNumericalResult::getMeasurementValue)
             .hasValue(BigDecimal.valueOf(EXPECTED_MEASUREMENT_VALUE));
         labResultInvestigationResult
-            .map(LaboratoryInvestigationResult::getMeasurementValueComparator)
+            .map(LaboratoryInvestigationNumericalResult::getMeasurementValueComparator)
             .contains(Optional.of(MeasurementValueComparator.LESS_THAN));
     }
 
@@ -227,7 +227,7 @@ class LabResultTest {
                 .isExactlyInstanceOf(MissingSegmentException.class)
                 .hasMessage("EDIFACT section is missing segment INV+MQ"),
             () -> assertThat(labResult.getSequenceDetails()).isEmpty(),
-            () -> assertThat(labResult.getInvestigationResult()).isEmpty(),
+            () -> assertThat(labResult.getInvestigationNumericalResult()).isEmpty(),
             () -> assertThat(labResult.getTestStatus()).isEmpty(),
             () -> assertThat(labResult.getFreeTexts()).isEmpty(),
             () -> assertThatThrownBy(labResult::getSequenceReference)

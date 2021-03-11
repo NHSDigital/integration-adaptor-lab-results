@@ -168,7 +168,7 @@ public class ObservationMapper {
 
         private void mapValueQuantity(final LabResult labResult, final Observation observation) {
             // Observation.value.valueQuantity.*
-            labResult.getInvestigationResult().ifPresent(investigationResult -> {
+            labResult.getInvestigationNumericalResult().ifPresent(investigationResult -> {
                 final var quantity = new Quantity();
 
                 // Observation.value.valueQuantity.value = SG18.RSL.C830(1).6314

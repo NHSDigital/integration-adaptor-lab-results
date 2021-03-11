@@ -11,12 +11,15 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 /**
+ * Details of the numerical result of a Laboratory Investigation.
+ * <pre>
  * Example: RSL+NV+11.9:7++:::ng/mL+HI'
+ * </pre>
  */
-@Getter
-@Builder
 @AllArgsConstructor
-public class LaboratoryInvestigationResult extends Segment {
+@Builder
+@Getter
+public class LaboratoryInvestigationNumericalResult extends Segment {
 
     private static final String KEY = "RSL";
     private static final String QUALIFIER = "NV";
@@ -31,10 +34,10 @@ public class LaboratoryInvestigationResult extends Segment {
     private final String measurementUnit;
     private final DeviatingResultIndicator deviatingResultIndicator;
 
-    public static LaboratoryInvestigationResult fromString(String edifactString) {
+    public static LaboratoryInvestigationNumericalResult fromString(String edifactString) {
         if (!edifactString.startsWith(KEY_QUALIFIER)) {
             throw new IllegalArgumentException("Can't create "
-                    + LaboratoryInvestigationResult.class.getSimpleName() + " from " + edifactString);
+                + LaboratoryInvestigationNumericalResult.class.getSimpleName() + " from " + edifactString);
         }
 
         final String[] keySplit = Split.byPlus(edifactString);
@@ -44,7 +47,7 @@ public class LaboratoryInvestigationResult extends Segment {
         final String measurementUnit = extractMeasurementUnit(keySplit);
         final String deviatingResultIndicator = extractDeviatingResultIndicator(keySplit);
 
-        return LaboratoryInvestigationResult.builder()
+        return LaboratoryInvestigationNumericalResult.builder()
             .measurementValue(measurementValue)
             .measurementValueComparator(StringUtils.isNotBlank(measurementValueComparator)
                     ? MeasurementValueComparator.fromCode(measurementValueComparator)

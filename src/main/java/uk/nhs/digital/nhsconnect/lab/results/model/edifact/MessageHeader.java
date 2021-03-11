@@ -1,22 +1,23 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 /**
  * A specialisation of a segment for the specific use case of a message header.
- * Takes in specific values required to generate an message header.
- * Example: {@code UNH+00000003+FHSREG:0:1:FH:FHS001'}.
+ * Takes in specific values required to generate n message header.
+ * <pre>
+ * Example: {@code UNH+1+MEDRPT:0:1:RT:NHS003'}.
+ * </pre>
  */
+@Builder
 @Getter
+@RequiredArgsConstructor
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class MessageHeader extends Segment {
 
     public static final String KEY = "UNH";
@@ -25,8 +26,22 @@ public class MessageHeader extends Segment {
     private static final int INDEX_SEQUENCE_NUMBER = 1;
     private static final int INDEX_MESSAGE_TYPE = 4;
 
-    private Long sequenceNumber;
-    private String messageType;
+    private final Long sequenceNumber;
+    private final MessageType messageType;
+
+    public static MessageHeader fromString(final String edifactString) {
+        if (!edifactString.startsWith(KEY)) {
+            throw new IllegalArgumentException("Can't create " + MessageHeader.class.getSimpleName()
+                + " from " + edifactString);
+        }
+        final String[] splitByPlus = Split.byPlus(edifactString);
+        final String[] splitByColon = Split.byColon(splitByPlus[2]);
+
+        return MessageHeader.builder()
+            .sequenceNumber(Long.valueOf(splitByPlus[INDEX_SEQUENCE_NUMBER]))
+            .messageType(MessageType.fromCode(splitByColon[INDEX_MESSAGE_TYPE]))
+            .build();
+    }
 
     @Override
     public String getKey() {
@@ -38,22 +53,14 @@ public class MessageHeader extends Segment {
         if (sequenceNumber == null) {
             throw new EdifactValidationException(KEY + ": Attribute sequenceNumber is required");
         }
+
         if (sequenceNumber < 1 || sequenceNumber > MAX_MESSAGE_SEQUENCE) {
             throw new EdifactValidationException(KEY + ": Attribute sequenceNumber must be between 1 and "
                 + MAX_MESSAGE_SEQUENCE);
         }
-        if (StringUtils.isBlank(messageType)) {
+
+        if (messageType == null) {
             throw new EdifactValidationException(KEY + ": Attribute messageType is required");
         }
-    }
-
-    public static MessageHeader fromString(final String edifactString) {
-        if (!edifactString.startsWith(KEY)) {
-            throw new IllegalArgumentException("Can't create " + MessageHeader.class.getSimpleName()
-                + " from " + edifactString);
-        }
-        final String[] splitByPlus = Split.byPlus(edifactString);
-        final String[] splitByColon = Split.byColon(splitByPlus[2]);
-        return new MessageHeader(Long.valueOf(splitByPlus[INDEX_SEQUENCE_NUMBER]), splitByColon[INDEX_MESSAGE_TYPE]);
     }
 }

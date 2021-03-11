@@ -90,11 +90,19 @@ public abstract class IntegrationBaseTest {
 
     @Getter
     @Value("classpath:edifact/pathology.edifact.dat")
-    private Resource edifactResource;
+    private Resource pathologyEdifactResource;
+
+    @Getter
+    @Value("classpath:edifact/screening.edifact.dat")
+    private Resource screeningEdifactResource;
 
     @Getter
     @Value("classpath:fhir/pathology.fhir.json")
-    private Resource fhirResource;
+    private Resource pathologyFhirResource;
+
+    @Getter
+    @Value("classpath:fhir/screening.fhir.json")
+    private Resource screeningFhirResource;
 
     @Getter
     @Value("classpath:edifact/pathology.nhsack.dat")

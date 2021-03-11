@@ -13,6 +13,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageHeader;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessageParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.sequence.SequenceService;
@@ -81,15 +82,21 @@ class NhsAckProducerServiceTest {
             .build());
 
         Message message1 = mock(Message.class);
-        when(message1.getMessageHeader()).thenReturn(new MessageHeader().setSequenceNumber(MESSAGE_SEQUENCE_NUMBER_1));
+        when(message1.getMessageHeader()).thenReturn(
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_1, MessageType.PATHOLOGY)
+        );
         messageProcessingResults.add(new Success(message1, null));
 
         Message message2 = mock(Message.class);
-        when(message2.getMessageHeader()).thenReturn(new MessageHeader().setSequenceNumber(MESSAGE_SEQUENCE_NUMBER_2));
+        when(message2.getMessageHeader()).thenReturn(
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_2, MessageType.PATHOLOGY)
+        );
         messageProcessingResults.add(new Success(message2, null));
 
         Message message3 = mock(Message.class);
-        when(message3.getMessageHeader()).thenReturn(new MessageHeader().setSequenceNumber(MESSAGE_SEQUENCE_NUMBER_3));
+        when(message3.getMessageHeader()).thenReturn(
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_3, MessageType.PATHOLOGY)
+        );
         messageProcessingResults.add(new Success(message3, null));
 
         String nhsAck = nhsAckProducerService.createNhsAckEdifact(
@@ -111,16 +118,22 @@ class NhsAckProducerServiceTest {
             .build());
 
         Message message1 = mock(Message.class);
-        when(message1.getMessageHeader()).thenReturn(new MessageHeader().setSequenceNumber(MESSAGE_SEQUENCE_NUMBER_1));
+        when(message1.getMessageHeader()).thenReturn(
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_1, MessageType.PATHOLOGY)
+        );
         messageProcessingResults.add(new Success(message1, null));
 
         Message message2 = mock(Message.class);
-        when(message2.getMessageHeader()).thenReturn(new MessageHeader().setSequenceNumber(MESSAGE_SEQUENCE_NUMBER_2));
+        when(message2.getMessageHeader()).thenReturn(
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_2, MessageType.PATHOLOGY)
+        );
         Exception exception = new Exception("This is a failed message.");
         messageProcessingResults.add(new Error(message2, exception));
 
         Message message3 = mock(Message.class);
-        when(message3.getMessageHeader()).thenReturn(new MessageHeader().setSequenceNumber(MESSAGE_SEQUENCE_NUMBER_3));
+        when(message3.getMessageHeader()).thenReturn(
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_3, MessageType.PATHOLOGY)
+        );
         messageProcessingResults.add(new Success(message3, null));
 
         String nhsAck = nhsAckProducerService.createNhsAckEdifact(
@@ -142,17 +155,23 @@ class NhsAckProducerServiceTest {
             .build());
 
         Message message1 = mock(Message.class);
-        when(message1.getMessageHeader()).thenReturn(new MessageHeader().setSequenceNumber(MESSAGE_SEQUENCE_NUMBER_1));
+        when(message1.getMessageHeader()).thenReturn(
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_1, MessageType.PATHOLOGY)
+        );
         Exception exception1 = new Exception("This is a failed message.");
         messageProcessingResults.add(new Error(message1, exception1));
 
         Message message2 = mock(Message.class);
-        when(message2.getMessageHeader()).thenReturn(new MessageHeader().setSequenceNumber(MESSAGE_SEQUENCE_NUMBER_2));
+        when(message2.getMessageHeader()).thenReturn(
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_2, MessageType.PATHOLOGY)
+        );
         Exception exception2 = new Exception("This is another failed message.");
         messageProcessingResults.add(new Error(message2, exception2));
 
         Message message3 = mock(Message.class);
-        when(message3.getMessageHeader()).thenReturn(new MessageHeader().setSequenceNumber(MESSAGE_SEQUENCE_NUMBER_3));
+        when(message3.getMessageHeader()).thenReturn(
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_3, MessageType.PATHOLOGY)
+        );
         Exception exception3 = new Exception("This is yet another failed message.");
         messageProcessingResults.add(new Error(message3, exception3));
 
@@ -207,15 +226,21 @@ class NhsAckProducerServiceTest {
             .build());
 
         Message message1 = mock(Message.class);
-        when(message1.getMessageHeader()).thenReturn(new MessageHeader().setSequenceNumber(MESSAGE_SEQUENCE_NUMBER_1));
+        when(message1.getMessageHeader()).thenReturn(
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_1, MessageType.PATHOLOGY)
+        );
         messageProcessingResults.add(new Success(message1, null));
 
         Message message2 = mock(Message.class);
-        when(message2.getMessageHeader()).thenReturn(new MessageHeader().setSequenceNumber(MESSAGE_SEQUENCE_NUMBER_2));
+        when(message2.getMessageHeader()).thenReturn(
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_2, MessageType.PATHOLOGY)
+        );
         messageProcessingResults.add(new Success(message2, null));
 
         Message message3 = mock(Message.class);
-        when(message3.getMessageHeader()).thenReturn(new MessageHeader().setSequenceNumber(MESSAGE_SEQUENCE_NUMBER_3));
+        when(message3.getMessageHeader()).thenReturn(
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_3, MessageType.PATHOLOGY)
+        );
         messageProcessingResults.add(new Success(message3, null));
 
         String nhsAck = nhsAckProducerService.createNhsAckEdifact(

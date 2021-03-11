@@ -18,7 +18,11 @@ class LaboratoryInvestigationTest {
 
     @Test
     void when_edifactStringIsPassed_expect_returnALaboratoryInvestigationObject() {
-        final var laboratoryInvestigation = new LaboratoryInvestigation("42R4.", "Serum ferritin");
+        final var laboratoryInvestigation = LaboratoryInvestigation.builder()
+            .investigationCode("42R4.")
+            .investigationCodeType(CodingType.READ_CODE)
+            .investigationDescription("Serum ferritin")
+            .build();
 
         assertThat(laboratoryInvestigation)
             .usingRecursiveComparison()
@@ -34,26 +38,38 @@ class LaboratoryInvestigationTest {
 
     @Test
     void testGetKey() {
-        assertThat(new LaboratoryInvestigation(null, ".").getKey()).isEqualTo("INV");
+        assertThat(new LaboratoryInvestigation(null, CodingType.READ_CODE, ".").getKey()).isEqualTo("INV");
     }
 
     @Test
     void testValidateAllValues() {
-        final var laboratoryInvestigation = new LaboratoryInvestigation("43J7.", "IgE");
+        final var laboratoryInvestigation = LaboratoryInvestigation.builder()
+            .investigationCode("43J7.")
+            .investigationCodeType(CodingType.READ_CODE)
+            .investigationDescription("IgE")
+            .build();
 
         assertThatNoException().isThrownBy(laboratoryInvestigation::validate);
     }
 
     @Test
     void testValidateMissingCode() {
-        final var laboratoryInvestigation = new LaboratoryInvestigation(null, "Something");
+        LaboratoryInvestigation laboratoryInvestigation = LaboratoryInvestigation.builder()
+            .investigationCode(null)
+            .investigationCodeType(CodingType.READ_CODE)
+            .investigationDescription("This is an investigation description")
+            .build();
 
         assertThatNoException().isThrownBy(laboratoryInvestigation::validate);
     }
 
     @Test
     void testValidateMissingDescription() {
-        final var laboratoryInvestigation = new LaboratoryInvestigation("42R4.", "");
+        final var laboratoryInvestigation = LaboratoryInvestigation.builder()
+            .investigationCode("42R4.")
+            .investigationCodeType(CodingType.READ_CODE)
+            .investigationDescription("")
+            .build();
 
         assertThatThrownBy(laboratoryInvestigation::validate)
             .isExactlyInstanceOf(EdifactValidationException.class)
