@@ -130,6 +130,9 @@
         "identifier": [ {
           "value": "15/CH000037K/200010191704"
         } ],
+        "basedOn": [ {
+          "reference": "urn:uuid:8be835ba-540a-4a02-bf0c-0be947b98c82"
+        } ],
         "status": "unknown",
         "code": {
           "coding": [ {

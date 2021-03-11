@@ -117,6 +117,9 @@
         "identifier": [ {
           "value": "15/CH000040N/200010191704"
         } ],
+        "basedOn": [ {
+          "reference": "urn:uuid:ab2ce0dd-c80c-42c3-929f-ba08459e72f2"
+        } ],
         "status": "unknown",
         "code": {
           "coding": [ {

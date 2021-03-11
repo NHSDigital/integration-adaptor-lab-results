@@ -122,6 +122,9 @@
         "identifier": [ {
           "value": "15/CH000038L/200010191704"
         } ],
+        "basedOn": [ {
+          "reference": "urn:uuid:a519747b-ec83-477b-bf7a-b3fc6b7abeac"
+        } ],
         "status": "unknown",
         "code": {
           "coding": [ {

@@ -8,6 +8,7 @@ import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
+import org.hl7.fhir.dstu3.model.ProcedureRequest;
 import org.hl7.fhir.dstu3.model.Specimen;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -39,10 +40,11 @@ public class DiagnosticReportMapper {
 
     public DiagnosticReport mapToDiagnosticReport(final Message message, Patient patient, List<Specimen> specimens,
                                                   List<Observation> observations, Practitioner performingPractitioner,
-                                                  Organization performingOrganization) {
+                                                  Organization performingOrganization,
+                                                  ProcedureRequest procedureRequest) {
 
         return new InternalMapper(message, patient, specimens, observations, performingPractitioner,
-            performingOrganization).map();
+            performingOrganization, procedureRequest).map();
     }
 
     @RequiredArgsConstructor
@@ -53,6 +55,7 @@ public class DiagnosticReportMapper {
         private final List<Observation> observations;
         private final Practitioner performingPractitioner;
         private final Organization performingOrganization;
+        private final ProcedureRequest procedureRequest;
         private DiagnosticReport fhir;
         private ServiceReportDetails serviceReportDetails;
 
@@ -63,6 +66,8 @@ public class DiagnosticReportMapper {
             fhir.setId(uuidGenerator.generateUUID());
             // fhir.issued = SG2.DTM
             mapIssued();
+            // fhir.basedOn
+            mapBasedOn();
             // fhir.status
             fhir.setStatus(STATUS_MAP.get(serviceReportDetails.getStatus().getEvent()));
             // fhir.identifier
@@ -80,6 +85,11 @@ public class DiagnosticReportMapper {
             /* TODO: Add BasedOn - ProcedureReport & Result - Observation */
 
             return fhir;
+        }
+
+        private void mapBasedOn() {
+            Optional.ofNullable(procedureRequest).ifPresent(request ->
+                fhir.addBasedOn().setReference(fullUrlGenerator.generate(request)));
         }
 
         private void mapIssued() {

@@ -5,6 +5,7 @@ import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
+import org.hl7.fhir.dstu3.model.ProcedureRequest;
 import org.hl7.fhir.dstu3.model.Reference;
 import org.hl7.fhir.dstu3.model.Specimen;
 import org.junit.jupiter.api.Test;
@@ -53,7 +54,7 @@ class DiagnosticReportMapperTest {
         ));
 
         assertThatThrownBy(() -> mapper.mapToDiagnosticReport(message, null, Collections.emptyList(),
-            Collections.emptyList(), null, null))
+            Collections.emptyList(), null, null, null))
             .isExactlyInstanceOf(MissingSegmentException.class)
             .hasMessageStartingWith("EDIFACT section is missing segment");
     }
@@ -71,7 +72,7 @@ class DiagnosticReportMapperTest {
         when(uuidGenerator.generateUUID()).thenReturn("resource-id");
 
         final var result = mapper.mapToDiagnosticReport(message, null, Collections.emptyList(),
-            Collections.emptyList(), null, null);
+            Collections.emptyList(), null, null, null);
         ZonedDateTime dateIssued = LocalDateTime.of(2010, 02, 25, 15, 41).atZone(TimestampService.UK_ZONE);
 
         assertAll(
@@ -108,7 +109,7 @@ class DiagnosticReportMapperTest {
         when(resourceFullUrlGenerator.generate(any(Patient.class))).thenReturn("patient-full-url");
 
         final var result = mapper.mapToDiagnosticReport(message, patient, Collections.emptyList(),
-            Collections.emptyList(), null, null);
+            Collections.emptyList(), null, null, null);
 
         assertThat(result.getSubject())
             .extracting(Reference::getReference)
@@ -130,7 +131,7 @@ class DiagnosticReportMapperTest {
 
         when(resourceFullUrlGenerator.generate(nullable(Specimen.class))).thenReturn("some-specimen-id");
         final var result = mapper.mapToDiagnosticReport(message, null, List.of(specimen1, specimen2),
-            Collections.emptyList(), null, null);
+            Collections.emptyList(), null, null, null);
 
         assertThat(result.getSpecimen())
             .hasSize(2)
@@ -153,7 +154,7 @@ class DiagnosticReportMapperTest {
 
         when(resourceFullUrlGenerator.generate(nullable(Observation.class))).thenReturn("some-observation-id");
         final var result = mapper.mapToDiagnosticReport(message, null, Collections.emptyList(),
-            List.of(observation1, observation2), null, null);
+            List.of(observation1, observation2), null, null, null);
 
         assertThat(result.getResult())
             .hasSize(2)
@@ -175,7 +176,7 @@ class DiagnosticReportMapperTest {
 
         when(resourceFullUrlGenerator.generate(nullable(Practitioner.class))).thenReturn("practitioner-id");
         final var result = mapper.mapToDiagnosticReport(message, null, Collections.emptyList(),
-            Collections.emptyList(), practitioner, null);
+            Collections.emptyList(), practitioner, null, null);
 
         assertAll(
             () -> assertThat(result.getPerformer()).hasSize(1),
@@ -199,7 +200,7 @@ class DiagnosticReportMapperTest {
 
         when(resourceFullUrlGenerator.generate(nullable(Organization.class))).thenReturn("organization-id");
         final var result = mapper.mapToDiagnosticReport(message, null, Collections.emptyList(),
-            Collections.emptyList(), null, organization);
+            Collections.emptyList(), null, organization, null);
 
         assertAll(
             () -> assertThat(result.getPerformer()).hasSize(1),
@@ -207,5 +208,27 @@ class DiagnosticReportMapperTest {
                 .extracting(Reference::getReference)
                 .isEqualTo("organization-id")
         );
+    }
+
+    @Test
+    void testMapToDiagnosticReportWithProcedureRequest() {
+        final Message message = new Message(List.of(
+            "S02+02",
+            "GIS+N",
+            "RFF+SRI:15/CH000042P/200010191704",
+            "STS++UN",
+            "DTM+ISR:201002251541:203"
+        ));
+
+        final var procedureRequest = mock(ProcedureRequest.class);
+
+        when(resourceFullUrlGenerator.generate(nullable(ProcedureRequest.class))).thenReturn("procedure-request-id");
+        final var result = mapper.mapToDiagnosticReport(message, null, Collections.emptyList(),
+            Collections.emptyList(), null, null, procedureRequest);
+
+        assertThat(result.getBasedOn())
+            .hasSize(1)
+            .extracting(Reference::getReference)
+            .containsExactly("procedure-request-id");
     }
 }

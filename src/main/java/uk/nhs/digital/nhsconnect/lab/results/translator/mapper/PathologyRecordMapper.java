@@ -25,15 +25,14 @@ public class PathologyRecordMapper {
         final var requestingOrganization = organizationMapper.mapToRequestingOrganization(message);
         final var performingPractitioner = practitionerMapper.mapToPerformingPractitioner(message);
         final var performingOrganization = organizationMapper.mapToPerformingOrganization(message);
-
         final var specimens = specimenMapper.mapToSpecimens(message, patient);
         final var observations = observationMapper.mapToTestGroupsAndResults(message);
-        final var diagnosticReport = diagnosticReportMapper.mapToDiagnosticReport(message, patient, specimens,
-            observations, performingPractitioner.orElse(null), performingOrganization.orElse(null));
         final var procedureRequest = procedureRequestMapper.mapToProcedureRequest(message, patient,
             requestingPractitioner.orElse(null), requestingOrganization.orElse(null),
             performingPractitioner.orElse(null), performingOrganization.orElse(null));
-
+        final var diagnosticReport = diagnosticReportMapper.mapToDiagnosticReport(message, patient, specimens,
+            observations, performingPractitioner.orElse(null), performingOrganization.orElse(null),
+            procedureRequest.orElse(null));
 
         final PathologyRecordBuilder pathologyRecordBuilder = PathologyRecord.builder();
 
