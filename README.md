@@ -20,7 +20,7 @@ The GP System will receive medical reports on the `Outbound GP Queue` in form of
 ### Examples
 
 Examples of both Pathology and Screening messages are provided as part of the adaptor's User Acceptance Tests.
-Each example is built from 3 files:
+Each example is built from 2 files:
 
 - `<example-id>.edifact.dat` - message provided by laboratory
 - `<example-id>.fhir.json` - message translated to FHIR format
