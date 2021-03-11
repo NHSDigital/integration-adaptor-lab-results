@@ -33,14 +33,14 @@ public class SpecimenMapper {
     private final DateFormatMapper dateFormatMapper;
     private final ResourceFullUrlGenerator fullUrlGenerator;
 
-    public Map<String, Specimen> mapToSpecimens(final Message message, Patient patient) {
+    public Map<String, Specimen> mapToSpecimensBySequenceNumber(final Message message, final Patient patient) {
         return message.getServiceReportDetails().getSubject().getSpecimens().stream()
             .collect(toMap(
                 specimenDetails -> specimenDetails.getSequenceDetails().getNumber(),
                 specimenDetails -> edifactToFhir(specimenDetails, patient)));
     }
 
-    private Specimen edifactToFhir(final SpecimenDetails edifact, Patient patient) {
+    private Specimen edifactToFhir(final SpecimenDetails edifact, final Patient patient) {
         final Specimen fhir = new Specimen();
         fhir.setId(uuidGenerator.generateUUID());
         // fhir.identifier = SG16.RFF.C506.1154 (requester)

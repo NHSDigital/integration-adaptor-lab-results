@@ -392,7 +392,7 @@ class ObservationMapperTest {
             "INV+MQ+c:911::group",
             "RFF+ASL:1"
         ));
-        var mockSpecimen = mock(Specimen.class);
+        final var mockSpecimen = mock(Specimen.class);
         when(mockSpecimen.getId()).thenReturn("uuid-specimen");
         when(fullUrlGenerator.generate("uuid-specimen")).thenReturn("url-specimen");
 

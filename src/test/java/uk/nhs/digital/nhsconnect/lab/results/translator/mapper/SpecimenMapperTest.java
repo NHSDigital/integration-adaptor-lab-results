@@ -49,7 +49,7 @@ class SpecimenMapperTest {
     void testMapToSpecimensNonePresent() {
         final Message message = new Message(Collections.emptyList());
 
-        final var specimens = specimenMapper.mapToSpecimens(message, null);
+        final var specimens = specimenMapper.mapToSpecimensBySequenceNumber(message, null);
 
         assertThat(specimens).isEmpty();
     }
@@ -62,7 +62,7 @@ class SpecimenMapperTest {
             "S16+16"  // SpecimenDetails
         ));
 
-        assertThatThrownBy(() -> specimenMapper.mapToSpecimens(message, null))
+        assertThatThrownBy(() -> specimenMapper.mapToSpecimensBySequenceNumber(message, null))
             .isExactlyInstanceOf(MissingSegmentException.class)
             .hasMessageStartingWith("EDIFACT section is missing segment");
     }
@@ -83,7 +83,7 @@ class SpecimenMapperTest {
             "SEQ++2" // SequenceDetails
         ));
 
-        final var specimens = specimenMapper.mapToSpecimens(message, null);
+        final var specimens = specimenMapper.mapToSpecimensBySequenceNumber(message, null);
 
         assertThat(specimens.values()).hasSize(2)
             .allSatisfy(specimen -> assertThat(specimen.getType().getCoding())
@@ -105,7 +105,7 @@ class SpecimenMapperTest {
             "RFF+RTI:Requester" // Reference - SPECIMEN_BY_REQUESTER
         ));
 
-        final var specimens = specimenMapper.mapToSpecimens(message, null);
+        final var specimens = specimenMapper.mapToSpecimensBySequenceNumber(message, null);
 
         assertThat(specimens.values()).hasSize(1)
             .first()
@@ -127,7 +127,7 @@ class SpecimenMapperTest {
             "RFF+STI:Provider" // Reference - SPECIMEN_BY_PROVIDER
         ));
 
-        final var specimens = specimenMapper.mapToSpecimens(message, null);
+        final var specimens = specimenMapper.mapToSpecimensBySequenceNumber(message, null);
 
         assertThat(specimens.values()).hasSize(1)
             .first()
@@ -152,7 +152,7 @@ class SpecimenMapperTest {
             "DTM+SRI:date:203" // SpecimenCollectionReceiptDateTime
         ));
 
-        final var specimens = specimenMapper.mapToSpecimens(message, null);
+        final var specimens = specimenMapper.mapToSpecimensBySequenceNumber(message, null);
 
         assertThat(specimens.values()).hasSize(1)
             .first()
@@ -175,7 +175,7 @@ class SpecimenMapperTest {
             "DTM+SCO:date:203" // SpecimenCollectionDateTime
         ));
 
-        final var specimens = specimenMapper.mapToSpecimens(message, null);
+        final var specimens = specimenMapper.mapToSpecimensBySequenceNumber(message, null);
 
         assertThat(specimens.values()).hasSize(1)
             .first()
@@ -194,7 +194,7 @@ class SpecimenMapperTest {
             "QTY+SVO:1+:::unit" // SpecimenQuantity
         ));
 
-        final var specimens = specimenMapper.mapToSpecimens(message, null);
+        final var specimens = specimenMapper.mapToSpecimensBySequenceNumber(message, null);
 
         assertThat(specimens.values()).hasSize(1)
             .first()
@@ -217,7 +217,7 @@ class SpecimenMapperTest {
             "FTX+SPC+++item 2 part 1:item 2 part 2"  // FreeTextSegment
         ));
 
-        final var specimens = specimenMapper.mapToSpecimens(message, null);
+        final var specimens = specimenMapper.mapToSpecimensBySequenceNumber(message, null);
 
         assertThat(specimens.values()).hasSize(1)
             .first()
@@ -237,7 +237,7 @@ class SpecimenMapperTest {
         ));
         when(fullUrlGenerator.generate(any(Patient.class))).thenReturn("patient-full-url");
 
-        final var specimens = specimenMapper.mapToSpecimens(message, mock(Patient.class));
+        final var specimens = specimenMapper.mapToSpecimensBySequenceNumber(message, mock(Patient.class));
 
         assertThat(specimens.values()).hasSize(1)
             .first()
@@ -255,7 +255,7 @@ class SpecimenMapperTest {
             "SPC+TSP+:::Required" // SpecimenCharacteristicType
         ));
 
-        assertThatThrownBy(() -> specimenMapper.mapToSpecimens(message, mock(Patient.class)))
+        assertThatThrownBy(() -> specimenMapper.mapToSpecimensBySequenceNumber(message, mock(Patient.class)))
             .isExactlyInstanceOf(MissingSegmentException.class)
             .hasMessage("EDIFACT section is missing segment SEQ");
     }
@@ -273,7 +273,7 @@ class SpecimenMapperTest {
             "SEQ++2" // SequenceDetails
         ));
 
-        final var specimens = specimenMapper.mapToSpecimens(message, mock(Patient.class));
+        final var specimens = specimenMapper.mapToSpecimensBySequenceNumber(message, mock(Patient.class));
 
         assertThat(specimens).hasSize(2)
             .allSatisfy((seq, specimen) -> assertThat(specimen.getType().getCoding().get(0).getDisplay())

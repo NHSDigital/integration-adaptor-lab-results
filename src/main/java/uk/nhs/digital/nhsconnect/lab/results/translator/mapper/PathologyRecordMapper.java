@@ -28,7 +28,7 @@ public class PathologyRecordMapper {
         final var procedureRequest = procedureRequestMapper.mapToProcedureRequest(message, patient,
             requestingPractitioner.orElse(null), requestingOrganization.orElse(null),
             performingPractitioner.orElse(null), performingOrganization.orElse(null));
-        final var specimens = specimenMapper.mapToSpecimens(message, patient);
+        final var specimens = specimenMapper.mapToSpecimensBySequenceNumber(message, patient);
         final var observations = observationMapper.mapToObservations(message, patient, specimens,
             performingOrganization.orElse(null), performingPractitioner.orElse(null));
 

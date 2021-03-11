@@ -62,7 +62,8 @@ class PathologyRecordMapperTest {
             nullable(Practitioner.class), nullable(Organization.class),
             nullable(Practitioner.class), nullable(Organization.class)))
             .thenReturn(Optional.empty());
-        when(specimenMapper.mapToSpecimens(any(Message.class), any(Patient.class))).thenReturn(Collections.emptyMap());
+        when(specimenMapper.mapToSpecimensBySequenceNumber(any(Message.class), any(Patient.class)))
+            .thenReturn(Collections.emptyMap());
         when(observationMapper.mapToObservations(any(), any(), any(), any(), any()))
             .thenReturn(Collections.emptyList());
     }
@@ -151,7 +152,7 @@ class PathologyRecordMapperTest {
         final var mockSpecimen1 = mock(Specimen.class);
         final var mockSpecimen2 = mock(Specimen.class);
         reset(specimenMapper);
-        when(specimenMapper.mapToSpecimens(eq(message), any(Patient.class)))
+        when(specimenMapper.mapToSpecimensBySequenceNumber(eq(message), any(Patient.class)))
             .thenReturn(Map.of("1", mockSpecimen1, "2", mockSpecimen2));
 
         final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
