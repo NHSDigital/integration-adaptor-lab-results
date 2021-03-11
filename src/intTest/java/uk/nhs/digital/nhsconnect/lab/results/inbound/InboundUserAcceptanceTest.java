@@ -100,9 +100,7 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
                     new Customization("identifier.value", IGNORE),
                     new Customization("entry[*].fullUrl", IGNORE),
                     new Customization("entry[*].resource.**.reference", IGNORE),
-                    new Customization("entry[*].resource.id", IGNORE),
-                    new Customization("entry[*].resource.id", IGNORE),
-                    new Customization("entry[*].resource.performer[*].actor.reference", IGNORE)
+                    new Customization("entry[*].resource.id", IGNORE)
                 )
             );
         }
