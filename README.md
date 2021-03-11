@@ -248,7 +248,7 @@ The `--continue` flag ensures that all tests and checks will run.
 
 ### Manual Testing
 
-Run `lab-results`, `mongodb`, `activemq`, `fake-mesh` containers:
+Run `lab-results`, `mongodb`, `activemq` and `fake-mesh` containers:
 
     docker-compose build
     docker-compose up
