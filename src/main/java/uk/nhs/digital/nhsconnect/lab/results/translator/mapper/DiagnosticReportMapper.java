@@ -24,7 +24,9 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -118,10 +120,10 @@ public class DiagnosticReportMapper {
         }
 
         private void mapPerformer() {
-            Optional.ofNullable(performingOrganization).ifPresent(organization ->
-                fhir.addPerformer().getActor().setReference(fullUrlGenerator.generate(organization)));
-            Optional.ofNullable(performingPractitioner).ifPresent(performer ->
-                fhir.addPerformer().getActor().setReference(fullUrlGenerator.generate(performer)));
+            Stream.of(performingOrganization, performingPractitioner)
+                .filter(Objects::nonNull)
+                .map(fullUrlGenerator::generate)
+                .forEach(performerUrl -> fhir.addPerformer().getActor().setReference(performerUrl));
         }
 
         private void mapObservations() {
