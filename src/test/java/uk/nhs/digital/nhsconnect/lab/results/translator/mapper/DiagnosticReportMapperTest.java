@@ -129,14 +129,17 @@ class DiagnosticReportMapperTest {
         final var specimen1 = mock(Specimen.class);
         final var specimen2 = mock(Specimen.class);
 
-        when(resourceFullUrlGenerator.generate(nullable(Specimen.class))).thenReturn("some-specimen-id");
+        when(resourceFullUrlGenerator.generate(nullable(Patient.class))).thenReturn("patient-id");
+        when(resourceFullUrlGenerator.generate(specimen1)).thenReturn("specimen-1-id");
+        when(resourceFullUrlGenerator.generate(specimen2)).thenReturn("specimen-2-id");
+
         final var result = mapper.mapToDiagnosticReport(message, null, List.of(specimen1, specimen2),
             Collections.emptyList(), null, null, null);
 
         assertThat(result.getSpecimen())
             .hasSize(2)
             .extracting(Reference::getReference)
-            .containsExactly("some-specimen-id", "some-specimen-id");
+            .containsExactly("specimen-1-id", "specimen-2-id");
     }
 
     @Test
@@ -152,14 +155,17 @@ class DiagnosticReportMapperTest {
         final var observation1 = mock(Observation.class);
         final var observation2 = mock(Observation.class);
 
-        when(resourceFullUrlGenerator.generate(nullable(Observation.class))).thenReturn("some-observation-id");
+        when(resourceFullUrlGenerator.generate(nullable(Patient.class))).thenReturn("patient-id");
+        when(resourceFullUrlGenerator.generate(observation1)).thenReturn("observation-1-id");
+        when(resourceFullUrlGenerator.generate(observation2)).thenReturn("observation-2-id");
+
         final var result = mapper.mapToDiagnosticReport(message, null, Collections.emptyList(),
             List.of(observation1, observation2), null, null, null);
 
         assertThat(result.getResult())
             .hasSize(2)
             .extracting(Reference::getReference)
-            .containsExactly("some-observation-id", "some-observation-id");
+            .containsExactly("observation-1-id", "observation-2-id");
     }
 
     @Test
