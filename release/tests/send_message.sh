@@ -11,4 +11,4 @@ echo -e "${LIGHT_GREEN}Loading env variables${NC}"
 source env.fake-mesh.sh
 
 echo -e "${LIGHT_GREEN}Sending test edifact message to fake mesh${NC}"
-./mesh.sh send gp_mailbox "@./../src/intTest/resources/edifact/pathology.dat"
+./mesh.sh send gp_mailbox "@./../src/intTest/resources/edifact/pathology.edifact.dat"
