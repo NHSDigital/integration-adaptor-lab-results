@@ -93,8 +93,8 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
                 new Customization("meta.lastUpdated", IGNORE),
                 new Customization("identifier.value", IGNORE),
                 new Customization("entry[*].fullUrl", IGNORE),
-                new Customization("entry[*].resource.**.reference", IGNORE),
-                new Customization("entry[*].resource.id", IGNORE)
+                new Customization("entry[*].resource.id", IGNORE),
+                new Customization("entry[*].resource.**.reference", IGNORE)
             )
         );
     }

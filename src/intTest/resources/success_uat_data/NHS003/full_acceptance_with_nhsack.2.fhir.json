@@ -110,6 +110,93 @@
       }
     },
     {
+      "fullUrl": "urn:uuid:1c2ffccb-186a-4193-a12e-f1b2c0bb6cee",
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "1c2ffccb-186a-4193-a12e-f1b2c0bb6cee",
+        "identifier": [
+          {
+            "value": "15/CH000041O/200010191704"
+          }
+        ],
+        "basedOn": [
+          {
+            "reference": "urn:uuid:46de5ca6-fb83-4ab0-b826-52adae5a9a4e"
+          }
+        ],
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "721981007",
+              "display": "Diagnostic studies report"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+        },
+        "issued": "2010-02-25T15:41:00.000+00:00",
+        "performer": [
+          {
+            "actor": {
+              "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+            }
+          }
+        ],
+        "specimen": [
+          {
+            "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
+          }
+        ],
+        "result": [
+          {
+            "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
+          },
+          {
+            "reference": "urn:uuid:36d0b706-a9e1-442e-8ab2-9adc766a5b9c"
+          },
+          {
+            "reference": "urn:uuid:590fd294-b573-406c-b46a-f0b59ece5da9"
+          },
+          {
+            "reference": "urn:uuid:8b75b9fb-4182-4d7b-ac34-fd67ff4abb19"
+          },
+          {
+            "reference": "urn:uuid:89a4c516-be4e-4d6d-b6f8-1bed944de685"
+          },
+          {
+            "reference": "urn:uuid:4867afeb-0467-4e8e-9e79-98a5e14ded49"
+          },
+          {
+            "reference": "urn:uuid:8705321a-18fa-49de-9515-14473032757a"
+          },
+          {
+            "reference": "urn:uuid:8834fb5a-9757-4729-a7ae-3e608899705f"
+          },
+          {
+            "reference": "urn:uuid:7b736f8a-ab6a-44b4-a804-b50e7e7b0abb"
+          },
+          {
+            "reference": "urn:uuid:bcc702d1-b557-47b7-bf37-ded54dad86fc"
+          },
+          {
+            "reference": "urn:uuid:9431a68c-a2dd-44a9-86ee-13630f3da0d6"
+          },
+          {
+            "reference": "urn:uuid:099ad994-9203-441e-9971-1e2b822947c1"
+          },
+          {
+            "reference": "urn:uuid:55e15e47-a6f0-4fe6-9a1d-845f0f1d7862"
+          },
+          {
+            "reference": "urn:uuid:4ac0f7da-f5c7-4d79-9064-35de8bf186fe"
+          }
+        ]
+      }
+    },
+    {
       "fullUrl": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287",
       "resource": {
         "resourceType": "Specimen",
