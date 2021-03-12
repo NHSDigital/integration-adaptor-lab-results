@@ -127,35 +127,47 @@
       "resource": {
         "resourceType": "DiagnosticReport",
         "id": "1c2ffccb-186a-4193-a12e-f1b2c0bb6cee",
-        "identifier": [ {
-          "value": "15/CH000037K/200010191704"
-        } ],
-        "basedOn": [ {
-          "reference": "urn:uuid:8aac2da2-5857-4c71-af22-461557c791ee"
-        } ],
+        "identifier": [
+          {
+            "value": "15/CH000037K/200010191704"
+          }
+        ],
+        "basedOn": [
+          {
+            "reference": "urn:uuid:8aac2da2-5857-4c71-af22-461557c791ee"
+          }
+        ],
         "status": "unknown",
         "code": {
-          "coding": [ {
-            "system": "http://snomed.info/sct",
-            "code": "721981007",
-            "display": "Diagnostic studies report"
-          } ]
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "721981007",
+              "display": "Diagnostic studies report"
+            }
+          ]
         },
         "subject": {
           "reference": "urn:uuid:4ad99777-9863-4614-b929-16633f870f23"
         },
         "issued": "2010-02-25T15:41:00.000+00:00",
-        "performer": [ {
-          "actor": {
-            "reference": "urn:uuid:b019bdf7-53fe-42a6-89f4-24a6ab5be2c4"
+        "performer": [
+          {
+            "actor": {
+              "reference": "urn:uuid:b019bdf7-53fe-42a6-89f4-24a6ab5be2c4"
+            }
           }
-        } ],
-        "specimen": [ {
-          "reference": "urn:uuid:6117b6d6-d0a8-4930-a404-611ddece464a"
-        } ],
-        "result": [ {
-          "reference": "urn:uuid:899d7b43-9e83-4f82-af3a-f0a742acf16f"
-        } ]
+        ],
+        "specimen": [
+          {
+            "reference": "urn:uuid:6117b6d6-d0a8-4930-a404-611ddece464a"
+          }
+        ],
+        "result": [
+          {
+            "reference": "urn:uuid:899d7b43-9e83-4f82-af3a-f0a742acf16f"
+          }
+        ]
       }
     },
     {

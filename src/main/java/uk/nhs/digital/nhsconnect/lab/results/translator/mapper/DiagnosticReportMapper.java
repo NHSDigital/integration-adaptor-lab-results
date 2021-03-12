@@ -84,7 +84,6 @@ public class DiagnosticReportMapper {
             mapObservations();
             // fhir.performer
             mapPerformer();
-            /* TODO: Add BasedOn - ProcedureReport & Result - Observation */
 
             return fhir;
         }
