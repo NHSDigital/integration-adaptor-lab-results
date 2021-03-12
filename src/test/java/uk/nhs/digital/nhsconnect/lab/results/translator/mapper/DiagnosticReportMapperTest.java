@@ -79,9 +79,7 @@ class DiagnosticReportMapperTest {
             () -> assertThat(result.getId()).isEqualTo("resource-id"),
             () -> assertThat(result.getIdentifier())
                 .first()
-                .satisfies(identifier -> assertAll(
-                    () -> assertThat(identifier.getValue()).isEqualTo("15/CH000042P/200010191704")
-                )),
+                .satisfies(identifier -> assertThat(identifier.getValue()).isEqualTo("15/CH000042P/200010191704")),
             () -> assertThat(result.getCode().getCoding())
                 .hasSize(1)
                 .first()
