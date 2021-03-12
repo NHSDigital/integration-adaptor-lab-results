@@ -9,7 +9,7 @@ import java.util.Arrays;
 @Getter
 @RequiredArgsConstructor
 public enum MessageType {
-    PATHOLOGY_NHSACK("NHS001", "NHS Acknowledgement MIG variant number 1"),
+    NHSACK("NHS001", "NHS Acknowledgement MIG variant number 1"),
     PATHOLOGY("NHS003", "NHS Laboratory Service Report MIG variant number 3"),
     SCREENING("NHS004", "NHS Laboratory Service Report MIG variant number 4");
 
@@ -20,6 +20,6 @@ public enum MessageType {
         return Arrays.stream(MessageType.values())
             .filter(c -> code.equals(c.getCode()))
             .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("No message type for '" + code + "'"));
+            .orElseThrow(() -> new IllegalArgumentException("No message type for \"" + code + "\""));
     }
 }

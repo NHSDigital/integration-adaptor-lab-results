@@ -67,7 +67,7 @@ class MeshServiceTest {
                 meshMailBoxScheduler,
                 correlationIdService,
                 scanDelayInSeconds,
-            scanIntervalInMilliseconds,
+                scanIntervalInMilliseconds,
                 pollingCycleMaximumDurationInSeconds);
     }
 

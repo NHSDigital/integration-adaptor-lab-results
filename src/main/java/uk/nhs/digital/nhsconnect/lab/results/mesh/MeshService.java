@@ -15,11 +15,14 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageType;
 import uk.nhs.digital.nhsconnect.lab.results.utils.CorrelationIdService;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Component
 @Slf4j
 public class MeshService {
+
+    private static final Set<WorkflowId> SUPPORTED_WORKFLOWS = Set.of(WorkflowId.PATHOLOGY, WorkflowId.SCREENING);
 
     private final MeshClient meshClient;
 
@@ -104,7 +107,7 @@ public class MeshService {
             LOGGER.debug("Downloading MeshMessageId={}", messageId);
             final InboundMeshMessage meshMessage = meshClient.getEdifactMessage(messageId);
 
-            if (isPathologyOrScreeningMessage(meshMessage.getWorkflowId())) {
+            if (isSupportedMessage(meshMessage.getWorkflowId())) {
                 LOGGER.debug("Publishing content of MeshMessageId={} to inbound mesh MQ", messageId);
                 meshInboundQueueService.publish(meshMessage);
                 LOGGER.debug("Acknowledging MeshMessageId={} on MESH API", messageId);
@@ -113,10 +116,9 @@ public class MeshService {
             } else {
                 LOGGER.info(
                     "Downloaded MeshMessageId={} has an unsupported MeshWorkflowId={}."
-                        + "It is not a " + MessageType.PATHOLOGY.getCode()
-                        + " or " + MessageType.PATHOLOGY.getCode() + " message,"
-                        + " therefore it has been left in the inbox.",
-                    meshMessage.getMeshMessageId(), meshMessage.getWorkflowId()
+                        + "It is not a {} or {} message, therefore it has been left in the inbox.",
+                    meshMessage.getMeshMessageId(), meshMessage.getWorkflowId(),
+                    MessageType.PATHOLOGY.getCode(), MessageType.SCREENING.getCode()
                 );
             }
         } catch (MeshWorkflowUnknownException ex) {
@@ -133,7 +135,7 @@ public class MeshService {
         }
     }
 
-    private boolean isPathologyOrScreeningMessage(WorkflowId workflowId) {
-        return workflowId.equals(WorkflowId.PATHOLOGY) || workflowId.equals(WorkflowId.SCREENING);
+    private boolean isSupportedMessage(WorkflowId workflowId) {
+        return SUPPORTED_WORKFLOWS.contains(workflowId);
     }
 }
