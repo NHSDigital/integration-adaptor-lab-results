@@ -68,7 +68,7 @@ class MeshInboundQueueServiceTest {
     private InboundMessageHandler inboundMessageHandler;
 
     @Test
-    void receiveInboundMessageIsHandledByInboundQueueConsumerService() throws Exception {
+    void receiveInboundPathologyMessageIsHandledByInboundQueueConsumerService() throws Exception {
         when(message.getStringProperty(JmsHeaders.CORRELATION_ID)).thenReturn(CORRELATION_ID);
         when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"" + PATHOLOGY_WORKFLOW_ID + "\"}");
 
@@ -76,6 +76,24 @@ class MeshInboundQueueServiceTest {
 
         final MeshMessage expectedMeshMessage = new MeshMessage();
         expectedMeshMessage.setWorkflowId(WorkflowId.PATHOLOGY);
+
+        assertAll(
+            () -> verify(correlationIdService).applyCorrelationId(CORRELATION_ID),
+            () -> verify(inboundMessageHandler).handle(expectedMeshMessage),
+            () -> verify(message).acknowledge(),
+            () -> verify(correlationIdService).resetCorrelationId()
+        );
+    }
+
+    @Test
+    void receiveInboundScreeningMessageIsHandledByInboundQueueConsumerService() throws Exception {
+        when(message.getStringProperty(JmsHeaders.CORRELATION_ID)).thenReturn(CORRELATION_ID);
+        when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"" + SCREENING_WORKFLOW_ID + "\"}");
+
+        meshInboundQueueService.receive(message);
+
+        final MeshMessage expectedMeshMessage = new MeshMessage();
+        expectedMeshMessage.setWorkflowId(WorkflowId.SCREENING);
 
         assertAll(
             () -> verify(correlationIdService).applyCorrelationId(CORRELATION_ID),
@@ -106,23 +124,6 @@ class MeshInboundQueueServiceTest {
         doThrow(RuntimeException.class).when(inboundMessageHandler).handle(any(MeshMessage.class));
 
         assertThrows(RuntimeException.class, () -> meshInboundQueueService.receive(message));
-
-        assertAll(
-            () -> verify(correlationIdService).applyCorrelationId(CORRELATION_ID),
-            () -> verify(message, never()).acknowledge(),
-            () -> verify(correlationIdService).resetCorrelationId()
-        );
-    }
-
-    @Test
-    void receiveInboundMessageForUnsupportedWorkflowIdThrowsException() throws Exception {
-        when(message.getStringProperty(JmsHeaders.CORRELATION_ID)).thenReturn(CORRELATION_ID);
-        when(message.getBody(String.class)).thenReturn("{\"workflowId\":\"" + SCREENING_WORKFLOW_ID + "\"}");
-
-        final UnknownWorkflowException exception =
-            assertThrows(UnknownWorkflowException.class, () -> meshInboundQueueService.receive(message));
-
-        assertEquals("Unknown workflow id: " + SCREENING_WORKFLOW_ID, exception.getMessage());
 
         assertAll(
             () -> verify(correlationIdService).applyCorrelationId(CORRELATION_ID),

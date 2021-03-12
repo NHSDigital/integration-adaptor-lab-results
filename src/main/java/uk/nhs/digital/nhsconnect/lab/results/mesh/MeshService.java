@@ -10,6 +10,8 @@ import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.MeshInboundQueueServi
 import uk.nhs.digital.nhsconnect.lab.results.mesh.exception.MeshWorkflowUnknownException;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshClient;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.InboundMeshMessage;
+import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageType;
 import uk.nhs.digital.nhsconnect.lab.results.utils.CorrelationIdService;
 
 import java.util.List;
@@ -101,14 +103,28 @@ public class MeshService {
             correlationIdService.applyRandomCorrelationId();
             LOGGER.debug("Downloading MeshMessageId={}", messageId);
             final InboundMeshMessage meshMessage = meshClient.getEdifactMessage(messageId);
-            LOGGER.debug("Publishing content of MeshMessageId={} to inbound mesh MQ", messageId);
-            meshInboundQueueService.publish(meshMessage);
-            LOGGER.debug("Acknowledging MeshMessageId={} on MESH API", messageId);
-            meshClient.acknowledgeMessage(meshMessage.getMeshMessageId());
-            LOGGER.info("Published MeshMessageId={} for inbound processing", meshMessage.getMeshMessageId());
+
+            if (isPathologyOrScreeningMessage(meshMessage.getWorkflowId())) {
+                LOGGER.debug("Publishing content of MeshMessageId={} to inbound mesh MQ", messageId);
+                meshInboundQueueService.publish(meshMessage);
+                LOGGER.debug("Acknowledging MeshMessageId={} on MESH API", messageId);
+                meshClient.acknowledgeMessage(meshMessage.getMeshMessageId());
+                LOGGER.info("Published MeshMessageId={} for inbound processing", meshMessage.getMeshMessageId());
+            } else {
+                LOGGER.info(
+                    "Downloaded MeshMessageId={} has an unsupported MeshWorkflowId={}."
+                        + "It is not a " + MessageType.PATHOLOGY.getCode()
+                        + " or " + MessageType.PATHOLOGY.getCode() + " message,"
+                        + " therefore it has been left in the inbox.",
+                    meshMessage.getMeshMessageId(), meshMessage.getWorkflowId()
+                );
+            }
         } catch (MeshWorkflowUnknownException ex) {
-            LOGGER.warn("MeshMessageId={} has an unsupported MeshWorkflowId={} and has been left in the inbox.",
-                messageId, ex.getWorkflowId());
+            LOGGER.warn(
+                "MeshMessageId={} has an unknown MeshWorkflowId={} and has been left in the inbox.",
+                messageId,
+                ex.getWorkflowId()
+            );
         } catch (Exception ex) {
             LOGGER.error("Error during reading of MESH message. MeshMessageId={}", messageId, ex);
             // skip message with error and attempt to download the next one
@@ -117,4 +133,7 @@ public class MeshService {
         }
     }
 
+    private boolean isPathologyOrScreeningMessage(WorkflowId workflowId) {
+        return workflowId.equals(WorkflowId.PATHOLOGY) || workflowId.equals(WorkflowId.SCREENING);
+    }
 }

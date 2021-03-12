@@ -41,6 +41,6 @@ class WorkflowIdTest {
     void testFromStringThrowsExceptionForInvalidWorkflowIdString() {
         final MeshWorkflowUnknownException exception = assertThrows(MeshWorkflowUnknownException.class,
             () -> WorkflowId.fromString("INVALID"));
-        assertEquals("Unsupported workflow id INVALID", exception.getMessage());
+        assertEquals("Unknown workflow id INVALID", exception.getMessage());
     }
 }
