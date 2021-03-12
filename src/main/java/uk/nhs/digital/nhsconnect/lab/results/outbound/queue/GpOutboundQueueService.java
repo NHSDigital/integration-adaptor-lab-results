@@ -40,6 +40,8 @@ public class GpOutboundQueueService {
             final TextMessage message = session.createTextMessage(jsonMessage);
             message.setStringProperty(JmsHeaders.CORRELATION_ID, correlationIdService.getCurrentCorrelationId());
             message.setStringProperty(JmsHeaders.CHECKSUM, buildChecksum(processingResult.getMessage()));
+            message.setStringProperty(JmsHeaders.MESSAGE_TYPE,
+                processingResult.getMessage().getMessageHeader().getMessageType());
             return message;
         };
 

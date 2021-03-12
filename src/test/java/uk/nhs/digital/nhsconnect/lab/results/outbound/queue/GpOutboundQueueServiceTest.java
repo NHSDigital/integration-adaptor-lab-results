@@ -33,6 +33,7 @@ import static org.mockito.Mockito.when;
 class GpOutboundQueueServiceTest {
 
     private static final String CONSERVATION_ID = "ABC123";
+    private static final String MESSAGE_TYPE = "NHS003";
     private static final String SENDER = "some_sender";
     private static final String RECIPIENT = "some_recipient";
     private static final long INTERCHANGE_SEQUENCE_NUMBER = 123;
@@ -86,6 +87,7 @@ class GpOutboundQueueServiceTest {
         when(interchangeHeader.getRecipient()).thenReturn(RECIPIENT);
         when(interchangeHeader.getSequenceNumber()).thenReturn(INTERCHANGE_SEQUENCE_NUMBER);
         when(messageHeader.getSequenceNumber()).thenReturn(MESSAGE_SEQUENCE_NUMBER);
+        when(messageHeader.getMessageType()).thenReturn(MESSAGE_TYPE);
 
         final var bundle = new Bundle();
         final var processingResult = new MessageProcessingResult.Success(message, bundle);
@@ -109,6 +111,7 @@ class GpOutboundQueueServiceTest {
         assertAll(
             () -> verify(session).createTextMessage(eq(serializedData)),
             () -> verify(textMessage).setStringProperty(JmsHeaders.CORRELATION_ID, CONSERVATION_ID),
+            () -> verify(textMessage).setStringProperty(JmsHeaders.MESSAGE_TYPE, MESSAGE_TYPE),
             () -> verify(correlationIdService).getCurrentCorrelationId(),
             () -> verify(checksumService)
                 .createChecksum(SENDER, RECIPIENT, INTERCHANGE_SEQUENCE_NUMBER, MESSAGE_SEQUENCE_NUMBER)
