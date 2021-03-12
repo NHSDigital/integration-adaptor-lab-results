@@ -226,7 +226,7 @@ class BundleMapperTest {
         assertAll(
             () -> verifyBundle(bundle),
             () -> assertThat(specimens)
-                .containsExactly(mockSpecimen1, mockSpecimen2),
+                .containsOnly(mockSpecimen1, mockSpecimen2),
             () -> assertThat(specimenBundleEntries)
                 .extracting(BundleEntryComponent::getFullUrl)
                 .allMatch(FULL_URL::equals)

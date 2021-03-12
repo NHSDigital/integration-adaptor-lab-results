@@ -17,10 +17,10 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -33,13 +33,14 @@ public class SpecimenMapper {
     private final DateFormatMapper dateFormatMapper;
     private final ResourceFullUrlGenerator fullUrlGenerator;
 
-    public List<Specimen> mapToSpecimens(final Message message, Patient patient) {
+    public Map<String, Specimen> mapToSpecimensBySequenceNumber(final Message message, final Patient patient) {
         return message.getServiceReportDetails().getSubject().getSpecimens().stream()
-            .map(edifact -> edifactToFhir(edifact, patient))
-            .collect(toList());
+            .collect(toMap(
+                specimenDetails -> specimenDetails.getSequenceDetails().getNumber(),
+                specimenDetails -> edifactToFhir(specimenDetails, patient)));
     }
 
-    private Specimen edifactToFhir(final SpecimenDetails edifact, Patient patient) {
+    private Specimen edifactToFhir(final SpecimenDetails edifact, final Patient patient) {
         final Specimen fhir = new Specimen();
         fhir.setId(uuidGenerator.generateUUID());
         // fhir.identifier = SG16.RFF.C506.1154 (requester)

@@ -1,5 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
+import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,8 +26,10 @@ public class PathologyRecordMapper {
         final var requestingOrganization = organizationMapper.mapToRequestingOrganization(message);
         final var performingPractitioner = practitionerMapper.mapToPerformingPractitioner(message);
         final var performingOrganization = organizationMapper.mapToPerformingOrganization(message);
-        final var specimens = specimenMapper.mapToSpecimens(message, patient);
-        final var observations = observationMapper.mapToTestGroupsAndResults(message);
+        final var specimensBySequenceNumber = specimenMapper.mapToSpecimensBySequenceNumber(message, patient);
+        final var specimens = Lists.newArrayList(specimensBySequenceNumber.values());
+        final var observations = observationMapper.mapToObservations(message, patient, specimensBySequenceNumber,
+            performingOrganization.orElse(null), performingPractitioner.orElse(null));
         final var procedureRequest = procedureRequestMapper.mapToProcedureRequest(message, patient,
             requestingPractitioner.orElse(null), requestingOrganization.orElse(null),
             performingPractitioner.orElse(null), performingOrganization.orElse(null));

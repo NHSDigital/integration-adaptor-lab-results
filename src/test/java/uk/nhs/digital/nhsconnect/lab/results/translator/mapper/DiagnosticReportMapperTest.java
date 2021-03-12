@@ -2,6 +2,8 @@ package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
 import org.hl7.fhir.dstu3.model.DiagnosticReport;
 import org.hl7.fhir.dstu3.model.Observation;
+import org.hl7.fhir.dstu3.model.Observation.ObservationRelatedComponent;
+import org.hl7.fhir.dstu3.model.Observation.ObservationRelationshipType;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
@@ -30,6 +32,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -149,21 +152,27 @@ class DiagnosticReportMapperTest {
             "STS++UN",
             "DTM+ISR:201002251541:203"
         ));
-
-        final var observation1 = mock(Observation.class);
-        final var observation2 = mock(Observation.class);
-
         when(resourceFullUrlGenerator.generate(nullable(Patient.class))).thenReturn("patient-id");
-        when(resourceFullUrlGenerator.generate(observation1)).thenReturn("observation-1-id");
-        when(resourceFullUrlGenerator.generate(observation2)).thenReturn("observation-2-id");
+
+        final var observationGroup = mock(Observation.class);
+        when(observationGroup.getRelated()).thenReturn(List.of(
+            new ObservationRelatedComponent().setType(ObservationRelationshipType.HASMEMBER)));
+        when(resourceFullUrlGenerator.generate(observationGroup)).thenReturn("observation-1-id");
+
+        final var observationGroupedResult = mock(Observation.class);
+        when(observationGroupedResult.getRelated()).thenReturn(List.of(new ObservationRelatedComponent()));
+        lenient().when(resourceFullUrlGenerator.generate(observationGroupedResult)).thenReturn("observation-2-id");
+
+        final var observationUngroupedResult = mock(Observation.class);
+        when(resourceFullUrlGenerator.generate(observationUngroupedResult)).thenReturn("observation-3-id");
 
         final var result = mapper.mapToDiagnosticReport(message, null, Collections.emptyList(),
-            List.of(observation1, observation2), null, null, null);
+            List.of(observationGroup, observationGroupedResult, observationUngroupedResult), null, null, null);
 
         assertThat(result.getResult())
             .hasSize(2)
             .extracting(Reference::getReference)
-            .containsExactly("observation-1-id", "observation-2-id");
+            .containsExactlyInAnyOrder("observation-1-id", "observation-3-id");
     }
 
     @Test

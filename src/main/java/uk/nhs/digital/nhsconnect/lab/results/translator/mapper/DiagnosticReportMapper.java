@@ -5,6 +5,7 @@ import org.hl7.fhir.dstu3.model.DiagnosticReport;
 import org.hl7.fhir.dstu3.model.DiagnosticReport.DiagnosticReportStatus;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Observation;
+import org.hl7.fhir.dstu3.model.Observation.ObservationRelationshipType;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 @Component
@@ -126,7 +128,12 @@ public class DiagnosticReportMapper {
         }
 
         private void mapObservations() {
+            final Predicate<Observation> isTestGroup =  ob -> ob.getRelated().stream()
+                .anyMatch(relation -> relation.getType() == ObservationRelationshipType.HASMEMBER);
+            final Predicate<Observation> isUngroupedResult = ob -> ob.getRelated().isEmpty();
+
             observations.stream()
+                .filter(isTestGroup.or(isUngroupedResult))
                 .map(fullUrlGenerator::generate)
                 .forEach(reference -> fhir.addResult().setReference(reference));
         }
