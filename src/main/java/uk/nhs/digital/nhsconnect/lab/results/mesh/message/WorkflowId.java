@@ -27,6 +27,6 @@ public enum WorkflowId {
         return Arrays.stream(WorkflowId.values())
             .filter(workflow -> workflow.workflowId.equalsIgnoreCase(workflowId))
             .findFirst()
-            .orElseThrow(() -> new MeshWorkflowUnknownException("Unsupported workflow id " + workflowId, workflowId));
+            .orElseThrow(() -> new MeshWorkflowUnknownException("Unknown workflow id " + workflowId, workflowId));
     }
 }
