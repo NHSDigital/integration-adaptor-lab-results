@@ -17,6 +17,7 @@ public class PathologyRecordMapper {
     private final PatientMapper patientMapper;
     private final OrganizationMapper organizationMapper;
     private final SpecimenMapper specimenMapper;
+    private final DiagnosticReportMapper diagnosticReportMapper;
     private final ObservationMapper observationMapper;
 
     public PathologyRecord mapToPathologyRecord(final Message message) {
@@ -25,12 +26,16 @@ public class PathologyRecordMapper {
         final var requestingOrganization = organizationMapper.mapToRequestingOrganization(message);
         final var performingPractitioner = practitionerMapper.mapToPerformingPractitioner(message);
         final var performingOrganization = organizationMapper.mapToPerformingOrganization(message);
+        final var specimensBySequenceNumber = specimenMapper.mapToSpecimensBySequenceNumber(message, patient);
+        final var specimens = Lists.newArrayList(specimensBySequenceNumber.values());
+        final var observations = observationMapper.mapToObservations(message, patient, specimensBySequenceNumber,
+            performingOrganization.orElse(null), performingPractitioner.orElse(null));
         final var procedureRequest = procedureRequestMapper.mapToProcedureRequest(message, patient,
             requestingPractitioner.orElse(null), requestingOrganization.orElse(null),
             performingPractitioner.orElse(null), performingOrganization.orElse(null));
-        final var specimens = specimenMapper.mapToSpecimensBySequenceNumber(message, patient);
-        final var observations = observationMapper.mapToObservations(message, patient, specimens,
-            performingOrganization.orElse(null), performingPractitioner.orElse(null));
+        final var diagnosticReport = diagnosticReportMapper.mapToDiagnosticReport(message, patient, specimens,
+            observations, performingPractitioner.orElse(null), performingOrganization.orElse(null),
+            procedureRequest.orElse(null));
 
         final PathologyRecordBuilder pathologyRecordBuilder = PathologyRecord.builder();
 
@@ -40,7 +45,8 @@ public class PathologyRecordMapper {
         performingPractitioner.ifPresent(pathologyRecordBuilder::performingPractitioner);
         performingOrganization.ifPresent(pathologyRecordBuilder::performingOrganization);
         procedureRequest.ifPresent(pathologyRecordBuilder::testRequestSummary);
-        pathologyRecordBuilder.specimens(Lists.newArrayList(specimens.values()));
+        pathologyRecordBuilder.testReport(diagnosticReport);
+        pathologyRecordBuilder.specimens(specimens);
         pathologyRecordBuilder.testResults(observations);
 
         return pathologyRecordBuilder.build();

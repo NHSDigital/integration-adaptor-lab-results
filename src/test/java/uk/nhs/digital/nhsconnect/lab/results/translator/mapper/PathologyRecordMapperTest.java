@@ -1,5 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
+import org.hl7.fhir.dstu3.model.DiagnosticReport;
 import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
@@ -21,6 +22,7 @@ import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.nullable;
@@ -50,6 +52,9 @@ class PathologyRecordMapperTest {
     @Mock
     private ObservationMapper observationMapper;
 
+    @Mock
+    private DiagnosticReportMapper diagnosticReportMapper;
+
     @InjectMocks
     private PathologyRecordMapper pathologyRecordMapper;
 
@@ -66,6 +71,9 @@ class PathologyRecordMapperTest {
             .thenReturn(Collections.emptyMap());
         when(observationMapper.mapToObservations(any(), any(), any(), any(), any()))
             .thenReturn(Collections.emptyList());
+        when(diagnosticReportMapper.mapToDiagnosticReport(nullable(Message.class), nullable(Patient.class), anyList(),
+            anyList(), nullable(Practitioner.class), nullable(Organization.class), nullable(ProcedureRequest.class)))
+            .thenReturn(new DiagnosticReport());
     }
 
     @Test
@@ -175,5 +183,19 @@ class PathologyRecordMapperTest {
 
         assertThat(pathologyRecord.getTestResults())
             .containsExactly(mockObservation1, mockObservation2);
+    }
+
+    @Test
+    void testMapMessageToPathologyRecordWithDiagnosticReport() {
+        final Message message = new Message(emptyList());
+        final var diagnosticReport = mock(DiagnosticReport.class);
+        reset(diagnosticReportMapper);
+        when(diagnosticReportMapper.mapToDiagnosticReport(eq(message), nullable(Patient.class), anyList(), anyList(),
+            nullable(Practitioner.class), nullable(Organization.class), nullable(ProcedureRequest.class)))
+            .thenReturn(diagnosticReport);
+
+        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+
+        assertThat(pathologyRecord.getTestReport()).isEqualTo(diagnosticReport);
     }
 }

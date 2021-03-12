@@ -20,14 +20,15 @@ The GP System will receive medical reports on the `Outbound GP Queue` in form of
 ### Examples
 
 Examples of both Pathology and Screening messages are provided as part of the adaptor's User Acceptance Tests.
-Each example is built from 3 files:
+Each example is built from 2 files:
 
 - `<example-id>.edifact.dat` - message provided by laboratory
 - `<example-id>.fhir.json` - message translated to FHIR format
-- `<example-id>.nhsack.dat` - confirmation messasge sent back to the laboratory
 
-Pathology examples can be found here //TODO
-Screening examples can be found here //TODO
+Example input EDIFACT files can be found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/edifact) with the corresponding FHIR translations found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/fhir)
+
+Pathology examples can be found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/success_uat_data/NHS003)
+Screening examples can be found //TODO
 
 ## Adaptor Architecture
 
@@ -201,18 +202,6 @@ Navigate to: IntegrationAdapterLabResultsApplication -> right click -> Run
     docker-compose build lab-results
     docker-compose up lab-results
 
-**Inside multiple containers, behind a load balancer**
-
-Docker Compose allows running multiple instances behind a nginx load balancer in using round-robin routing.
-
-    docker-compose build lab-results
-    docker-compose -f docker-compose.yml -f docker-compose.lb.override.yml up --scale lab-results=3 lab-results
-
-This command will start three instances of the adaptor behind a load balancer on port 8080.
-
-To change the scale number while all services are running run the same "up" command with new scale value and then
-restart the load balancer container (so it will become aware of instance count change).
-
 ### Running quality checks
 
 **All quality checks**
@@ -257,6 +246,23 @@ The `--continue` flag ensures that all tests and checks will run.
 
     ./gradlew check --continue
 
+### Manual Testing
+
+Run `lab-results`, `mongodb`, `activemq` and `fake-mesh` containers:
+
+    docker-compose build
+    docker-compose up
+
+Run test script:
+
+    cd ./release/tests
+    ./send_message.sh
+
+that will send an [example EDIFACT message](https://github.com/nhsconnect/integration-adaptor-lab-results/blob/main/src/intTest/resources/edifact/pathology.edifact.dat) to the `fake-mesh` container. The `lab-results` container app will fetch this message and put the translated to FHIR format result on the `activemq` container's `lab_results_gp_outbound` queue.
+Check [ActiveMQ admin console](http://localhost:8161/admin/queues.jsp) (user: admin, password: admin) to download the result which will match the [example FHIR message](https://github.com/nhsconnect/integration-adaptor-lab-results/blob/main/src/intTest/resources/fhir/pathology.fhir.json). Additionally `mesh/mesh.sh` can be used to fetch the generated NHSACK from `fake-mesh`.
+
+Notice that depending on the `lab-result` configuration, it can take several seconds until `fake-mesh` is scanned for new messages.
+
 ### Debugging
 
 #### MongoDB
@@ -285,6 +291,7 @@ To view messages in the ActiveMQ Web Console:
 #### MESH API
 
 A `mesh.sh` bash script exists for testing or debugging MESH. For more information see: [mesh/README.md](/mesh/README.md)
+The `release/tests/send_message.sh` is a test script that sends an [example](https://github.com/nhsconnect/integration-adaptor-lab-results/blob/main/src/intTest/resources/edifact/pathology.edifact.dat) message to MESH mailbox.
 
 #### Fake MESH
 
