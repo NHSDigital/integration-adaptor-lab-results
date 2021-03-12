@@ -102,7 +102,7 @@ public class MeshClient {
                 }
                 final var meshMessage = new MeshMessage();
                 /* Get the workflowId before extracting the message body. An exception is thrown if the workflowId is
-                unsupported causing that message to be skipped. Messages for unsupported workflows might be very large
+                unknown causing that message to be skipped. Messages for unknown workflows might be very large
                 (up to 100mb) so we want to avoid reading the content into a String if not needed. */
                 meshMessage.setWorkflowId(WorkflowId.fromString(response.getHeaders("Mex-WorkflowID")[0].getValue()));
                 meshMessage.setContent(EntityUtils.toString(response.getEntity()));

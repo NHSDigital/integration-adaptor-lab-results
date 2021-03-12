@@ -19,7 +19,6 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
-import java.io.IOException;
 
 @Component
 @Slf4j
@@ -40,7 +39,7 @@ public class MeshInboundQueueService {
     private String meshInboundQueueName;
 
     @JmsListener(destination = "${labresults.amqp.meshInboundQueueName}")
-    public void receive(final Message message) throws IOException, JMSException {
+    public void receive(final Message message) throws Exception {
         LOGGER.info("Message received on '{}' queue", meshInboundQueueName);
         try {
             setLoggingCorrelationId(message);
@@ -54,11 +53,7 @@ public class MeshInboundQueueService {
             LOGGER.info("Processing MeshMessageId={} with MeshWorkflowId={}", meshMessage.getMeshMessageId(),
                 workflowId);
 
-            if (WorkflowId.PATHOLOGY.equals(workflowId)) {
-                inboundMessageHandler.handle(meshMessage);
-            } else {
-                throw new UnknownWorkflowException(workflowId);
-            }
+            inboundMessageHandler.handle(meshMessage);
 
             message.acknowledge();
             LOGGER.info("Completed processing MeshMessageId={}", meshMessage.getMeshMessageId());

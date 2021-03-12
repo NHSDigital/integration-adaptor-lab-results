@@ -12,6 +12,7 @@ import uk.nhs.digital.nhsconnect.lab.results.mesh.exception.MeshApiConnectionExc
 import uk.nhs.digital.nhsconnect.lab.results.mesh.exception.MeshWorkflowUnknownException;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshClient;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
+import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
 import uk.nhs.digital.nhsconnect.lab.results.utils.CorrelationIdService;
 
 import java.util.List;
@@ -45,7 +46,6 @@ class MeshServiceTest {
     private CorrelationIdService correlationIdService;
 
     private final long scanDelayInSeconds = 2L;
-    private final long scanIntervalInMilliseconds = 6000L;
     private final long pollingCycleMaximumDurationInSeconds = 1L;
     private static final String MESSAGE_ID1 = "messageId1";
     private static final String MESSAGE_ID2 = "messageId2";
@@ -57,10 +57,11 @@ class MeshServiceTest {
     @BeforeEach
     void setUp() {
         meshMessage1 = new MeshMessage();
-        meshMessage1.setMeshMessageId(MESSAGE_ID1);
+        meshMessage1.setMeshMessageId(MESSAGE_ID1).setWorkflowId(WorkflowId.PATHOLOGY);
         meshMessage2 = new MeshMessage();
-        meshMessage2.setMeshMessageId(MESSAGE_ID2);
+        meshMessage2.setMeshMessageId(MESSAGE_ID2).setWorkflowId(WorkflowId.PATHOLOGY);
 
+        final long scanIntervalInMilliseconds = 6000L;
         meshService = new MeshService(meshClient,
                 meshInboundQueueService,
                 meshMailBoxScheduler,
@@ -156,6 +157,29 @@ class MeshServiceTest {
     }
 
     @Test
+    void when_intervalPassedAndDownloadedMessageHasAnUnsupportedWorkflow_expect_doNotPublishOrAcknowledgeMessage() {
+        final String MESSAGE_ID = "messageId_with_unsupported_workflow";
+        final MeshMessage meshMessage = new MeshMessage();
+        meshMessage.setMeshMessageId(MESSAGE_ID).setWorkflowId(WorkflowId.PATHOLOGY_ACK);
+
+        when(meshMailBoxScheduler.hasTimePassed(scanDelayInSeconds)).thenReturn(true);
+        when(meshMailBoxScheduler.isEnabled()).thenReturn(true);
+        when(meshClient.getInboxMessageIds()).thenReturn(List.of(MESSAGE_ID));
+        when(meshClient.getEdifactMessage(MESSAGE_ID)).thenReturn(meshMessage);
+
+        meshService.scanMeshInboxForMessages();
+
+        assertAll(
+            () -> verify(meshClient).authenticate(),
+            () -> verify(meshClient).getEdifactMessage(MESSAGE_ID),
+            () -> verify(meshInboundQueueService, never()).publish(any()),
+            () -> verify(meshClient, never()).acknowledgeMessage(MESSAGE_ID),
+            () -> verify(correlationIdService).applyRandomCorrelationId(),
+            () -> verify(correlationIdService).resetCorrelationId()
+        );
+    }
+
+    @Test
     void when_intervalPassedAndMeshDownloadFailsWithWorkflowUnknownException_expect_doNotPublishOrAcknowledgeMessage() {
         when(meshMailBoxScheduler.hasTimePassed(scanDelayInSeconds)).thenReturn(true);
         when(meshMailBoxScheduler.isEnabled()).thenReturn(true);
@@ -198,7 +222,7 @@ class MeshServiceTest {
     @Test
     void when_intervalHasPassedAndAcknowledgeMeshMessageFails_expect_skipMessageAndDownloadNextOne() {
         final MeshMessage messageForAckError = new MeshMessage();
-        messageForAckError.setMeshMessageId(ERROR_MESSAGE_ID);
+        messageForAckError.setMeshMessageId(ERROR_MESSAGE_ID).setWorkflowId(WorkflowId.PATHOLOGY);
 
         when(meshMailBoxScheduler.hasTimePassed(scanDelayInSeconds)).thenReturn(true);
         when(meshMailBoxScheduler.isEnabled()).thenReturn(true);
