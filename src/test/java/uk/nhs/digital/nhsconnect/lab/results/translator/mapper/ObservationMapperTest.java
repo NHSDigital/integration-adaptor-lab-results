@@ -110,7 +110,7 @@ class ObservationMapperTest {
                 .satisfies(coding -> assertAll(
                     () -> assertThat(coding.getCode()).isEqualTo("code"),
                     () -> assertThat(coding.getDisplay()).isEqualTo("description"),
-                    () -> assertThat(coding.getSystem()).isEqualTo("http://loinc.org")
+                    () -> assertThat(coding.getSystem()).isEqualTo("http://read.info/readv2")
                 )))
             .allSatisfy(specimen -> assertThat(specimen.getId()).isEqualTo("test-uuid"));
     }
@@ -135,7 +135,7 @@ class ObservationMapperTest {
                 .satisfies(coding -> assertAll(
                     () -> assertThat(coding.hasCode()).isFalse(),
                     () -> assertThat(coding.getDisplay()).isEqualTo("description"),
-                    () -> assertThat(coding.getSystem()).isEqualTo("http://loinc.org")
+                    () -> assertThat(coding.getSystem()).isEqualTo("http://read.info/readv2")
                 )));
     }
 

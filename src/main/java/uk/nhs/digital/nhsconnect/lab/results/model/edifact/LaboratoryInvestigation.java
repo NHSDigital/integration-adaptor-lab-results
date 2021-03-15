@@ -13,10 +13,10 @@ import java.util.Optional;
 /**
  * Details of the laboratory investigation.
  * <pre>
-     * Example in a Pathology (NHS003) message: INV+MQ+42R4.:911::Serum ferritin'
+ * Example in a Pathology (NHS003) message: {@code INV+MQ+42R4.:911::Serum ferritin'}
  * </pre>
  * <pre>
- * Example in a Screening (NHS004) message: INV+MQ+368481000000103:921::BCS?:FOB result'
+ * Example in a Screening (NHS004) message: {@code INV+MQ+368481000000103:921::BCS?:FOB result'}
  * </pre>
  */
 @AllArgsConstructor
@@ -28,6 +28,7 @@ public class LaboratoryInvestigation extends Segment {
     public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
 
     private final String investigationCode;
+    @Getter
     private final CodingType investigationCodeType;
     @Getter
     @NonNull

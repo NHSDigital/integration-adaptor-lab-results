@@ -188,7 +188,6 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
               "display": "B12/FOLATE"
             }
           ]
@@ -230,7 +229,7 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
+              "system": "http://read.info/readv2",
               "code": "42T..",
               "display": "Serum vitamin B12"
             }
@@ -279,7 +278,7 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
+              "system": "http://read.info/readv2",
               "code": "42UE.",
               "display": "Plasma folate level"
             }

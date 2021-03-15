@@ -131,7 +131,8 @@ labresults:
       -----END RSA PRIVATE KEY-----}
     subCAcert: ${LAB_RESULTS_MESH_SUB_CA:}
     recipientToMailboxIdMappings: ${LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS:000000004400001=lab_results_mailbox
-      000000024600002=lab_results_mailbox 000000183500005=lab_results_mailbox}
+      000000024600002=lab_results_mailbox
+      000000183500005=lab_results_mailbox}
     wakeupIntervalInMilliseconds: ${LAB_RESULTS_MESH_CLIENT_WAKEUP_INTERVAL_IN_MILLISECONDS:60000}
     pollingCycleMinimumIntervalInSeconds: ${LAB_RESULTS_MESH_POLLING_CYCLE_MINIMUM_INTERVAL_IN_SECONDS:300}
     pollingCycleDurationInSeconds: ${LAB_RESULTS_MESH_POLLING_CYCLE_DURATION_IN_SECONDS:285}

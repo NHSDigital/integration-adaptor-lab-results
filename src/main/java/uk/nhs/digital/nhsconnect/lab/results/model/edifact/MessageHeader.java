@@ -9,9 +9,9 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 /**
  * A specialisation of a segment for the specific use case of a message header.
- * Takes in specific values required to generate n message header.
+ * Takes in specific values required to generate a message header.
  * <pre>
- * Example: {@code UNH+1+MEDRPT:0:1:RT:NHS003'}.
+ * Example: {@code UNH+1+MEDRPT:0:1:RT:NHS003'}
  * </pre>
  */
 @Builder
@@ -23,12 +23,10 @@ public class MessageHeader extends Segment {
     public static final String KEY = "UNH";
     public static final long MAX_MESSAGE_SEQUENCE = 99_999_999L;
 
-    private static final int INDEX_SEQUENCE_NUMBER = 1;
-    private static final int INDEX_MESSAGE_TYPE = 4;
-
     private final Long sequenceNumber;
     private final MessageType messageType;
 
+    @SuppressWarnings("checkstyle:MagicNumber")
     public static MessageHeader fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY)) {
             throw new IllegalArgumentException("Can't create " + MessageHeader.class.getSimpleName()
@@ -38,8 +36,8 @@ public class MessageHeader extends Segment {
         final String[] splitByColon = Split.byColon(splitByPlus[2]);
 
         return MessageHeader.builder()
-            .sequenceNumber(Long.valueOf(splitByPlus[INDEX_SEQUENCE_NUMBER]))
-            .messageType(MessageType.fromCode(splitByColon[INDEX_MESSAGE_TYPE]))
+            .sequenceNumber(Long.valueOf(splitByPlus[1]))
+            .messageType(MessageType.fromCode(splitByColon[4]))
             .build();
     }
 

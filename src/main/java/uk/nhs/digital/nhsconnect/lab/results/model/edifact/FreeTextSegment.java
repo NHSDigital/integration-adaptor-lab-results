@@ -12,11 +12,11 @@ import java.util.Arrays;
 
 /**
  * <pre>
- * Example: FTX+CID+++ON WARFARIN'
+ * Example: {@code FTX+CID+++ON WARFARIN'}
  * </pre>
  * <pre>
- * Example: FTX+SPC+++Normal. Sent following an initial single
- * Negative result or following:2 Negative results after an initial Weak Positive'
+ * Example: {@code FTX+SPC+++Normal. Sent following an initial single Negative
+ * result or following:2 Negative results after an initial Weak Positive'}
  * </pre>
  */
 @RequiredArgsConstructor

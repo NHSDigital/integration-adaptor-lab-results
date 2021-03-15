@@ -191,7 +191,7 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
+              "system": "http://read.info/readv2",
               "code": "424..",
               "display": "Full blood count - FBC"
             }
@@ -299,7 +299,7 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
+              "system": "http://read.info/readv2",
               "code": "42H..",
               "display": "Total white cell count"
             }
@@ -348,7 +348,7 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
+              "system": "http://read.info/readv2",
               "code": "426..",
               "display": "Red blood cell (RBC) count"
             }
@@ -397,7 +397,7 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
+              "system": "http://read.info/readv2",
               "code": "423..",
               "display": "Haemoglobin estimation"
             }
@@ -446,7 +446,7 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
+              "system": "http://read.info/readv2",
               "code": "4258.",
               "display": "Haematocrit"
             }
@@ -495,7 +495,7 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
+              "system": "http://read.info/readv2",
               "code": "42A..",
               "display": "Mean corpuscular volume (MCV)"
             }
@@ -544,7 +544,7 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
+              "system": "http://read.info/readv2",
               "code": "428..",
               "display": "Mean corpusc. haemoglobin(MCH)"
             }
@@ -593,7 +593,7 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
+              "system": "http://read.info/readv2",
               "code": "429..",
               "display": "Mean corpusc. Hb. conc. (MCHC)"
             }
@@ -642,7 +642,7 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
+              "system": "http://read.info/readv2",
               "code": "42P..",
               "display": "Platelet count"
             }
@@ -691,7 +691,7 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
+              "system": "http://read.info/readv2",
               "code": "42J..",
               "display": "Neutrophil count"
             }
@@ -740,7 +740,7 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
+              "system": "http://read.info/readv2",
               "code": "42M..",
               "display": "Lymphocyte count"
             }
@@ -789,7 +789,7 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
+              "system": "http://read.info/readv2",
               "code": "42N..",
               "display": "Monocyte count"
             }
@@ -838,7 +838,7 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
+              "system": "http://read.info/readv2",
               "code": "42K..",
               "display": "Eosinophil count"
             }
@@ -888,7 +888,7 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
+              "system": "http://read.info/readv2",
               "code": "42L..",
               "display": "Basophil count"
             }

@@ -33,6 +33,11 @@
         "birthDate": "1938-02-06",
         "address": [
           {
+            "line": [
+              "HIGHWOOD BUNGALOW",
+              "EXETER",
+              "DEVON"
+            ],
             "postalCode": "TQ14 4QJ"
           }
         ]
@@ -138,7 +143,7 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
+              "system": "http://snomed.info/sct",
               "code": "368481000000103",
               "display": "Bowel cancer screening result"
             }
@@ -152,6 +157,15 @@
             "reference": "urn:uuid:fc050c50-8fbb-4b91-a9eb-509d4c6f745d"
           }
         ],
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "375211000000108",
+              "display": "Bowel cancer screening programme FOB test normal (finding)"
+            }
+          ]
+        },
         "comment": "Normal. Sent following an initial single Negative result or following 2 Negative results after an initial Weak Positive",
         "specimen": {
           "reference": "urn:uuid:ad79dabe-2842-4a74-8f09-72cd398fcdd4"

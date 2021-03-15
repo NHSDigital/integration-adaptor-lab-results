@@ -9,10 +9,10 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 /**
  * <pre>
- * Example: PDI+1'
+ * Example: {@code PDI+1'}
  * </pre>
  * <pre>
- * Example: PDI+2'
+ * Example: {@code PDI+2'}
  * </pre>
  */
 @Getter
