@@ -1,6 +1,7 @@
 package uk.nhs.digital.nhsconnect.lab.results.outbound.queue;
 
 import org.hl7.fhir.dstu3.model.Bundle;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -17,6 +18,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageHeader;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageType;
 import uk.nhs.digital.nhsconnect.lab.results.utils.CorrelationIdService;
 import uk.nhs.digital.nhsconnect.lab.results.utils.JmsHeaders;
 
@@ -24,19 +26,17 @@ import javax.jms.JMSException;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@SuppressWarnings("checkstyle:MagicNumber")
 class GpOutboundQueueServiceTest {
-
-    private static final String CONSERVATION_ID = "ABC123";
-    private static final String SENDER = "some_sender";
-    private static final String RECIPIENT = "some_recipient";
-    private static final long INTERCHANGE_SEQUENCE_NUMBER = 123;
-    private static final long MESSAGE_SEQUENCE_NUMBER = 234;
 
     @InjectMocks
     private GpOutboundQueueService gpOutboundQueueService;
@@ -72,20 +72,25 @@ class GpOutboundQueueServiceTest {
     private MessageHeader messageHeader;
 
     @Captor
-    private ArgumentCaptor<MessageCreator> messageCreatorArgumentCaptor;
+    private ArgumentCaptor<MessageCreator> messageCreatorCaptor;
 
     @Value("${labresults.amqp.gpOutboundQueueName}")
     private String gpOutboundQueueName;
 
+    @BeforeEach
+    void setUp() {
+        lenient().when(message.getInterchange()).thenReturn(interchange);
+        lenient().when(interchange.getInterchangeHeader()).thenReturn(interchangeHeader);
+        when(message.getMessageHeader()).thenReturn(messageHeader);
+    }
+
     @Test
     void publishMessageToGpOutboundQueue() throws JMSException {
-        when(message.getInterchange()).thenReturn(interchange);
-        when(interchange.getInterchangeHeader()).thenReturn(interchangeHeader);
-        when(message.getMessageHeader()).thenReturn(messageHeader);
-        when(interchangeHeader.getSender()).thenReturn(SENDER);
-        when(interchangeHeader.getRecipient()).thenReturn(RECIPIENT);
-        when(interchangeHeader.getSequenceNumber()).thenReturn(INTERCHANGE_SEQUENCE_NUMBER);
-        when(messageHeader.getSequenceNumber()).thenReturn(MESSAGE_SEQUENCE_NUMBER);
+        when(interchangeHeader.getSender()).thenReturn("some_sender");
+        when(interchangeHeader.getRecipient()).thenReturn("some_recipient");
+        when(interchangeHeader.getSequenceNumber()).thenReturn(123L);
+        when(messageHeader.getSequenceNumber()).thenReturn(234L);
+        when(messageHeader.getMessageType()).thenReturn(MessageType.PATHOLOGY.getCode());
 
         final var bundle = new Bundle();
         final var processingResult = new MessageProcessingResult.Success(message, bundle);
@@ -93,25 +98,46 @@ class GpOutboundQueueServiceTest {
         final String serializedData = "some_serialized_data";
 
         when(serializer.serialize(bundle)).thenReturn(serializedData);
-        when(correlationIdService.getCurrentCorrelationId()).thenReturn(CONSERVATION_ID);
+        when(correlationIdService.getCurrentCorrelationId()).thenReturn("ABC123");
 
         gpOutboundQueueService.publish(processingResult);
 
         assertAll(
             () -> verify(serializer).serialize(bundle),
-            () -> verify(jmsTemplate).send(eq(gpOutboundQueueName), messageCreatorArgumentCaptor.capture())
+            () -> verify(jmsTemplate).send(eq(gpOutboundQueueName), messageCreatorCaptor.capture())
         );
 
         when(session.createTextMessage(serializedData)).thenReturn(textMessage);
 
-        messageCreatorArgumentCaptor.getValue().createMessage(session);
+        messageCreatorCaptor.getValue().createMessage(session);
 
         assertAll(
-            () -> verify(session).createTextMessage(eq(serializedData)),
-            () -> verify(textMessage).setStringProperty(JmsHeaders.CORRELATION_ID, CONSERVATION_ID),
+            () -> verify(session).createTextMessage(serializedData),
+            () -> verify(textMessage).setStringProperty(JmsHeaders.CORRELATION_ID, "ABC123"),
+            () -> verify(textMessage).setStringProperty(JmsHeaders.MESSAGE_TYPE, "Pathology"),
             () -> verify(correlationIdService).getCurrentCorrelationId(),
             () -> verify(checksumService)
-                .createChecksum(SENDER, RECIPIENT, INTERCHANGE_SEQUENCE_NUMBER, MESSAGE_SEQUENCE_NUMBER)
+                .createChecksum("some_sender", "some_recipient", 123L, 234L)
         );
+    }
+
+    @Test
+    void publishInvalidMessageToGpOutboundQueue() {
+        when(messageHeader.getMessageType()).thenReturn(MessageType.NHSACK.getCode());
+        final var processingResult = new MessageProcessingResult.Success(message, new Bundle());
+
+        assertThatIllegalStateException()
+            .isThrownBy(() -> gpOutboundQueueService.publish(processingResult))
+            .withMessage("Invalid message type: NHSACK");
+    }
+
+    @Test
+    void publishNonsenseMessageToGpOutboundQueue() {
+        when(messageHeader.getMessageType()).thenReturn("Nonsense");
+        final var processingResult = new MessageProcessingResult.Success(message, new Bundle());
+
+        assertThatIllegalArgumentException()
+            .isThrownBy(() -> gpOutboundQueueService.publish(processingResult))
+            .withMessage("No message type for \"Nonsense\"");
     }
 }
