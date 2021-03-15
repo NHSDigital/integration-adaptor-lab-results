@@ -22,6 +22,7 @@ public class MessageHeader extends Segment {
     public static final String KEY = "UNH";
     public static final long MAX_MESSAGE_SEQUENCE = 99_999_999L;
 
+    private static final int INDEX_SEQUENCE_NUMBER = 1;
     private static final int INDEX_MESSAGE_TYPE = 4;
 
     private Long sequenceNumber;
@@ -53,6 +54,6 @@ public class MessageHeader extends Segment {
         }
         final String[] splitByPlus = Split.byPlus(edifactString);
         final String[] splitByColon = Split.byColon(splitByPlus[2]);
-        return new MessageHeader(Long.valueOf(splitByPlus[1]), splitByColon[INDEX_MESSAGE_TYPE]);
+        return new MessageHeader(Long.valueOf(splitByPlus[INDEX_SEQUENCE_NUMBER]), splitByColon[INDEX_MESSAGE_TYPE]);
     }
 }
