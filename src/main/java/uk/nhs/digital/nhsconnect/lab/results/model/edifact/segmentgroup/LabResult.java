@@ -58,7 +58,7 @@ public class LabResult extends SegmentGroup {
 
     @Getter(lazy = true)
     private final Optional<LaboratoryInvestigationResult> investigationResult =
-        extractOptionalSegment(LaboratoryInvestigationResult.KEY_QUALIFIER)
+        extractOptionalSegment(LaboratoryInvestigationResult.KEY)
             .map(LaboratoryInvestigationResult::fromString);
 
     @Getter(lazy = true)

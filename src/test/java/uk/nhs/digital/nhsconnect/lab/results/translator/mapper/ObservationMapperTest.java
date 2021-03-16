@@ -1,5 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
+import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.Observation.ObservationReferenceRangeComponent;
 import org.hl7.fhir.dstu3.model.Observation.ObservationRelationshipType;
@@ -110,7 +111,7 @@ class ObservationMapperTest {
                 .satisfies(coding -> assertAll(
                     () -> assertThat(coding.getCode()).isEqualTo("code"),
                     () -> assertThat(coding.getDisplay()).isEqualTo("description"),
-                    () -> assertThat(coding.getSystem()).isEqualTo("http://loinc.org")
+                    () -> assertThat(coding.getSystem()).isEqualTo("http://read.info/readv2")
                 )))
             .allSatisfy(specimen -> assertThat(specimen.getId()).isEqualTo("test-uuid"));
     }
@@ -135,12 +136,12 @@ class ObservationMapperTest {
                 .satisfies(coding -> assertAll(
                     () -> assertThat(coding.hasCode()).isFalse(),
                     () -> assertThat(coding.getDisplay()).isEqualTo("description"),
-                    () -> assertThat(coding.getSystem()).isEqualTo("http://loinc.org")
+                    () -> assertThat(coding.getSystem()).isEqualTo("http://read.info/readv2")
                 )));
     }
 
     @Test
-    void testMapLaboratoryInvestigationResult() {
+    void testMapLaboratoryInvestigationNumericalResult() {
         final var message = new Message(List.of(
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
@@ -162,6 +163,33 @@ class ObservationMapperTest {
                 () -> assertThat(quantity.getValue()).isEqualTo("1.23"),
                 () -> assertThat(quantity.getComparator()).isEqualTo(QuantityComparator.LESS_THAN),
                 () -> assertThat(quantity.getUnit()).isEqualTo("units")
+            ));
+    }
+
+    @Test
+    void testMapLaboratoryInvestigationCodedResult() {
+        final var message = new Message(List.of(
+            "S02+02", // ServiceReportDetails
+            "S06+06", // InvestigationSubject
+            "GIS+N", // LabResult
+            "INV+MQ+c:911::d", // LaboratoryInvestigation
+            "RFF+ASL:1", // Reference
+
+            "RSL+CV+::111222333:921::Normal test" // LaboratoryInvestigationResult
+        ));
+
+        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
+            mockPractitioner);
+
+        assertThat(observations).hasSize(1)
+            .first()
+            .extracting(Observation::getValueCodeableConcept)
+            .extracting(CodeableConcept::getCoding)
+            .isNotNull()
+            .satisfies(result -> assertAll(
+                () -> assertThat(result.get(0).getSystem()).isEqualTo("http://snomed.info/sct"),
+                () -> assertThat(result.get(0).getCode()).isEqualTo("111222333"),
+                () -> assertThat(result.get(0).getDisplay()).isEqualTo("Normal test")
             ));
     }
 

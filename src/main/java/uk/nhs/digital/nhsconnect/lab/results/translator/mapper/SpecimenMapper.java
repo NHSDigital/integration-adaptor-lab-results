@@ -21,13 +21,13 @@ import java.util.Map;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toMap;
+import static uk.nhs.digital.nhsconnect.lab.results.model.Constants.SNOMED_CODING_SYSTEM;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class SpecimenMapper {
     private static final String IDENTIFIER_SYSTEM = "http://ehr.acme.org/identifiers/collections";
     private static final String ACCESSION_IDENTIFIER_SYSTEM = "http://lab.acme.org/specimens/2011";
-    private static final String TYPE_SYSTEM = "http://snomed.info/sct";
 
     private final UUIDGenerator uuidGenerator;
     private final DateFormatMapper dateFormatMapper;
@@ -61,7 +61,7 @@ public class SpecimenMapper {
             .map(SpecimenCharacteristicType::getTypeOfSpecimen)
             .ifPresent(specimenType -> fhir.getType().addCoding()
                 .setDisplay(specimenType)
-                .setSystem(TYPE_SYSTEM));
+                .setSystem(SNOMED_CODING_SYSTEM));
         // fhir.receivedTime = SG16.DTM.C507.2380 (SRI)
         edifact.getCollectionReceiptDateTime()
             .map(date -> dateFormatMapper.mapToDate(date.getDateFormat(), date.getCollectionReceiptDateTime()))

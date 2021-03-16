@@ -1,6 +1,7 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
 import org.junit.jupiter.api.Test;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.CodingType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DeviatingResultIndicator;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
@@ -55,10 +56,10 @@ class LabResultTest {
         var labResultInvestigation = assertThat(labResult.getInvestigation()).isNotNull();
 
         labResultInvestigation
-            .extracting(LaboratoryInvestigation::getInvestigationCode)
+            .extracting(LaboratoryInvestigation::getCode)
             .isEqualTo(Optional.of("42R4."));
         labResultInvestigation
-            .extracting(LaboratoryInvestigation::getInvestigationDescription)
+            .extracting(LaboratoryInvestigation::getDescription)
             .isEqualTo("Serum ferritin");
     }
 
@@ -76,26 +77,46 @@ class LabResultTest {
     }
 
     @Test
-    void testGetLaboratoryInvestigationResult() {
+    void testGetLaboratoryInvestigationNumericalResult() {
         final var labResult = new LabResult(List.of(
             "ignore me",
             "RSL+NV+11.9:7++:::ng/mL+HI",
             "ignore me"
         ));
-        var labResultInvestigationResult = assertThat(labResult.getInvestigationResult()).isPresent();
+        var assertInvestigationResult = assertThat(labResult.getInvestigationResult()).isPresent();
 
-        labResultInvestigationResult
+        assertInvestigationResult
             .map(LaboratoryInvestigationResult::getDeviatingResultIndicator)
             .hasValue(DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT);
-        labResultInvestigationResult
+        assertInvestigationResult
             .map(LaboratoryInvestigationResult::getMeasurementUnit)
             .hasValue("ng/mL");
-        labResultInvestigationResult
+        assertInvestigationResult
             .map(LaboratoryInvestigationResult::getMeasurementValue)
             .hasValue(BigDecimal.valueOf(EXPECTED_MEASUREMENT_VALUE));
-        labResultInvestigationResult
+        assertInvestigationResult
             .map(LaboratoryInvestigationResult::getMeasurementValueComparator)
             .contains(Optional.of(MeasurementValueComparator.LESS_THAN));
+    }
+
+    @Test
+    void testGetLaboratoryInvestigationCodedResult() {
+        final var labResult = new LabResult(List.of(
+            "ignore me",
+            "RSL+CV+::375211000000108:921::Bowel cancer screening programme FOB test normal (finding)",
+            "ignore me"
+        ));
+        var assertInvestigationResult = assertThat(labResult.getInvestigationResult()).isPresent();
+
+        assertInvestigationResult
+            .map(LaboratoryInvestigationResult::getCode)
+            .hasValue("375211000000108");
+        assertInvestigationResult
+            .map(LaboratoryInvestigationResult::getCodingType)
+            .contains(Optional.of(CodingType.SNOMED_CT_CODE));
+        assertInvestigationResult
+            .map(LaboratoryInvestigationResult::getDescription)
+            .hasValue("Bowel cancer screening programme FOB test normal (finding)");
     }
 
     @Test

@@ -65,7 +65,7 @@ public class OrganizationMapper {
         organization.setName(organizationName.replaceAll("\\?'", "'"));
 
         if (!StringUtils.isBlank(departmentName)) {
-            Coding coding = new Coding()
+            final Coding coding = new Coding()
                 .setCode(OrganizationType.DEPT.toCode())
                 .setDisplay(departmentName);
             CodeableConcept type = new CodeableConcept().addCoding(coding);

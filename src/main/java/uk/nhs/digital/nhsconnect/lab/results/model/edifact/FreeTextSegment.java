@@ -11,14 +11,19 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 import java.util.Arrays;
 
 /**
- * Example FTX+CID+++ON WARFARIN'
+ * <pre>
+ * Example: {@code FTX+CID+++ON WARFARIN'}
+ * </pre>
+ * <pre>
+ * Example: {@code FTX+SPC+++Normal. Sent following an initial single Negative
+ * result or following:2 Negative results after an initial Weak Positive'}
+ * </pre>
  */
 @RequiredArgsConstructor
 @Getter
 @EqualsAndHashCode(callSuper = false)
 public class FreeTextSegment extends Segment {
     public static final String KEY = "FTX";
-    private static final int FREE_TEXT_INDEX = 4;
     private static final int MAXIMUM_FREE_TEXTS = 5;
 
     @NonNull
@@ -26,6 +31,7 @@ public class FreeTextSegment extends Segment {
     @NonNull
     private final String[] texts;
 
+    @SuppressWarnings("checkstyle:MagicNumber")
     public static FreeTextSegment fromString(final String edifact) {
         if (!edifact.startsWith(KEY)) {
             throw new IllegalArgumentException(
@@ -34,7 +40,7 @@ public class FreeTextSegment extends Segment {
 
         final String[] split = Split.byPlus(edifact);
         final String typeCode = split[1];
-        final String freeTextComponent = split[FREE_TEXT_INDEX];
+        final String freeTextComponent = split[4];
 
         final String[] freeTexts = Split.byColon(freeTextComponent);
         if (freeTexts.length > MAXIMUM_FREE_TEXTS) {

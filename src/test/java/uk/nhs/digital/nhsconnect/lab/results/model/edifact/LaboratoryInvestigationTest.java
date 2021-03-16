@@ -18,7 +18,11 @@ class LaboratoryInvestigationTest {
 
     @Test
     void when_edifactStringIsPassed_expect_returnALaboratoryInvestigationObject() {
-        final var laboratoryInvestigation = new LaboratoryInvestigation("42R4.", "Serum ferritin");
+        final var laboratoryInvestigation = LaboratoryInvestigation.builder()
+            .code("42R4.")
+            .codingType(CodingType.READ_CODE)
+            .description("Serum ferritin")
+            .build();
 
         assertThat(laboratoryInvestigation)
             .usingRecursiveComparison()
@@ -29,31 +33,43 @@ class LaboratoryInvestigationTest {
     void when_buildingSegmentObjectWithoutAnyFields_expect_nullPointerExceptionIsThrown() {
         assertThatThrownBy(() -> LaboratoryInvestigation.builder().build())
             .isExactlyInstanceOf(NullPointerException.class)
-            .hasMessage("investigationDescription is marked non-null but is null");
+            .hasMessage("description is marked non-null but is null");
     }
 
     @Test
     void testGetKey() {
-        assertThat(new LaboratoryInvestigation(null, ".").getKey()).isEqualTo("INV");
+        assertThat(new LaboratoryInvestigation(null, CodingType.READ_CODE, ".").getKey()).isEqualTo("INV");
     }
 
     @Test
     void testValidateAllValues() {
-        final var laboratoryInvestigation = new LaboratoryInvestigation("43J7.", "IgE");
+        final var laboratoryInvestigation = LaboratoryInvestigation.builder()
+            .code("43J7.")
+            .codingType(CodingType.READ_CODE)
+            .description("IgE")
+            .build();
 
         assertThatNoException().isThrownBy(laboratoryInvestigation::validate);
     }
 
     @Test
     void testValidateMissingCode() {
-        final var laboratoryInvestigation = new LaboratoryInvestigation(null, "Something");
+        LaboratoryInvestigation laboratoryInvestigation = LaboratoryInvestigation.builder()
+            .code(null)
+            .codingType(CodingType.READ_CODE)
+            .description("This is an investigation description")
+            .build();
 
         assertThatNoException().isThrownBy(laboratoryInvestigation::validate);
     }
 
     @Test
     void testValidateMissingDescription() {
-        final var laboratoryInvestigation = new LaboratoryInvestigation("42R4.", "");
+        final var laboratoryInvestigation = LaboratoryInvestigation.builder()
+            .code("42R4.")
+            .codingType(CodingType.READ_CODE)
+            .description("")
+            .build();
 
         assertThatThrownBy(laboratoryInvestigation::validate)
             .isExactlyInstanceOf(EdifactValidationException.class)

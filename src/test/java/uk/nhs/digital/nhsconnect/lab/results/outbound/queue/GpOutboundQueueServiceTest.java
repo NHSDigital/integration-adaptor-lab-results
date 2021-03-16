@@ -26,7 +26,6 @@ import javax.jms.JMSException;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
-import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.eq;
@@ -90,7 +89,7 @@ class GpOutboundQueueServiceTest {
         when(interchangeHeader.getRecipient()).thenReturn("some_recipient");
         when(interchangeHeader.getSequenceNumber()).thenReturn(123L);
         when(messageHeader.getSequenceNumber()).thenReturn(234L);
-        when(messageHeader.getMessageType()).thenReturn(MessageType.PATHOLOGY.getCode());
+        when(messageHeader.getMessageType()).thenReturn(MessageType.PATHOLOGY);
 
         final var bundle = new Bundle();
         final var processingResult = new MessageProcessingResult.Success(message, bundle);
@@ -123,21 +122,11 @@ class GpOutboundQueueServiceTest {
 
     @Test
     void publishInvalidMessageToGpOutboundQueue() {
-        when(messageHeader.getMessageType()).thenReturn(MessageType.NHSACK.getCode());
+        when(messageHeader.getMessageType()).thenReturn(MessageType.NHSACK);
         final var processingResult = new MessageProcessingResult.Success(message, new Bundle());
 
         assertThatIllegalStateException()
             .isThrownBy(() -> gpOutboundQueueService.publish(processingResult))
             .withMessage("Invalid message type: NHSACK");
-    }
-
-    @Test
-    void publishNonsenseMessageToGpOutboundQueue() {
-        when(messageHeader.getMessageType()).thenReturn("Nonsense");
-        final var processingResult = new MessageProcessingResult.Success(message, new Bundle());
-
-        assertThatIllegalArgumentException()
-            .isThrownBy(() -> gpOutboundQueueService.publish(processingResult))
-            .withMessage("No message type for \"Nonsense\"");
     }
 }

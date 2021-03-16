@@ -28,6 +28,7 @@ class EdifactParserTest {
     private static final String SENDER = "some_sender";
     private static final String RECIPIENT = "some_recipient";
     private static final Long INTERCHANGE_SEQUENCE_NUMBER = 1L;
+
     @Mock
     private InterchangeFactory interchangeFactory;
 
@@ -51,13 +52,14 @@ class EdifactParserTest {
         when(interchangeFactory.createInterchange(any())).thenReturn(interchange);
         when(interchange.setMessages(any())).thenReturn(interchange);
 
-        Interchange interchange = edifactParser.parse(String.join("\n", EdifactFixtures.SAMPLE_EDIFACT));
+        Interchange interchange = edifactParser.parse(EdifactFixtures.SAMPLE_EDIFACT);
 
         assertNotNull(interchange);
 
         // trailing empty string because we split by apostrophe and there's a trailing apostrophe
         verify(interchangeFactory).createInterchange(
-            List.of(EdifactFixtures.EDIFACT_HEADER, EdifactFixtures.EDIFACT_TRAILER, ""));
+            List.of(EdifactFixtures.EDIFACT_INTERCHANGE_HEADER, EdifactFixtures.EDIFACT_INTERCHANGE_TRAILER, "")
+        );
     }
 
     @Test
@@ -71,7 +73,7 @@ class EdifactParserTest {
         when(interchangeFactory.createInterchange(any())).thenReturn(interchange);
 
         assertThatThrownBy(() ->
-            edifactParser.parse(String.join("\n", EdifactFixtures.TRAILER_BEFORE_HEADER_EDIFACT)))
+            edifactParser.parse(EdifactFixtures.TRAILER_BEFORE_HEADER_EDIFACT))
             .isInstanceOf(MessageParsingException.class)
             .hasMessage("Error parsing messages");
     }
@@ -86,8 +88,7 @@ class EdifactParserTest {
 
         when(interchangeFactory.createInterchange(any())).thenReturn(interchange);
 
-        assertThatThrownBy(() ->
-            edifactParser.parse(String.join("\n", EdifactFixtures.MISMATCH_MESSAGE_TRAILER_HEADER_EDIFACT)))
+        assertThatThrownBy(() -> edifactParser.parse(EdifactFixtures.MISMATCH_MESSAGE_TRAILER_HEADER_EDIFACT))
             .isInstanceOf(MessageParsingException.class)
             .hasMessage("Error parsing messages");
     }

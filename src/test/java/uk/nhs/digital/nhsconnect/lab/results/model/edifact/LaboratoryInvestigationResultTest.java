@@ -6,78 +6,182 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatNoException;
+import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class LaboratoryInvestigationResultTest {
 
-    private final LaboratoryInvestigationResult laboratoryInvestigationResult = new LaboratoryInvestigationResult(
-        new BigDecimal("11.9"), MeasurementValueComparator.LESS_THAN, "ng/mL",
-        DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT);
-
     @Test
-    void when_edifactStringDoesNotStartWithLaboratoryInvestigationResultKey_expect_illegalArgumentExceptionIsThrown() {
-        assertThrows(IllegalArgumentException.class, () -> LaboratoryInvestigationResult.fromString("wrong value"));
+    void when_edifactStringDoesNotStartWithKey_expect_illegalArgumentExceptionIsThrown() {
+        assertThatIllegalArgumentException().isThrownBy(
+            () -> LaboratoryInvestigationResult.fromString("wrong value")
+        ).withMessage("Can't create LaboratoryInvestigationResult from wrong value");
     }
 
     @Test
-    void when_edifactString1IsPassed_expect_returnALaboratoryInvestigationResultObject() {
-        assertThat(laboratoryInvestigationResult)
-            .usingRecursiveComparison()
-            .isEqualTo(LaboratoryInvestigationResult.fromString("RSL+NV+11.9:7++:::ng/mL+HI"));
-    }
+    void when_edifactString1IsPassed_expect_returnALaboratoryInvestigationNumericalResultObject() {
+        final LaboratoryInvestigationResult laboratoryInvestigationNumericalResult =
+            LaboratoryInvestigationResult.fromString("RSL+NV+11.9:7++:::ng/mL+HI");
 
-    @Test
-    void when_edifactString2IsPassed_expect_returnALaboratoryInvestigationResultObject() {
-        final LaboratoryInvestigationResult laboratoryInvestigationResult = new LaboratoryInvestigationResult(
-            new BigDecimal("11.9"), null, "ng/mL", DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT
+        assertAll(
+            () -> assertThat(laboratoryInvestigationNumericalResult.getMeasurementValue())
+                .isEqualTo(new BigDecimal("11.9")),
+            () -> assertThat(laboratoryInvestigationNumericalResult.getMeasurementValueComparator())
+                .contains(MeasurementValueComparator.LESS_THAN),
+            () -> assertThat(laboratoryInvestigationNumericalResult.getMeasurementUnit()).isEqualTo("ng/mL"),
+            () -> assertThat(laboratoryInvestigationNumericalResult.getDeviatingResultIndicator())
+                .isEqualTo(DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT)
         );
-
-        assertThat(laboratoryInvestigationResult)
-            .usingRecursiveComparison()
-            .isEqualTo(LaboratoryInvestigationResult.fromString("RSL+NV+11.9++:::ng/mL+HI"));
     }
 
     @Test
-    void when_edifactString3IsPassed_expect_returnALaboratoryInvestigationResultObject() {
-        final LaboratoryInvestigationResult laboratoryInvestigationResult = new LaboratoryInvestigationResult(
-            new BigDecimal("11.9"), null, "ng/mL", null
-        );
+    void when_edifactString2IsPassed_expect_returnALaboratoryInvestigationNumericalResultObject() {
+        final LaboratoryInvestigationResult laboratoryInvestigationNumericalResult =
+            LaboratoryInvestigationResult.fromString("RSL+NV+11.9++:::ng/mL+HI");
 
-        assertThat(laboratoryInvestigationResult)
-            .usingRecursiveComparison()
-            .isEqualTo(LaboratoryInvestigationResult.fromString("RSL+NV+11.9++:::ng/mL"));
+        assertAll(
+            () -> assertThat(laboratoryInvestigationNumericalResult.getMeasurementValue())
+                .isEqualTo(new BigDecimal("11.9")),
+            () -> assertThat(laboratoryInvestigationNumericalResult.getMeasurementValueComparator()).isEmpty(),
+            () -> assertThat(laboratoryInvestigationNumericalResult.getMeasurementUnit()).isEqualTo("ng/mL"),
+            () -> assertThat(laboratoryInvestigationNumericalResult.getDeviatingResultIndicator())
+                .isEqualTo(DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT)
+        );
+    }
+
+    @Test
+    void when_edifactString3IsPassed_expect_returnALaboratoryInvestigationNumericalResultObject() {
+        final LaboratoryInvestigationResult laboratoryInvestigationNumericalResult =
+            LaboratoryInvestigationResult.fromString("RSL+NV+11.9++:::ng/mL");
+
+        assertAll(
+            () -> assertThat(laboratoryInvestigationNumericalResult.getMeasurementValue())
+                .isEqualTo(new BigDecimal("11.9")),
+            () -> assertThat(laboratoryInvestigationNumericalResult.getMeasurementValueComparator()).isEmpty(),
+            () -> assertThat(laboratoryInvestigationNumericalResult.getMeasurementUnit()).isEqualTo("ng/mL"),
+            () -> assertThat(laboratoryInvestigationNumericalResult.getDeviatingResultIndicator()).isNull()
+        );
+    }
+
+    @Test
+    void when_edifactString4IsPassed_expect_returnALaboratoryInvestigationCodedResultObject() {
+        final LaboratoryInvestigationResult laboratoryInvestigationCodedResult =
+            LaboratoryInvestigationResult.fromString("RSL+CV+::111222333:921::Cancer screening");
+
+        assertAll(
+            () -> assertThat(laboratoryInvestigationCodedResult.getCode()).isEqualTo("111222333"),
+            () -> assertThat(laboratoryInvestigationCodedResult.getCodingType()).contains(CodingType.SNOMED_CT_CODE),
+            () -> assertThat(laboratoryInvestigationCodedResult.getDescription()).isEqualTo("Cancer screening")
+        );
     }
 
     @Test
     void when_buildingSegmentObjectWithoutAnyFields_expect_nullPointerExceptionIsThrown() {
-        assertThrows(NullPointerException.class, () -> LaboratoryInvestigation.builder().build());
+        assertThatNullPointerException().isThrownBy(() -> LaboratoryInvestigation.builder().build());
     }
 
     @Test
     void testGetKey() {
-        assertEquals(laboratoryInvestigationResult.getKey(), "RSL");
+        final LaboratoryInvestigationResult laboratoryInvestigationResult =
+            LaboratoryInvestigationResult.builder()
+                .measurementValue(new BigDecimal("11.9"))
+                .measurementValueComparator(MeasurementValueComparator.LESS_THAN)
+                .measurementUnit("ng/mL")
+                .deviatingResultIndicator(DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT)
+                .build();
+
+        assertThat(laboratoryInvestigationResult.getKey()).isEqualTo("RSL");
     }
 
     @Test
-    void testValidate() {
-        assertDoesNotThrow(laboratoryInvestigationResult::validate);
+    void testValidateNumericalResultDoesNotThrowException() {
+        final LaboratoryInvestigationResult laboratoryInvestigationNumericalResult =
+            LaboratoryInvestigationResult.builder()
+                .resultType(LaboratoryInvestigationResultType.NUMERICAL_VALUE)
+                .measurementValue(new BigDecimal("11.9"))
+                .measurementValueComparator(MeasurementValueComparator.LESS_THAN)
+                .measurementUnit("ng/mL")
+                .deviatingResultIndicator(DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT)
+                .build();
 
-        LaboratoryInvestigationResult emptyMeasurementValue = new LaboratoryInvestigationResult(null,
-            MeasurementValueComparator.LESS_THAN, "ng/mL", DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT);
-        LaboratoryInvestigationResult emptyMeasurementUnit = new LaboratoryInvestigationResult(new BigDecimal("11.9"),
-            MeasurementValueComparator.LESS_THAN, null, DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT);
+        assertThatNoException().isThrownBy(laboratoryInvestigationNumericalResult::validate);
+    }
 
-        assertAll(
-            () -> assertThatThrownBy(emptyMeasurementValue::validate)
-                .isExactlyInstanceOf(EdifactValidationException.class)
-                .hasMessage("RSL: Attribute measurementValue is required"),
-            () -> assertThatThrownBy(emptyMeasurementUnit::validate)
-                .isExactlyInstanceOf(EdifactValidationException.class)
-                .hasMessage("RSL: Attribute measurementUnit is required")
-        );
+    @Test
+    void testValidateEmptyMeasurementValue() {
+        final LaboratoryInvestigationResult laboratoryInvestigationNumericalResult =
+            LaboratoryInvestigationResult.builder()
+                .resultType(LaboratoryInvestigationResultType.NUMERICAL_VALUE)
+                .measurementValue(null)
+                .measurementValueComparator(MeasurementValueComparator.LESS_THAN)
+                .measurementUnit("ng/mL")
+                .deviatingResultIndicator(DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT)
+                .build();
+
+        assertThatThrownBy(laboratoryInvestigationNumericalResult::validate)
+            .isExactlyInstanceOf(EdifactValidationException.class)
+            .hasMessage("RSL: Attribute measurementValue is required");
+    }
+
+    @Test
+    void testValidateEmptyMeasurementUnit() {
+        final LaboratoryInvestigationResult laboratoryInvestigationNumericalResult =
+            LaboratoryInvestigationResult.builder()
+                .resultType(LaboratoryInvestigationResultType.NUMERICAL_VALUE)
+                .measurementValue(new BigDecimal("11.9"))
+                .measurementValueComparator(MeasurementValueComparator.LESS_THAN)
+                .measurementUnit(null)
+                .deviatingResultIndicator(DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT)
+                .build();
+
+        assertThatThrownBy(laboratoryInvestigationNumericalResult::validate)
+            .isExactlyInstanceOf(EdifactValidationException.class)
+            .hasMessage("RSL: Attribute measurementUnit is required");
+    }
+
+    @Test
+    void testValidateCodedResultDoesNotThrowException() {
+        final LaboratoryInvestigationResult laboratoryInvestigationCodedResult =
+            LaboratoryInvestigationResult.builder()
+                .resultType(LaboratoryInvestigationResultType.CODED_VALUE)
+                .code("111222333")
+                .codingType(CodingType.SNOMED_CT_CODE)
+                .description("Cancer screening")
+                .build();
+
+        assertThatNoException().isThrownBy(laboratoryInvestigationCodedResult::validate);
+    }
+
+    @Test
+    void testValidateEmptyCode() {
+        final LaboratoryInvestigationResult laboratoryInvestigationCodedResult =
+            LaboratoryInvestigationResult.builder()
+                .resultType(LaboratoryInvestigationResultType.CODED_VALUE)
+                .code(null)
+                .codingType(CodingType.SNOMED_CT_CODE)
+                .description("Cancer screening")
+                .build();
+
+        assertThatThrownBy(laboratoryInvestigationCodedResult::validate)
+            .isExactlyInstanceOf(EdifactValidationException.class)
+            .hasMessage("RSL: Attribute code is required");
+    }
+
+    @Test
+    void testValidateEmptyDescription() {
+        final LaboratoryInvestigationResult laboratoryInvestigationResult =
+            LaboratoryInvestigationResult.builder()
+                .resultType(LaboratoryInvestigationResultType.CODED_VALUE)
+                .code("111222333")
+                .codingType(CodingType.SNOMED_CT_CODE)
+                .description(null)
+                .build();
+
+        assertThatThrownBy(laboratoryInvestigationResult::validate)
+            .isExactlyInstanceOf(EdifactValidationException.class)
+            .hasMessage("RSL: Attribute description is required");
     }
 }

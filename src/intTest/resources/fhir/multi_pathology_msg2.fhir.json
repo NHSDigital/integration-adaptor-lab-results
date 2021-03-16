@@ -190,7 +190,7 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
+              "system": "http://read.info/readv2",
               "code": "43F3.",
               "display": "R.A. latex test"
             }

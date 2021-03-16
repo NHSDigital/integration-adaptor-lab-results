@@ -2,6 +2,8 @@ package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.hl7.fhir.dstu3.model.CodeableConcept;
+import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.Observation.ObservationReferenceRangeComponent;
 import org.hl7.fhir.dstu3.model.Observation.ObservationRelatedComponent;
@@ -17,7 +19,9 @@ import org.hl7.fhir.dstu3.model.SimpleQuantity;
 import org.hl7.fhir.dstu3.model.Specimen;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.CodingType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigationResultType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MeasurementValueComparator;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.TestStatus;
@@ -40,10 +44,18 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.groupingBy;
+import static uk.nhs.digital.nhsconnect.lab.results.model.Constants.READ_CODING_SYSTEM;
+import static uk.nhs.digital.nhsconnect.lab.results.model.Constants.SNOMED_CODING_SYSTEM;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ObservationMapper {
+
+    private static final Map<CodingType, String> CODING_TYPE_SYSTEMS = Map.of(
+        CodingType.SNOMED_CT_CODE, SNOMED_CODING_SYSTEM,
+        CodingType.READ_CODE, READ_CODING_SYSTEM
+    );
+
     private static final Function<Boolean, List<LabResult>> EMPTY_LIST = $ -> Collections.emptyList();
 
     private final UUIDGenerator uuidGenerator;
@@ -58,7 +70,6 @@ public class ObservationMapper {
 
     @RequiredArgsConstructor
     private class InternalMapper {
-        private static final String CODING_SYSTEM = "http://loinc.org";
 
         private final Map<String, String> edifactToFhirIdMap = new HashMap<>();
         private final Map<String, Observation> testGroupsById = new HashMap<>();
@@ -137,7 +148,7 @@ public class ObservationMapper {
 
         private void mapContents(final LabResult labResult, final Observation observation) {
             mapStatus(labResult, observation);
-            mapValueQuantity(labResult, observation);
+            mapLaboratoryInvestigationResult(labResult, observation);
             mapCode(labResult, observation);
             mapReferenceRange(labResult, observation);
             mapComment(labResult, observation);
@@ -166,33 +177,48 @@ public class ObservationMapper {
             observation.setStatus(status);
         }
 
-        private void mapValueQuantity(final LabResult labResult, final Observation observation) {
+        private void mapLaboratoryInvestigationResult(final LabResult labResult, final Observation observation) {
             // Observation.value.valueQuantity.*
             labResult.getInvestigationResult().ifPresent(investigationResult -> {
-                final var quantity = new Quantity();
+                if (investigationResult.getResultType() == LaboratoryInvestigationResultType.NUMERICAL_VALUE) {
+                    final var quantity = new Quantity();
 
-                // Observation.value.valueQuantity.value = SG18.RSL.C830(1).6314
-                quantity.setValue(investigationResult.getMeasurementValue());
+                    // Observation.value.valueQuantity.value = SG18.RSL.C830(1).6314
+                    quantity.setValue(investigationResult.getMeasurementValue());
 
-                // Observation.value.valueQuantity.unit = SG18.RSL.C848.6410
-                quantity.setUnit(investigationResult.getMeasurementUnit());
+                    // Observation.value.valueQuantity.unit = SG18.RSL.C848.6410
+                    quantity.setUnit(investigationResult.getMeasurementUnit());
 
-                // Observation.value.valueQuantity.comparator = SG18.RSL.C830(1).6321
-                investigationResult.getMeasurementValueComparator()
-                    .map(MeasurementValueComparator::getDescription)
-                    .map(QuantityComparator::fromCode)
-                    .ifPresent(quantity::setComparator);
+                    // Observation.value.valueQuantity.comparator = SG18.RSL.C830(1).6321
+                    investigationResult.getMeasurementValueComparator()
+                        .map(MeasurementValueComparator::getDescription)
+                        .map(QuantityComparator::fromCode)
+                        .ifPresent(quantity::setComparator);
 
-                observation.setValue(quantity);
+                    observation.setValue(quantity);
+                } else if (investigationResult.getResultType() == LaboratoryInvestigationResultType.CODED_VALUE) {
+                    final Coding coding = new Coding()
+                        .setCode(investigationResult.getCode())
+                        .setDisplay(investigationResult.getDescription());
+                    investigationResult.getCodingType()
+                        .map(this::getSystemValue)
+                        .ifPresent(coding::setSystem);
+
+                    CodeableConcept result = new CodeableConcept().addCoding(coding);
+
+                    observation.setValue(result);
+                }
             });
         }
 
         private void mapCode(final LabResult labResult, final Observation observation) {
             // Observation.code = SG18.INV.C847.9930 and SG18.INV.C847.9931
             final var coding = observation.getCode().addCoding();
-            labResult.getInvestigation().getInvestigationCode().ifPresent(coding::setCode);
-            coding.setDisplay(labResult.getInvestigation().getInvestigationDescription());
-            coding.setSystem(CODING_SYSTEM);
+            labResult.getInvestigation().getCode().ifPresent(coding::setCode);
+            coding.setDisplay(labResult.getInvestigation().getDescription());
+            labResult.getInvestigation().getCodingType()
+                .map(this::getSystemValue)
+                .ifPresent(coding::setSystem);
         }
 
         private void mapReferenceRange(final LabResult labResult, final Observation observation) {
@@ -242,6 +268,10 @@ public class ObservationMapper {
             final var simpleQuantity = new SimpleQuantity();
             simpleQuantity.setValue(value);
             return simpleQuantity;
+        }
+
+        private String getSystemValue(final CodingType codingType) {
+            return CODING_TYPE_SYSTEMS.get(codingType);
         }
     }
 }
