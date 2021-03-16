@@ -21,13 +21,13 @@ import java.util.Map;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toMap;
+import static uk.nhs.digital.nhsconnect.lab.results.model.Constants.SNOMED_CODING_SYSTEM;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class SpecimenMapper {
     private static final String IDENTIFIER_SYSTEM = "http://ehr.acme.org/identifiers/collections";
     private static final String ACCESSION_IDENTIFIER_SYSTEM = "http://lab.acme.org/specimens/2011";
-    private static final String SNOMED_CODING_SYSTEM = "http://snomed.info/sct";
 
     private final UUIDGenerator uuidGenerator;
     private final DateFormatMapper dateFormatMapper;

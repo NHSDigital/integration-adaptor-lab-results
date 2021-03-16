@@ -30,12 +30,13 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static uk.nhs.digital.nhsconnect.lab.results.model.Constants.SNOMED_CODING_SYSTEM;
+
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class DiagnosticReportMapper {
     private static final Map<ReportStatusCode, DiagnosticReportStatus> STATUS_MAP = Map.of(
         ReportStatusCode.UNSPECIFIED, DiagnosticReportStatus.UNKNOWN);
-    private static final String SNOMED_CODING_SYSTEM = "http://snomed.info/sct";
     private static final String CODE_DISPLAY = "Diagnostic studies report";
     private static final String CODE_NUMBER = "721981007";
 

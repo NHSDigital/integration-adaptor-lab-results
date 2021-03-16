@@ -73,7 +73,7 @@ class LaboratoryInvestigationResultTest {
 
         assertAll(
             () -> assertThat(laboratoryInvestigationCodedResult.getCode()).isEqualTo("111222333"),
-            () -> assertThat(laboratoryInvestigationCodedResult.getCodeType()).isEqualTo(CodingType.SNOMED_CT_CODE),
+            () -> assertThat(laboratoryInvestigationCodedResult.getCodingType()).contains(CodingType.SNOMED_CT_CODE),
             () -> assertThat(laboratoryInvestigationCodedResult.getDescription()).isEqualTo("Cancer screening")
         );
     }
@@ -148,7 +148,7 @@ class LaboratoryInvestigationResultTest {
             LaboratoryInvestigationResult.builder()
                 .resultType(LaboratoryInvestigationResultType.CODED_VALUE)
                 .code("111222333")
-                .codeType(CodingType.SNOMED_CT_CODE)
+                .codingType(CodingType.SNOMED_CT_CODE)
                 .description("Cancer screening")
                 .build();
 
@@ -161,7 +161,7 @@ class LaboratoryInvestigationResultTest {
             LaboratoryInvestigationResult.builder()
                 .resultType(LaboratoryInvestigationResultType.CODED_VALUE)
                 .code(null)
-                .codeType(CodingType.SNOMED_CT_CODE)
+                .codingType(CodingType.SNOMED_CT_CODE)
                 .description("Cancer screening")
                 .build();
 
@@ -171,27 +171,12 @@ class LaboratoryInvestigationResultTest {
     }
 
     @Test
-    void testValidateEmptyCodeType() {
-        final LaboratoryInvestigationResult laboratoryInvestigationCodedResult =
-            LaboratoryInvestigationResult.builder()
-                .resultType(LaboratoryInvestigationResultType.CODED_VALUE)
-                .code("111222333")
-                .codeType(null)
-                .description("Cancer screening")
-                .build();
-
-        assertThatThrownBy(laboratoryInvestigationCodedResult::validate)
-            .isExactlyInstanceOf(EdifactValidationException.class)
-            .hasMessage("RSL: Attribute codeType is required");
-    }
-
-    @Test
     void testValidateEmptyDescription() {
         final LaboratoryInvestigationResult laboratoryInvestigationResult =
             LaboratoryInvestigationResult.builder()
                 .resultType(LaboratoryInvestigationResultType.CODED_VALUE)
                 .code("111222333")
-                .codeType(CodingType.SNOMED_CT_CODE)
+                .codingType(CodingType.SNOMED_CT_CODE)
                 .description(null)
                 .build();
 

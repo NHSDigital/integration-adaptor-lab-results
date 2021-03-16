@@ -21,18 +21,17 @@ import java.util.Optional;
  */
 @AllArgsConstructor
 @Builder
+@Getter
 public class LaboratoryInvestigation extends Segment {
 
     private static final String KEY = "INV";
     private static final String QUALIFIER = "MQ";
     public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
 
-    private final String investigationCode;
-    @Getter
-    private final CodingType investigationCodeType;
-    @Getter
+    private final String code;
+    private final CodingType codingType;
     @NonNull
-    private final String investigationDescription;
+    private final String description;
 
     @SuppressWarnings("checkstyle:MagicNumber")
     public static LaboratoryInvestigation fromString(String edifactString) {
@@ -48,14 +47,18 @@ public class LaboratoryInvestigation extends Segment {
         final String investigationDescription = Split.byColon(keySplit[2])[3];
 
         return LaboratoryInvestigation.builder()
-            .investigationCode(investigationCode)
-            .investigationCodeType(investigationCodeType)
-            .investigationDescription(investigationDescription)
+            .code(investigationCode)
+            .codingType(investigationCodeType)
+            .description(investigationDescription)
             .build();
     }
 
-    public Optional<String> getInvestigationCode() {
-        return Optional.ofNullable(investigationCode);
+    public Optional<String> getCode() {
+        return Optional.ofNullable(code);
+    }
+
+    public Optional<CodingType> getCodingType() {
+        return Optional.ofNullable(codingType);
     }
 
     @Override
@@ -65,7 +68,7 @@ public class LaboratoryInvestigation extends Segment {
 
     @Override
     public void validate() throws EdifactValidationException {
-        if (StringUtils.isBlank(investigationDescription)) {
+        if (StringUtils.isBlank(description)) {
             throw new EdifactValidationException(KEY + ": Attribute investigationDescription is required");
         }
     }

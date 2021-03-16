@@ -39,7 +39,7 @@ public class LaboratoryInvestigationResult extends Segment {
     private final DeviatingResultIndicator deviatingResultIndicator;
 
     private final String code;
-    private final CodingType codeType;
+    private final CodingType codingType;
     private final String description;
 
     @SuppressWarnings("checkstyle:MagicNumber")
@@ -82,7 +82,7 @@ public class LaboratoryInvestigationResult extends Segment {
 
         return laboratoryInvestigationResultBuilder
             .code(code)
-            .codeType(CodingType.fromCode(codeType))
+            .codingType(CodingType.fromCode(codeType))
             .description(description)
             .build();
     }
@@ -123,6 +123,10 @@ public class LaboratoryInvestigationResult extends Segment {
         return Optional.ofNullable(measurementValueComparator);
     }
 
+    public Optional<CodingType> getCodingType() {
+        return Optional.ofNullable(codingType);
+    }
+
     @Override
     public String getKey() {
         return KEY;
@@ -143,10 +147,6 @@ public class LaboratoryInvestigationResult extends Segment {
         if (resultType.equals(LaboratoryInvestigationResultType.CODED_VALUE)) {
             if (code == null) {
                 throw new EdifactValidationException(KEY + ": Attribute code is required");
-            }
-
-            if (codeType == null) {
-                throw new EdifactValidationException(KEY + ": Attribute codeType is required");
             }
 
             if (description == null) {

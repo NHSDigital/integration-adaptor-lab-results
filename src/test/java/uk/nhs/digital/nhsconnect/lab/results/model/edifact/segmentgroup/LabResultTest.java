@@ -56,10 +56,10 @@ class LabResultTest {
         var labResultInvestigation = assertThat(labResult.getInvestigation()).isNotNull();
 
         labResultInvestigation
-            .extracting(LaboratoryInvestigation::getInvestigationCode)
+            .extracting(LaboratoryInvestigation::getCode)
             .isEqualTo(Optional.of("42R4."));
         labResultInvestigation
-            .extracting(LaboratoryInvestigation::getInvestigationDescription)
+            .extracting(LaboratoryInvestigation::getDescription)
             .isEqualTo("Serum ferritin");
     }
 
@@ -112,8 +112,8 @@ class LabResultTest {
             .map(LaboratoryInvestigationResult::getCode)
             .hasValue("375211000000108");
         labResultInvestigationResult
-            .map(LaboratoryInvestigationResult::getCodeType)
-            .hasValue(CodingType.SNOMED_CT_CODE);
+            .map(LaboratoryInvestigationResult::getCodingType)
+            .contains(Optional.of(CodingType.SNOMED_CT_CODE));
         labResultInvestigationResult
             .map(LaboratoryInvestigationResult::getDescription)
             .hasValue("Bowel cancer screening programme FOB test normal (finding)");
