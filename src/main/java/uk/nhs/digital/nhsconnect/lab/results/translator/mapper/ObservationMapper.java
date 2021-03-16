@@ -48,6 +48,7 @@ import static java.util.stream.Collectors.groupingBy;
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ObservationMapper {
+
     private static final Function<Boolean, List<LabResult>> EMPTY_LIST = $ -> Collections.emptyList();
 
     private final UUIDGenerator uuidGenerator;
@@ -142,7 +143,7 @@ public class ObservationMapper {
 
         private void mapContents(final LabResult labResult, final Observation observation) {
             mapStatus(labResult, observation);
-            mapInvestigationResult(labResult, observation);
+            mapLaboratoryInvestigationResult(labResult, observation);
             mapCode(labResult, observation);
             mapReferenceRange(labResult, observation);
             mapComment(labResult, observation);
@@ -171,7 +172,7 @@ public class ObservationMapper {
             observation.setStatus(status);
         }
 
-        private void mapInvestigationResult(final LabResult labResult, final Observation observation) {
+        private void mapLaboratoryInvestigationResult(final LabResult labResult, final Observation observation) {
             // Observation.value.valueQuantity.*
             labResult.getInvestigationResult().ifPresent(investigationResult -> {
                 if (investigationResult.getResultType() == LaboratoryInvestigationResultType.NUMERICAL_VALUE) {

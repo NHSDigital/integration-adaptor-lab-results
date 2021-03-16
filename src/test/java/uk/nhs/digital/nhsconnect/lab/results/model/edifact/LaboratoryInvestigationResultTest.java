@@ -97,7 +97,7 @@ class LaboratoryInvestigationResultTest {
     }
 
     @Test
-    void testValidateNumericalResult() {
+    void testValidateNumericalResultDoesNotThrowException() {
         final LaboratoryInvestigationResult laboratoryInvestigationNumericalResult =
             LaboratoryInvestigationResult.builder()
                 .resultType(LaboratoryInvestigationResultType.NUMERICAL_VALUE)
@@ -108,8 +108,11 @@ class LaboratoryInvestigationResultTest {
                 .build();
 
         assertThatNoException().isThrownBy(laboratoryInvestigationNumericalResult::validate);
+    }
 
-        LaboratoryInvestigationResult emptyMeasurementValue =
+    @Test
+    void testValidateEmptyMeasurementValue() {
+        final LaboratoryInvestigationResult laboratoryInvestigationNumericalResult =
             LaboratoryInvestigationResult.builder()
                 .resultType(LaboratoryInvestigationResultType.NUMERICAL_VALUE)
                 .measurementValue(null)
@@ -118,7 +121,14 @@ class LaboratoryInvestigationResultTest {
                 .deviatingResultIndicator(DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT)
                 .build();
 
-        LaboratoryInvestigationResult emptyMeasurementUnit =
+        assertThatThrownBy(laboratoryInvestigationNumericalResult::validate)
+            .isExactlyInstanceOf(EdifactValidationException.class)
+            .hasMessage("RSL: Attribute measurementValue is required");
+    }
+
+    @Test
+    void testValidateEmptyMeasurementUnit() {
+        final LaboratoryInvestigationResult laboratoryInvestigationNumericalResult =
             LaboratoryInvestigationResult.builder()
                 .resultType(LaboratoryInvestigationResultType.NUMERICAL_VALUE)
                 .measurementValue(new BigDecimal("11.9"))
@@ -127,18 +137,13 @@ class LaboratoryInvestigationResultTest {
                 .deviatingResultIndicator(DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT)
                 .build();
 
-        assertAll(
-            () -> assertThatThrownBy(emptyMeasurementValue::validate)
-                .isExactlyInstanceOf(EdifactValidationException.class)
-                .hasMessage("RSL: Attribute measurementValue is required"),
-            () -> assertThatThrownBy(emptyMeasurementUnit::validate)
-                .isExactlyInstanceOf(EdifactValidationException.class)
-                .hasMessage("RSL: Attribute measurementUnit is required")
-        );
+        assertThatThrownBy(laboratoryInvestigationNumericalResult::validate)
+            .isExactlyInstanceOf(EdifactValidationException.class)
+            .hasMessage("RSL: Attribute measurementUnit is required");
     }
 
     @Test
-    void testValidateCodedResult() {
+    void testValidateCodedResultDoesNotThrowException() {
         final LaboratoryInvestigationResult laboratoryInvestigationCodedResult =
             LaboratoryInvestigationResult.builder()
                 .resultType(LaboratoryInvestigationResultType.CODED_VALUE)
@@ -148,8 +153,11 @@ class LaboratoryInvestigationResultTest {
                 .build();
 
         assertThatNoException().isThrownBy(laboratoryInvestigationCodedResult::validate);
+    }
 
-        LaboratoryInvestigationResult emptyCode =
+    @Test
+    void testValidateEmptyCode() {
+        final LaboratoryInvestigationResult laboratoryInvestigationCodedResult =
             LaboratoryInvestigationResult.builder()
                 .resultType(LaboratoryInvestigationResultType.CODED_VALUE)
                 .code(null)
@@ -157,7 +165,14 @@ class LaboratoryInvestigationResultTest {
                 .description("Cancer screening")
                 .build();
 
-        LaboratoryInvestigationResult emptyCodeType =
+        assertThatThrownBy(laboratoryInvestigationCodedResult::validate)
+            .isExactlyInstanceOf(EdifactValidationException.class)
+            .hasMessage("RSL: Attribute code is required");
+    }
+
+    @Test
+    void testValidateEmptyCodeType() {
+        final LaboratoryInvestigationResult laboratoryInvestigationCodedResult =
             LaboratoryInvestigationResult.builder()
                 .resultType(LaboratoryInvestigationResultType.CODED_VALUE)
                 .code("111222333")
@@ -165,7 +180,14 @@ class LaboratoryInvestigationResultTest {
                 .description("Cancer screening")
                 .build();
 
-        LaboratoryInvestigationResult emptyDescription =
+        assertThatThrownBy(laboratoryInvestigationCodedResult::validate)
+            .isExactlyInstanceOf(EdifactValidationException.class)
+            .hasMessage("RSL: Attribute codeType is required");
+    }
+
+    @Test
+    void testValidateEmptyDescription() {
+        final LaboratoryInvestigationResult laboratoryInvestigationResult =
             LaboratoryInvestigationResult.builder()
                 .resultType(LaboratoryInvestigationResultType.CODED_VALUE)
                 .code("111222333")
@@ -173,16 +195,8 @@ class LaboratoryInvestigationResultTest {
                 .description(null)
                 .build();
 
-        assertAll(
-            () -> assertThatThrownBy(emptyCode::validate)
-                .isExactlyInstanceOf(EdifactValidationException.class)
-                .hasMessage("RSL: Attribute code is required"),
-            () -> assertThatThrownBy(emptyCodeType::validate)
-                .isExactlyInstanceOf(EdifactValidationException.class)
-                .hasMessage("RSL: Attribute codeType is required"),
-            () -> assertThatThrownBy(emptyDescription::validate)
-                .isExactlyInstanceOf(EdifactValidationException.class)
-                .hasMessage("RSL: Attribute description is required")
-        );
+        assertThatThrownBy(laboratoryInvestigationResult::validate)
+            .isExactlyInstanceOf(EdifactValidationException.class)
+            .hasMessage("RSL: Attribute description is required");
     }
 }

@@ -19,7 +19,7 @@ public enum LaboratoryInvestigationResultType {
             .filter(c -> code.equals(c.getCode()))
             .findFirst()
             .orElseThrow(
-                () -> new IllegalArgumentException("No Laboratory Investigation Result Type for '" + code + "'")
+                () -> new IllegalArgumentException("No laboratory investigation result type for \"" + code + "\"")
             );
     }
 }
