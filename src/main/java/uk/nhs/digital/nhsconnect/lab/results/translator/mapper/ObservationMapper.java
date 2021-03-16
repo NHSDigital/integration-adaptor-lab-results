@@ -200,9 +200,9 @@ public class ObservationMapper {
                     final Coding coding = new Coding()
                         .setCode(investigationResult.getCode())
                         .setDisplay(investigationResult.getDescription());
-                    investigationResult.getCodingType().ifPresent(
-                        codingType -> coding.setSystem(getSystemValue(codingType))
-                    );
+                    investigationResult.getCodingType()
+                        .map(this::getSystemValue)
+                        .ifPresent(coding::setSystem);
 
                     CodeableConcept result = new CodeableConcept().addCoding(coding);
 
@@ -216,9 +216,9 @@ public class ObservationMapper {
             final var coding = observation.getCode().addCoding();
             labResult.getInvestigation().getCode().ifPresent(coding::setCode);
             coding.setDisplay(labResult.getInvestigation().getDescription());
-            labResult.getInvestigation().getCodingType().ifPresent(
-                codingType -> coding.setSystem(getSystemValue(codingType))
-            );
+            labResult.getInvestigation().getCodingType()
+                .map(this::getSystemValue)
+                .ifPresent(coding::setSystem);
         }
 
         private void mapReferenceRange(final LabResult labResult, final Observation observation) {

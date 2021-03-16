@@ -83,18 +83,18 @@ class LabResultTest {
             "RSL+NV+11.9:7++:::ng/mL+HI",
             "ignore me"
         ));
-        var labResultInvestigationResult = assertThat(labResult.getInvestigationResult()).isPresent();
+        var assertInvestigationResult = assertThat(labResult.getInvestigationResult()).isPresent();
 
-        labResultInvestigationResult
+        assertInvestigationResult
             .map(LaboratoryInvestigationResult::getDeviatingResultIndicator)
             .hasValue(DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT);
-        labResultInvestigationResult
+        assertInvestigationResult
             .map(LaboratoryInvestigationResult::getMeasurementUnit)
             .hasValue("ng/mL");
-        labResultInvestigationResult
+        assertInvestigationResult
             .map(LaboratoryInvestigationResult::getMeasurementValue)
             .hasValue(BigDecimal.valueOf(EXPECTED_MEASUREMENT_VALUE));
-        labResultInvestigationResult
+        assertInvestigationResult
             .map(LaboratoryInvestigationResult::getMeasurementValueComparator)
             .contains(Optional.of(MeasurementValueComparator.LESS_THAN));
     }
@@ -106,15 +106,15 @@ class LabResultTest {
             "RSL+CV+::375211000000108:921::Bowel cancer screening programme FOB test normal (finding)",
             "ignore me"
         ));
-        var labResultInvestigationResult = assertThat(labResult.getInvestigationResult()).isPresent();
+        var assertInvestigationResult = assertThat(labResult.getInvestigationResult()).isPresent();
 
-        labResultInvestigationResult
+        assertInvestigationResult
             .map(LaboratoryInvestigationResult::getCode)
             .hasValue("375211000000108");
-        labResultInvestigationResult
+        assertInvestigationResult
             .map(LaboratoryInvestigationResult::getCodingType)
             .contains(Optional.of(CodingType.SNOMED_CT_CODE));
-        labResultInvestigationResult
+        assertInvestigationResult
             .map(LaboratoryInvestigationResult::getDescription)
             .hasValue("Bowel cancer screening programme FOB test normal (finding)");
     }
