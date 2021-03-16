@@ -4,7 +4,7 @@
 
 The main objective of the Lab Results Adaptor is to hide complex legacy standards and instead present a simple and consistent interface aligned to current NHSD national standards. The adaptor removes the requirement for a GP System to handle the complexities of EDIFACT and MESH messaging.
 
-At a high level, the Lab Results Adaptor exposes a queue (AMQP 1.0) from which the GP System can consume Pathology and Screening medical reports in FHIR DSTU3 format.
+At a high level, the Lab Results Adaptor exposes a queue ([AMQP 1.0](https://www.amqp.org/resources/specifications)) from which the GP System can consume Pathology and Screening medical reports in [FHIR STU3](https://digital.nhs.uk/developer/guides-and-documentation/api-technologies-at-nhs-digital#fhir) format.
 
 See the [Resources](#resources) section for links to the underlying services and standards. 
 
@@ -12,7 +12,7 @@ Adaptor handles the following types of EDIFACT messages:
 - Pathology `NHS003`
 - Screening `NHS004`
 
-and replies with `NHS001` (NHSACK) if requested
+and replies with an `NHS001` (NHSACK) message if requested.
 
 ## Architecture
 
@@ -33,13 +33,13 @@ When an EDIFACT message is downloaded from MESH using the MESH Client component,
 Two error scenarios are possible at this stage:
 - Message has been downloaded but the adaptor was unable to put it on the `Inbound MESH Queue`
 
-    Message has not been put on the queue, nor MESH has been instructed to delete it. Apart from error log entry, there is no side effect. Operation is retried on next MESH scan cycle.
+    Message has not been put on the queue, nor MESH has been instructed to delete it. Apart from error log entry, there is no side effect. The operation is retried on the next MESH scan cycle.
 - Message has been downloaded and placed on `Inbound MESH Queue` but an error occurred while notifying MESH that the message can be deleted
 
     Message has been put on the queue, but MESH has not been instructed to delete it.
-    Apart from error log entry, since the message has not been deleted from MESH, it will be fetched again on next MESH scan cycle. Since the message has been already put on `Inbound MESH Queue`, it will be processed again causing duplicates to appear on the `Outbound GP Queue`. Handling duplicates is described in the  [duplicates](#duplicates) section.
+    There are no side effects apart from error log entry. The message has not been deleted from MESH, so it will be fetched again on the next MESH scan cycle. Since the message has already been put on `Inbound MESH Queue`, it will be processed again causing duplicates to appear on the `Outbound GP Queue`. Handling duplicates is described in the  [duplicates](#duplicates) section.
 
-Once the message is on the `Inbound MESH Queue` the Message Translator component picks each one up and performs following steps:
+Once the message is on the `Inbound MESH Queue` the Message Translator component picks each one up and performs the following steps:
 
 1) Initial verification
 
@@ -53,15 +53,15 @@ Once the message is on the `Inbound MESH Queue` the Message Translator component
 
 2) Translation
 
-    At this step an EDIFACT has already been parsed and split into messages. Each message is translated into a FHIR Bundle. Any error occurring at this step, is logged and if an NHSACK is requested, appropriate is set in it. Because of the error, no FHIR Bundle is created for that single message. Other messages are not affected and can still be processed. At the end of this step, a summary NHSACK is generated containing information about all the successes and failures of EDIFACT messages processing.
+    At this step an EDIFACT has already been parsed and split into messages. Each message is translated into a FHIR Bundle. Any error occurring at this step is logged, and if an NHSACK is requested, appropriate information is set in it. Because of the error, no FHIR Bundle is created for that single message. Other messages are not affected and can still be processed. At the end of this step, a summary NHSACK is generated containing information about all the successes and failures of EDIFACT messages processing.
 
 3) Sending to `Outbound GP Queue`
 
-    All individual EDIFACT messages that have been successfully translated into FHIR are sent to `Outbound GP Queue`. If an error occurs at this step, whole EDIFACT is rejected and it returns to the `Inbound MESH Queue` to be picked up again until MQ max retry value is reached. After that, the EDIFACT is placed on the Dead Letter Queue and manual intervention is required.
+    All individual EDIFACT messages that have been successfully translated into FHIR are sent to `Outbound GP Queue`. If an error occurs at this step, the whole EDIFACT is rejected and it returns to the `Inbound MESH Queue` to be picked up again until MQ max retry value is reached. After that, the EDIFACT is placed on the Dead Letter Queue and manual intervention is required.
 
 4) Sending NHSACK to `Outbound MESH Queue`
 
-    All individual FHIR messages have been sent to the `Outbound GP Queue`. If an NHSACK was requested, it has been generated and sent to `Outbound MESH Queue`. If an error occurs at this step, the whole EDIFACT is rejected and it will be returned to the `Inbound MESH Queue` to be picked up again until MQ max retry value is reached. After that, the EDIFACT is placed on the Dead Letter Queue and manual intervention is required. Since the message has been already put on `Inbound MESH Queue`, it will be processed again causing duplicates to appear on the `Outbound GP Queue`. Handling duplicates is been described in the [duplicates](#duplicates) section.
+    All individual FHIR messages have been sent to the `Outbound GP Queue`. If an NHSACK was requested, it has been generated and sent to `Outbound MESH Queue`. If an error occurs at this step, the whole EDIFACT is rejected and it will be returned to the `Inbound MESH Queue` to be picked up again until MQ max retry value is reached. After that, the EDIFACT is placed on the Dead Letter Queue and manual intervention is required. Since the message has been already put on `Inbound MESH Queue`, it will be processed again causing duplicates to appear on the `Outbound GP Queue`. Handling duplicates is described in the [duplicates](#duplicates) section.
 
 ### Logging and debugging
 
@@ -73,7 +73,7 @@ In rare cases, the adaptor can produce duplicate messages on the `Outbound GP Qu
 
 ## Integrating with the adaptor
 
-When using the adaptor, the GP Supplier will receive medical reports on the `Outbound GP Queue` (AMQP 1.0) in the form of a [FHIR DSTU3](https://digital.nhs.uk/developer/guides-and-documentation/api-technologies-at-nhs-digital#fhir) Bundle resources. Examples can be found [here](#examples)
+When using the adaptor, the GP Supplier will receive medical reports on the `Outbound GP Queue` ([AMQP 1.0](https://www.amqp.org/resources/specifications)) in the form of a [FHIR STU3](https://digital.nhs.uk/developer/guides-and-documentation/api-technologies-at-nhs-digital#fhir) Bundle resources. Examples can be found [here](#examples)
 
 ### Outbound GP Queue specification
 
