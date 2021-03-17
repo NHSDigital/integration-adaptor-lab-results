@@ -8,7 +8,7 @@ import org.hl7.fhir.dstu3.model.Meta;
 import org.hl7.fhir.dstu3.model.Resource;
 import org.hl7.fhir.dstu3.model.UriType;
 import org.springframework.stereotype.Component;
-import uk.nhs.digital.nhsconnect.lab.results.model.fhir.PathologyRecord;
+import uk.nhs.digital.nhsconnect.lab.results.model.PathologyRecord;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 

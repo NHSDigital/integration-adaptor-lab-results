@@ -3,7 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ClinicalInformationCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextType;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.FreeTextType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
 
 import java.util.List;

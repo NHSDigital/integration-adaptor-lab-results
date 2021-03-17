@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DateFormat;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.DateFormat;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;

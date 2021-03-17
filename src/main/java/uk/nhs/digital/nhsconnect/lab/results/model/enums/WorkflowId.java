@@ -1,4 +1,4 @@
-package uk.nhs.digital.nhsconnect.lab.results.mesh.message;
+package uk.nhs.digital.nhsconnect.lab.results.model.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;

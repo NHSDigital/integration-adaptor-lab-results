@@ -7,15 +7,15 @@ import uk.nhs.digital.nhsconnect.lab.results.inbound.MessageProcessingResult;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.NhsAckProducerService;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
-import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessageParsingException;
 
 import java.util.List;
 
-import static uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId.PATHOLOGY_ACK;
-import static uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId.SCREENING_ACK;
+import static uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId.PATHOLOGY_ACK;
+import static uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId.SCREENING_ACK;
 
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Component

@@ -2,6 +2,7 @@ package uk.nhs.digital.nhsconnect.lab.results.mesh.message;
 
 import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.exception.MeshWorkflowUnknownException;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;

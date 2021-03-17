@@ -14,7 +14,7 @@ import org.springframework.jms.core.MessageCreator;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.InboundMessageHandler;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.InboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
-import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId;
 import uk.nhs.digital.nhsconnect.lab.results.utils.CorrelationIdService;
 import uk.nhs.digital.nhsconnect.lab.results.utils.JmsHeaders;
 import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;

@@ -1,4 +1,4 @@
-package uk.nhs.digital.nhsconnect.lab.results.model.fhir;
+package uk.nhs.digital.nhsconnect.lab.results.model;
 
 import lombok.Builder;
 import lombok.Getter;

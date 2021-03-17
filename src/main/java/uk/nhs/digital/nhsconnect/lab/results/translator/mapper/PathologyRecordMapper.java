@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
-import uk.nhs.digital.nhsconnect.lab.results.model.fhir.PathologyRecord;
-import uk.nhs.digital.nhsconnect.lab.results.model.fhir.PathologyRecord.PathologyRecordBuilder;
+import uk.nhs.digital.nhsconnect.lab.results.model.PathologyRecord;
+import uk.nhs.digital.nhsconnect.lab.results.model.PathologyRecord.PathologyRecordBuilder;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)

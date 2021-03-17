@@ -10,7 +10,7 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 import java.util.Optional;
 
-import static uk.nhs.digital.nhsconnect.lab.results.model.edifact.ServiceProviderCode.PROFESSIONAL;
+import static uk.nhs.digital.nhsconnect.lab.results.model.enums.ServiceProviderCode.PROFESSIONAL;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)

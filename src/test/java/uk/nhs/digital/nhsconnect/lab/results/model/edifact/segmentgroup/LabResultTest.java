@@ -1,19 +1,19 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
 import org.junit.jupiter.api.Test;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.CodingType;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DeviatingResultIndicator;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.CodingType;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.DeviatingResultIndicator;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextType;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.FreeTextType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigation;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigationResult;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MeasurementValueComparator;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.MeasurementValueComparator;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceType;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.ReferenceType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceDetails;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.TestStatus;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.TestStatusCode;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.TestStatusCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
 
 import java.math.BigDecimal;
