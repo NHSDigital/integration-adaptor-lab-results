@@ -1,0 +1,27 @@
+title Lab Results adaptor
+
+participant Sender MESH Mailbox
+participant Receiver MESH Mailbox
+participant MESH Client
+participant Inbound MESH Queue
+participant Message Translator
+participant Outbound MESH Queue
+
+Sender MESH Mailbox->MESH Client: Download Edifact
+MESH Client->Inbound MESH Queue: Put Edifact on Inbound Mesh Queue
+MESH Client->Sender MESH Mailbox: Infrastructure ACK
+Inbound MESH Queue->Message Translator: Read Edifact from Inbound Mesh Queue
+
+note over Message Translator: Translate from Edifact to FHIR
+
+opt if NHSACK requested
+    note over Message Translator: Generate NHSACK
+end
+
+Message Translator->Outbound GP Queue: Put FHIR on Outbound GP Queue
+
+opt if NHSACK requested
+    Message Translator->Outbound MESH Queue: Put NHSACK on Outbound Mesh Queue
+    Outbound MESH Queue->MESH Client: Read NHSACK from Outbound Mesh Queue
+    MESH Client->Receiver MESH Mailbox: Send NHSACK edifact
+
