@@ -8,7 +8,7 @@ import org.hl7.fhir.dstu3.model.Meta;
 import org.hl7.fhir.dstu3.model.Resource;
 import org.hl7.fhir.dstu3.model.UriType;
 import org.springframework.stereotype.Component;
-import uk.nhs.digital.nhsconnect.lab.results.model.PathologyRecord;
+import uk.nhs.digital.nhsconnect.lab.results.model.MedicalReport;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
@@ -26,22 +26,22 @@ public class BundleMapper {
     private final UUIDGenerator uuidGenerator;
     private final ResourceFullUrlGenerator fullUrlGenerator;
 
-    public Bundle mapToBundle(final PathologyRecord pathologyRecord) {
+    public Bundle mapToBundle(final MedicalReport medicalReport) {
         final Bundle bundle = generateInitialPathologyBundle();
         final Consumer<Resource> addToBundle = resource -> addResourceToBundle(bundle, resource);
 
-        addToBundle.accept(pathologyRecord.getPatient());
+        addToBundle.accept(medicalReport.getPatient());
 
-        Optional.ofNullable(pathologyRecord.getRequestingPractitioner()).ifPresent(addToBundle);
-        Optional.ofNullable(pathologyRecord.getRequestingOrganization()).ifPresent(addToBundle);
-        Optional.ofNullable(pathologyRecord.getPerformingPractitioner()).ifPresent(addToBundle);
-        Optional.ofNullable(pathologyRecord.getPerformingOrganization()).ifPresent(addToBundle);
-        Optional.ofNullable(pathologyRecord.getTestRequestSummary()).ifPresent(addToBundle);
-        Optional.ofNullable(pathologyRecord.getTestReport()).ifPresent(addToBundle);
+        Optional.ofNullable(medicalReport.getRequestingPractitioner()).ifPresent(addToBundle);
+        Optional.ofNullable(medicalReport.getRequestingOrganization()).ifPresent(addToBundle);
+        Optional.ofNullable(medicalReport.getPerformingPractitioner()).ifPresent(addToBundle);
+        Optional.ofNullable(medicalReport.getPerformingOrganization()).ifPresent(addToBundle);
+        Optional.ofNullable(medicalReport.getTestRequestSummary()).ifPresent(addToBundle);
+        Optional.ofNullable(medicalReport.getTestReport()).ifPresent(addToBundle);
 
-        pathologyRecord.getSpecimens().forEach(addToBundle);
+        medicalReport.getSpecimens().forEach(addToBundle);
 
-        pathologyRecord.getTestResults().forEach(addToBundle);
+        medicalReport.getTestResults().forEach(addToBundle);
 
         return bundle;
     }

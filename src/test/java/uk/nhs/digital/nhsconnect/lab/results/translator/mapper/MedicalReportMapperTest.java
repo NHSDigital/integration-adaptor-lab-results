@@ -32,7 +32,7 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class PathologyRecordMapperTest {
+class MedicalReportMapperTest {
 
     @Mock
     private PatientMapper patientMapper;
@@ -56,7 +56,7 @@ class PathologyRecordMapperTest {
     private DiagnosticReportMapper diagnosticReportMapper;
 
     @InjectMocks
-    private PathologyRecordMapper pathologyRecordMapper;
+    private MedicalReportMapper medicalReportMapper;
 
     @BeforeEach
     void setUp() {
@@ -77,70 +77,70 @@ class PathologyRecordMapperTest {
     }
 
     @Test
-    void testMapMessageToPathologyRecordWithPatient() {
+    void testMapMessageToMedicalReportWithPatient() {
         final Message message = new Message(emptyList());
         var mockPatient = mock(Patient.class);
         when(patientMapper.mapToPatient(message)).thenReturn(mockPatient);
 
-        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+        final var medicalReport = medicalReportMapper.mapToMedicalReport(message);
 
-        assertThat(pathologyRecord.getPatient()).isEqualTo(mockPatient);
+        assertThat(medicalReport.getPatient()).isEqualTo(mockPatient);
     }
 
     @Test
-    void testMapMessageToPathologyRecordWithRequester() {
+    void testMapMessageToMedicalReportWithRequester() {
         final Message message = new Message(emptyList());
         var mockRequestingPractitioner = mock(Practitioner.class);
 
         when(practitionerMapper.mapToRequestingPractitioner(message))
             .thenReturn(Optional.of(mockRequestingPractitioner));
 
-        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+        final var medicalReport = medicalReportMapper.mapToMedicalReport(message);
 
-        assertThat(pathologyRecord.getRequestingPractitioner()).isEqualTo(mockRequestingPractitioner);
+        assertThat(medicalReport.getRequestingPractitioner()).isEqualTo(mockRequestingPractitioner);
     }
 
     @Test
-    void testMapMessageToPathologyRecordWithRequestingOrganization() {
+    void testMapMessageToMedicalReportWithRequestingOrganization() {
         final Message message = new Message(emptyList());
         var mockRequestingOrganization = mock(Organization.class);
 
         when(organizationMapper.mapToRequestingOrganization(message))
             .thenReturn(Optional.of(mockRequestingOrganization));
 
-        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+        final var medicalReport = medicalReportMapper.mapToMedicalReport(message);
 
-        assertThat(pathologyRecord.getRequestingOrganization()).isEqualTo(mockRequestingOrganization);
+        assertThat(medicalReport.getRequestingOrganization()).isEqualTo(mockRequestingOrganization);
     }
 
     @Test
-    void testMapMessageToPathologyRecordWithPerformer() {
+    void testMapMessageToMedicalReportWithPerformer() {
         final Message message = new Message(emptyList());
         var mockPerformingPractitioner = mock(Practitioner.class);
 
         when(practitionerMapper.mapToPerformingPractitioner(message))
             .thenReturn(Optional.of(mockPerformingPractitioner));
 
-        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+        final var medicalReport = medicalReportMapper.mapToMedicalReport(message);
 
-        assertThat(pathologyRecord.getPerformingPractitioner()).isEqualTo(mockPerformingPractitioner);
+        assertThat(medicalReport.getPerformingPractitioner()).isEqualTo(mockPerformingPractitioner);
     }
 
     @Test
-    void testMapMessageToPathologyRecordWithPerformingOrganization() {
+    void testMapMessageToMedicalReportWithPerformingOrganization() {
         final Message message = new Message(emptyList());
         var mockPerformingOrganization = mock(Organization.class);
 
         when(organizationMapper.mapToPerformingOrganization(message))
             .thenReturn(Optional.of(mockPerformingOrganization));
 
-        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+        final var medicalReport = medicalReportMapper.mapToMedicalReport(message);
 
-        assertThat(pathologyRecord.getPerformingOrganization()).isEqualTo(mockPerformingOrganization);
+        assertThat(medicalReport.getPerformingOrganization()).isEqualTo(mockPerformingOrganization);
     }
 
     @Test
-    void testMapMessageToPathologyRecordWithProcedureRequest() {
+    void testMapMessageToMedicalReportWithProcedureRequest() {
         final Message message = new Message(emptyList());
         var mockProcedureRequest = mock(ProcedureRequest.class);
         reset(procedureRequestMapper);
@@ -149,13 +149,13 @@ class PathologyRecordMapperTest {
             nullable(Practitioner.class), nullable(Organization.class)))
             .thenReturn(Optional.of(mockProcedureRequest));
 
-        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+        final var medicalReport = medicalReportMapper.mapToMedicalReport(message);
 
-        assertThat(pathologyRecord.getTestRequestSummary()).isEqualTo(mockProcedureRequest);
+        assertThat(medicalReport.getTestRequestSummary()).isEqualTo(mockProcedureRequest);
     }
 
     @Test
-    void testMapMessageToPathologyRecordWithSpecimens() {
+    void testMapMessageToMedicalReportWithSpecimens() {
         final Message message = new Message(emptyList());
         final var mockSpecimen1 = mock(Specimen.class);
         final var mockSpecimen2 = mock(Specimen.class);
@@ -163,14 +163,14 @@ class PathologyRecordMapperTest {
         when(specimenMapper.mapToSpecimensBySequenceNumber(eq(message), any(Patient.class)))
             .thenReturn(Map.of("1", mockSpecimen1, "2", mockSpecimen2));
 
-        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+        final var medicalReport = medicalReportMapper.mapToMedicalReport(message);
 
-        assertThat(pathologyRecord.getSpecimens())
+        assertThat(medicalReport.getSpecimens())
             .containsOnly(mockSpecimen1, mockSpecimen2);
     }
 
     @Test
-    void testMapMessageToPathologyRecordWithTestResults() {
+    void testMapMessageToMedicalReportWithTestResults() {
         final Message message = new Message(emptyList());
         final var mockObservation1 = mock(Observation.class);
         final var mockObservation2 = mock(Observation.class);
@@ -179,14 +179,14 @@ class PathologyRecordMapperTest {
             nullable(Organization.class), nullable(Practitioner.class)))
             .thenReturn(List.of(mockObservation1, mockObservation2));
 
-        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+        final var medicalReport = medicalReportMapper.mapToMedicalReport(message);
 
-        assertThat(pathologyRecord.getTestResults())
+        assertThat(medicalReport.getTestResults())
             .containsExactly(mockObservation1, mockObservation2);
     }
 
     @Test
-    void testMapMessageToPathologyRecordWithDiagnosticReport() {
+    void testMapMessageToMedicalReportWithDiagnosticReport() {
         final Message message = new Message(emptyList());
         final var diagnosticReport = mock(DiagnosticReport.class);
         reset(diagnosticReportMapper);
@@ -194,8 +194,8 @@ class PathologyRecordMapperTest {
             nullable(Practitioner.class), nullable(Organization.class), nullable(ProcedureRequest.class)))
             .thenReturn(diagnosticReport);
 
-        final var pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+        final var medicalReport = medicalReportMapper.mapToMedicalReport(message);
 
-        assertThat(pathologyRecord.getTestReport()).isEqualTo(diagnosticReport);
+        assertThat(medicalReport.getTestReport()).isEqualTo(diagnosticReport);
     }
 }

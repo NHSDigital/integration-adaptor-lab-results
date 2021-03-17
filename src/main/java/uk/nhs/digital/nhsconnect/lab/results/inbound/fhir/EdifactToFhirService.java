@@ -5,20 +5,20 @@ import org.hl7.fhir.dstu3.model.Bundle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
-import uk.nhs.digital.nhsconnect.lab.results.model.PathologyRecord;
+import uk.nhs.digital.nhsconnect.lab.results.model.MedicalReport;
 import uk.nhs.digital.nhsconnect.lab.results.translator.mapper.BundleMapper;
-import uk.nhs.digital.nhsconnect.lab.results.translator.mapper.PathologyRecordMapper;
+import uk.nhs.digital.nhsconnect.lab.results.translator.mapper.MedicalReportMapper;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class EdifactToFhirService {
 
-    private final PathologyRecordMapper pathologyRecordMapper;
+    private final MedicalReportMapper medicalReportMapper;
     private final BundleMapper bundleMapper;
 
     public Bundle convertToFhir(final Message message) {
-        PathologyRecord pathologyRecord = pathologyRecordMapper.mapToPathologyRecord(message);
+        MedicalReport medicalReport = medicalReportMapper.mapToMedicalReport(message);
 
-        return bundleMapper.mapToBundle(pathologyRecord);
+        return bundleMapper.mapToBundle(medicalReport);
     }
 }

@@ -5,12 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
-import uk.nhs.digital.nhsconnect.lab.results.model.PathologyRecord;
-import uk.nhs.digital.nhsconnect.lab.results.model.PathologyRecord.PathologyRecordBuilder;
+import uk.nhs.digital.nhsconnect.lab.results.model.MedicalReport;
+import uk.nhs.digital.nhsconnect.lab.results.model.MedicalReport.MedicalReportBuilder;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class PathologyRecordMapper {
+public class MedicalReportMapper {
 
     private final PractitionerMapper practitionerMapper;
     private final ProcedureRequestMapper procedureRequestMapper;
@@ -20,7 +20,7 @@ public class PathologyRecordMapper {
     private final DiagnosticReportMapper diagnosticReportMapper;
     private final ObservationMapper observationMapper;
 
-    public PathologyRecord mapToPathologyRecord(final Message message) {
+    public MedicalReport mapToMedicalReport(final Message message) {
         final var patient = patientMapper.mapToPatient(message);
         final var requestingPractitioner = practitionerMapper.mapToRequestingPractitioner(message);
         final var requestingOrganization = organizationMapper.mapToRequestingOrganization(message);
@@ -37,18 +37,18 @@ public class PathologyRecordMapper {
             observations, performingPractitioner.orElse(null), performingOrganization.orElse(null),
             procedureRequest.orElse(null));
 
-        final PathologyRecordBuilder pathologyRecordBuilder = PathologyRecord.builder();
+        final MedicalReportBuilder medicalReportBuilder = MedicalReport.builder();
 
-        pathologyRecordBuilder.patient(patient);
-        requestingPractitioner.ifPresent(pathologyRecordBuilder::requestingPractitioner);
-        requestingOrganization.ifPresent(pathologyRecordBuilder::requestingOrganization);
-        performingPractitioner.ifPresent(pathologyRecordBuilder::performingPractitioner);
-        performingOrganization.ifPresent(pathologyRecordBuilder::performingOrganization);
-        procedureRequest.ifPresent(pathologyRecordBuilder::testRequestSummary);
-        pathologyRecordBuilder.testReport(diagnosticReport);
-        pathologyRecordBuilder.specimens(specimens);
-        pathologyRecordBuilder.testResults(observations);
+        medicalReportBuilder.patient(patient);
+        requestingPractitioner.ifPresent(medicalReportBuilder::requestingPractitioner);
+        requestingOrganization.ifPresent(medicalReportBuilder::requestingOrganization);
+        performingPractitioner.ifPresent(medicalReportBuilder::performingPractitioner);
+        performingOrganization.ifPresent(medicalReportBuilder::performingOrganization);
+        procedureRequest.ifPresent(medicalReportBuilder::testRequestSummary);
+        medicalReportBuilder.testReport(diagnosticReport);
+        medicalReportBuilder.specimens(specimens);
+        medicalReportBuilder.testResults(observations);
 
-        return pathologyRecordBuilder.build();
+        return medicalReportBuilder.build();
     }
 }
