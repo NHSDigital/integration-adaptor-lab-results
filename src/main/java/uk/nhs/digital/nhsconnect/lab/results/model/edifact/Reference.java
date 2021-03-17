@@ -5,6 +5,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.ReferenceType;
 
 /**
  * Example RFF+ASL:1'

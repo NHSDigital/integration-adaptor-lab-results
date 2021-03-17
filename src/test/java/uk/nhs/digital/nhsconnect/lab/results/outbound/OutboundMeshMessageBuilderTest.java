@@ -14,7 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.NhsAckProducerService;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
-import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessageParsingException;

@@ -3,7 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 import lombok.Getter;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageTrailer;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceType;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.ReferenceType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.UnstructuredAddress;
 
 import java.util.List;

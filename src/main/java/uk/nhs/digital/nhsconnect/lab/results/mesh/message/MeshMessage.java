@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId;
 
 @Getter
 @Setter

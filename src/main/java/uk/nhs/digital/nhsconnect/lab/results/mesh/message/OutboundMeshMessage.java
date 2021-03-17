@@ -2,6 +2,7 @@ package uk.nhs.digital.nhsconnect.lab.results.mesh.message;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId;
 
 public interface OutboundMeshMessage {
     String getRecipient();

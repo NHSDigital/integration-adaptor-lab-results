@@ -1,4 +1,4 @@
-package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
+package uk.nhs.digital.nhsconnect.lab.results.model.enums;
 
 import lombok.Getter;
 

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.MessageType;
 
 /**
  * A specialisation of a segment for the specific use case of a message header.

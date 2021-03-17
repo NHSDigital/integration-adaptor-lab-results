@@ -3,7 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 import lombok.Getter;
 import lombok.NonNull;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextType;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.FreeTextType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.RangeDetail;
 
 import java.util.List;

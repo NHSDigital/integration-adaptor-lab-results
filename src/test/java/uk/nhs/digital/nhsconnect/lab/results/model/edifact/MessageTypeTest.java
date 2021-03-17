@@ -1,6 +1,7 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
 import org.junit.jupiter.api.Test;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.MessageType;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;

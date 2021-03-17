@@ -1,13 +1,13 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
 import org.junit.jupiter.api.Test;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.HealthcareRegistrationIdentificationCode;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.HealthcareRegistrationIdentificationCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageRecipientNameAndAddress;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PerformerNameAndAddress;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceType;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.ReferenceType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.RequesterNameAndAddress;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ServiceProviderCode;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.ServiceProviderCode;
 
 import java.util.List;
 

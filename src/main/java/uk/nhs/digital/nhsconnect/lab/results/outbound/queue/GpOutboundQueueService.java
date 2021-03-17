@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.ChecksumService;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.MessageProcessingResult;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageType;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.MessageType;
 import uk.nhs.digital.nhsconnect.lab.results.utils.CorrelationIdService;
 import uk.nhs.digital.nhsconnect.lab.results.utils.JmsHeaders;
 

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.util.ObjectUtils;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.TestStatusCode;
 
 /**
  * Example: STS++CO'

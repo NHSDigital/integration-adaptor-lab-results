@@ -1,10 +1,10 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
 import org.junit.jupiter.api.Test;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DateFormat;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.DateFormat;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceType;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.ReferenceType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceDetails;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCollectionDateTime;

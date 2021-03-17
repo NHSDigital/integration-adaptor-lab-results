@@ -5,8 +5,8 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportDateIssued;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportStatus;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceType;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReportStatusCode;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.ReferenceType;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.ReportStatusCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
 
 import java.time.LocalDateTime;

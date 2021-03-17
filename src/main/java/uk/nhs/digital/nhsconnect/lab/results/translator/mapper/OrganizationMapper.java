@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static uk.nhs.digital.nhsconnect.lab.results.model.edifact.ServiceProviderCode.DEPARTMENT;
-import static uk.nhs.digital.nhsconnect.lab.results.model.edifact.ServiceProviderCode.ORGANIZATION;
+import static uk.nhs.digital.nhsconnect.lab.results.model.enums.ServiceProviderCode.DEPARTMENT;
+import static uk.nhs.digital.nhsconnect.lab.results.model.enums.ServiceProviderCode.ORGANIZATION;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)

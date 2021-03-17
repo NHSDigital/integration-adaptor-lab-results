@@ -5,6 +5,7 @@ import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.hl7.fhir.dstu3.model.ProcedureRequest;
+import org.hl7.fhir.dstu3.model.ProcedureRequest.ProcedureRequestIntent;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,8 +27,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import org.hl7.fhir.dstu3.model.ProcedureRequest.ProcedureRequestIntent;
 
 @SuppressWarnings("checkstyle:magicnumber")
 @ExtendWith(MockitoExtension.class)
@@ -181,7 +180,7 @@ class ProcedureRequestMapperTest {
         assertThat(procedureRequest)
             .isNotEmpty()
             .hasValueSatisfying(procedure ->
-                assertThat(procedure.getIntent()).isEqualTo(ProcedureRequestIntent.NULL));
+                assertThat(procedure.getIntent()).isEqualTo(ProcedureRequestIntent.ORIGINALORDER));
     }
 
     @Test

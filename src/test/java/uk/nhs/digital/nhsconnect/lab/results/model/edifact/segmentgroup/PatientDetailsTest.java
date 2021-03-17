@@ -1,9 +1,9 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 
 import org.junit.jupiter.api.Test;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DateFormat;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Gender;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PatientIdentificationType;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.DateFormat;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.Gender;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.PatientIdentificationType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PersonDateOfBirth;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PersonName;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PersonSex;
