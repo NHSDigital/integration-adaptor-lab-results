@@ -19,16 +19,17 @@ import org.hl7.fhir.dstu3.model.SimpleQuantity;
 import org.hl7.fhir.dstu3.model.Specimen;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.nhs.digital.nhsconnect.lab.results.model.enums.CodingType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
-import uk.nhs.digital.nhsconnect.lab.results.model.enums.LaboratoryInvestigationResultType;
-import uk.nhs.digital.nhsconnect.lab.results.model.enums.MeasurementValueComparator;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.RangeDetail;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.TestStatus;
-import uk.nhs.digital.nhsconnect.lab.results.model.enums.TestStatusCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvestigationSubject;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.LabResult;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.ResultReferenceRange;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.CodingType;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.LaboratoryInvestigationResultType;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.MeasurementValueComparator;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.TestStatusCode;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
@@ -231,11 +232,13 @@ public class ObservationMapper {
                     // Observation.referenceRange.low = SG20.RND.6162
                     rangeDetail.getLowerLimit()
                         .map(this::toSimpleQuantity)
+                        .map(quantity -> addUnit(quantity, rangeDetail))
                         .ifPresent(range::setLow);
 
                     // Observation.referenceRange.high = SG20.RND.6152
                     rangeDetail.getUpperLimit()
                         .map(this::toSimpleQuantity)
+                        .map(quantity -> addUnit(quantity, rangeDetail))
                         .ifPresent(range::setHigh);
 
                     return range;
@@ -268,6 +271,11 @@ public class ObservationMapper {
             final var simpleQuantity = new SimpleQuantity();
             simpleQuantity.setValue(value);
             return simpleQuantity;
+        }
+
+        private SimpleQuantity addUnit(final SimpleQuantity quantity, final RangeDetail rangeDetail) {
+            rangeDetail.getUnits().ifPresent(quantity::setUnit);
+            return quantity;
         }
 
         private String getSystemValue(final CodingType codingType) {
