@@ -43,6 +43,16 @@ class UnstructuredAddressTest {
     }
 
     @Test
+    void testFromStringValidWithMinimumAddressFieldsIgnoringTrailingColons() {
+        final var address = UnstructuredAddress.fromString("ADR++US:LINE1++");
+        assertAll(
+            () -> assertThat(address.getFormat()).isEqualTo("US"),
+            () -> assertThat(address.getAddressLines()).containsExactly("LINE1"),
+            () -> assertThat(address.getPostCode()).isEmpty()
+        );
+    }
+
+    @Test
     void testFromStringValidWithOnlyPostcode() {
         final var address = UnstructuredAddress.fromString("ADR++++POSTCODE");
         assertAll(

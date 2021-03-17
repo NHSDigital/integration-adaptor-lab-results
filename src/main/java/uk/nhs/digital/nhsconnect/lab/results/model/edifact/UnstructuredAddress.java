@@ -8,7 +8,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 /**
- * E.g. {@code ADR++US:FLAT1:12 BROWNBERRIE AVENUE::LEEDS:++LS18 5PN'} has no address parts 3 or 5.
+ * E.g. {@code ADR++US:FLAT1:12 BROWNBERRIE AVENUE::LEEDS++LS18 5PN'} has no address parts 3 or 5.
  * {@code ADR++++LS18 5PN'} has only a postcode
  */
 @EqualsAndHashCode(callSuper = true)
@@ -18,7 +18,7 @@ public class UnstructuredAddress extends Segment {
     public static final String KEY = "ADR";
     private static final String FORMAT = "US";
 
-    private static final int ADDRESS_LINES = 5;
+    private static final int MAX_ADDRESS_LINES = 5;
     private static final int INDEX_ADDRESS = 2;
     private static final int INDEX_POSTCODE = 4;
 
@@ -35,9 +35,9 @@ public class UnstructuredAddress extends Segment {
         final String[] splitByColon = Split.byColon(splitByPlus[INDEX_ADDRESS]);
 
         String[] addressLines = null;
-        if (splitByColon.length > ADDRESS_LINES) {
-            addressLines = new String[ADDRESS_LINES];
-            System.arraycopy(splitByColon, 1, addressLines, 0, ADDRESS_LINES);
+        if (splitByColon.length > 1 && splitByColon.length <= MAX_ADDRESS_LINES + 1) {
+            addressLines = new String[splitByColon.length - 1];
+            System.arraycopy(splitByColon, 1, addressLines, 0, splitByColon.length - 1);
         }
 
         final String postCode = splitByPlus[INDEX_POSTCODE];
