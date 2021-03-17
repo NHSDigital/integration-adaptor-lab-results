@@ -34,8 +34,7 @@ class OutboundMeshMessageBuilderTest {
 
         when(interchange.getInterchangeHeader().getSender()).thenReturn("Sender");
 
-        when(nhsAckProducerService.createNhsAckEdifact(
-            WorkflowId.PATHOLOGY_ACK, interchange, null)).thenReturn("NHSACK");
+        when(nhsAckProducerService.createNhsAckEdifact(interchange, null)).thenReturn("NHSACK");
 
         OutboundMeshMessage outboundMeshMessage = outboundMeshMessageBuilder.buildNhsAck(
             WorkflowId.PATHOLOGY, interchange, null);
@@ -53,8 +52,7 @@ class OutboundMeshMessageBuilderTest {
 
         when(interchange.getInterchangeHeader().getSender()).thenReturn("Sender");
 
-        when(nhsAckProducerService.createNhsAckEdifact(
-            WorkflowId.SCREENING_ACK, interchange, null)).thenReturn("NHSACK");
+        when(nhsAckProducerService.createNhsAckEdifact(interchange, null)).thenReturn("NHSACK");
 
         OutboundMeshMessage outboundMeshMessage = outboundMeshMessageBuilder.buildNhsAck(
             WorkflowId.SCREENING, interchange, null);
@@ -72,7 +70,7 @@ class OutboundMeshMessageBuilderTest {
 
         when(exception.getSender()).thenReturn("Sender");
 
-        when(nhsAckProducerService.createNhsAckEdifact(WorkflowId.PATHOLOGY_ACK, exception)).thenReturn("NHSACK");
+        when(nhsAckProducerService.createNhsAckEdifact(exception)).thenReturn("NHSACK");
 
         OutboundMeshMessage outboundMeshMessage = outboundMeshMessageBuilder.buildNhsAck(
             WorkflowId.PATHOLOGY, exception);
@@ -90,7 +88,7 @@ class OutboundMeshMessageBuilderTest {
 
         when(exception.getSender()).thenReturn("Sender");
 
-        when(nhsAckProducerService.createNhsAckEdifact(WorkflowId.PATHOLOGY_ACK, exception)).thenReturn("NHSACK");
+        when(nhsAckProducerService.createNhsAckEdifact(exception)).thenReturn("NHSACK");
 
         OutboundMeshMessage outboundMeshMessage = outboundMeshMessageBuilder.buildNhsAck(
             WorkflowId.PATHOLOGY, exception);

@@ -184,9 +184,9 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
     }
 
     private WorkflowId getEdifactWorkflowId(String edifact) {
-        if (edifact.contains(WorkflowId.PATHOLOGY.getWorkflowId())) {
+        if (edifact.contains("NHS002") || edifact.contains("NHS003")) {
             return WorkflowId.PATHOLOGY;
-        } else if (edifact.contains(WorkflowId.SCREENING.getWorkflowId())) {
+        } else if (edifact.contains("NHS004")) {
             return WorkflowId.SCREENING;
         } else {
             throw new RuntimeException("Unsupported Workflow ID");
