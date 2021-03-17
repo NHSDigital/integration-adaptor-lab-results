@@ -8,7 +8,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValida
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 /**
- * E.g. {@code ADR++US:FLAT1:12 BROWNBERRIE AVENUE::LEEDS:++LS18 5PN'} has no address parts 3 or 5.
+ * E.g. {@code ADR++US:FLAT1:12 BROWNBERRIE AVENUE::LEEDS++LS18 5PN'} has no address parts 3 or 5.
  * {@code ADR++++LS18 5PN'} has only a postcode
  */
 @EqualsAndHashCode(callSuper = true)
