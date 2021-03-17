@@ -28,6 +28,10 @@ Adaptor's EDIFACT to FHIR translation steps are built for high performance and r
 
 ### Message processing and error handling
 
+EDIFACT messages are downloaded from MESH using MESH Client component. Due to specifics on how MESH works, the following design has been implemented.
+![MESH Client](/documentation/lab_results_mesh_client_diagram.png)
+MESH Client component is triggers at a given interval (app configuration), downloads all messages matching Pathology and Screening workflows and sends back an infrastructure ACK telling MESH to delete EDIFACT messages. Even if there are multiple instances of the adaptor running, only one of them will be downloading messages at a given time.
+
 When an EDIFACT message is downloaded from MESH using the MESH Client component, its structure is not verified at this step. The message is stored on the internal `Inbound MESH Queue` and MESH is instructed that the file can be deleted since the message has been successfully downloaded.
 
 Two error scenarios are possible at this stage:
