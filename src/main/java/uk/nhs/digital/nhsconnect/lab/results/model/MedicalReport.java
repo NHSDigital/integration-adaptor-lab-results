@@ -17,15 +17,13 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
-public class PathologyRecord {
+public class MedicalReport {
 
     private Patient patient;
     private Practitioner performingPractitioner;
     private Organization performingOrganization;
     private Practitioner requestingPractitioner;
     private Organization requestingOrganization;
-    private Organization specimenCollectingOrganization;
-    private Practitioner specimenCollector;
     @Builder.Default
     private List<Specimen> specimens = Collections.emptyList();
     private DiagnosticReport testReport;

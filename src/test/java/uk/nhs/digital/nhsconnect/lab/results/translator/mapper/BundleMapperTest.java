@@ -16,8 +16,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.nhs.digital.nhsconnect.lab.results.model.PathologyRecord;
-import uk.nhs.digital.nhsconnect.lab.results.model.PathologyRecord.PathologyRecordBuilder;
+import uk.nhs.digital.nhsconnect.lab.results.model.MedicalReport;
+import uk.nhs.digital.nhsconnect.lab.results.model.MedicalReport.MedicalReportBuilder;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
@@ -46,7 +46,7 @@ class BundleMapperTest {
     @InjectMocks
     private BundleMapper bundleMapper;
 
-    private PathologyRecordBuilder pathologyRecordBuilder;
+    private MedicalReportBuilder medicalReportBuilder;
 
     @BeforeEach
     void setUp() {
@@ -55,18 +55,18 @@ class BundleMapperTest {
         // add members that are required:
         final var mockRequester = mock(Practitioner.class);
         lenient().when(mockRequester.getId()).thenReturn(SOME_UUID);
-        pathologyRecordBuilder = PathologyRecord.builder()
+        medicalReportBuilder = MedicalReport.builder()
             .requestingPractitioner(mockRequester)
             .patient(mock(Patient.class))
             .testReport(mock(DiagnosticReport.class));
     }
 
     @Test
-    void testMapPathologyRecordToBundleWithPatient() {
+    void testMapMedicalReportToBundleWithPatient() {
         final var mockPatient = mock(Patient.class);
-        pathologyRecordBuilder.patient(mockPatient);
+        medicalReportBuilder.patient(mockPatient);
 
-        final Bundle bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
+        final Bundle bundle = bundleMapper.mapToBundle(medicalReportBuilder.build());
 
         final var patientBundleEntries = bundle.getEntry().stream()
             .filter(entry -> entry.getResource() instanceof Patient)
@@ -86,11 +86,11 @@ class BundleMapperTest {
     }
 
     @Test
-    void testMapPathologyRecordToBundleWithRequestingPractitioner() {
+    void testMapMedicalReportToBundleWithRequestingPractitioner() {
         final var mockRequestingPractitioner = mock(Practitioner.class);
-        pathologyRecordBuilder.requestingPractitioner(mockRequestingPractitioner);
+        medicalReportBuilder.requestingPractitioner(mockRequestingPractitioner);
 
-        final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
+        final var bundle = bundleMapper.mapToBundle(medicalReportBuilder.build());
 
         final var requesterBundleEntries = bundle.getEntry().stream()
             .filter(entry -> entry.getResource() instanceof Practitioner)
@@ -110,11 +110,11 @@ class BundleMapperTest {
     }
 
     @Test
-    void testMapPathologyRecordToBundleWithRequestingOrganization() {
+    void testMapMedicalReportToBundleWithRequestingOrganization() {
         final var mockRequestingOrganization = mock(Organization.class);
-        pathologyRecordBuilder.requestingOrganization(mockRequestingOrganization);
+        medicalReportBuilder.requestingOrganization(mockRequestingOrganization);
 
-        final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
+        final var bundle = bundleMapper.mapToBundle(medicalReportBuilder.build());
 
         final var requestingOrganizationBundleEntries = bundle.getEntry().stream()
             .filter(entry -> entry.getResource() instanceof Organization)
@@ -134,11 +134,11 @@ class BundleMapperTest {
     }
 
     @Test
-    void testMapPathologyRecordToBundleWithPerformingPractitioner() {
+    void testMapMedicalReportToBundleWithPerformingPractitioner() {
         final var mockPerformingPractitioner = mock(Practitioner.class);
-        pathologyRecordBuilder.performingPractitioner(mockPerformingPractitioner);
+        medicalReportBuilder.performingPractitioner(mockPerformingPractitioner);
 
-        final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
+        final var bundle = bundleMapper.mapToBundle(medicalReportBuilder.build());
 
         final var performerBundleEntries = bundle.getEntry().stream()
             .filter(entry -> entry.getResource() instanceof Practitioner)
@@ -159,11 +159,11 @@ class BundleMapperTest {
     }
 
     @Test
-    void testMapPathologyRecordToBundleWithPerformingOrganization() {
+    void testMapMedicalReportToBundleWithPerformingOrganization() {
         final var mockPerformingOrganization = mock(Organization.class);
-        pathologyRecordBuilder.performingOrganization(mockPerformingOrganization);
+        medicalReportBuilder.performingOrganization(mockPerformingOrganization);
 
-        final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
+        final var bundle = bundleMapper.mapToBundle(medicalReportBuilder.build());
 
         final var performingOrganizationBundleEntries = bundle.getEntry().stream()
             .filter(entry -> entry.getResource() instanceof Organization)
@@ -183,11 +183,11 @@ class BundleMapperTest {
     }
 
     @Test
-    void testMapPathologyRecordToBundleWithProcedureRequest() {
+    void testMapMedicalReportToBundleWithProcedureRequest() {
         final var mockProcedureRequest = mock(ProcedureRequest.class);
-        pathologyRecordBuilder.testRequestSummary(mockProcedureRequest);
+        medicalReportBuilder.testRequestSummary(mockProcedureRequest);
 
-        final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
+        final var bundle = bundleMapper.mapToBundle(medicalReportBuilder.build());
 
         final var procedureRequestBundleEntries = bundle.getEntry().stream()
             .filter(entry -> entry.getResource() instanceof ProcedureRequest)
@@ -208,12 +208,12 @@ class BundleMapperTest {
     }
 
     @Test
-    void testMapPathologyRecordToBundleWithSpecimens() {
+    void testMapMedicalReportToBundleWithSpecimens() {
         final var mockSpecimen1 = mock(Specimen.class);
         final var mockSpecimen2 = mock(Specimen.class);
-        pathologyRecordBuilder.specimens(List.of(mockSpecimen1, mockSpecimen2));
+        medicalReportBuilder.specimens(List.of(mockSpecimen1, mockSpecimen2));
 
-        final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
+        final var bundle = bundleMapper.mapToBundle(medicalReportBuilder.build());
 
         final var specimenBundleEntries = bundle.getEntry().stream()
             .filter(entry -> entry.getResource() instanceof Specimen)
@@ -234,12 +234,12 @@ class BundleMapperTest {
     }
 
     @Test
-    void testMapPathologyRecordToBundleWithTestResults() {
+    void testMapMedicalReportToBundleWithTestResults() {
         final var mockTestResult1 = mock(Observation.class);
         final var mockTestResult2 = mock(Observation.class);
-        pathologyRecordBuilder.testResults(List.of(mockTestResult1, mockTestResult2));
+        medicalReportBuilder.testResults(List.of(mockTestResult1, mockTestResult2));
 
-        final var bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
+        final var bundle = bundleMapper.mapToBundle(medicalReportBuilder.build());
 
         final var observationBundleEntries = bundle.getEntry().stream()
             .filter(entry -> entry.getResource() instanceof Observation)
@@ -260,11 +260,11 @@ class BundleMapperTest {
     }
 
     @Test
-    void testMapPathologyRecordToBundleWithDiagnosticReport() {
+    void testMapMedicalReportToBundleWithDiagnosticReport() {
         final var mockDiagnosticReport = mock(DiagnosticReport.class);
-        pathologyRecordBuilder.testReport(mockDiagnosticReport);
+        medicalReportBuilder.testReport(mockDiagnosticReport);
 
-        final Bundle bundle = bundleMapper.mapToBundle(pathologyRecordBuilder.build());
+        final Bundle bundle = bundleMapper.mapToBundle(medicalReportBuilder.build());
 
         final var diagnosticReportBundleEntries = bundle.getEntry().stream()
             .filter(entry -> entry.getResource() instanceof DiagnosticReport)
