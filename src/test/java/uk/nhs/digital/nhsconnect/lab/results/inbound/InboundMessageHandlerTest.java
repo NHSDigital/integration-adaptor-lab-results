@@ -10,7 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.fhir.EdifactToFhirService;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
-import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;

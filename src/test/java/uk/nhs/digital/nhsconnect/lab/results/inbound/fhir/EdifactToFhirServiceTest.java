@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
-import uk.nhs.digital.nhsconnect.lab.results.model.fhir.PathologyRecord;
+import uk.nhs.digital.nhsconnect.lab.results.model.PathologyRecord;
 import uk.nhs.digital.nhsconnect.lab.results.translator.mapper.BundleMapper;
 import uk.nhs.digital.nhsconnect.lab.results.translator.mapper.PathologyRecordMapper;
 

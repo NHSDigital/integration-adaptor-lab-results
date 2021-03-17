@@ -3,6 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.NhsAckStatus;
 
 import java.util.List;
 

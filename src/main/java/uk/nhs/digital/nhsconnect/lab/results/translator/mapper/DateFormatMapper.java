@@ -4,7 +4,7 @@ import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
 import org.hl7.fhir.dstu3.model.BaseDateTimeType;
 import org.hl7.fhir.dstu3.model.DateTimeType;
 import org.springframework.stereotype.Component;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DateFormat;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.DateFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

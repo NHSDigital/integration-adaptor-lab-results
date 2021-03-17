@@ -25,7 +25,7 @@ import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshRequests;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessageId;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
-import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId;
 
 import java.io.IOException;
 import java.util.List;

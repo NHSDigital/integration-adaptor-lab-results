@@ -10,8 +10,8 @@ import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.MeshInboundQueueServi
 import uk.nhs.digital.nhsconnect.lab.results.mesh.exception.MeshWorkflowUnknownException;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshClient;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.InboundMeshMessage;
-import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageType;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.MessageType;
 import uk.nhs.digital.nhsconnect.lab.results.utils.CorrelationIdService;
 
 import java.util.List;

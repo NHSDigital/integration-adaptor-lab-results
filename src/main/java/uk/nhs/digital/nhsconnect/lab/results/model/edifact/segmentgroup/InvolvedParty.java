@@ -5,7 +5,7 @@ import lombok.NonNull;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageRecipientNameAndAddress;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PerformerNameAndAddress;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceType;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.ReferenceType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.RequesterNameAndAddress;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ServiceProvider;
 

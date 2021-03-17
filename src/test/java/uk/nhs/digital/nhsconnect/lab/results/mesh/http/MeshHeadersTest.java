@@ -4,7 +4,7 @@ import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
-import uk.nhs.digital.nhsconnect.lab.results.mesh.message.WorkflowId;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId;
 
 import java.util.Arrays;
 import java.util.List;

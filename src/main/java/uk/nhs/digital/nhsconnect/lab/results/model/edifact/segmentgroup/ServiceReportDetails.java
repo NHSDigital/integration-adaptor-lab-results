@@ -6,7 +6,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportDateI
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportStatus;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageTrailer;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.ReferenceType;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.ReferenceType;
 
 import java.util.List;
 

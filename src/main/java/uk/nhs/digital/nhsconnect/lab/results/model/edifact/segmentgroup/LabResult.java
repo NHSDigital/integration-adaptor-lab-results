@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.DiagnosticReportCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextType;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.FreeTextType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigation;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigationResult;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.MessageTrailer;
