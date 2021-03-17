@@ -4,37 +4,105 @@
 
 The main objective of the Lab Results Adaptor is to hide complex legacy standards and instead present a simple and consistent interface aligned to current NHSD national standards. The adaptor removes the requirement for a GP System to handle the complexities of EDIFACT and MESH messaging.
 
-At a high level, the Lab Results Adaptor exposes a queue from which the GP System can consume medical reports
+At a high level, the Lab Results Adaptor exposes a queue ([AMQP 1.0](https://www.amqp.org/resources/specifications)) from which the GP System can consume Pathology and Screening medical reports in [FHIR STU3](https://digital.nhs.uk/developer/guides-and-documentation/api-technologies-at-nhs-digital#fhir) format.
 
 See the [Resources](#resources) section for links to the underlying services and standards. 
 
-Adaptor handles two types of messages
-
+Adaptor handles the following types of EDIFACT messages:
 - Pathology `NHS003`
 - Screening `NHS004`
 
-## Adaptor API
+and replies with an `NHS001` (NHSACK) message if requested.
 
-The GP System will receive medical reports on the `Outbound GP Queue` in form of a FHIR DSTU3 Bundle.
+## Architecture
+
+![Adaptor Component Diagram](/documentation/lab_results_diagram.png)
+![Adaptor Sequence Diagram](/documentation/lab_results_sequence_diagram.png)
+
+Adaptor downloads EDIFACT messages from MESH mailbox (`PATH_MEDRPT_V3` and `SCRN_BCS_MEDRPT_V4` MESH workflows) using MESH Client component and puts them on an internal `Inbound MESH Queue`. The Message Translator component fetches messages off the queue, translates the EDIFACT into FHIR format and puts the result onto the `Outbound GP Queue` where other GP Supplier apps can consume medical reports from.
+In the end, if the EDIFACT Interchange Header has requested such, an NHSACK confirmation will be sent back to the laboratory MESH mailbox.
+
+### Performance
+
+Adaptor's EDIFACT to FHIR translation steps are built for high performance and resiliency by applying horizontal scaling techniques. However, the MESH consumer's step performance cannot be increased this way. Due to the nature of MESH, if there are multiple adaptor instances, only one randomly chosen instance will download messages and put them on the `Inbound MESH Queue`.
+
+### Message processing and error handling
+
+When an EDIFACT message is downloaded from MESH using the MESH Client component, its structure is not verified at this step. The message is stored on the internal `Inbound MESH Queue` and MESH is instructed that the file can be deleted since the message has been successfully downloaded.
+
+Two error scenarios are possible at this stage:
+- Message has been downloaded but the adaptor was unable to put it on the `Inbound MESH Queue`
+
+    Message has not been put on the queue, nor MESH has been instructed to delete it. Apart from error log entry, there is no side effect. The operation is retried on the next MESH scan cycle.
+- Message has been downloaded and placed on `Inbound MESH Queue` but an error occurred while notifying MESH that the message can be deleted
+
+    Message has been put on the queue, but MESH has not been instructed to delete it.
+    There are no side effects apart from error log entry. The message has not been deleted from MESH, so it will be fetched again on the next MESH scan cycle. Since the message has already been put on `Inbound MESH Queue`, it will be processed again causing duplicates to appear on the `Outbound GP Queue`. Handling duplicates is described in the  [duplicates](#duplicates) section.
+
+Once the message is on the `Inbound MESH Queue` the Message Translator component picks each one up and performs the following steps:
+
+1) Initial verification
+
+    This step parses the EDIFACT message and verifies the general structure of the message and can result in two types of errors:
+    - Interchange Header (UNB) is missing mandatory fields (sender, recipient, sequence number, NHSACK request flag).
+
+        Since the header can't be parsed, an NHSACK can't be produced to inform the laboratory about the error. This is a critical error and manual intervention is required. Message is rejected causing it to be placed back on the `Inbound MESH Queue`. It is picked up again for retry until the MQ max retry value is reached. After that, message is placed on the Dead Letter Queue and manual intervention is required.
+    - Interchange Trailer (UNZ) message count or Message Header (UNH) or Message Trailer (UNT) can't be parsed.
+
+        Since the Interchange Header was parsed, all the information required to produce an NHSACK is available. If Interchange Header has the NHSACK request flag set, an NHSACK is produced and sent back to the laboratory MESH mailbox.
+
+2) Translation
+
+    At this step an EDIFACT has already been parsed and split into messages. Each message is translated into a FHIR Bundle. Any error occurring at this step is logged, and if an NHSACK is requested, appropriate information is set in it. Because of the error, no FHIR Bundle is created for that single message. Other messages are not affected and can still be processed. At the end of this step, a summary NHSACK is generated containing information about all the successes and failures of EDIFACT messages processing.
+
+3) Sending to `Outbound GP Queue`
+
+    All individual EDIFACT messages that have been successfully translated into FHIR are sent to `Outbound GP Queue`. If an error occurs at this step, the whole EDIFACT is rejected and it returns to the `Inbound MESH Queue` to be picked up again until MQ max retry value is reached. After that, the EDIFACT is placed on the Dead Letter Queue and manual intervention is required.
+
+4) Sending NHSACK to `Outbound MESH Queue`
+
+    All individual FHIR messages have been sent to the `Outbound GP Queue`. If an NHSACK was requested, it has been generated and sent to `Outbound MESH Queue`. If an error occurs at this step, the whole EDIFACT is rejected and it will be returned to the `Inbound MESH Queue` to be picked up again until MQ max retry value is reached. After that, the EDIFACT is placed on the Dead Letter Queue and manual intervention is required. Since the message has been already put on `Inbound MESH Queue`, it will be processed again causing duplicates to appear on the `Outbound GP Queue`. Handling duplicates is described in the [duplicates](#duplicates) section.
+
+### Logging and debugging
+
+Adaptor provides detailed logs while processing each EDIFACT. Each EDIFACT that goes through the adapter is given a new randomly generated `CorrelationId`. This value is available in every log line that is created while processing that EDIFACT and also as an AMQP header (check [here](#outbound-gp-queue-specification)) on the `Outbound GP Queue`.
+
+### Duplicates
+
+In rare cases, the adaptor can produce duplicate messages on the `Outbound GP Queue`. It is GP Supplier's responsibility to identify and handle duplicates when fetching messages from the queue. The AMQP message `Checksum` header should be used to identify duplicates (see [Outbound GP Queue specification](#outbound-gp-queue-specification)).
+
+## Integrating with the adaptor
+
+When using the adaptor, the GP Supplier will receive medical reports on the `Outbound GP Queue` ([AMQP 1.0](https://www.amqp.org/resources/specifications)) in the form of a [FHIR STU3](https://digital.nhs.uk/developer/guides-and-documentation/api-technologies-at-nhs-digital#fhir) Bundle resources. Examples can be found [here](#examples)
+
+### Outbound GP Queue specification
+
+The `Outbound GP Queue` from where the FHIR-formatted medical reports can be fetched from is an AMQP 1.0 queue. The payload of the queue message is the FHIR Bundle resource accompanied with custom headers:
+
+- `CorrelationId` - a unique identifier assigned for a given inbound EDIFACT message that can be used to trace down message processing and issues in adaptor logs. Keep in mind that a single EDIFACT can contain multiple messages, which will produce multiple queue messages having the same `CorrelationId`. Example: `83035310E0B54283A5242C8EC9CA5FD6`
+- `Checksum` - an MD5 checksum of the inbound EDIFACT message. This value should be used to handle duplicates on the GP Supplier Applications end.
+- `MessageType` - one of [`Pathology`, `Screening`] indicating the source EDIFACT message type
 
 ### Examples
 
 Examples of both Pathology and Screening messages are provided as part of the adaptor's User Acceptance Tests.
 Each example is built from 2 files:
 
-- `<example-id>.edifact.dat` - message provided by laboratory
+- `<example-id>.edifact.dat` - EDIFACT message provided by the laboratory
 - `<example-id>.fhir.json` - message translated to FHIR format
 
 Example input EDIFACT files can be found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/edifact) with the corresponding FHIR translations found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/fhir)
 
 Pathology examples can be found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/success_uat_data/NHS003)
-Screening examples can be found //TODO
-
-## Adaptor Architecture
-
-//TODO NIAD-993 link to digital.nhs.uk
+Screening examples can be found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/success_uat_data/NHS004)
 
 ## Resources
+
+[Lab Results adaptor](https://digital.nhs.uk/developer/api-catalogue/nhs-lab-results-adaptor)
+
+[Pathology Messaging - EDIFACT API](https://digital.nhs.uk/developer/api-catalogue/pathology-messaging-edifact)
+
+[Bowel Cancer Screening - EDIFACT API](https://digital.nhs.uk/developer/api-catalogue/bowel-cancer-screening-edifact)
 
 [Pathology & Diagnostics Information Standards Collaboration Space](https://hscic.kahootz.com/connect.ti/PathologyandDiagnostics/groupHome)
 
@@ -48,9 +116,8 @@ Screening examples can be found //TODO
 
 ## Configuration
 
-The adaptor reads its configuration from environment variables. The following sections describe the environment variables
- used to configure the adaptor. 
- 
+All configuration options can be found in the [application.yml](/src/main/resources/application.yml) file. The adaptor reads its configuration from environment variables to override the defaults. The following sections describe the environment variables used to configure the adaptor. 
+
 Variables without a default value and not marked optional *MUST* be defined for the adaptor to run.
 
 ### General Configuration
@@ -156,7 +223,7 @@ Refer to [OPERATING.md](OPERATING.md) for tips about how to operate the adaptor 
 
 ## Development
 
-The following sections provide the necessary information to develop the Integration Adaptor.
+The following sections provide the necessary information to develop the Lab Results adaptor.
 
 The adaptor configuration has sensible defaults for local development. Some overrides might be required where the 
 "secure by default" principle takes precedence:
