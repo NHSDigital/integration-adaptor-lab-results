@@ -7,6 +7,8 @@ import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.hl7.fhir.dstu3.model.ProcedureRequest;
+import org.hl7.fhir.dstu3.model.ProcedureRequest.ProcedureRequestIntent;
+import org.hl7.fhir.dstu3.model.ProcedureRequest.ProcedureRequestStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
@@ -20,9 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import org.hl7.fhir.dstu3.model.ProcedureRequest.ProcedureRequestStatus;
-import org.hl7.fhir.dstu3.model.ProcedureRequest.ProcedureRequestIntent;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -66,7 +65,8 @@ public class ProcedureRequestMapper {
             this.procedureRequest = new ProcedureRequest();
             mapFreeText();
             mapStatus();
-            procedureRequest.setIntent(ProcedureRequestIntent.NULL);
+            // TODO: this is just a valid value used until we know the real one, or how to determine the real one
+            procedureRequest.setIntent(ProcedureRequestIntent.ORIGINALORDER);
             procedureRequest.setCode(new CodeableConcept().setText("unknown"));
             procedureRequest.setId(uuidGenerator.generateUUID());
             procedureRequest.getSubject().setReference(fullUrlGenerator.generate(patient));
