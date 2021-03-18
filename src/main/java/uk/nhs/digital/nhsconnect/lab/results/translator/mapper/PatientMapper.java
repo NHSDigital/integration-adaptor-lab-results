@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PersonName;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.UnstructuredAddress;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvestigationSubject;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.PatientDetails;
@@ -37,13 +38,18 @@ public class PatientMapper {
             .map(InvestigationSubject::getDetails)
             .orElseThrow(() -> new FhirValidationException("Unable to map message to patient details"));
 
+        final Optional<Reference> referenceServiceSubject = investigationSubject
+            .flatMap(InvestigationSubject::getReferenceServiceSubject);
+
         final Patient patient = new Patient();
         patient.setId(uuidGenerator.generateUUID());
 
-        Optional.ofNullable(patientDetails.getName()).ifPresent(name -> {
-            mapIdentifier(name, patient);
-            mapName(name, patient);
-        });
+        final PersonName personName = patientDetails.getName();
+        mapName(personName, patient);
+
+        Optional.ofNullable(personName.getNhsNumber())
+            .ifPresentOrElse(nhsNumber -> mapNhsNumberIdentifier(nhsNumber, patient),
+                () -> referenceServiceSubject.ifPresent(reference -> mapOtherIdentifier(reference, patient)));
 
         mapGender(patientDetails, patient);
         mapDateOfBirth(patientDetails, patient);
@@ -54,7 +60,7 @@ public class PatientMapper {
         return patient;
     }
 
-    private void mapAddress(UnstructuredAddress unstructuredAddress, Patient patient) {
+    private void mapAddress(final UnstructuredAddress unstructuredAddress, final Patient patient) {
         final Address address = new Address();
 
         final String[] addressLines = unstructuredAddress.getAddressLines();
@@ -66,12 +72,16 @@ public class PatientMapper {
         patient.addAddress(address);
     }
 
-    private void mapIdentifier(final PersonName name, final Patient patient) {
+    private void mapNhsNumberIdentifier(final String nhsNumber, final Patient patient) {
         final Identifier identifier = new Identifier();
-
         identifier.setSystem(NHS_NUMBER_SYSTEM);
-        identifier.setValue(name.getNhsNumber());
+        identifier.setValue(nhsNumber);
+        patient.addIdentifier(identifier);
+    }
 
+    private void mapOtherIdentifier(final Reference reference, final Patient patient) {
+        final Identifier identifier = new Identifier();
+        identifier.setId(reference.getNumber());
         patient.addIdentifier(identifier);
     }
 
