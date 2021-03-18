@@ -22,7 +22,8 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class MeshService {
 
-    private static final Set<WorkflowId> SUPPORTED_WORKFLOWS = Set.of(WorkflowId.PATHOLOGY_3, WorkflowId.SCREENING);
+    private static final Set<WorkflowId> SUPPORTED_WORKFLOWS = Set.of(
+        WorkflowId.PATHOLOGY_2, WorkflowId.PATHOLOGY_3, WorkflowId.SCREENING);
 
     private final MeshClient meshClient;
 

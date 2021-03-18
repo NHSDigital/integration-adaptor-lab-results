@@ -57,7 +57,7 @@ class MeshServiceTest {
     @BeforeEach
     void setUp() {
         meshMessage1 = new MeshMessage();
-        meshMessage1.setMeshMessageId(MESSAGE_ID1).setWorkflowId(WorkflowId.PATHOLOGY_3);
+        meshMessage1.setMeshMessageId(MESSAGE_ID1).setWorkflowId(WorkflowId.PATHOLOGY_2);
         meshMessage2 = new MeshMessage();
         meshMessage2.setMeshMessageId(MESSAGE_ID2).setWorkflowId(WorkflowId.PATHOLOGY_3);
 
