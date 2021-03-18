@@ -16,7 +16,6 @@ public class NhsAckContent {
     private String dateYYMMDD;
     private String timeHHMM;
     private String nhsAckControlReference;
-    private String workflowId;
     private String dateCCYYMMDD;
     private String interchangeControlReference;
     private NhsAckStatus interchangeStatusCode;

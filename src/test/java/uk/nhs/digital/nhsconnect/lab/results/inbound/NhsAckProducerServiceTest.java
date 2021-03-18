@@ -8,7 +8,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.MessageProcessingResult.Error;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.MessageProcessingResult.Success;
-import uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
@@ -99,8 +98,7 @@ class NhsAckProducerServiceTest {
         );
         messageProcessingResults.add(new Success(message3, null));
 
-        String nhsAck = nhsAckProducerService.createNhsAckEdifact(
-            WorkflowId.PATHOLOGY_ACK, interchange, messageProcessingResults);
+        String nhsAck = nhsAckProducerService.createNhsAckEdifact(interchange, messageProcessingResults);
 
         String expectedNhsAck = readFile(NHSACK_IAF_RESPONSE_PATH).replace("\n", "");
 
@@ -136,8 +134,7 @@ class NhsAckProducerServiceTest {
         );
         messageProcessingResults.add(new Success(message3, null));
 
-        String nhsAck = nhsAckProducerService.createNhsAckEdifact(
-            WorkflowId.PATHOLOGY_ACK, interchange, messageProcessingResults);
+        String nhsAck = nhsAckProducerService.createNhsAckEdifact(interchange, messageProcessingResults);
 
         String expectedNhsAck = readFile(NHSACK_IAP_RESPONSE_PATH).replace("\n", "");
 
@@ -175,8 +172,7 @@ class NhsAckProducerServiceTest {
         Exception exception3 = new Exception("This is yet another failed message.");
         messageProcessingResults.add(new Error(message3, exception3));
 
-        String nhsAck = nhsAckProducerService.createNhsAckEdifact(
-            WorkflowId.PATHOLOGY_ACK, interchange, messageProcessingResults);
+        String nhsAck = nhsAckProducerService.createNhsAckEdifact(interchange, messageProcessingResults);
 
         String expectedNhsAck = readFile(NHSACK_IRA_RESPONSE_PATH).replace("\n", "");
 
@@ -191,8 +187,7 @@ class NhsAckProducerServiceTest {
         when(interchangeParsingException.getInterchangeSequenceNumber()).thenReturn(INTERCHANGE_CONTROL_REFERENCE);
         when(interchangeParsingException.getMessage()).thenReturn("Interchange could not be processed.");
 
-        String nhsAck = nhsAckProducerService.createNhsAckEdifact(
-            WorkflowId.PATHOLOGY_ACK, interchangeParsingException);
+        String nhsAck = nhsAckProducerService.createNhsAckEdifact(interchangeParsingException);
 
         String expectedNhsAck = readFile(NHSACK_IRI_RESPONSE_PATH).replace("\n", "");
 
@@ -207,8 +202,7 @@ class NhsAckProducerServiceTest {
         when(messageParsingException.getInterchangeSequenceNumber()).thenReturn(INTERCHANGE_CONTROL_REFERENCE);
         when(messageParsingException.getMessage()).thenReturn("Messages could not be extracted.");
 
-        String nhsAck = nhsAckProducerService.createNhsAckEdifact(
-            WorkflowId.PATHOLOGY_ACK, messageParsingException);
+        String nhsAck = nhsAckProducerService.createNhsAckEdifact(messageParsingException);
 
         String expectedNhsAck = readFile(NHSACK_IRM_RESPONSE_PATH).replace("\n", "");
 
@@ -243,8 +237,7 @@ class NhsAckProducerServiceTest {
         );
         messageProcessingResults.add(new Success(message3, null));
 
-        String nhsAck = nhsAckProducerService.createNhsAckEdifact(
-            WorkflowId.SCREENING_ACK, interchange, messageProcessingResults);
+        String nhsAck = nhsAckProducerService.createNhsAckEdifact(interchange, messageProcessingResults);
 
         String expectedNhsAck = readFile(NHSACK_SCREENING_RESPONSE_PATH).replace("\n", "");
 
