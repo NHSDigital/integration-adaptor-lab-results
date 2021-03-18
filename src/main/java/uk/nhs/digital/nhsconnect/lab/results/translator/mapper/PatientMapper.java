@@ -21,6 +21,8 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 import java.util.Arrays;
 import java.util.Optional;
 
+import static java.util.Optional.ofNullable;
+
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class PatientMapper {
@@ -31,7 +33,7 @@ public class PatientMapper {
     public Patient mapToPatient(final Message message) {
 
         final Optional<InvestigationSubject> investigationSubject =
-            Optional.ofNullable(message.getServiceReportDetails())
+            ofNullable(message.getServiceReportDetails())
                 .map(ServiceReportDetails::getSubject);
 
         final PatientDetails patientDetails = investigationSubject
@@ -47,7 +49,7 @@ public class PatientMapper {
         final PersonName personName = patientDetails.getName();
         mapName(personName, patient);
 
-        Optional.ofNullable(personName.getNhsNumber())
+        ofNullable(personName.getNhsNumber())
             .ifPresentOrElse(nhsNumber -> mapNhsNumberIdentifier(nhsNumber, patient),
                 () -> referenceServiceSubject.ifPresent(reference -> mapOtherIdentifier(reference, patient)));
 
@@ -62,13 +64,9 @@ public class PatientMapper {
 
     private void mapAddress(final UnstructuredAddress unstructuredAddress, final Patient patient) {
         final Address address = new Address();
-
-        final String[] addressLines = unstructuredAddress.getAddressLines();
-        if (addressLines != null && addressLines.length > 0) {
-            Arrays.stream(addressLines).forEach(address::addLine);
-        }
-        address.setPostalCode(unstructuredAddress.getPostCode());
-
+        final Optional<String[]> addressLines = unstructuredAddress.getAddressLines();
+        addressLines.map(Arrays::stream).ifPresent(stream -> stream.forEach(address::addLine));
+        unstructuredAddress.getPostCode().ifPresent(address::setPostalCode);
         patient.addAddress(address);
     }
 
@@ -101,10 +99,10 @@ public class PatientMapper {
     private void mapName(final PersonName name, final Patient patient) {
         final HumanName humanName = new HumanName();
 
-        Optional.ofNullable(name.getTitle()).ifPresent(humanName::addPrefix);
-        Optional.ofNullable(name.getFirstForename()).ifPresent(forename -> {
+        ofNullable(name.getTitle()).ifPresent(humanName::addPrefix);
+        ofNullable(name.getFirstForename()).ifPresent(forename -> {
             humanName.addGiven(forename);
-            Optional.ofNullable(name.getSecondForename())
+            ofNullable(name.getSecondForename())
                 .ifPresent(humanName::addGiven);
         });
         humanName.setFamily(name.getSurname());

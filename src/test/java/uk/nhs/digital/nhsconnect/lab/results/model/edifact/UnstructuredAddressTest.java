@@ -27,8 +27,9 @@ class UnstructuredAddressTest {
         final var address = UnstructuredAddress.fromString("ADR++US:LINE1:LINE2:LINE3:LINE4:LINE5++POSTCODE");
         assertAll(
             () -> assertThat(address.getFormat()).isEqualTo("US"),
-            () -> assertThat(address.getAddressLines()).containsExactly("LINE1", "LINE2", "LINE3", "LINE4", "LINE5"),
-            () -> assertThat(address.getPostCode()).isEqualTo("POSTCODE")
+            () -> assertThat(address.getAddressLines())
+                .contains(new String[]{"LINE1", "LINE2", "LINE3", "LINE4", "LINE5"}),
+            () -> assertThat(address.getPostCode()).contains("POSTCODE")
         );
     }
 
@@ -37,7 +38,17 @@ class UnstructuredAddressTest {
         final var address = UnstructuredAddress.fromString("ADR++US:LINE1::::++");
         assertAll(
             () -> assertThat(address.getFormat()).isEqualTo("US"),
-            () -> assertThat(address.getAddressLines()).containsExactly("LINE1", "", "", "", ""),
+            () -> assertThat(address.getAddressLines()).contains(new String[]{"LINE1", "", "", "", ""}),
+            () -> assertThat(address.getPostCode()).isEmpty()
+        );
+    }
+
+    @Test
+    void testFromStringValidWithNoPostcode() {
+        final var address = UnstructuredAddress.fromString("ADR++US:SLOANE SQUARE:LONDON");
+        assertAll(
+            () -> assertThat(address.getFormat()).isEqualTo("US"),
+            () -> assertThat(address.getAddressLines()).contains(new String[]{"SLOANE SQUARE", "LONDON"}),
             () -> assertThat(address.getPostCode()).isEmpty()
         );
     }
@@ -47,7 +58,7 @@ class UnstructuredAddressTest {
         final var address = UnstructuredAddress.fromString("ADR++US:LINE1++");
         assertAll(
             () -> assertThat(address.getFormat()).isEqualTo("US"),
-            () -> assertThat(address.getAddressLines()).containsExactly("LINE1"),
+            () -> assertThat(address.getAddressLines()).contains(new String[]{"LINE1"}),
             () -> assertThat(address.getPostCode()).isEmpty()
         );
     }
@@ -57,8 +68,8 @@ class UnstructuredAddressTest {
         final var address = UnstructuredAddress.fromString("ADR++++POSTCODE");
         assertAll(
             () -> assertThat(address.getFormat()).isEmpty(),
-            () -> assertThat(address.getAddressLines()).isNull(),
-            () -> assertThat(address.getPostCode()).isEqualTo("POSTCODE")
+            () -> assertThat(address.getAddressLines()).isEmpty(),
+            () -> assertThat(address.getPostCode()).contains("POSTCODE")
         );
     }
 

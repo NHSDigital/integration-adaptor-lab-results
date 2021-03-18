@@ -43,15 +43,15 @@ class InvestigationSubjectTest {
         var investigationSubjectAddress = assertThat(investigationSubject.getAddress()).isPresent();
 
         investigationSubjectAddress
-            .map(UnstructuredAddress::getAddressLines)
-            .contains(new String[] {"FLAT1", "12 BROWNBERRIE AVENUE", "", "LEEDS", ""});
+            .flatMap(UnstructuredAddress::getAddressLines)
+            .contains(new String[]{"FLAT1", "12 BROWNBERRIE AVENUE", "", "LEEDS", ""});
 
         investigationSubjectAddress
             .map(UnstructuredAddress::getFormat)
             .hasValue("US");
         investigationSubjectAddress
             .map(UnstructuredAddress::getPostCode)
-            .hasValue("LS18 5PN");
+            .hasValue(java.util.Optional.of("LS18 5PN"));
     }
 
     @Test
