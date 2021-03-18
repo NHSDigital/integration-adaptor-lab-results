@@ -65,8 +65,7 @@ public class ProcedureRequestMapper {
             this.procedureRequest = new ProcedureRequest();
             mapFreeText();
             mapStatus();
-            // TODO NIAD-1179: just a valid value used until we know the real one, or how to determine the real one
-            procedureRequest.setIntent(ProcedureRequestIntent.ORIGINALORDER);
+            procedureRequest.setIntent(ProcedureRequestIntent.ORDER);
             procedureRequest.setCode(new CodeableConcept().setText("unknown"));
             procedureRequest.setId(uuidGenerator.generateUUID());
             procedureRequest.getSubject().setReference(fullUrlGenerator.generate(patient));
