@@ -20,7 +20,8 @@
         "id": "9b57f7ad-7273-42f7-8072-f4a162eb3091",
         "identifier": [
           {
-            "system": "https://fhir.nhs.uk/Id/nhs-number"
+            "system": "https://fhir.nhs.uk/Id/nhs-number",
+            "value": "9435492908"
           }
         ],
         "name": [

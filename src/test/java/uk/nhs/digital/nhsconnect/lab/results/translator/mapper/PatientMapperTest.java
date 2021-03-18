@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
 import uk.nhs.digital.nhsconnect.lab.results.model.enums.DateFormat;
 import uk.nhs.digital.nhsconnect.lab.results.model.enums.Gender;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
@@ -29,30 +30,12 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 @SuppressWarnings("checkstyle:MagicNumber")
 @ExtendWith(MockitoExtension.class)
 class PatientMapperTest {
-    private static final String TITLE = "MISS";
-    private static final String FIRST_FORENAME = "SARAH";
-    private static final String SECOND_FORENAME = "ANGELA";
-    private static final String SURNAME = "KENNEDY";
-    private static final String NHS_NUMBER = "1234";
-    private static final String UUID = "some-uuid";
-    private static final String BIRTH_DATE_FULL = "1991-10-28";
-    private static final String BIRTH_DATE_YEAR_AND_MONTH = "1991-10";
-    private static final String BIRTH_DATE_YEAR_ONLY = "1991";
-    private static final LocalDate LOCAL_DATE_FULL = LocalDate.of(1991, 10, 28);
-    private static final LocalDate LOCAL_DATE_FOR_YEAR_AND_MONTH = LocalDate.of(1991, 10, 1);
-    private static final LocalDate LOCAL_DATE_FOR_YEAR_ONLY = LocalDate.of(1991, 1, 1);
-    private static final String POSTCODE = "POST CODE";
-    private static final String ADDRESS_LINE_1 = "LINE1";
-    private static final String ADDRESS_LINE_2 = "LINE2";
-    private static final String ADDRESS_LINE_3 = "LINE3";
-    private static final String ADDRESS_LINE_4 = "LINE4";
-    private static final String ADDRESS_LINE_5 = "LINE5";
-
     @InjectMocks
     private PatientMapper patientMapper;
     @Mock
@@ -65,6 +48,8 @@ class PatientMapperTest {
     private InvestigationSubject investigationSubject;
     @Mock
     private PatientDetails patientDetails;
+    @Mock
+    private Reference reference;
 
     @Test
     void testMapMessageToPatientThrowsExceptionWhenServiceReportDetailsAreNull() {
@@ -97,14 +82,14 @@ class PatientMapperTest {
         when(message.getServiceReportDetails()).thenReturn(serviceReportDetails);
         when(serviceReportDetails.getSubject()).thenReturn(investigationSubject);
         when(investigationSubject.getDetails()).thenReturn(patientDetails);
-        when(uuidGenerator.generateUUID()).thenReturn(UUID);
+        when(uuidGenerator.generateUUID()).thenReturn("some-uuid");
 
         final PersonName personName = PersonName.builder()
-            .title(TITLE)
-            .firstForename(FIRST_FORENAME)
-            .secondForename(SECOND_FORENAME)
-            .surname(SURNAME)
-            .nhsNumber(NHS_NUMBER)
+            .title("MISS")
+            .firstForename("SARAH")
+            .secondForename("ANGELA")
+            .surname("KENNEDY")
+            .nhsNumber("1234")
             .build();
         when(patientDetails.getName()).thenReturn(personName);
 
@@ -113,31 +98,37 @@ class PatientMapperTest {
             .build());
         when(patientDetails.getSex()).thenReturn(personSex);
 
-        stubDateOfBirth(BIRTH_DATE_FULL, DateFormat.CCYYMMDD);
+        final Optional<PersonDateOfBirth> personDateOfBirth = Optional.of(PersonDateOfBirth.builder()
+            .dateOfBirth("1991-10-28")
+            .dateFormat(DateFormat.CCYYMMDD)
+            .build());
+        when(patientDetails.getDateOfBirth()).thenReturn(personDateOfBirth);
 
-        final String[] addressLines = {ADDRESS_LINE_1, ADDRESS_LINE_2, ADDRESS_LINE_3, ADDRESS_LINE_4, ADDRESS_LINE_5};
-        stubAddress(addressLines);
+        final String[] addressLines = {"LINE1", "LINE2", "LINE3", "LINE4", "LINE5"};
+        final UnstructuredAddress unstructuredAddress = new UnstructuredAddress("", addressLines, "POST CODE");
+        when(investigationSubject.getAddress()).thenReturn(Optional.of(unstructuredAddress));
 
         final Patient patient = patientMapper.mapToPatient(message);
 
         assertAll("patient",
             () -> assertThat(patient).isNotNull(),
-
+            () -> assertThat(patient.getId()).isEqualTo("some-uuid"),
             () -> assertThat(patient.getIdentifier()).hasSize(1).first()
                 .satisfies(identifier -> assertAll(
-                    () -> assertThat(identifier.getValue()).isEqualTo(NHS_NUMBER),
+                    () -> assertThat(identifier.getId()).isNull(),
+                    () -> assertThat(identifier.getValue()).isEqualTo("1234"),
                     () -> assertThat(identifier.getSystem()).isEqualTo(PatientMapper.NHS_NUMBER_SYSTEM))),
 
             () -> assertThat(patient.getName()).hasSize(1).first()
                 .satisfies(name -> assertAll(
-                    () -> assertThat(name.getPrefixAsSingleString()).isEqualTo(TITLE),
-                    () -> assertThat(name.getGivenAsSingleString()).isEqualTo(FIRST_FORENAME + " " + SECOND_FORENAME),
-                    () -> assertThat(name.getFamily()).isEqualTo(SURNAME))),
+                    () -> assertThat(name.getPrefixAsSingleString()).isEqualTo("MISS"),
+                    () -> assertThat(name.getGivenAsSingleString()).isEqualTo("SARAH ANGELA"),
+                    () -> assertThat(name.getFamily()).isEqualTo("KENNEDY"))),
 
             () -> assertThat(patient.getGender()).isEqualTo(Enumerations.AdministrativeGender.FEMALE),
 
             () -> {
-                final Date birthDate = Date.from(LOCAL_DATE_FULL.atStartOfDay()
+                final Date birthDate = Date.from(LocalDate.of(1991, 10, 28).atStartOfDay()
                     .atZone(ZoneId.systemDefault()).toInstant());
                 assertThat(patient.getBirthDate()).isEqualTo(birthDate);
             },
@@ -145,13 +136,13 @@ class PatientMapperTest {
             () -> assertThat(patient.getAddress()).hasSize(1).first()
                 .satisfies(address -> assertAll(
                     () -> {
-                        final List<StringType> lines = List.of(new StringType(ADDRESS_LINE_1),
-                            new StringType(ADDRESS_LINE_2), new StringType(ADDRESS_LINE_3),
-                            new StringType(ADDRESS_LINE_4), new StringType(ADDRESS_LINE_5));
+                        final List<StringType> lines = List.of(new StringType("LINE1"),
+                            new StringType("LINE2"), new StringType("LINE3"),
+                            new StringType("LINE4"), new StringType("LINE5"));
 
                         assertThat(address.getLine()).usingRecursiveComparison().isEqualTo(lines);
                     },
-                    () -> assertThat(address.getPostalCode()).isEqualTo(POSTCODE)))
+                    () -> assertThat(address.getPostalCode()).isEqualTo("POST CODE")))
         );
     }
 
@@ -160,12 +151,12 @@ class PatientMapperTest {
         when(message.getServiceReportDetails()).thenReturn(serviceReportDetails);
         when(serviceReportDetails.getSubject()).thenReturn(investigationSubject);
         when(investigationSubject.getDetails()).thenReturn(patientDetails);
-        when(uuidGenerator.generateUUID()).thenReturn(UUID);
+        when(uuidGenerator.generateUUID()).thenReturn("some-uuid");
 
         final PersonName personName = PersonName.builder()
-            .title(TITLE)
-            .secondForename(SECOND_FORENAME)
-            .surname(SURNAME)
+            .title("MISS")
+            .secondForename("ANGELA")
+            .surname("KENNEDY")
             .build();
         when(patientDetails.getName()).thenReturn(personName);
 
@@ -173,11 +164,16 @@ class PatientMapperTest {
 
         assertAll("patient",
             () -> assertThat(patient).isNotNull(),
+            () -> assertThat(patient.getId()).isEqualTo("some-uuid"),
+            () -> assertThat(patient.getIdentifier()).isEmpty(),
             () -> assertThat(patient.getName()).hasSize(1).first()
                 .satisfies(name -> assertAll(
-                    () -> assertThat(name.getPrefixAsSingleString()).isEqualTo(TITLE),
+                    () -> assertThat(name.getPrefixAsSingleString()).isEqualTo("MISS"),
                     () -> assertThat(name.getGivenAsSingleString()).isEmpty(),
-                    () -> assertThat(name.getFamily()).isEqualTo(SURNAME))));
+                    () -> assertThat(name.getFamily()).isEqualTo("KENNEDY"))),
+            () -> assertThat(patient.getGender()).isNull(),
+            () -> assertThat(patient.getBirthDate()).isNull(),
+            () -> assertThat(patient.getAddress()).isEmpty());
     }
 
     @Test
@@ -185,12 +181,12 @@ class PatientMapperTest {
         when(message.getServiceReportDetails()).thenReturn(serviceReportDetails);
         when(serviceReportDetails.getSubject()).thenReturn(investigationSubject);
         when(investigationSubject.getDetails()).thenReturn(patientDetails);
-        when(uuidGenerator.generateUUID()).thenReturn(UUID);
+        when(uuidGenerator.generateUUID()).thenReturn("some-uuid");
 
         final PersonName personName = PersonName.builder()
-            .title(TITLE)
-            .firstForename(FIRST_FORENAME)
-            .surname(SURNAME)
+            .title("MISS")
+            .firstForename("SARAH")
+            .surname("KENNEDY")
             .build();
         when(patientDetails.getName()).thenReturn(personName);
 
@@ -198,11 +194,16 @@ class PatientMapperTest {
 
         assertAll("patient",
             () -> assertThat(patient).isNotNull(),
+            () -> assertThat(patient.getId()).isEqualTo("some-uuid"),
+            () -> assertThat(patient.getIdentifier()).isEmpty(),
             () -> assertThat(patient.getName()).hasSize(1).first()
                 .satisfies(name -> assertAll(
-                    () -> assertThat(name.getPrefixAsSingleString()).isEqualTo(TITLE),
-                    () -> assertThat(name.getGivenAsSingleString()).isEqualTo(FIRST_FORENAME),
-                    () -> assertThat(name.getFamily()).isEqualTo(SURNAME))));
+                    () -> assertThat(name.getPrefixAsSingleString()).isEqualTo("MISS"),
+                    () -> assertThat(name.getGivenAsSingleString()).isEqualTo("SARAH"),
+                    () -> assertThat(name.getFamily()).isEqualTo("KENNEDY"))),
+            () -> assertThat(patient.getGender()).isNull(),
+            () -> assertThat(patient.getBirthDate()).isNull(),
+            () -> assertThat(patient.getAddress()).isEmpty());
     }
 
     @Test
@@ -210,140 +211,166 @@ class PatientMapperTest {
         when(message.getServiceReportDetails()).thenReturn(serviceReportDetails);
         when(serviceReportDetails.getSubject()).thenReturn(investigationSubject);
         when(investigationSubject.getDetails()).thenReturn(patientDetails);
-        when(uuidGenerator.generateUUID()).thenReturn(UUID);
+        when(uuidGenerator.generateUUID()).thenReturn("some-uuid");
+        when(patientDetails.getName()).thenReturn(PersonName.builder().build());
 
         final Patient patient = patientMapper.mapToPatient(message);
 
         assertAll("patient",
             () -> assertThat(patient).isNotNull(),
+            () -> assertThat(patient.getId()).isEqualTo("some-uuid"),
             () -> assertThat(patient.getIdentifier()).isEmpty(),
-            () -> assertThat(patient.getName()).isEmpty(),
+            () -> assertThat(patient.getName()).isNotEmpty(),
             () -> assertThat(patient.getGender()).isNull(),
-            () -> assertThat(patient.getBirthDate()).isNull());
-    }
-
-    @Test
-    void testMapMessageToPatientWithBirthDateIsYearOnly() {
-        when(message.getServiceReportDetails()).thenReturn(serviceReportDetails);
-        when(serviceReportDetails.getSubject()).thenReturn(investigationSubject);
-        when(investigationSubject.getDetails()).thenReturn(patientDetails);
-        when(uuidGenerator.generateUUID()).thenReturn(UUID);
-
-        stubDateOfBirth(BIRTH_DATE_YEAR_ONLY, DateFormat.CCYY);
-
-        final Patient patient = patientMapper.mapToPatient(message);
-
-        assertAll("patient",
-            () -> assertThat(patient).isNotNull(),
-            () -> assertThat(patient.getIdentifier()).isEmpty(),
-            () -> assertThat(patient.getName()).isEmpty(),
-            () -> assertThat(patient.getGender()).isNull(),
-
-            () -> {
-                final Date birthDate = Date.from(LOCAL_DATE_FOR_YEAR_ONLY.atStartOfDay()
-                    .atZone(ZoneId.systemDefault()).toInstant());
-                assertThat(patient.getBirthDate()).isEqualTo(birthDate);
-            });
-    }
-
-    @Test
-    void testMapMessageToPatientWithBirthDateYearMonthOnly() {
-        when(message.getServiceReportDetails()).thenReturn(serviceReportDetails);
-        when(serviceReportDetails.getSubject()).thenReturn(investigationSubject);
-        when(investigationSubject.getDetails()).thenReturn(patientDetails);
-        when(uuidGenerator.generateUUID()).thenReturn(UUID);
-
-        stubDateOfBirth(BIRTH_DATE_YEAR_AND_MONTH, DateFormat.CCYYMM);
-
-        final Patient patient = patientMapper.mapToPatient(message);
-
-        assertAll("patient",
-            () -> assertThat(patient).isNotNull(),
-            () -> assertThat(patient.getIdentifier()).isEmpty(),
-            () -> assertThat(patient.getName()).isEmpty(),
-            () -> assertThat(patient.getGender()).isNull(),
-
-            () -> {
-                final Date birthDate = Date.from(LOCAL_DATE_FOR_YEAR_AND_MONTH.atStartOfDay()
-                    .atZone(ZoneId.systemDefault()).toInstant());
-                assertThat(patient.getBirthDate()).isEqualTo(birthDate);
-            });
-    }
-
-    @Test
-    void testMapMessageToPatientDoesNotMapAddressWhenNull() {
-        when(message.getServiceReportDetails()).thenReturn(serviceReportDetails);
-        when(serviceReportDetails.getSubject()).thenReturn(investigationSubject);
-        when(investigationSubject.getDetails()).thenReturn(patientDetails);
-        when(uuidGenerator.generateUUID()).thenReturn(UUID);
-
-        final PersonName personName = PersonName.builder()
-            .title(TITLE)
-            .firstForename(FIRST_FORENAME)
-            .secondForename(SECOND_FORENAME)
-            .surname(SURNAME)
-            .nhsNumber(NHS_NUMBER)
-            .build();
-        when(patientDetails.getName()).thenReturn(personName);
-
-        final Patient patient = patientMapper.mapToPatient(message);
-
-        assertAll("patient",
-            () -> assertThat(patient).isNotNull(),
-            () -> assertThat(patient.getName()).hasSize(1).first()
-                .satisfies(name -> assertAll(
-                    () -> assertThat(name.getPrefixAsSingleString()).isEqualTo(TITLE),
-                    () -> assertThat(name.getGivenAsSingleString()).isEqualTo(FIRST_FORENAME + " " + SECOND_FORENAME),
-                    () -> assertThat(name.getFamily()).isEqualTo(SURNAME))),
-
+            () -> assertThat(patient.getBirthDate()).isNull(),
             () -> assertThat(patient.getAddress()).isEmpty());
     }
 
     @Test
-    void testMapMessageToPatientDoesNotMapAddressLinesIsNull() {
+    void testMapMessageToPatientWhenBirthDateIsYearOnly() {
         when(message.getServiceReportDetails()).thenReturn(serviceReportDetails);
         when(serviceReportDetails.getSubject()).thenReturn(investigationSubject);
         when(investigationSubject.getDetails()).thenReturn(patientDetails);
-        when(uuidGenerator.generateUUID()).thenReturn(UUID);
+        when(uuidGenerator.generateUUID()).thenReturn("some-uuid");
+        when(patientDetails.getName()).thenReturn(PersonName.builder().build());
 
-        final PersonName personName = PersonName.builder()
-            .title(TITLE)
-            .firstForename(FIRST_FORENAME)
-            .surname(SURNAME)
-            .build();
-        when(patientDetails.getName()).thenReturn(personName);
-
-        stubAddress(null);
+        final Optional<PersonDateOfBirth> personDateOfBirth = Optional.of(PersonDateOfBirth.builder()
+            .dateOfBirth("1991")
+            .dateFormat(DateFormat.CCYY)
+            .build());
+        when(patientDetails.getDateOfBirth()).thenReturn(personDateOfBirth);
 
         final Patient patient = patientMapper.mapToPatient(message);
 
         assertAll("patient",
             () -> assertThat(patient).isNotNull(),
+            () -> assertThat(patient.getId()).isEqualTo("some-uuid"),
+            () -> assertThat(patient.getIdentifier()).isEmpty(),
+            () -> assertThat(patient.getName()).isNotEmpty(),
+            () -> assertThat(patient.getGender()).isNull(),
+            () -> {
+                final Date birthDate = Date.from(LocalDate.of(1991, 1, 1).atStartOfDay()
+                    .atZone(ZoneId.systemDefault()).toInstant());
+                assertThat(patient.getBirthDate()).isEqualTo(birthDate);
+            },
+            () -> assertThat(patient.getAddress()).isEmpty());
+    }
 
-            () -> assertThat(patient.getName()).hasSize(1).first()
-                .satisfies(name -> assertAll(
-                    () -> assertThat(name.getPrefixAsSingleString()).isEqualTo(TITLE),
-                    () -> assertThat(name.getGivenAsSingleString()).isEqualTo(FIRST_FORENAME),
-                    () -> assertThat(name.getFamily()).isEqualTo(SURNAME))),
+    @Test
+    void testMapMessageToPatientWhenBirthDateYearMonthOnly() {
+        when(message.getServiceReportDetails()).thenReturn(serviceReportDetails);
+        when(serviceReportDetails.getSubject()).thenReturn(investigationSubject);
+        when(investigationSubject.getDetails()).thenReturn(patientDetails);
+        when(uuidGenerator.generateUUID()).thenReturn("some-uuid");
+        when(patientDetails.getName()).thenReturn(PersonName.builder().build());
 
+        final Optional<PersonDateOfBirth> personDateOfBirth = Optional.of(PersonDateOfBirth.builder()
+            .dateOfBirth("1991-10")
+            .dateFormat(DateFormat.CCYYMM)
+            .build());
+        when(patientDetails.getDateOfBirth()).thenReturn(personDateOfBirth);
+
+        final Patient patient = patientMapper.mapToPatient(message);
+
+        assertAll("patient",
+            () -> assertThat(patient).isNotNull(),
+            () -> assertThat(patient.getId()).isEqualTo("some-uuid"),
+            () -> assertThat(patient.getIdentifier()).isEmpty(),
+            () -> assertThat(patient.getName()).isNotEmpty(),
+            () -> assertThat(patient.getGender()).isNull(),
+
+            () -> {
+                final Date birthDate = Date.from(LocalDate.of(1991, 10, 1).atStartOfDay()
+                    .atZone(ZoneId.systemDefault()).toInstant());
+                assertThat(patient.getBirthDate()).isEqualTo(birthDate);
+            },
+            () -> assertThat(patient.getAddress()).isEmpty());
+    }
+
+    @Test
+    void testMapMessageToPatientDoesNotMapAddressLinesWhenNull() {
+        when(message.getServiceReportDetails()).thenReturn(serviceReportDetails);
+        when(serviceReportDetails.getSubject()).thenReturn(investigationSubject);
+        when(investigationSubject.getDetails()).thenReturn(patientDetails);
+        when(uuidGenerator.generateUUID()).thenReturn("some-uuid");
+
+        when(patientDetails.getName()).thenReturn(PersonName.builder().build());
+
+        final UnstructuredAddress unstructuredAddress = new UnstructuredAddress("", null, "POST CODE");
+        when(investigationSubject.getAddress()).thenReturn(Optional.of(unstructuredAddress));
+
+        final Patient patient = patientMapper.mapToPatient(message);
+
+        assertAll("patient",
+            () -> assertThat(patient).isNotNull(),
+            () -> assertThat(patient.getId()).isEqualTo("some-uuid"),
+            () -> assertThat(patient.getIdentifier()).isEmpty(),
+            () -> assertThat(patient.getName()).isNotEmpty(),
+            () -> assertThat(patient.getGender()).isNull(),
+            () -> assertThat(patient.getBirthDate()).isNull(),
             () -> assertThat(patient.getAddress()).hasSize(1).first()
                 .satisfies(address -> assertAll(
                     () -> assertThat(address.getLine()).isEmpty(),
-                    () -> assertThat(address.getPostalCode()).isEqualTo(POSTCODE)))
+                    () -> assertThat(address.getPostalCode()).isEqualTo("POST CODE")))
         );
     }
 
-    private void stubDateOfBirth(final String dateOfBirth, final DateFormat dateFormat) {
-        final Optional<PersonDateOfBirth> personDateOfBirth = Optional.of(PersonDateOfBirth.builder()
-            .dateOfBirth(dateOfBirth)
-            .dateFormat(dateFormat)
-            .build());
-        when(patientDetails.getDateOfBirth()).thenReturn(personDateOfBirth);
+    @Test
+    void testMapMessageToPatientMapsOtherIdentifierWhenNhsNumberIsNull() {
+        when(message.getServiceReportDetails()).thenReturn(serviceReportDetails);
+        when(serviceReportDetails.getSubject()).thenReturn(investigationSubject);
+        when(investigationSubject.getDetails()).thenReturn(patientDetails);
+        when(investigationSubject.getReferenceServiceSubject()).thenReturn(Optional.of(reference));
+        when(reference.getNumber()).thenReturn("123");
+        when(uuidGenerator.generateUUID()).thenReturn("some-uuid");
+        when(patientDetails.getName()).thenReturn(PersonName.builder().build());
+
+        final Patient patient = patientMapper.mapToPatient(message);
+
+        assertAll("patient",
+            () -> assertThat(patient).isNotNull(),
+            () -> assertThat(patient.getId()).isEqualTo("some-uuid"),
+            () -> assertThat(patient.getIdentifier()).hasSize(1).first()
+                .satisfies(identifier -> assertAll(
+                    () -> assertThat(identifier.getId()).isEqualTo("123"),
+                    () -> assertThat(identifier.getValue()).isNull(),
+                    () -> assertThat(identifier.getSystem()).isNull())),
+
+            () -> assertThat(patient.getName()).isNotEmpty(),
+            () -> assertThat(patient.getGender()).isNull(),
+            () -> assertThat(patient.getBirthDate()).isNull(),
+            () -> assertThat(patient.getAddress()).isEmpty());
     }
 
-    private void stubAddress(String[] addressLines) {
-        final UnstructuredAddress unstructuredAddress = new UnstructuredAddress("", addressLines, POSTCODE);
-        when(investigationSubject.getAddress()).thenReturn(Optional.of(unstructuredAddress));
+    @Test
+    void testMapMessageToPatientMapsOnlyNhsNumberWhenBothNhsNumberAndReferenceExists() {
+        when(message.getServiceReportDetails()).thenReturn(serviceReportDetails);
+        when(serviceReportDetails.getSubject()).thenReturn(investigationSubject);
+        when(investigationSubject.getDetails()).thenReturn(patientDetails);
+        lenient().when(investigationSubject.getReferenceServiceSubject()).thenReturn(Optional.of(reference));
+        lenient().when(reference.getNumber()).thenReturn("1111");
+        when(uuidGenerator.generateUUID()).thenReturn("some-uuid");
+
+        final PersonName personName = PersonName.builder()
+            .nhsNumber("1234")
+            .build();
+        when(patientDetails.getName()).thenReturn(personName);
+
+        final Patient patient = patientMapper.mapToPatient(message);
+
+        assertAll("patient",
+            () -> assertThat(patient).isNotNull(),
+            () -> assertThat(patient.getId()).isEqualTo("some-uuid"),
+            () -> assertThat(patient.getIdentifier()).hasSize(1).first()
+                .satisfies(identifier -> assertAll(
+                    () -> assertThat(identifier.getId()).isNull(),
+                    () -> assertThat(identifier.getValue()).isEqualTo("1234"),
+                    () -> assertThat(identifier.getSystem()).isEqualTo(PatientMapper.NHS_NUMBER_SYSTEM))),
+
+            () -> assertThat(patient.getName()).isNotEmpty(),
+            () -> assertThat(patient.getGender()).isNull(),
+            () -> assertThat(patient.getBirthDate()).isNull(),
+            () -> assertThat(patient.getAddress()).isEmpty());
     }
 
 }

@@ -1,0 +1,173 @@
+{
+  "resourceType": "Bundle",
+  "id": "2afee038-3966-4e2d-8bc3-9a89fcf7cce1",
+  "meta": {
+    "lastUpdated": "2021-03-16T17:07:00.464+00:00",
+    "profile": [
+      "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"
+    ]
+  },
+  "identifier": {
+    "system": "https://tools.ietf.org/html/rfc4122",
+    "value": "a580db1b-d217-4df0-aaa4-9d2479c5bb3c"
+  },
+  "type": "message",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:b80f7190-193e-4490-9401-255fdeb53038",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "b80f7190-193e-4490-9401-255fdeb53038",
+        "name": [
+          {
+            "family": "EL-ASSAN",
+            "given": [
+              "HABIB"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1957-01-16",
+        "address": [
+          {
+            "line": [
+              "HIGHWOOD BUNGALOW",
+              "EXETER",
+              "DEVON"
+            ],
+            "postalCode": "TQ14 4QJ"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:0573e3c3-9520-4f8f-9e9d-e6161f80b055",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "0573e3c3-9520-4f8f-9e9d-e6161f80b055",
+        "name": [
+          {
+            "text": "BCSP Hub Manager"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:b3494606-d2fe-4d10-a67c-f9e80ecde6f6",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "b3494606-d2fe-4d10-a67c-f9e80ecde6f6",
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "dept",
+                "display": "UNKNOWN"
+              }
+            ]
+          }
+        ],
+        "name": "Southern Bowel Cancer Screening Pro:gramme Hub"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d8997e31-7336-46dc-86e9-c3ea2272f2ce",
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "d8997e31-7336-46dc-86e9-c3ea2272f2ce",
+        "identifier": [
+          {
+            "value": "34/1"
+          }
+        ],
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "721981007",
+              "display": "Diagnostic studies report"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:b80f7190-193e-4490-9401-255fdeb53038"
+        },
+        "issued": "2009-11-10T11:45:00.000+00:00",
+        "performer": [
+          {
+            "actor": {
+              "reference": "urn:uuid:b3494606-d2fe-4d10-a67c-f9e80ecde6f6"
+            }
+          }
+        ],
+        "specimen": [
+          {
+            "reference": "urn:uuid:936c53f6-5ded-4892-a14a-320e0d4ed529"
+          }
+        ],
+        "result": [
+          {
+            "reference": "urn:uuid:75f43941-8e00-4ce0-a638-4e46b87559bd"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:936c53f6-5ded-4892-a14a-320e0d4ed529",
+      "resource": {
+        "resourceType": "Specimen",
+        "id": "936c53f6-5ded-4892-a14a-320e0d4ed529",
+        "type": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "display": "Faeces"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:b80f7190-193e-4490-9401-255fdeb53038"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:75f43941-8e00-4ce0-a638-4e46b87559bd",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "75f43941-8e00-4ce0-a638-4e46b87559bd",
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "368481000000103",
+              "display": "BCS?:FOB result"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:b80f7190-193e-4490-9401-255fdeb53038"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:b3494606-d2fe-4d10-a67c-f9e80ecde6f6"
+          }
+        ],
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "375211000000108",
+              "display": "Bowel cancer screening programme FOB test normal (finding)"
+            }
+          ]
+        },
+        "comment": "Normal. Sent following an initial single Negative result or following 2 Negative results after an initial Weak Positive",
+        "specimen": {
+          "reference": "urn:uuid:936c53f6-5ded-4892-a14a-320e0d4ed529"
+        }
+      }
+    }
+  ]
+}
