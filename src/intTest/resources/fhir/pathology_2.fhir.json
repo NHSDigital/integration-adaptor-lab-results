@@ -182,7 +182,7 @@
           "coding": [
             {
               "system": "http://snomed.info/sct",
-              "display": "VENOUS BLOOD"
+              "code": "T016"
             }
           ]
         },
