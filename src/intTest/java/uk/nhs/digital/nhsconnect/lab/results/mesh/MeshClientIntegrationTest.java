@@ -45,7 +45,7 @@ class MeshClientIntegrationTest extends IntegrationBaseTest {
     private static final String RECIPIENT = "000000024600002";
     private static final String CONTENT = "test_message";
     private static final OutboundMeshMessage OUTBOUND_MESH_MESSAGE = OutboundMeshMessage.create(
-        RECIPIENT, WorkflowId.PATHOLOGY, CONTENT, null);
+        RECIPIENT, WorkflowId.PATHOLOGY_3, CONTENT, null);
     private static final String INVALID_WORKFLOW_ID = "INVALID";
 
     @Autowired
@@ -73,7 +73,7 @@ class MeshClientIntegrationTest extends IntegrationBaseTest {
 
         final var inboundMeshMessage = getLabResultsMeshClient().getEdifactMessage(testMessageId.getMessageID());
         assertThat(inboundMeshMessage.getContent()).isEqualTo(CONTENT);
-        assertThat(inboundMeshMessage.getWorkflowId()).isEqualTo(WorkflowId.PATHOLOGY);
+        assertThat(inboundMeshMessage.getWorkflowId()).isEqualTo(WorkflowId.PATHOLOGY_3);
     }
 
     @Test
@@ -91,7 +91,7 @@ class MeshClientIntegrationTest extends IntegrationBaseTest {
         var recipientMailbox = recipientMailboxIdMappings.getRecipientMailboxId(messageForMappingMailboxId);
 
         try (CloseableHttpClient client = meshHttpClientBuilder.build()) {
-            var request = meshRequests.sendMessage(recipientMailbox, WorkflowId.PATHOLOGY);
+            var request = meshRequests.sendMessage(recipientMailbox, WorkflowId.PATHOLOGY_3);
             request.removeHeaders("Mex-WorkflowID");
             request.setHeader("Mex-WorkflowID", INVALID_WORKFLOW_ID);
             request.setEntity(new StringEntity("a".repeat(MB_100))); // 100mb

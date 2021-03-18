@@ -10,19 +10,24 @@ import uk.nhs.digital.nhsconnect.lab.results.inbound.queue.MeshInboundQueueServi
 import uk.nhs.digital.nhsconnect.lab.results.mesh.exception.MeshWorkflowUnknownException;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshClient;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.InboundMeshMessage;
-import uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId;
 import uk.nhs.digital.nhsconnect.lab.results.model.enums.MessageType;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId;
 import uk.nhs.digital.nhsconnect.lab.results.utils.CorrelationIdService;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
 public class MeshService {
 
-    private static final Set<WorkflowId> SUPPORTED_WORKFLOWS = Set.of(WorkflowId.PATHOLOGY, WorkflowId.SCREENING);
+    private static final Map<WorkflowId, MessageType> SUPPORTED_WORKFLOWS_TO_TYPES = Map.of(
+        WorkflowId.PATHOLOGY_2, MessageType.PATHOLOGY_VARIANT_2,
+        WorkflowId.PATHOLOGY_3, MessageType.PATHOLOGY_VARIANT_3,
+        WorkflowId.SCREENING, MessageType.SCREENING
+    );
 
     private final MeshClient meshClient;
 
@@ -116,9 +121,10 @@ public class MeshService {
             } else {
                 LOGGER.info(
                     "Downloaded MeshMessageId={} has an unsupported MeshWorkflowId={}."
-                        + "It is not a {} or {} message, therefore it has been left in the inbox.",
+                        + "It is not a {} message, therefore it has been left in the inbox.",
                     meshMessage.getMeshMessageId(), meshMessage.getWorkflowId(),
-                    MessageType.PATHOLOGY.getCode(), MessageType.SCREENING.getCode()
+                    SUPPORTED_WORKFLOWS_TO_TYPES.values().stream().map(MessageType::getCode)
+                        .collect(Collectors.joining(" or "))
                 );
             }
         } catch (MeshWorkflowUnknownException ex) {
@@ -136,6 +142,6 @@ public class MeshService {
     }
 
     private boolean isSupportedMessage(WorkflowId workflowId) {
-        return SUPPORTED_WORKFLOWS.contains(workflowId);
+        return SUPPORTED_WORKFLOWS_TO_TYPES.containsKey(workflowId);
     }
 }
