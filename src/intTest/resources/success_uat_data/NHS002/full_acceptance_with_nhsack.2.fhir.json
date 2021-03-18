@@ -1,0 +1,251 @@
+{
+  "resourceType": "Bundle",
+  "id": "dfcea81c-2ee3-4240-a361-774f1d494f07",
+  "meta": {
+    "lastUpdated": "2021-02-24T14:18:27.244+00:00",
+    "profile": [
+      "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"
+    ]
+  },
+  "identifier": {
+    "system": "https://tools.ietf.org/html/rfc4122",
+    "value": "83e9fe88-3191-40ca-b46d-34c3abadea17"
+  },
+  "type": "message",
+  "entry": [
+    {
+      "fullUrl": "",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "01a94b7d-3516-4fce-b6ed-24c72e9a8d61",
+        "fhir_comments": [
+          "Requester"
+        ],
+        "meta": {
+          "profile": [
+            "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-Practitioner-1"
+          ],
+          "lastUpdated": "2010-02-26T15:41"
+        },
+        "identifier": [
+          {
+            "system": "https://fhir.nhs.uk/Id/sds-user-id",
+            "value": "G9304284"
+          }
+        ],
+        "name": [
+          {
+            "text": "DR A DOCTOR"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "",
+      "id": "40ac4f5c-cedd-4c05-844c-9a7ce4d51bb6",
+      "resource": {
+        "resourceType": "Organization",
+        "fhir_comments": [
+          "Requester"
+        ],
+        "meta": {
+          "profile": [
+            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1"
+          ],
+          "lastUpdated": "2010-02-26T15:41"
+        },
+        "identifier": [
+          {
+            "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+            "value": "L99999"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "770ddf70-a715-4a73-a026-3213b0a6996f",
+        "fhir_comments": [
+          "Provider"
+        ],
+        "meta": {
+          "profile": [
+            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1"
+          ],
+          "lastUpdated": "2010-02-26T15:41"
+        },
+        "identifier": [
+          {
+            "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+            "value": "REF00"
+          }
+        ],
+        "type": [
+          {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/organization-type",
+                "code": "dept",
+                "display": "RCHT CLIN IMG"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "",
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "ca45b44b-1640-4879-a8b6-d17021cfbaab",
+        "meta": {
+          "profile": [
+            "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-DiagnosticReport-1"
+          ],
+          "lastUpdated": "2010-02-26T15:41"
+        },
+        "code": {
+          "coding": {
+            "system": "http://snomed.info/sct",
+            "code": "721981007",
+            "display": "Diagnostic studies report"
+          }
+        },
+        "identifier": [
+          {
+            "system": "",
+            "value": "468158/3"
+          }
+        ],
+        "status": "unknown",
+        "issued": "2007-03-27T12:13:00.000+00:00",
+        "subject": {
+          "reference": "urn:uuid:fee01efb-85cc-46bd-ad93-b07b1f379ed1"
+        },
+        "performer": [
+          {
+            "actor": {
+              "reference": "urn:uuid:770ddf70-a715-4a73-a026-3213b0a6996f"
+            }
+          }
+        ],
+        "specimen": [
+          {
+            "reference": "urn:uuid:9d0cb2e2-2c2e-4531-97f5-9b512968d41e"
+          }
+        ],
+        "result": [
+          {
+            "reference": "urn:uuid:2c560903-e246-42d5-a163-c9b05cbac8a4"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "fee01efb-85cc-46bd-ad93-b07b1f379ed1",
+        "meta": {
+          "profile": [
+            "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Patient-1"
+          ],
+          "lastUpdated": "2019-11-04"
+        },
+        "identifier": {
+          "value": "C905711"
+        },
+        "name": [
+          {
+            "family": "PITSTOP",
+            "given": [
+              "PENELOPE",
+              "JANE"
+            ]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1950-02-15",
+        "address": [
+          {
+            "line": [
+              "HILLTOP FARM",
+              "TRUMPTON"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "",
+      "resource": {
+        "resourceType": "Specimen",
+        "id": "9d0cb2e2-2c2e-4531-97f5-9b512968d41e",
+        "meta": {
+          "profile": [
+            "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Specimen-1"
+          ],
+          "lastUpdated": "2020-02-17"
+        },
+        "identifier": [
+          {
+            "system": "http://lab.acme.org/specimens/2011",
+            "value": "07052525/XR Chest"
+          }
+        ],
+        "type": {
+          "coding": [
+            {
+              "system": "902",
+              "code": "T016"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:fee01efb-85cc-46bd-ad93-b07b1f379ed1"
+        },
+        "collection": {
+          "collectedDateTime": "2007-03-26T011-37:203+00:00"
+        },
+        "receivedTime": "2007-03-267T11-37:203+00:00"
+      }
+    },
+    {
+      "fullUrl": "",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "2c560903-e246-42d5-a163-c9b05cbac8a4",
+        "meta": {
+          "profile": [
+            "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+          ],
+          "lastUpdated": "2010-02-26T15:41"
+        },
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://read.info/readv2",
+              "code": "",
+              "display": "IMAGING XR Chest"
+            }
+          ]
+        },
+        "comment": "No lung or mediastinal lesion is seen.\nReporter: Dr E E SMITH",
+        "subject": {
+          "reference": "urn:uuid:fee01efb-85cc-46bd-ad93-b07b1f379ed1"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:770ddf70-a715-4a73-a026-3213b0a6996f"
+          }
+        ],
+        "specimen": {
+          "reference": "urn:uuid:9d0cb2e2-2c2e-4531-97f5-9b512968d41e"
+        }
+      }
+    }
+  ]
+}
