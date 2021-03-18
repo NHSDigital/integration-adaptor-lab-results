@@ -92,7 +92,7 @@
         "resourceType": "ProcedureRequest",
         "id": "a519747b-ec83-477b-bf7a-b3fc6b7abeac",
         "status": "unknown",
-        "intent": "original-order",
+        "intent": "order",
         "code": {
           "text": "unknown"
         },
