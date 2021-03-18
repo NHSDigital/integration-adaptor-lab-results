@@ -13,7 +13,8 @@ class MessageTypeTest {
     void testFromCodeReturnsMessageTypeForValidString() {
         assertAll(
             () -> assertThat(MessageType.fromCode("NHS001")).isEqualTo(MessageType.NHSACK),
-            () -> assertThat(MessageType.fromCode("NHS003")).isEqualTo(MessageType.PATHOLOGY),
+            () -> assertThat(MessageType.fromCode("NHS002")).isEqualTo(MessageType.PATHOLOGY_VARIANT_2),
+            () -> assertThat(MessageType.fromCode("NHS003")).isEqualTo(MessageType.PATHOLOGY_VARIANT_3),
             () -> assertThat(MessageType.fromCode("NHS004")).isEqualTo(MessageType.SCREENING)
         );
     }

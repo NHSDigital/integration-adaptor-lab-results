@@ -42,9 +42,9 @@ class MeshRequestsTest {
     void when_sendingPathologyMessage_expect_httpPostAndCorrectUri() {
         final MeshRequests meshRequests = new MeshRequests(meshConfig, meshHeaders);
 
-        final var request = meshRequests.sendMessage(MESSAGE_RECIPIENT, WorkflowId.PATHOLOGY);
+        final var request = meshRequests.sendMessage(MESSAGE_RECIPIENT, WorkflowId.PATHOLOGY_3);
 
-        assertSending(request, WorkflowId.PATHOLOGY);
+        assertSending(request, WorkflowId.PATHOLOGY_3);
     }
 
     @Test
@@ -60,9 +60,9 @@ class MeshRequestsTest {
     void when_sendingNhsAckMessage_expect_httpPostAndCorrectUri() {
         final MeshRequests meshRequests = new MeshRequests(meshConfig, meshHeaders);
 
-        final var request = meshRequests.sendMessage(MESSAGE_RECIPIENT, WorkflowId.PATHOLOGY_ACK);
+        final var request = meshRequests.sendMessage(MESSAGE_RECIPIENT, WorkflowId.PATHOLOGY_3_ACK);
 
-        assertSending(request, WorkflowId.PATHOLOGY_ACK);
+        assertSending(request, WorkflowId.PATHOLOGY_3_ACK);
     }
 
     @Test

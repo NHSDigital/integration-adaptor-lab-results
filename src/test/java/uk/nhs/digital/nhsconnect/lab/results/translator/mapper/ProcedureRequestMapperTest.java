@@ -180,7 +180,7 @@ class ProcedureRequestMapperTest {
         assertThat(procedureRequest)
             .isNotEmpty()
             .hasValueSatisfying(procedure ->
-                assertThat(procedure.getIntent()).isEqualTo(ProcedureRequestIntent.ORIGINALORDER));
+                assertThat(procedure.getIntent()).isEqualTo(ProcedureRequestIntent.ORDER));
     }
 
     @Test

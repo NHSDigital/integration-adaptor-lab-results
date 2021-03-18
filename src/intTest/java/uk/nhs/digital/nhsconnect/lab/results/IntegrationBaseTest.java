@@ -89,16 +89,24 @@ public abstract class IntegrationBaseTest {
     private String gpOutboundQueueName;
 
     @Getter
-    @Value("classpath:edifact/pathology.edifact.dat")
-    private Resource pathologyEdifactResource;
+    @Value("classpath:edifact/pathology_2.edifact.dat")
+    private Resource pathology2EdifactResource;
+
+    @Getter
+    @Value("classpath:edifact/pathology_3.edifact.dat")
+    private Resource pathology3EdifactResource;
 
     @Getter
     @Value("classpath:edifact/screening.edifact.dat")
     private Resource screeningEdifactResource;
 
     @Getter
-    @Value("classpath:fhir/pathology.fhir.json")
-    private Resource pathologyFhirResource;
+    @Value("classpath:fhir/pathology_2.fhir.json")
+    private Resource pathology2FhirResource;
+
+    @Getter
+    @Value("classpath:fhir/pathology_3.fhir.json")
+    private Resource pathology3FhirResource;
 
     @Getter
     @Value("classpath:fhir/screening.fhir.json")

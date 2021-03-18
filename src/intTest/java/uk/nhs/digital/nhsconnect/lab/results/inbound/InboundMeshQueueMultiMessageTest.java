@@ -53,7 +53,7 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
         final String content = new String(Files.readAllBytes(multiEdifactResource.getFile().toPath()));
 
         final MeshMessage meshMessage = new MeshMessage()
-            .setWorkflowId(WorkflowId.PATHOLOGY)
+            .setWorkflowId(WorkflowId.PATHOLOGY_3)
             .setContent(content);
 
         sendToMeshInboundQueue(meshMessage);

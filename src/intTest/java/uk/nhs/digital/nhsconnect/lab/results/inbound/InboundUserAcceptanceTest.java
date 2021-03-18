@@ -27,7 +27,8 @@ import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
-import static uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId.PATHOLOGY_ACK;
+import static uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId.PATHOLOGY_2_ACK;
+import static uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId.PATHOLOGY_3_ACK;
 import static uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId.SCREENING_ACK;
 
 class InboundUserAcceptanceTest extends IntegrationBaseTest {
@@ -184,19 +185,24 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
     }
 
     private WorkflowId getEdifactWorkflowId(String edifact) {
-        if (edifact.contains(WorkflowId.PATHOLOGY.getWorkflowId())) {
-            return WorkflowId.PATHOLOGY;
-        } else if (edifact.contains(WorkflowId.SCREENING.getWorkflowId())) {
-            return WorkflowId.SCREENING;
-        } else {
-            throw new RuntimeException("Unsupported Workflow ID");
+        if (edifact.contains("NHS002")) {
+            return WorkflowId.PATHOLOGY_2;
         }
+        if (edifact.contains("NHS003")) {
+            return WorkflowId.PATHOLOGY_3;
+        }
+        if (edifact.contains("NHS004")) {
+            return WorkflowId.SCREENING;
+        }
+        throw new RuntimeException("Unsupported Workflow ID");
     }
 
     private WorkflowId getNhsAckWorkflowId(WorkflowId workflowId) {
         switch (workflowId) {
-            case PATHOLOGY:
-                return PATHOLOGY_ACK;
+            case PATHOLOGY_2:
+                return PATHOLOGY_2_ACK;
+            case PATHOLOGY_3:
+                return PATHOLOGY_3_ACK;
             case SCREENING:
                 return SCREENING_ACK;
             default:
