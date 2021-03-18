@@ -20,7 +20,7 @@
         "id": "7707bc15-b499-45da-9ec3-345a0267643f",
         "identifier": [
           {
-            "system": "https://fhir.nhs.uk/Id/nhs-number"
+            "id": "Z77553311"
           }
         ],
         "name": [
