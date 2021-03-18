@@ -37,10 +37,10 @@ class OutboundMeshMessageBuilderTest {
         when(nhsAckProducerService.createNhsAckEdifact(interchange, null)).thenReturn("NHSACK");
 
         OutboundMeshMessage outboundMeshMessage = outboundMeshMessageBuilder.buildNhsAck(
-            WorkflowId.PATHOLOGY, interchange, null);
+            WorkflowId.PATHOLOGY_3, interchange, null);
 
         assertAll(
-            () -> assertEquals(WorkflowId.PATHOLOGY_ACK, outboundMeshMessage.getWorkflowId()),
+            () -> assertEquals(WorkflowId.PATHOLOGY_3_ACK, outboundMeshMessage.getWorkflowId()),
             () -> assertEquals("Sender", outboundMeshMessage.getRecipient()),
             () -> assertEquals("NHSACK", outboundMeshMessage.getContent())
         );
@@ -73,10 +73,10 @@ class OutboundMeshMessageBuilderTest {
         when(nhsAckProducerService.createNhsAckEdifact(exception)).thenReturn("NHSACK");
 
         OutboundMeshMessage outboundMeshMessage = outboundMeshMessageBuilder.buildNhsAck(
-            WorkflowId.PATHOLOGY, exception);
+            WorkflowId.PATHOLOGY_3, exception);
 
         assertAll(
-            () -> assertEquals(WorkflowId.PATHOLOGY_ACK, outboundMeshMessage.getWorkflowId()),
+            () -> assertEquals(WorkflowId.PATHOLOGY_3_ACK, outboundMeshMessage.getWorkflowId()),
             () -> assertEquals("Sender", outboundMeshMessage.getRecipient()),
             () -> assertEquals("NHSACK", outboundMeshMessage.getContent())
         );
@@ -91,10 +91,10 @@ class OutboundMeshMessageBuilderTest {
         when(nhsAckProducerService.createNhsAckEdifact(exception)).thenReturn("NHSACK");
 
         OutboundMeshMessage outboundMeshMessage = outboundMeshMessageBuilder.buildNhsAck(
-            WorkflowId.PATHOLOGY, exception);
+            WorkflowId.PATHOLOGY_3, exception);
 
         assertAll(
-            () -> assertEquals(WorkflowId.PATHOLOGY_ACK, outboundMeshMessage.getWorkflowId()),
+            () -> assertEquals(WorkflowId.PATHOLOGY_3_ACK, outboundMeshMessage.getWorkflowId()),
             () -> assertEquals("Sender", outboundMeshMessage.getRecipient()),
             () -> assertEquals("NHSACK", outboundMeshMessage.getContent())
         );

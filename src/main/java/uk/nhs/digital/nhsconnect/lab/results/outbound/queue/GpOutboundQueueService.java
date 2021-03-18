@@ -25,7 +25,8 @@ import java.util.Optional;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class GpOutboundQueueService {
     private static final Map<MessageType, String> MESSAGE_TYPE_HEADER_VALUES = Map.of(
-        MessageType.PATHOLOGY, "Pathology",
+        MessageType.PATHOLOGY_VARIANT_2, "Pathology",
+        MessageType.PATHOLOGY_VARIANT_3, "Pathology",
         MessageType.SCREENING, "Screening"
     );
 

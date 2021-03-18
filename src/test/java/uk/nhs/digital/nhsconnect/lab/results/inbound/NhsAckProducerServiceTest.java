@@ -82,19 +82,19 @@ class NhsAckProducerServiceTest {
 
         Message message1 = mock(Message.class);
         when(message1.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_1, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_1, MessageType.PATHOLOGY_VARIANT_3)
         );
         messageProcessingResults.add(new Success(message1, null));
 
         Message message2 = mock(Message.class);
         when(message2.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_2, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_2, MessageType.PATHOLOGY_VARIANT_3)
         );
         messageProcessingResults.add(new Success(message2, null));
 
         Message message3 = mock(Message.class);
         when(message3.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_3, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_3, MessageType.PATHOLOGY_VARIANT_3)
         );
         messageProcessingResults.add(new Success(message3, null));
 
@@ -117,20 +117,20 @@ class NhsAckProducerServiceTest {
 
         Message message1 = mock(Message.class);
         when(message1.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_1, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_1, MessageType.PATHOLOGY_VARIANT_3)
         );
         messageProcessingResults.add(new Success(message1, null));
 
         Message message2 = mock(Message.class);
         when(message2.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_2, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_2, MessageType.PATHOLOGY_VARIANT_3)
         );
         Exception exception = new Exception("This is a failed message.");
         messageProcessingResults.add(new Error(message2, exception));
 
         Message message3 = mock(Message.class);
         when(message3.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_3, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_3, MessageType.PATHOLOGY_VARIANT_3)
         );
         messageProcessingResults.add(new Success(message3, null));
 
@@ -153,21 +153,21 @@ class NhsAckProducerServiceTest {
 
         Message message1 = mock(Message.class);
         when(message1.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_1, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_1, MessageType.PATHOLOGY_VARIANT_3)
         );
         Exception exception1 = new Exception("This is a failed message.");
         messageProcessingResults.add(new Error(message1, exception1));
 
         Message message2 = mock(Message.class);
         when(message2.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_2, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_2, MessageType.PATHOLOGY_VARIANT_3)
         );
         Exception exception2 = new Exception("This is another failed message.");
         messageProcessingResults.add(new Error(message2, exception2));
 
         Message message3 = mock(Message.class);
         when(message3.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_3, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_3, MessageType.PATHOLOGY_VARIANT_3)
         );
         Exception exception3 = new Exception("This is yet another failed message.");
         messageProcessingResults.add(new Error(message3, exception3));
@@ -221,19 +221,19 @@ class NhsAckProducerServiceTest {
 
         Message message1 = mock(Message.class);
         when(message1.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_1, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_1, MessageType.PATHOLOGY_VARIANT_3)
         );
         messageProcessingResults.add(new Success(message1, null));
 
         Message message2 = mock(Message.class);
         when(message2.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_2, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_2, MessageType.PATHOLOGY_VARIANT_3)
         );
         messageProcessingResults.add(new Success(message2, null));
 
         Message message3 = mock(Message.class);
         when(message3.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_3, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_3, MessageType.PATHOLOGY_VARIANT_3)
         );
         messageProcessingResults.add(new Success(message3, null));
 

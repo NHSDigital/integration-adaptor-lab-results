@@ -40,7 +40,7 @@ import static org.mockito.Mockito.when;
 class MeshInboundQueueServiceTest {
 
     private static final String CORRELATION_ID = "CORR123";
-    private static final String PATHOLOGY_WORKFLOW_ID = WorkflowId.PATHOLOGY.getWorkflowId();
+    private static final String PATHOLOGY_WORKFLOW_ID = WorkflowId.PATHOLOGY_3.getWorkflowId();
     private static final String SCREENING_WORKFLOW_ID = WorkflowId.SCREENING.getWorkflowId();
 
     @Spy
@@ -75,7 +75,7 @@ class MeshInboundQueueServiceTest {
         meshInboundQueueService.receive(message);
 
         final MeshMessage expectedMeshMessage = new MeshMessage();
-        expectedMeshMessage.setWorkflowId(WorkflowId.PATHOLOGY);
+        expectedMeshMessage.setWorkflowId(WorkflowId.PATHOLOGY_3);
 
         assertAll(
             () -> verify(correlationIdService).applyCorrelationId(CORRELATION_ID),
@@ -140,7 +140,7 @@ class MeshInboundQueueServiceTest {
         meshInboundQueueService.receive(message);
 
         final MeshMessage expectedMeshMessage = new MeshMessage();
-        expectedMeshMessage.setWorkflowId(WorkflowId.PATHOLOGY);
+        expectedMeshMessage.setWorkflowId(WorkflowId.PATHOLOGY_3);
 
         assertAll(
             () -> verify(correlationIdService, never()).applyCorrelationId(CORRELATION_ID),
@@ -157,13 +157,13 @@ class MeshInboundQueueServiceTest {
         final var messageSentTimestamp = "2020-06-12T14:15:16Z";
         when(timestampService.formatInISO(now)).thenReturn(messageSentTimestamp);
 
-        final InboundMeshMessage inboundMeshMessage = InboundMeshMessage.create(WorkflowId.PATHOLOGY,
+        final InboundMeshMessage inboundMeshMessage = InboundMeshMessage.create(WorkflowId.PATHOLOGY_3,
             "ASDF", null, "ID123");
 
         meshInboundQueueService.publish(inboundMeshMessage);
 
         // the method parameter is modified so another copy is needed. Timestamp set to expected value
-        final InboundMeshMessage expectedInboundMeshMessage = InboundMeshMessage.create(WorkflowId.PATHOLOGY,
+        final InboundMeshMessage expectedInboundMeshMessage = InboundMeshMessage.create(WorkflowId.PATHOLOGY_3,
             "ASDF", messageSentTimestamp,
             "ID123");
         final String expectedStringMessage = objectMapper.writeValueAsString(expectedInboundMeshMessage);
