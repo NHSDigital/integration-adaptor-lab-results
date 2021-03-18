@@ -60,13 +60,7 @@ public class PatientMapper {
         return patient;
     }
 
-    private void mapOtherIdentifier(Reference reference, Patient patient) {
-        final Identifier identifier = new Identifier();
-        identifier.setId(reference.getNumber());
-        patient.addIdentifier(identifier);
-    }
-
-    private void mapAddress(UnstructuredAddress unstructuredAddress, Patient patient) {
+    private void mapAddress(final UnstructuredAddress unstructuredAddress, final Patient patient) {
         final Address address = new Address();
 
         final String[] addressLines = unstructuredAddress.getAddressLines();
@@ -80,10 +74,14 @@ public class PatientMapper {
 
     private void mapNhsNumberIdentifier(final String nhsNumber, final Patient patient) {
         final Identifier identifier = new Identifier();
-
         identifier.setSystem(NHS_NUMBER_SYSTEM);
         identifier.setValue(nhsNumber);
+        patient.addIdentifier(identifier);
+    }
 
+    private void mapOtherIdentifier(final Reference reference, final Patient patient) {
+        final Identifier identifier = new Identifier();
+        identifier.setId(reference.getNumber());
         patient.addIdentifier(identifier);
     }
 
