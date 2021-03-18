@@ -18,11 +18,6 @@
       "resource": {
         "resourceType": "Patient",
         "id": "5f622ca2-4f7b-48eb-8924-bc5bbbc71118",
-        "identifier": [
-          {
-            "system": "https://fhir.nhs.uk/Id/nhs-number"
-          }
-        ],
         "name": [
           {
             "family": "ABLE",
