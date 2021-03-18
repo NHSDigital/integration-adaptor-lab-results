@@ -35,6 +35,7 @@
         "birthDate": "1957-01-16",
         "address": [
           {
+            "line": [ "HIGHWOOD BUNGALOW", "EXETER", "DEVON" ],
             "postalCode": "TQ14 4QJ"
           }
         ]
