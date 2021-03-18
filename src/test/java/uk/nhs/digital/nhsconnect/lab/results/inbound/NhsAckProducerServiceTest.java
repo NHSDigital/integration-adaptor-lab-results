@@ -83,24 +83,24 @@ class NhsAckProducerServiceTest {
 
         Message message1 = mock(Message.class);
         when(message1.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_1, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_1, MessageType.PATHOLOGY_VARIANT_3)
         );
         messageProcessingResults.add(new Success(message1, null));
 
         Message message2 = mock(Message.class);
         when(message2.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_2, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_2, MessageType.PATHOLOGY_VARIANT_3)
         );
         messageProcessingResults.add(new Success(message2, null));
 
         Message message3 = mock(Message.class);
         when(message3.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_3, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_3, MessageType.PATHOLOGY_VARIANT_3)
         );
         messageProcessingResults.add(new Success(message3, null));
 
         String nhsAck = nhsAckProducerService.createNhsAckEdifact(
-            WorkflowId.PATHOLOGY_ACK, interchange, messageProcessingResults);
+            WorkflowId.PATHOLOGY_3_ACK, interchange, messageProcessingResults);
 
         String expectedNhsAck = readFile(NHSACK_IAF_RESPONSE_PATH).replace("\n", "");
 
@@ -119,25 +119,25 @@ class NhsAckProducerServiceTest {
 
         Message message1 = mock(Message.class);
         when(message1.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_1, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_1, MessageType.PATHOLOGY_VARIANT_3)
         );
         messageProcessingResults.add(new Success(message1, null));
 
         Message message2 = mock(Message.class);
         when(message2.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_2, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_2, MessageType.PATHOLOGY_VARIANT_3)
         );
         Exception exception = new Exception("This is a failed message.");
         messageProcessingResults.add(new Error(message2, exception));
 
         Message message3 = mock(Message.class);
         when(message3.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_3, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_3, MessageType.PATHOLOGY_VARIANT_3)
         );
         messageProcessingResults.add(new Success(message3, null));
 
         String nhsAck = nhsAckProducerService.createNhsAckEdifact(
-            WorkflowId.PATHOLOGY_ACK, interchange, messageProcessingResults);
+            WorkflowId.PATHOLOGY_3_ACK, interchange, messageProcessingResults);
 
         String expectedNhsAck = readFile(NHSACK_IAP_RESPONSE_PATH).replace("\n", "");
 
@@ -156,27 +156,27 @@ class NhsAckProducerServiceTest {
 
         Message message1 = mock(Message.class);
         when(message1.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_1, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_1, MessageType.PATHOLOGY_VARIANT_3)
         );
         Exception exception1 = new Exception("This is a failed message.");
         messageProcessingResults.add(new Error(message1, exception1));
 
         Message message2 = mock(Message.class);
         when(message2.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_2, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_2, MessageType.PATHOLOGY_VARIANT_3)
         );
         Exception exception2 = new Exception("This is another failed message.");
         messageProcessingResults.add(new Error(message2, exception2));
 
         Message message3 = mock(Message.class);
         when(message3.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_3, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_3, MessageType.PATHOLOGY_VARIANT_3)
         );
         Exception exception3 = new Exception("This is yet another failed message.");
         messageProcessingResults.add(new Error(message3, exception3));
 
         String nhsAck = nhsAckProducerService.createNhsAckEdifact(
-            WorkflowId.PATHOLOGY_ACK, interchange, messageProcessingResults);
+            WorkflowId.PATHOLOGY_3_ACK, interchange, messageProcessingResults);
 
         String expectedNhsAck = readFile(NHSACK_IRA_RESPONSE_PATH).replace("\n", "");
 
@@ -192,7 +192,7 @@ class NhsAckProducerServiceTest {
         when(interchangeParsingException.getMessage()).thenReturn("Interchange could not be processed.");
 
         String nhsAck = nhsAckProducerService.createNhsAckEdifact(
-            WorkflowId.PATHOLOGY_ACK, interchangeParsingException);
+            WorkflowId.PATHOLOGY_3_ACK, interchangeParsingException);
 
         String expectedNhsAck = readFile(NHSACK_IRI_RESPONSE_PATH).replace("\n", "");
 
@@ -208,7 +208,7 @@ class NhsAckProducerServiceTest {
         when(messageParsingException.getMessage()).thenReturn("Messages could not be extracted.");
 
         String nhsAck = nhsAckProducerService.createNhsAckEdifact(
-            WorkflowId.PATHOLOGY_ACK, messageParsingException);
+            WorkflowId.PATHOLOGY_3_ACK, messageParsingException);
 
         String expectedNhsAck = readFile(NHSACK_IRM_RESPONSE_PATH).replace("\n", "");
 
@@ -227,19 +227,19 @@ class NhsAckProducerServiceTest {
 
         Message message1 = mock(Message.class);
         when(message1.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_1, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_1, MessageType.PATHOLOGY_VARIANT_3)
         );
         messageProcessingResults.add(new Success(message1, null));
 
         Message message2 = mock(Message.class);
         when(message2.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_2, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_2, MessageType.PATHOLOGY_VARIANT_3)
         );
         messageProcessingResults.add(new Success(message2, null));
 
         Message message3 = mock(Message.class);
         when(message3.getMessageHeader()).thenReturn(
-            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_3, MessageType.PATHOLOGY)
+            new MessageHeader(MESSAGE_SEQUENCE_NUMBER_3, MessageType.PATHOLOGY_VARIANT_3)
         );
         messageProcessingResults.add(new Success(message3, null));
 

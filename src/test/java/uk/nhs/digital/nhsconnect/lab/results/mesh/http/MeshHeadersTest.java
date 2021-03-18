@@ -35,7 +35,7 @@ class MeshHeadersTest {
     void createSendHeaders() {
         final String meshRecipient = "some_recipient";
 
-        final Header[] headers = meshHeaders.createSendHeaders(meshRecipient, WorkflowId.PATHOLOGY);
+        final Header[] headers = meshHeaders.createSendHeaders(meshRecipient, WorkflowId.PATHOLOGY_3);
 
         final List<String> headerNames = Arrays.stream(headers)
             .map(BasicHeader.class::cast)
@@ -62,7 +62,7 @@ class MeshHeadersTest {
             softly.assertThat(getHeaderValue(headers, HEADER_MEX_FROM)).isEqualTo("mailboxId");
             softly.assertThat(getHeaderValue(headers, HEADER_MEX_TO)).isEqualTo(meshRecipient);
             softly.assertThat(getHeaderValue(headers, HEADER_MEX_WORKFLOW_ID))
-                .isEqualTo(WorkflowId.PATHOLOGY.toString());
+                .isEqualTo(WorkflowId.PATHOLOGY_3.toString());
             softly.assertThat(getHeaderValue(headers, HEADER_MEX_FILE_NAME)).isEqualTo("edifact.dat");
             softly.assertThat(getHeaderValue(headers, HEADER_MEX_MESSAGE_TYPE)).isEqualTo("DATA");
             softly.assertThat(getHeaderValue(headers, HEADER_MEX_CONTENT_COMPRESSED)).isEqualTo("N");

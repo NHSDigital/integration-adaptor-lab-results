@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class MeshService {
 
-    private static final Set<WorkflowId> SUPPORTED_WORKFLOWS = Set.of(WorkflowId.PATHOLOGY, WorkflowId.SCREENING);
+    private static final Set<WorkflowId> SUPPORTED_WORKFLOWS = Set.of(WorkflowId.PATHOLOGY_3, WorkflowId.SCREENING);
 
     private final MeshClient meshClient;
 
@@ -118,7 +118,7 @@ public class MeshService {
                     "Downloaded MeshMessageId={} has an unsupported MeshWorkflowId={}."
                         + "It is not a {} or {} message, therefore it has been left in the inbox.",
                     meshMessage.getMeshMessageId(), meshMessage.getWorkflowId(),
-                    MessageType.PATHOLOGY.getCode(), MessageType.SCREENING.getCode()
+                    MessageType.PATHOLOGY_VARIANT_3.getCode(), MessageType.SCREENING.getCode()
                 );
             }
         } catch (MeshWorkflowUnknownException ex) {
