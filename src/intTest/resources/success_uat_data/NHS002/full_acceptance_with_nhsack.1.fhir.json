@@ -206,9 +206,9 @@
           "reference": "urn:uuid:8b3a4995-940e-4d59-b13e-05b92780d908"
         },
         "collection": {
-          "collectedDateTime": "2007-03-27T09-44:203+00:00"
+          "collectedDateTime": "2007-03-27T09:44:00+00:00"
         },
-        "receivedTime": "2007-03-27T09-44:203+00:00"
+        "receivedTime": "2007-03-27T09:44:00+00:00"
       }
     },
     {

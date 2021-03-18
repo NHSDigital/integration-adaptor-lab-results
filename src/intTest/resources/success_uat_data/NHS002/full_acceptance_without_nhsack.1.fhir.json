@@ -244,9 +244,9 @@
         "subject": {
           "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
         },
-        "receivedTime": "2003-03-04T15-40:203+00:00",
+        "receivedTime": "2003-03-04T15:40:00+00:00",
         "collection": {
-          "collectedDateTime": "2003-03-04T10-30:203+00:00"
+          "collectedDateTime": "2003-03-04T10:30:00+00:00"
         }
       }
     },
