@@ -55,7 +55,7 @@ public class OrganizationMapper {
         return involvedPartyList.stream().map(InvolvedParty::getPerformerNameAndAddress)
             .flatMap(Optional::stream)
             .findFirst()
-            .map(PerformerNameAndAddress::getPartyName);
+            .map(PerformerNameAndAddress::getName);
     }
 
     private Organization mapToOrganization(final String organizationName, final String departmentName) {
