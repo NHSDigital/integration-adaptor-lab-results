@@ -36,7 +36,7 @@ public class InboundMeshQueueTest extends IntegrationBaseTest {
     void whenMeshInboundQueuePathology2MessageIsReceivedThenMessageIsHandled()
             throws IOException, JMSException, JSONException {
         final MeshMessage meshMessage = new MeshMessage()
-            .setWorkflowId(WorkflowId.PATHOLOGY_3)
+            .setWorkflowId(WorkflowId.PATHOLOGY_2)
             .setContent(new String(Files.readAllBytes(getPathology2EdifactResource().getFile().toPath())))
             .setMeshMessageId("12345");
 
