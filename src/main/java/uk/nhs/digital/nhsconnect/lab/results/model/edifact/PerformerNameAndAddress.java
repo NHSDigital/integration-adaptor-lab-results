@@ -25,7 +25,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.enums.HealthcareRegistrationI
  * NAD+SLA+++ST JAMES?'S UNIVERSITY HOSPITAL'
  * SPR+ORG'
  * </pre>
- * Example: Details of performing organization with identifier and code only
+ * Example: NHS002 variant of a performing orgnization without a name, only a code
  * <pre>
  * NAD+SLA+REF00:903'
  * SPR+ORG'

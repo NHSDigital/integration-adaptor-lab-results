@@ -1,7 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.Organization;
@@ -13,9 +12,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PerformerNameAndAddre
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvolvedParty;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static uk.nhs.digital.nhsconnect.lab.results.model.enums.ServiceProviderCode.DEPARTMENT;
 import static uk.nhs.digital.nhsconnect.lab.results.model.enums.ServiceProviderCode.ORGANIZATION;
@@ -23,55 +20,58 @@ import static uk.nhs.digital.nhsconnect.lab.results.model.enums.ServiceProviderC
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class OrganizationMapper {
+    private static final String ODS_ORGANIZATION_SYSTEM = "https://fhir.nhs.uk/Id/ods-organization-code";
 
     private final UUIDGenerator uuidGenerator;
 
     public Optional<Organization> mapToRequestingOrganization(final Message message) {
         return message.getInvolvedParties().stream()
-            .filter(party -> party.getServiceProvider().getServiceProviderCode().equals(ORGANIZATION))
+            .filter(party -> party.getServiceProvider().getServiceProviderCode() == ORGANIZATION)
             .map(InvolvedParty::getRequesterNameAndAddress)
             .flatMap(Optional::stream)
             .findFirst()
-            .map(requester -> mapToOrganization(requester.getName(), null));
+            .map(requester -> {
+                final var organization = new Organization();
+                organization.setId(uuidGenerator.generateUUID());
+                requester.getName().map(MappingUtils::unescape).ifPresent(organization::setName);
+                requester.getIdentifier().ifPresent(id -> organization.addIdentifier()
+                    .setSystem(ODS_ORGANIZATION_SYSTEM)
+                    .setValue(id));
+                return organization;
+            });
     }
 
     public Optional<Organization> mapToPerformingOrganization(final Message message) {
-        List<InvolvedParty> organizationList = message.getInvolvedParties().stream()
-            .filter(party -> party.getServiceProvider().getServiceProviderCode().equals(ORGANIZATION))
-            .collect(Collectors.toList());
+        final var performingOrganization = message.getInvolvedParties().stream()
+            .filter(party -> party.getServiceProvider().getServiceProviderCode() == ORGANIZATION)
+            .filter(organization -> organization.getPerformerNameAndAddress().isPresent())
+            .findAny();
 
-        return mapToPerformingPartyName(organizationList).map(organizationName -> {
-            List<InvolvedParty> departmentList = message.getInvolvedParties().stream()
-                .filter(party -> party.getServiceProvider().getServiceProviderCode().equals(DEPARTMENT))
-                .collect(Collectors.toList());
+        final var performingDepartment = message.getInvolvedParties().stream()
+            .filter(party -> party.getServiceProvider().getServiceProviderCode() == DEPARTMENT)
+            .filter(department -> department.getPerformerNameAndAddress().isPresent())
+            .findAny();
 
-            return mapToPerformingPartyName(departmentList)
-                .map(departmentName -> mapToOrganization(organizationName, departmentName))
-                .orElseGet(() -> mapToOrganization(organizationName, null));
-        });
-    }
-
-    private Optional<String> mapToPerformingPartyName(List<InvolvedParty> involvedPartyList) {
-        return involvedPartyList.stream().map(InvolvedParty::getPerformerNameAndAddress)
-            .flatMap(Optional::stream)
-            .findFirst()
-            .map(PerformerNameAndAddress::getName);
-    }
-
-    private Organization mapToOrganization(final String organizationName, final String departmentName) {
-        final var organization = new Organization();
-
-        organization.setId(uuidGenerator.generateUUID());
-        organization.setName(organizationName.replaceAll("\\?'", "'"));
-
-        if (!StringUtils.isBlank(departmentName)) {
-            final Coding coding = new Coding()
-                .setCode(OrganizationType.DEPT.toCode())
-                .setDisplay(departmentName);
-            CodeableConcept type = new CodeableConcept().addCoding(coding);
-            organization.addType(type);
+        if (performingOrganization.isEmpty() && performingDepartment.isEmpty()) {
+            return Optional.empty();
         }
 
-        return organization;
+        final var organization = new Organization();
+        organization.setId(uuidGenerator.generateUUID());
+
+        performingOrganization.flatMap(InvolvedParty::getPerformerNameAndAddress)
+            .map(PerformerNameAndAddress::getName)
+            .map(MappingUtils::unescape)
+            .ifPresent(organization::setName);
+
+        performingDepartment.flatMap(InvolvedParty::getPerformerNameAndAddress)
+            .map(PerformerNameAndAddress::getName)
+            .map(departmentName -> new Coding()
+                .setCode(OrganizationType.DEPT.toCode())
+                .setDisplay(departmentName))
+            .map(coding -> new CodeableConcept().addCoding(coding))
+            .ifPresent(organization::addType);
+
+        return Optional.of(organization);
     }
 }

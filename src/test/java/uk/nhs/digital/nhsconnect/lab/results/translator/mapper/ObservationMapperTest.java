@@ -194,6 +194,28 @@ class ObservationMapperTest {
     }
 
     @Test
+    void testMapInterpretation() {
+        final var message = new Message(List.of(
+            "S02+02", // ServiceReportDetails
+            "S06+06", // InvestigationSubject
+            "GIS+N", // LabResult
+            "INV+MQ+c:911::d", // LaboratoryInvestigation
+            "RFF+ASL:1", // Reference
+
+            "RSL+NV+1.23:7++:::units+HI" // LaboratoryInvestigationResult
+        ));
+
+        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
+            mockPractitioner);
+
+        assertThat(observations).hasSize(1)
+            .first()
+            .extracting(Observation::getInterpretation)
+            .extracting(CodeableConcept::getText)
+            .isEqualTo("HI : Above high reference limit");
+    }
+
+    @Test
     void testMapTestStatusCode() {
         final var message = new Message(List.of(
             "S02+02", // ServiceReportDetails

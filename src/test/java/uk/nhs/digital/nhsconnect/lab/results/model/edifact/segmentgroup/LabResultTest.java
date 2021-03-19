@@ -95,8 +95,8 @@ class LabResultTest {
             .map(LaboratoryInvestigationResult::getMeasurementValue)
             .hasValue(BigDecimal.valueOf(EXPECTED_MEASUREMENT_VALUE));
         assertInvestigationResult
-            .map(LaboratoryInvestigationResult::getMeasurementValueComparator)
-            .contains(Optional.of(MeasurementValueComparator.LESS_THAN));
+            .flatMap(LaboratoryInvestigationResult::getMeasurementValueComparator)
+            .contains(MeasurementValueComparator.LESS_THAN);
     }
 
     @Test
@@ -112,8 +112,8 @@ class LabResultTest {
             .map(LaboratoryInvestigationResult::getCode)
             .hasValue("375211000000108");
         assertInvestigationResult
-            .map(LaboratoryInvestigationResult::getCodingType)
-            .contains(Optional.of(CodingType.SNOMED_CT_CODE));
+            .flatMap(LaboratoryInvestigationResult::getCodingType)
+            .contains(CodingType.SNOMED_CT_CODE);
         assertInvestigationResult
             .map(LaboratoryInvestigationResult::getDescription)
             .hasValue("Bowel cancer screening programme FOB test normal (finding)");
