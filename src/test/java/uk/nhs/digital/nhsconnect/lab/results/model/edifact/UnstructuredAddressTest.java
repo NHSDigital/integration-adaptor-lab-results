@@ -29,7 +29,7 @@ class UnstructuredAddressTest {
             () -> assertThat(address.getFormat()).isEqualTo("US"),
             () -> assertThat(address.getAddressLines())
                 .containsExactly(new String[]{"LINE1", "LINE2", "LINE3", "LINE4", "LINE5"}),
-            () -> assertThat(address.getPostCode()).contains("POSTCODE")
+            () -> assertThat(address.getPostcode()).contains("POSTCODE")
         );
     }
 
@@ -39,7 +39,7 @@ class UnstructuredAddressTest {
         assertAll(
             () -> assertThat(address.getFormat()).isEqualTo("US"),
             () -> assertThat(address.getAddressLines()).containsExactly(new String[]{"LINE1", "", "", "", ""}),
-            () -> assertThat(address.getPostCode()).isEmpty()
+            () -> assertThat(address.getPostcode()).isEmpty()
         );
     }
 
@@ -49,7 +49,7 @@ class UnstructuredAddressTest {
         assertAll(
             () -> assertThat(address.getFormat()).isEqualTo("US"),
             () -> assertThat(address.getAddressLines()).containsExactly(new String[]{"SLOANE SQUARE", "LONDON"}),
-            () -> assertThat(address.getPostCode()).isEmpty()
+            () -> assertThat(address.getPostcode()).isEmpty()
         );
     }
 
@@ -59,7 +59,7 @@ class UnstructuredAddressTest {
         assertAll(
             () -> assertThat(address.getFormat()).isEqualTo("US"),
             () -> assertThat(address.getAddressLines()).containsExactly(new String[]{"LINE1"}),
-            () -> assertThat(address.getPostCode()).isEmpty()
+            () -> assertThat(address.getPostcode()).isEmpty()
         );
     }
 
@@ -69,7 +69,7 @@ class UnstructuredAddressTest {
         assertAll(
             () -> assertThat(address.getFormat()).isEmpty(),
             () -> assertThat(address.getAddressLines()).isEmpty(),
-            () -> assertThat(address.getPostCode()).contains("POSTCODE")
+            () -> assertThat(address.getPostcode()).contains("POSTCODE")
         );
     }
 

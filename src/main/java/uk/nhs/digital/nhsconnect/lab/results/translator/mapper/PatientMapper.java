@@ -63,7 +63,7 @@ public class PatientMapper {
     private void mapAddress(final UnstructuredAddress unstructuredAddress, final Patient patient) {
         final Address address = new Address();
         Arrays.stream(unstructuredAddress.getAddressLines()).forEach(address::addLine);
-        unstructuredAddress.getPostCode().ifPresent(address::setPostalCode);
+        unstructuredAddress.getPostcode().ifPresent(address::setPostalCode);
         patient.addAddress(address);
     }
 
