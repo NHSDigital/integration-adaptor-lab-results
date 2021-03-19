@@ -1,5 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
+import lombok.NonNull;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public abstract class Segment {
     public void validate() throws EdifactValidationException {
     }
 
-    protected static Optional<String> arrayGetSafe(String[] array, int index) {
+    protected static Optional<String> arrayGetSafe(final @NonNull String[] array, final int index) {
         if (array.length > index) {
             final var result = array[index];
             return Optional.ofNullable(result.isBlank() ? null : result);

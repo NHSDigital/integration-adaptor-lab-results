@@ -3,14 +3,14 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup;
 import lombok.Getter;
 import lombok.NonNull;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
-import uk.nhs.digital.nhsconnect.lab.results.model.enums.FreeTextType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
-import uk.nhs.digital.nhsconnect.lab.results.model.enums.ReferenceType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceDetails;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicType;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristic;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCollectionDateTime;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCollectionReceiptDateTime;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenQuantity;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.FreeTextType;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.ReferenceType;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,8 +46,8 @@ public class SpecimenDetails extends SegmentGroup {
     private final SequenceDetails sequenceDetails = SequenceDetails.fromString(extractSegment(SequenceDetails.KEY));
 
     @Getter(lazy = true)
-    private final SpecimenCharacteristicType characteristicType =
-        SpecimenCharacteristicType.fromString(extractSegment(SpecimenCharacteristicType.KEY_QUALIFIER));
+    private final SpecimenCharacteristic characteristic =
+        SpecimenCharacteristic.fromString(extractSegment(SpecimenCharacteristic.KEY_QUALIFIER));
 
     @Getter(lazy = true)
     private final Optional<Reference> serviceRequesterReference =
