@@ -50,8 +50,8 @@ class InvestigationSubjectTest {
             .map(UnstructuredAddress::getFormat)
             .hasValue("US");
         investigationSubjectAddress
-            .map(UnstructuredAddress::getPostcode)
-            .hasValue(java.util.Optional.of("LS18 5PN"));
+            .flatMap(UnstructuredAddress::getPostcode)
+            .contains("LS18 5PN");
     }
 
     @Test
