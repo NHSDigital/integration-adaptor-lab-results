@@ -44,11 +44,13 @@ Performs the "Check inbox" operation. The JSON response is printed to the consol
 
 Send a message with message content provided on the command line
 
-    ./mesh.sh send [mailbox_id] "my message content"
+    ./mesh.sh send [mailbox_id] "message_content" [count]
     
-Send a message with message content provided by a file
+Send 3 messages with message content provided by a file
 
-    ./mesh.sh send [mailbox_id] "@../src/intTest/resources/edifact/pathology.dat"
+    ./mesh.sh send [mailbox_id] "@../src/intTest/resources/edifact/pathology.dat" 3
+
+[count] parameter indicates how many messages to send
     
 ### Download a message
 
