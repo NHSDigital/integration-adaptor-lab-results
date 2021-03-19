@@ -43,7 +43,7 @@ class InvestigationSubjectTest {
         var investigationSubjectAddress = assertThat(investigationSubject.getAddress()).isPresent();
 
         investigationSubjectAddress
-            .flatMap(UnstructuredAddress::getAddressLines)
+            .map(UnstructuredAddress::getAddressLines)
             .contains(new String[]{"FLAT1", "12 BROWNBERRIE AVENUE", "", "LEEDS", ""});
 
         investigationSubjectAddress

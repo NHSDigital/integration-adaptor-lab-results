@@ -49,8 +49,8 @@ public class UnstructuredAddress extends Segment {
         return new UnstructuredAddress(qualifier, addressLines, postCode);
     }
 
-    public Optional<String[]> getAddressLines() {
-        return Optional.ofNullable(addressLines);
+    public String[] getAddressLines() {
+        return addressLines != null ? addressLines : new String[0];
     }
 
     public Optional<String> getPostCode() {
