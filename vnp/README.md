@@ -10,7 +10,7 @@ For both ways a sample EDIFACT file should be present on disk.
 
 ## Sending EDIFACT to MESH
 
-Use the MESH client script you can send the same file multiple times to a given MESH mailbox. Details can be found [here](../mesh/README.md).
+Use the MESH Client script to send the same file multiple times to a given MESH mailbox. Details about the script can be found [here](../mesh/README.md).
 
 Example:
 
@@ -20,7 +20,7 @@ will send 3 times the content of a file located at `../src/intTest/resources/edi
 
 ## Sending EDIFACT to `Inbound MESH Queue`
 
-Use the ["A" application](https://github.com/fmtn/a) which is a AMQP client allowing you to send messages directly to `Inbound MESH Queue`.
+Use the ["A" application](https://github.com/fmtn/a) which is an AMQP client allowing you to send messages directly to `Inbound MESH Queue`. Java 11 required.
 
 Example:
 
