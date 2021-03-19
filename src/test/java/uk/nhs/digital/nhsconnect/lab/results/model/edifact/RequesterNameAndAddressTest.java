@@ -38,9 +38,9 @@ class RequesterNameAndAddressTest {
         var requesterResult = RequesterNameAndAddress.fromString(edifactString);
 
         assertAll(
-            () -> assertThat(requesterResult.getIdentifier()).isEqualTo("ABC"),
-            () -> assertThat(requesterResult.getName()).isEqualTo("SMITH"),
-            () -> assertThat(requesterResult.getCode()).isEqualTo(HealthcareRegistrationIdentificationCode.GP)
+            () -> assertThat(requesterResult.getIdentifier()).contains("ABC"),
+            () -> assertThat(requesterResult.getName()).contains("SMITH"),
+            () -> assertThat(requesterResult.getCode()).contains(HealthcareRegistrationIdentificationCode.GP)
         );
     }
 
@@ -51,9 +51,9 @@ class RequesterNameAndAddressTest {
         var requesterResult = RequesterNameAndAddress.fromString(edifactString);
 
         assertAll(
-            () -> assertThat(requesterResult.getIdentifier()).isNull(),
-            () -> assertThat(requesterResult.getName()).isEqualTo("SMITH"),
-            () -> assertThat(requesterResult.getCode()).isNull()
+            () -> assertThat(requesterResult.getIdentifier()).isEmpty(),
+            () -> assertThat(requesterResult.getName()).contains("SMITH"),
+            () -> assertThat(requesterResult.getCode()).isEmpty()
         );
     }
 
@@ -64,9 +64,9 @@ class RequesterNameAndAddressTest {
         var requesterResult = RequesterNameAndAddress.fromString(edifactString);
 
         assertAll(
-            () -> assertThat(requesterResult.getIdentifier()).isNull(),
-            () -> assertThat(requesterResult.getName()).isEqualTo("SMITH"),
-            () -> assertThat(requesterResult.getCode()).isNull()
+            () -> assertThat(requesterResult.getIdentifier()).isEmpty(),
+            () -> assertThat(requesterResult.getName()).contains("SMITH"),
+            () -> assertThat(requesterResult.getCode()).contains(HealthcareRegistrationIdentificationCode.GP)
         );
     }
 
@@ -77,9 +77,9 @@ class RequesterNameAndAddressTest {
         var requesterResult = RequesterNameAndAddress.fromString(edifactString);
 
         assertAll(
-            () -> assertThat(requesterResult.getIdentifier()).isEqualTo("ABC"),
-            () -> assertThat(requesterResult.getName()).isEqualTo("SMITH"),
-            () -> assertThat(requesterResult.getCode()).isNull()
+            () -> assertThat(requesterResult.getIdentifier()).contains("ABC"),
+            () -> assertThat(requesterResult.getName()).contains("SMITH"),
+            () -> assertThat(requesterResult.getCode()).isEmpty()
         );
     }
 

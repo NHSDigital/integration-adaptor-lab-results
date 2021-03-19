@@ -24,7 +24,7 @@ public class PractitionerMapper {
             .filter(party -> party.getServiceProvider().getServiceProviderCode().equals(PROFESSIONAL))
             .map(InvolvedParty::getRequesterNameAndAddress)
             .flatMap(Optional::stream)
-            .map(r -> mapToPractitioner(r.getIdentifier(), r.getName()))
+            .map(r -> mapToPractitioner(r.getIdentifier().orElse(null), r.getName().orElse(null)))
             .findFirst();
     }
 
