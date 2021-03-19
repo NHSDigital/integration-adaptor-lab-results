@@ -43,11 +43,7 @@ public class UnstructuredAddress extends Segment {
             System.arraycopy(splitByColon, 1, addressLines, 0, splitByColon.length - 1);
         }
 
-        String postCode = null;
-        if (splitByPlus.length >= INDEX_POSTCODE && StringUtils.isNotBlank(splitByPlus[INDEX_POSTCODE])) {
-            postCode = splitByPlus[INDEX_POSTCODE];
-        }
-
+        final String postCode = arrayGetSafe(splitByPlus, INDEX_POSTCODE).orElse(null);
         final String qualifier = edifact.startsWith(KEY + PLUS_SEPARATOR + PLUS_SEPARATOR + FORMAT) ? FORMAT : "";
 
         return new UnstructuredAddress(qualifier, addressLines, postCode);
