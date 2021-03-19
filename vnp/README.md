@@ -16,7 +16,7 @@ Example:
 
     ./mesh.sh send gp_mailbox "@../src/intTest/resources/edifact/pathology.edifact.dat" 3 
 
-will send 3 times the content of a file located at `../src/intTest/resources/edifact/pathology.edifact.dat` to `gp_mailbox` MESH mailbox.
+will send the content of a file located at `../src/intTest/resources/edifact/pathology.edifact.dat` to `gp_mailbox` MESH mailbox 3 times.
 
 ## Sending EDIFACT to `Inbound MESH Queue`
 
