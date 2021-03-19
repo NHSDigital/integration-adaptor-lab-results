@@ -17,6 +17,8 @@ management:
       enabled: true
 
 labresults:
+  trustStoreUrl:
+  trustStorePassword:
   amqp:
     brokers: ${LAB_RESULTS_AMQP_BROKERS}
     meshOutboundQueueName: lab_results_mesh_outbound
