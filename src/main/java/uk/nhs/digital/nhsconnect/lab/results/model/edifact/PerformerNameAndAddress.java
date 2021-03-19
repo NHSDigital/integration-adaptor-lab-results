@@ -63,7 +63,7 @@ public class PerformerNameAndAddress extends Segment {
                 ? HealthcareRegistrationIdentificationCode.fromCode(colonSplit[1]) : null;
         }
 
-        final String name = keySplit.length > 3 && StringUtils.isNotBlank(keySplit[4]) ? keySplit[4] : null;
+        final String name = keySplit.length > 4 && StringUtils.isNotBlank(keySplit[4]) ? keySplit[4] : null;
 
         return PerformerNameAndAddress.builder()
             .identifier(identifier)
