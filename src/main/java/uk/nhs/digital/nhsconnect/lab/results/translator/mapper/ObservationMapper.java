@@ -192,7 +192,6 @@ public class ObservationMapper {
         private void mapLaboratoryInvestigationResult(final LabResult labResult, final Observation observation) {
             // Observation.value.valueQuantity.*
             labResult.getInvestigationResult().ifPresent(investigationResult -> {
-
                 if (investigationResult.getResultType() == LaboratoryInvestigationResultType.NUMERICAL_VALUE) {
                     final var quantity = new Quantity();
 
