@@ -34,7 +34,7 @@ class UnstructuredAddressTest {
     }
 
     @Test
-    void testFromStringValidWithMinimumAddressFields() {
+    void testFromStringValidWithMinimumAddressFieldsAndNoPostcode() {
         final var address = UnstructuredAddress.fromString("ADR++US:LINE1::::++");
         assertAll(
             () -> assertThat(address.getFormat()).isEqualTo("US"),
@@ -44,7 +44,7 @@ class UnstructuredAddressTest {
     }
 
     @Test
-    void testFromStringValidWithNoPostcode() {
+    void testFromStringValidWithAddressFieldsAndNoPostcode() {
         final var address = UnstructuredAddress.fromString("ADR++US:SLOANE SQUARE:LONDON");
         assertAll(
             () -> assertThat(address.getFormat()).isEqualTo("US"),
