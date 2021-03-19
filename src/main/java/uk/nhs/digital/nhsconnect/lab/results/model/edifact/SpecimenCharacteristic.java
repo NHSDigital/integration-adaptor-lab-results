@@ -2,6 +2,8 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
 import java.util.Optional;
@@ -50,6 +52,14 @@ public class SpecimenCharacteristic extends Segment {
 
     public Optional<String> getTypeOfSpecimen() {
         return Optional.ofNullable(typeOfSpecimen);
+    }
+
+    @Override
+    public void validate() throws EdifactValidationException {
+        if (StringUtils.isBlank(characteristic) && StringUtils.isBlank(typeOfSpecimen)) {
+            throw new EdifactValidationException(
+                KEY + ": at least one of characteristic and typeOfSpecimen is required");
+        }
     }
 }
 
