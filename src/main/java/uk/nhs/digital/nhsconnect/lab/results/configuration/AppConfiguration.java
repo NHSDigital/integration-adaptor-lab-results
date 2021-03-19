@@ -4,7 +4,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "labresults")
 @Getter
 @Setter
-@Slf4j
 public class AppConfiguration {
 
     private String trustStoreUrl;
@@ -22,8 +20,7 @@ public class AppConfiguration {
     @Bean
     public AmazonS3 getS3Client() {
         if (trustStoreUrl != null && trustStoreUrl.startsWith("s3")) {
-            return AmazonS3ClientBuilder.standard()
-                .build();
+            return AmazonS3ClientBuilder.standard().build();
         }
         return null;
     }

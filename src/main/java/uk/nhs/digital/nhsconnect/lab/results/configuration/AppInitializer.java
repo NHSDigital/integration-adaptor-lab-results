@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component(value = "appInitializer")
 @Slf4j
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class AppInitializer implements InitializingBean {
 
     private final AppConfiguration appConfiguration;
@@ -21,7 +21,8 @@ public class AppInitializer implements InitializingBean {
         if (StringUtils.isNotBlank(appConfiguration.getTrustStoreUrl())) {
             LOGGER.info("Adding custom TrustStore to default one");
             customTrustStore.addToDefault(
-                appConfiguration.getTrustStoreUrl(), appConfiguration.getTrustStorePassword());
+                appConfiguration.getTrustStoreUrl(), appConfiguration.getTrustStorePassword()
+            );
         }
     }
 }

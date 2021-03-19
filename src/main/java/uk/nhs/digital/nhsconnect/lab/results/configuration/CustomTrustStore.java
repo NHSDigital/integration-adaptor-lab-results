@@ -17,6 +17,7 @@ import javax.net.ssl.X509TrustManager;
 import java.security.KeyStore;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Arrays;
 
 @Component
 @Slf4j
@@ -41,23 +42,13 @@ public class CustomTrustStore {
 
     @SneakyThrows
     private X509TrustManager getDefaultTrustManager() {
-        TrustManagerFactory trustManagerFactory =
-            TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-        trustManagerFactory.init((KeyStore) null); // Using null here initialises the TMF with the default trust store.
-
-        for (TrustManager tm : trustManagerFactory.getTrustManagers()) {
-            if (tm instanceof X509TrustManager) {
-                return (X509TrustManager) tm;
-            }
-        }
-        throw new IllegalStateException("Cannot find trust manager");
+        var trustManagerFactory = getDefaultTrustManagerFactory();
+        return getX509TrustManager(trustManagerFactory);
     }
 
     @SneakyThrows
     private X509TrustManager getCustomDbTrustManager(AmazonS3URI s3URI, String trustStorePassword) {
-        TrustManagerFactory trustManagerFactory =
-            TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-        trustManagerFactory.init((KeyStore) null); // Using null here initialises the TMF with the default trust store.
+        var trustManagerFactory = getDefaultTrustManagerFactory();
 
         LOGGER.info("Loading custom KeyStore from '{}'", s3URI.toString());
         try (var s3Object = s3Client.getObject(new GetObjectRequest(s3URI.getBucket(), s3URI.getKey()));
@@ -68,12 +59,23 @@ public class CustomTrustStore {
             trustManagerFactory.init(customKeyStore);
         }
 
-        for (TrustManager tm : trustManagerFactory.getTrustManagers()) {
-            if (tm instanceof X509TrustManager) {
-                return (X509TrustManager) tm;
-            }
-        }
-        throw new IllegalStateException("Cannot find trust manager");
+        return getX509TrustManager(trustManagerFactory);
+    }
+
+    @SneakyThrows
+    private TrustManagerFactory getDefaultTrustManagerFactory() {
+        TrustManagerFactory trustManagerFactory =
+            TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+        trustManagerFactory.init((KeyStore) null); // Using null here initialises the TMF with the default trust store.
+        return trustManagerFactory;
+    }
+
+    private X509TrustManager getX509TrustManager(TrustManagerFactory trustManagerFactory) {
+        return Arrays.stream(trustManagerFactory.getTrustManagers())
+            .filter(X509TrustManager.class::isInstance)
+            .map(X509TrustManager.class::cast)
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException("Cannot find trust manager"));
     }
 
     @RequiredArgsConstructor

@@ -97,13 +97,13 @@ For more information on TLS configuration in MongoDB see [TLS options for Mongo 
 SSH tunneling might require adding the connection string option: `tlsAllowInvalidHostnames=true` (as CA would try to resolve localhost as hostname).
 This option should only be used for local tests as this might create a vulnerability.
 
-Use of DocumentDB TLS requires java trust store to be provided manually. Instructions on how to create trust store can be found here: 
+Use of DocumentDB TLS requires Java trust store to be provided manually. Instructions on how to create trust store can be found here: 
 [Connect to Document DB programmatically](https://docs.aws.amazon.com/documentdb/latest/developerguide/connect_programmatically.html#connect_programmatically-tls_enabled) 
 
-To configure custom trust store with AWS CA certificates set the `LAB_RESULTS_SSL_TRUST_STORE_URL` 
+To configure custom trust store with AWS CA certificates set `LAB_RESULTS_SSL_TRUST_STORE_URL` 
 with a runtime-accessible S3 URL with the JKS file (Example: s3://my-bucket/my-trust-store.jks). 
 The AWS resource running the adaptor must have sufficient permission to read this s3 object.
-Additionally, set the `LAB_RESULTS_SSL_TRUST_STORE_PASSWORD` to trust store password
+Additionally, set `LAB_RESULTS_SSL_TRUST_STORE_PASSWORD` to trust store password.
 
 # MESH Requirements
 
