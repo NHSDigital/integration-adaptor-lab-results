@@ -40,12 +40,17 @@ inbox() {
 
 send() {
   local body
+  local count
   body="$1"
-  curl "${CURL_FLAGS}" -X POST "https://${HOST}/messageexchange/${MAILBOX_ID}/outbox" \
-    --cert "${OPENTEST_ENDPOINT_CERT}" --key "${OPENTEST_ENDPOINT_PRIVATE_KEY}" -H "Authorization: ${TOKEN}" -d "${body}" \
-    -H "Mex-From: ${MAILBOX_ID}" -H "Mex-To: ${TO_MAILBOX}" -H "Mex-WorkflowID: ${WORKFLOW_ID}" \
-    -H 'Content-Type:application/octet-stream' -H 'Mex-MessageType: DATA'  -H 'Mex-FileName: test-filename.txt' -H 'Mex-Version: 1.0' \
-    -H 'Mex-ClientVersion: 1.0' -H 'Mex-JavaVersion: 1.7.0_60' -H 'Mex-OSArchitecture: Windows 7' -H 'Mex-OSName: x86' -H 'Mex-OSVersion: 6.1'
+  count="$2"
+  for ((i = 1 ; i <= $count ; i++)); do
+    echo "Sending message $i of $count"
+    curl "${CURL_FLAGS}" -X POST "https://${HOST}/messageexchange/${MAILBOX_ID}/outbox" \
+      --cert "${OPENTEST_ENDPOINT_CERT}" --key "${OPENTEST_ENDPOINT_PRIVATE_KEY}" -H "Authorization: ${TOKEN}" -d "${body}" \
+      -H "Mex-From: ${MAILBOX_ID}" -H "Mex-To: ${TO_MAILBOX}" -H "Mex-WorkflowID: ${WORKFLOW_ID}" \
+      -H 'Content-Type:application/octet-stream' -H 'Mex-MessageType: DATA'  -H 'Mex-FileName: test-filename.txt' -H 'Mex-Version: 1.0' \
+      -H 'Mex-ClientVersion: 1.0' -H 'Mex-JavaVersion: 1.7.0_60' -H 'Mex-OSArchitecture: Windows 7' -H 'Mex-OSName: x86' -H 'Mex-OSVersion: 6.1'
+  done
 }
 
 download() {
@@ -74,7 +79,7 @@ then
   inbox
 elif [ "$1" = "send" ]
 then
-  send "$3"
+  send "$3" "$4"
 elif [ "$1" = "download" ]
 then
   download "$3"
