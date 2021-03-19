@@ -6,7 +6,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
 import uk.nhs.digital.nhsconnect.lab.results.model.enums.ReferenceType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SequenceDetails;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicType;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristic;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCollectionDateTime;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCollectionReceiptDateTime;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenQuantity;
@@ -41,16 +41,29 @@ class SpecimenDetailsTest {
     }
 
     @Test
-    void testGetSpecimenCharacteristicType() {
+    void testGetSpecimenCharacteristicTypeWithDescription() {
         final var specimen = new SpecimenDetails(List.of(
             "ignore me",
             "SPC+TSP+:::BLOOD & URINE",
             "ignore me"
         ));
-        assertThat(specimen.getCharacteristicType())
+        assertThat(specimen.getCharacteristic())
             .isNotNull()
-            .extracting(SpecimenCharacteristicType::getTypeOfSpecimen)
-            .isEqualTo("BLOOD & URINE");
+            .extracting(SpecimenCharacteristic::getTypeOfSpecimen)
+            .isEqualTo(Optional.of("BLOOD & URINE"));
+    }
+
+    @Test
+    void testGetSpecimenCharacteristicTypeWithCode() {
+        final var specimen = new SpecimenDetails(List.of(
+            "ignore me",
+            "SPC+TSP+AB12:123",
+            "ignore me"
+        ));
+        assertThat(specimen.getCharacteristic())
+            .isNotNull()
+            .extracting(SpecimenCharacteristic::getCharacteristic)
+            .isEqualTo(Optional.of("AB12"));
     }
 
     @Test
@@ -173,7 +186,7 @@ class SpecimenDetailsTest {
             () -> assertThatThrownBy(specimen::getSequenceDetails)
                 .isExactlyInstanceOf(MissingSegmentException.class)
                 .hasMessage("EDIFACT section is missing segment SEQ"),
-            () -> assertThatThrownBy(specimen::getCharacteristicType)
+            () -> assertThatThrownBy(specimen::getCharacteristic)
                 .isExactlyInstanceOf(MissingSegmentException.class)
                 .hasMessage("EDIFACT section is missing segment SPC+TSP"),
             () -> assertThat(specimen.getServiceRequesterReference()).isEmpty(),

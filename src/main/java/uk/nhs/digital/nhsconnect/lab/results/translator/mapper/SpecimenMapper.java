@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenCharacteristicType;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.SpecimenQuantity;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.SpecimenDetails;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
@@ -56,12 +55,16 @@ public class SpecimenMapper {
                 .setValue(identifier)
                 .setSystem(ACCESSION_IDENTIFIER_SYSTEM)));
         // fhir.status = [none]
-        // fhir.type = SG16.SPC.C832.7866
-        Optional.ofNullable(edifact.getCharacteristicType())
-            .map(SpecimenCharacteristicType::getTypeOfSpecimen)
-            .ifPresent(specimenType -> fhir.getType().addCoding()
-                .setDisplay(specimenType)
-                .setSystem(SNOMED_CODING_SYSTEM));
+        // fhir.type = SG16.SPC.C832
+        Optional.ofNullable(edifact.getCharacteristic())
+            .ifPresent(specimenCharacteristic -> {
+                final var coding = fhir.getType().addCoding()
+                    .setSystem(SNOMED_CODING_SYSTEM);
+                specimenCharacteristic.getCharacteristic()
+                    .ifPresent(coding::setCode);
+                specimenCharacteristic.getTypeOfSpecimen()
+                    .ifPresent(coding::setDisplay);
+            });
         // fhir.receivedTime = SG16.DTM.C507.2380 (SRI)
         edifact.getCollectionReceiptDateTime()
             .map(date -> dateFormatMapper.mapToDate(date.getDateFormat(), date.getCollectionReceiptDateTime()))
