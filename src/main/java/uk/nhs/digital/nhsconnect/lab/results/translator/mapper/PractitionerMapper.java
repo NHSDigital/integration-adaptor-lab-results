@@ -33,7 +33,7 @@ public class PractitionerMapper {
             .filter(party -> party.getServiceProvider().getServiceProviderCode().equals(PROFESSIONAL))
             .map(InvolvedParty::getPerformerNameAndAddress)
             .flatMap(Optional::stream)
-            .map(p -> mapToPractitioner(p.getIdentifier(), p.getPractitionerName()))
+            .map(p -> mapToPractitioner(p.getIdentifier(), p.getName()))
             .findFirst();
     }
 
