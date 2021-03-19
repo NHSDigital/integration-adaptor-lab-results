@@ -41,7 +41,7 @@ class SpecimenDetailsTest {
     }
 
     @Test
-    void testGetSpecimenCharacteristicType() {
+    void testGetSpecimenCharacteristicTypeWithDescription() {
         final var specimen = new SpecimenDetails(List.of(
             "ignore me",
             "SPC+TSP+:::BLOOD & URINE",
@@ -51,6 +51,19 @@ class SpecimenDetailsTest {
             .isNotNull()
             .extracting(SpecimenCharacteristic::getTypeOfSpecimen)
             .isEqualTo(Optional.of("BLOOD & URINE"));
+    }
+
+    @Test
+    void testGetSpecimenCharacteristicTypeWithCode() {
+        final var specimen = new SpecimenDetails(List.of(
+            "ignore me",
+            "SPC+TSP+AB12:123",
+            "ignore me"
+        ));
+        assertThat(specimen.getCharacteristic())
+            .isNotNull()
+            .extracting(SpecimenCharacteristic::getCharacteristic)
+            .isEqualTo(Optional.of("AB12"));
     }
 
     @Test
