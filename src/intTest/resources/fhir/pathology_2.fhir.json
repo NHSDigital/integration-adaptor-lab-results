@@ -318,10 +318,12 @@
         "referenceRange": [
           {
             "low": {
-              "value": 2.0
+              "value": 2.0,
+              "unit": "nmol/L"
             },
             "high": {
-              "value": 20.0
+              "value": 20.0,
+              "unit": "nmol/L"
             }
           }
         ],
