@@ -10,9 +10,10 @@ import java.util.Optional;
 
 /**
  * Examples:
- *
+ * <br/>
  * {@code RND+U+170+1100'}: between 170 and 1100<br/>
  * {@code RND+U++999'}: less than 999<br/>
+ * {@code RND+U+13.3+16.7+g/dl'}: with units
  */
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
@@ -23,9 +24,12 @@ public class RangeDetail extends Segment {
 
     private static final int INDEX_LOWER_LIMIT = 2;
     private static final int INDEX_UPPER_LIMIT = 3;
+    private static final int INDEX_UNITS = 4;
 
     private final BigDecimal lowerLimit;
     private final BigDecimal upperLimit;
+
+    private final String units;
 
     public static RangeDetail fromString(final String edifact) {
         if (!edifact.startsWith(KEY_QUALIFIER)) {
@@ -40,8 +44,9 @@ public class RangeDetail extends Segment {
         final BigDecimal upperLimit = split[INDEX_UPPER_LIMIT].isBlank()
             ? null
             : new BigDecimal(split[INDEX_UPPER_LIMIT]);
+        final String units = split.length > INDEX_UNITS ? split[INDEX_UNITS] : null;
 
-        return new RangeDetail(lowerLimit, upperLimit);
+        return new RangeDetail(lowerLimit, upperLimit, units);
     }
 
     public Optional<BigDecimal> getLowerLimit() {
@@ -50,6 +55,10 @@ public class RangeDetail extends Segment {
 
     public Optional<BigDecimal> getUpperLimit() {
         return Optional.ofNullable(upperLimit);
+    }
+
+    public Optional<String> getUnits() {
+        return Optional.ofNullable(units);
     }
 
     @Override
