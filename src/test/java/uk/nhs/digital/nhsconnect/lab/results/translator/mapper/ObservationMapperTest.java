@@ -20,7 +20,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
-import uk.nhs.digital.nhsconnect.lab.results.model.enums.DeviatingResultIndicator;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
@@ -213,9 +212,7 @@ class ObservationMapperTest {
             .first()
             .extracting(Observation::getInterpretation)
             .extracting(CodeableConcept::getText)
-            .satisfies(result ->
-                assertThat(result).isEqualTo(DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT.getCode()
-                    + " : " + DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT.getDescription()));
+            .isEqualTo("HI : Above high reference limit");
     }
 
     @Test
