@@ -3,6 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -13,6 +14,13 @@ class SpecimenCharacteristicTest {
         final var segment = new SpecimenCharacteristic(null, null);
 
         assertThat(segment.getKey()).isEqualTo("SPC");
+    }
+
+    @Test
+    void testFromStringWrongKey() {
+        assertThatIllegalArgumentException()
+            .isThrownBy(() -> SpecimenCharacteristic.fromString("WRONG"))
+            .withMessage("Can't create SpecimenCharacteristic from WRONG");
     }
 
     @Test
