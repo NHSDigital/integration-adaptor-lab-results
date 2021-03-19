@@ -3,7 +3,9 @@
   "id": "bfbbff2b-aa31-455e-8072-43ef3f28a13a",
   "meta": {
     "lastUpdated": "2021-03-12T13:36:29.588+00:00",
-    "profile": [ "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1" ]
+    "profile": [
+      "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"
+    ]
   },
   "identifier": {
     "system": "https://tools.ietf.org/html/rfc4122",
@@ -25,8 +27,12 @@
         "name": [
           {
             "family": "GRIMSHAW",
-            "given": [ "BRETT" ],
-            "prefix": [ "CAPT" ]
+            "given": [
+              "BRETT"
+            ],
+            "prefix": [
+              "CAPT"
+            ]
           }
         ],
         "gender": "male",
@@ -169,7 +175,19 @@
         "comment": "Normal. Sent following an initial single Negative result or following 2 Negative results after an initial Weak Positive",
         "specimen": {
           "reference": "urn:uuid:ad79dabe-2842-4a74-8f09-72cd398fcdd4"
-        }
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 13.3,
+              "unit": "g/dl"
+            },
+            "high": {
+              "value": 16.7,
+              "unit": "g/dl"
+            }
+          }
+        ]
       }
     }
   ]
