@@ -175,6 +175,17 @@ Option 2: If `LAB_RESULTS_MONGO_HOST` is undefined then the adaptor uses the con
 | LAB_RESULTS_MONGO_DATABASE_NAME  | labresults                | Database name for MongoDB
 | LAB_RESULTS_MONGO_URI            | mongodb://localhost:27017 | MongoDB connection string
 
+**Trust Store Configuration**
+
+These optional properties configure a trust store with private CA certificates. This trust store does not replace Java's
+default trust store. At runtime the application adds these additional certificates to the default trust store. See 
+[OPERATING.md - AWS DocumentDB TLS configuration](OPERATING.md#AWS DocumentDB TLS configuration) for more information.
+
+| Environment Variable                      | Default       | Description 
+| ------------------------------------------|---------------|-------------
+| LAB_RESULTS_SSL_TRUST_STORE_URL           |               | (Optional) URL of the trust store JKS. The only scheme currently supported is `s3://`
+| LAB_RESULTS_SSL_TRUST_STORE_PASSWORD      |               | (Optional) Password used to access the trust store
+
 ## MESH API
 
 ### MESH API Connection Configuration

@@ -22,6 +22,8 @@ spring:
       acknowledge-mode: CLIENT
 
 labresults:
+  trustStoreUrl: ${LAB_RESULTS_SSL_TRUST_STORE_URL:}
+  trustStorePassword: ${LAB_RESULTS_SSL_TRUST_STORE_PASSWORD:}
   amqp:
     brokers: ${LAB_RESULTS_AMQP_BROKERS:amqp://localhost:5672}
     meshOutboundQueueName: ${LAB_RESULTS_MESH_OUTBOUND_QUEUE_NAME:lab_results_mesh_outbound}
