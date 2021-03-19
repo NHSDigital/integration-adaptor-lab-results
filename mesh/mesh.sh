@@ -42,7 +42,7 @@ send() {
   local body
   local count
   body="$1"
-  count="$2"
+  count="${2:-1}"
   for ((i = 1 ; i <= $count ; i++)); do
     echo "Sending message $i of $count"
     curl "${CURL_FLAGS}" -X POST "https://${HOST}/messageexchange/${MAILBOX_ID}/outbox" \
