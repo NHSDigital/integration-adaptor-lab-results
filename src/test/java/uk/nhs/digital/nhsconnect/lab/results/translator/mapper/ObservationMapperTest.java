@@ -20,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.DeviatingResultIndicator;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
@@ -191,6 +192,30 @@ class ObservationMapperTest {
                 () -> assertThat(result.get(0).getCode()).isEqualTo("111222333"),
                 () -> assertThat(result.get(0).getDisplay()).isEqualTo("Normal test")
             ));
+    }
+
+    @Test
+    void testMapInterpretation() {
+        final var message = new Message(List.of(
+            "S02+02", // ServiceReportDetails
+            "S06+06", // InvestigationSubject
+            "GIS+N", // LabResult
+            "INV+MQ+c:911::d", // LaboratoryInvestigation
+            "RFF+ASL:1", // Reference
+
+            "RSL+NV+1.23:7++:::units+HI" // LaboratoryInvestigationResult
+        ));
+
+        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
+            mockPractitioner);
+
+        assertThat(observations).hasSize(1)
+            .first()
+            .extracting(Observation::getInterpretation)
+            .extracting(CodeableConcept::getText)
+            .satisfies(result ->
+                assertThat(result).isEqualTo(DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT.getCode()
+                    + " : " + DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT.getDescription()));
     }
 
     @Test
