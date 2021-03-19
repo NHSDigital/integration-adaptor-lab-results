@@ -106,6 +106,7 @@ spotbugsMain {
 
 spotbugs {
 	excludeFilter = file("${rootDir}/config/spotbugs/exclude.xml")
+    toolVersion = '4.2.2'
 }
 
 checkstyle {
