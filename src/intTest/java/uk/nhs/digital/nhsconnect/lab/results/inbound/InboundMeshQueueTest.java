@@ -111,7 +111,7 @@ public class InboundMeshQueueTest extends IntegrationBaseTest {
 
         final String expectedContent = new String(Files.readAllBytes(getScreeningFhirResource().getFile().toPath()));
 
-        assertThat(message.getStringProperty("Checksum")).isEqualTo("5BF5B1C8CFCB439126E4EA1C348350B7");
+        assertThat(message.getStringProperty("Checksum")).isEqualTo("440A799A79EEDA64373DD4171FD5429D");
 
         JSONAssert.assertEquals(
             expectedContent,

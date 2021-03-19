@@ -25,6 +25,11 @@ import uk.nhs.digital.nhsconnect.lab.results.model.enums.HealthcareRegistrationI
  * NAD+SLA+++ST JAMES?'S UNIVERSITY HOSPITAL'
  * SPR+ORG'
  * </pre>
+ * Example: NHS002 variant of a performing orgnization without a name, only a code
+ * <pre>
+ * NAD+PO+L99999:901'
+ * SPR+ORG'
+ * </pre>
  */
 @Getter
 @Builder

@@ -1,13 +1,14 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
 import lombok.Builder;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 import uk.nhs.digital.nhsconnect.lab.results.model.enums.HealthcareRegistrationIdentificationCode;
+
+import java.util.Optional;
 
 /**
  * Example: Details of requesting practitioner with identifier
@@ -26,7 +27,6 @@ import uk.nhs.digital.nhsconnect.lab.results.model.enums.HealthcareRegistrationI
  * SPR+ORG'
  * </pre>
  */
-@Getter
 @Setter
 @Builder
 @RequiredArgsConstructor
@@ -50,26 +50,33 @@ public class RequesterNameAndAddress extends Segment {
         final String[] keySplit = Split.byPlus(edifactString);
         final String[] colonSplit = Split.byColon(keySplit[2]);
 
-        String identifier = null;
-        HealthcareRegistrationIdentificationCode code = null;
-        if (colonSplit.length > 1 && StringUtils.isNotBlank(colonSplit[0])) {
-            identifier = colonSplit[0];
-            code = StringUtils.isNotBlank(colonSplit[1])
-                ? HealthcareRegistrationIdentificationCode.fromCode(colonSplit[1]) : null;
-        }
+        final var builder = RequesterNameAndAddress.builder();
+        arrayGetSafe(colonSplit, 0)
+            .ifPresent(builder::identifier);
+        arrayGetSafe(colonSplit, 1)
+            .map(HealthcareRegistrationIdentificationCode::fromCode)
+            .ifPresent(builder::code);
+        arrayGetSafe(keySplit, 4)
+            .ifPresent(builder::name);
 
-        final String name = keySplit[4];
-
-        return RequesterNameAndAddress.builder()
-            .identifier(identifier)
-            .code(code)
-            .name(name)
-            .build();
+        return builder.build();
     }
 
     @Override
     public String getKey() {
         return KEY;
+    }
+
+    public Optional<String> getIdentifier() {
+        return Optional.ofNullable(identifier);
+    }
+
+    public Optional<HealthcareRegistrationIdentificationCode> getCode() {
+        return Optional.ofNullable(code);
+    }
+
+    public Optional<String> getName() {
+        return Optional.ofNullable(name);
     }
 
     @Override

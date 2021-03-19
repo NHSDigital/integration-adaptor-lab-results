@@ -54,12 +54,12 @@
         "identifier": [
           {
             "system": "https://fhir.nhs.uk/Id/sds-user-id",
-            "value": "G3380314"
+            "value": "G9304284"
           }
         ],
         "name": [
           {
-            "text": "SCOTT"
+            "text": "DR A DOCTOR"
           }
         ]
       }
@@ -69,7 +69,12 @@
       "resource": {
         "resourceType": "Organization",
         "id": "7b38873c-978b-461d-8100-a1534afe7103",
-        "name": "NORTH DOWN GP"
+        "identifier": [
+          {
+            "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+            "value": "L99999"
+          }
+        ]
       }
     },
     {
