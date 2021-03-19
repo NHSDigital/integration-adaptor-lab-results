@@ -7,9 +7,12 @@ import org.apache.commons.lang3.StringUtils;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
 
+import java.util.Optional;
+
 /**
  * E.g. {@code ADR++US:FLAT1:12 BROWNBERRIE AVENUE::LEEDS++LS18 5PN'} has no address parts 3 or 5.
- * {@code ADR++++LS18 5PN'} has only a postcode
+ * {@code ADR++++LS18 5PN'} has only a postcode.
+ * {@code ADR++US:HIGH TERRACE:LONDON'} has no postcode (NHS002).
  */
 @EqualsAndHashCode(callSuper = true)
 @Getter
@@ -24,7 +27,7 @@ public class UnstructuredAddress extends Segment {
 
     private final String format;
     private final String[] addressLines;
-    private final String postCode;
+    private final String postcode;
 
     public static UnstructuredAddress fromString(final String edifact) {
         if (!edifact.startsWith(KEY)) {
@@ -40,10 +43,18 @@ public class UnstructuredAddress extends Segment {
             System.arraycopy(splitByColon, 1, addressLines, 0, splitByColon.length - 1);
         }
 
-        final String postCode = splitByPlus[INDEX_POSTCODE];
+        final String postcode = arrayGetSafe(splitByPlus, INDEX_POSTCODE).orElse(null);
         final String qualifier = edifact.startsWith(KEY + PLUS_SEPARATOR + PLUS_SEPARATOR + FORMAT) ? FORMAT : "";
 
-        return new UnstructuredAddress(qualifier, addressLines, postCode);
+        return new UnstructuredAddress(qualifier, addressLines, postcode);
+    }
+
+    public String[] getAddressLines() {
+        return addressLines != null ? addressLines : new String[0];
+    }
+
+    public Optional<String> getPostcode() {
+        return Optional.ofNullable(postcode);
     }
 
     @Override
@@ -63,7 +74,7 @@ public class UnstructuredAddress extends Segment {
     @Override
     public void validate() throws EdifactValidationException {
         // if no postcode, there must be address lines
-        if (StringUtils.isBlank(postCode)) {
+        if (StringUtils.isBlank(postcode)) {
             if (addressLines == null || addressLines.length <= 1) {
                 throw new EdifactValidationException(KEY
                     + ": attribute addressLines is required when postcode is missing");

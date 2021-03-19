@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class RangeDetailTest {
     @Test
     void testGetKey() {
-        assertThat(new RangeDetail(null, null).getKey()).isEqualTo("RND");
+        assertThat(new RangeDetail(null, null, null).getKey()).isEqualTo("RND");
     }
 
     @Test
@@ -24,7 +24,17 @@ class RangeDetailTest {
     }
 
     @Test
-    void testMissingBothLimits() {
+    void testAllFieldsGiven() {
+        var result = RangeDetail.fromString("RND+U+1.1+2.2+unit");
+        assertAll(
+            () -> assertThat(result.getLowerLimit()).contains(new BigDecimal("1.1")),
+            () -> assertThat(result.getUpperLimit()).contains(new BigDecimal("2.2")),
+            () -> assertThat(result.getUnits()).contains("unit")
+        );
+    }
+
+    @Test
+    void testMissingAllFields() {
         var result = RangeDetail.fromString("RND+U++");
         assertAll(
             () -> assertThat(result.getLowerLimit()).isEmpty(),
