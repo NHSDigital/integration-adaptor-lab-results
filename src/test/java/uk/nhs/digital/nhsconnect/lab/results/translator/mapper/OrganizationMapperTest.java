@@ -1,13 +1,5 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.Mockito.when;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.codesystems.OrganizationType;
@@ -16,10 +8,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvolvedParty;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class OrganizationMapperTest {
@@ -55,7 +54,8 @@ class OrganizationMapperTest {
         assertThat(organization).isNotEmpty()
             .hasValueSatisfying(org -> assertAll(
                 () -> assertThat(org.getName()).isEqualTo("MATTHEW'S GP"),
-                () -> assertThat(org.getType()).isEmpty()
+                () -> assertThat(org.getType()).isEmpty(),
+                () -> assertThat(org.getIdentifier()).isEmpty()
             ));
     }
 
@@ -64,6 +64,42 @@ class OrganizationMapperTest {
         when(message.getInvolvedParties()).thenReturn(Collections.emptyList());
 
         assertThat(mapper.mapToPerformingOrganization(message)).isEmpty();
+    }
+
+    @Test
+    void testMapMessageToPerformingOrganizationWithNameCodeAndDepartment() {
+        final var performingDepartmentParty = new InvolvedParty(List.of(
+            "ignore me",
+            "NAD+SLA+++Microbiology",
+            "SPR+DPT",
+            "ignore me"
+        ));
+
+        final var performingOrganizationParty = new InvolvedParty(List.of(
+            "ignore me",
+            "NAD+SLA+A2442389:902++DR J SMITH",
+            "SPR+ORG",
+            "ignore me"
+        ));
+
+        when(message.getInvolvedParties()).thenReturn(List.of(performingDepartmentParty, performingOrganizationParty));
+
+        Optional<Organization> result = mapper.mapToPerformingOrganization(message);
+        assertThat(result).isNotEmpty();
+
+        Organization organization = result.get();
+        Coding type = organization.getType().get(0).getCoding().get(0);
+
+        assertAll(
+            () -> assertThat(organization.getIdentifier()).hasSize(1).first()
+                .satisfies(identifier -> assertAll(
+                    () -> assertThat(identifier.getValue()).isEqualTo("A2442389"),
+                    () -> assertThat(identifier.getSystem())
+                        .isEqualTo("https://fhir.nhs.uk/Id/ods-organization-code"))),
+            () -> assertThat(organization.getName()).isEqualTo("DR J SMITH"),
+            () -> assertThat(type.getCode()).isEqualTo(OrganizationType.DEPT.toCode()),
+            () -> assertThat(type.getDisplay()).isEqualTo("Microbiology")
+        );
     }
 
     @Test
@@ -92,10 +128,72 @@ class OrganizationMapperTest {
 
         assertAll(
             () -> assertThat(organization.getName()).isEqualTo("ST JAMES'S UNIVERSITY HOSPITAL"),
+            () -> assertThat(organization.getIdentifier()).isEmpty(),
             () -> assertThat(type.getCode()).isEqualTo(OrganizationType.DEPT.toCode()),
             () -> assertThat(type.getDisplay()).isEqualTo("Microbiology")
         );
     }
+
+    @Test
+    void testMapMessageToPerformingOrganizationWithCodeOnly() {
+        final var performingParty = new InvolvedParty(List.of(
+            "ignore me",
+            "NAD+SLA+REF00:903",
+            "SPR+ORG",
+            "ignore me"
+        ));
+
+        when(message.getInvolvedParties()).thenReturn(List.of(performingParty));
+
+        Optional<Organization> organization = mapper.mapToPerformingOrganization(message);
+        assertThat(organization).isNotEmpty()
+            .hasValueSatisfying(org -> assertAll(
+                () -> assertThat(org.getIdentifier()).hasSize(1).first()
+                    .satisfies(identifier -> assertAll(
+                        () -> assertThat(identifier.getValue()).isEqualTo("REF00"),
+                        () -> assertThat(identifier.getSystem())
+                            .isEqualTo("https://fhir.nhs.uk/Id/ods-organization-code"))),
+                () -> assertThat(org.getName()).isNull(),
+                () -> assertThat(org.getType()).isEmpty()
+            ));
+    }
+
+    @Test
+    void testMapMessageToPerformingOrganizationWithCodeAndDepartment() {
+        final var performingDepartmentParty = new InvolvedParty(List.of(
+            "ignore me",
+            "NAD+SLA+++Microbiology",
+            "SPR+DPT",
+            "ignore me"
+        ));
+
+        final var performingOrganizationParty = new InvolvedParty(List.of(
+            "ignore me",
+            "NAD+SLA+REF00:903",
+            "SPR+ORG",
+            "ignore me"
+        ));
+
+        when(message.getInvolvedParties()).thenReturn(List.of(performingDepartmentParty, performingOrganizationParty));
+
+        Optional<Organization> result = mapper.mapToPerformingOrganization(message);
+        assertThat(result).isNotEmpty();
+
+        Organization organization = result.get();
+        Coding type = organization.getType().get(0).getCoding().get(0);
+
+        assertAll(
+            () -> assertThat(organization.getIdentifier()).hasSize(1).first()
+                .satisfies(identifier -> assertAll(
+                    () -> assertThat(identifier.getValue()).isEqualTo("REF00"),
+                    () -> assertThat(identifier.getSystem())
+                        .isEqualTo("https://fhir.nhs.uk/Id/ods-organization-code"))),
+            () -> assertThat(organization.getName()).isNull(),
+            () -> assertThat(type.getCode()).isEqualTo(OrganizationType.DEPT.toCode()),
+            () -> assertThat(type.getDisplay()).isEqualTo("Microbiology")
+        );
+    }
+
 
     @Test
     void testMapMessageToPerformingOrganizationWithOrganizationAndNoDepartment() {
@@ -112,7 +210,8 @@ class OrganizationMapperTest {
         assertThat(organization).isNotEmpty()
             .hasValueSatisfying(org -> assertAll(
                 () -> assertThat(org.getName()).isEqualTo("ST JAMES'S UNIVERSITY HOSPITAL"),
-                () -> assertThat(org.getType()).isEmpty()
+                () -> assertThat(org.getType()).isEmpty(),
+                () -> assertThat(org.getIdentifier()).isEmpty()
             ));
     }
 

@@ -11,7 +11,8 @@ import java.util.Arrays;
 public enum HealthcareRegistrationIdentificationCode {
     GP("900", "National GP"),
     GP_PRACTICE("901", "National GP Practice"),
-    CONSULTANT("902", "National Consultant");
+    CONSULTANT("902", "National Consultant"),
+    PROVIDER("903", "National Provider");
 
     private final String code;
     private final String description;

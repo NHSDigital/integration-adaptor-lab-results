@@ -59,13 +59,21 @@ public class OrganizationMapper {
         final var organization = new Organization();
         organization.setId(uuidGenerator.generateUUID());
 
-        performingOrganization.flatMap(InvolvedParty::getPerformerNameAndAddress)
-            .map(PerformerNameAndAddress::getPartyName)
+        final Optional<PerformerNameAndAddress> performerNameAndAddress = performingOrganization
+            .flatMap(InvolvedParty::getPerformerNameAndAddress);
+
+        performerNameAndAddress
+            .map(PerformerNameAndAddress::getName)
             .map(MappingUtils::unescape)
             .ifPresent(organization::setName);
 
+        performerNameAndAddress.map(PerformerNameAndAddress::getIdentifier)
+            .ifPresent(id -> organization.addIdentifier()
+                .setSystem(ODS_ORGANIZATION_SYSTEM)
+                .setValue(id));
+
         performingDepartment.flatMap(InvolvedParty::getPerformerNameAndAddress)
-            .map(PerformerNameAndAddress::getPartyName)
+            .map(PerformerNameAndAddress::getName)
             .map(departmentName -> new Coding()
                 .setCode(OrganizationType.DEPT.toCode())
                 .setDisplay(departmentName))
