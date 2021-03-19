@@ -21,8 +21,6 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 import java.util.Arrays;
 import java.util.Optional;
 
-import static java.util.Optional.ofNullable;
-
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class PatientMapper {
@@ -33,7 +31,7 @@ public class PatientMapper {
     public Patient mapToPatient(final Message message) {
 
         final Optional<InvestigationSubject> investigationSubject =
-            ofNullable(message.getServiceReportDetails())
+            Optional.ofNullable(message.getServiceReportDetails())
                 .map(ServiceReportDetails::getSubject);
 
         final PatientDetails patientDetails = investigationSubject
@@ -49,7 +47,7 @@ public class PatientMapper {
         final PersonName personName = patientDetails.getName();
         mapName(personName, patient);
 
-        ofNullable(personName.getNhsNumber())
+        Optional.ofNullable(personName.getNhsNumber())
             .ifPresentOrElse(nhsNumber -> mapNhsNumberIdentifier(nhsNumber, patient),
                 () -> referenceServiceSubject.ifPresent(reference -> mapOtherIdentifier(reference, patient)));
 
@@ -98,10 +96,10 @@ public class PatientMapper {
     private void mapName(final PersonName name, final Patient patient) {
         final HumanName humanName = new HumanName();
 
-        ofNullable(name.getTitle()).ifPresent(humanName::addPrefix);
-        ofNullable(name.getFirstForename()).ifPresent(forename -> {
+        Optional.ofNullable(name.getTitle()).ifPresent(humanName::addPrefix);
+        Optional.ofNullable(name.getFirstForename()).ifPresent(forename -> {
             humanName.addGiven(forename);
-            ofNullable(name.getSecondForename())
+            Optional.ofNullable(name.getSecondForename())
                 .ifPresent(humanName::addGiven);
         });
         humanName.setFamily(name.getSurname());
