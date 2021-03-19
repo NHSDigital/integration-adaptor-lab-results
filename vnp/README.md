@@ -26,4 +26,4 @@ Example:
 
     java -jar a-1.5.0-jar-with-dependencies.jar -A -b "amqps://admin:pwd@my-mq.com:5671" -p "@../src/intTest/resources/edifact/pathology.edifact.dat" -c 5 lab_results_mesh_inbound
 
-will send 5 times the content of a file located at `../src/intTest/resources/edifact/pathology.edifact.dat` to `lab_results_mesh_inbound` queue on `my-mq.com` broker listening on port `5671` connecting using secured AMQP protocol (amqp<span style="color:yellow">**s**</span>), user name `admin` and password `pwd`
+will send the content of a file located at `../src/intTest/resources/edifact/pathology.edifact.dat` 5 times to the `lab_results_mesh_inbound` queue on `my-mq.com` broker listening on port `5671` connecting using secured AMQP protocol (amqp<span style="color:yellow">**s**</span>), user name `admin` and password `pwd`
