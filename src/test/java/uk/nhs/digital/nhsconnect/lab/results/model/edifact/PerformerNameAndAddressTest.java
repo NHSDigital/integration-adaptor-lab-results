@@ -59,7 +59,7 @@ class PerformerNameAndAddressTest {
         assertAll(
             () -> assertThat(performerResult.getIdentifier()).isNull(),
             () -> assertThat(performerResult.getName()).isEqualTo("SMITH"),
-            () -> assertThat(performerResult.getCode()).isNull()
+            () -> assertThat(performerResult.getCode()).isEqualTo(HealthcareRegistrationIdentificationCode.GP)
         );
     }
 

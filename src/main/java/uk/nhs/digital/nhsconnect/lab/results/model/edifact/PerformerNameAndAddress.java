@@ -55,15 +55,11 @@ public class PerformerNameAndAddress extends Segment {
         final String[] keySplit = Split.byPlus(edifactString);
         final String[] colonSplit = Split.byColon(keySplit[2]);
 
-        String identifier = null;
-        HealthcareRegistrationIdentificationCode code = null;
-        if (colonSplit.length > 1 && StringUtils.isNotBlank(colonSplit[0])) {
-            identifier = colonSplit[0];
-            code = StringUtils.isNotBlank(colonSplit[1])
-                ? HealthcareRegistrationIdentificationCode.fromCode(colonSplit[1]) : null;
-        }
-
-        final String name = keySplit.length > 4 && StringUtils.isNotBlank(keySplit[4]) ? keySplit[4] : null;
+        final String identifier = arrayGetSafe(colonSplit, 0).orElse(null);
+        final HealthcareRegistrationIdentificationCode code = arrayGetSafe(colonSplit, 1)
+            .map(HealthcareRegistrationIdentificationCode::fromCode)
+            .orElse(null);
+        final String name = arrayGetSafe(keySplit, 4).orElse(null);
 
         return PerformerNameAndAddress.builder()
             .identifier(identifier)
