@@ -29,21 +29,20 @@ public class CustomTrustStore {
     @SneakyThrows
     public void addToDefault(String trustStorePath, String trustStorePassword) {
         final X509TrustManager defaultTrustManager = getDefaultTrustManager();
-        final X509TrustManager customTrustManager = getCustomDbTrustManager(new AmazonS3URI(trustStorePath), trustStorePassword);
+        final X509TrustManager customTrustManager =
+            getCustomDbTrustManager(new AmazonS3URI(trustStorePath), trustStorePassword);
         X509TrustManager combinedTrustManager = new CombinedTrustManager(customTrustManager, defaultTrustManager);
 
         SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(null, new TrustManager[]
-            {
-                combinedTrustManager
-            }, null);
+        sslContext.init(null, new TrustManager[] {combinedTrustManager}, null);
         LOGGER.info("Overriding default TrustStore with combined one");
         SSLContext.setDefault(sslContext);
     }
 
     @SneakyThrows
     private X509TrustManager getDefaultTrustManager() {
-        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+        TrustManagerFactory trustManagerFactory =
+            TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
         trustManagerFactory.init((KeyStore) null); // Using null here initialises the TMF with the default trust store.
 
         for (TrustManager tm : trustManagerFactory.getTrustManagers()) {
@@ -56,7 +55,8 @@ public class CustomTrustStore {
 
     @SneakyThrows
     private X509TrustManager getCustomDbTrustManager(AmazonS3URI s3URI, String trustStorePassword) {
-        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+        TrustManagerFactory trustManagerFactory =
+            TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
         trustManagerFactory.init((KeyStore) null); // Using null here initialises the TMF with the default trust store.
 
         LOGGER.info("Loading custom KeyStore from '{}'", s3URI.toString());
