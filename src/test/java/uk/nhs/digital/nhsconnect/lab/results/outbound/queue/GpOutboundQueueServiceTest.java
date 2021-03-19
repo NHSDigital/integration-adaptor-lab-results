@@ -89,7 +89,7 @@ class GpOutboundQueueServiceTest {
         when(interchangeHeader.getRecipient()).thenReturn("some_recipient");
         when(interchangeHeader.getSequenceNumber()).thenReturn(123L);
         when(messageHeader.getSequenceNumber()).thenReturn(234L);
-        when(messageHeader.getMessageType()).thenReturn(MessageType.PATHOLOGY);
+        when(messageHeader.getMessageType()).thenReturn(MessageType.PATHOLOGY_VARIANT_3);
 
         final var bundle = new Bundle();
         final var processingResult = new MessageProcessingResult.Success(message, bundle);

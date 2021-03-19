@@ -102,7 +102,7 @@ Screening examples can be found [here](https://github.com/nhsconnect/integration
 
 ## Resources
 
-[Lab Results adaptor](https://digital.nhs.uk/developer/api-catalogue/nhs-lab-results-adaptor)
+[Lab Results adaptor](https://digital.nhs.uk/developer/api-catalogue/lab-results-adaptor)
 
 [Pathology Messaging - EDIFACT API](https://digital.nhs.uk/developer/api-catalogue/pathology-messaging-edifact)
 

@@ -13,10 +13,14 @@ class WorkflowIdTest {
     @Test
     void testFromStringReturnsWorkflowIdForValidWorkflowIdString() {
         assertAll(
-            () -> assertEquals(WorkflowId.PATHOLOGY,
-                WorkflowId.fromString(WorkflowId.PATHOLOGY.getWorkflowId())),
-            () -> assertEquals(WorkflowId.PATHOLOGY_ACK,
-                WorkflowId.fromString(WorkflowId.PATHOLOGY_ACK.getWorkflowId())),
+            () -> assertEquals(WorkflowId.PATHOLOGY_2,
+                WorkflowId.fromString(WorkflowId.PATHOLOGY_2.getWorkflowId())),
+            () -> assertEquals(WorkflowId.PATHOLOGY_3_ACK,
+                WorkflowId.fromString(WorkflowId.PATHOLOGY_3_ACK.getWorkflowId())),
+            () -> assertEquals(WorkflowId.PATHOLOGY_3,
+                WorkflowId.fromString(WorkflowId.PATHOLOGY_3.getWorkflowId())),
+            () -> assertEquals(WorkflowId.PATHOLOGY_3_ACK,
+                WorkflowId.fromString(WorkflowId.PATHOLOGY_3_ACK.getWorkflowId())),
             () -> assertEquals(WorkflowId.SCREENING,
                 WorkflowId.fromString(WorkflowId.SCREENING.getWorkflowId())),
             () -> assertEquals(WorkflowId.SCREENING_ACK,
@@ -27,10 +31,14 @@ class WorkflowIdTest {
     @Test
     void testFromStringReturnsWorkflowIdForValidLowercaseWorkflowIdString() {
         assertAll(
-            () -> assertEquals(WorkflowId.PATHOLOGY,
-                WorkflowId.fromString(WorkflowId.PATHOLOGY.getWorkflowId().toLowerCase())),
-            () -> assertEquals(WorkflowId.PATHOLOGY_ACK,
-                WorkflowId.fromString(WorkflowId.PATHOLOGY_ACK.getWorkflowId().toLowerCase())),
+            () -> assertEquals(WorkflowId.PATHOLOGY_2,
+                WorkflowId.fromString(WorkflowId.PATHOLOGY_2.getWorkflowId().toLowerCase())),
+            () -> assertEquals(WorkflowId.PATHOLOGY_3_ACK,
+                WorkflowId.fromString(WorkflowId.PATHOLOGY_3_ACK.getWorkflowId().toLowerCase())),
+            () -> assertEquals(WorkflowId.PATHOLOGY_3,
+                WorkflowId.fromString(WorkflowId.PATHOLOGY_3.getWorkflowId().toLowerCase())),
+            () -> assertEquals(WorkflowId.PATHOLOGY_3_ACK,
+                WorkflowId.fromString(WorkflowId.PATHOLOGY_3_ACK.getWorkflowId().toLowerCase())),
             () -> assertEquals(WorkflowId.SCREENING,
                 WorkflowId.fromString(WorkflowId.SCREENING.getWorkflowId().toLowerCase())),
             () -> assertEquals(WorkflowId.SCREENING_ACK,

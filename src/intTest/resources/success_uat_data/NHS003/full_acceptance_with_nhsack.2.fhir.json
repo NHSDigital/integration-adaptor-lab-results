@@ -20,7 +20,7 @@
         "id": "7707bc15-b499-45da-9ec3-345a0267643f",
         "identifier": [
           {
-            "system": "https://fhir.nhs.uk/Id/nhs-number"
+            "id": "Z77553311"
           }
         ],
         "name": [
@@ -87,7 +87,7 @@
         "resourceType": "ProcedureRequest",
         "id": "46de5ca6-fb83-4ab0-b826-52adae5a9a4e",
         "status": "unknown",
-        "intent": "original-order",
+        "intent": "order",
         "code": {
           "text": "unknown"
         },

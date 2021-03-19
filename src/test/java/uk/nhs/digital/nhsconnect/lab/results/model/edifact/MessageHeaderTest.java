@@ -26,7 +26,7 @@ class MessageHeaderTest {
     void testValidateSequenceNumberLessThanMinimumValueThrowsException() {
         final var messageHeader = MessageHeader.builder()
             .sequenceNumber(0L)
-            .messageType(MessageType.PATHOLOGY)
+            .messageType(MessageType.PATHOLOGY_VARIANT_3)
             .build();
 
         assertThatThrownBy(messageHeader::validate)
@@ -39,7 +39,7 @@ class MessageHeaderTest {
     void testValidateSequenceNumberMoreThanMaxValueThrowsException() {
         final var messageHeader = MessageHeader.builder()
             .sequenceNumber(100_000_000L)
-            .messageType(MessageType.PATHOLOGY)
+            .messageType(MessageType.PATHOLOGY_VARIANT_3)
             .build();
 
         assertThatThrownBy(messageHeader::validate)
@@ -64,7 +64,7 @@ class MessageHeaderTest {
     void testValidateSequenceNumberWithValidValuesDoesNotThrowException() {
         final var messageHeader = MessageHeader.builder()
             .sequenceNumber(9_999_999L)
-            .messageType(MessageType.PATHOLOGY)
+            .messageType(MessageType.PATHOLOGY_VARIANT_3)
             .build();
 
         assertDoesNotThrow(messageHeader::validate);
@@ -77,7 +77,7 @@ class MessageHeaderTest {
 
         assertAll(
             () -> assertThat(messageHeader.getSequenceNumber()).isEqualTo(3),
-            () -> assertThat(messageHeader.getMessageType()).isEqualTo(MessageType.PATHOLOGY)
+            () -> assertThat(messageHeader.getMessageType()).isEqualTo(MessageType.PATHOLOGY_VARIANT_3)
         );
     }
 

@@ -33,11 +33,11 @@ public class InboundMeshQueueTest extends IntegrationBaseTest {
     }
 
     @Test
-    void whenMeshInboundQueuePathologyMessageIsReceivedThenMessageIsHandled()
+    void whenMeshInboundQueuePathology2MessageIsReceivedThenMessageIsHandled()
             throws IOException, JMSException, JSONException {
         final MeshMessage meshMessage = new MeshMessage()
-            .setWorkflowId(WorkflowId.PATHOLOGY)
-            .setContent(new String(Files.readAllBytes(getPathologyEdifactResource().getFile().toPath())))
+            .setWorkflowId(WorkflowId.PATHOLOGY_2)
+            .setContent(new String(Files.readAllBytes(getPathology2EdifactResource().getFile().toPath())))
             .setMeshMessageId("12345");
 
         sendToMeshInboundQueue(meshMessage);
@@ -45,7 +45,39 @@ public class InboundMeshQueueTest extends IntegrationBaseTest {
         final Message message = getGpOutboundQueueMessage();
         final String content = parseTextMessage(message);
 
-        final String expectedContent = new String(Files.readAllBytes(getPathologyFhirResource().getFile().toPath()));
+        final String expectedContent = new String(Files.readAllBytes(getPathology2FhirResource().getFile().toPath()));
+
+        assertThat(message.getStringProperty("Checksum")).isEqualTo("BAE9833404E34D8F67B3815FC4C51091");
+
+        JSONAssert.assertEquals(
+            expectedContent,
+            content,
+            new CustomComparator(
+                JSONCompareMode.STRICT,
+                new Customization("id", IGNORE),
+                new Customization("meta.lastUpdated", IGNORE),
+                new Customization("identifier.value", IGNORE),
+                new Customization("entry[*].fullUrl", IGNORE),
+                new Customization("entry[*].resource.**.reference", IGNORE),
+                new Customization("entry[*].resource.id", IGNORE)
+            )
+        );
+    }
+
+    @Test
+    void whenMeshInboundQueuePathology3MessageIsReceivedThenMessageIsHandled()
+            throws IOException, JMSException, JSONException {
+        final MeshMessage meshMessage = new MeshMessage()
+            .setWorkflowId(WorkflowId.PATHOLOGY_3)
+            .setContent(new String(Files.readAllBytes(getPathology3EdifactResource().getFile().toPath())))
+            .setMeshMessageId("12345");
+
+        sendToMeshInboundQueue(meshMessage);
+
+        final Message message = getGpOutboundQueueMessage();
+        final String content = parseTextMessage(message);
+
+        final String expectedContent = new String(Files.readAllBytes(getPathology3FhirResource().getFile().toPath()));
 
         assertThat(message.getStringProperty("Checksum")).isEqualTo("BAE9833404E34D8F67B3815FC4C51091");
 
