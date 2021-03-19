@@ -1,0 +1,104 @@
+{
+  "resourceType": "Bundle",
+  "id": "486094af-acc8-48e3-8c99-76feaaaaa33c",
+  "meta": {
+    "lastUpdated": "2021-03-19T09:38:08.251+00:00",
+    "profile": [
+      "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"
+    ]
+  },
+  "identifier": {
+    "system": "https://tools.ietf.org/html/rfc4122",
+    "value": "bfb435e9-17b5-49e4-888c-e26d6d8326b5"
+  },
+  "type": "message",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:64b7f393-7e82-4aae-a53b-a1c5c40aa16f",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "64b7f393-7e82-4aae-a53b-a1c5c40aa16f",
+        "identifier": [
+          {
+            "system": "https://fhir.nhs.uk/Id/nhs-number",
+            "value": "7000000007"
+          }
+        ],
+        "name": [
+          {
+            "family": "MILLER",
+            "given": [
+              "WINDY",
+              "BRIAN"
+            ],
+            "prefix": [
+              "MR"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1946-09-18",
+        "address": [
+          {
+            "line": [
+              "THE WINDMILL",
+              "WINDMILL HILL"
+            ],
+            "postalCode": "PL1 1AA"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:c454436c-78cc-47c9-a10f-0c338d161dfc",
+      "resource": {
+        "resourceType": "ProcedureRequest",
+        "id": "c454436c-78cc-47c9-a10f-0c338d161dfc",
+        "status": "unknown",
+        "intent": "order",
+        "code": {
+          "text": "unknown"
+        },
+        "subject": {
+          "reference": "urn:uuid:64b7f393-7e82-4aae-a53b-a1c5c40aa16f"
+        },
+        "note": [
+          {
+            "text": "MICROANEURYSM R EYE"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:685524aa-e28f-4d53-be0b-1901121defdd",
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "685524aa-e28f-4d53-be0b-1901121defdd",
+        "identifier": [
+          {
+            "value": "428090/1"
+          }
+        ],
+        "basedOn": [
+          {
+            "reference": "urn:uuid:c454436c-78cc-47c9-a10f-0c338d161dfc"
+          }
+        ],
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "721981007",
+              "display": "Diagnostic studies report"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:64b7f393-7e82-4aae-a53b-a1c5c40aa16f"
+        },
+        "issued": "2003-03-04T17:14:00.000+00:00"
+      }
+    }
+  ]
+}
