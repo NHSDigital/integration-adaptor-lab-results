@@ -1,6 +1,6 @@
 # Volumetric and Performance testing
 
-There are 2 ways how to put load on the Lab Results adaptor in order to measure it's performance.
+There are 2 ways to put load on the Lab Results adaptor in order to measure its performance.
 * sending EDIFACT to MESH mailbox as a laboratory would
 * putting EDIFACT messages directly on `Inbound MESH Queue`
 
