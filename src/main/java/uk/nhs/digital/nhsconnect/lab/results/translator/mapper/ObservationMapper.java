@@ -20,6 +20,7 @@ import org.hl7.fhir.dstu3.model.Specimen;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigationResult;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.RangeDetail;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.TestStatus;
@@ -181,12 +182,10 @@ public class ObservationMapper {
 
         private void mapInterpretation(final LabResult labResult, final Observation observation) {
             // Observation.interpretation = SG18.RSL.7857
-            labResult.getInvestigationResult().ifPresent(investigationResult ->
-                Optional.ofNullable(investigationResult.getDeviatingResultIndicator()).ifPresent(deviation ->
-                    observation.getInterpretation().setText(
-                        deviation.getCode() + " : " + deviation.getDescription())
-                )
-            );
+            labResult.getInvestigationResult()
+                .map(LaboratoryInvestigationResult::getDeviatingResultIndicator)
+                .map(deviation -> deviation.getCode() + " : " + deviation.getDescription())
+                .ifPresent(deviation -> observation.getInterpretation().setText(deviation));
         }
 
         private void mapLaboratoryInvestigationResult(final LabResult labResult, final Observation observation) {
