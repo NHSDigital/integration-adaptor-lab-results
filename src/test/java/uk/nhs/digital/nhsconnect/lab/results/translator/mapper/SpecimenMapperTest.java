@@ -1,7 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
 import org.hl7.fhir.dstu3.model.Annotation;
-import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.DateTimeType;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Patient;
@@ -11,9 +10,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.nhs.digital.nhsconnect.lab.results.model.enums.DateFormat;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.DateFormat;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
@@ -75,11 +74,11 @@ class SpecimenMapperTest {
             "S06+06", // InvestigationSubject
 
             "S16+16", // SpecimenDetails
-            "SPC+TSP+:::Specimen type", // SpecimenCharacteristicType
+            "SPC+TSP+AB12:920::Specimen type", // SpecimenCharacteristicType
             "SEQ++1", // SequenceDetails
 
             "S16+16", // SpecimenDetails
-            "SPC+TSP+:::Specimen type", // SpecimenCharacteristicType
+            "SPC+TSP+AB12:920::Specimen type", // SpecimenCharacteristicType
             "SEQ++2" // SequenceDetails
         ));
 
@@ -88,8 +87,12 @@ class SpecimenMapperTest {
         assertThat(specimens.values()).hasSize(2)
             .allSatisfy(specimen -> assertThat(specimen.getType().getCoding())
                 .hasSize(1)
-                .map(Coding::getDisplay)
-                .allMatch("Specimen type"::equals))
+                .first()
+                .satisfies(coding -> assertAll(
+                    () -> assertThat(coding.getSystem()).isEqualTo("http://snomed.info/sct"),
+                    () -> assertThat(coding.getCode()).isEqualTo("AB12"),
+                    () -> assertThat(coding.getDisplay()).isEqualTo("Specimen type")
+                )))
             .allSatisfy(specimen -> assertThat(specimen.getId()).isEqualTo("test-uuid"));
     }
 

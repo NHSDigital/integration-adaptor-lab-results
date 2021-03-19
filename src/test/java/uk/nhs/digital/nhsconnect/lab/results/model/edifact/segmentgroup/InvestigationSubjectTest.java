@@ -44,14 +44,14 @@ class InvestigationSubjectTest {
 
         investigationSubjectAddress
             .map(UnstructuredAddress::getAddressLines)
-            .contains(new String[] {"FLAT1", "12 BROWNBERRIE AVENUE", "", "LEEDS", ""});
+            .contains(new String[]{"FLAT1", "12 BROWNBERRIE AVENUE", "", "LEEDS", ""});
 
         investigationSubjectAddress
             .map(UnstructuredAddress::getFormat)
             .hasValue("US");
         investigationSubjectAddress
-            .map(UnstructuredAddress::getPostCode)
-            .hasValue("LS18 5PN");
+            .flatMap(UnstructuredAddress::getPostcode)
+            .contains("LS18 5PN");
     }
 
     @Test
