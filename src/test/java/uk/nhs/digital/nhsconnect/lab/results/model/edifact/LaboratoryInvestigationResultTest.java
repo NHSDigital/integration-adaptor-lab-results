@@ -26,6 +26,22 @@ class LaboratoryInvestigationResultTest {
     }
 
     @Test
+    void when_edifact002StringIsPassed_expect_returnALaboratoryInvestigationNumericalResultObject() {
+        final LaboratoryInvestigationResult laboratoryInvestigationNumericalResult =
+            LaboratoryInvestigationResult.fromString("RSL+NV+11.9:7++X 10-9/l+HI");
+
+        assertAll(
+            () -> assertThat(laboratoryInvestigationNumericalResult.getMeasurementValue())
+                .isEqualTo(new BigDecimal("11.9")),
+            () -> assertThat(laboratoryInvestigationNumericalResult.getMeasurementValueComparator())
+                .contains(MeasurementValueComparator.LESS_THAN),
+            () -> assertThat(laboratoryInvestigationNumericalResult.getMeasurementUnit()).isEqualTo("X 10-9/l"),
+            () -> assertThat(laboratoryInvestigationNumericalResult.getDeviatingResultIndicator())
+                .isEqualTo(DeviatingResultIndicator.ABOVE_HIGH_REFERENCE_LIMIT)
+        );
+    }
+
+    @Test
     void when_edifactString1IsPassed_expect_returnALaboratoryInvestigationNumericalResultObject() {
         final LaboratoryInvestigationResult laboratoryInvestigationNumericalResult =
             LaboratoryInvestigationResult.fromString("RSL+NV+11.9:7++:::ng/mL+HI");

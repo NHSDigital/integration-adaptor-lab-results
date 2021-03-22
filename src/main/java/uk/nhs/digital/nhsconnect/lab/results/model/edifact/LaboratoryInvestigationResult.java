@@ -33,6 +33,7 @@ public class LaboratoryInvestigationResult extends Segment {
 
     private static final int MEASUREMENT_UNIT_SECTION = 4;
     private static final int MEASUREMENT_UNIT_INDEX = 3;
+    private static final int MEASUREMENT_UNIT_INDEX_NHS002 = 0;
     private static final int DEVIATING_RESULT_INDICATOR_INDEX = 5;
 
     private final LaboratoryInvestigationResultType resultType;
@@ -108,11 +109,11 @@ public class LaboratoryInvestigationResult extends Segment {
     }
 
     private static String extractMeasurementUnit(String[] keySplit) {
-        if (StringUtils.isNotBlank(keySplit[MEASUREMENT_UNIT_SECTION])) {
-            return Split.byColon(keySplit[MEASUREMENT_UNIT_SECTION])[MEASUREMENT_UNIT_INDEX];
-        }
-
-        return null;
+        return arrayGetSafe(keySplit, MEASUREMENT_UNIT_SECTION)
+            .map(Split::byColon)
+            .flatMap(subFields -> arrayGetSafe(subFields, MEASUREMENT_UNIT_INDEX)
+                .or(() -> arrayGetSafe(subFields, MEASUREMENT_UNIT_INDEX_NHS002)))
+            .orElse(null);
     }
 
     private static String extractDeviatingResultIndicator(String[] keySplit) {
