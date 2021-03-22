@@ -366,6 +366,9 @@
           "value": 2.84,
           "unit": "10*12/L"
         },
+        "interpretation": {
+          "text": "LO : Below low reference limit"
+        },
         "specimen": {
           "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
         },
@@ -464,6 +467,9 @@
           "value": 0.315,
           "unit": "%"
         },
+        "interpretation": {
+          "text": "LO : Below low reference limit"
+        },
         "specimen": {
           "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
         },
@@ -513,6 +519,9 @@
           "value": 111.1,
           "unit": "fL"
         },
+        "interpretation": {
+          "text": "HI : Above high reference limit"
+        },
         "specimen": {
           "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
         },
@@ -561,6 +570,9 @@
         "valueQuantity": {
           "value": 38.7,
           "unit": "pg"
+        },
+        "interpretation": {
+          "text": "HI : Above high reference limit"
         },
         "specimen": {
           "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"

@@ -76,14 +76,14 @@ class InboundMessageHandlerTest {
         throws InterchangeParsingException, MessageParsingException {
 
         final MeshMessage meshMessage = new MeshMessage()
-            .setWorkflowId(WorkflowId.PATHOLOGY);
+            .setWorkflowId(WorkflowId.PATHOLOGY_3);
         when(edifactParser.parse(meshMessage.getContent())).thenThrow(new InterchangeParsingException(
             null, null, null, 1L, true
         ));
 
         final OutboundMeshMessage outboundMeshMessage = new MeshMessage()
-            .setWorkflowId(WorkflowId.PATHOLOGY_ACK);
-        when(outboundMeshMessageBuilder.buildNhsAck(eq(WorkflowId.PATHOLOGY), any(InterchangeParsingException.class)))
+            .setWorkflowId(WorkflowId.PATHOLOGY_3_ACK);
+        when(outboundMeshMessageBuilder.buildNhsAck(eq(WorkflowId.PATHOLOGY_3), any(InterchangeParsingException.class)))
             .thenReturn(outboundMeshMessage);
 
         inboundMessageHandler.handle(meshMessage);
@@ -100,13 +100,13 @@ class InboundMessageHandlerTest {
     @Test
     void handleInvalidMessageMeshMessageRaisesException() throws InterchangeParsingException, MessageParsingException {
         final MeshMessage meshMessage = new MeshMessage()
-            .setWorkflowId(WorkflowId.PATHOLOGY);
+            .setWorkflowId(WorkflowId.PATHOLOGY_3);
         when(edifactParser.parse(meshMessage.getContent())).thenThrow(
             new MessageParsingException(null, null, null, 1L, true, null));
 
         final OutboundMeshMessage outboundMeshMessage = new MeshMessage()
-            .setWorkflowId(WorkflowId.PATHOLOGY_ACK);
-        when(outboundMeshMessageBuilder.buildNhsAck(eq(WorkflowId.PATHOLOGY), any(MessageParsingException.class)))
+            .setWorkflowId(WorkflowId.PATHOLOGY_3_ACK);
+        when(outboundMeshMessageBuilder.buildNhsAck(eq(WorkflowId.PATHOLOGY_3), any(MessageParsingException.class)))
             .thenReturn(outboundMeshMessage);
 
         inboundMessageHandler.handle(meshMessage);
@@ -125,13 +125,13 @@ class InboundMessageHandlerTest {
         throws InterchangeParsingException, MessageParsingException {
 
         final MeshMessage meshMessage = new MeshMessage()
-            .setWorkflowId(WorkflowId.PATHOLOGY);
+            .setWorkflowId(WorkflowId.PATHOLOGY_3);
         when(edifactParser.parse(meshMessage.getContent())).thenReturn(interchange);
 
         final OutboundMeshMessage outboundMeshMessage = new MeshMessage()
-            .setWorkflowId(WorkflowId.PATHOLOGY_ACK);
+            .setWorkflowId(WorkflowId.PATHOLOGY_3_ACK);
         when(outboundMeshMessageBuilder
-            .buildNhsAck(WorkflowId.PATHOLOGY, interchange, Collections.emptyList()))
+            .buildNhsAck(WorkflowId.PATHOLOGY_3, interchange, Collections.emptyList()))
             .thenReturn(outboundMeshMessage);
 
         inboundMessageHandler.handle(meshMessage);
@@ -141,7 +141,7 @@ class InboundMessageHandlerTest {
             () -> verify(edifactToFhirService, never()).convertToFhir(any(Message.class)),
             () -> verify(gpOutboundQueueService, never()).publish(any(MessageProcessingResult.Success.class)),
             () -> verify(outboundMeshMessageBuilder)
-                .buildNhsAck(WorkflowId.PATHOLOGY, interchange, Collections.emptyList()),
+                .buildNhsAck(WorkflowId.PATHOLOGY_3, interchange, Collections.emptyList()),
             () -> verify(meshOutboundQueueService).publish(outboundMeshMessage)
         );
     }
@@ -158,7 +158,7 @@ class InboundMessageHandlerTest {
         when(edifactToFhirService.convertToFhir(message)).thenReturn(bundle);
 
         final OutboundMeshMessage outboundMeshMessage = new MeshMessage()
-            .setWorkflowId(WorkflowId.PATHOLOGY_ACK);
+            .setWorkflowId(WorkflowId.PATHOLOGY_3_ACK);
         when(outboundMeshMessageBuilder.buildNhsAck(any(), eq(interchange), anyList())).thenReturn(outboundMeshMessage);
 
         inboundMessageHandler.handle(meshMessage);
@@ -186,7 +186,7 @@ class InboundMessageHandlerTest {
         when(edifactToFhirService.convertToFhir(message1)).thenReturn(bundle);
 
         final OutboundMeshMessage outboundMeshMessage = new MeshMessage()
-            .setWorkflowId(WorkflowId.PATHOLOGY_ACK);
+            .setWorkflowId(WorkflowId.PATHOLOGY_3_ACK);
         when(outboundMeshMessageBuilder.buildNhsAck(any(), eq(interchange), anyList())).thenReturn(outboundMeshMessage);
 
         inboundMessageHandler.handle(meshMessage);

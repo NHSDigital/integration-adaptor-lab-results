@@ -49,14 +49,14 @@ class NhsAckResponseTest extends IntegrationBaseTest {
         final String expectedNhsAck = readResource(expectedNhsAckFile).replace("\n", "");
 
         final MeshMessage meshMessage = new MeshMessage()
-            .setWorkflowId(WorkflowId.PATHOLOGY)
+            .setWorkflowId(WorkflowId.PATHOLOGY_3)
             .setContent(inputEdifact);
 
         sendToMeshInboundQueue(meshMessage);
 
         final var nhsAck = waitForMeshMessage(getMeshClient());
 
-        assertThat(nhsAck.getWorkflowId()).isEqualTo(WorkflowId.PATHOLOGY_ACK);
+        assertThat(nhsAck.getWorkflowId()).isEqualTo(WorkflowId.PATHOLOGY_3_ACK);
 
         final String nhsAckContent = nhsAck.getContent();
 

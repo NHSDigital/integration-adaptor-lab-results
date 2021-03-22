@@ -45,6 +45,7 @@ dependencies {
     implementation 'org.apache.httpcomponents:httpclient:4.5.13'
     implementation 'org.apache.qpid:qpid-jms-client:0.56.0'
     implementation 'com.heroku.sdk:env-keystore:1.1.6'
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.11.978'
 	implementation 'ca.uhn.hapi.fhir:hapi-fhir-base:5.3.0'
 	implementation 'ca.uhn.hapi.fhir:hapi-fhir-structures-dstu3:5.3.0'
 	implementation 'com.github.spullara.mustache.java:compiler:0.9.7'
@@ -105,6 +106,7 @@ spotbugsMain {
 
 spotbugs {
 	excludeFilter = file("${rootDir}/config/spotbugs/exclude.xml")
+    toolVersion = '4.2.2'
 }
 
 checkstyle {

@@ -57,9 +57,9 @@ class MeshServiceTest {
     @BeforeEach
     void setUp() {
         meshMessage1 = new MeshMessage();
-        meshMessage1.setMeshMessageId(MESSAGE_ID1).setWorkflowId(WorkflowId.PATHOLOGY);
+        meshMessage1.setMeshMessageId(MESSAGE_ID1).setWorkflowId(WorkflowId.PATHOLOGY_2);
         meshMessage2 = new MeshMessage();
-        meshMessage2.setMeshMessageId(MESSAGE_ID2).setWorkflowId(WorkflowId.PATHOLOGY);
+        meshMessage2.setMeshMessageId(MESSAGE_ID2).setWorkflowId(WorkflowId.PATHOLOGY_3);
 
         final long scanIntervalInMilliseconds = 6000L;
         meshService = new MeshService(meshClient,
@@ -160,7 +160,7 @@ class MeshServiceTest {
     void when_intervalPassedAndDownloadedMessageHasAnUnsupportedWorkflow_expect_doNotPublishOrAcknowledgeMessage() {
         final String MESSAGE_ID = "messageId_with_unsupported_workflow";
         final MeshMessage meshMessage = new MeshMessage();
-        meshMessage.setMeshMessageId(MESSAGE_ID).setWorkflowId(WorkflowId.PATHOLOGY_ACK);
+        meshMessage.setMeshMessageId(MESSAGE_ID).setWorkflowId(WorkflowId.PATHOLOGY_3_ACK);
 
         when(meshMailBoxScheduler.hasTimePassed(scanDelayInSeconds)).thenReturn(true);
         when(meshMailBoxScheduler.isEnabled()).thenReturn(true);
@@ -222,7 +222,7 @@ class MeshServiceTest {
     @Test
     void when_intervalHasPassedAndAcknowledgeMeshMessageFails_expect_skipMessageAndDownloadNextOne() {
         final MeshMessage messageForAckError = new MeshMessage();
-        messageForAckError.setMeshMessageId(ERROR_MESSAGE_ID).setWorkflowId(WorkflowId.PATHOLOGY);
+        messageForAckError.setMeshMessageId(ERROR_MESSAGE_ID).setWorkflowId(WorkflowId.PATHOLOGY_3);
 
         when(meshMailBoxScheduler.hasTimePassed(scanDelayInSeconds)).thenReturn(true);
         when(meshMailBoxScheduler.isEnabled()).thenReturn(true);

@@ -10,7 +10,8 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public enum MessageType {
     NHSACK("NHS001", "NHS Acknowledgement MIG variant number 1"),
-    PATHOLOGY("NHS003", "NHS Laboratory Service Report MIG variant number 3"),
+    PATHOLOGY_VARIANT_2("NHS002", "NHS Laboratory Service Report MIG variant number 2"),
+    PATHOLOGY_VARIANT_3("NHS003", "NHS Laboratory Service Report MIG variant number 3"),
     SCREENING("NHS004", "NHS Laboratory Service Report MIG variant number 4");
 
     private final String code;

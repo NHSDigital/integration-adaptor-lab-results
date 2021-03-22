@@ -28,7 +28,7 @@ class InvolvedPartyTest {
         ));
         assertThat(involvedParty.getPerformerNameAndAddress())
             .isPresent()
-            .map(PerformerNameAndAddress::getPartyName)
+            .map(PerformerNameAndAddress::getName)
             .contains("ST JAMES?'S UNIVERSITY HOSPITAL");
     }
 
@@ -42,16 +42,16 @@ class InvolvedPartyTest {
         var requesterNameAndAddress = involvedParty.getRequesterNameAndAddress();
         assertThat(requesterNameAndAddress)
             .isPresent()
-            .map(RequesterNameAndAddress::getName)
-            .hasValue("SCOTT");
+            .flatMap(RequesterNameAndAddress::getName)
+            .contains("SCOTT");
         assertThat(requesterNameAndAddress)
             .isPresent()
-            .map(RequesterNameAndAddress::getCode)
-            .hasValue(HealthcareRegistrationIdentificationCode.GP);
+            .flatMap(RequesterNameAndAddress::getCode)
+            .contains(HealthcareRegistrationIdentificationCode.GP);
         assertThat(requesterNameAndAddress)
             .isPresent()
-            .map(RequesterNameAndAddress::getIdentifier)
-            .hasValue("G3380314");
+            .flatMap(RequesterNameAndAddress::getIdentifier)
+            .contains("G3380314");
     }
 
     @Test
