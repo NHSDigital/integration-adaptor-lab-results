@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 
 import java.time.Duration;
@@ -17,6 +18,7 @@ import java.time.Duration;
 @Getter
 @Setter
 @Slf4j
+@DependsOn({"appInitializer"}) // so that custom TrustStore is loaded before DB connection is initialized
 public class LabResultsMongoClientConfiguration extends AbstractMongoClientConfiguration {
 
     private String database;
