@@ -261,6 +261,7 @@ public class ObservationMapper {
                 .map(FreeTextSegment::getTexts)
                 .map(texts -> String.join(" ", texts))
                 .collect(Collectors.joining("\n")))
+                .map(MappingUtils::unescape)
                 .filter(StringUtils::isNotBlank)
                 .ifPresent(observation::setComment);
         }

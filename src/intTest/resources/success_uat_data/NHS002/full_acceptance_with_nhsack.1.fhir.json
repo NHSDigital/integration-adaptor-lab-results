@@ -14,149 +14,13 @@
   "type": "message",
   "entry": [
     {
-      "fullUrl": "",
-      "resource": {
-        "resourceType": "Practitioner",
-        "id": "3cf4db7d-f1ec-4120-a1e2-89b793c0b69e",
-        "fhir_comments": [
-          "Requester"
-        ],
-        "meta": {
-          "profile": [
-            "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-Practitioner-1"
-          ],
-          "lastUpdated": "2010-02-26T15:41"
-        },
-        "identifier": [
-          {
-            "system": "https://fhir.nhs.uk/Id/sds-user-id",
-            "value": "G9999999"
-          }
-        ],
-        "name": [
-          {
-            "text": "DR A DOCTOR"
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "",
-      "id": "d10e0acd-5dd7-4622-982f-49bfb5f3dbeb",
-      "resource": {
-        "resourceType": "Organization",
-        "fhir_comments": [
-          "Requester"
-        ],
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1"
-          ],
-          "lastUpdated": "2010-02-26T15:41"
-        },
-        "identifier": [
-          {
-            "system": "https://fhir.nhs.uk/Id/ods-organization-code",
-            "value": "L99999"
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "",
-      "resource": {
-        "resourceType": "Organization",
-        "id": "8d2a0213-5ec0-4ff7-8822-230864119bbd",
-        "fhir_comments": [
-          "Provider"
-        ],
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1"
-          ],
-          "lastUpdated": "2010-02-26T15:41"
-        },
-        "identifier": [
-          {
-            "system": "https://fhir.nhs.uk/Id/ods-organization-code",
-            "value": "REF00"
-          }
-        ],
-        "type": [
-          {
-            "coding": [
-              {
-                "system": "http://hl7.org/fhir/organization-type",
-                "code": "dept",
-                "display": "RCHT CLIN IMG"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "",
-      "resource": {
-        "resourceType": "DiagnosticReport",
-        "id": "ca45b44b-1640-4879-a8b6-d17021cfbaab",
-        "meta": {
-          "profile": [
-            "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-DiagnosticReport-1"
-          ],
-          "lastUpdated": "2010-02-26T15:41"
-        },
-        "code": {
-          "coding": {
-            "system": "http://snomed.info/sct",
-            "code": "721981007",
-            "display": "Diagnostic studies report"
-          }
-        },
-        "identifier": [
-          {
-            "system": "",
-            "value": "468158/1"
-          }
-        ],
-        "status": "unknown",
-        "issued": "2007-03-27T12-20:203+00:00",
-        "subject": {
-          "reference": "urn:uuid:8b3a4995-940e-4d59-b13e-05b92780d908"
-        },
-        "performer": [
-          {
-            "actor": {
-              "reference": "urn:uuid:8d2a0213-5ec0-4ff7-8822-230864119bbd"
-            }
-          }
-        ],
-        "specimen": [
-          {
-            "reference": "urn:uuid:d611d5b2-3870-4121-b3ef-3969aa46952a"
-          }
-        ],
-        "result": [
-          {
-            "reference": "urn:uuid:f3c37c38-619d-4936-b726-5cbf37367b16"
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "",
+      "fullUrl": "urn:uuid:88fbfba3-b3f1-44bb-8e1d-f03d34412142",
       "resource": {
         "resourceType": "Patient",
         "id": "8b3a4995-940e-4d59-b13e-05b92780d908",
-        "meta": {
-          "profile": [
-            "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Patient-1"
-          ],
-          "lastUpdated": "2019-11-04"
-        },
-        "identifier": {
-          "value": "C930718"
-        },
+        "identifier": [{
+          "id": "C930718"
+        }],
         "name": [
           {
             "family": "BLESSED",
@@ -178,26 +42,113 @@
       }
     },
     {
-      "fullUrl": "",
+      "fullUrl": "urn:uuid:3cf4db7d-f1ec-4120-a1e2-89b793c0b69e",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "3cf4db7d-f1ec-4120-a1e2-89b793c0b69e",
+        "identifier": [
+          {
+            "system": "https://fhir.nhs.uk/Id/sds-user-id",
+            "value": "G9999999"
+          }
+        ],
+        "name": [
+          {
+            "text": "DR A DOCTOR"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d10e0acd-5dd7-4622-982f-49bfb5f3dbeb",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "d10e0acd-5dd7-4622-982f-49bfb5f3dbeb",
+        "identifier": [
+          {
+            "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+            "value": "L99999"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:8d2a0213-5ec0-4ff7-8822-230864119bbd",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "8d2a0213-5ec0-4ff7-8822-230864119bbd",
+        "identifier": [
+          {
+            "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+            "value": "REF00"
+          }
+        ],
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "dept",
+                "display": "RCHT CLIN IMG"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:ca45b44b-1640-4879-a8b6-d17021cfbaab",
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "ca45b44b-1640-4879-a8b6-d17021cfbaab",
+        "identifier": [
+          {
+            "value": "468158/1"
+          }
+        ],
+        "status": "unknown",
+        "code": {
+          "coding": [{
+            "system": "http://snomed.info/sct",
+            "code": "721981007",
+            "display": "Diagnostic studies report"
+          }]
+        },
+        "subject": {
+          "reference": "urn:uuid:8b3a4995-940e-4d59-b13e-05b92780d908"
+        },
+        "issued": "2007-03-27T12-20:203+00:00",
+        "performer": [
+          {
+            "actor": {
+              "reference": "urn:uuid:8d2a0213-5ec0-4ff7-8822-230864119bbd"
+            }
+          }
+        ],
+        "specimen": [
+          {
+            "reference": "urn:uuid:d611d5b2-3870-4121-b3ef-3969aa46952a"
+          }
+        ],
+        "result": [
+          {
+            "reference": "urn:uuid:f3c37c38-619d-4936-b726-5cbf37367b16"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d611d5b2-3870-4121-b3ef-3969aa46952a",
       "resource": {
         "resourceType": "Specimen",
         "id": "d611d5b2-3870-4121-b3ef-3969aa46952a",
-        "meta": {
-          "profile": [
-            "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Specimen-1"
-          ],
-          "lastUpdated": "2020-02-17"
+        "accessionIdentifier": {
+          "system": "http://lab.acme.org/specimens/2011",
+          "value": "07053229/XR Chest"
         },
-        "identifier": [
-          {
-            "system": "http://lab.acme.org/specimens/2011",
-            "value": "07053229/XR Chest"
-          }
-        ],
         "type": {
           "coding": [
             {
-              "system": "920",
+              "system": "902",
               "code": "T016"
             }
           ]
@@ -205,29 +156,22 @@
         "subject": {
           "reference": "urn:uuid:8b3a4995-940e-4d59-b13e-05b92780d908"
         },
+        "receivedTime": "2007-03-27T09:44:00+00:00",
         "collection": {
           "collectedDateTime": "2007-03-27T09:44:00+00:00"
-        },
-        "receivedTime": "2007-03-27T09:44:00+00:00"
+        }
       }
     },
     {
-      "fullUrl": "",
+      "fullUrl": "urn:uuid:f3c37c38-619d-4936-b726-5cbf37367b16",
       "resource": {
         "resourceType": "Observation",
         "id": "f3c37c38-619d-4936-b726-5cbf37367b16",
-        "meta": {
-          "profile": [
-            "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-Observation-1"
-          ],
-          "lastUpdated": "2010-02-26T15:41"
-        },
         "status": "unknown",
         "code": {
           "coding": [
             {
               "system": "http://read.info/readv2",
-              "code": "",
               "display": "IMAGING XR Chest"
             }
           ]
