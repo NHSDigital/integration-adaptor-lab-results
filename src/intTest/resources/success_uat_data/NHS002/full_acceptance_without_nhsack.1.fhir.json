@@ -14,16 +14,44 @@
   "type": "message",
   "entry": [
     {
+      "fullUrl": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "e33be04b-1024-4dd7-817c-e6de22a88c27",
+        "identifier": [
+          {
+            "system": "https://fhir.nhs.uk/Id/nhs-number",
+            "value": "7000000007"
+          }
+        ],
+        "name": [
+          {
+            "family": "MILLER",
+            "given": [
+              "WINDY",
+              "BRIAN"
+            ],
+            "prefix": ["MR"]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1946-09-18",
+        "address": [
+          {
+            "line": [
+              "THE WINDMILL",
+              "WINDMILL HILL"
+            ],
+            "postalCode": "PL1 1AA"
+          }
+        ]
+      }
+    },
+    {
       "fullUrl": "urn:uuid:4b3d2066-b865-4e22-941a-aa338f9d9340",
       "resource": {
         "resourceType": "Practitioner",
         "id": "4b3d2066-b865-4e22-941a-aa338f9d9340",
-        "meta": {
-          "profile": [
-            "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-Practitioner-1"
-          ],
-          "lastUpdated": "2010-02-26T15:41"
-        },
         "identifier": [
           {
             "system": "https://fhir.nhs.uk/Id/sds-user-id",
@@ -42,12 +70,6 @@
       "resource": {
         "resourceType": "Organization",
         "id": "4a0ebfbc-df97-4e93-b0e9-10917053a87d",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1"
-          ],
-          "lastUpdated": "2010-02-26T15:41"
-        },
         "identifier": [
           {
             "system": "https://fhir.nhs.uk/Id/ods-organization-code",
@@ -61,12 +83,6 @@
       "resource": {
         "resourceType": "Organization",
         "id": "db836f3d-eb20-4894-a218-7bad2fb8d97d",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1"
-          ],
-          "lastUpdated": "2010-02-26T15:41"
-        },
         "identifier": [
           {
             "system": "https://fhir.nhs.uk/Id/ods-organization-code",
@@ -77,104 +93,10 @@
           {
             "coding": [
               {
-                "system": "http://hl7.org/fhir/organization-type",
                 "code": "dept",
                 "display": "TRELISKE HAE/CH"
               }
             ]
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:299776d6-9381-4610-91e7-d6a430f599ae",
-      "resource": {
-        "resourceType": "DiagnosticReport",
-        "id": "299776d6-9381-4610-91e7-d6a430f599ae",
-        "meta": {
-          "profile": [
-            "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-DiagnosticReport-1"
-          ],
-          "lastUpdated": "2010-02-26T15:41"
-        },
-        "code": {
-          "coding": {
-            "system": "http://snomed.info/sct",
-            "code": "721981007",
-            "display": "Diagnostic studies report"
-          }
-        },
-        "identifier": [
-          {
-            "system": "",
-            "value": "428090/1"
-          }
-        ],
-        "status": "unknown",
-        "issued": "2003-03-04T17-14:203+00:00",
-        "basedOn": [
-          {
-            "reference": "urn:uuid:54aaddb8-6033-4ce9-83b7-9be7f7feed98"
-          }
-        ],
-        "subject": {
-          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
-        },
-        "performer": [
-          {
-            "actor": {
-              "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
-            }
-          }
-        ],
-        "specimen": [
-          {
-            "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
-          }
-        ],
-        "result": [
-          {
-            "reference": "urn:uuid:a62797f3-58ae-4abb-b5f3-e29ec286828e"
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27",
-      "resource": {
-        "resourceType": "Patient",
-        "id": "e33be04b-1024-4dd7-817c-e6de22a88c27",
-        "meta": {
-          "profile": [
-            "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Patient-1"
-          ],
-          "lastUpdated": "2019-11-04"
-        },
-        "identifier": [
-          {
-            "system": "https://fhir.nhs.uk/Id/nhs-number",
-            "value": "7000000007"
-          }
-        ],
-        "name": [
-          {
-            "family": "MILLER",
-            "given": [
-              "WINDY",
-              "BRIAN"
-            ],
-            "prefix": "MR"
-          }
-        ],
-        "gender": "male",
-        "birthDate": "1946-09-18",
-        "address": [
-          {
-            "line": [
-              "THE WINDMILL",
-              "WINDMILL HILL"
-            ],
-            "postalCode": "PL1 1AA"
           }
         ]
       }
@@ -185,7 +107,7 @@
         "resourceType": "ProcedureRequest",
         "id": "54aaddb8-6033-4ce9-83b7-9be7f7feed98",
         "status": "unknown",
-        "intent": "unknown",
+        "intent": "order",
         "code": {
           "text": "unknown"
         },
@@ -208,27 +130,65 @@
       }
     },
     {
+      "fullUrl": "urn:uuid:299776d6-9381-4610-91e7-d6a430f599ae",
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "299776d6-9381-4610-91e7-d6a430f599ae",
+        "identifier": [
+          {
+            "value": "428090/1"
+          }
+        ],
+        "basedOn": [
+          {
+            "reference": "urn:uuid:54aaddb8-6033-4ce9-83b7-9be7f7feed98"
+          }
+        ],
+        "status": "unknown",
+        "code": {
+          "coding": [{
+            "system": "http://snomed.info/sct",
+            "code": "721981007",
+            "display": "Diagnostic studies report"
+          }]
+        },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "issued": "2003-03-04T17:14:00.000+00:00",
+        "performer": [
+          {
+            "actor": {
+              "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+            }
+          }
+        ],
+        "specimen": [
+          {
+            "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
+          }
+        ],
+        "result": [
+          {
+            "reference": "urn:uuid:a62797f3-58ae-4abb-b5f3-e29ec286828e"
+          }
+        ]
+      }
+    },
+    {
       "fullUrl": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e",
       "resource": {
         "resourceType": "Specimen",
         "id": "9032b5ab-ce23-495d-8386-35f65ae2a44e",
-        "meta": {
-          "profile": [
-            "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Specimen-1"
-          ],
-          "lastUpdated": "2020-02-17"
+        "accessionIdentifier": {
+          "system": "http://lab.acme.org/specimens/2011",
+          "value": "CH30304/6285Q"
         },
-        "identifier": [
-          {
-            "system": "",
-            "value": "CH30304/6285Q"
-          }
-        ],
         "type": {
           "coding": [
             {
-              "system": "920",
-              "display": "T026"
+              "system": "http://snomed.info/sct",
+              "code": "T026"
             }
           ]
         },
@@ -250,9 +210,8 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
-              "code": "424..",
-              "display": "911"
+              "system": "http://read.info/readv2",
+              "code": "424.."
             }
           ]
         },
@@ -352,15 +311,25 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
-              "code": "423..",
-              "display": "911"
+              "system": "http://read.info/readv2",
+              "code": "423.."
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
         "valueQuantity": {
           "value": 16.7,
           "unit": "g/dl"
+        },
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
         },
         "referenceRange": [
           {
@@ -374,17 +343,6 @@
             }
           }
         ],
-        "subject": {
-          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
-          }
-        ],
-        "specimen": {
-          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
-        },
         "related": [
           {
             "target": {
@@ -403,15 +361,25 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
-              "code": "42H..",
-              "display": "911"
+              "system": "http://read.info/readv2",
+              "code": "42H.."
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
         "valueQuantity": {
           "value": 5.5,
           "unit": "X 10-9/l"
+        },
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
         },
         "referenceRange": [
           {
@@ -425,17 +393,6 @@
             }
           }
         ],
-        "subject": {
-          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
-          }
-        ],
-        "specimen": {
-          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
-        },
         "related": [
           {
             "target": {
@@ -454,15 +411,25 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
-              "code": "42P..",
-              "display": "911"
+              "system": "http://read.info/readv2",
+              "code": "42P.."
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
         "valueQuantity": {
           "value": 178,
           "unit": "X 10-9/l"
+        },
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
         },
         "referenceRange": [
           {
@@ -476,17 +443,6 @@
             }
           }
         ],
-        "subject": {
-          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
-          }
-        ],
-        "specimen": {
-          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
-        },
         "related": [
           {
             "target": {
@@ -505,15 +461,25 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
-              "code": "426..",
-              "display": "911"
+              "system": "http://read.info/readv2",
+              "code": "426.."
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
         "valueQuantity": {
           "value": 5.64,
           "unit": "X 10-12/l"
+        },
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
         },
         "referenceRange": [
           {
@@ -527,17 +493,6 @@
             }
           }
         ],
-        "subject": {
-          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
-          }
-        ],
-        "specimen": {
-          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
-        },
         "related": [
           {
             "target": {
@@ -556,15 +511,25 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
-              "code": "4258.",
-              "display": "911"
+              "system": "http://read.info/readv2",
+              "code": "4258."
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
         "valueQuantity": {
           "value": 0.49,
           "unit": "l/l"
+        },
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
         },
         "referenceRange": [
           {
@@ -578,17 +543,6 @@
             }
           }
         ],
-        "subject": {
-          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
-          }
-        ],
-        "specimen": {
-          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
-        },
         "related": [
           {
             "target": {
@@ -607,15 +561,25 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
-              "code": "42A..",
-              "display": "911"
+              "system": "http://read.info/readv2",
+              "code": "42A.."
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
         "valueQuantity": {
           "value": 86.8,
           "unit": "f/l"
+        },
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
         },
         "referenceRange": [
           {
@@ -629,17 +593,6 @@
             }
           }
         ],
-        "subject": {
-          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
-          }
-        ],
-        "specimen": {
-          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
-        },
         "related": [
           {
             "target": {
@@ -658,15 +611,25 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
-              "code": "428..",
-              "display": "911"
+              "system": "http://read.info/readv2",
+              "code": "428.."
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
         "valueQuantity": {
           "value": 29.6,
           "unit": "pg"
+        },
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
         },
         "referenceRange": [
           {
@@ -680,17 +643,6 @@
             }
           }
         ],
-        "subject": {
-          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
-          }
-        ],
-        "specimen": {
-          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
-        },
         "related": [
           {
             "target": {
@@ -709,15 +661,25 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
-              "code": "429..",
-              "display": "911"
+              "system": "http://read.info/readv2",
+              "code": "429.."
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
         "valueQuantity": {
           "value": 34.1,
           "unit": "g/dl"
+        },
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
         },
         "referenceRange": [
           {
@@ -731,17 +693,6 @@
             }
           }
         ],
-        "subject": {
-          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
-          }
-        ],
-        "specimen": {
-          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
-        },
         "related": [
           {
             "target": {
@@ -760,18 +711,26 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
-              "code": "42J..",
-              "display": "911"
+              "system": "http://read.info/readv2",
+              "code": "42J.."
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
         "valueQuantity": {
           "value": 3.66,
           "unit": "X 10-9/l"
         },
-        "note": {
-          "text": "66.3%"
+        "comment": "66.3%",
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
         },
         "referenceRange": [
           {
@@ -785,17 +744,6 @@
             }
           }
         ],
-        "subject": {
-          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
-          }
-        ],
-        "specimen": {
-          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
-        },
         "related": [
           {
             "target": {
@@ -814,18 +762,26 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
-              "code": "42N..",
-              "display": "911"
+              "system": "http://read.info/readv2",
+              "code": "42N.."
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
         "valueQuantity": {
           "value": 0.25,
           "unit": "X 10-9/l"
         },
-        "note": {
-          "text": "4.5%"
+        "comment": "4.5%",
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
         },
         "referenceRange": [
           {
@@ -839,17 +795,6 @@
             }
           }
         ],
-        "subject": {
-          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
-          }
-        ],
-        "specimen": {
-          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
-        },
         "related": [
           {
             "target": {
@@ -868,19 +813,29 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
-              "code": "42K..",
-              "display": "911"
+              "system": "http://read.info/readv2",
+              "code": "42K.."
             }
           ]
         },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
         "valueQuantity": {
           "value": 0.08,
-          "unit": "X 10-9/l",
-          "comparator": "<"
+          "unit": "X 10-9/l"
         },
-        "note": {
-          "text": "1.5%"
+        "interpretation": {
+          "text": "LO : Below low reference limit"
+        },
+        "comment": "1.5%",
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
         },
         "referenceRange": [
           {
@@ -894,17 +849,6 @@
             }
           }
         ],
-        "subject": {
-          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
-          }
-        ],
-        "specimen": {
-          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
-        },
         "related": [
           {
             "target": {
@@ -923,29 +867,11 @@
         "code": {
           "coding": [
             {
-              "system": "http://loinc.org",
-              "code": "42L..",
-              "display": "911"
+              "system": "http://read.info/readv2",
+              "code": "42L.."
             }
           ]
         },
-        "valueQuantity": {
-          "value": 0.04,
-          "unit": "X 10-9/l"
-        },
-        "note": {
-          "text": "0.7%"
-        },
-        "referenceRange": [
-          {
-            "low": {
-              "value": 0.02
-            },
-            "high": {
-              "value": 0.1
-            }
-          }
-        ],
         "subject": {
           "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
         },
@@ -954,9 +880,26 @@
             "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
           }
         ],
+        "valueQuantity": {
+          "value": 0.04,
+          "unit": "X 10-9/l"
+        },
+        "comment": "0.7%",
         "specimen": {
           "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
         },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 0.02,
+              "unit": "X 10-9/l"
+            },
+            "high": {
+              "value": 0.1,
+              "unit": "X 10-9/l"
+            }
+          }
+        ],
         "related": [
           {
             "target": {
