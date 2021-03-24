@@ -1,7 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
 import org.junit.jupiter.api.Test;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.enums.CodingType;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -65,8 +64,6 @@ class LaboratoryInvestigationTest {
             .description("")
             .build();
 
-        assertThatThrownBy(laboratoryInvestigation::validate)
-            .isExactlyInstanceOf(EdifactValidationException.class)
-            .hasMessage("INV: Attribute investigationDescription is required");
+        assertThatNoException().isThrownBy(laboratoryInvestigation::validate);
     }
 }
