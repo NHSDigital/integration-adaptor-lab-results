@@ -31,13 +31,6 @@ class LaboratoryInvestigationTest {
     }
 
     @Test
-    void when_buildingSegmentObjectWithoutAnyFields_expect_nullPointerExceptionIsThrown() {
-        assertThatThrownBy(() -> LaboratoryInvestigation.builder().build())
-            .isExactlyInstanceOf(NullPointerException.class)
-            .hasMessage("description is marked non-null but is null");
-    }
-
-    @Test
     void testGetKey() {
         assertThat(new LaboratoryInvestigation(null, CodingType.READ_CODE, ".").getKey()).isEqualTo("INV");
     }

@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatNoException;
-import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -96,11 +95,6 @@ class LaboratoryInvestigationResultTest {
             () -> assertThat(laboratoryInvestigationCodedResult.getCodingType()).contains(CodingType.SNOMED_CT_CODE),
             () -> assertThat(laboratoryInvestigationCodedResult.getDescription()).isEqualTo("Cancer screening")
         );
-    }
-
-    @Test
-    void when_buildingSegmentObjectWithoutAnyFields_expect_nullPointerExceptionIsThrown() {
-        assertThatNullPointerException().isThrownBy(() -> LaboratoryInvestigation.builder().build());
     }
 
     @Test
