@@ -117,7 +117,7 @@
         "subject": {
           "reference": "urn:uuid:fee01efb-85cc-46bd-ad93-b07b1f379ed1"
         },
-        "issued": "2007-03-27T12:20:00.000+01:00",
+        "issued": "2007-03-27T13:13:00.000+01:00",
         "performer": [
           {
             "actor": {
@@ -149,7 +149,7 @@
         "type": {
           "coding": [
             {
-              "system": "902",
+              "system": "http://snomed.info/sct",
               "code": "T016"
             }
           ]
@@ -157,9 +157,9 @@
         "subject": {
           "reference": "urn:uuid:fee01efb-85cc-46bd-ad93-b07b1f379ed1"
         },
-        "receivedTime": "2007-03-27T10:44:00+01:00",
+        "receivedTime": "2007-03-27T12:37:00+01:00",
         "collection": {
-          "collectedDateTime": "2007-03-27T10:44:00+01:00"
+          "collectedDateTime": "2007-03-27T12:37:00+01:00",
         },
       }
     },

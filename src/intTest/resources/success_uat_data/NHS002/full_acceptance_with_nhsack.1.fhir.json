@@ -116,7 +116,7 @@
         "subject": {
           "reference": "urn:uuid:8b3a4995-940e-4d59-b13e-05b92780d908"
         },
-        "issued": "2007-03-27T12:20:00.000+01:00",
+        "issued": "2007-03-27T13:20:00.000+01:00",
         "performer": [
           {
             "actor": {
@@ -148,7 +148,7 @@
         "type": {
           "coding": [
             {
-              "system": "902",
+              "system": "http://snomed.info/sct",
               "code": "T016"
             }
           ]
