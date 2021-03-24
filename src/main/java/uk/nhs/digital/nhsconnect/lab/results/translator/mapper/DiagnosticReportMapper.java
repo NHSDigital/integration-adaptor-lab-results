@@ -14,14 +14,14 @@ import org.hl7.fhir.dstu3.model.Specimen;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
-import uk.nhs.digital.nhsconnect.lab.results.model.enums.ReportStatusCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.ServiceReportDetails;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.ReportStatusCode;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
-import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -98,8 +98,8 @@ public class DiagnosticReportMapper {
 
         private void mapIssued() {
             LocalDateTime dateIssued = serviceReportDetails.getDateIssued().getDateIssued();
-            ZonedDateTime zonedDateTime = dateIssued.atZone(TimestampService.UK_ZONE);
-            fhir.setIssued(Date.from(zonedDateTime.toInstant()));
+            Instant actualDate = dateIssued.toInstant(ZoneOffset.UTC);
+            fhir.setIssued(Date.from(actualDate));
         }
 
         private void mapIdentifier() {
@@ -129,7 +129,7 @@ public class DiagnosticReportMapper {
         }
 
         private void mapObservations() {
-            final Predicate<Observation> isTestGroup =  ob -> ob.getRelated().stream()
+            final Predicate<Observation> isTestGroup = ob -> ob.getRelated().stream()
                 .anyMatch(relation -> relation.getType() == ObservationRelationshipType.HASMEMBER);
             final Predicate<Observation> isUngroupedResult = ob -> ob.getRelated().isEmpty();
 

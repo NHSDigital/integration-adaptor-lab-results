@@ -157,10 +157,10 @@
         "subject": {
           "reference": "urn:uuid:fee01efb-85cc-46bd-ad93-b07b1f379ed1"
         },
-        "receivedTime": "2007-03-27T12:37:00+01:00",
+        "receivedTime": "2007-03-26T12:37:00+01:00",
         "collection": {
-          "collectedDateTime": "2007-03-27T12:37:00+01:00",
-        },
+          "collectedDateTime": "2007-03-26T12:37:00+01:00"
+        }
       }
     },
     {

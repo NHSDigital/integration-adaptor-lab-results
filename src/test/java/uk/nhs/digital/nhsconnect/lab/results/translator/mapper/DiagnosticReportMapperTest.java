@@ -18,11 +18,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
-import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
+import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -76,7 +76,7 @@ class DiagnosticReportMapperTest {
 
         final var result = mapper.mapToDiagnosticReport(message, null, Collections.emptyList(),
             Collections.emptyList(), null, null, null);
-        ZonedDateTime dateIssued = LocalDateTime.of(2010, 02, 25, 15, 41).atZone(TimestampService.UK_ZONE);
+        Instant date = LocalDateTime.of(2010, 02, 25, 15, 41).toInstant(ZoneOffset.UTC);
 
         assertAll(
             () -> assertThat(result.getId()).isEqualTo("resource-id"),
@@ -92,7 +92,7 @@ class DiagnosticReportMapperTest {
                     () -> assertThat(coding.getSystem()).isEqualTo("http://snomed.info/sct")
                 )),
             () -> assertThat(result.getStatus()).isEqualTo(DiagnosticReport.DiagnosticReportStatus.UNKNOWN),
-            () -> assertThat(result.getIssued()).isEqualTo(Date.from(dateIssued.toInstant()))
+            () -> assertThat(result.getIssued()).isEqualTo(Date.from(date))
         );
     }
 

@@ -11,10 +11,10 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.skyscreamer.jsonassert.comparator.CustomComparator;
 import uk.nhs.digital.nhsconnect.lab.results.IntegrationBaseTest;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
-import uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessageParsingException;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId;
 import uk.nhs.digital.nhsconnect.lab.results.uat.common.FailureArgumentsProvider;
 import uk.nhs.digital.nhsconnect.lab.results.uat.common.SuccessArgumentsProvider;
 import uk.nhs.digital.nhsconnect.lab.results.uat.common.TestData;
@@ -22,7 +22,6 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.JmsHeaders;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
-
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,7 +32,7 @@ import static uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId.SCREE
 
 class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
-    private static final String ACK_REQUESTED_REGEX = "(?s)^.*UNB\\+UNOC.*\\+\\+1'\\s*UNH.*$";
+    private static final String ACK_REQUESTED_REGEX = "(?s)^.*UNB\\+(UNOC|UNOB).*\\+\\+1'\\s*UNH.*$";
 
     private static final int GP_OUTBOUND_QUEUE_POLLING_DELAY = 2000;
     private static final int GP_OUTBOUND_QUEUE_POLLING_TIMEOUT = 10000;
@@ -57,13 +56,13 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
      * GP Outbound Queue with the expected FHIR representation of the original message sent
      * (.[messageNumber].fhir.json file having the same name as the .dat). The json files must be numbered in the same
      * order as the messages in the EDIFACT.
-     *
+     * <p>
      * E.g: testMessage.edifact.dat, testMessage.1.fhir.json, testMessage.2.fhir.json
      */
     @ParameterizedTest(name = "[{index}] - {0}")
     @ArgumentsSource(SuccessArgumentsProvider.class)
     void testEdifactIsSuccessfullyProcessedAndPushedToGpOutboundQueue(String testGroupName, TestData testData)
-            throws JMSException, InterchangeParsingException, MessageParsingException, JSONException {
+        throws JMSException, InterchangeParsingException, MessageParsingException, JSONException {
 
         final String edifact = testData.getEdifact();
 
@@ -82,7 +81,7 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
         getLabResultsMeshClient().sendEdifactMessage(outboundMeshMessage);
 
-        for (String expectedMessageBody: testData.getJsonList()) {
+        for (String expectedMessageBody : testData.getJsonList()) {
             Message gpOutboundQueueMessage = getGpOutboundQueueMessage();
             assertThat(gpOutboundQueueMessage).isNotNull();
 
