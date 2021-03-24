@@ -19,9 +19,6 @@ import uk.nhs.digital.nhsconnect.lab.results.model.enums.ReportStatusCode;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +39,7 @@ public class DiagnosticReportMapper {
 
     private final UUIDGenerator uuidGenerator;
     private final ResourceFullUrlGenerator fullUrlGenerator;
+    private final DateFormatMapper dateFormatMapper;
 
     public DiagnosticReport mapToDiagnosticReport(final Message message, Patient patient, List<Specimen> specimens,
                                                   List<Observation> observations, Practitioner performingPractitioner,
@@ -97,9 +95,12 @@ public class DiagnosticReportMapper {
         }
 
         private void mapIssued() {
-            LocalDateTime dateIssued = serviceReportDetails.getDateIssued().getDateIssued();
-            Instant actualDate = dateIssued.toInstant(ZoneOffset.UTC);
-            fhir.setIssued(Date.from(actualDate));
+            Date dateIssued = dateFormatMapper.mapToDate(
+                serviceReportDetails.getDateIssued().getDateFormat(),
+                serviceReportDetails.getDateIssued().getDateIssued()
+            );
+
+            fhir.setIssued(dateIssued);
         }
 
         private void mapIdentifier() {

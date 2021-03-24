@@ -22,6 +22,10 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.JmsHeaders;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,6 +37,7 @@ import static uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId.SCREE
 class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
     private static final String ACK_REQUESTED_REGEX = "(?s)^.*UNB\\+(UNOC|UNOB).*\\+\\+1'\\s*UNH.*$";
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
     private static final int GP_OUTBOUND_QUEUE_POLLING_DELAY = 2000;
     private static final int GP_OUTBOUND_QUEUE_POLLING_TIMEOUT = 10000;
@@ -62,7 +67,7 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
     @ParameterizedTest(name = "[{index}] - {0}")
     @ArgumentsSource(SuccessArgumentsProvider.class)
     void testEdifactIsSuccessfullyProcessedAndPushedToGpOutboundQueue(String testGroupName, TestData testData)
-        throws JMSException, InterchangeParsingException, MessageParsingException, JSONException {
+            throws JMSException, InterchangeParsingException, MessageParsingException, JSONException {
 
         final String edifact = testData.getEdifact();
 
@@ -100,7 +105,43 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
                     new Customization("identifier.value", IGNORE),
                     new Customization("entry[*].fullUrl", IGNORE),
                     new Customization("entry[*].resource.**.reference", IGNORE),
-                    new Customization("entry[*].resource.id", IGNORE)
+                    new Customization("entry[*].resource.id", IGNORE),
+                    new Customization("entry[*].resource.issued", (d1, d2) -> {
+                        try {
+                            Date date1 = dateFormat.parse((String) d1);
+                            Date date2 = dateFormat.parse((String) d2);
+
+                            return date1.toInstant().atZone(ZoneId.of("UTC")).equals(
+                                date2.toInstant().atZone(ZoneId.of("UTC"))
+                            );
+                        } catch (ParseException e) {
+                            return false;
+                        }
+                    }),
+                    new Customization("entry[*].resource.receivedTime", (d1, d2) -> {
+                        try {
+                            Date date1 = dateFormat.parse((String) d1);
+                            Date date2 = dateFormat.parse((String) d2);
+
+                            return date1.toInstant().atZone(ZoneId.of("UTC")).equals(
+                                date2.toInstant().atZone(ZoneId.of("UTC"))
+                            );
+                        } catch (ParseException e) {
+                            return false;
+                        }
+                    }),
+                    new Customization("entry[*].resource.collection.collectedDateTime", (d1, d2) -> {
+                        try {
+                            Date date1 = dateFormat.parse((String) d1);
+                            Date date2 = dateFormat.parse((String) d2);
+
+                            return date1.toInstant().atZone(ZoneId.of("UTC")).equals(
+                                date2.toInstant().atZone(ZoneId.of("UTC"))
+                            );
+                        } catch (ParseException e) {
+                            return false;
+                        }
+                    })
                 )
             );
         }
