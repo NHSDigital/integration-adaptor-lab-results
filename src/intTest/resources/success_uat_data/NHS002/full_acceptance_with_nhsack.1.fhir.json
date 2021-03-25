@@ -116,7 +116,7 @@
         "subject": {
           "reference": "urn:uuid:8b3a4995-940e-4d59-b13e-05b92780d908"
         },
-        "issued": "2007-03-27T13:20:00.000+01:00",
+        "issued": "2007-03-27T12:20:00.000+00:00",
         "performer": [
           {
             "actor": {
@@ -156,9 +156,9 @@
         "subject": {
           "reference": "urn:uuid:8b3a4995-940e-4d59-b13e-05b92780d908"
         },
-        "receivedTime": "2007-03-27T10:44:00+01:00",
+        "receivedTime": "2007-03-27T09:44:00+00:00",
         "collection": {
-          "collectedDateTime": "2007-03-27T10:44:00+01:00"
+          "collectedDateTime": "2007-03-27T09:44:00+00:00"
         }
       }
     },
