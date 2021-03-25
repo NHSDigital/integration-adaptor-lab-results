@@ -4,10 +4,6 @@ import org.assertj.core.api.SoftAssertions;
 import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.skyscreamer.jsonassert.Customization;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.skyscreamer.jsonassert.JSONCompareMode;
-import org.skyscreamer.jsonassert.comparator.CustomComparator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.test.annotation.DirtiesContext;
@@ -84,19 +80,7 @@ public class InboundMeshQueueMultiMessageTest extends IntegrationBaseTest {
         final String messageBody = parseTextMessage(message);
         final String expectedMessageBody = new String(Files.readAllBytes(fhirMessage.getFile().toPath()));
 
-        JSONAssert.assertEquals(
-            expectedMessageBody,
-            messageBody,
-            new CustomComparator(
-                JSONCompareMode.STRICT,
-                new Customization("id", IGNORE),
-                new Customization("meta.lastUpdated", IGNORE),
-                new Customization("identifier.value", IGNORE),
-                new Customization("entry[*].fullUrl", IGNORE),
-                new Customization("entry[*].resource.id", IGNORE),
-                new Customization("entry[*].resource.**.reference", IGNORE)
-            )
-        );
+        assertFhirEquals(expectedMessageBody, messageBody);
     }
 
 }

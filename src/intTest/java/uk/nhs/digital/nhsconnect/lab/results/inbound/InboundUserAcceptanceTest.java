@@ -5,10 +5,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-import org.skyscreamer.jsonassert.Customization;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.skyscreamer.jsonassert.JSONCompareMode;
-import org.skyscreamer.jsonassert.comparator.CustomComparator;
 import uk.nhs.digital.nhsconnect.lab.results.IntegrationBaseTest;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
@@ -22,10 +18,7 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.JmsHeaders;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -95,55 +88,7 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
             String messageBody = parseTextMessage(gpOutboundQueueMessage);
 
-            JSONAssert.assertEquals(
-                expectedMessageBody,
-                messageBody,
-                new CustomComparator(
-                    JSONCompareMode.STRICT,
-                    new Customization("id", IGNORE),
-                    new Customization("meta.lastUpdated", IGNORE),
-                    new Customization("identifier.value", IGNORE),
-                    new Customization("entry[*].fullUrl", IGNORE),
-                    new Customization("entry[*].resource.**.reference", IGNORE),
-                    new Customization("entry[*].resource.id", IGNORE),
-                    new Customization("entry[*].resource.issued", (d1, d2) -> {
-                        try {
-                            Date date1 = DATE_FORMAT.parse((String) d1);
-                            Date date2 = DATE_FORMAT.parse((String) d2);
-
-                            return date1.toInstant().atZone(ZoneId.of("UTC")).equals(
-                                date2.toInstant().atZone(ZoneId.of("UTC"))
-                            );
-                        } catch (ParseException e) {
-                            return false;
-                        }
-                    }),
-                    new Customization("entry[*].resource.receivedTime", (d1, d2) -> {
-                        try {
-                            Date date1 = DATE_FORMAT.parse((String) d1);
-                            Date date2 = DATE_FORMAT.parse((String) d2);
-
-                            return date1.toInstant().atZone(ZoneId.of("UTC")).equals(
-                                date2.toInstant().atZone(ZoneId.of("UTC"))
-                            );
-                        } catch (ParseException e) {
-                            return false;
-                        }
-                    }),
-                    new Customization("entry[*].resource.collection.collectedDateTime", (d1, d2) -> {
-                        try {
-                            Date date1 = DATE_FORMAT.parse((String) d1);
-                            Date date2 = DATE_FORMAT.parse((String) d2);
-
-                            return date1.toInstant().atZone(ZoneId.of("UTC")).equals(
-                                date2.toInstant().atZone(ZoneId.of("UTC"))
-                            );
-                        } catch (ParseException e) {
-                            return false;
-                        }
-                    })
-                )
-            );
+            assertFhirEquals(expectedMessageBody, messageBody);
         }
 
         if (ackRequested) {
