@@ -1,0 +1,30 @@
+server:
+  port: ${LAB_RESULTS_RESPONDER_SERVER_PORT:8081}
+
+logging:
+  level:
+    uk.nhs.digital.nhsconnect.lab.results: ${LAB_RESULTS_RESPONDER_LOGGING_LEVEL:INFO}
+
+management:
+  endpoints:
+    web:
+      base-path: /
+      path-mapping.health: healthcheck
+      exposure:
+        include: info, health, metrics
+
+spring:
+  jms:
+    listener:
+      acknowledge-mode: CLIENT
+
+responder:
+  mode: ${LAB_RESULTS_RESPONDER_MODE:SUCCESS} # SUCCESS, ERROR, RANDOM
+  amqp:
+    brokers: ${LAB_RESULTS_RESPONDER_AMQP_BROKERS:amqp://localhost:5672}
+    gpOutboundQueueName: ${LAB_RESULTS_RESPONDER_OUTBOUND_QUEUE_NAME:lab_results_gp_outbound}
+    gpInboundQueueName: ${LAB_RESULTS_RESPONDER_INBOUND_QUEUE_NAME:lab_results_gp_inbound}
+    exchange: amq.direct
+    username: ${LAB_RESULTS_RESPONDER_AMQP_USERNAME:}
+    password: ${LAB_RESULTS_RESPONDER_AMQP_PASSWORD:}
+    maxRedeliveries: ${LAB_RESULTS_RESPONDER_AMQP_MAX_REDELIVERIES:3}

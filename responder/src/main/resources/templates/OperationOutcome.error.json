@@ -1,0 +1,17 @@
+{
+  "resourceType": "OperationOutcome",
+  "issue": [
+    {
+      "severity": "error",
+      "code": "exception",
+      "details": {
+        "coding": [
+          {
+            "code": "error-123",
+            "display": "Some validation error"
+          }
+        ]
+      }
+    }
+  ]
+}

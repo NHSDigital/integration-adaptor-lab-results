@@ -22,6 +22,7 @@ services:
       - LAB_RESULTS_MESH_OUTBOUND_QUEUE_NAME=lab_results_mesh_outbound
       - LAB_RESULTS_MESH_INBOUND_QUEUE_NAME=lab_results_mesh_inbound
       - LAB_RESULTS_GP_OUTBOUND_QUEUE_NAME=lab_results_gp_outbound
+      - LAB_RESULTS_GP_INBOUND_QUEUE_NAME=lab_results_gp_inbound
       - LAB_RESULTS_MONGO_URI=mongodb://mongodb:27017
       - LAB_RESULTS_MONGO_DATABASE_NAME=labresults
       - LAB_RESULTS_MONGO_HOST=
@@ -147,3 +148,20 @@ services:
   # Enable if you need to inspect the fake-mesh database for any reason
   #    volumes:
   #      - ./fake_mesh_dir:/tmp/fake_mesh_dir
+
+  lab-results-responder:
+    build:
+      context: ./responder/
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - LAB_RESULTS_RESPONDER_LOGGING_LEVEL=INFO
+      - LAB_RESULTS_RESPONDER_SERVER_PORT=8081
+      - LAB_RESULTS_RESPONDER_MODE=SUCCESS
+      - LAB_RESULTS_RESPONDER_AMQP_BROKERS=amqp://activemq:5672
+      - LAB_RESULTS_RESPONDER_OUTBOUND_QUEUE_NAME=lab_results_gp_outbound
+      - LAB_RESULTS_RESPONDER_INBOUND_QUEUE_NAME=lab_results_gp_inbound
+      - LAB_RESULTS_RESPONDER_AMQP_USERNAME
+      - LAB_RESULTS_RESPONDER_AMQP_PASSWORD
+      - LAB_RESULTS_RESPONDER_AMQP_MAX_REDELIVERIES=3
