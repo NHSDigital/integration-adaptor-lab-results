@@ -130,6 +130,7 @@ labresults:
     recipientToMailboxIdMappings: 000000004400001=lab_results_mailbox
       000000024600002=lab_results_mailbox
       000000183500005=lab_results_mailbox
+      110000044300001=lab_results_mailbox
     wakeupIntervalInMilliseconds: 500
     pollingCycleMinimumIntervalInSeconds: 1
     pollingCycleDurationInSeconds: 1

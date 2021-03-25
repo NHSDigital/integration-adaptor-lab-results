@@ -6,9 +6,14 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
+import org.json.JSONException;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.skyscreamer.jsonassert.Customization;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.skyscreamer.jsonassert.ValueMatcher;
+import org.skyscreamer.jsonassert.comparator.CustomComparator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,7 +37,10 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.jms.JMSException;
 import javax.jms.Message;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
@@ -55,7 +63,19 @@ public abstract class IntegrationBaseTest {
     protected static final int POLL_DELAY_MS = 10;
     private static final int JMS_RECEIVE_TIMEOUT = 500;
     protected static final int TIMEOUT_SECONDS = 10;
-    protected static final ValueMatcher<Object> IGNORE = (a, b) -> true;
+    private static final ValueMatcher<Object> IGNORE = (a, b) -> true;
+    private static final ValueMatcher<Object> AS_INSTANTS = (d1, d2) -> {
+        if (Objects.equals(d1, d2)) {
+            return true;
+        }
+        try {
+            var date1 = OffsetDateTime.parse((String) d1);
+            var date2 = OffsetDateTime.parse((String) d2);
+            return date1.toInstant().equals(date2.toInstant());
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    };
 
     @Autowired
     private JmsTemplate jmsTemplate;
@@ -243,5 +263,24 @@ public abstract class IntegrationBaseTest {
 
     protected void sendToMeshInboundQueue(String data) {
         jmsTemplate.send(meshInboundQueueName, session -> session.createTextMessage(data));
+    }
+
+    protected void assertFhirEquals(String expected, String actual) throws JSONException {
+        JSONAssert.assertEquals(
+            expected,
+            actual,
+            new CustomComparator(
+                JSONCompareMode.STRICT,
+                new Customization("id", IGNORE),
+                new Customization("meta.lastUpdated", IGNORE),
+                new Customization("identifier.value", IGNORE),
+                new Customization("entry[*].fullUrl", IGNORE),
+                new Customization("entry[*].resource.**.reference", IGNORE),
+                new Customization("entry[*].resource.id", IGNORE),
+                new Customization("entry[*].resource.issued", AS_INSTANTS),
+                new Customization("entry[*].resource.receivedTime", AS_INSTANTS),
+                new Customization("entry[*].resource.collection.collectedDateTime", AS_INSTANTS)
+            )
+        );
     }
 }

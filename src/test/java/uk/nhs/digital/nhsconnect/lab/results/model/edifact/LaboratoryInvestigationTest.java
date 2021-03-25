@@ -1,7 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 
 import org.junit.jupiter.api.Test;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.enums.CodingType;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,13 +27,6 @@ class LaboratoryInvestigationTest {
         assertThat(laboratoryInvestigation)
             .usingRecursiveComparison()
             .isEqualTo(LaboratoryInvestigation.fromString("INV+MQ+42R4.:911::Serum ferritin"));
-    }
-
-    @Test
-    void when_buildingSegmentObjectWithoutAnyFields_expect_nullPointerExceptionIsThrown() {
-        assertThatThrownBy(() -> LaboratoryInvestigation.builder().build())
-            .isExactlyInstanceOf(NullPointerException.class)
-            .hasMessage("description is marked non-null but is null");
     }
 
     @Test
@@ -72,8 +64,6 @@ class LaboratoryInvestigationTest {
             .description("")
             .build();
 
-        assertThatThrownBy(laboratoryInvestigation::validate)
-            .isExactlyInstanceOf(EdifactValidationException.class)
-            .hasMessage("INV: Attribute investigationDescription is required");
+        assertThatNoException().isThrownBy(laboratoryInvestigation::validate);
     }
 }

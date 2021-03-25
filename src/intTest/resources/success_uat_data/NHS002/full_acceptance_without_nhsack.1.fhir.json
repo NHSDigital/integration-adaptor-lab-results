@@ -1,23 +1,23 @@
 {
   "resourceType": "Bundle",
-  "id": "a169ea47-9479-4156-a525-8dad92aefb51",
+  "id": "200cf594-5df0-4bf8-aea6-7be2e3a3fae4",
   "meta": {
-    "lastUpdated": "2021-03-19T15:37:04.332+00:00",
+    "lastUpdated": "2010-02-26T15:41",
     "profile": [
       "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"
     ]
   },
   "identifier": {
     "system": "https://tools.ietf.org/html/rfc4122",
-    "value": "048acab9-cdd2-476c-a372-d8ca8899476b"
+    "value": "e4b15fef-b47b-474b-b679-3c4c6778a7be"
   },
   "type": "message",
   "entry": [
     {
-      "fullUrl": "urn:uuid:45223130-c892-4226-b38a-b04dfdd24249",
+      "fullUrl": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27",
       "resource": {
         "resourceType": "Patient",
-        "id": "45223130-c892-4226-b38a-b04dfdd24249",
+        "id": "e33be04b-1024-4dd7-817c-e6de22a88c27",
         "identifier": [
           {
             "system": "https://fhir.nhs.uk/Id/nhs-number",
@@ -31,9 +31,7 @@
               "WINDY",
               "BRIAN"
             ],
-            "prefix": [
-              "MR"
-            ]
+            "prefix": ["MR"]
           }
         ],
         "gender": "male",
@@ -50,10 +48,41 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:2e4d977a-53c6-4ee6-8330-cd812db56fd8",
+      "fullUrl": "urn:uuid:4b3d2066-b865-4e22-941a-aa338f9d9340",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "4b3d2066-b865-4e22-941a-aa338f9d9340",
+        "identifier": [
+          {
+            "system": "https://fhir.nhs.uk/Id/sds-user-id",
+            "value": "G9304284"
+          }
+        ],
+        "name": [
+          {
+            "text": "DR A DOCTOR"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:4a0ebfbc-df97-4e93-b0e9-10917053a87d",
       "resource": {
         "resourceType": "Organization",
-        "id": "2e4d977a-53c6-4ee6-8330-cd812db56fd8",
+        "id": "4a0ebfbc-df97-4e93-b0e9-10917053a87d",
+        "identifier": [
+          {
+            "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+            "value": "L99999"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "db836f3d-eb20-4894-a218-7bad2fb8d97d",
         "identifier": [
           {
             "system": "https://fhir.nhs.uk/Id/ods-organization-code",
@@ -73,20 +102,25 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:86746f3a-5084-411c-a21a-8bccb2e42fb3",
+      "fullUrl": "urn:uuid:54aaddb8-6033-4ce9-83b7-9be7f7feed98",
       "resource": {
         "resourceType": "ProcedureRequest",
-        "id": "86746f3a-5084-411c-a21a-8bccb2e42fb3",
+        "id": "54aaddb8-6033-4ce9-83b7-9be7f7feed98",
         "status": "unknown",
         "intent": "order",
         "code": {
           "text": "unknown"
         },
         "subject": {
-          "reference": "urn:uuid:45223130-c892-4226-b38a-b04dfdd24249"
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "requester": {
+          "agent": {
+            "reference": "urn:uuid:4a0ebfbc-df97-4e93-b0e9-10917053a87d"
+          }
         },
         "performer": {
-          "reference": "urn:uuid:2e4d977a-53c6-4ee6-8330-cd812db56fd8"
+          "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
         },
         "note": [
           {
@@ -96,10 +130,10 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:e84566c5-3f9f-4b54-b808-acf837bf9486",
+      "fullUrl": "urn:uuid:299776d6-9381-4610-91e7-d6a430f599ae",
       "resource": {
         "resourceType": "DiagnosticReport",
-        "id": "e84566c5-3f9f-4b54-b808-acf837bf9486",
+        "id": "299776d6-9381-4610-91e7-d6a430f599ae",
         "identifier": [
           {
             "value": "428090/1"
@@ -107,27 +141,769 @@
         ],
         "basedOn": [
           {
-            "reference": "urn:uuid:86746f3a-5084-411c-a21a-8bccb2e42fb3"
+            "reference": "urn:uuid:54aaddb8-6033-4ce9-83b7-9be7f7feed98"
           }
         ],
         "status": "unknown",
         "code": {
-          "coding": [
-            {
-              "system": "http://snomed.info/sct",
-              "code": "721981007",
-              "display": "Diagnostic studies report"
-            }
-          ]
+          "coding": [{
+            "system": "http://snomed.info/sct",
+            "code": "721981007",
+            "display": "Diagnostic studies report"
+          }]
         },
         "subject": {
-          "reference": "urn:uuid:45223130-c892-4226-b38a-b04dfdd24249"
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
         },
         "issued": "2003-03-04T17:14:00.000+00:00",
         "performer": [
           {
             "actor": {
-              "reference": "urn:uuid:2e4d977a-53c6-4ee6-8330-cd812db56fd8"
+              "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+            }
+          }
+        ],
+        "specimen": [
+          {
+            "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
+          }
+        ],
+        "result": [
+          {
+            "reference": "urn:uuid:a62797f3-58ae-4abb-b5f3-e29ec286828e"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e",
+      "resource": {
+        "resourceType": "Specimen",
+        "id": "9032b5ab-ce23-495d-8386-35f65ae2a44e",
+        "accessionIdentifier": {
+          "system": "http://lab.acme.org/specimens/2011",
+          "value": "CH30304/6285Q"
+        },
+        "type": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "T026"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "receivedTime": "2003-03-04T15:40:00+00:00",
+        "collection": {
+          "collectedDateTime": "2003-03-04T10:30:00+00:00"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:a62797f3-58ae-4abb-b5f3-e29ec286828e",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "a62797f3-58ae-4abb-b5f3-e29ec286828e",
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://read.info/readv2",
+              "code": "424.."
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
+        },
+        "related": [
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:c66c5eda-9d91-41b3-b2e6-6bcbb030f9c6"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:2c151e02-fee0-4af2-99ae-63142d3b21f5"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:1b02c631-1486-47a7-88a6-05e9b823c443"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:43206e93-1ca6-4472-a35d-d014a86fd7c1"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:73768364-1a7e-48a6-ba94-ab81debc553e"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:5bf259ec-9648-441a-b746-8c37bd2a586b"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:a4eb7465-992e-48ed-9eea-3a30c332ff33"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:00047977-3684-490c-8315-b6a35db3c604"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:ae626bb4-fcc2-4e79-a687-ef3bdee33ba7"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:402ce71a-28f1-44d0-b582-b78019b289a0"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:4d435938-de9d-4d9b-835c-839b1dae5043"
+            }
+          },
+          {
+            "type": "has-member",
+            "target": {
+              "reference": "urn:uuid:85f2543e-14bd-46d4-9f2b-9892d05fef25"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:c66c5eda-9d91-41b3-b2e6-6bcbb030f9c6",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "c66c5eda-9d91-41b3-b2e6-6bcbb030f9c6",
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://read.info/readv2",
+              "code": "423.."
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
+        "valueQuantity": {
+          "value": 16.7,
+          "unit": "g/dl"
+        },
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 13.3,
+              "unit": "g/dl"
+            },
+            "high": {
+              "value": 16.7,
+              "unit": "g/dl"
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:a62797f3-58ae-4abb-b5f3-e29ec286828e"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:2c151e02-fee0-4af2-99ae-63142d3b21f5",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "2c151e02-fee0-4af2-99ae-63142d3b21f5",
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://read.info/readv2",
+              "code": "42H.."
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
+        "valueQuantity": {
+          "value": 5.5,
+          "unit": "X 10-9/l"
+        },
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 3.7,
+              "unit": "X 10-9/l"
+            },
+            "high": {
+              "value": 9.5,
+              "unit": "X 10-9/l"
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:a62797f3-58ae-4abb-b5f3-e29ec286828e"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:1b02c631-1486-47a7-88a6-05e9b823c443",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "1b02c631-1486-47a7-88a6-05e9b823c443",
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://read.info/readv2",
+              "code": "42P.."
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
+        "valueQuantity": {
+          "value": 178,
+          "unit": "X 10-9/l"
+        },
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 150,
+              "unit": "X 10-9/l"
+            },
+            "high": {
+              "value": 400,
+              "unit": "X 10-9/l"
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:a62797f3-58ae-4abb-b5f3-e29ec286828e"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:43206e93-1ca6-4472-a35d-d014a86fd7c1",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "43206e93-1ca6-4472-a35d-d014a86fd7c1",
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://read.info/readv2",
+              "code": "426.."
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
+        "valueQuantity": {
+          "value": 5.64,
+          "unit": "X 10-12/l"
+        },
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 4.3,
+              "unit": "X 10-12/l"
+            },
+            "high": {
+              "value": 5.7,
+              "unit": "X 10-12/l"
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:a62797f3-58ae-4abb-b5f3-e29ec286828e"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:73768364-1a7e-48a6-ba94-ab81debc553e",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "73768364-1a7e-48a6-ba94-ab81debc553e",
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://read.info/readv2",
+              "code": "4258."
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
+        "valueQuantity": {
+          "value": 0.49,
+          "unit": "l/l"
+        },
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 0.39,
+              "unit": "l/l"
+            },
+            "high": {
+              "value": 0.50,
+              "unit": "l/l"
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:a62797f3-58ae-4abb-b5f3-e29ec286828e"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:5bf259ec-9648-441a-b746-8c37bd2a586b",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "5bf259ec-9648-441a-b746-8c37bd2a586b",
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://read.info/readv2",
+              "code": "42A.."
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
+        "valueQuantity": {
+          "value": 86.8,
+          "unit": "f/l"
+        },
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 77,
+              "unit": "f/l"
+            },
+            "high": {
+              "value": 98,
+              "unit": "f/l"
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:a62797f3-58ae-4abb-b5f3-e29ec286828e"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:a4eb7465-992e-48ed-9eea-3a30c332ff33",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "a4eb7465-992e-48ed-9eea-3a30c332ff33",
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://read.info/readv2",
+              "code": "428.."
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
+        "valueQuantity": {
+          "value": 29.6,
+          "unit": "pg"
+        },
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 27.3,
+              "unit": "pg"
+            },
+            "high": {
+              "value": 32.6,
+              "unit": "pg"
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:a62797f3-58ae-4abb-b5f3-e29ec286828e"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:00047977-3684-490c-8315-b6a35db3c604",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "00047977-3684-490c-8315-b6a35db3c604",
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://read.info/readv2",
+              "code": "429.."
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
+        "valueQuantity": {
+          "value": 34.1,
+          "unit": "g/dl"
+        },
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 31.6,
+              "unit": "g/dl"
+            },
+            "high": {
+              "value": 34.9,
+              "unit": "g/dl"
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:a62797f3-58ae-4abb-b5f3-e29ec286828e"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:ae626bb4-fcc2-4e79-a687-ef3bdee33ba7",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "ae626bb4-fcc2-4e79-a687-ef3bdee33ba7",
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://read.info/readv2",
+              "code": "42J.."
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
+        "valueQuantity": {
+          "value": 3.66,
+          "unit": "X 10-9/l"
+        },
+        "comment": "66.3%",
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 1.7,
+              "unit": "X 10-9/l"
+            },
+            "high": {
+              "value": 7.5,
+              "unit": "X 10-9/l"
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:a62797f3-58ae-4abb-b5f3-e29ec286828e"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:402ce71a-28f1-44d0-b582-b78019b289a0",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "402ce71a-28f1-44d0-b582-b78019b289a0",
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://read.info/readv2",
+              "code": "42N.."
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
+        "valueQuantity": {
+          "value": 0.25,
+          "unit": "X 10-9/l"
+        },
+        "comment": "4.5%",
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 0.2,
+              "unit": "X 10-9/l"
+            },
+            "high": {
+              "value": 0.6,
+              "unit": "X 10-9/l"
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:a62797f3-58ae-4abb-b5f3-e29ec286828e"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:4d435938-de9d-4d9b-835c-839b1dae5043",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "4d435938-de9d-4d9b-835c-839b1dae5043",
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://read.info/readv2",
+              "code": "42K.."
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
+        "valueQuantity": {
+          "value": 0.08,
+          "unit": "X 10-9/l"
+        },
+        "interpretation": {
+          "text": "LO : Below low reference limit"
+        },
+        "comment": "1.5%",
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 0.1,
+              "unit": "X 10-9/l"
+            },
+            "high": {
+              "value": 0.5,
+              "unit": "X 10-9/l"
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:a62797f3-58ae-4abb-b5f3-e29ec286828e"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:85f2543e-14bd-46d4-9f2b-9892d05fef25",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "85f2543e-14bd-46d4-9f2b-9892d05fef25",
+        "status": "unknown",
+        "code": {
+          "coding": [
+            {
+              "system": "http://read.info/readv2",
+              "code": "42L.."
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:e33be04b-1024-4dd7-817c-e6de22a88c27"
+        },
+        "performer": [
+          {
+            "reference": "urn:uuid:db836f3d-eb20-4894-a218-7bad2fb8d97d"
+          }
+        ],
+        "valueQuantity": {
+          "value": 0.04,
+          "unit": "X 10-9/l"
+        },
+        "comment": "0.7%",
+        "specimen": {
+          "reference": "urn:uuid:9032b5ab-ce23-495d-8386-35f65ae2a44e"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 0.02,
+              "unit": "X 10-9/l"
+            },
+            "high": {
+              "value": 0.1,
+              "unit": "X 10-9/l"
+            }
+          }
+        ],
+        "related": [
+          {
+            "target": {
+              "reference": "urn:uuid:a62797f3-58ae-4abb-b5f3-e29ec286828e"
             }
           }
         ]

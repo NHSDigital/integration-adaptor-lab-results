@@ -225,7 +225,7 @@ public class ObservationMapper {
             // Observation.code = SG18.INV.C847.9930 and SG18.INV.C847.9931
             final var coding = observation.getCode().addCoding();
             labResult.getInvestigation().getCode().ifPresent(coding::setCode);
-            coding.setDisplay(labResult.getInvestigation().getDescription());
+            labResult.getInvestigation().getDescription().ifPresent(coding::setDisplay);
             labResult.getInvestigation().getCodingType()
                 .map(this::getSystemValue)
                 .ifPresent(coding::setSystem);
@@ -261,6 +261,7 @@ public class ObservationMapper {
                 .map(FreeTextSegment::getTexts)
                 .map(texts -> String.join(" ", texts))
                 .collect(Collectors.joining("\n")))
+                .map(MappingUtils::unescape)
                 .filter(StringUtils::isNotBlank)
                 .ifPresent(observation::setComment);
         }
