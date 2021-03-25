@@ -37,7 +37,7 @@ import static uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId.SCREE
 class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
     private static final String ACK_REQUESTED_REGEX = "(?s)^.*UNB\\+(UNOC|UNOB).*\\+\\+1'\\s*UNH.*$";
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
     private static final int GP_OUTBOUND_QUEUE_POLLING_DELAY = 2000;
     private static final int GP_OUTBOUND_QUEUE_POLLING_TIMEOUT = 10000;
@@ -108,8 +108,8 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
                     new Customization("entry[*].resource.id", IGNORE),
                     new Customization("entry[*].resource.issued", (d1, d2) -> {
                         try {
-                            Date date1 = dateFormat.parse((String) d1);
-                            Date date2 = dateFormat.parse((String) d2);
+                            Date date1 = DATE_FORMAT.parse((String) d1);
+                            Date date2 = DATE_FORMAT.parse((String) d2);
 
                             return date1.toInstant().atZone(ZoneId.of("UTC")).equals(
                                 date2.toInstant().atZone(ZoneId.of("UTC"))
@@ -120,8 +120,8 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
                     }),
                     new Customization("entry[*].resource.receivedTime", (d1, d2) -> {
                         try {
-                            Date date1 = dateFormat.parse((String) d1);
-                            Date date2 = dateFormat.parse((String) d2);
+                            Date date1 = DATE_FORMAT.parse((String) d1);
+                            Date date2 = DATE_FORMAT.parse((String) d2);
 
                             return date1.toInstant().atZone(ZoneId.of("UTC")).equals(
                                 date2.toInstant().atZone(ZoneId.of("UTC"))
@@ -132,8 +132,8 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
                     }),
                     new Customization("entry[*].resource.collection.collectedDateTime", (d1, d2) -> {
                         try {
-                            Date date1 = dateFormat.parse((String) d1);
-                            Date date2 = dateFormat.parse((String) d2);
+                            Date date1 = DATE_FORMAT.parse((String) d1);
+                            Date date2 = DATE_FORMAT.parse((String) d2);
 
                             return date1.toInstant().atZone(ZoneId.of("UTC")).equals(
                                 date2.toInstant().atZone(ZoneId.of("UTC"))
