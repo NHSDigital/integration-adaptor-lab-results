@@ -14,14 +14,11 @@ import org.hl7.fhir.dstu3.model.Specimen;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
-import uk.nhs.digital.nhsconnect.lab.results.model.enums.ReportStatusCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.ServiceReportDetails;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.ReportStatusCode;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
-import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +39,7 @@ public class DiagnosticReportMapper {
 
     private final UUIDGenerator uuidGenerator;
     private final ResourceFullUrlGenerator fullUrlGenerator;
+    private final DateFormatMapper dateFormatMapper;
 
     public DiagnosticReport mapToDiagnosticReport(final Message message, Patient patient, List<Specimen> specimens,
                                                   List<Observation> observations, Practitioner performingPractitioner,
@@ -97,9 +95,12 @@ public class DiagnosticReportMapper {
         }
 
         private void mapIssued() {
-            LocalDateTime dateIssued = serviceReportDetails.getDateIssued().getDateIssued();
-            ZonedDateTime zonedDateTime = dateIssued.atZone(TimestampService.UK_ZONE);
-            fhir.setIssued(Date.from(zonedDateTime.toInstant()));
+            Date dateIssued = dateFormatMapper.mapToDate(
+                serviceReportDetails.getDateIssued().getDateFormat(),
+                serviceReportDetails.getDateIssued().getDateIssued()
+            );
+
+            fhir.setIssued(dateIssued);
         }
 
         private void mapIdentifier() {
@@ -129,7 +130,7 @@ public class DiagnosticReportMapper {
         }
 
         private void mapObservations() {
-            final Predicate<Observation> isTestGroup =  ob -> ob.getRelated().stream()
+            final Predicate<Observation> isTestGroup = ob -> ob.getRelated().stream()
                 .anyMatch(relation -> relation.getType() == ObservationRelationshipType.HASMEMBER);
             final Predicate<Observation> isUngroupedResult = ob -> ob.getRelated().isEmpty();
 

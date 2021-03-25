@@ -3,7 +3,6 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.Split;
@@ -28,10 +27,10 @@ public class LaboratoryInvestigation extends Segment {
     private static final String KEY = "INV";
     private static final String QUALIFIER = "MQ";
     public static final String KEY_QUALIFIER = KEY + PLUS_SEPARATOR + QUALIFIER;
+    private static final int DESCRIPTION_INDEX = 3;
 
     private final String code;
     private final CodingType codingType;
-    @NonNull
     private final String description;
 
     @SuppressWarnings("checkstyle:MagicNumber")
@@ -45,7 +44,8 @@ public class LaboratoryInvestigation extends Segment {
         final String investigationCode = Split.byColon(keySplit[2])[0];
         final CodingType investigationCodeType = StringUtils.isNotBlank(Split.byColon(keySplit[2])[1])
             ? CodingType.fromCode(Split.byColon(keySplit[2])[1]) : null;
-        final String investigationDescription = Split.byColon(keySplit[2])[3];
+        final String investigationDescription = Split.byColon(keySplit[2]).length > (DESCRIPTION_INDEX - 1)
+            ? Split.byColon(keySplit[2])[3] : null;
 
         return LaboratoryInvestigation.builder()
             .code(investigationCode)
@@ -62,15 +62,15 @@ public class LaboratoryInvestigation extends Segment {
         return Optional.ofNullable(codingType);
     }
 
+    public Optional<String> getDescription() {
+        return Optional.ofNullable(description);
+    }
+
     @Override
     public String getKey() {
         return KEY;
     }
 
     @Override
-    public void validate() throws EdifactValidationException {
-        if (StringUtils.isBlank(description)) {
-            throw new EdifactValidationException(KEY + ": Attribute investigationDescription is required");
-        }
-    }
+    public void validate() throws EdifactValidationException { }
 }

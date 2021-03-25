@@ -9,7 +9,6 @@ import uk.nhs.digital.nhsconnect.lab.results.model.enums.ReferenceType;
 import uk.nhs.digital.nhsconnect.lab.results.model.enums.ReportStatusCode;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,8 +16,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ServiceReportDetailsTest {
-    private static final LocalDateTime EXPECTED_DATE_TIME =
-        LocalDateTime.of(2020, 1, 28, 9, 57);
 
     @Test
     void testIndicator() {
@@ -80,7 +77,7 @@ class ServiceReportDetailsTest {
 
         reportDateIssued
             .extracting(DiagnosticReportDateIssued::getDateIssued)
-            .isEqualTo(EXPECTED_DATE_TIME);
+            .isEqualTo("202001280957");
     }
 
     @Test
