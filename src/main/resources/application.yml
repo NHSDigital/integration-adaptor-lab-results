@@ -44,7 +44,7 @@ labresults:
     autoIndexCreation: ${LAB_RESULTS_MONGO_AUTO_INDEX_CREATION:true}
     ttl: ${LAB_RESULTS_MONGO_TTL:P30D}
   mesh:
-    mailboxId: ${LAB_RESULTS_MESH_MAILBOX_ID:gp_mailbox}
+    mailboxId: ${LAB_RESULTS_MESH_MAILBOX_ID:lab_results_mailbox}
     mailboxPassword: ${LAB_RESULTS_MESH_MAILBOX_PASSWORD:password}
     sharedKey: ${LAB_RESULTS_MESH_SHARED_KEY:SharedKey}
     host: ${LAB_RESULTS_MESH_HOST:https://localhost:8829/messageexchange/}
@@ -132,9 +132,9 @@ labresults:
       3WJ4bVSmp3MOQ2EF4zrAl4fXEd4lS3JxKtzbHFbSogAmPFnuP8wIDWTDgfEq
       -----END RSA PRIVATE KEY-----}
     subCAcert: ${LAB_RESULTS_MESH_SUB_CA:}
-    recipientToMailboxIdMappings: ${LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS:000000004400001=lab_results_mailbox
-      000000024600002=lab_results_mailbox
-      000000183500005=lab_results_mailbox}
+    recipientToMailboxIdMappings: ${LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS:000000004400001=lab_results_ack_mailbox
+      000000024600002=lab_results_ack_mailbox
+      000000183500005=lab_results_ack_mailbox}
     wakeupIntervalInMilliseconds: ${LAB_RESULTS_MESH_CLIENT_WAKEUP_INTERVAL_IN_MILLISECONDS:60000}
     pollingCycleMinimumIntervalInSeconds: ${LAB_RESULTS_MESH_POLLING_CYCLE_MINIMUM_INTERVAL_IN_SECONDS:300}
     pollingCycleDurationInSeconds: ${LAB_RESULTS_MESH_POLLING_CYCLE_DURATION_IN_SECONDS:285}

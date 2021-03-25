@@ -14,14 +14,14 @@ export SHARED_KEY='SharedKey'
 export HOST='localhost:8829'
 
 # path to the file containing the fake-mesh private key.
-export OPENTEST_ENDPOINT_PRIVATE_KEY="./fakemesh.ca.key.pem"
+export MESH_ENDPOINT_PRIVATE_KEY="./fakemesh.ca.key.pem"
 
 # path the file containg the fake-mesh endpoint certificate.
-export OPENTEST_ENDPOINT_CERT="./fakemesh.ca.cert.pem"
+export MESH_ENDPOINT_CERT="./fakemesh.ca.cert.pem"
 
 # (optional) provide different flags / options for the curl command
 #export CURL_FLAGS="-s -i -k -o /dev/null"
 
 # WorkflowID used to send MESH messages.
 # Can be either PATH_MEDRPT_V3, PATH_MEDRPT_V3_ACK, SCRN_BCS_MEDRPT_V4 or SCRN_BCS_MEDRPT_V4_ACK.
-export WORKFLOW_ID=PATH_MEDRPT_V3
+export WORKFLOW_ID=SCRN_BCS_MEDRPT_V4

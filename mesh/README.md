@@ -6,8 +6,8 @@ A command line tool to use with [NHS Digital's MESH API](https://meshapi.docs.ap
 
 Copy `env.example.sh` to `env.sh` and fill in the values as described in the comments and below.
 
-You **MUST** provide files containing **your** OpenTest endpoint private key and endpoint certificate.
-These can be found in your OpenTest welcome email. Copy the values into either the path/files used by default
+You **MUST** provide files containing **your** MESH private key and endpoint certificate.
+Copy the values into either the path/files used by default
 (see `env.example.sh` for instruction) or to paths/files of your choosing (provided you set the variables
 accordingly)
 

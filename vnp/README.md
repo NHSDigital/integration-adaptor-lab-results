@@ -14,9 +14,9 @@ Use the MESH Client script to send the same file multiple times to a given MESH 
 
 Example:
 
-    ./mesh.sh send gp_mailbox "@../src/intTest/resources/edifact/pathology.edifact.dat" 3 
+    for ((i = 1 ; i <= 3; i++)); do ./mesh.sh send lab_results_mailbox "@../src/intTest/resources/edifact/pathology.edifact.dat"; done
 
-will send the content of a file located at `../src/intTest/resources/edifact/pathology.edifact.dat` to `gp_mailbox` MESH mailbox 3 times.
+will send the content of a file located at `../src/intTest/resources/edifact/pathology.edifact.dat` to `lab_results_mailbox` MESH mailbox 3 times.
 
 ## Sending EDIFACT to `Inbound MESH Queue`
 
