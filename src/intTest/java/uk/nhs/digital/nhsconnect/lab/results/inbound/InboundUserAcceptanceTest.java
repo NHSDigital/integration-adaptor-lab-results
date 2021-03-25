@@ -18,7 +18,6 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.JmsHeaders;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
-import java.text.SimpleDateFormat;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,7 +29,6 @@ import static uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId.SCREE
 class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
     private static final String ACK_REQUESTED_REGEX = "(?s)^.*UNB\\+(UNOC|UNOB).*\\+\\+1'\\s*UNH.*$";
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
     private static final int GP_OUTBOUND_QUEUE_POLLING_DELAY = 2000;
     private static final int GP_OUTBOUND_QUEUE_POLLING_TIMEOUT = 10000;
