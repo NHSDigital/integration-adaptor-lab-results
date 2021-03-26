@@ -24,4 +24,4 @@ export MESH_ENDPOINT_CERT="./fakemesh.ca.cert.pem"
 
 # WorkflowID used to send MESH messages.
 # Can be either PATH_MEDRPT_V3, PATH_MEDRPT_V3_ACK, SCRN_BCS_MEDRPT_V4 or SCRN_BCS_MEDRPT_V4_ACK.
-export WORKFLOW_ID=SCRN_BCS_MEDRPT_V4
+export WORKFLOW_ID=PATH_MEDRPT_V3
