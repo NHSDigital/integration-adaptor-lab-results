@@ -10,11 +10,6 @@
 
 To help you begin using the Lab Results Adaptor we provide shell scripts and Docker Compose configurations.
 
-## Pre-requisites
-
-To get running make sure you have an OpenTest environment setup. The project also includes mock dependencies for local
-testing and development.
-
 ## Clone the repository
 
 ```bash
@@ -64,6 +59,8 @@ We provide shell scripts in the release/tests directory to help you start testin
 
 * `healthcheck.sh` verifies that the adaptor's healthcheck endpoint is available
 * `send_message.sh` puts an example EDIFACT message on the fake mesh allowing it to be consumed and translated to FHIR by the adaptor
+
+Set all required environment variables as described in MESH Client README [Setup](../mesh/README.md#setup) and [Environment set up](../mesh/README.md#environment-set-up) sections
 
 ```bash
 cd tests/

@@ -14,10 +14,10 @@ export SHARED_KEY='SharedKey'
 export HOST='localhost:8829'
 
 # path to the file containing the fake-mesh private key.
-export OPENTEST_ENDPOINT_PRIVATE_KEY="./fakemesh.ca.key.pem"
+export MESH_ENDPOINT_PRIVATE_KEY="./fakemesh.ca.key.pem"
 
 # path the file containg the fake-mesh endpoint certificate.
-export OPENTEST_ENDPOINT_CERT="./fakemesh.ca.cert.pem"
+export MESH_ENDPOINT_CERT="./fakemesh.ca.cert.pem"
 
 # (optional) provide different flags / options for the curl command
 #export CURL_FLAGS="-s -i -k -o /dev/null"
