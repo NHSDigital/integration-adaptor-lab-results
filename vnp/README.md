@@ -26,7 +26,7 @@ Wrap any Med Report EDIFACT message into json (example: [pathology_3.edifact.dat
 ```json
 {
     "recipient": null,
-    "workflowId": "SCRN_BCS_MEDRPT_V4",
+    "workflowId": "PATH_MEDRPT_V3",
     "content": "<EDIFACT>",
     "messageSentTimestamp": "2021-03-25T15:31:29.175Z[Europe/London]",
     "meshMessageId": "20210325153127453385_000000111"
