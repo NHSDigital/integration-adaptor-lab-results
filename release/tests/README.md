@@ -4,7 +4,7 @@ The purpose of this tool is to enable automated testing of Lab Results adaptor's
 
 ## Overview
 
-The tool performs following actions:
+The tool performs the following actions:
 1) Sends infrastructure ACK for any NHSACK that already exists in MESH that matches 
 sender, recipient, interchange sequence number and message sequence numbers of a given test EDIFACT file.
 2) Sends given EDIFACT test file to MESH mailbox
