@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.3] - 2021-03-26
+### Added
+- NHS002 translations fully implemented
+- Documentation updated
+- Fixed https://github.com/nhsconnect/integration-adaptor-lab-results/issues/106
+
+### Changed
+n/a
+
+### Removed
+n/a
+
+### Known Issues
+
+Issues with no direct upgrade or patch:
+- Comparison Using Wrong Factors [High Severity][https://snyk.io/vuln/SNYK-JAVA-ORGBOUNCYCASTLE-1052448] in org.bouncycastle:bcprov-jdk15on@1.66 introduced by org.bouncycastle:bcpkix-jdk15on@1.66 > org.bouncycastle:bcprov-jdk15on@1.66
+- Denial of Service (DoS) [Medium Severity][https://snyk.io/vuln/SNYK-JAVA-NETMINIDEV-1078499] in net.minidev:json-smart@2.3 introduced by net.minidev:json-smart@2.3
+- Improper Certificate Validation [Medium Severity][https://snyk.io/vuln/SNYK-JAVA-IONETTY-1042268] in io.netty:netty-handler@4.1.60.Final introduced by io.netty:netty-handler@4.1.60.Final
+
 ## [0.0.2] - 2021-03-19
 ### Added
 - NHS003 and NHS004 translations fully implemented
