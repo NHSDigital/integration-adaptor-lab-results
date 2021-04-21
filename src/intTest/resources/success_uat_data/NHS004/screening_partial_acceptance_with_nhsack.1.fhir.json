@@ -18,6 +18,11 @@
       "resource": {
         "resourceType": "Patient",
         "id": "7ec55442-b603-42d5-be26-6278ec19a4e6",
+        "meta": {
+          "profile": [
+            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Patient-1"
+          ]
+        },
         "name": [
           {
             "family": "ABLE",
@@ -35,6 +40,11 @@
       "resource": {
         "resourceType": "Practitioner",
         "id": "d2a0da67-8d35-450a-bf29-19138edc06be",
+        "meta": {
+          "profile": [
+            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Practitioner-1"
+          ]
+        },
         "name": [
           {
             "text": "BCSP Hub Manager"
@@ -47,6 +57,11 @@
       "resource": {
         "resourceType": "Organization",
         "id": "96ebe70e-0ee6-47aa-bcf1-63da0fef91c8",
+        "meta": {
+          "profile": [
+            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1"
+          ]
+        },
         "type": [
           {
             "coding": [
@@ -64,6 +79,11 @@
       "fullUrl": "urn:uuid:47dfb6a5-12e2-47a8-b057-b36ae501801e",
       "resource": {
         "resourceType": "DiagnosticReport",
+        "meta": {
+          "profile": [
+            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-DiagnosticReport-1"
+          ]
+        },
         "id": "47dfb6a5-12e2-47a8-b057-b36ae501801e",
         "identifier": [
           {
@@ -108,6 +128,11 @@
       "resource": {
         "resourceType": "Specimen",
         "id": "4c8e850b-0cd6-45c5-999b-0809b45371f7",
+        "meta": {
+          "profile": [
+            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Specimen-1"
+          ]
+        },
         "type": {
           "coding": [
             {
@@ -126,6 +151,11 @@
       "resource": {
         "resourceType": "Observation",
         "id": "2e57cea3-06d8-4bfd-a9cd-d9bc66dc192e",
+        "meta": {
+          "profile": [
+            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+          ]
+        },
         "status": "unknown",
         "code": {
           "coding": [

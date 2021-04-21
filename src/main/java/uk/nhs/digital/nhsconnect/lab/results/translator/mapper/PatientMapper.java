@@ -42,6 +42,7 @@ public class PatientMapper {
             .flatMap(InvestigationSubject::getReferenceServiceSubject);
 
         final Patient patient = new Patient();
+        patient.getMeta().addProfile(FhirProfiles.PATIENT);
         patient.setId(uuidGenerator.generateUUID());
 
         final PersonName personName = patientDetails.getName();

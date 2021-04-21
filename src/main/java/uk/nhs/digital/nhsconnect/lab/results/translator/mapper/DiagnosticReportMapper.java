@@ -59,39 +59,40 @@ public class DiagnosticReportMapper {
         private final Practitioner performingPractitioner;
         private final Organization performingOrganization;
         private final ProcedureRequest procedureRequest;
-        private DiagnosticReport fhir;
+        private DiagnosticReport diagnosticReport;
         private ServiceReportDetails serviceReportDetails;
 
         public DiagnosticReport map() {
-            this.fhir = new DiagnosticReport();
+            this.diagnosticReport = new DiagnosticReport();
+            this.diagnosticReport.getMeta().addProfile(FhirProfiles.DIAGNOSTIC_REPORT);
             this.serviceReportDetails = message.getServiceReportDetails();
 
-            fhir.setId(uuidGenerator.generateUUID());
-            // fhir.issued = SG2.DTM
+            diagnosticReport.setId(uuidGenerator.generateUUID());
+            // diagnosticReport.issued = SG2.DTM
             mapIssued();
-            // fhir.basedOn
+            // diagnosticReport.basedOn
             mapBasedOn();
-            // fhir.status
-            fhir.setStatus(STATUS_MAP.get(serviceReportDetails.getStatus().getEvent()));
-            // fhir.identifier
+            // diagnosticReport.status
+            diagnosticReport.setStatus(STATUS_MAP.get(serviceReportDetails.getStatus().getEvent()));
+            // diagnosticReport.identifier
             mapIdentifier();
-            // fhir.code
+            // diagnosticReport.code
             mapCode();
-            // fhir.subject
-            fhir.getSubject().setReference(fullUrlGenerator.generate(patient));
-            // fhir.specimens
+            // diagnosticReport.subject
+            diagnosticReport.getSubject().setReference(fullUrlGenerator.generate(patient));
+            // diagnosticReport.specimens
             mapSpecimens();
-            // fhir.results
+            // diagnosticReport.results
             mapObservations();
-            // fhir.performer
+            // diagnosticReport.performer
             mapPerformer();
 
-            return fhir;
+            return diagnosticReport;
         }
 
         private void mapBasedOn() {
             Optional.ofNullable(procedureRequest).ifPresent(request ->
-                fhir.addBasedOn().setReference(fullUrlGenerator.generate(request)));
+                diagnosticReport.addBasedOn().setReference(fullUrlGenerator.generate(request)));
         }
 
         private void mapIssued() {
@@ -100,23 +101,23 @@ public class DiagnosticReportMapper {
                 serviceReportDetails.getDateIssued().getDateIssued()
             );
 
-            fhir.setIssued(dateIssued);
+            diagnosticReport.setIssued(dateIssued);
         }
 
         private void mapIdentifier() {
             final Identifier identifier = new Identifier();
             identifier.setValue(serviceReportDetails.getReference().getNumber());
-            fhir.addIdentifier(identifier);
+            diagnosticReport.addIdentifier(identifier);
         }
 
         private void mapSpecimens() {
             specimens.stream()
                 .map(fullUrlGenerator::generate)
-                .forEach(reference -> fhir.addSpecimen().setReference(reference));
+                .forEach(reference -> diagnosticReport.addSpecimen().setReference(reference));
         }
 
         private void mapCode() {
-            fhir.getCode().addCoding()
+            diagnosticReport.getCode().addCoding()
                 .setDisplay(CODE_DISPLAY)
                 .setCode(CODE_NUMBER)
                 .setSystem(SNOMED_CODING_SYSTEM);
@@ -126,7 +127,7 @@ public class DiagnosticReportMapper {
             Stream.of(performingOrganization, performingPractitioner)
                 .filter(Objects::nonNull)
                 .map(fullUrlGenerator::generate)
-                .forEach(performerUrl -> fhir.addPerformer().getActor().setReference(performerUrl));
+                .forEach(performerUrl -> diagnosticReport.addPerformer().getActor().setReference(performerUrl));
         }
 
         private void mapObservations() {
@@ -137,7 +138,7 @@ public class DiagnosticReportMapper {
             observations.stream()
                 .filter(isTestGroup.or(isUngroupedResult))
                 .map(fullUrlGenerator::generate)
-                .forEach(reference -> fhir.addResult().setReference(reference));
+                .forEach(reference -> diagnosticReport.addResult().setReference(reference));
         }
     }
 }

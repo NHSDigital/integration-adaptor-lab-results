@@ -18,6 +18,11 @@
       "resource": {
         "resourceType": "Patient",
         "id": "5f622ca2-4f7b-48eb-8924-bc5bbbc71118",
+        "meta": {
+          "profile": [
+            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Patient-1"
+          ]
+        },
         "name": [
           {
             "family": "ABLE",
@@ -35,6 +40,11 @@
       "resource": {
         "resourceType": "Practitioner",
         "id": "92b3254f-35f8-4699-9f1b-88384d74c0be",
+        "meta": {
+          "profile": [
+            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Practitioner-1"
+          ]
+        },
         "name": [
           {
             "text": "BCSP Hub Manager"
@@ -47,6 +57,11 @@
       "resource": {
         "resourceType": "Organization",
         "id": "8989b584-6b01-499a-b391-b3ac5556d1e2",
+        "meta": {
+          "profile": [
+            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1"
+          ]
+        },
         "type": [
           {
             "coding": [
@@ -65,6 +80,11 @@
       "resource": {
         "resourceType": "DiagnosticReport",
         "id": "fc089985-58de-4c24-af74-7892c20ec013",
+        "meta": {
+          "profile": [
+            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-DiagnosticReport-1"
+          ]
+        },
         "identifier": [
           {
             "value": "34/1"
@@ -108,6 +128,11 @@
       "resource": {
         "resourceType": "Specimen",
         "id": "ec639b88-e94d-41b7-87bd-4cc00f29e5be",
+        "meta": {
+          "profile": [
+            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Specimen-1"
+          ]
+        },
         "type": {
           "coding": [
             {
@@ -126,6 +151,11 @@
       "resource": {
         "resourceType": "Observation",
         "id": "45b4403a-a873-428b-94c2-e85ed2bc8c2d",
+        "meta": {
+          "profile": [
+            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+          ]
+        },
         "status": "unknown",
         "code": {
           "coding": [

@@ -12,9 +12,9 @@ import uk.nhs.digital.nhsconnect.lab.results.model.MedicalReport.MedicalReportBu
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class MedicalReportMapper {
 
+    private final PatientMapper patientMapper;
     private final PractitionerMapper practitionerMapper;
     private final ProcedureRequestMapper procedureRequestMapper;
-    private final PatientMapper patientMapper;
     private final OrganizationMapper organizationMapper;
     private final SpecimenMapper specimenMapper;
     private final DiagnosticReportMapper diagnosticReportMapper;

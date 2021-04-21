@@ -63,6 +63,7 @@ public class ProcedureRequestMapper {
         private ProcedureRequest mapPatientClinicalInfo(PatientClinicalInfo patientClinicalInfo) {
             this.patientClinicalInfo = patientClinicalInfo;
             this.procedureRequest = new ProcedureRequest();
+            this.procedureRequest.getMeta().addProfile(FhirProfiles.PROCEDURE_REQUEST);
             mapFreeText();
             mapStatus();
             procedureRequest.setIntent(ProcedureRequestIntent.ORDER);

@@ -271,6 +271,7 @@ public abstract class IntegrationBaseTest {
             actual,
             new CustomComparator(
                 JSONCompareMode.STRICT,
+//                JSONCompareMode.LENIENT,
                 new Customization("id", IGNORE),
                 new Customization("meta.lastUpdated", IGNORE),
                 new Customization("identifier.value", IGNORE),
@@ -280,6 +281,8 @@ public abstract class IntegrationBaseTest {
                 new Customization("entry[*].resource.issued", AS_INSTANTS),
                 new Customization("entry[*].resource.receivedTime", AS_INSTANTS),
                 new Customization("entry[*].resource.collection.collectedDateTime", AS_INSTANTS)
+//                ,
+//                new Customization("entry[*].resource.meta", (a, b) -> true)
             )
         );
     }
