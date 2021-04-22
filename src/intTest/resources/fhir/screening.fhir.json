@@ -1,224 +1,224 @@
 {
-  "resourceType": "Bundle",
-  "id": "bfbbff2b-aa31-455e-8072-43ef3f28a13a",
-  "meta": {
-    "lastUpdated": "2021-03-12T13:36:29.588+00:00",
-    "profile": [
-      "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"
-    ]
-  },
-  "identifier": {
-    "system": "https://tools.ietf.org/html/rfc4122",
-    "value": "7ff987dc-eb21-43f3-9ec6-f9967feabf15"
-  },
-  "type": "message",
-  "entry": [
-    {
-      "fullUrl": "urn:uuid:68f3ed2a-9f5f-4d2d-84a9-0c4aaa5529de",
-      "resource": {
-        "resourceType": "Patient",
-        "id": "68f3ed2a-9f5f-4d2d-84a9-0c4aaa5529de",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Patient-1"
-          ]
-        },
-        "identifier": [
-          {
-            "system": "https://fhir.nhs.uk/Id/nhs-number",
-            "value": "8982821201"
-          }
-        ],
-        "name": [
-          {
-            "family": "GRIMSHAW",
-            "given": [
-              "BRETT"
-            ],
-            "prefix": [
-              "CAPT"
-            ]
-          }
-        ],
-        "gender": "male",
-        "birthDate": "1938-02-06",
-        "address": [
-          {
-            "line": [
-              "HIGHWOOD BUNGALOW",
-              "EXETER",
-              "DEVON"
-            ],
-            "postalCode": "TQ14 4QJ"
-          }
+    "resourceType": "Bundle",
+    "id": "bfbbff2b-aa31-455e-8072-43ef3f28a13a",
+    "meta": {
+        "lastUpdated": "2021-03-12T13:36:29.588+00:00",
+        "profile": [
+            "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"
         ]
-      }
     },
-    {
-      "fullUrl": "urn:uuid:bcbb255a-fd29-4811-97c4-b5d77e8ed731",
-      "resource": {
-        "resourceType": "Practitioner",
-        "id": "bcbb255a-fd29-4811-97c4-b5d77e8ed731",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Practitioner-1"
-          ]
-        },
-        "name": [
-          {
-            "text": "BCSP Hub Manager"
-          }
-        ]
-      }
+    "identifier": {
+        "system": "https://tools.ietf.org/html/rfc4122",
+        "value": "7ff987dc-eb21-43f3-9ec6-f9967feabf15"
     },
-    {
-      "fullUrl": "urn:uuid:fc050c50-8fbb-4b91-a9eb-509d4c6f745d",
-      "resource": {
-        "resourceType": "Organization",
-        "id": "fc050c50-8fbb-4b91-a9eb-509d4c6f745d",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1"
-          ]
-        },
-        "type": [
-          {
-            "coding": [
-              {
-                "code": "dept",
-                "display": "UNKNOWN"
-              }
-            ]
-          }
-        ],
-        "name": "Southern Bowel Cancer Screening Programme Hub"
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:cb5babe7-1ce3-4ce5-9206-08f5145b745b",
-      "resource": {
-        "resourceType": "DiagnosticReport",
-        "id": "cb5babe7-1ce3-4ce5-9206-08f5145b745b",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-DiagnosticReport-1"
-          ]
-        },
-        "identifier": [
-          {
-            "value": "34/1"
-          }
-        ],
-        "status": "unknown",
-        "code": {
-          "coding": [
-            {
-              "system": "http://snomed.info/sct",
-              "code": "721981007",
-              "display": "Diagnostic studies report"
+    "type": "message",
+    "entry": [
+        {
+            "fullUrl": "urn:uuid:68f3ed2a-9f5f-4d2d-84a9-0c4aaa5529de",
+            "resource": {
+                "resourceType": "Patient",
+                "id": "68f3ed2a-9f5f-4d2d-84a9-0c4aaa5529de",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Patient-1"
+                    ]
+                },
+                "identifier": [
+                    {
+                        "system": "https://fhir.nhs.uk/Id/nhs-number",
+                        "value": "8982821201"
+                    }
+                ],
+                "name": [
+                    {
+                        "family": "GRIMSHAW",
+                        "given": [
+                            "BRETT"
+                        ],
+                        "prefix": [
+                            "CAPT"
+                        ]
+                    }
+                ],
+                "gender": "male",
+                "birthDate": "1938-02-06",
+                "address": [
+                    {
+                        "line": [
+                            "HIGHWOOD BUNGALOW",
+                            "EXETER",
+                            "DEVON"
+                        ],
+                        "postalCode": "TQ14 4QJ"
+                    }
+                ]
             }
-          ]
         },
-        "subject": {
-          "reference": "urn:uuid:68f3ed2a-9f5f-4d2d-84a9-0c4aaa5529de"
-        },
-        "issued": "2009-11-10T11:45:00.000+00:00",
-        "performer": [
-          {
-            "actor": {
-              "reference": "urn:uuid:fc050c50-8fbb-4b91-a9eb-509d4c6f745d"
+        {
+            "fullUrl": "urn:uuid:bcbb255a-fd29-4811-97c4-b5d77e8ed731",
+            "resource": {
+                "resourceType": "Practitioner",
+                "id": "bcbb255a-fd29-4811-97c4-b5d77e8ed731",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Practitioner-1"
+                    ]
+                },
+                "name": [
+                    {
+                        "text": "BCSP Hub Manager"
+                    }
+                ]
             }
-          }
-        ],
-        "specimen": [
-          {
-            "reference": "urn:uuid:ad79dabe-2842-4a74-8f09-72cd398fcdd4"
-          }
-        ],
-        "result": [
-          {
-            "reference": "urn:uuid:77251914-ba65-4fc7-8467-d00c1c4b97d1"
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:ad79dabe-2842-4a74-8f09-72cd398fcdd4",
-      "resource": {
-        "resourceType": "Specimen",
-        "id": "ad79dabe-2842-4a74-8f09-72cd398fcdd4",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Specimen-1"
-          ]
         },
-        "type": {
-          "coding": [
-            {
-              "system": "http://snomed.info/sct",
-              "display": "Faeces"
+        {
+            "fullUrl": "urn:uuid:fc050c50-8fbb-4b91-a9eb-509d4c6f745d",
+            "resource": {
+                "resourceType": "Organization",
+                "id": "fc050c50-8fbb-4b91-a9eb-509d4c6f745d",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1"
+                    ]
+                },
+                "type": [
+                    {
+                        "coding": [
+                            {
+                                "code": "dept",
+                                "display": "UNKNOWN"
+                            }
+                        ]
+                    }
+                ],
+                "name": "Southern Bowel Cancer Screening Programme Hub"
             }
-          ]
         },
-        "subject": {
-          "reference": "urn:uuid:68f3ed2a-9f5f-4d2d-84a9-0c4aaa5529de"
+        {
+            "fullUrl": "urn:uuid:cb5babe7-1ce3-4ce5-9206-08f5145b745b",
+            "resource": {
+                "resourceType": "DiagnosticReport",
+                "id": "cb5babe7-1ce3-4ce5-9206-08f5145b745b",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-DiagnosticReport-1"
+                    ]
+                },
+                "identifier": [
+                    {
+                        "value": "34/1"
+                    }
+                ],
+                "status": "unknown",
+                "code": {
+                    "coding": [
+                        {
+                            "system": "http://snomed.info/sct",
+                            "code": "721981007",
+                            "display": "Diagnostic studies report"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "urn:uuid:68f3ed2a-9f5f-4d2d-84a9-0c4aaa5529de"
+                },
+                "issued": "2009-11-10T11:45:00.000+00:00",
+                "performer": [
+                    {
+                        "actor": {
+                            "reference": "urn:uuid:fc050c50-8fbb-4b91-a9eb-509d4c6f745d"
+                        }
+                    }
+                ],
+                "specimen": [
+                    {
+                        "reference": "urn:uuid:ad79dabe-2842-4a74-8f09-72cd398fcdd4"
+                    }
+                ],
+                "result": [
+                    {
+                        "reference": "urn:uuid:77251914-ba65-4fc7-8467-d00c1c4b97d1"
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "urn:uuid:ad79dabe-2842-4a74-8f09-72cd398fcdd4",
+            "resource": {
+                "resourceType": "Specimen",
+                "id": "ad79dabe-2842-4a74-8f09-72cd398fcdd4",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Specimen-1"
+                    ]
+                },
+                "type": {
+                    "coding": [
+                        {
+                            "system": "http://snomed.info/sct",
+                            "display": "Faeces"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "urn:uuid:68f3ed2a-9f5f-4d2d-84a9-0c4aaa5529de"
+                }
+            }
+        },
+        {
+            "fullUrl": "urn:uuid:77251914-ba65-4fc7-8467-d00c1c4b97d1",
+            "resource": {
+                "resourceType": "Observation",
+                "id": "77251914-ba65-4fc7-8467-d00c1c4b97d1",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
+                "status": "unknown",
+                "code": {
+                    "coding": [
+                        {
+                            "system": "http://snomed.info/sct",
+                            "code": "368481000000103",
+                            "display": "Bowel cancer screening result"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "urn:uuid:68f3ed2a-9f5f-4d2d-84a9-0c4aaa5529de"
+                },
+                "performer": [
+                    {
+                        "reference": "urn:uuid:fc050c50-8fbb-4b91-a9eb-509d4c6f745d"
+                    }
+                ],
+                "valueCodeableConcept": {
+                    "coding": [
+                        {
+                            "system": "http://snomed.info/sct",
+                            "code": "375211000000108",
+                            "display": "Bowel cancer screening programme FOB test normal (finding)"
+                        }
+                    ]
+                },
+                "comment": "Normal. Sent following an initial single Negative result or following 2 Negative results after an initial Weak Positive",
+                "specimen": {
+                    "reference": "urn:uuid:ad79dabe-2842-4a74-8f09-72cd398fcdd4"
+                },
+                "referenceRange": [
+                    {
+                        "low": {
+                            "value": 13.3,
+                            "unit": "g/dl"
+                        },
+                        "high": {
+                            "value": 16.7,
+                            "unit": "g/dl"
+                        }
+                    }
+                ]
+            }
         }
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:77251914-ba65-4fc7-8467-d00c1c4b97d1",
-      "resource": {
-        "resourceType": "Observation",
-        "id": "77251914-ba65-4fc7-8467-d00c1c4b97d1",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
-          ]
-        },
-        "status": "unknown",
-        "code": {
-          "coding": [
-            {
-              "system": "http://snomed.info/sct",
-              "code": "368481000000103",
-              "display": "Bowel cancer screening result"
-            }
-          ]
-        },
-        "subject": {
-          "reference": "urn:uuid:68f3ed2a-9f5f-4d2d-84a9-0c4aaa5529de"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:fc050c50-8fbb-4b91-a9eb-509d4c6f745d"
-          }
-        ],
-        "valueCodeableConcept": {
-          "coding": [
-            {
-              "system": "http://snomed.info/sct",
-              "code": "375211000000108",
-              "display": "Bowel cancer screening programme FOB test normal (finding)"
-            }
-          ]
-        },
-        "comment": "Normal. Sent following an initial single Negative result or following 2 Negative results after an initial Weak Positive",
-        "specimen": {
-          "reference": "urn:uuid:ad79dabe-2842-4a74-8f09-72cd398fcdd4"
-        },
-        "referenceRange": [
-          {
-            "low": {
-              "value": 13.3,
-              "unit": "g/dl"
-            },
-            "high": {
-              "value": 16.7,
-              "unit": "g/dl"
-            }
-          }
-        ]
-      }
-    }
-  ]
+    ]
 }

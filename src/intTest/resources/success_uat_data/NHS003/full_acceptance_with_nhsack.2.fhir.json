@@ -1,1044 +1,1044 @@
 {
-  "resourceType": "Bundle",
-  "id": "d8928243-02ca-4cca-9bb3-5da21ecc9785",
-  "meta": {
-    "lastUpdated": "2021-03-08T12:44:36.449+00:00",
-    "profile": [
-      "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"
-    ]
-  },
-  "identifier": {
-    "system": "https://tools.ietf.org/html/rfc4122",
-    "value": "03f52b84-2265-4c85-9d50-c0d53fa29959"
-  },
-  "type": "message",
-  "entry": [
-    {
-      "fullUrl": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f",
-      "resource": {
-        "resourceType": "Patient",
-        "id": "7707bc15-b499-45da-9ec3-345a0267643f",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Patient-1"
-          ]
-        },
-        "identifier": [
-          {
-            "id": "Z77553311"
-          }
-        ],
-        "name": [
-          {
-            "family": "SPRINGATE",
-            "given": [
-              "SYDNEY"
-            ]
-          }
-        ],
-        "birthDate": "1962-11-01",
-        "address": [
-          {
-            "line": [
-              "FLAT1",
-              "1 LUMBY",
-              "PUDSEY",
-              "LEEDS"
-            ],
-            "postalCode": "LS25 5PR"
-          }
+    "resourceType": "Bundle",
+    "id": "d8928243-02ca-4cca-9bb3-5da21ecc9785",
+    "meta": {
+        "lastUpdated": "2021-03-08T12:44:36.449+00:00",
+        "profile": [
+            "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"
         ]
-      }
     },
-    {
-      "fullUrl": "urn:uuid:97b9fbfd-c5aa-4665-a2c9-6d504151a168",
-      "resource": {
-        "resourceType": "Practitioner",
-        "id": "97b9fbfd-c5aa-4665-a2c9-6d504151a168",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Practitioner-1"
-          ]
-        },
-        "identifier": [
-          {
-            "system": "https://fhir.nhs.uk/Id/sds-user-id",
-            "value": "G3380314"
-          }
-        ],
-        "name": [
-          {
-            "text": "SCOTT"
-          }
-        ]
-      }
+    "identifier": {
+        "system": "https://tools.ietf.org/html/rfc4122",
+        "value": "03f52b84-2265-4c85-9d50-c0d53fa29959"
     },
-    {
-      "fullUrl": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a",
-      "resource": {
-        "resourceType": "Organization",
-        "id": "432d6573-a9c5-4d28-8c5b-51b71f9af40a",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1"
-          ]
-        },
-        "type": [
-          {
-            "coding": [
-              {
-                "code": "dept",
-                "display": "Haematology Dept."
-              }
-            ]
-          }
-        ],
-        "name": "ST JAMES'S UNIVERSITY HOSPITAL"
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:46de5ca6-fb83-4ab0-b826-52adae5a9a4e",
-      "resource": {
-        "resourceType": "ProcedureRequest",
-        "id": "46de5ca6-fb83-4ab0-b826-52adae5a9a4e",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-ProcedureRequest-1"
-          ]
-        },
-        "status": "unknown",
-        "intent": "order",
-        "code": {
-          "text": "unknown"
-        },
-        "subject": {
-          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
-        },
-        "requester": {
-          "agent": {
-            "reference": "urn:uuid:97b9fbfd-c5aa-4665-a2c9-6d504151a168"
-          }
-        },
-        "performer": {
-          "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
-        },
-        "note": [
-          {
-            "text": "ON AZATHIOPRINE"
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:1c2ffccb-186a-4193-a12e-f1b2c0bb6cee",
-      "resource": {
-        "resourceType": "DiagnosticReport",
-        "id": "1c2ffccb-186a-4193-a12e-f1b2c0bb6cee",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-DiagnosticReport-1"
-          ]
-        },
-        "identifier": [
-          {
-            "value": "15/CH000041O/200010191704"
-          }
-        ],
-        "basedOn": [
-          {
-            "reference": "urn:uuid:46de5ca6-fb83-4ab0-b826-52adae5a9a4e"
-          }
-        ],
-        "status": "unknown",
-        "code": {
-          "coding": [
-            {
-              "system": "http://snomed.info/sct",
-              "code": "721981007",
-              "display": "Diagnostic studies report"
+    "type": "message",
+    "entry": [
+        {
+            "fullUrl": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f",
+            "resource": {
+                "resourceType": "Patient",
+                "id": "7707bc15-b499-45da-9ec3-345a0267643f",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Patient-1"
+                    ]
+                },
+                "identifier": [
+                    {
+                        "id": "Z77553311"
+                    }
+                ],
+                "name": [
+                    {
+                        "family": "SPRINGATE",
+                        "given": [
+                            "SYDNEY"
+                        ]
+                    }
+                ],
+                "birthDate": "1962-11-01",
+                "address": [
+                    {
+                        "line": [
+                            "FLAT1",
+                            "1 LUMBY",
+                            "PUDSEY",
+                            "LEEDS"
+                        ],
+                        "postalCode": "LS25 5PR"
+                    }
+                ]
             }
-          ]
         },
-        "subject": {
-          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
-        },
-        "issued": "2010-02-25T15:41:00.000+00:00",
-        "performer": [
-          {
-            "actor": {
-              "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+        {
+            "fullUrl": "urn:uuid:97b9fbfd-c5aa-4665-a2c9-6d504151a168",
+            "resource": {
+                "resourceType": "Practitioner",
+                "id": "97b9fbfd-c5aa-4665-a2c9-6d504151a168",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Practitioner-1"
+                    ]
+                },
+                "identifier": [
+                    {
+                        "system": "https://fhir.nhs.uk/Id/sds-user-id",
+                        "value": "G3380314"
+                    }
+                ],
+                "name": [
+                    {
+                        "text": "SCOTT"
+                    }
+                ]
             }
-          }
-        ],
-        "specimen": [
-          {
-            "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
-          }
-        ],
-        "result": [
-          {
-            "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287",
-      "resource": {
-        "resourceType": "Specimen",
-        "id": "365dc55f-5336-4e85-9dd5-ac2dabaa9287",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Specimen-1"
-          ]
         },
-        "accessionIdentifier": {
-          "system": "http://lab.acme.org/specimens/2011",
-          "value": "CH000041OC"
-        },
-        "type": {
-          "coding": [
-            {
-              "system": "http://snomed.info/sct",
-              "display": "VENOUS BLOOD"
+        {
+            "fullUrl": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a",
+            "resource": {
+                "resourceType": "Organization",
+                "id": "432d6573-a9c5-4d28-8c5b-51b71f9af40a",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1"
+                    ]
+                },
+                "type": [
+                    {
+                        "coding": [
+                            {
+                                "code": "dept",
+                                "display": "Haematology Dept."
+                            }
+                        ]
+                    }
+                ],
+                "name": "ST JAMES'S UNIVERSITY HOSPITAL"
             }
-          ]
         },
-        "subject": {
-          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+        {
+            "fullUrl": "urn:uuid:46de5ca6-fb83-4ab0-b826-52adae5a9a4e",
+            "resource": {
+                "resourceType": "ProcedureRequest",
+                "id": "46de5ca6-fb83-4ab0-b826-52adae5a9a4e",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-ProcedureRequest-1"
+                    ]
+                },
+                "status": "unknown",
+                "intent": "order",
+                "code": {
+                    "text": "unknown"
+                },
+                "subject": {
+                    "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+                },
+                "requester": {
+                    "agent": {
+                        "reference": "urn:uuid:97b9fbfd-c5aa-4665-a2c9-6d504151a168"
+                    }
+                },
+                "performer": {
+                    "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+                },
+                "note": [
+                    {
+                        "text": "ON AZATHIOPRINE"
+                    }
+                ]
+            }
         },
-        "collection": {
-          "collectedDateTime": "2010-02-23"
+        {
+            "fullUrl": "urn:uuid:1c2ffccb-186a-4193-a12e-f1b2c0bb6cee",
+            "resource": {
+                "resourceType": "DiagnosticReport",
+                "id": "1c2ffccb-186a-4193-a12e-f1b2c0bb6cee",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-DiagnosticReport-1"
+                    ]
+                },
+                "identifier": [
+                    {
+                        "value": "15/CH000041O/200010191704"
+                    }
+                ],
+                "basedOn": [
+                    {
+                        "reference": "urn:uuid:46de5ca6-fb83-4ab0-b826-52adae5a9a4e"
+                    }
+                ],
+                "status": "unknown",
+                "code": {
+                    "coding": [
+                        {
+                            "system": "http://snomed.info/sct",
+                            "code": "721981007",
+                            "display": "Diagnostic studies report"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+                },
+                "issued": "2010-02-25T15:41:00.000+00:00",
+                "performer": [
+                    {
+                        "actor": {
+                            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+                        }
+                    }
+                ],
+                "specimen": [
+                    {
+                        "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
+                    }
+                ],
+                "result": [
+                    {
+                        "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287",
+            "resource": {
+                "resourceType": "Specimen",
+                "id": "365dc55f-5336-4e85-9dd5-ac2dabaa9287",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Specimen-1"
+                    ]
+                },
+                "accessionIdentifier": {
+                    "system": "http://lab.acme.org/specimens/2011",
+                    "value": "CH000041OC"
+                },
+                "type": {
+                    "coding": [
+                        {
+                            "system": "http://snomed.info/sct",
+                            "display": "VENOUS BLOOD"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+                },
+                "collection": {
+                    "collectedDateTime": "2010-02-23"
+                }
+            }
+        },
+        {
+            "fullUrl": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa",
+            "resource": {
+                "resourceType": "Observation",
+                "id": "dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
+                "status": "unknown",
+                "code": {
+                    "coding": [
+                        {
+                            "system": "http://read.info/readv2",
+                            "code": "424..",
+                            "display": "Full blood count - FBC"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+                },
+                "performer": [
+                    {
+                        "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+                    }
+                ],
+                "specimen": {
+                    "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
+                },
+                "related": [
+                    {
+                        "type": "has-member",
+                        "target": {
+                            "reference": "urn:uuid:36d0b706-a9e1-442e-8ab2-9adc766a5b9c"
+                        }
+                    },
+                    {
+                        "type": "has-member",
+                        "target": {
+                            "reference": "urn:uuid:590fd294-b573-406c-b46a-f0b59ece5da9"
+                        }
+                    },
+                    {
+                        "type": "has-member",
+                        "target": {
+                            "reference": "urn:uuid:8b75b9fb-4182-4d7b-ac34-fd67ff4abb19"
+                        }
+                    },
+                    {
+                        "type": "has-member",
+                        "target": {
+                            "reference": "urn:uuid:89a4c516-be4e-4d6d-b6f8-1bed944de685"
+                        }
+                    },
+                    {
+                        "type": "has-member",
+                        "target": {
+                            "reference": "urn:uuid:4867afeb-0467-4e8e-9e79-98a5e14ded49"
+                        }
+                    },
+                    {
+                        "type": "has-member",
+                        "target": {
+                            "reference": "urn:uuid:8705321a-18fa-49de-9515-14473032757a"
+                        }
+                    },
+                    {
+                        "type": "has-member",
+                        "target": {
+                            "reference": "urn:uuid:8834fb5a-9757-4729-a7ae-3e608899705f"
+                        }
+                    },
+                    {
+                        "type": "has-member",
+                        "target": {
+                            "reference": "urn:uuid:7b736f8a-ab6a-44b4-a804-b50e7e7b0abb"
+                        }
+                    },
+                    {
+                        "type": "has-member",
+                        "target": {
+                            "reference": "urn:uuid:bcc702d1-b557-47b7-bf37-ded54dad86fc"
+                        }
+                    },
+                    {
+                        "type": "has-member",
+                        "target": {
+                            "reference": "urn:uuid:9431a68c-a2dd-44a9-86ee-13630f3da0d6"
+                        }
+                    },
+                    {
+                        "type": "has-member",
+                        "target": {
+                            "reference": "urn:uuid:099ad994-9203-441e-9971-1e2b822947c1"
+                        }
+                    },
+                    {
+                        "type": "has-member",
+                        "target": {
+                            "reference": "urn:uuid:55e15e47-a6f0-4fe6-9a1d-845f0f1d7862"
+                        }
+                    },
+                    {
+                        "type": "has-member",
+                        "target": {
+                            "reference": "urn:uuid:4ac0f7da-f5c7-4d79-9064-35de8bf186fe"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "urn:uuid:36d0b706-a9e1-442e-8ab2-9adc766a5b9c",
+            "resource": {
+                "resourceType": "Observation",
+                "id": "36d0b706-a9e1-442e-8ab2-9adc766a5b9c",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
+                "status": "unknown",
+                "code": {
+                    "coding": [
+                        {
+                            "system": "http://read.info/readv2",
+                            "code": "42H..",
+                            "display": "Total white cell count"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+                },
+                "performer": [
+                    {
+                        "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+                    }
+                ],
+                "valueQuantity": {
+                    "value": 7.6,
+                    "unit": "10*9/L"
+                },
+                "specimen": {
+                    "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
+                },
+                "referenceRange": [
+                    {
+                        "low": {
+                            "value": 4.0
+                        },
+                        "high": {
+                            "value": 11.0
+                        }
+                    }
+                ],
+                "related": [
+                    {
+                        "target": {
+                            "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "urn:uuid:590fd294-b573-406c-b46a-f0b59ece5da9",
+            "resource": {
+                "resourceType": "Observation",
+                "id": "590fd294-b573-406c-b46a-f0b59ece5da9",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
+                "status": "unknown",
+                "code": {
+                    "coding": [
+                        {
+                            "system": "http://read.info/readv2",
+                            "code": "426..",
+                            "display": "Red blood cell (RBC) count"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+                },
+                "performer": [
+                    {
+                        "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+                    }
+                ],
+                "valueQuantity": {
+                    "value": 2.84,
+                    "unit": "10*12/L"
+                },
+                "interpretation": {
+                    "text": "LO : Below low reference limit"
+                },
+                "specimen": {
+                    "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
+                },
+                "referenceRange": [
+                    {
+                        "low": {
+                            "value": 3.8
+                        },
+                        "high": {
+                            "value": 5.4
+                        }
+                    }
+                ],
+                "related": [
+                    {
+                        "target": {
+                            "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "urn:uuid:8b75b9fb-4182-4d7b-ac34-fd67ff4abb19",
+            "resource": {
+                "resourceType": "Observation",
+                "id": "8b75b9fb-4182-4d7b-ac34-fd67ff4abb19",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
+                "status": "unknown",
+                "code": {
+                    "coding": [
+                        {
+                            "system": "http://read.info/readv2",
+                            "code": "423..",
+                            "display": "Haemoglobin estimation"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+                },
+                "performer": [
+                    {
+                        "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+                    }
+                ],
+                "valueQuantity": {
+                    "value": 11.0,
+                    "unit": "g/dL"
+                },
+                "specimen": {
+                    "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
+                },
+                "referenceRange": [
+                    {
+                        "low": {
+                            "value": 10.5
+                        },
+                        "high": {
+                            "value": 15.0
+                        }
+                    }
+                ],
+                "related": [
+                    {
+                        "target": {
+                            "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "urn:uuid:89a4c516-be4e-4d6d-b6f8-1bed944de685",
+            "resource": {
+                "resourceType": "Observation",
+                "id": "89a4c516-be4e-4d6d-b6f8-1bed944de685",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
+                "status": "unknown",
+                "code": {
+                    "coding": [
+                        {
+                            "system": "http://read.info/readv2",
+                            "code": "4258.",
+                            "display": "Haematocrit"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+                },
+                "performer": [
+                    {
+                        "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+                    }
+                ],
+                "valueQuantity": {
+                    "value": 0.315,
+                    "unit": "%"
+                },
+                "interpretation": {
+                    "text": "LO : Below low reference limit"
+                },
+                "specimen": {
+                    "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
+                },
+                "referenceRange": [
+                    {
+                        "low": {
+                            "value": 0.370
+                        },
+                        "high": {
+                            "value": 0.470
+                        }
+                    }
+                ],
+                "related": [
+                    {
+                        "target": {
+                            "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "urn:uuid:4867afeb-0467-4e8e-9e79-98a5e14ded49",
+            "resource": {
+                "resourceType": "Observation",
+                "id": "4867afeb-0467-4e8e-9e79-98a5e14ded49",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
+                "status": "unknown",
+                "code": {
+                    "coding": [
+                        {
+                            "system": "http://read.info/readv2",
+                            "code": "42A..",
+                            "display": "Mean corpuscular volume (MCV)"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+                },
+                "performer": [
+                    {
+                        "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+                    }
+                ],
+                "valueQuantity": {
+                    "value": 111.1,
+                    "unit": "fL"
+                },
+                "interpretation": {
+                    "text": "HI : Above high reference limit"
+                },
+                "specimen": {
+                    "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
+                },
+                "referenceRange": [
+                    {
+                        "low": {
+                            "value": 76
+                        },
+                        "high": {
+                            "value": 100
+                        }
+                    }
+                ],
+                "related": [
+                    {
+                        "target": {
+                            "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "urn:uuid:8705321a-18fa-49de-9515-14473032757a",
+            "resource": {
+                "resourceType": "Observation",
+                "id": "8705321a-18fa-49de-9515-14473032757a",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
+                "status": "unknown",
+                "code": {
+                    "coding": [
+                        {
+                            "system": "http://read.info/readv2",
+                            "code": "428..",
+                            "display": "Mean corpusc. haemoglobin(MCH)"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+                },
+                "performer": [
+                    {
+                        "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+                    }
+                ],
+                "valueQuantity": {
+                    "value": 38.7,
+                    "unit": "pg"
+                },
+                "interpretation": {
+                    "text": "HI : Above high reference limit"
+                },
+                "specimen": {
+                    "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
+                },
+                "referenceRange": [
+                    {
+                        "low": {
+                            "value": 26
+                        },
+                        "high": {
+                            "value": 32
+                        }
+                    }
+                ],
+                "related": [
+                    {
+                        "target": {
+                            "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "urn:uuid:8834fb5a-9757-4729-a7ae-3e608899705f",
+            "resource": {
+                "resourceType": "Observation",
+                "id": "8834fb5a-9757-4729-a7ae-3e608899705f",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
+                "status": "unknown",
+                "code": {
+                    "coding": [
+                        {
+                            "system": "http://read.info/readv2",
+                            "code": "429..",
+                            "display": "Mean corpusc. Hb. conc. (MCHC)"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+                },
+                "performer": [
+                    {
+                        "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+                    }
+                ],
+                "valueQuantity": {
+                    "value": 34.8,
+                    "unit": "g/dL"
+                },
+                "specimen": {
+                    "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
+                },
+                "referenceRange": [
+                    {
+                        "low": {
+                            "value": 30
+                        },
+                        "high": {
+                            "value": 37
+                        }
+                    }
+                ],
+                "related": [
+                    {
+                        "target": {
+                            "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "urn:uuid:7b736f8a-ab6a-44b4-a804-b50e7e7b0abb",
+            "resource": {
+                "resourceType": "Observation",
+                "id": "7b736f8a-ab6a-44b4-a804-b50e7e7b0abb",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
+                "status": "unknown",
+                "code": {
+                    "coding": [
+                        {
+                            "system": "http://read.info/readv2",
+                            "code": "42P..",
+                            "display": "Platelet count"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+                },
+                "performer": [
+                    {
+                        "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+                    }
+                ],
+                "valueQuantity": {
+                    "value": 220,
+                    "unit": "10*9/L"
+                },
+                "specimen": {
+                    "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
+                },
+                "referenceRange": [
+                    {
+                        "low": {
+                            "value": 150
+                        },
+                        "high": {
+                            "value": 600
+                        }
+                    }
+                ],
+                "related": [
+                    {
+                        "target": {
+                            "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "urn:uuid:bcc702d1-b557-47b7-bf37-ded54dad86fc",
+            "resource": {
+                "resourceType": "Observation",
+                "id": "bcc702d1-b557-47b7-bf37-ded54dad86fc",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
+                "status": "unknown",
+                "code": {
+                    "coding": [
+                        {
+                            "system": "http://read.info/readv2",
+                            "code": "42J..",
+                            "display": "Neutrophil count"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+                },
+                "performer": [
+                    {
+                        "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+                    }
+                ],
+                "valueQuantity": {
+                    "value": 7.4,
+                    "unit": "10*9/L"
+                },
+                "specimen": {
+                    "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
+                },
+                "referenceRange": [
+                    {
+                        "low": {
+                            "value": 2.0
+                        },
+                        "high": {
+                            "value": 7.5
+                        }
+                    }
+                ],
+                "related": [
+                    {
+                        "target": {
+                            "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "urn:uuid:9431a68c-a2dd-44a9-86ee-13630f3da0d6",
+            "resource": {
+                "resourceType": "Observation",
+                "id": "9431a68c-a2dd-44a9-86ee-13630f3da0d6",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
+                "status": "unknown",
+                "code": {
+                    "coding": [
+                        {
+                            "system": "http://read.info/readv2",
+                            "code": "42M..",
+                            "display": "Lymphocyte count"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+                },
+                "performer": [
+                    {
+                        "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+                    }
+                ],
+                "valueQuantity": {
+                    "value": 0.1,
+                    "unit": "10*9/L"
+                },
+                "specimen": {
+                    "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
+                },
+                "referenceRange": [
+                    {
+                        "low": {
+                            "value": 1.0
+                        },
+                        "high": {
+                            "value": 4.0
+                        }
+                    }
+                ],
+                "related": [
+                    {
+                        "target": {
+                            "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "urn:uuid:099ad994-9203-441e-9971-1e2b822947c1",
+            "resource": {
+                "resourceType": "Observation",
+                "id": "099ad994-9203-441e-9971-1e2b822947c1",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
+                "status": "unknown",
+                "code": {
+                    "coding": [
+                        {
+                            "system": "http://read.info/readv2",
+                            "code": "42N..",
+                            "display": "Monocyte count"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+                },
+                "performer": [
+                    {
+                        "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+                    }
+                ],
+                "valueQuantity": {
+                    "value": 0.1,
+                    "unit": "10*9/L"
+                },
+                "specimen": {
+                    "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
+                },
+                "referenceRange": [
+                    {
+                        "low": {
+                            "value": 0.2
+                        },
+                        "high": {
+                            "value": 1.0
+                        }
+                    }
+                ],
+                "related": [
+                    {
+                        "target": {
+                            "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "urn:uuid:55e15e47-a6f0-4fe6-9a1d-845f0f1d7862",
+            "resource": {
+                "resourceType": "Observation",
+                "id": "55e15e47-a6f0-4fe6-9a1d-845f0f1d7862",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
+                "status": "unknown",
+                "code": {
+                    "coding": [
+                        {
+                            "system": "http://read.info/readv2",
+                            "code": "42K..",
+                            "display": "Eosinophil count"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+                },
+                "performer": [
+                    {
+                        "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+                    }
+                ],
+                "valueQuantity": {
+                    "value": 0.1,
+                    "comparator": "<",
+                    "unit": "10*9/L"
+                },
+                "specimen": {
+                    "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
+                },
+                "referenceRange": [
+                    {
+                        "low": {
+                            "value": 0
+                        },
+                        "high": {
+                            "value": 0.6
+                        }
+                    }
+                ],
+                "related": [
+                    {
+                        "target": {
+                            "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "urn:uuid:4ac0f7da-f5c7-4d79-9064-35de8bf186fe",
+            "resource": {
+                "resourceType": "Observation",
+                "id": "4ac0f7da-f5c7-4d79-9064-35de8bf186fe",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
+                "status": "unknown",
+                "code": {
+                    "coding": [
+                        {
+                            "system": "http://read.info/readv2",
+                            "code": "42L..",
+                            "display": "Basophil count"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
+                },
+                "performer": [
+                    {
+                        "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
+                    }
+                ],
+                "valueQuantity": {
+                    "value": 0.0,
+                    "unit": "10*9/L"
+                },
+                "specimen": {
+                    "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
+                },
+                "referenceRange": [
+                    {
+                        "low": {
+                            "value": 0.00
+                        },
+                        "high": {
+                            "value": 0.3
+                        }
+                    }
+                ],
+                "related": [
+                    {
+                        "target": {
+                            "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
+                        }
+                    }
+                ]
+            }
         }
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa",
-      "resource": {
-        "resourceType": "Observation",
-        "id": "dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
-          ]
-        },
-        "status": "unknown",
-        "code": {
-          "coding": [
-            {
-              "system": "http://read.info/readv2",
-              "code": "424..",
-              "display": "Full blood count - FBC"
-            }
-          ]
-        },
-        "subject": {
-          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
-          }
-        ],
-        "specimen": {
-          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
-        },
-        "related": [
-          {
-            "type": "has-member",
-            "target": {
-              "reference": "urn:uuid:36d0b706-a9e1-442e-8ab2-9adc766a5b9c"
-            }
-          },
-          {
-            "type": "has-member",
-            "target": {
-              "reference": "urn:uuid:590fd294-b573-406c-b46a-f0b59ece5da9"
-            }
-          },
-          {
-            "type": "has-member",
-            "target": {
-              "reference": "urn:uuid:8b75b9fb-4182-4d7b-ac34-fd67ff4abb19"
-            }
-          },
-          {
-            "type": "has-member",
-            "target": {
-              "reference": "urn:uuid:89a4c516-be4e-4d6d-b6f8-1bed944de685"
-            }
-          },
-          {
-            "type": "has-member",
-            "target": {
-              "reference": "urn:uuid:4867afeb-0467-4e8e-9e79-98a5e14ded49"
-            }
-          },
-          {
-            "type": "has-member",
-            "target": {
-              "reference": "urn:uuid:8705321a-18fa-49de-9515-14473032757a"
-            }
-          },
-          {
-            "type": "has-member",
-            "target": {
-              "reference": "urn:uuid:8834fb5a-9757-4729-a7ae-3e608899705f"
-            }
-          },
-          {
-            "type": "has-member",
-            "target": {
-              "reference": "urn:uuid:7b736f8a-ab6a-44b4-a804-b50e7e7b0abb"
-            }
-          },
-          {
-            "type": "has-member",
-            "target": {
-              "reference": "urn:uuid:bcc702d1-b557-47b7-bf37-ded54dad86fc"
-            }
-          },
-          {
-            "type": "has-member",
-            "target": {
-              "reference": "urn:uuid:9431a68c-a2dd-44a9-86ee-13630f3da0d6"
-            }
-          },
-          {
-            "type": "has-member",
-            "target": {
-              "reference": "urn:uuid:099ad994-9203-441e-9971-1e2b822947c1"
-            }
-          },
-          {
-            "type": "has-member",
-            "target": {
-              "reference": "urn:uuid:55e15e47-a6f0-4fe6-9a1d-845f0f1d7862"
-            }
-          },
-          {
-            "type": "has-member",
-            "target": {
-              "reference": "urn:uuid:4ac0f7da-f5c7-4d79-9064-35de8bf186fe"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:36d0b706-a9e1-442e-8ab2-9adc766a5b9c",
-      "resource": {
-        "resourceType": "Observation",
-        "id": "36d0b706-a9e1-442e-8ab2-9adc766a5b9c",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
-          ]
-        },
-        "status": "unknown",
-        "code": {
-          "coding": [
-            {
-              "system": "http://read.info/readv2",
-              "code": "42H..",
-              "display": "Total white cell count"
-            }
-          ]
-        },
-        "subject": {
-          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
-          }
-        ],
-        "valueQuantity": {
-          "value": 7.6,
-          "unit": "10*9/L"
-        },
-        "specimen": {
-          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
-        },
-        "referenceRange": [
-          {
-            "low": {
-              "value": 4.0
-            },
-            "high": {
-              "value": 11.0
-            }
-          }
-        ],
-        "related": [
-          {
-            "target": {
-              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:590fd294-b573-406c-b46a-f0b59ece5da9",
-      "resource": {
-        "resourceType": "Observation",
-        "id": "590fd294-b573-406c-b46a-f0b59ece5da9",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
-          ]
-        },
-        "status": "unknown",
-        "code": {
-          "coding": [
-            {
-              "system": "http://read.info/readv2",
-              "code": "426..",
-              "display": "Red blood cell (RBC) count"
-            }
-          ]
-        },
-        "subject": {
-          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
-          }
-        ],
-        "valueQuantity": {
-          "value": 2.84,
-          "unit": "10*12/L"
-        },
-        "interpretation": {
-          "text": "LO : Below low reference limit"
-        },
-        "specimen": {
-          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
-        },
-        "referenceRange": [
-          {
-            "low": {
-              "value": 3.8
-            },
-            "high": {
-              "value": 5.4
-            }
-          }
-        ],
-        "related": [
-          {
-            "target": {
-              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:8b75b9fb-4182-4d7b-ac34-fd67ff4abb19",
-      "resource": {
-        "resourceType": "Observation",
-        "id": "8b75b9fb-4182-4d7b-ac34-fd67ff4abb19",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
-          ]
-        },
-        "status": "unknown",
-        "code": {
-          "coding": [
-            {
-              "system": "http://read.info/readv2",
-              "code": "423..",
-              "display": "Haemoglobin estimation"
-            }
-          ]
-        },
-        "subject": {
-          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
-          }
-        ],
-        "valueQuantity": {
-          "value": 11.0,
-          "unit": "g/dL"
-        },
-        "specimen": {
-          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
-        },
-        "referenceRange": [
-          {
-            "low": {
-              "value": 10.5
-            },
-            "high": {
-              "value": 15.0
-            }
-          }
-        ],
-        "related": [
-          {
-            "target": {
-              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:89a4c516-be4e-4d6d-b6f8-1bed944de685",
-      "resource": {
-        "resourceType": "Observation",
-        "id": "89a4c516-be4e-4d6d-b6f8-1bed944de685",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
-          ]
-        },
-        "status": "unknown",
-        "code": {
-          "coding": [
-            {
-              "system": "http://read.info/readv2",
-              "code": "4258.",
-              "display": "Haematocrit"
-            }
-          ]
-        },
-        "subject": {
-          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
-          }
-        ],
-        "valueQuantity": {
-          "value": 0.315,
-          "unit": "%"
-        },
-        "interpretation": {
-          "text": "LO : Below low reference limit"
-        },
-        "specimen": {
-          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
-        },
-        "referenceRange": [
-          {
-            "low": {
-              "value": 0.370
-            },
-            "high": {
-              "value": 0.470
-            }
-          }
-        ],
-        "related": [
-          {
-            "target": {
-              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:4867afeb-0467-4e8e-9e79-98a5e14ded49",
-      "resource": {
-        "resourceType": "Observation",
-        "id": "4867afeb-0467-4e8e-9e79-98a5e14ded49",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
-          ]
-        },
-        "status": "unknown",
-        "code": {
-          "coding": [
-            {
-              "system": "http://read.info/readv2",
-              "code": "42A..",
-              "display": "Mean corpuscular volume (MCV)"
-            }
-          ]
-        },
-        "subject": {
-          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
-          }
-        ],
-        "valueQuantity": {
-          "value": 111.1,
-          "unit": "fL"
-        },
-        "interpretation": {
-          "text": "HI : Above high reference limit"
-        },
-        "specimen": {
-          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
-        },
-        "referenceRange": [
-          {
-            "low": {
-              "value": 76
-            },
-            "high": {
-              "value": 100
-            }
-          }
-        ],
-        "related": [
-          {
-            "target": {
-              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:8705321a-18fa-49de-9515-14473032757a",
-      "resource": {
-        "resourceType": "Observation",
-        "id": "8705321a-18fa-49de-9515-14473032757a",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
-          ]
-        },
-        "status": "unknown",
-        "code": {
-          "coding": [
-            {
-              "system": "http://read.info/readv2",
-              "code": "428..",
-              "display": "Mean corpusc. haemoglobin(MCH)"
-            }
-          ]
-        },
-        "subject": {
-          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
-          }
-        ],
-        "valueQuantity": {
-          "value": 38.7,
-          "unit": "pg"
-        },
-        "interpretation": {
-          "text": "HI : Above high reference limit"
-        },
-        "specimen": {
-          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
-        },
-        "referenceRange": [
-          {
-            "low": {
-              "value": 26
-            },
-            "high": {
-              "value": 32
-            }
-          }
-        ],
-        "related": [
-          {
-            "target": {
-              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:8834fb5a-9757-4729-a7ae-3e608899705f",
-      "resource": {
-        "resourceType": "Observation",
-        "id": "8834fb5a-9757-4729-a7ae-3e608899705f",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
-          ]
-        },
-        "status": "unknown",
-        "code": {
-          "coding": [
-            {
-              "system": "http://read.info/readv2",
-              "code": "429..",
-              "display": "Mean corpusc. Hb. conc. (MCHC)"
-            }
-          ]
-        },
-        "subject": {
-          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
-          }
-        ],
-        "valueQuantity": {
-          "value": 34.8,
-          "unit": "g/dL"
-        },
-        "specimen": {
-          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
-        },
-        "referenceRange": [
-          {
-            "low": {
-              "value": 30
-            },
-            "high": {
-              "value": 37
-            }
-          }
-        ],
-        "related": [
-          {
-            "target": {
-              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:7b736f8a-ab6a-44b4-a804-b50e7e7b0abb",
-      "resource": {
-        "resourceType": "Observation",
-        "id": "7b736f8a-ab6a-44b4-a804-b50e7e7b0abb",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
-          ]
-        },
-        "status": "unknown",
-        "code": {
-          "coding": [
-            {
-              "system": "http://read.info/readv2",
-              "code": "42P..",
-              "display": "Platelet count"
-            }
-          ]
-        },
-        "subject": {
-          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
-          }
-        ],
-        "valueQuantity": {
-          "value": 220,
-          "unit": "10*9/L"
-        },
-        "specimen": {
-          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
-        },
-        "referenceRange": [
-          {
-            "low": {
-              "value": 150
-            },
-            "high": {
-              "value": 600
-            }
-          }
-        ],
-        "related": [
-          {
-            "target": {
-              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:bcc702d1-b557-47b7-bf37-ded54dad86fc",
-      "resource": {
-        "resourceType": "Observation",
-        "id": "bcc702d1-b557-47b7-bf37-ded54dad86fc",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
-          ]
-        },
-        "status": "unknown",
-        "code": {
-          "coding": [
-            {
-              "system": "http://read.info/readv2",
-              "code": "42J..",
-              "display": "Neutrophil count"
-            }
-          ]
-        },
-        "subject": {
-          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
-          }
-        ],
-        "valueQuantity": {
-          "value": 7.4,
-          "unit": "10*9/L"
-        },
-        "specimen": {
-          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
-        },
-        "referenceRange": [
-          {
-            "low": {
-              "value": 2.0
-            },
-            "high": {
-              "value": 7.5
-            }
-          }
-        ],
-        "related": [
-          {
-            "target": {
-              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:9431a68c-a2dd-44a9-86ee-13630f3da0d6",
-      "resource": {
-        "resourceType": "Observation",
-        "id": "9431a68c-a2dd-44a9-86ee-13630f3da0d6",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
-          ]
-        },
-        "status": "unknown",
-        "code": {
-          "coding": [
-            {
-              "system": "http://read.info/readv2",
-              "code": "42M..",
-              "display": "Lymphocyte count"
-            }
-          ]
-        },
-        "subject": {
-          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
-          }
-        ],
-        "valueQuantity": {
-          "value": 0.1,
-          "unit": "10*9/L"
-        },
-        "specimen": {
-          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
-        },
-        "referenceRange": [
-          {
-            "low": {
-              "value": 1.0
-            },
-            "high": {
-              "value": 4.0
-            }
-          }
-        ],
-        "related": [
-          {
-            "target": {
-              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:099ad994-9203-441e-9971-1e2b822947c1",
-      "resource": {
-        "resourceType": "Observation",
-        "id": "099ad994-9203-441e-9971-1e2b822947c1",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
-          ]
-        },
-        "status": "unknown",
-        "code": {
-          "coding": [
-            {
-              "system": "http://read.info/readv2",
-              "code": "42N..",
-              "display": "Monocyte count"
-            }
-          ]
-        },
-        "subject": {
-          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
-          }
-        ],
-        "valueQuantity": {
-          "value": 0.1,
-          "unit": "10*9/L"
-        },
-        "specimen": {
-          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
-        },
-        "referenceRange": [
-          {
-            "low": {
-              "value": 0.2
-            },
-            "high": {
-              "value": 1.0
-            }
-          }
-        ],
-        "related": [
-          {
-            "target": {
-              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:55e15e47-a6f0-4fe6-9a1d-845f0f1d7862",
-      "resource": {
-        "resourceType": "Observation",
-        "id": "55e15e47-a6f0-4fe6-9a1d-845f0f1d7862",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
-          ]
-        },
-        "status": "unknown",
-        "code": {
-          "coding": [
-            {
-              "system": "http://read.info/readv2",
-              "code": "42K..",
-              "display": "Eosinophil count"
-            }
-          ]
-        },
-        "subject": {
-          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
-          }
-        ],
-        "valueQuantity": {
-          "value": 0.1,
-          "comparator": "<",
-          "unit": "10*9/L"
-        },
-        "specimen": {
-          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
-        },
-        "referenceRange": [
-          {
-            "low": {
-              "value": 0
-            },
-            "high": {
-              "value": 0.6
-            }
-          }
-        ],
-        "related": [
-          {
-            "target": {
-              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "urn:uuid:4ac0f7da-f5c7-4d79-9064-35de8bf186fe",
-      "resource": {
-        "resourceType": "Observation",
-        "id": "4ac0f7da-f5c7-4d79-9064-35de8bf186fe",
-        "meta": {
-          "profile": [
-            "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
-          ]
-        },
-        "status": "unknown",
-        "code": {
-          "coding": [
-            {
-              "system": "http://read.info/readv2",
-              "code": "42L..",
-              "display": "Basophil count"
-            }
-          ]
-        },
-        "subject": {
-          "reference": "urn:uuid:7707bc15-b499-45da-9ec3-345a0267643f"
-        },
-        "performer": [
-          {
-            "reference": "urn:uuid:432d6573-a9c5-4d28-8c5b-51b71f9af40a"
-          }
-        ],
-        "valueQuantity": {
-          "value": 0.0,
-          "unit": "10*9/L"
-        },
-        "specimen": {
-          "reference": "urn:uuid:365dc55f-5336-4e85-9dd5-ac2dabaa9287"
-        },
-        "referenceRange": [
-          {
-            "low": {
-              "value": 0.00
-            },
-            "high": {
-              "value": 0.3
-            }
-          }
-        ],
-        "related": [
-          {
-            "target": {
-              "reference": "urn:uuid:dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa"
-            }
-          }
-        ]
-      }
-    }
-  ]
+    ]
 }
