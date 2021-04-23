@@ -9,6 +9,7 @@ import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.nhs.digital.nhsconnect.lab.results.model.FhirProfiles;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PersonName;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Reference;
@@ -42,6 +43,7 @@ public class PatientMapper {
             .flatMap(InvestigationSubject::getReferenceServiceSubject);
 
         final Patient patient = new Patient();
+        patient.getMeta().addProfile(FhirProfiles.PATIENT);
         patient.setId(uuidGenerator.generateUUID());
 
         final PersonName personName = patientDetails.getName();

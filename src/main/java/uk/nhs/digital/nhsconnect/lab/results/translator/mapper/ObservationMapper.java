@@ -19,6 +19,7 @@ import org.hl7.fhir.dstu3.model.SimpleQuantity;
 import org.hl7.fhir.dstu3.model.Specimen;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.nhs.digital.nhsconnect.lab.results.model.FhirProfiles;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.LaboratoryInvestigationResult;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
@@ -105,32 +106,34 @@ public class ObservationMapper {
         }
 
         private void addTestGroup(final LabResult labResult) {
-            final var result = new Observation();
+            final var observation = new Observation();
+            observation.getMeta().addProfile(FhirProfiles.OBSERVATION);
 
             final var fhirId = uuidGenerator.generateUUID();
-            result.setId(fhirId);
+            observation.setId(fhirId);
 
             //noinspection OptionalGetWithoutIsPresent Previous logic guarantees its presence
             final var edifactId = labResult.getSequenceDetails().get().getNumber();
             edifactToFhirIdMap.put(edifactId, fhirId);
 
-            mapContents(labResult, result);
+            mapContents(labResult, observation);
 
-            testGroupsById.put(fhirId, result);
+            testGroupsById.put(fhirId, observation);
         }
 
         private Observation mapTestResult(final LabResult labResult) {
-            final var result = new Observation();
+            final var observation = new Observation();
+            observation.getMeta().addProfile(FhirProfiles.OBSERVATION);
 
             final var resultId = uuidGenerator.generateUUID();
-            result.setId(resultId);
+            observation.setId(resultId);
 
-            mapContents(labResult, result);
+            mapContents(labResult, observation);
 
             final var edifactId = labResult.getSequenceReference().getNumber();
             Optional.ofNullable(edifactToFhirIdMap.get(edifactId))
-                .ifPresent(fhirId -> linkWithGroup(fhirId, result));
-            return result;
+                .ifPresent(fhirId -> linkWithGroup(fhirId, observation));
+            return observation;
         }
 
         private void linkWithGroup(String fhirId, Observation result) {

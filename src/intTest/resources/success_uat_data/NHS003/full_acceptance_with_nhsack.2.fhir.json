@@ -18,6 +18,11 @@
             "resource": {
                 "resourceType": "Patient",
                 "id": "7707bc15-b499-45da-9ec3-345a0267643f",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Patient-1"
+                    ]
+                },
                 "identifier": [
                     {
                         "id": "Z77553311"
@@ -50,6 +55,11 @@
             "resource": {
                 "resourceType": "Practitioner",
                 "id": "97b9fbfd-c5aa-4665-a2c9-6d504151a168",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Practitioner-1"
+                    ]
+                },
                 "identifier": [
                     {
                         "system": "https://fhir.nhs.uk/Id/sds-user-id",
@@ -68,6 +78,11 @@
             "resource": {
                 "resourceType": "Organization",
                 "id": "432d6573-a9c5-4d28-8c5b-51b71f9af40a",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1"
+                    ]
+                },
                 "type": [
                     {
                         "coding": [
@@ -86,6 +101,11 @@
             "resource": {
                 "resourceType": "ProcedureRequest",
                 "id": "46de5ca6-fb83-4ab0-b826-52adae5a9a4e",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-ProcedureRequest-1"
+                    ]
+                },
                 "status": "unknown",
                 "intent": "order",
                 "code": {
@@ -114,6 +134,11 @@
             "resource": {
                 "resourceType": "DiagnosticReport",
                 "id": "1c2ffccb-186a-4193-a12e-f1b2c0bb6cee",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-DiagnosticReport-1"
+                    ]
+                },
                 "identifier": [
                     {
                         "value": "15/CH000041O/200010191704"
@@ -162,6 +187,11 @@
             "resource": {
                 "resourceType": "Specimen",
                 "id": "365dc55f-5336-4e85-9dd5-ac2dabaa9287",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Specimen-1"
+                    ]
+                },
                 "accessionIdentifier": {
                     "system": "http://lab.acme.org/specimens/2011",
                     "value": "CH000041OC"
@@ -187,6 +217,11 @@
             "resource": {
                 "resourceType": "Observation",
                 "id": "dc9fb61f-0e8a-4acf-aebc-a9f295f55ffa",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
                 "status": "unknown",
                 "code": {
                     "coding": [
@@ -295,6 +330,11 @@
             "resource": {
                 "resourceType": "Observation",
                 "id": "36d0b706-a9e1-442e-8ab2-9adc766a5b9c",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
                 "status": "unknown",
                 "code": {
                     "coding": [
@@ -344,6 +384,11 @@
             "resource": {
                 "resourceType": "Observation",
                 "id": "590fd294-b573-406c-b46a-f0b59ece5da9",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
                 "status": "unknown",
                 "code": {
                     "coding": [
@@ -396,6 +441,11 @@
             "resource": {
                 "resourceType": "Observation",
                 "id": "8b75b9fb-4182-4d7b-ac34-fd67ff4abb19",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
                 "status": "unknown",
                 "code": {
                     "coding": [
@@ -445,6 +495,11 @@
             "resource": {
                 "resourceType": "Observation",
                 "id": "89a4c516-be4e-4d6d-b6f8-1bed944de685",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
                 "status": "unknown",
                 "code": {
                     "coding": [
@@ -497,6 +552,11 @@
             "resource": {
                 "resourceType": "Observation",
                 "id": "4867afeb-0467-4e8e-9e79-98a5e14ded49",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
                 "status": "unknown",
                 "code": {
                     "coding": [
@@ -549,6 +609,11 @@
             "resource": {
                 "resourceType": "Observation",
                 "id": "8705321a-18fa-49de-9515-14473032757a",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
                 "status": "unknown",
                 "code": {
                     "coding": [
@@ -601,6 +666,11 @@
             "resource": {
                 "resourceType": "Observation",
                 "id": "8834fb5a-9757-4729-a7ae-3e608899705f",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
                 "status": "unknown",
                 "code": {
                     "coding": [
@@ -650,6 +720,11 @@
             "resource": {
                 "resourceType": "Observation",
                 "id": "7b736f8a-ab6a-44b4-a804-b50e7e7b0abb",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
                 "status": "unknown",
                 "code": {
                     "coding": [
@@ -699,6 +774,11 @@
             "resource": {
                 "resourceType": "Observation",
                 "id": "bcc702d1-b557-47b7-bf37-ded54dad86fc",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
                 "status": "unknown",
                 "code": {
                     "coding": [
@@ -748,6 +828,11 @@
             "resource": {
                 "resourceType": "Observation",
                 "id": "9431a68c-a2dd-44a9-86ee-13630f3da0d6",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
                 "status": "unknown",
                 "code": {
                     "coding": [
@@ -797,6 +882,11 @@
             "resource": {
                 "resourceType": "Observation",
                 "id": "099ad994-9203-441e-9971-1e2b822947c1",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
                 "status": "unknown",
                 "code": {
                     "coding": [
@@ -846,6 +936,11 @@
             "resource": {
                 "resourceType": "Observation",
                 "id": "55e15e47-a6f0-4fe6-9a1d-845f0f1d7862",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
                 "status": "unknown",
                 "code": {
                     "coding": [
@@ -896,6 +991,11 @@
             "resource": {
                 "resourceType": "Observation",
                 "id": "4ac0f7da-f5c7-4d79-9064-35de8bf186fe",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
                 "status": "unknown",
                 "code": {
                     "coding": [

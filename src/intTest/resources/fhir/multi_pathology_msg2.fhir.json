@@ -18,6 +18,11 @@
             "resource": {
                 "resourceType": "Patient",
                 "id": "eea77c68-0d47-412c-a7bc-321583a2c75f",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Patient-1"
+                    ]
+                },
                 "identifier": [
                     {
                         "system": "https://fhir.nhs.uk/Id/nhs-number",
@@ -47,6 +52,11 @@
             "resource": {
                 "resourceType": "Practitioner",
                 "id": "b6909753-80ec-41d7-b269-4c12e7c7b906",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Practitioner-1"
+                    ]
+                },
                 "identifier": [
                     {
                         "system": "https://fhir.nhs.uk/Id/sds-user-id",
@@ -65,6 +75,11 @@
             "resource": {
                 "resourceType": "Organization",
                 "id": "1395dd50-5440-424c-bd30-a2f62e3e24c3",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1"
+                    ]
+                },
                 "name": "NORTH DOWN GP"
             }
         },
@@ -73,6 +88,11 @@
             "resource": {
                 "resourceType": "Organization",
                 "id": "d5229278-191d-4801-9332-2faae4e9761d",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1"
+                    ]
+                },
                 "type": [
                     {
                         "coding": [
@@ -91,6 +111,11 @@
             "resource": {
                 "resourceType": "ProcedureRequest",
                 "id": "a519747b-ec83-477b-bf7a-b3fc6b7abeac",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-ProcedureRequest-1"
+                    ]
+                },
                 "status": "unknown",
                 "intent": "order",
                 "code": {
@@ -119,6 +144,11 @@
             "resource": {
                 "resourceType": "DiagnosticReport",
                 "id": "1c2ffccb-186a-4193-a12e-f1b2c0bb6cee",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-DiagnosticReport-1"
+                    ]
+                },
                 "identifier": [
                     {
                         "value": "15/CH000038L/200010191704"
@@ -167,6 +197,11 @@
             "resource": {
                 "resourceType": "Specimen",
                 "id": "34a0625d-5517-42a2-99c3-3a621c989c73",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Specimen-1"
+                    ]
+                },
                 "type": {
                     "coding": [
                         {
@@ -186,6 +221,11 @@
             "resource": {
                 "resourceType": "Observation",
                 "id": "6d53dfea-9ed1-405c-964c-ab32197251e7",
+                "meta": {
+                    "profile": [
+                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
+                    ]
+                },
                 "status": "unknown",
                 "code": {
                     "coding": [

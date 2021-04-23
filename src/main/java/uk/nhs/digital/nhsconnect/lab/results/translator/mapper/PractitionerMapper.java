@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.nhs.digital.nhsconnect.lab.results.model.FhirProfiles;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvolvedParty;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
@@ -38,15 +39,16 @@ public class PractitionerMapper {
     }
 
     private Practitioner mapToPractitioner(final String identifier, final String name) {
-        final var result = new Practitioner();
+        final var practitioner = new Practitioner();
+        practitioner.getMeta().addProfile(FhirProfiles.PRACTITIONER);
 
         Optional.ofNullable(identifier)
-            .ifPresent(id -> result.addIdentifier().setValue(id).setSystem(SDS_USER_SYSTEM));
+            .ifPresent(id -> practitioner.addIdentifier().setValue(id).setSystem(SDS_USER_SYSTEM));
 
         Optional.ofNullable(name)
-            .ifPresent(n -> result.addName().setText(n));
-        result.setId(uuidGenerator.generateUUID());
+            .ifPresent(n -> practitioner.addName().setText(n));
+        practitioner.setId(uuidGenerator.generateUUID());
 
-        return result;
+        return practitioner;
     }
 }

@@ -7,6 +7,7 @@ import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.codesystems.OrganizationType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.nhs.digital.nhsconnect.lab.results.model.FhirProfiles;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.PerformerNameAndAddress;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.InvolvedParty;
@@ -32,6 +33,7 @@ public class OrganizationMapper {
             .findFirst()
             .map(requester -> {
                 final var organization = new Organization();
+                organization.getMeta().addProfile(FhirProfiles.ORGANIZATION);
                 organization.setId(uuidGenerator.generateUUID());
                 requester.getName().map(MappingUtils::unescape).ifPresent(organization::setName);
                 requester.getIdentifier().ifPresent(id -> organization.addIdentifier()
@@ -57,6 +59,7 @@ public class OrganizationMapper {
         }
 
         final var organization = new Organization();
+        organization.getMeta().addProfile(FhirProfiles.ORGANIZATION);
         organization.setId(uuidGenerator.generateUUID());
 
         final Optional<PerformerNameAndAddress> performerNameAndAddress = performingOrganization
