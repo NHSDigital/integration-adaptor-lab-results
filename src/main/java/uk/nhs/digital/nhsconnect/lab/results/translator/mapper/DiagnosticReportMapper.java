@@ -22,7 +22,6 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -125,7 +124,6 @@ public class DiagnosticReportMapper {
 
         private void mapPerformer() {
             Stream.of(performingOrganization, performingPractitioner)
-                .filter(Objects::nonNull)
                 .map(fullUrlGenerator::generate)
                 .forEach(performerUrl -> diagnosticReport.addPerformer().getActor().setReference(performerUrl));
         }

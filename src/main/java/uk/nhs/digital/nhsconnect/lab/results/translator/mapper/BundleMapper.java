@@ -13,8 +13,8 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
@@ -30,18 +30,22 @@ public class BundleMapper {
         final Bundle bundle = generateInitialPathologyBundle();
         final Consumer<Resource> addToBundle = resource -> addResourceToBundle(bundle, resource);
 
-        addToBundle.accept(medicalReport.getPatient());
-
-        Optional.ofNullable(medicalReport.getRequestingPractitioner()).ifPresent(addToBundle);
-        Optional.ofNullable(medicalReport.getRequestingOrganization()).ifPresent(addToBundle);
-        Optional.ofNullable(medicalReport.getPerformingPractitioner()).ifPresent(addToBundle);
-        Optional.ofNullable(medicalReport.getPerformingOrganization()).ifPresent(addToBundle);
-        Optional.ofNullable(medicalReport.getTestRequestSummary()).ifPresent(addToBundle);
-        Optional.ofNullable(medicalReport.getTestReport()).ifPresent(addToBundle);
-
-        medicalReport.getSpecimens().forEach(addToBundle);
-
-        medicalReport.getTestResults().forEach(addToBundle);
+        Stream.of(
+            Stream.of(
+                medicalReport.getMessageHeader(),
+                medicalReport.getPatient(),
+                medicalReport.getRequestingPractitioner(),
+                medicalReport.getRequestingOrganization(),
+                medicalReport.getPerformingPractitioner(),
+                medicalReport.getPerformingOrganization(),
+                medicalReport.getTestRequestSummary(),
+                medicalReport.getTestReport()
+            ),
+            medicalReport.getSpecimens().stream(),
+            medicalReport.getTestResults().stream()
+        )
+            .flatMap(i -> i)
+            .forEach(addToBundle);
 
         return bundle;
     }

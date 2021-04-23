@@ -14,7 +14,6 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -36,7 +35,12 @@ class OrganizationMapperTest {
     void testMapMessageToRequestingOrganizationWithNoRequesterDetails() {
         when(message.getInvolvedParties()).thenReturn(Collections.emptyList());
 
-        assertThat(mapper.mapToRequestingOrganization(message)).isEmpty();
+        Organization organization = mapper.mapToRequestingOrganization(message);
+        assertAll(
+            () -> assertThat(organization.getName()).isNull(),
+            () -> assertThat(organization.getType()).isEmpty(),
+            () -> assertThat(organization.getIdentifier()).isEmpty()
+        );
     }
 
     @Test
@@ -50,20 +54,24 @@ class OrganizationMapperTest {
 
         when(message.getInvolvedParties()).thenReturn(List.of(requestingParty));
 
-        Optional<Organization> organization = mapper.mapToRequestingOrganization(message);
-        assertThat(organization).isNotEmpty()
-            .hasValueSatisfying(org -> assertAll(
-                () -> assertThat(org.getName()).isEqualTo("MATTHEW'S GP"),
-                () -> assertThat(org.getType()).isEmpty(),
-                () -> assertThat(org.getIdentifier()).isEmpty()
-            ));
+        Organization organization = mapper.mapToRequestingOrganization(message);
+        assertAll(
+            () -> assertThat(organization.getName()).isEqualTo("MATTHEW'S GP"),
+            () -> assertThat(organization.getType()).isEmpty(),
+            () -> assertThat(organization.getIdentifier()).isEmpty()
+        );
     }
 
     @Test
     void testMapMessageToPerformingOrganizationWithNoPerformerDetails() {
         when(message.getInvolvedParties()).thenReturn(Collections.emptyList());
 
-        assertThat(mapper.mapToPerformingOrganization(message)).isEmpty();
+        Organization organization = mapper.mapToPerformingOrganization(message);
+        assertAll(
+            () -> assertThat(organization.getName()).isNull(),
+            () -> assertThat(organization.getType()).isEmpty(),
+            () -> assertThat(organization.getIdentifier()).isEmpty()
+        );
     }
 
     @Test
@@ -82,12 +90,10 @@ class OrganizationMapperTest {
             "ignore me"
         ));
 
-        when(message.getInvolvedParties()).thenReturn(List.of(performingDepartmentParty, performingOrganizationParty));
+        when(message.getInvolvedParties())
+            .thenReturn(List.of(performingDepartmentParty, performingOrganizationParty));
 
-        Optional<Organization> result = mapper.mapToPerformingOrganization(message);
-        assertThat(result).isNotEmpty();
-
-        Organization organization = result.get();
+        Organization organization = mapper.mapToPerformingOrganization(message);
         Coding type = organization.getType().get(0).getCoding().get(0);
 
         assertAll(
@@ -118,12 +124,10 @@ class OrganizationMapperTest {
             "ignore me"
         ));
 
-        when(message.getInvolvedParties()).thenReturn(List.of(performingDepartmentParty, performingOrganizationParty));
+        when(message.getInvolvedParties())
+            .thenReturn(List.of(performingDepartmentParty, performingOrganizationParty));
 
-        Optional<Organization> result = mapper.mapToPerformingOrganization(message);
-        assertThat(result).isNotEmpty();
-
-        Organization organization = result.get();
+        Organization organization = mapper.mapToPerformingOrganization(message);
         Coding type = organization.getType().get(0).getCoding().get(0);
 
         assertAll(
@@ -145,17 +149,16 @@ class OrganizationMapperTest {
 
         when(message.getInvolvedParties()).thenReturn(List.of(performingParty));
 
-        Optional<Organization> organization = mapper.mapToPerformingOrganization(message);
-        assertThat(organization).isNotEmpty()
-            .hasValueSatisfying(org -> assertAll(
-                () -> assertThat(org.getIdentifier()).hasSize(1).first()
-                    .satisfies(identifier -> assertAll(
-                        () -> assertThat(identifier.getValue()).isEqualTo("REF00"),
-                        () -> assertThat(identifier.getSystem())
-                            .isEqualTo("https://fhir.nhs.uk/Id/ods-organization-code"))),
-                () -> assertThat(org.getName()).isNull(),
-                () -> assertThat(org.getType()).isEmpty()
-            ));
+        Organization organization = mapper.mapToPerformingOrganization(message);
+        assertAll(
+            () -> assertThat(organization.getIdentifier()).hasSize(1).first()
+                .satisfies(identifier -> assertAll(
+                    () -> assertThat(identifier.getValue()).isEqualTo("REF00"),
+                    () -> assertThat(identifier.getSystem())
+                        .isEqualTo("https://fhir.nhs.uk/Id/ods-organization-code"))),
+            () -> assertThat(organization.getName()).isNull(),
+            () -> assertThat(organization.getType()).isEmpty()
+        );
     }
 
     @Test
@@ -174,12 +177,11 @@ class OrganizationMapperTest {
             "ignore me"
         ));
 
-        when(message.getInvolvedParties()).thenReturn(List.of(performingDepartmentParty, performingOrganizationParty));
+        when(message.getInvolvedParties())
+            .thenReturn(List.of(performingDepartmentParty, performingOrganizationParty));
 
-        Optional<Organization> result = mapper.mapToPerformingOrganization(message);
-        assertThat(result).isNotEmpty();
+        Organization organization = mapper.mapToPerformingOrganization(message);
 
-        Organization organization = result.get();
         Coding type = organization.getType().get(0).getCoding().get(0);
 
         assertAll(
@@ -206,13 +208,12 @@ class OrganizationMapperTest {
 
         when(message.getInvolvedParties()).thenReturn(List.of(performingParty));
 
-        Optional<Organization> organization = mapper.mapToPerformingOrganization(message);
-        assertThat(organization).isNotEmpty()
-            .hasValueSatisfying(org -> assertAll(
-                () -> assertThat(org.getName()).isEqualTo("ST JAMES'S UNIVERSITY HOSPITAL"),
-                () -> assertThat(org.getType()).isEmpty(),
-                () -> assertThat(org.getIdentifier()).isEmpty()
-            ));
+        Organization organization = mapper.mapToPerformingOrganization(message);
+        assertAll(
+            () -> assertThat(organization.getName()).isEqualTo("ST JAMES'S UNIVERSITY HOSPITAL"),
+            () -> assertThat(organization.getType()).isEmpty(),
+            () -> assertThat(organization.getIdentifier()).isEmpty()
+        );
     }
 
     @Test
@@ -226,7 +227,11 @@ class OrganizationMapperTest {
 
         when(message.getInvolvedParties()).thenReturn(List.of(involvedParty));
 
-        Optional<Organization> result = mapper.mapToPerformingOrganization(message);
-        assertThat(result).isEmpty();
+        Organization organization = mapper.mapToPerformingOrganization(message);
+        assertAll(
+            () -> assertThat(organization.getName()).isNull(),
+            () -> assertThat(organization.getType()).isEmpty(),
+            () -> assertThat(organization.getIdentifier()).isEmpty()
+        );
     }
 }

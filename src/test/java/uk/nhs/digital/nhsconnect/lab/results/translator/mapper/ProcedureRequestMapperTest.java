@@ -5,7 +5,6 @@ import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.hl7.fhir.dstu3.model.ProcedureRequest;
-import org.hl7.fhir.dstu3.model.ProcedureRequest.ProcedureRequestIntent;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,15 +15,11 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmen
 import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -40,17 +35,7 @@ class ProcedureRequestMapperTest {
     private ResourceFullUrlGenerator fullUrlGenerator;
 
     @Test
-    void testMapMessageToProcedureRequestNoPatientClinicalInfo() {
-        final Message message = new Message(Collections.emptyList());
-
-        final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
-            message, null, null, null, null, null);
-
-        assertThat(procedureRequest).isEmpty();
-    }
-
-    @Test
-    void testMapToProcedureRequestThrowsExceptionWhenFreeTextIsMissing() {
+    void when_freeTextIsMissing_expect_exception() {
         final Message message = new Message(List.of(
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
@@ -59,14 +44,14 @@ class ProcedureRequestMapperTest {
         ));
 
         assertThatThrownBy(() -> procedureRequestMapper.mapToProcedureRequest(
-            message, null, null, null, null, null))
+            message, mock(Patient.class), mock(Practitioner.class), mock(Organization.class), mock(Practitioner.class)))
             .isInstanceOf(FhirValidationException.class)
             .hasMessage("Unable to map message. "
                 + "The FreeText segment is mandatory in Clinical Information");
     }
 
     @Test
-    void testMapToProcedureRequestThrowsExceptionWhenClinicalInformationCodeIsMissing() {
+    void when_clinicalInformationIsMissing_expect_exception() {
         final Message message = new Message(List.of(
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
@@ -75,14 +60,31 @@ class ProcedureRequestMapperTest {
         ));
 
         assertThatThrownBy(() -> procedureRequestMapper.mapToProcedureRequest(
-            message, null, null, null, null, null))
+            message, mock(Patient.class), mock(Practitioner.class), mock(Organization.class), mock(Practitioner.class)))
             .isInstanceOf(MissingSegmentException.class)
             .hasMessage("EDIFACT section is missing segment CIN");
     }
 
     @Test
-    void testMapToProcedureRequestWithOneFreeTextSegment() {
+    void when_clinicalInformationStatusIsUnknown_expect_exception() {
+        final Message message = new Message(List.of(
+            "S02+02", // ServiceReportDetails
+            "S06+06", // InvestigationSubject
+            "S10+10",
+            "CIN+Undefined Status",
+            "FTX+CID+++COELIAC"
+        ));
+
+        assertThatThrownBy(() -> procedureRequestMapper.mapToProcedureRequest(
+            message, mock(Patient.class), mock(Practitioner.class), mock(Organization.class), mock(Practitioner.class)))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("No Report Status Code for 'Undefined Status'");
+    }
+
+    @Test
+    void when_oneFreeTextFieldIsPresent_expect_oneAnnotation() {
         when(uuidGenerator.generateUUID()).thenReturn("test-uuid");
+
         final Message message = new Message(List.of(
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
@@ -91,22 +93,21 @@ class ProcedureRequestMapperTest {
             "FTX+CID+++COELIAC"
         ));
 
-        final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
-            message, null, null, null, null, null);
+        ProcedureRequest procedureRequest = procedureRequestMapper.mapToProcedureRequest(
+            message, mock(Patient.class), mock(Practitioner.class), mock(Organization.class), mock(Practitioner.class));
 
-        assertThat(procedureRequest).isNotEmpty()
-            .hasValueSatisfying(procedure -> assertAll(
-                () -> assertThat(procedure.getNote())
-                    .hasSize(1)
-                    .first()
-                    .extracting(Annotation::getText)
-                    .isEqualTo("COELIAC"),
-                () -> assertThat(procedure.getId()).isEqualTo("test-uuid")
-            ));
+        assertAll(
+            () -> assertThat(procedureRequest.getNote())
+                .hasSize(1)
+                .first()
+                .extracting(Annotation::getText)
+                .isEqualTo("COELIAC"),
+            () -> assertThat(procedureRequest.getId()).isEqualTo("test-uuid")
+        );
     }
 
     @Test
-    void testMapToProcedureRequestWithMultipleFreeTextSegments() {
+    void when_multipleFreeTextFieldsArePresent_expect_multipleAnnotations() {
         final Message message = new Message(List.of(
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
@@ -117,20 +118,19 @@ class ProcedureRequestMapperTest {
             "FTX+CID+++GASTRIC ULCER DECLINE"
         ));
 
-        final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
-            message, null, null, null, null, null);
+        ProcedureRequest procedureRequest = procedureRequestMapper.mapToProcedureRequest(
+            message, mock(Patient.class), mock(Practitioner.class), mock(Organization.class), mock(Practitioner.class));
 
-        assertThat(procedureRequest).isNotEmpty()
-            .hasValueSatisfying(procedure -> assertAll(
-                () -> assertThat(procedure.getNote())
-                    .hasSize(3)
-                    .extracting(Annotation::getText)
-                    .containsExactly("COELIAC", "JAUNDICE  ?OBSTRUCTIVE", "GASTRIC ULCER DECLINE")
-            ));
+        assertAll(
+            () -> assertThat(procedureRequest.getNote())
+                .hasSize(3)
+                .extracting(Annotation::getText)
+                .containsExactly("COELIAC", "JAUNDICE  ?OBSTRUCTIVE", "GASTRIC ULCER DECLINE")
+        );
     }
 
     @Test
-    void testMapToProcedureRequestStatus() {
+    void when_mappingEdifact_expect_otherResourcesAreReferenced() {
         final Message message = new Message(List.of(
             "S02+02", // ServiceReportDetails
             "S06+06", // InvestigationSubject
@@ -139,155 +139,28 @@ class ProcedureRequestMapperTest {
             "FTX+CID+++COELIAC"
         ));
 
-        final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
-            message, null, null, null, null, null);
+        var patient = mock(Patient.class);
+        var requestingOrganization = mock(Organization.class);
+        var requestingPractitioner = mock(Practitioner.class);
+        var performingPractitioner = mock(Practitioner.class);
 
-        assertThat(procedureRequest)
-            .isNotEmpty()
-            .hasValueSatisfying(procedure ->
-                assertThat(procedure.getStatus().toCode()).isEqualTo("unknown"));
-    }
+        when(fullUrlGenerator.generate(patient)).thenReturn("patient-full-url");
+        when(fullUrlGenerator.generate(requestingOrganization)).thenReturn("requesting-organisation-full-url");
+        when(fullUrlGenerator.generate(requestingPractitioner)).thenReturn("requesting-practitioner-full-url");
+        when(fullUrlGenerator.generate(performingPractitioner)).thenReturn("performing-practitioner-full-url");
 
-    @Test
-    void testMapToProcedureRequestUndefinedStatus() {
-        final Message message = new Message(List.of(
-            "S02+02", // ServiceReportDetails
-            "S06+06", // InvestigationSubject
-            "S10+10",
-            "CIN+Undefined Status",
-            "FTX+CID+++COELIAC"
-        ));
+        ProcedureRequest procedureRequest = procedureRequestMapper.mapToProcedureRequest(
+            message, patient, requestingPractitioner, requestingOrganization, performingPractitioner);
 
-        assertThatThrownBy(() -> procedureRequestMapper.mapToProcedureRequest(
-            message, null, null, null, null, null))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("No Report Status Code for 'Undefined Status'");
-    }
-
-    @Test
-    void testMapToProcedureRequestIntent() {
-        final Message message = new Message(List.of(
-            "S02+02", // ServiceReportDetails
-            "S06+06", // InvestigationSubject
-            "S10+10",
-            "CIN+UN",
-            "FTX+CID+++COELIAC"
-        ));
-
-        final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
-            message, null, null, null, null, null);
-
-        assertThat(procedureRequest)
-            .isNotEmpty()
-            .hasValueSatisfying(procedure ->
-                assertThat(procedure.getIntent()).isEqualTo(ProcedureRequestIntent.ORDER));
-    }
-
-    @Test
-    void testMapToProcedureRequestPatientReference() {
-        final Message message = new Message(List.of(
-            "S02+02", // ServiceReportDetails
-            "S06+06", // InvestigationSubject
-            "S10+10",
-            "CIN+UN",
-            "FTX+CID+++COELIAC"
-        ));
-        when(fullUrlGenerator.generate(any(Patient.class))).thenReturn("patient-full-url");
-
-        final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
-            message, mock(Patient.class), null, null, null, null);
-
-        assertThat(procedureRequest)
-            .isNotEmpty()
-            .hasValueSatisfying(procedure ->
-                assertThat(procedure.getSubject().getReference()).isEqualTo("patient-full-url"));
-    }
-
-    @Test
-    void testMapToProcedureRequestRequesterReferenceWhenPerformingOrganisationIsPresented() {
-        final Message message = new Message(List.of(
-            "S02+02", // ServiceReportDetails
-            "S06+06", // InvestigationSubject
-            "S10+10",
-            "CIN+UN",
-            "FTX+CID+++COELIAC"
-        ));
-        when(fullUrlGenerator.generate(nullable(Organization.class)))
-            .thenReturn("requesting-organisation-full-url");
-
-        final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
-            message, null, mock(Practitioner.class), mock(Organization.class), null, null);
-
-        assertThat(procedureRequest)
-            .isNotEmpty()
-            .hasValueSatisfying(procedure ->
-                assertThat(procedure.getRequester().getAgent().getReference())
-                    .isEqualTo("requesting-organisation-full-url"));
-    }
-
-    @Test
-    void testMapToProcedureRequestRequesterReferenceWhenOnlyRequestingPractitionerIsPresented() {
-        final Message message = new Message(List.of(
-            "S02+02", // ServiceReportDetails
-            "S06+06", // InvestigationSubject
-            "S10+10",
-            "CIN+UN",
-            "FTX+CID+++COELIAC"
-        ));
-        when(fullUrlGenerator.generate(nullable(Practitioner.class)))
-            .thenReturn("requesting-practitioner-full-url");
-
-        final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
-            message, null, mock(Practitioner.class), null, null, null);
-
-        assertThat(procedureRequest)
-            .isNotEmpty()
-            .hasValueSatisfying(procedure ->
-                assertThat(procedure.getRequester().getAgent().getReference())
-                    .isEqualTo("requesting-practitioner-full-url"));
-    }
-
-    @Test
-    void testMapToProcedureRequestPerformerReferenceWhenPerformingOrganisationIsPresented() {
-        final Message message = new Message(List.of(
-            "S02+02", // ServiceReportDetails
-            "S06+06", // InvestigationSubject
-            "S10+10",
-            "CIN+UN",
-            "FTX+CID+++COELIAC"
-        ));
-        when(fullUrlGenerator.generate(nullable(Organization.class)))
-            .thenReturn("performing-organisation-full-url");
-
-        final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
-            message, null, null, null, mock(Practitioner.class), mock(Organization.class));
-
-        assertThat(procedureRequest)
-            .isNotEmpty()
-            .hasValueSatisfying(procedure ->
-                assertThat(procedure.getPerformer().getReference())
-                    .isEqualTo("performing-organisation-full-url"));
-    }
-
-    @Test
-    void testMapToProcedureRequestPerformerReferenceWhenOnlyPerformingPractitionerIsPresented() {
-        final Message message = new Message(List.of(
-            "S02+02", // ServiceReportDetails
-            "S06+06", // InvestigationSubject
-            "S10+10",
-            "CIN+UN",
-            "FTX+CID+++COELIAC"
-        ));
-        when(fullUrlGenerator.generate(nullable(Practitioner.class)))
-            .thenReturn("performing-practitioner-full-url");
-
-        final Optional<ProcedureRequest> procedureRequest = procedureRequestMapper.mapToProcedureRequest(
-            message, null, null, null, mock(Practitioner.class), null);
-
-        assertThat(procedureRequest)
-            .isNotEmpty()
-            .hasValueSatisfying(procedure ->
-                assertThat(procedure.getPerformer().getReference())
-                    .isEqualTo("performing-practitioner-full-url"));
+        assertAll(
+            () -> assertThat(procedureRequest.getSubject().getReference())
+                .isEqualTo("patient-full-url"),
+            () -> assertThat(procedureRequest.getRequester().getAgent().getReference())
+                .isEqualTo("requesting-practitioner-full-url"),
+            () -> assertThat(procedureRequest.getRequester().getOnBehalfOf().getReference())
+                .isEqualTo("requesting-organisation-full-url"),
+            () -> assertThat(procedureRequest.getPerformer().getReference())
+                .isEqualTo("performing-practitioner-full-url")
+        );
     }
 }

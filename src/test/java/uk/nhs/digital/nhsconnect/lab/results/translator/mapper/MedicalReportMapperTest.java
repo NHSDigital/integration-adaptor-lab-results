@@ -1,13 +1,14 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
+import com.google.common.collect.Lists;
 import org.hl7.fhir.dstu3.model.DiagnosticReport;
+import org.hl7.fhir.dstu3.model.MessageHeader;
 import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.hl7.fhir.dstu3.model.ProcedureRequest;
 import org.hl7.fhir.dstu3.model.Specimen;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,24 +16,24 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyMap;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.nullable;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MedicalReportMapperTest {
+
+    private static final String SPECIMEN_1_SEQUENCE_NUMBER = "1";
+    private static final String SPECIMEN_2_SEQUENCE_NUMBER = "2";
+
+    @Mock
+    private Message message;
+
+    @Mock
+    private MessageHeaderMapper messageHeaderMapper;
 
     @Mock
     private PatientMapper patientMapper;
@@ -58,144 +59,60 @@ class MedicalReportMapperTest {
     @InjectMocks
     private MedicalReportMapper medicalReportMapper;
 
-    @BeforeEach
-    void setUp() {
-        when(practitionerMapper.mapToRequestingPractitioner(any(Message.class))).thenReturn(Optional.empty());
-        when(practitionerMapper.mapToPerformingPractitioner(any(Message.class))).thenReturn(Optional.empty());
-        when(patientMapper.mapToPatient(any(Message.class))).thenReturn(new Patient());
-        when(procedureRequestMapper.mapToProcedureRequest(any(Message.class), any(Patient.class),
-            nullable(Practitioner.class), nullable(Organization.class),
-            nullable(Practitioner.class), nullable(Organization.class)))
-            .thenReturn(Optional.empty());
-        when(specimenMapper.mapToSpecimensBySequenceNumber(any(Message.class), any(Patient.class)))
-            .thenReturn(Collections.emptyMap());
-        when(observationMapper.mapToObservations(any(), any(), any(), any(), any()))
-            .thenReturn(Collections.emptyList());
-        when(diagnosticReportMapper.mapToDiagnosticReport(nullable(Message.class), nullable(Patient.class), anyList(),
-            anyList(), nullable(Practitioner.class), nullable(Organization.class), nullable(ProcedureRequest.class)))
-            .thenReturn(new DiagnosticReport());
-    }
-
     @Test
-    void testMapMessageToMedicalReportWithPatient() {
-        final Message message = new Message(emptyList());
-        var mockPatient = mock(Patient.class);
-        when(patientMapper.mapToPatient(message)).thenReturn(mockPatient);
+    void when_mappingMessage_expect_medicalReportWithAllResourcesIsReturned() {
+        var messageHeader = mock(MessageHeader.class);
+        var patient = mock(Patient.class);
+        var diagnosticReport = mock(DiagnosticReport.class);
+        var performingOrganization = mock(Organization.class);
+        var performingPractitioner = mock(Practitioner.class);
+        var requestingOrganization = mock(Organization.class);
+        var requestingPractitioner = mock(Practitioner.class);
+        var procedureRequest = mock(ProcedureRequest.class);
+        var specimen1 = mock(Specimen.class);
+        var specimen2 = mock(Specimen.class);
+        var observation1 = mock(Observation.class);
+        var observation2 = mock(Observation.class);
 
-        final var medicalReport = medicalReportMapper.mapToMedicalReport(message);
+        var observations = List.of(observation1, observation2);
+        var specimensBySequenceNumber = Map.of(
+            SPECIMEN_1_SEQUENCE_NUMBER, specimen1,
+            SPECIMEN_2_SEQUENCE_NUMBER, specimen2
+        );
+        var specimens = Lists.newArrayList(specimensBySequenceNumber.values());
 
-        assertThat(medicalReport.getPatient()).isEqualTo(mockPatient);
-    }
-
-    @Test
-    void testMapMessageToMedicalReportWithRequester() {
-        final Message message = new Message(emptyList());
-        var mockRequestingPractitioner = mock(Practitioner.class);
-
-        when(practitionerMapper.mapToRequestingPractitioner(message))
-            .thenReturn(Optional.of(mockRequestingPractitioner));
-
-        final var medicalReport = medicalReportMapper.mapToMedicalReport(message);
-
-        assertThat(medicalReport.getRequestingPractitioner()).isEqualTo(mockRequestingPractitioner);
-    }
-
-    @Test
-    void testMapMessageToMedicalReportWithRequestingOrganization() {
-        final Message message = new Message(emptyList());
-        var mockRequestingOrganization = mock(Organization.class);
-
-        when(organizationMapper.mapToRequestingOrganization(message))
-            .thenReturn(Optional.of(mockRequestingOrganization));
-
-        final var medicalReport = medicalReportMapper.mapToMedicalReport(message);
-
-        assertThat(medicalReport.getRequestingOrganization()).isEqualTo(mockRequestingOrganization);
-    }
-
-    @Test
-    void testMapMessageToMedicalReportWithPerformer() {
-        final Message message = new Message(emptyList());
-        var mockPerformingPractitioner = mock(Practitioner.class);
-
-        when(practitionerMapper.mapToPerformingPractitioner(message))
-            .thenReturn(Optional.of(mockPerformingPractitioner));
-
-        final var medicalReport = medicalReportMapper.mapToMedicalReport(message);
-
-        assertThat(medicalReport.getPerformingPractitioner()).isEqualTo(mockPerformingPractitioner);
-    }
-
-    @Test
-    void testMapMessageToMedicalReportWithPerformingOrganization() {
-        final Message message = new Message(emptyList());
-        var mockPerformingOrganization = mock(Organization.class);
-
-        when(organizationMapper.mapToPerformingOrganization(message))
-            .thenReturn(Optional.of(mockPerformingOrganization));
-
-        final var medicalReport = medicalReportMapper.mapToMedicalReport(message);
-
-        assertThat(medicalReport.getPerformingOrganization()).isEqualTo(mockPerformingOrganization);
-    }
-
-    @Test
-    void testMapMessageToMedicalReportWithProcedureRequest() {
-        final Message message = new Message(emptyList());
-        var mockProcedureRequest = mock(ProcedureRequest.class);
-        reset(procedureRequestMapper);
-        when(procedureRequestMapper.mapToProcedureRequest(eq(message), any(Patient.class),
-            nullable(Practitioner.class), nullable(Organization.class),
-            nullable(Practitioner.class), nullable(Organization.class)))
-            .thenReturn(Optional.of(mockProcedureRequest));
-
-        final var medicalReport = medicalReportMapper.mapToMedicalReport(message);
-
-        assertThat(medicalReport.getTestRequestSummary()).isEqualTo(mockProcedureRequest);
-    }
-
-    @Test
-    void testMapMessageToMedicalReportWithSpecimens() {
-        final Message message = new Message(emptyList());
-        final var mockSpecimen1 = mock(Specimen.class);
-        final var mockSpecimen2 = mock(Specimen.class);
-        reset(specimenMapper);
-        when(specimenMapper.mapToSpecimensBySequenceNumber(eq(message), any(Patient.class)))
-            .thenReturn(Map.of("1", mockSpecimen1, "2", mockSpecimen2));
-
-        final var medicalReport = medicalReportMapper.mapToMedicalReport(message);
-
-        assertThat(medicalReport.getSpecimens())
-            .containsOnly(mockSpecimen1, mockSpecimen2);
-    }
-
-    @Test
-    void testMapMessageToMedicalReportWithTestResults() {
-        final Message message = new Message(emptyList());
-        final var mockObservation1 = mock(Observation.class);
-        final var mockObservation2 = mock(Observation.class);
-        reset(observationMapper);
-        when(observationMapper.mapToObservations(eq(message), nullable(Patient.class), anyMap(),
-            nullable(Organization.class), nullable(Practitioner.class)))
-            .thenReturn(List.of(mockObservation1, mockObservation2));
-
-        final var medicalReport = medicalReportMapper.mapToMedicalReport(message);
-
-        assertThat(medicalReport.getTestResults())
-            .containsExactly(mockObservation1, mockObservation2);
-    }
-
-    @Test
-    void testMapMessageToMedicalReportWithDiagnosticReport() {
-        final Message message = new Message(emptyList());
-        final var diagnosticReport = mock(DiagnosticReport.class);
-        reset(diagnosticReportMapper);
-        when(diagnosticReportMapper.mapToDiagnosticReport(eq(message), nullable(Patient.class), anyList(), anyList(),
-            nullable(Practitioner.class), nullable(Organization.class), nullable(ProcedureRequest.class)))
+        when(messageHeaderMapper.mapToMessageHeader(
+                message, diagnosticReport, performingOrganization, requestingOrganization))
+            .thenReturn(messageHeader);
+        when(patientMapper.mapToPatient(message)).thenReturn(patient);
+        when(organizationMapper.mapToRequestingOrganization(message)).thenReturn(requestingOrganization);
+        when(practitionerMapper.mapToRequestingPractitioner(message)).thenReturn(requestingPractitioner);
+        when(organizationMapper.mapToPerformingOrganization(message)).thenReturn(performingOrganization);
+        when(practitionerMapper.mapToPerformingPractitioner(message)).thenReturn(performingPractitioner);
+        when(procedureRequestMapper.mapToProcedureRequest(
+                message, patient, requestingPractitioner, requestingOrganization, performingPractitioner))
+            .thenReturn(procedureRequest);
+        when(specimenMapper.mapToSpecimensBySequenceNumber(message, patient))
+            .thenReturn(specimensBySequenceNumber);
+        when(observationMapper.mapToObservations(
+                message, patient, specimensBySequenceNumber, performingOrganization, performingPractitioner))
+            .thenReturn(observations);
+        when(diagnosticReportMapper.mapToDiagnosticReport(
+                message, patient, specimens, observations,
+                performingPractitioner, performingOrganization, procedureRequest))
             .thenReturn(diagnosticReport);
 
-        final var medicalReport = medicalReportMapper.mapToMedicalReport(message);
+        var medicalReport = medicalReportMapper.mapToMedicalReport(message);
 
+        assertThat(medicalReport.getMessageHeader()).isEqualTo(messageHeader);
+        assertThat(medicalReport.getPatient()).isEqualTo(patient);
+        assertThat(medicalReport.getPerformingOrganization()).isEqualTo(performingOrganization);
+        assertThat(medicalReport.getPerformingPractitioner()).isEqualTo(performingPractitioner);
+        assertThat(medicalReport.getRequestingOrganization()).isEqualTo(requestingOrganization);
+        assertThat(medicalReport.getRequestingPractitioner()).isEqualTo(requestingPractitioner);
         assertThat(medicalReport.getTestReport()).isEqualTo(diagnosticReport);
+        assertThat(medicalReport.getTestRequestSummary()).isEqualTo(procedureRequest);
+        assertThat(medicalReport.getSpecimens()).isEqualTo(specimens);
+        assertThat(medicalReport.getTestResults()).isEqualTo(observations);
     }
 }

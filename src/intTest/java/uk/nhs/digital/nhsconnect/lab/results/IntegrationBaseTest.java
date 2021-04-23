@@ -29,8 +29,6 @@ import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshHeaders;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshHttpClientBuilder;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshRequests;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.InboundMeshMessage;
-import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
-import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.utils.JmsReader;
 
 import javax.annotation.PostConstruct;
@@ -186,11 +184,10 @@ public abstract class IntegrationBaseTest {
     @SneakyThrows(IllegalAccessException.class)
     private MeshClient buildMeshClientForLabResultsMailbox() {
         // getting this from config is
-        final String labResultsMailboxId = recipientMailboxIdMappings.getRecipientMailboxId(
-            new MeshMessage().setRecipient("000000024600002"));
+        final String labResultsMailboxId = recipientMailboxIdMappings.getRecipientMailboxId("000000024600002");
         final String gpMailboxId = meshConfig.getMailboxId();
         final RecipientMailboxIdMappings mockRecipientMailboxIdMappings = mock(RecipientMailboxIdMappings.class);
-        when(mockRecipientMailboxIdMappings.getRecipientMailboxId(any(OutboundMeshMessage.class)))
+        when(mockRecipientMailboxIdMappings.getRecipientMailboxId(any(String.class)))
             .thenReturn(gpMailboxId);
         // getters perform a transformation
         final String endpointCert = (String) FieldUtils.readField(meshConfig, "endpointCert", true);

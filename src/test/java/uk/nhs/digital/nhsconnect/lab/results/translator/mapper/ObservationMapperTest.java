@@ -359,26 +359,6 @@ class ObservationMapperTest {
     }
 
     @Test
-    void testMapOrganizationAsPerformer() {
-        final var message = new Message(List.of(
-            "S02+02", // ServiceReportDetails
-            "S06+06", // InvestigationSubject
-            "GIS+N", // LabResult
-            "INV+MQ+c:911::d", // LaboratoryInvestigation
-            "RFF+ASL:1" // Reference
-        ));
-        when(fullUrlGenerator.generate(mockOrganization)).thenReturn("url-organization");
-
-        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization, null);
-
-        assertThat(observations).hasSize(1).first()
-            .extracting(Observation::getPerformer)
-            .satisfies(performers -> assertThat(performers).hasSize(1).first()
-                .extracting(Reference::getReference)
-                .isEqualTo("url-organization"));
-    }
-
-    @Test
     void testMapPractitionerAsPerformer() {
         final var message = new Message(List.of(
             "S02+02", // ServiceReportDetails
@@ -387,16 +367,20 @@ class ObservationMapperTest {
             "INV+MQ+c:911::d", // LaboratoryInvestigation
             "RFF+ASL:1" // Reference
         ));
-        when(fullUrlGenerator.generate(mockPractitioner)).thenReturn("url-practitioner");
 
-        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), null,
-            mockPractitioner);
+        when(fullUrlGenerator.generate(mockPractitioner)).thenReturn("url-practitioner");
+        when(fullUrlGenerator.generate(mockOrganization)).thenReturn("url-organization");
+
+        final var observations = mapper.mapToObservations(
+            message, mockPatient, emptyMap(), mockOrganization, mockPractitioner);
 
         assertThat(observations).hasSize(1).first()
             .extracting(Observation::getPerformer)
-            .satisfies(performers -> assertThat(performers).hasSize(1).first()
-                .extracting(Reference::getReference)
-                .isEqualTo("url-practitioner"));
+            .satisfies(performers -> assertAll(
+                () -> assertThat(performers).hasSize(2),
+                () -> assertThat(performers.get(0).getReference()).isEqualTo("url-organization"),
+                () -> assertThat(performers.get(1).getReference()).isEqualTo("url-practitioner")
+            ));
     }
 
     @Test
@@ -419,23 +403,6 @@ class ObservationMapperTest {
             .satisfies(performers -> assertThat(performers).hasSize(2)
                 .map(Reference::getReference)
                 .containsExactly("url-organization", "url-practitioner"));
-    }
-
-    @Test
-    void testMapNoPerformers() {
-        final var message = new Message(List.of(
-            "S02+02", // ServiceReportDetails
-            "S06+06", // InvestigationSubject
-            "GIS+N", // LabResult
-            "INV+MQ+c:911::d", // LaboratoryInvestigation
-            "RFF+ASL:1" // Reference
-        ));
-
-        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), null, null);
-
-        assertThat(observations).hasSize(1).first()
-            .extracting(Observation::getPerformer)
-            .satisfies(performers -> assertThat(performers).isEmpty());
     }
 
     @Test

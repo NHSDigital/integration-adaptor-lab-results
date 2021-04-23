@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.exception.MeshRecipientUnknownException;
-import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,9 +20,8 @@ public class RecipientMailboxIdMappings {
         this.recipientToMailboxIdMappings = recipientToMailboxIdMappings;
     }
 
-    public String getRecipientMailboxId(OutboundMeshMessage outboundMeshMessage) {
+    public String getRecipientMailboxId(String recipient) {
         Map<String, String> mappings = createMappings();
-        String recipient = outboundMeshMessage.getRecipient();
         if (!mappings.containsKey(recipient)) {
             throw new MeshRecipientUnknownException("Couldn't decode recipient: " + recipient);
         }

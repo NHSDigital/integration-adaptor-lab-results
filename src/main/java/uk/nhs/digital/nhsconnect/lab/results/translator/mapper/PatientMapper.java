@@ -26,6 +26,7 @@ import java.util.Optional;
 public class PatientMapper {
 
     protected static final String NHS_NUMBER_SYSTEM = "https://fhir.nhs.uk/Id/nhs-number";
+
     private final UUIDGenerator uuidGenerator;
 
     public Patient mapToPatient(final Message message) {
