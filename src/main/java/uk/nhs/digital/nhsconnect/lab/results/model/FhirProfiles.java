@@ -1,4 +1,4 @@
-package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
+package uk.nhs.digital.nhsconnect.lab.results.model;
 
 public final class FhirProfiles {
 
