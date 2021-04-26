@@ -38,9 +38,9 @@ class PractitionerMapperTest {
 
         assertAll(
             () -> assertThat(requestingPractitioner.getName())
-                .hasSize(0),
+                .isEmpty(),
             () -> assertThat(requestingPractitioner.getIdentifier())
-                .hasSize(0)
+                .isEmpty()
         );
     }
 
@@ -103,9 +103,9 @@ class PractitionerMapperTest {
         Practitioner performingPractitioner = mapper.mapToPerformingPractitioner(message);
         assertAll(
             () -> assertThat(performingPractitioner.getName())
-                .hasSize(0),
+                .isEmpty(),
             () -> assertThat(performingPractitioner.getIdentifier())
-                .hasSize(0)
+                .isEmpty()
         );
     }
 
@@ -151,9 +151,9 @@ class PractitionerMapperTest {
         Practitioner performingPractitioner = mapper.mapToPerformingPractitioner(message);
         assertAll(
             () -> assertThat(performingPractitioner.getName())
-                .hasSize(0),
+                .isEmpty(),
             () -> assertThat(performingPractitioner.getIdentifier())
-                .hasSize(0)
+                .isEmpty()
         );
     }
 }

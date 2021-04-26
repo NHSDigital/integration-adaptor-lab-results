@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.hl7.fhir.dstu3.model.BooleanType;
 import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.DiagnosticReport;
-import org.hl7.fhir.dstu3.model.Extension;
 import org.hl7.fhir.dstu3.model.MessageHeader;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Reference;
@@ -16,6 +15,8 @@ import uk.nhs.digital.nhsconnect.lab.results.model.FhirProfiles;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
+
+import java.util.Date;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -31,26 +32,27 @@ public class MessageHeaderMapper {
         messageHeader.getMeta().addProfile(FhirProfiles.MESSAGE_HEADER);
         messageHeader.setId(uuidGenerator.generateUUID());
 
+        messageHeader.setTimestamp(
+            Date.from(message.getInterchange().getInterchangeHeader().getTranslationTime()));
         messageHeader.addFocus(new Reference(fullUrlGenerator.generate(diagnosticReport)));
 
         messageHeader.setResponsible(new Reference(fullUrlGenerator.generate(performingOrganization)));
 
         var extension = messageHeader.addExtension();
         extension.setUrl("https://fhir.nhs.uk/STU3/StructureDefinition/Extension-ITK-MessageHandling-2");
-        extension.addExtension(new Extension().setUrl("BusAckRequested").setValue(new BooleanType(true)));
-        extension.addExtension(new Extension().setUrl("InfAckRequested").setValue(new BooleanType(true)));
-        extension.addExtension(new Extension().setUrl("RecipientType").setValue(new Coding()
-                .setSystem("https://fhir.nhs.uk/STU3/CodeSystem/ITK-RecipientType-1")
-                .setCode("FA")
-                .setDisplay("For Action")
-            )
+        extension.addExtension().setUrl("BusAckRequested").setValue(new BooleanType(true));
+        extension.addExtension().setUrl("InfAckRequested").setValue(new BooleanType(true));
+        extension.addExtension().setUrl("RecipientType").setValue(new Coding()
+            .setSystem("https://fhir.nhs.uk/STU3/CodeSystem/ITK-RecipientType-1")
+            .setCode("FA")
+            .setDisplay("For Action")
         );
 //            it's mandatory according to MessageHeader profile but there is no value for Pathology nor Screening
 //            closest one is https://fhir.nhs.uk/STU3/MessageDefinition/ITK-SendPayload-MessageDefinition-1
 //            but it requires practitioner and organization that have different profiles than pathology
 //        extension.addExtension(new Extension().setUrl("MessageDefinition").setValue(...))
-        extension.addExtension(new Extension().setUrl("SenderReference").setValue(new StringType("None")));
-        extension.addExtension(new Extension().setUrl("LocalExtension").setValue(new StringType("None")));
+        extension.addExtension().setUrl("SenderReference").setValue(new StringType("None"));
+        extension.addExtension().setUrl("LocalExtension").setValue(new StringType("None"));
 
         messageHeader.setEvent(new Coding()
             .setSystem("https://fhir.nhs.uk/STU3/CodeSystem/ITK-MessageEvent-2")

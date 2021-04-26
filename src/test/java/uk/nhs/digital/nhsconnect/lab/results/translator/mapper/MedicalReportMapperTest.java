@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -104,15 +105,17 @@ class MedicalReportMapperTest {
 
         var medicalReport = medicalReportMapper.mapToMedicalReport(message);
 
-        assertThat(medicalReport.getMessageHeader()).isEqualTo(messageHeader);
-        assertThat(medicalReport.getPatient()).isEqualTo(patient);
-        assertThat(medicalReport.getPerformingOrganization()).isEqualTo(performingOrganization);
-        assertThat(medicalReport.getPerformingPractitioner()).isEqualTo(performingPractitioner);
-        assertThat(medicalReport.getRequestingOrganization()).isEqualTo(requestingOrganization);
-        assertThat(medicalReport.getRequestingPractitioner()).isEqualTo(requestingPractitioner);
-        assertThat(medicalReport.getTestReport()).isEqualTo(diagnosticReport);
-        assertThat(medicalReport.getTestRequestSummary()).isEqualTo(procedureRequest);
-        assertThat(medicalReport.getSpecimens()).isEqualTo(specimens);
-        assertThat(medicalReport.getTestResults()).isEqualTo(observations);
+        assertAll(
+            () -> assertThat(medicalReport.getMessageHeader()).isEqualTo(messageHeader),
+            () -> assertThat(medicalReport.getPatient()).isEqualTo(patient),
+            () -> assertThat(medicalReport.getPerformingOrganization()).isEqualTo(performingOrganization),
+            () -> assertThat(medicalReport.getPerformingPractitioner()).isEqualTo(performingPractitioner),
+            () -> assertThat(medicalReport.getRequestingOrganization()).isEqualTo(requestingOrganization),
+            () -> assertThat(medicalReport.getRequestingPractitioner()).isEqualTo(requestingPractitioner),
+            () -> assertThat(medicalReport.getTestReport()).isEqualTo(diagnosticReport),
+            () -> assertThat(medicalReport.getTestRequestSummary()).isEqualTo(procedureRequest),
+            () -> assertThat(medicalReport.getSpecimens()).isEqualTo(specimens),
+            () -> assertThat(medicalReport.getTestResults()).isEqualTo(observations)
+        );
     }
 }

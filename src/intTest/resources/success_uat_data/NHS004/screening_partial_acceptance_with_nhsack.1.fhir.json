@@ -65,6 +65,7 @@
                 "sender": {
                     "reference": "urn:uuid:85aa16b7-dfb8-4fdf-878a-b6841a7bd872"
                 },
+                "timestamp": "2010-03-01T18:51:00.000+00:00",
                 "source": {
                     "endpoint": "lab_results_mailbox"
                 },
@@ -206,6 +207,7 @@
                 },
                 "identifier": [
                     {
+                        "system": "https://tools.ietf.org/html/rfc4122",
                         "value": "34/1"
                     }
                 ],

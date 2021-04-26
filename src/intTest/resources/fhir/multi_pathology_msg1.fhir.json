@@ -65,6 +65,7 @@
                 "sender": {
                     "reference": "urn:uuid:bb9387a2-e88d-4c97-ba8b-b21c972da154"
                 },
+                "timestamp": "2010-03-01T18:51:00.000+00:00",
                 "source": {
                     "endpoint": "lab_results_mailbox"
                 },
@@ -239,6 +240,7 @@
                 },
                 "identifier": [
                     {
+                        "system": "https://tools.ietf.org/html/rfc4122",
                         "value": "15/CH000037K/200010191704"
                     }
                 ],
@@ -260,7 +262,7 @@
                 "subject": {
                     "reference": "urn:uuid:698d307b-bc34-4ee7-bc4c-c02805d5fca6"
                 },
-                "issued": "2010-02-25T16:41:00.000+01:00",
+                "issued": "2010-02-25T15:41:00.000+00:00",
                 "performer": [
                     {
                         "actor": {

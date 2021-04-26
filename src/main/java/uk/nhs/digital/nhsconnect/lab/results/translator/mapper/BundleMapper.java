@@ -2,6 +2,7 @@ package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.hl7.fhir.dstu3.model.Bundle;
+import org.hl7.fhir.dstu3.model.DomainResource;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.InstantType;
 import org.hl7.fhir.dstu3.model.Meta;
@@ -28,7 +29,7 @@ public class BundleMapper {
 
     public Bundle mapToBundle(final MedicalReport medicalReport) {
         final Bundle bundle = generateInitialPathologyBundle();
-        final Consumer<Resource> addToBundle = resource -> addResourceToBundle(bundle, resource);
+        final Consumer<DomainResource> addToBundle = resource -> addResourceToBundle(bundle, resource);
 
         Stream.of(
             Stream.of(
@@ -44,7 +45,7 @@ public class BundleMapper {
             medicalReport.getSpecimens().stream(),
             medicalReport.getTestResults().stream()
         )
-            .flatMap(i -> i)
+            .reduce(Stream.empty(), Stream::concat)
             .forEach(addToBundle);
 
         return bundle;

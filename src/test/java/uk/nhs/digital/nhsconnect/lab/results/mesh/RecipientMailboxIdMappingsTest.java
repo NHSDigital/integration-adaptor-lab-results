@@ -4,8 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.exception.MeshRecipientUnknownException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class RecipientMailboxIdMappingsTest {
 
@@ -19,14 +19,23 @@ public class RecipientMailboxIdMappingsTest {
 
     @Test
     void testGetRecipientMailboxIdForMessage() {
-        assertEquals("test_mailbox", recipientMailboxIdMappings.getRecipientMailboxId("REC1"));
+        assertThat(recipientMailboxIdMappings.getRecipientMailboxId("REC1")).isEqualTo("test_mailbox");
     }
 
     @Test
     void testGetRecipientMailboxIdForMessageRecipientNotFoundThrowsException() {
-        final MeshRecipientUnknownException exception = assertThrows(MeshRecipientUnknownException.class,
-            () -> recipientMailboxIdMappings.getRecipientMailboxId("INVALID"));
+        assertThatThrownBy(() -> recipientMailboxIdMappings.getRecipientMailboxId("INVALID"))
+            .isInstanceOf(MeshRecipientUnknownException.class)
+            .hasMessage("Couldn't decode recipient: INVALID");
+    }
 
-        assertEquals("Couldn't decode recipient: INVALID", exception.getMessage());
+    @Test
+    void testGetRecipientMailboxIdForMessageNoRecipientToMailboxMappingsThrowsException() {
+        recipientMailboxIdMappings = new RecipientMailboxIdMappings("");
+
+        assertThatThrownBy(() -> recipientMailboxIdMappings.getRecipientMailboxId("REC1"))
+            .isInstanceOf(MeshRecipientUnknownException.class)
+            .hasMessage("LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS env var doesn't contain valid "
+                + "recipient to mailbox mapping");
     }
 }
