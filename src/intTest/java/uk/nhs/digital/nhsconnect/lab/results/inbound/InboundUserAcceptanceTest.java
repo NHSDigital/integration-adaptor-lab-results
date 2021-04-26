@@ -85,7 +85,6 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
             assertThat(correlationId).isNotEmpty();
 
             String messageBody = parseTextMessage(gpOutboundQueueMessage);
-
             assertFhirEquals(expectedMessageBody, messageBody);
         }
 
@@ -94,7 +93,6 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
         } else {
             assertThat(getMeshClient().getInboxMessageIds()).isEmpty();
         }
-
     }
 
     /**

@@ -5,6 +5,7 @@ public final class FhirProfiles {
     private FhirProfiles() {
     }
 
+    public static final String MESSAGE_HEADER = "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-MessageHeader-2";
     public static final String PATIENT = "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Patient-1";
     public static final String PRACTITIONER = "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Practitioner-1";
     public static final String ORGANIZATION = "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1";

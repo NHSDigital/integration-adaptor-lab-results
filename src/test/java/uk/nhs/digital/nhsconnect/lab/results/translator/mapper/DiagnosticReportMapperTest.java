@@ -199,40 +199,22 @@ class DiagnosticReportMapperTest {
         ));
 
         final var practitioner = mock(Practitioner.class);
-
-        when(resourceFullUrlGenerator.generate(nullable(Practitioner.class))).thenReturn("practitioner-id");
-        final var result = mapper.mapToDiagnosticReport(message, null, Collections.emptyList(),
-            Collections.emptyList(), practitioner, null, null);
-
-        assertAll(
-            () -> assertThat(result.getPerformer()).hasSize(1),
-            () -> assertThat(result.getPerformer().get(0).getActor())
-                .extracting(Reference::getReference)
-                .isEqualTo("practitioner-id")
-        );
-    }
-
-    @Test
-    void testMapToDiagnosticReportWithPerformingOrganization() {
-        final Message message = new Message(List.of(
-            "S02+02",
-            "GIS+N",
-            "RFF+SRI:15/CH000042P/200010191704",
-            "STS++UN",
-            "DTM+ISR:201002251541:203"
-        ));
-
         final var organization = mock(Organization.class);
 
+        when(resourceFullUrlGenerator.generate(nullable(Practitioner.class))).thenReturn("practitioner-id");
         when(resourceFullUrlGenerator.generate(nullable(Organization.class))).thenReturn("organization-id");
+
         final var result = mapper.mapToDiagnosticReport(message, null, Collections.emptyList(),
-            Collections.emptyList(), null, organization, null);
+            Collections.emptyList(), practitioner, organization, null);
 
         assertAll(
-            () -> assertThat(result.getPerformer()).hasSize(1),
+            () -> assertThat(result.getPerformer()).hasSize(2),
             () -> assertThat(result.getPerformer().get(0).getActor())
                 .extracting(Reference::getReference)
-                .isEqualTo("organization-id")
+                .isEqualTo("organization-id"),
+            () -> assertThat(result.getPerformer().get(1).getActor())
+                .extracting(Reference::getReference)
+                .isEqualTo("practitioner-id")
         );
     }
 

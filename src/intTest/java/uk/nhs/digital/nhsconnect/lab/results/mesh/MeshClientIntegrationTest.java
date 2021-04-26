@@ -22,7 +22,6 @@ import uk.nhs.digital.nhsconnect.lab.results.mesh.exception.MeshApiConnectionExc
 import uk.nhs.digital.nhsconnect.lab.results.mesh.exception.MeshWorkflowUnknownException;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshHttpClientBuilder;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshRequests;
-import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessageId;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId;
@@ -87,8 +86,7 @@ class MeshClientIntegrationTest extends IntegrationBaseTest {
 
     @SneakyThrows
     private MeshMessageId sendLargeMessageWithWrongWorkflowId() {
-        OutboundMeshMessage messageForMappingMailboxId = new MeshMessage().setRecipient(RECIPIENT);
-        var recipientMailbox = recipientMailboxIdMappings.getRecipientMailboxId(messageForMappingMailboxId);
+        var recipientMailbox = recipientMailboxIdMappings.getRecipientMailboxId(RECIPIENT);
 
         try (CloseableHttpClient client = meshHttpClientBuilder.build()) {
             var request = meshRequests.sendMessage(recipientMailbox, WorkflowId.PATHOLOGY_3);

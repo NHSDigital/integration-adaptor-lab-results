@@ -3,7 +3,6 @@ package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 import lombok.RequiredArgsConstructor;
 import org.hl7.fhir.dstu3.model.DiagnosticReport;
 import org.hl7.fhir.dstu3.model.DiagnosticReport.DiagnosticReportStatus;
-import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.Observation.ObservationRelationshipType;
 import org.hl7.fhir.dstu3.model.Organization;
@@ -23,7 +22,6 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -106,9 +104,9 @@ public class DiagnosticReportMapper {
         }
 
         private void mapIdentifier() {
-            final Identifier identifier = new Identifier();
-            identifier.setValue(serviceReportDetails.getReference().getNumber());
-            diagnosticReport.addIdentifier(identifier);
+            diagnosticReport.addIdentifier()
+                .setValue(serviceReportDetails.getReference().getNumber())
+                .setSystem("https://tools.ietf.org/html/rfc4122");
         }
 
         private void mapSpecimens() {
@@ -126,7 +124,6 @@ public class DiagnosticReportMapper {
 
         private void mapPerformer() {
             Stream.of(performingOrganization, performingPractitioner)
-                .filter(Objects::nonNull)
                 .map(fullUrlGenerator::generate)
                 .forEach(performerUrl -> diagnosticReport.addPerformer().getActor().setReference(performerUrl));
         }

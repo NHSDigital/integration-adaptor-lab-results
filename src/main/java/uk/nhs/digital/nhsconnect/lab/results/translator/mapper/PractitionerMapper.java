@@ -20,35 +20,42 @@ public class PractitionerMapper {
 
     private static final String SDS_USER_SYSTEM = "https://fhir.nhs.uk/Id/sds-user-id";
 
-    public Optional<Practitioner> mapToRequestingPractitioner(final Message message) {
+    public Practitioner mapToRequestingPractitioner(final Message message) {
         return message.getInvolvedParties().stream()
             .filter(party -> party.getServiceProvider().getServiceProviderCode().equals(PROFESSIONAL))
             .map(InvolvedParty::getRequesterNameAndAddress)
             .flatMap(Optional::stream)
             .map(r -> mapToPractitioner(r.getIdentifier().orElse(null), r.getName().orElse(null)))
-            .findFirst();
+            .findFirst()
+            .orElseGet(this::buildBarePractitioner);
     }
 
-    public Optional<Practitioner> mapToPerformingPractitioner(final Message message) {
+    public Practitioner mapToPerformingPractitioner(final Message message) {
         return message.getInvolvedParties().stream()
             .filter(party -> party.getServiceProvider().getServiceProviderCode().equals(PROFESSIONAL))
             .map(InvolvedParty::getPerformerNameAndAddress)
             .flatMap(Optional::stream)
             .map(p -> mapToPractitioner(p.getIdentifier(), p.getName()))
-            .findFirst();
+            .findFirst()
+            .orElseGet(this::buildBarePractitioner);
     }
 
     private Practitioner mapToPractitioner(final String identifier, final String name) {
-        final var practitioner = new Practitioner();
-        practitioner.getMeta().addProfile(FhirProfiles.PRACTITIONER);
+        final var practitioner = buildBarePractitioner();
 
         Optional.ofNullable(identifier)
             .ifPresent(id -> practitioner.addIdentifier().setValue(id).setSystem(SDS_USER_SYSTEM));
 
         Optional.ofNullable(name)
             .ifPresent(n -> practitioner.addName().setText(n));
-        practitioner.setId(uuidGenerator.generateUUID());
 
+        return practitioner;
+    }
+
+    private Practitioner buildBarePractitioner() {
+        final var practitioner = new Practitioner();
+        practitioner.setId(uuidGenerator.generateUUID());
+        practitioner.getMeta().addProfile(FhirProfiles.PRACTITIONER);
         return practitioner;
     }
 }

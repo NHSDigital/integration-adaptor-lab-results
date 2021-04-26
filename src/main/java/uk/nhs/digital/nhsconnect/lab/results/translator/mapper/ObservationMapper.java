@@ -40,7 +40,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -275,7 +274,6 @@ public class ObservationMapper {
 
         private void mapPerformer(final Observation observation) {
             Stream.of(organization, practitioner)
-                .filter(Objects::nonNull)
                 .map(fullUrlGenerator::generate)
                 .forEach(performerUrl -> observation.addPerformer().setReference(performerUrl));
         }

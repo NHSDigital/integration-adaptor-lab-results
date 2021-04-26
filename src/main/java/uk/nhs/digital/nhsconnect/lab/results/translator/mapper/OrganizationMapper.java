@@ -25,25 +25,24 @@ public class OrganizationMapper {
 
     private final UUIDGenerator uuidGenerator;
 
-    public Optional<Organization> mapToRequestingOrganization(final Message message) {
+    public Organization mapToRequestingOrganization(final Message message) {
         return message.getInvolvedParties().stream()
             .filter(party -> party.getServiceProvider().getServiceProviderCode() == ORGANIZATION)
             .map(InvolvedParty::getRequesterNameAndAddress)
             .flatMap(Optional::stream)
             .findFirst()
             .map(requester -> {
-                final var organization = new Organization();
-                organization.getMeta().addProfile(FhirProfiles.ORGANIZATION);
-                organization.setId(uuidGenerator.generateUUID());
+                final var organization = buildBareOrganization();
                 requester.getName().map(MappingUtils::unescape).ifPresent(organization::setName);
                 requester.getIdentifier().ifPresent(id -> organization.addIdentifier()
                     .setSystem(ODS_ORGANIZATION_SYSTEM)
                     .setValue(id));
                 return organization;
-            });
+            })
+            .orElseGet(this::buildBareOrganization);
     }
 
-    public Optional<Organization> mapToPerformingOrganization(final Message message) {
+    public Organization mapToPerformingOrganization(final Message message) {
         final var performingOrganization = message.getInvolvedParties().stream()
             .filter(party -> party.getServiceProvider().getServiceProviderCode() == ORGANIZATION)
             .filter(organization -> organization.getPerformerNameAndAddress().isPresent())
@@ -54,13 +53,11 @@ public class OrganizationMapper {
             .filter(department -> department.getPerformerNameAndAddress().isPresent())
             .findAny();
 
-        if (performingOrganization.isEmpty() && performingDepartment.isEmpty()) {
-            return Optional.empty();
-        }
+        final var organization = buildBareOrganization();
 
-        final var organization = new Organization();
-        organization.getMeta().addProfile(FhirProfiles.ORGANIZATION);
-        organization.setId(uuidGenerator.generateUUID());
+        if (performingOrganization.isEmpty() && performingDepartment.isEmpty()) {
+            return organization;
+        }
 
         final Optional<PerformerNameAndAddress> performerNameAndAddress = performingOrganization
             .flatMap(InvolvedParty::getPerformerNameAndAddress);
@@ -83,6 +80,13 @@ public class OrganizationMapper {
             .map(coding -> new CodeableConcept().addCoding(coding))
             .ifPresent(organization::addType);
 
-        return Optional.of(organization);
+        return organization;
+    }
+
+    private Organization buildBareOrganization() {
+        final var organization = new Organization();
+        organization.getMeta().addProfile(FhirProfiles.ORGANIZATION);
+        organization.setId(uuidGenerator.generateUUID());
+        return organization;
     }
 }

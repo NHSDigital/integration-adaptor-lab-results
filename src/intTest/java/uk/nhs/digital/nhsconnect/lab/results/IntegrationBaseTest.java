@@ -29,8 +29,6 @@ import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshHeaders;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshHttpClientBuilder;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshRequests;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.InboundMeshMessage;
-import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
-import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.utils.JmsReader;
 
 import javax.annotation.PostConstruct;
@@ -47,7 +45,7 @@ import java.util.function.Supplier;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -186,11 +184,10 @@ public abstract class IntegrationBaseTest {
     @SneakyThrows(IllegalAccessException.class)
     private MeshClient buildMeshClientForLabResultsMailbox() {
         // getting this from config is
-        final String labResultsMailboxId = recipientMailboxIdMappings.getRecipientMailboxId(
-            new MeshMessage().setRecipient("000000024600002"));
+        final String labResultsMailboxId = recipientMailboxIdMappings.getRecipientMailboxId("000000024600002");
         final String gpMailboxId = meshConfig.getMailboxId();
         final RecipientMailboxIdMappings mockRecipientMailboxIdMappings = mock(RecipientMailboxIdMappings.class);
-        when(mockRecipientMailboxIdMappings.getRecipientMailboxId(any(OutboundMeshMessage.class)))
+        when(mockRecipientMailboxIdMappings.getRecipientMailboxId(anyString()))
             .thenReturn(gpMailboxId);
         // getters perform a transformation
         final String endpointCert = (String) FieldUtils.readField(meshConfig, "endpointCert", true);
@@ -279,6 +276,7 @@ public abstract class IntegrationBaseTest {
                 new Customization("entry[*].resource.id", IGNORE),
                 new Customization("entry[*].resource.issued", AS_INSTANTS),
                 new Customization("entry[*].resource.receivedTime", AS_INSTANTS),
+                new Customization("entry[*].resource.timestamp", IGNORE),
                 new Customization("entry[*].resource.collection.collectedDateTime", AS_INSTANTS)
             )
         );

@@ -57,7 +57,8 @@ public class MeshClient {
     @SneakyThrows
     public MeshMessageId sendEdifactMessage(OutboundMeshMessage outboundMeshMessage) {
         final var loggingName = "Send a message";
-        final String recipientMailbox = recipientMailboxIdMappings.getRecipientMailboxId(outboundMeshMessage);
+        final String recipientMailbox = recipientMailboxIdMappings
+            .getRecipientMailboxId(outboundMeshMessage.getRecipient());
         LOGGER.info("Sending to MESH API: recipient: {}, MESH mailbox: {}, workflow: {}",
             outboundMeshMessage.getRecipient(), recipientMailbox, outboundMeshMessage.getWorkflowId());
         try (CloseableHttpClient client = meshHttpClientBuilder.build()) {

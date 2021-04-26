@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hl7.fhir.dstu3.model.DiagnosticReport;
+import org.hl7.fhir.dstu3.model.MessageHeader;
 import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
@@ -19,6 +20,7 @@ import java.util.List;
 @Setter
 public class MedicalReport {
 
+    private MessageHeader messageHeader;
     private Patient patient;
     private Practitioner performingPractitioner;
     private Organization performingOrganization;
