@@ -1,6 +1,7 @@
 package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
 import org.hl7.fhir.dstu3.model.CodeableConcept;
+import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.Observation.ObservationReferenceRangeComponent;
 import org.hl7.fhir.dstu3.model.Observation.ObservationRelationshipType;
@@ -68,8 +69,8 @@ class ObservationMapperTest {
     void testMapNonePresent() {
         final var message = new Message(Collections.emptyList());
 
-        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
-            mockPractitioner);
+        final var observations = mapper.mapToObservations(
+            message, mockPatient, emptyMap(), mockOrganization, mockPractitioner);
 
         assertThat(observations).isEmpty();
     }
@@ -82,8 +83,8 @@ class ObservationMapperTest {
             "GIS+N" // LabResult
         ));
 
-        assertThatThrownBy(() -> mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
-            mockPractitioner))
+        assertThatThrownBy(() -> mapper.mapToObservations(
+            message, mockPatient, emptyMap(), mockOrganization, mockPractitioner))
             .isExactlyInstanceOf(MissingSegmentException.class)
             .hasMessageStartingWith("EDIFACT section is missing segment");
     }
@@ -102,8 +103,8 @@ class ObservationMapperTest {
             "RFF+ASL:1" // Reference
         ));
 
-        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
-            mockPractitioner);
+        final var observations = mapper.mapToObservations(
+            message, mockPatient, emptyMap(), mockOrganization, mockPractitioner);
 
         assertThat(observations).hasSize(2)
             .allSatisfy(observation -> assertThat(observation.getCode().getCoding()).hasSize(1)
@@ -126,8 +127,8 @@ class ObservationMapperTest {
             "RFF+ASL:1" // Reference
         ));
 
-        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
-            mockPractitioner);
+        final var observations = mapper.mapToObservations(
+            message, mockPatient, emptyMap(), mockOrganization, mockPractitioner);
 
         assertThat(observations).hasSize(1)
             .first()
@@ -152,8 +153,8 @@ class ObservationMapperTest {
             "RSL+NV+1.23:7++:::units" // LaboratoryInvestigationResult
         ));
 
-        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
-            mockPractitioner);
+        final var observations = mapper.mapToObservations(
+            message, mockPatient, emptyMap(), mockOrganization, mockPractitioner);
 
         assertThat(observations).hasSize(1)
             .first()
@@ -178,8 +179,8 @@ class ObservationMapperTest {
             "RSL+CV+::111222333:921::Normal test" // LaboratoryInvestigationResult
         ));
 
-        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
-            mockPractitioner);
+        final var observations = mapper.mapToObservations(
+            message, mockPatient, emptyMap(), mockOrganization, mockPractitioner);
 
         assertThat(observations).hasSize(1)
             .first()
@@ -205,14 +206,22 @@ class ObservationMapperTest {
             "RSL+NV+1.23:7++:::units+HI" // LaboratoryInvestigationResult
         ));
 
-        final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
-            mockPractitioner);
+        final var observations = mapper.mapToObservations(
+            message, mockPatient, emptyMap(), mockOrganization, mockPractitioner);
 
         assertThat(observations).hasSize(1)
             .first()
             .extracting(Observation::getInterpretation)
-            .extracting(CodeableConcept::getText)
-            .isEqualTo("HI : Above high reference limit");
+            .extracting(CodeableConcept::getCoding)
+            .asList()
+            .hasSize(1)
+            .first()
+            .usingRecursiveComparison()
+            .isEqualTo(new Coding()
+                .setCode("H")
+                .setSystem("http://hl7.org/fhir/v2/0078")
+                .setDisplay("High")
+        );
     }
 
     @Test
@@ -394,6 +403,7 @@ class ObservationMapperTest {
         ));
         when(fullUrlGenerator.generate(mockOrganization)).thenReturn("url-organization");
         when(fullUrlGenerator.generate(mockPractitioner)).thenReturn("url-practitioner");
+        when(fullUrlGenerator.generate(mockOrganization)).thenReturn("url-organization");
 
         final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
             mockPractitioner);

@@ -29,6 +29,7 @@ import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.Investig
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.LabResult;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.ResultReferenceRange;
 import uk.nhs.digital.nhsconnect.lab.results.model.enums.CodingType;
+import uk.nhs.digital.nhsconnect.lab.results.model.enums.DeviatingResultIndicator;
 import uk.nhs.digital.nhsconnect.lab.results.model.enums.LaboratoryInvestigationResultType;
 import uk.nhs.digital.nhsconnect.lab.results.model.enums.MeasurementValueComparator;
 import uk.nhs.digital.nhsconnect.lab.results.model.enums.TestStatusCode;
@@ -105,33 +106,33 @@ public class ObservationMapper {
         }
 
         private void addTestGroup(final LabResult labResult) {
-            final var observation = new Observation();
-            observation.getMeta().addProfile(FhirProfiles.OBSERVATION);
-
-            final var fhirId = uuidGenerator.generateUUID();
-            observation.setId(fhirId);
+            final var observation = buildBareObservation();
+            final var observationId = observation.getId();
 
             //noinspection OptionalGetWithoutIsPresent Previous logic guarantees its presence
             final var edifactId = labResult.getSequenceDetails().get().getNumber();
-            edifactToFhirIdMap.put(edifactId, fhirId);
+            edifactToFhirIdMap.put(edifactId, observationId);
 
             mapContents(labResult, observation);
 
-            testGroupsById.put(fhirId, observation);
+            testGroupsById.put(observationId, observation);
         }
 
         private Observation mapTestResult(final LabResult labResult) {
-            final var observation = new Observation();
-            observation.getMeta().addProfile(FhirProfiles.OBSERVATION);
-
-            final var resultId = uuidGenerator.generateUUID();
-            observation.setId(resultId);
+            final var observation = buildBareObservation();
 
             mapContents(labResult, observation);
 
             final var edifactId = labResult.getSequenceReference().getNumber();
             Optional.ofNullable(edifactToFhirIdMap.get(edifactId))
                 .ifPresent(fhirId -> linkWithGroup(fhirId, observation));
+            return observation;
+        }
+
+        private Observation buildBareObservation() {
+            final var observation = new Observation();
+            observation.getMeta().addProfile(FhirProfiles.OBSERVATION);
+            observation.setId(uuidGenerator.generateUUID());
             return observation;
         }
 
@@ -184,10 +185,11 @@ public class ObservationMapper {
 
         private void mapInterpretation(final LabResult labResult, final Observation observation) {
             // Observation.interpretation = SG18.RSL.7857
+            var interpretation = observation.getInterpretation();
             labResult.getInvestigationResult()
                 .map(LaboratoryInvestigationResult::getDeviatingResultIndicator)
-                .map(deviation -> deviation.getCode() + " : " + deviation.getDescription())
-                .ifPresent(deviation -> observation.getInterpretation().setText(deviation));
+                .map(DeviatingResultIndicator::toCoding)
+                .ifPresent(interpretation::addCoding);
         }
 
         private void mapLaboratoryInvestigationResult(final LabResult labResult, final Observation observation) {

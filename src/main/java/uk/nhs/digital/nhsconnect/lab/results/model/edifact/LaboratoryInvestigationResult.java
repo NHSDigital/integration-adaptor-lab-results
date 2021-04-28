@@ -76,7 +76,7 @@ public class LaboratoryInvestigationResult extends Segment {
                     : null)
                 .measurementUnit(measurementUnit)
                 .deviatingResultIndicator(StringUtils.isNotBlank(deviatingResultIndicator)
-                    ? DeviatingResultIndicator.fromCode(deviatingResultIndicator)
+                    ? DeviatingResultIndicator.fromEdifactCode(deviatingResultIndicator)
                     : null)
                 .build();
         }
