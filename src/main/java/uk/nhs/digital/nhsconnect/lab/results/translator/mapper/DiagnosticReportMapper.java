@@ -32,7 +32,10 @@ import static uk.nhs.digital.nhsconnect.lab.results.model.Constants.SNOMED_CODIN
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class DiagnosticReportMapper {
     private static final Map<ReportStatusCode, DiagnosticReportStatus> STATUS_MAP = Map.of(
-        ReportStatusCode.UNSPECIFIED, DiagnosticReportStatus.UNKNOWN);
+        ReportStatusCode.UNSPECIFIED, DiagnosticReportStatus.UNKNOWN,
+        ReportStatusCode.PRELIMINARY, DiagnosticReportStatus.PRELIMINARY,
+        ReportStatusCode.SUPPLEMENTARY, DiagnosticReportStatus.APPENDED
+    );
     private static final String CODE_DISPLAY = "Diagnostic studies report";
     private static final String CODE_NUMBER = "721981007";
 

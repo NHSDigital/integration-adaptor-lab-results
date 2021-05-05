@@ -1,14 +1,16 @@
 package uk.nhs.digital.nhsconnect.lab.results.model.enums;
 
-import java.util.Arrays;
-
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+
 @Getter
 @RequiredArgsConstructor
 public enum ReportStatusCode {
+    PRELIMINARY("PR", "Preliminary (Interim) result"),
+    SUPPLEMENTARY("SR", "Supplementary result"),
     UNSPECIFIED("UN", "Unspecified");
 
     private final String code;
