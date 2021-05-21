@@ -62,6 +62,8 @@ public abstract class IntegrationBaseTest {
     private static final int JMS_RECEIVE_TIMEOUT = 500;
     protected static final int TIMEOUT_SECONDS = 10;
     private static final ValueMatcher<Object> IGNORE = (a, b) -> true;
+    private static final String TIMESTAMP_REGEX =
+        "[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9]\\.[0-9]{1,3}\\+[0-9]{2}:[0-9]{2}";
     private static final ValueMatcher<Object> AS_INSTANTS = (d1, d2) -> {
         if (Objects.equals(d1, d2)) {
             return true;
@@ -269,16 +271,20 @@ public abstract class IntegrationBaseTest {
             new CustomComparator(
                 JSONCompareMode.STRICT,
                 new Customization("id", IGNORE),
-                new Customization("meta.lastUpdated", IGNORE),
+                new Customization("meta.lastUpdated", regex(TIMESTAMP_REGEX)),
                 new Customization("identifier.value", IGNORE),
                 new Customization("entry[*].fullUrl", IGNORE),
                 new Customization("entry[*].resource.**.reference", IGNORE),
                 new Customization("entry[*].resource.id", IGNORE),
                 new Customization("entry[*].resource.issued", AS_INSTANTS),
                 new Customization("entry[*].resource.receivedTime", AS_INSTANTS),
-                new Customization("entry[*].resource.timestamp", IGNORE),
+                new Customization("entry[*].resource.timestamp", regex(TIMESTAMP_REGEX)),
                 new Customization("entry[*].resource.collection.collectedDateTime", AS_INSTANTS)
             )
         );
+    }
+
+    private static ValueMatcher<Object> regex(String regex) {
+        return (a, b) -> String.valueOf(a).matches(regex) && String.valueOf(b).matches(regex);
     }
 }

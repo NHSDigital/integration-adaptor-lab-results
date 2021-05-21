@@ -2,6 +2,8 @@ package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.hl7.fhir.dstu3.model.Address;
+import org.hl7.fhir.dstu3.model.CodeableConcept;
+import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.DateType;
 import org.hl7.fhir.dstu3.model.Enumerations;
 import org.hl7.fhir.dstu3.model.HumanName;
@@ -71,10 +73,16 @@ public class PatientMapper {
     }
 
     private void mapNhsNumberIdentifier(final String nhsNumber, final Patient patient) {
-        final Identifier identifier = new Identifier();
-        identifier.setSystem(NHS_NUMBER_SYSTEM);
-        identifier.setValue(nhsNumber);
-        patient.addIdentifier(identifier);
+        patient.addIdentifier()
+            .setSystem(NHS_NUMBER_SYSTEM)
+            .setValue(nhsNumber)
+            .addExtension()
+            .setUrl("https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-NHSNumberVerificationStatus-1")
+            .setValue(new CodeableConcept().addCoding(new Coding() //TODO ask Philip is always this value for P&S
+                .setSystem("https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-NHSNumberVerificationStatus-1")
+                .setCode("01")
+                .setDisplay("Number present and verified")
+            ));
     }
 
     private void mapOtherIdentifier(final Reference reference, final Patient patient) {
@@ -106,7 +114,7 @@ public class PatientMapper {
                 .ifPresent(humanName::addGiven);
         });
         humanName.setFamily(name.getSurname());
-
+        humanName.setUse(HumanName.NameUse.OFFICIAL);
         patient.addName(humanName);
     }
 }
