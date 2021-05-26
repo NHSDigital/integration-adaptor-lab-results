@@ -78,9 +78,9 @@ public class PatientMapper {
             .setValue(nhsNumber)
             .addExtension()
             .setUrl("https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-NHSNumberVerificationStatus-1")
-            .setValue(new CodeableConcept().addCoding(new Coding() //TODO ask Philip is always this value for P&S
+            .setValue(new CodeableConcept().addCoding(new Coding()
                 .setSystem("https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-NHSNumberVerificationStatus-1")
-                .setCode("01")
+                .setCode("01") //TODO awaiting NHS IOPS to provide answer
                 .setDisplay("Number present and verified")
             ));
     }
