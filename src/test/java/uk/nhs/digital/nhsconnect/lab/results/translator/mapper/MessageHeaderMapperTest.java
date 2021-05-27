@@ -70,7 +70,7 @@ class MessageHeaderMapperTest {
 
         assertAll(
             () -> assertThat(messageHeader.getId()).isEqualTo(MESSAGE_HEADER_ID),
-            () -> assertThat(messageHeader.getTimestamp()).isEqualTo("1970-01-01T01:02:03.000"),
+            () -> assertThat(messageHeader.getTimestamp().toInstant()).isEqualTo(INTERCHANGE_TRANSLATION_TIME),
             () -> assertThat(messageHeader.getResponsible().getReference()).isEqualTo(PERFORMING_ORGANIZATION_FULL_URL),
             () -> assertThat(messageHeader.getSender().getReference()).isEqualTo(PERFORMING_ORGANIZATION_FULL_URL),
             () -> assertThat(messageHeader.getReceiver().getReference()).isEqualTo(REQUESTING_ORGANIZATION_FULL_URL)
