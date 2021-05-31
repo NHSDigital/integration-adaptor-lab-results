@@ -3,6 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.translator.mapper;
 import lombok.RequiredArgsConstructor;
 import org.hl7.fhir.dstu3.model.Annotation;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
+import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Practitioner;
@@ -22,6 +23,10 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static uk.nhs.digital.nhsconnect.lab.results.model.Constants.SNOMED_CODING_SYSTEM;
+import static uk.nhs.digital.nhsconnect.lab.results.model.Constants.SNOMED_LABORATORY_TEST_CODE;
+import static uk.nhs.digital.nhsconnect.lab.results.model.Constants.SNOMED_LABORATORY_TEST_DISPLAY;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -65,7 +70,12 @@ public class ProcedureRequestMapper {
             procedureRequest.setId(uuidGenerator.generateUUID());
             procedureRequest.setStatus(ProcedureRequestStatus.ACTIVE);
             procedureRequest.setIntent(ProcedureRequestIntent.ORDER);
-            procedureRequest.setCode(new CodeableConcept().setText("unknown"));
+            procedureRequest.setCode(new CodeableConcept().addCoding(
+                new Coding()
+                    .setCode(SNOMED_LABORATORY_TEST_CODE)
+                    .setSystem(SNOMED_CODING_SYSTEM)
+                    .setDisplay(SNOMED_LABORATORY_TEST_DISPLAY))
+            );
             procedureRequest.getSubject().setReference(fullUrlGenerator.generate(this.patient));
             setRequesterReference(procedureRequest);
             setPerformerReference(procedureRequest);
