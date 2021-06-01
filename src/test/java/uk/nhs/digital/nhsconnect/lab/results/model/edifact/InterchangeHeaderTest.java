@@ -3,6 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 import org.junit.jupiter.api.Test;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -48,9 +49,29 @@ class InterchangeHeaderTest {
     @Test
     void testValidateSequenceNumberWithinMinMaxDoesNotThrowException() {
         final InterchangeHeader interchangeHeader =
-            InterchangeHeader.fromString("UNB+UNOA:2+SNDR:80+RECP:80+190523:0900+00000001");
+            InterchangeHeader.fromString("UNB+UNOA:2+SNDR:80+RECP:80+190523:0900+00000001++MEDRPT");
 
         assertDoesNotThrow(interchangeHeader::validate);
+    }
+
+    @Test
+    void testValidateMissingMessageTypeThrowsException() {
+        final InterchangeHeader interchangeHeader =
+            InterchangeHeader.fromString("UNB+UNOA:2+SNDR:80+RECP:80+190523:0900+00000001");
+
+        assertThatThrownBy(interchangeHeader::validate)
+            .isInstanceOf(EdifactValidationException.class)
+            .hasMessage("UNB: Attribute messageType must be equal to: [MEDRPT, NHSACK]");
+    }
+
+    @Test
+    void testValidateInvalidMessageTypeThrowsException() {
+        final InterchangeHeader interchangeHeader =
+            InterchangeHeader.fromString("UNB+UNOA:2+SNDR:80+RECP:80+190523:0900+00000001++QWE");
+
+        assertThatThrownBy(interchangeHeader::validate)
+            .isInstanceOf(EdifactValidationException.class)
+            .hasMessage("UNB: Attribute messageType must be equal to: [MEDRPT, NHSACK]");
     }
 
     @Test

@@ -1,7 +1,6 @@
 package uk.nhs.digital.nhsconnect.lab.results.inbound;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.json.JSONException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.function.Executable;
@@ -18,7 +17,6 @@ import uk.nhs.digital.nhsconnect.lab.results.uat.common.SuccessArgumentsProvider
 import uk.nhs.digital.nhsconnect.lab.results.uat.common.TestData;
 import uk.nhs.digital.nhsconnect.lab.results.utils.JmsHeaders;
 
-import javax.jms.JMSException;
 import javax.jms.Message;
 import java.util.concurrent.TimeUnit;
 
@@ -61,7 +59,7 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
     @ParameterizedTest(name = "[{index}] - {0}")
     @ArgumentsSource(SuccessArgumentsProvider.class)
     void testEdifactIsSuccessfullyProcessedAndPushedToGpOutboundQueue(String testGroupName, TestData testData)
-            throws JMSException, InterchangeParsingException, MessageParsingException, JSONException {
+            throws InterchangeParsingException, MessageParsingException {
 
         final String edifact = testData.getEdifact();
 

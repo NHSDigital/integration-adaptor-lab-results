@@ -10,15 +10,20 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 
 /**
  * A specialisation of a segment for the specific use case of an interchange header
  * takes in specific values required to generate an interchange header
- * example: UNB+UNOA:2+000000004400001:80+000000024600002:80+920113:1317+00000002'
+ * example: UNB+UNOC:3+000000004400001:80+000000024600002:80+100301:1751+1015++MEDRPT++1'
  */
 @Getter
 @Builder
 public class InterchangeHeader extends Segment {
+
+    public enum MessageType {
+        MEDRPT, NHSACK
+    }
 
     protected static final String KEY = "UNB";
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyMMdd:HHmm")
@@ -29,6 +34,7 @@ public class InterchangeHeader extends Segment {
     private static final int RECIPIENT_INDEX = 3;
     private static final int TRANSLATION_TIME_INDEX = 4;
     private static final int SEQUENCE_NUMBER_INDEX = 5;
+    private static final int MESSAGE_TYPE_INDEX = 7;
     private static final int NHSACK_INDEX = 9;
     private static final int SENDER_SUBSECTION_ID_INDEX = 0;
     private static final int RECIPIENT_SUBSECTION_ID_INDEX = 0;
@@ -38,6 +44,7 @@ public class InterchangeHeader extends Segment {
     private final Long sequenceNumber;
     private final Instant translationTime;
     private final boolean nhsAckRequested;
+    private final String messageType;
 
     public static InterchangeHeader fromString(final String edifactString) {
         if (!edifactString.startsWith(KEY)) {
@@ -60,6 +67,7 @@ public class InterchangeHeader extends Segment {
                 ? getTranslationTime(split[TRANSLATION_TIME_INDEX])
                 : null)
             .nhsAckRequested(NHSACK_INDEX < split.length && split[NHSACK_INDEX].equals("1"))
+            .messageType(MESSAGE_TYPE_INDEX < split.length ? split[MESSAGE_TYPE_INDEX] : null)
             .build();
     }
 
@@ -85,6 +93,10 @@ public class InterchangeHeader extends Segment {
         if (getSequenceNumber() < 1 || getSequenceNumber() > MAX_INTERCHANGE_SEQUENCE) {
             throw new EdifactValidationException(
                 getKey() + ": Attribute sequenceNumber must be between 1 and " + MAX_INTERCHANGE_SEQUENCE);
+        }
+        if (messageType == null || Arrays.stream(MessageType.values()).map(Enum::name).noneMatch(messageType::equals)) {
+            throw new EdifactValidationException(
+                KEY + ": Attribute messageType must be equal to: " + Arrays.toString(MessageType.values()));
         }
     }
 

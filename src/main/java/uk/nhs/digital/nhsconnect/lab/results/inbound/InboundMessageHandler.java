@@ -10,6 +10,7 @@ import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.InterchangeParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MessageParsingException;
 import uk.nhs.digital.nhsconnect.lab.results.outbound.OutboundMeshMessageBuilder;
@@ -34,6 +35,7 @@ public class InboundMessageHandler {
         final Interchange interchange;
         try {
             interchange = edifactParser.parse(meshMessage.getContent());
+            validateMessageType(interchange);
         } catch (InterchangeParsingException ex) {
             LOGGER.error("Error parsing Interchange", ex);
             if (ex.isNhsAckRequested()) {
@@ -82,6 +84,15 @@ public class InboundMessageHandler {
         if (ackRequested) {
             meshOutboundQueueService.publish(nhsack);
             logNhsackSentFor(interchange);
+        }
+    }
+
+    private void validateMessageType(Interchange interchange) {
+        var messageType = interchange.getInterchangeHeader().getMessageType();
+        var medrpt = InterchangeHeader.MessageType.MEDRPT.name();
+
+        if (!medrpt.equals(messageType)) {
+            throw new EdifactValidationException("UNB: Attribute messageType must be equal to: " + medrpt);
         }
     }
 
