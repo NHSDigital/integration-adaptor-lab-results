@@ -18,8 +18,6 @@ import static uk.nhs.digital.nhsconnect.lab.results.model.enums.ServiceProviderC
 public class PractitionerMapper {
     private final UUIDGenerator uuidGenerator;
 
-    private static final String SDS_USER_SYSTEM = "https://fhir.nhs.uk/Id/sds-user-id";
-
     public Practitioner mapToRequestingPractitioner(final Message message) {
         return message.getInvolvedParties().stream()
             .filter(party -> party.getServiceProvider().getServiceProviderCode().equals(PROFESSIONAL))
@@ -44,7 +42,7 @@ public class PractitionerMapper {
         final var practitioner = buildBarePractitioner();
 
         Optional.ofNullable(identifier)
-            .ifPresent(id -> practitioner.addIdentifier().setValue(id).setSystem(SDS_USER_SYSTEM));
+            .ifPresent(id -> practitioner.addIdentifier().setValue(id));
 
         Optional.ofNullable(name)
             .ifPresent(n -> practitioner.addName().setText(n));
