@@ -26,9 +26,6 @@ import static uk.nhs.digital.nhsconnect.lab.results.model.Constants.SNOMED_CODIN
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class SpecimenMapper {
-    private static final String IDENTIFIER_SYSTEM = "http://ehr.acme.org/identifiers/collections";
-    private static final String ACCESSION_IDENTIFIER_SYSTEM = "http://lab.acme.org/specimens/2011";
-
     private final UUIDGenerator uuidGenerator;
     private final DateFormatMapper dateFormatMapper;
     private final ResourceFullUrlGenerator fullUrlGenerator;
@@ -48,14 +45,12 @@ public class SpecimenMapper {
         edifact.getServiceRequesterReference()
             .map(Reference::getNumber)
             .ifPresent(identifier -> specimen.addIdentifier()
-                .setValue(identifier)
-                .setSystem(IDENTIFIER_SYSTEM));
+                .setValue(identifier));
         // specimen.accessionIdentifier = SG16.RFF.C506.1154 (provider)
         edifact.getServiceProviderReference()
             .map(Reference::getNumber)
             .ifPresent(identifier -> specimen.setAccessionIdentifier(new Identifier()
-                .setValue(identifier)
-                .setSystem(ACCESSION_IDENTIFIER_SYSTEM)));
+                .setValue(identifier)));
         // specimen.status = [none]
         // specimen.type = SG16.SPC.C832
         Optional.ofNullable(edifact.getCharacteristic())
