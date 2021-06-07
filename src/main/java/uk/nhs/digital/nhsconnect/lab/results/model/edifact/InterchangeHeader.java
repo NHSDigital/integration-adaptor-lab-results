@@ -96,7 +96,7 @@ public class InterchangeHeader extends Segment {
         }
         if (messageType == null || Arrays.stream(MessageType.values()).map(Enum::name).noneMatch(messageType::equals)) {
             throw new EdifactValidationException(
-                KEY + ": Attribute messageType must be equal to: " + Arrays.toString(MessageType.values()));
+                KEY + ": Attribute messageType must be one of: " + Arrays.toString(MessageType.values()));
         }
     }
 
