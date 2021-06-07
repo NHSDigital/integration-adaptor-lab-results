@@ -65,25 +65,23 @@ public class LaboratoryInvestigationResult extends Segment {
             laboratoryInvestigationResultBuilder.resultType(resultType);
         }
 
+        final String deviatingResultIndicator = extractDeviatingResultIndicator(keySplit);
+        laboratoryInvestigationResultBuilder.deviatingResultIndicator(StringUtils.isNotBlank(deviatingResultIndicator)
+            ? DeviatingResultIndicator.fromEdifactCode(deviatingResultIndicator)
+            : null);
+
         if (LaboratoryInvestigationResultType.NUMERICAL_VALUE.equals(resultType)) {
             final BigDecimal measurementValue = extractMeasurementValue(keySplit);
             final String measurementValueComparator = extractMeasurementValueComparator(keySplit);
             final String measurementUnit = extractMeasurementUnit(keySplit);
-            final String deviatingResultIndicator = extractDeviatingResultIndicator(keySplit);
 
-            return laboratoryInvestigationResultBuilder
+            laboratoryInvestigationResultBuilder
                 .measurementValue(measurementValue)
                 .measurementValueComparator(StringUtils.isNotBlank(measurementValueComparator)
                     ? MeasurementValueComparator.fromCode(measurementValueComparator)
                     : null)
-                .measurementUnit(measurementUnit)
-                .deviatingResultIndicator(StringUtils.isNotBlank(deviatingResultIndicator)
-                    ? DeviatingResultIndicator.fromEdifactCode(deviatingResultIndicator)
-                    : null)
-                .build();
-        }
-
-        if (keySplit.length >= 3) {
+                .measurementUnit(measurementUnit);
+        } else if (keySplit.length >= 3) {
             final String[] subFields = Split.byColon(keySplit[2]);
             if (subFields.length >= 3) {
                 laboratoryInvestigationResultBuilder.code(subFields[2]);

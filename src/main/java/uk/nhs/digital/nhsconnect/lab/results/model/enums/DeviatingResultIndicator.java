@@ -16,7 +16,6 @@ public enum DeviatingResultIndicator {
     POTENTIALLY_ABNORMAL("PA", "PA", "Potentially abnormal");
 
     private static final String STANDARD_INTERPRETATION_CODE_SYSTEM = "http://hl7.org/fhir/v2/0078";
-    private static final String EXTENDED_INTERPRETATION_CODE_SYSTEM = "https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-ExtendedInterpretationCode-1";
 
     private final String edifactCode;
     private final String fhirCode;
@@ -43,7 +42,7 @@ public enum DeviatingResultIndicator {
                 return STANDARD_INTERPRETATION_CODE_SYSTEM;
             case OUTSIDE_REFERENCE_LIMIT:
             case POTENTIALLY_ABNORMAL:
-                return EXTENDED_INTERPRETATION_CODE_SYSTEM;
+                return null;
             default:
                 throw new NotImplementedException();
         }
