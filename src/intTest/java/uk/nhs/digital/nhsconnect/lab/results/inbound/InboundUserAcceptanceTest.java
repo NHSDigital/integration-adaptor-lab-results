@@ -59,7 +59,11 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
     @ParameterizedTest(name = "[{index}] - {0}")
     @ArgumentsSource(SuccessArgumentsProvider.class)
     void testEdifactIsSuccessfullyProcessedAndPushedToGpOutboundQueue(String testGroupName, TestData testData)
+<<<<<<< HEAD
             throws InterchangeParsingException, MessageParsingException {
+=======
+        throws InterchangeParsingException, MessageParsingException {
+>>>>>>> main
 
         final String edifact = testData.getEdifact();
 
@@ -200,5 +204,4 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
                 throw new IllegalArgumentException(workflowId.name() + " workflow has no corresponding ACK one");
         }
     }
-
 }

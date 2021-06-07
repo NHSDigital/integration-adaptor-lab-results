@@ -76,6 +76,8 @@ public abstract class IntegrationBaseTest {
             return false;
         }
     };
+    private static final ValueMatcher<Object> IS_TIMESTAMP = (d1, d2) ->
+        String.valueOf(d1).matches(TIMESTAMP_REGEX) && String.valueOf(d2).matches(TIMESTAMP_REGEX);
 
     @Autowired
     private JmsTemplate jmsTemplate;
@@ -271,14 +273,22 @@ public abstract class IntegrationBaseTest {
             new CustomComparator(
                 JSONCompareMode.STRICT,
                 new Customization("id", IGNORE),
+<<<<<<< HEAD
                 new Customization("meta.lastUpdated", regex(TIMESTAMP_REGEX)),
+=======
+                new Customization("meta.lastUpdated", IS_TIMESTAMP),
+>>>>>>> main
                 new Customization("identifier.value", IGNORE),
                 new Customization("entry[*].fullUrl", IGNORE),
                 new Customization("entry[*].resource.**.reference", IGNORE),
                 new Customization("entry[*].resource.id", IGNORE),
                 new Customization("entry[*].resource.issued", AS_INSTANTS),
                 new Customization("entry[*].resource.receivedTime", AS_INSTANTS),
+<<<<<<< HEAD
                 new Customization("entry[*].resource.timestamp", regex(TIMESTAMP_REGEX)),
+=======
+                new Customization("entry[*].resource.timestamp", IS_TIMESTAMP),
+>>>>>>> main
                 new Customization("entry[*].resource.collection.collectedDateTime", AS_INSTANTS)
             )
         );
