@@ -55,8 +55,7 @@ public class SpecimenMapper {
         // specimen.type = SG16.SPC.C832
         Optional.ofNullable(edifact.getCharacteristic())
             .ifPresent(specimenCharacteristic -> {
-                final var coding = specimen.getType().addCoding()
-                    .setSystem(SNOMED_CODING_SYSTEM);
+                final var coding = specimen.getType().addCoding();
                 specimenCharacteristic.getCharacteristic()
                     .ifPresent(coding::setCode);
                 specimenCharacteristic.getTypeOfSpecimen()
