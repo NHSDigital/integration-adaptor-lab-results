@@ -285,8 +285,4 @@ public abstract class IntegrationBaseTest {
             )
         );
     }
-
-    private static ValueMatcher<Object> regex(String regex) {
-        return (a, b) -> String.valueOf(a).matches(regex) && String.valueOf(b).matches(regex);
-    }
 }
