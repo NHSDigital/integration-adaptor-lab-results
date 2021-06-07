@@ -61,7 +61,7 @@ class InterchangeHeaderTest {
 
         assertThatThrownBy(interchangeHeader::validate)
             .isInstanceOf(EdifactValidationException.class)
-            .hasMessage("UNB: Attribute messageType must be equal to: [MEDRPT, NHSACK]");
+            .hasMessage("UNB: Attribute messageType must be one of: [MEDRPT, NHSACK]");
     }
 
     @Test
@@ -71,7 +71,7 @@ class InterchangeHeaderTest {
 
         assertThatThrownBy(interchangeHeader::validate)
             .isInstanceOf(EdifactValidationException.class)
-            .hasMessage("UNB: Attribute messageType must be equal to: [MEDRPT, NHSACK]");
+            .hasMessage("UNB: Attribute messageType must be one of: [MEDRPT, NHSACK]");
     }
 
     @Test
