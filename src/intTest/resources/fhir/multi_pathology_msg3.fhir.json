@@ -1,194 +1,23 @@
 {
     "resourceType": "Bundle",
-<<<<<<< HEAD
-    "id": "0787b6b3-f46e-43a5-85e9-b29e87cbb17b",
+    "id": "aa137a33-044b-448d-b03e-95020e107461",
     "meta": {
-        "lastUpdated": "2021-04-27T13:07:24.725+01:00",
-        "profile": [ "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1" ]
-    },
-    "identifier": {
-        "system": "https://tools.ietf.org/html/rfc4122",
-        "value": "df12d9dc-e8c5-4c24-b8d2-05c88018dd8e"
-    },
-    "type": "message",
-    "entry": [ {
-        "fullUrl": "urn:uuid:c0c98561-fc5a-4f47-bac3-d70b7c751da4",
-        "resource": {
-            "resourceType": "MessageHeader",
-            "id": "c0c98561-fc5a-4f47-bac3-d70b7c751da4",
-            "meta": {
-                "profile": [ "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-MessageHeader-2" ]
-            },
-            "extension": [ {
-                "url": "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-ITK-MessageHandling-2",
-                "extension": [ {
-                    "url": "BusAckRequested",
-                    "valueBoolean": true
-                }, {
-                    "url": "InfAckRequested",
-                    "valueBoolean": true
-                }, {
-                    "url": "RecipientType",
-                    "valueCoding": {
-                        "system": "https://fhir.nhs.uk/STU3/CodeSystem/ITK-RecipientType-1",
-                        "code": "FA",
-                        "display": "For Action"
-                    }
-                }, {
-                    "url": "SenderReference",
-                    "valueString": "None"
-                }, {
-                    "url": "LocalExtension",
-                    "valueString": "None"
-                } ]
-            } ],
-            "event": {
-                "system": "https://fhir.nhs.uk/STU3/CodeSystem/ITK-MessageEvent-2",
-                "code": "ITK012M",
-                "display": "ITK National Pathology"
-            },
-            "receiver": {
-                "reference": "urn:uuid:cd534eb8-e2c0-42e4-980a-cae5b42912e4"
-            },
-            "sender": {
-                "reference": "urn:uuid:bc15c89c-f398-40a7-bc26-9517ef57cb23"
-            },
-            "timestamp": "2010-03-01T17:51:00.000+00:00",
-            "source": {
-                "endpoint": "lab_results_mailbox"
-            },
-            "responsible": {
-                "reference": "urn:uuid:bc15c89c-f398-40a7-bc26-9517ef57cb23"
-            },
-            "focus": [ {
-                "reference": "urn:uuid:c42b263f-7cc0-409a-a682-00d3b9c96edf"
-            } ]
-        }
-    }, {
-        "fullUrl": "urn:uuid:504bf03c-0b79-472b-93a6-e53ff48055e6",
-        "resource": {
-            "resourceType": "Patient",
-            "id": "504bf03c-0b79-472b-93a6-e53ff48055e6",
-            "meta": {
-                "profile": [ "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Patient-1" ]
-            },
-            "identifier": [ {
-                "extension": [ {
-                    "url": "https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-NHSNumberVerificationStatus-1",
-                    "valueCodeableConcept": {
-                        "coding": [ {
-                            "system": "https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-NHSNumberVerificationStatus-1",
-                            "code": "01",
-                            "display": "Number present and verified"
-                        } ]
-                    }
-                } ],
-                "system": "https://fhir.nhs.uk/Id/nhs-number",
-                "value": "9435518443"
-            } ],
-            "name": [ {
-                "use": "official",
-                "family": "TSUEI",
-                "given": [ "MINGYU" ]
-            } ],
-            "gender": "female",
-            "birthDate": "1967-05-31"
-        }
-    }, {
-        "fullUrl": "urn:uuid:a254a103-7a4b-403c-9874-0663234c243b",
-        "resource": {
-            "resourceType": "Practitioner",
-            "id": "a254a103-7a4b-403c-9874-0663234c243b",
-            "meta": {
-                "profile": [ "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Practitioner-1" ]
-            },
-            "name": [ {
-                "text": "SCOTT"
-            } ]
-        }
-    }, {
-        "fullUrl": "urn:uuid:cd534eb8-e2c0-42e4-980a-cae5b42912e4",
-        "resource": {
-            "resourceType": "Organization",
-            "id": "cd534eb8-e2c0-42e4-980a-cae5b42912e4",
-            "meta": {
-                "profile": [ "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1" ]
-            },
-            "name": "NORTH DOWN GP"
-        }
-    }, {
-        "fullUrl": "urn:uuid:2db5d238-d28a-4924-9757-df8d3e07a27a",
-        "resource": {
-            "resourceType": "Practitioner",
-            "id": "2db5d238-d28a-4924-9757-df8d3e07a27a",
-            "meta": {
-                "profile": [ "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Practitioner-1" ]
-            },
-            "identifier": [ {
-                "system": "https://fhir.nhs.uk/Id/sds-user-id",
-                "value": "C1357930"
-            } ],
-            "name": [ {
-                "text": "DR C CURLEY"
-            } ]
-        }
-    }, {
-        "fullUrl": "urn:uuid:bc15c89c-f398-40a7-bc26-9517ef57cb23",
-        "resource": {
-            "resourceType": "Organization",
-            "id": "bc15c89c-f398-40a7-bc26-9517ef57cb23",
-            "meta": {
-                "profile": [ "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1" ]
-            },
-            "type": [ {
-                "coding": [ {
-                    "code": "dept",
-                    "display": "Microbiology"
-                } ]
-            } ],
-            "name": "ST JAMES'S UNIVERSITY HOSPITAL"
-        }
-    }, {
-        "fullUrl": "urn:uuid:c0812aa9-cfcd-4171-be59-1859bb6a7cc4",
-        "resource": {
-            "resourceType": "ProcedureRequest",
-            "id": "c0812aa9-cfcd-4171-be59-1859bb6a7cc4",
-            "meta": {
-                "profile": [ "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-ProcedureRequest-1" ]
-            },
-            "status": "active",
-            "intent": "order",
-            "code": {
-                "text": "unknown"
-            },
-            "subject": {
-                "reference": "urn:uuid:504bf03c-0b79-472b-93a6-e53ff48055e6"
-            },
-            "requester": {
-                "agent": {
-                    "reference": "urn:uuid:a254a103-7a4b-403c-9874-0663234c243b"
-                },
-                "onBehalfOf": {
-                    "reference": "urn:uuid:cd534eb8-e2c0-42e4-980a-cae5b42912e4"
-=======
-    "id": "adc3d59c-73b4-4096-ae9c-ec09cb4ff106",
-    "meta": {
-        "lastUpdated": "2021-04-28T14:47:18.291+01:00",
+        "lastUpdated": "2021-06-07T10:18:29.067+01:00",
         "profile": [
             "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"
         ]
     },
     "identifier": {
         "system": "https://tools.ietf.org/html/rfc4122",
-        "value": "1de7f6f4-04c2-4b00-bff1-66fdecb1d6af"
+        "value": "3055e277-4039-4f90-8fd1-b8fffa8e6671"
     },
     "type": "message",
     "entry": [
         {
-            "fullUrl": "urn:uuid:02301c95-4361-4356-93fe-a8501a5ebeb3",
+            "fullUrl": "urn:uuid:6e97a35b-77f5-42c1-9a0a-70a333980305",
             "resource": {
                 "resourceType": "MessageHeader",
-                "id": "02301c95-4361-4356-93fe-a8501a5ebeb3",
+                "id": "6e97a35b-77f5-42c1-9a0a-70a333980305",
                 "meta": {
                     "profile": [
                         "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-MessageHeader-2"
@@ -231,30 +60,30 @@
                     "display": "ITK National Pathology"
                 },
                 "receiver": {
-                    "reference": "urn:uuid:4e20153c-f449-4b20-9666-1339d9723870"
+                    "reference": "urn:uuid:c7a272c9-836f-48b6-826b-e1d3b2b46b1b"
                 },
                 "sender": {
-                    "reference": "urn:uuid:e09f15db-ac5c-4be3-8905-9d63996804fa"
+                    "reference": "urn:uuid:2dd909bf-1dd9-4f87-b591-86e47a11a387"
                 },
                 "timestamp": "2010-03-01T17:51:00.000+00:00",
                 "source": {
                     "endpoint": "lab_results_mailbox"
                 },
                 "responsible": {
-                    "reference": "urn:uuid:e09f15db-ac5c-4be3-8905-9d63996804fa"
+                    "reference": "urn:uuid:2dd909bf-1dd9-4f87-b591-86e47a11a387"
                 },
                 "focus": [
                     {
-                        "reference": "urn:uuid:45cd8205-014f-480a-bb36-883d21acf46f"
+                        "reference": "urn:uuid:7aca5498-6bab-47a1-9e52-ca1ff539fafd"
                     }
                 ]
             }
         },
         {
-            "fullUrl": "urn:uuid:4b731eaf-562e-48a6-a551-5fa3375f300d",
+            "fullUrl": "urn:uuid:4f99def2-6ce6-47af-818b-52dbc891aade",
             "resource": {
                 "resourceType": "Patient",
-                "id": "4b731eaf-562e-48a6-a551-5fa3375f300d",
+                "id": "4f99def2-6ce6-47af-818b-52dbc891aade",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Patient-1"
@@ -294,10 +123,10 @@
             }
         },
         {
-            "fullUrl": "urn:uuid:4dc661f1-7aae-4050-93ce-7e2cf84af63c",
+            "fullUrl": "urn:uuid:108f51a5-8e31-47e5-9fee-dc48dfbf23cd",
             "resource": {
                 "resourceType": "Practitioner",
-                "id": "4dc661f1-7aae-4050-93ce-7e2cf84af63c",
+                "id": "108f51a5-8e31-47e5-9fee-dc48dfbf23cd",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Practitioner-1"
@@ -311,10 +140,10 @@
             }
         },
         {
-            "fullUrl": "urn:uuid:4e20153c-f449-4b20-9666-1339d9723870",
+            "fullUrl": "urn:uuid:c7a272c9-836f-48b6-826b-e1d3b2b46b1b",
             "resource": {
                 "resourceType": "Organization",
-                "id": "4e20153c-f449-4b20-9666-1339d9723870",
+                "id": "c7a272c9-836f-48b6-826b-e1d3b2b46b1b",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1"
@@ -324,10 +153,10 @@
             }
         },
         {
-            "fullUrl": "urn:uuid:b0a55ef6-5812-4a87-90d1-3eccacf7d2d6",
+            "fullUrl": "urn:uuid:a67ded1d-aded-4a3f-812d-e56569ae2829",
             "resource": {
                 "resourceType": "Practitioner",
-                "id": "b0a55ef6-5812-4a87-90d1-3eccacf7d2d6",
+                "id": "a67ded1d-aded-4a3f-812d-e56569ae2829",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Practitioner-1"
@@ -347,10 +176,10 @@
             }
         },
         {
-            "fullUrl": "urn:uuid:e09f15db-ac5c-4be3-8905-9d63996804fa",
+            "fullUrl": "urn:uuid:2dd909bf-1dd9-4f87-b591-86e47a11a387",
             "resource": {
                 "resourceType": "Organization",
-                "id": "e09f15db-ac5c-4be3-8905-9d63996804fa",
+                "id": "2dd909bf-1dd9-4f87-b591-86e47a11a387",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1"
@@ -370,10 +199,10 @@
             }
         },
         {
-            "fullUrl": "urn:uuid:6ca89729-2078-4ffc-8f9d-2e08e6378a9f",
+            "fullUrl": "urn:uuid:bc062537-ec63-4ac7-b095-cd15cde40e39",
             "resource": {
                 "resourceType": "ProcedureRequest",
-                "id": "6ca89729-2078-4ffc-8f9d-2e08e6378a9f",
+                "id": "bc062537-ec63-4ac7-b095-cd15cde40e39",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-ProcedureRequest-1"
@@ -385,32 +214,26 @@
                     "text": "unknown"
                 },
                 "subject": {
-                    "reference": "urn:uuid:4b731eaf-562e-48a6-a551-5fa3375f300d"
+                    "reference": "urn:uuid:4f99def2-6ce6-47af-818b-52dbc891aade"
                 },
                 "requester": {
                     "agent": {
-                        "reference": "urn:uuid:4dc661f1-7aae-4050-93ce-7e2cf84af63c"
+                        "reference": "urn:uuid:108f51a5-8e31-47e5-9fee-dc48dfbf23cd"
                     },
                     "onBehalfOf": {
-                        "reference": "urn:uuid:4e20153c-f449-4b20-9666-1339d9723870"
+                        "reference": "urn:uuid:c7a272c9-836f-48b6-826b-e1d3b2b46b1b"
                     }
                 },
                 "performer": {
-                    "reference": "urn:uuid:b0a55ef6-5812-4a87-90d1-3eccacf7d2d6"
->>>>>>> main
+                    "reference": "urn:uuid:a67ded1d-aded-4a3f-812d-e56569ae2829"
                 }
-            },
-            "performer": {
-                "reference": "urn:uuid:2db5d238-d28a-4924-9757-df8d3e07a27a"
             }
-<<<<<<< HEAD
-=======
         },
         {
-            "fullUrl": "urn:uuid:45cd8205-014f-480a-bb36-883d21acf46f",
+            "fullUrl": "urn:uuid:7aca5498-6bab-47a1-9e52-ca1ff539fafd",
             "resource": {
                 "resourceType": "DiagnosticReport",
-                "id": "45cd8205-014f-480a-bb36-883d21acf46f",
+                "id": "7aca5498-6bab-47a1-9e52-ca1ff539fafd",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-DiagnosticReport-1"
@@ -424,7 +247,7 @@
                 ],
                 "basedOn": [
                     {
-                        "reference": "urn:uuid:6ca89729-2078-4ffc-8f9d-2e08e6378a9f"
+                        "reference": "urn:uuid:bc062537-ec63-4ac7-b095-cd15cde40e39"
                     }
                 ],
                 "status": "unknown",
@@ -438,60 +261,22 @@
                     ]
                 },
                 "subject": {
-                    "reference": "urn:uuid:4b731eaf-562e-48a6-a551-5fa3375f300d"
+                    "reference": "urn:uuid:4f99def2-6ce6-47af-818b-52dbc891aade"
                 },
                 "issued": "2010-02-25T15:41:00.000+00:00",
                 "performer": [
                     {
                         "actor": {
-                            "reference": "urn:uuid:e09f15db-ac5c-4be3-8905-9d63996804fa"
+                            "reference": "urn:uuid:2dd909bf-1dd9-4f87-b591-86e47a11a387"
                         }
                     },
                     {
                         "actor": {
-                            "reference": "urn:uuid:b0a55ef6-5812-4a87-90d1-3eccacf7d2d6"
+                            "reference": "urn:uuid:a67ded1d-aded-4a3f-812d-e56569ae2829"
                         }
                     }
                 ]
             }
->>>>>>> main
         }
-    }, {
-        "fullUrl": "urn:uuid:c42b263f-7cc0-409a-a682-00d3b9c96edf",
-        "resource": {
-            "resourceType": "DiagnosticReport",
-            "id": "c42b263f-7cc0-409a-a682-00d3b9c96edf",
-            "meta": {
-                "profile": [ "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-DiagnosticReport-1" ]
-            },
-            "identifier": [ {
-                "system": "https://tools.ietf.org/html/rfc4122",
-                "value": "15/CH000063K/200010191704"
-            } ],
-            "basedOn": [ {
-                "reference": "urn:uuid:c0812aa9-cfcd-4171-be59-1859bb6a7cc4"
-            } ],
-            "status": "unknown",
-            "code": {
-                "coding": [ {
-                    "system": "http://snomed.info/sct",
-                    "code": "721981007",
-                    "display": "Diagnostic studies report"
-                } ]
-            },
-            "subject": {
-                "reference": "urn:uuid:504bf03c-0b79-472b-93a6-e53ff48055e6"
-            },
-            "issued": "2010-02-25T15:41:00.000+00:00",
-            "performer": [ {
-                "actor": {
-                    "reference": "urn:uuid:bc15c89c-f398-40a7-bc26-9517ef57cb23"
-                }
-            }, {
-                "actor": {
-                    "reference": "urn:uuid:2db5d238-d28a-4924-9757-df8d3e07a27a"
-                }
-            } ]
-        }
-    } ]
+    ]
 }
