@@ -1,513 +1,390 @@
 {
     "resourceType": "Bundle",
-    "id": "b69c77b2-e062-4738-9622-8cd2983ad0c6",
+    "id": "6830dc0e-a32e-45a3-9c96-0692e093ca5d",
     "meta": {
-        "lastUpdated": "2021-05-31T13:07:49.847+01:00",
-        "profile": [
-            "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"
-        ]
+        "lastUpdated": "2021-06-07T12:23:39.931+01:00",
+        "profile": [ "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1" ]
     },
     "identifier": {
         "system": "https://tools.ietf.org/html/rfc4122",
-        "value": "1a17d5c5-ffbf-4347-a694-b108149a13bd"
+        "value": "8e1a3d4f-d26a-4606-9666-8fdb52a9036c"
     },
     "type": "message",
-    "entry": [
-        {
-            "fullUrl": "urn:uuid:db693328-bb1f-4c8e-b0e0-18164beaa28d",
-            "resource": {
-                "resourceType": "MessageHeader",
-                "id": "db693328-bb1f-4c8e-b0e0-18164beaa28d",
-                "meta": {
-                    "profile": [
-                        "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-MessageHeader-2"
-                    ]
-                },
-                "extension": [
-                    {
-                        "url": "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-ITK-MessageHandling-2",
-                        "extension": [
-                            {
-                                "url": "BusAckRequested",
-                                "valueBoolean": true
-                            },
-                            {
-                                "url": "InfAckRequested",
-                                "valueBoolean": true
-                            },
-                            {
-                                "url": "RecipientType",
-                                "valueCoding": {
-                                    "system": "https://fhir.nhs.uk/STU3/CodeSystem/ITK-RecipientType-1",
-                                    "code": "FA",
-                                    "display": "For Action"
-                                }
-                            },
-                            {
-                                "url": "SenderReference",
-                                "valueString": "None"
-                            },
-                            {
-                                "url": "LocalExtension",
-                                "valueString": "None"
-                            }
-                        ]
+    "entry": [ {
+        "fullUrl": "urn:uuid:f7111d71-6184-465a-87e8-9cb581fd6136",
+        "resource": {
+            "resourceType": "MessageHeader",
+            "id": "f7111d71-6184-465a-87e8-9cb581fd6136",
+            "meta": {
+                "profile": [ "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-MessageHeader-2" ]
+            },
+            "extension": [ {
+                "url": "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-ITK-MessageHandling-2",
+                "extension": [ {
+                    "url": "BusAckRequested",
+                    "valueBoolean": true
+                }, {
+                    "url": "InfAckRequested",
+                    "valueBoolean": true
+                }, {
+                    "url": "RecipientType",
+                    "valueCoding": {
+                        "system": "https://fhir.nhs.uk/STU3/CodeSystem/ITK-RecipientType-1",
+                        "code": "FA",
+                        "display": "For Action"
                     }
-                ],
-                "event": {
-                    "system": "https://fhir.nhs.uk/STU3/CodeSystem/ITK-MessageEvent-2",
-                    "code": "ITK012M",
-                    "display": "ITK National Pathology"
-                },
-                "receiver": {
-                    "reference": "urn:uuid:a32da1f5-b5b6-491d-a979-901e1fd40824"
-                },
-                "sender": {
-                    "reference": "urn:uuid:d2493b29-df47-4af0-8dc4-c0006de728b7"
-                },
-                "timestamp": "2010-03-01T17:51:00.000+00:00",
-                "source": {
-                    "endpoint": "lab_results_mailbox"
-                },
-                "responsible": {
-                    "reference": "urn:uuid:d2493b29-df47-4af0-8dc4-c0006de728b7"
-                },
-                "focus": [
-                    {
-                        "reference": "urn:uuid:7700a8f8-a8a7-46c9-82f5-92b95922d1af"
+                }, {
+                    "url": "SenderReference",
+                    "valueString": "None"
+                }, {
+                    "url": "LocalExtension",
+                    "valueString": "None"
+                } ]
+            } ],
+            "event": {
+                "system": "https://fhir.nhs.uk/STU3/CodeSystem/ITK-MessageEvent-2",
+                "code": "ITK012M",
+                "display": "ITK National Pathology"
+            },
+            "receiver": {
+                "reference": "urn:uuid:39080955-69a0-48ac-80a0-2a2e23ffa0cb"
+            },
+            "sender": {
+                "reference": "urn:uuid:5c57ffd8-3c7f-48c5-8da3-3ed1701d46fb"
+            },
+            "timestamp": "2010-03-01T17:51:00.000+00:00",
+            "source": {
+                "endpoint": "lab_results_mailbox"
+            },
+            "responsible": {
+                "reference": "urn:uuid:5c57ffd8-3c7f-48c5-8da3-3ed1701d46fb"
+            },
+            "focus": [ {
+                "reference": "urn:uuid:9181b424-67ed-4414-80c7-14f8090dc884"
+            } ]
+        }
+    }, {
+        "fullUrl": "urn:uuid:bc8293ee-4fa7-4fac-bcd4-ec1281554d5b",
+        "resource": {
+            "resourceType": "Patient",
+            "id": "bc8293ee-4fa7-4fac-bcd4-ec1281554d5b",
+            "meta": {
+                "profile": [ "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Patient-1" ]
+            },
+            "identifier": [ {
+                "extension": [ {
+                    "url": "https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-NHSNumberVerificationStatus-1",
+                    "valueCodeableConcept": {
+                        "coding": [ {
+                            "system": "https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-NHSNumberVerificationStatus-1",
+                            "code": "01",
+                            "display": "Number present and verified"
+                        } ]
                     }
-                ]
-            }
-        },
-        {
-            "fullUrl": "urn:uuid:50899d07-d7ce-44bc-8b03-ee6761dd07ff",
-            "resource": {
-                "resourceType": "Patient",
-                "id": "50899d07-d7ce-44bc-8b03-ee6761dd07ff",
-                "meta": {
-                    "profile": [
-                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Patient-1"
-                    ]
-                },
-                "identifier": [
-                    {
-                        "extension": [
-                            {
-                                "url": "https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-NHSNumberVerificationStatus-1",
-                                "valueCodeableConcept": {
-                                    "coding": [
-                                        {
-                                            "system": "https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-NHSNumberVerificationStatus-1",
-                                            "code": "01",
-                                            "display": "Number present and verified"
-                                        }
-                                    ]
-                                }
-                            }
-                        ],
-                        "system": "https://fhir.nhs.uk/Id/nhs-number",
-                        "value": "9435492908"
-                    }
-                ],
-                "name": [
-                    {
-                        "use": "official",
-                        "family": "AZIZ",
-                        "given": [
-                            "NISMA"
-                        ]
-                    }
-                ],
-                "gender": "female",
-                "birthDate": "1945-07-30",
-                "address": [
-                    {
-                        "line": [
-                            "FLAT1",
-                            "59 SANDTOFT ROAD",
-                            "DONCASTER"
-                        ],
-                        "postalCode": "DN9 1PJ"
-                    }
-                ]
-            }
-        },
-        {
-            "fullUrl": "urn:uuid:8a187ef9-8333-4709-9096-314d8004a679",
-            "resource": {
-                "resourceType": "Practitioner",
-                "id": "8a187ef9-8333-4709-9096-314d8004a679",
-                "meta": {
-                    "profile": [
-                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Practitioner-1"
-                    ]
-                },
-                "identifier": [
-                    {
-                        "system": "https://fhir.nhs.uk/Id/sds-user-id",
-                        "value": "G9304284"
-                    }
-                ],
-                "name": [
-                    {
-                        "text": "DR A DOCTOR"
-                    }
-                ]
-            }
-        },
-        {
-            "fullUrl": "urn:uuid:a32da1f5-b5b6-491d-a979-901e1fd40824",
-            "resource": {
-                "resourceType": "Organization",
-                "id": "a32da1f5-b5b6-491d-a979-901e1fd40824",
-                "meta": {
-                    "profile": [
-                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1"
-                    ]
-                },
-                "identifier": [
-                    {
-                        "system": "https://fhir.nhs.uk/Id/ods-organization-code",
-                        "value": "L99999"
-                    }
-                ]
-            }
-        },
-        {
-            "fullUrl": "urn:uuid:e481ab01-fad6-4944-b849-1196013eb927",
-            "resource": {
-                "resourceType": "Practitioner",
-                "id": "e481ab01-fad6-4944-b849-1196013eb927",
-                "meta": {
-                    "profile": [
-                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Practitioner-1"
-                    ]
-                }
-            }
-        },
-        {
-            "fullUrl": "urn:uuid:d2493b29-df47-4af0-8dc4-c0006de728b7",
-            "resource": {
-                "resourceType": "Organization",
-                "id": "d2493b29-df47-4af0-8dc4-c0006de728b7",
-                "meta": {
-                    "profile": [
-                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1"
-                    ]
-                },
-                "type": [
-                    {
-                        "coding": [
-                            {
-                                "code": "dept",
-                                "display": "Haematology"
-                            }
-                        ]
-                    }
-                ],
-                "name": "ST JAMES'S UNIVERSITY HOSPITAL"
-            }
-        },
-        {
-            "fullUrl": "urn:uuid:17f01b50-1520-406b-b440-0af84fbac026",
-            "resource": {
-                "resourceType": "ProcedureRequest",
-                "id": "17f01b50-1520-406b-b440-0af84fbac026",
-                "meta": {
-                    "profile": [
-                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-ProcedureRequest-1"
-                    ]
-                },
-                "status": "unknown",
-                "intent": "order",
-                "code": {
-                    "coding": [
-                        {
-                            "system": "http://snomed.info/sct",
-                            "code": "15220000",
-                            "display": "Laboratory test (procedure)"
-                        }
-                    ]
-                },
-                "subject": {
-                    "reference": "urn:uuid:50899d07-d7ce-44bc-8b03-ee6761dd07ff"
-                },
-                "requester": {
-                    "agent": {
-                        "reference": "urn:uuid:8a187ef9-8333-4709-9096-314d8004a679"
-                    },
-                    "onBehalfOf": {
-                        "reference": "urn:uuid:a32da1f5-b5b6-491d-a979-901e1fd40824"
-                    }
-                },
-                "performer": {
-                    "reference": "urn:uuid:e481ab01-fad6-4944-b849-1196013eb927"
-                },
-                "note": [
-                    {
-                        "text": "TIRED ALL THE TIME, LOW Hb"
-                    },
-                    {
-                        "text": "COELIAC"
-                    }
-                ]
-            }
-        },
-        {
-            "fullUrl": "urn:uuid:7700a8f8-a8a7-46c9-82f5-92b95922d1af",
-            "resource": {
-                "resourceType": "DiagnosticReport",
-                "id": "7700a8f8-a8a7-46c9-82f5-92b95922d1af",
-                "meta": {
-                    "profile": [
-                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-DiagnosticReport-1"
-                    ]
-                },
-                "identifier": [
-                    {
-                        "system": "https://tools.ietf.org/html/rfc4122",
-                        "value": "15/CH000037K/200010191704"
-                    }
-                ],
-                "basedOn": [
-                    {
-                        "reference": "urn:uuid:17f01b50-1520-406b-b440-0af84fbac026"
-                    }
-                ],
-                "status": "unknown",
-                "code": {
-                    "coding": [
-                        {
-                            "system": "http://snomed.info/sct",
-                            "code": "721981007",
-                            "display": "Diagnostic studies report"
-                        }
-                    ]
-                },
-                "subject": {
-                    "reference": "urn:uuid:50899d07-d7ce-44bc-8b03-ee6761dd07ff"
-                },
-                "issued": "2010-02-25T15:41:00.000+00:00",
-                "performer": [
-                    {
-                        "actor": {
-                            "reference": "urn:uuid:d2493b29-df47-4af0-8dc4-c0006de728b7"
-                        }
-                    },
-                    {
-                        "actor": {
-                            "reference": "urn:uuid:e481ab01-fad6-4944-b849-1196013eb927"
-                        }
-                    }
-                ],
-                "specimen": [
-                    {
-                        "reference": "urn:uuid:54cf7baf-ff9f-4fe5-b711-f7d2899fc550"
-                    }
-                ],
-                "result": [
-                    {
-                        "reference": "urn:uuid:0019ca38-f87c-4d21-806f-77ad8d375f24"
-                    }
-                ]
-            }
-        },
-        {
-            "fullUrl": "urn:uuid:54cf7baf-ff9f-4fe5-b711-f7d2899fc550",
-            "resource": {
-                "resourceType": "Specimen",
-                "id": "54cf7baf-ff9f-4fe5-b711-f7d2899fc550",
-                "meta": {
-                    "profile": [
-                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Specimen-1"
-                    ]
-                },
-                "accessionIdentifier": {
-                    "system": "http://lab.acme.org/specimens/2011",
-                    "value": "CH000037KA"
-                },
-                "type": {
-                    "coding": [
-                        {
-                            "system": "http://snomed.info/sct",
-                            "code": "T016",
-                            "display": "VENOUS BLOOD"
-                        }
-                    ]
-                },
-                "subject": {
-                    "reference": "urn:uuid:50899d07-d7ce-44bc-8b03-ee6761dd07ff"
-                },
-                "receivedTime": "2010-02-24T15:41:00+00:00",
-                "collection": {
-                    "collectedDateTime": "2010-02-23T15:41:00+00:00"
-                }
-            }
-        },
-        {
-            "fullUrl": "urn:uuid:0019ca38-f87c-4d21-806f-77ad8d375f24",
-            "resource": {
-                "resourceType": "Observation",
-                "id": "0019ca38-f87c-4d21-806f-77ad8d375f24",
-                "meta": {
-                    "profile": [
-                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
-                    ]
-                },
-                "status": "final",
-                "code": {
-                    "coding": [
-                        {
-                            "display": "B12/FOLATE"
-                        }
-                    ]
-                },
-                "subject": {
-                    "reference": "urn:uuid:50899d07-d7ce-44bc-8b03-ee6761dd07ff"
-                },
-                "performer": [
-                    {
-                        "reference": "urn:uuid:d2493b29-df47-4af0-8dc4-c0006de728b7"
-                    },
-                    {
-                        "reference": "urn:uuid:e481ab01-fad6-4944-b849-1196013eb927"
-                    }
-                ],
-                "comment": "Results repeated Low plasma Folate",
-                "specimen": {
-                    "reference": "urn:uuid:54cf7baf-ff9f-4fe5-b711-f7d2899fc550"
-                },
-                "related": [
-                    {
-                        "type": "has-member",
-                        "target": {
-                            "reference": "urn:uuid:efb733e2-88f6-4cf1-880d-d6935e7dd0f5"
-                        }
-                    },
-                    {
-                        "type": "has-member",
-                        "target": {
-                            "reference": "urn:uuid:7c285933-ffe6-47ac-9e15-38e73c334982"
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "fullUrl": "urn:uuid:efb733e2-88f6-4cf1-880d-d6935e7dd0f5",
-            "resource": {
-                "resourceType": "Observation",
-                "id": "efb733e2-88f6-4cf1-880d-d6935e7dd0f5",
-                "meta": {
-                    "profile": [
-                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
-                    ]
-                },
-                "status": "final",
-                "code": {
-                    "coding": [
-                        {
-                            "system": "http://read.info/readv2",
-                            "code": "42T..",
-                            "display": "Serum vitamin B12"
-                        }
-                    ]
-                },
-                "subject": {
-                    "reference": "urn:uuid:50899d07-d7ce-44bc-8b03-ee6761dd07ff"
-                },
-                "performer": [
-                    {
-                        "reference": "urn:uuid:d2493b29-df47-4af0-8dc4-c0006de728b7"
-                    },
-                    {
-                        "reference": "urn:uuid:e481ab01-fad6-4944-b849-1196013eb927"
-                    }
-                ],
-                "valueQuantity": {
-                    "value": 1001,
-                    "unit": "ng/L"
-                },
-                "specimen": {
-                    "reference": "urn:uuid:54cf7baf-ff9f-4fe5-b711-f7d2899fc550"
-                },
-                "referenceRange": [
-                    {
-                        "low": {
-                            "value": 170
-                        },
-                        "high": {
-                            "value": 1100
-                        }
-                    }
-                ],
-                "related": [
-                    {
-                        "target": {
-                            "reference": "urn:uuid:0019ca38-f87c-4d21-806f-77ad8d375f24"
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "fullUrl": "urn:uuid:7c285933-ffe6-47ac-9e15-38e73c334982",
-            "resource": {
-                "resourceType": "Observation",
-                "id": "7c285933-ffe6-47ac-9e15-38e73c334982",
-                "meta": {
-                    "profile": [
-                        "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
-                    ]
-                },
-                "status": "final",
-                "code": {
-                    "coding": [
-                        {
-                            "system": "http://read.info/readv2",
-                            "code": "42UE.",
-                            "display": "Plasma folate level"
-                        }
-                    ]
-                },
-                "subject": {
-                    "reference": "urn:uuid:50899d07-d7ce-44bc-8b03-ee6761dd07ff"
-                },
-                "performer": [
-                    {
-                        "reference": "urn:uuid:d2493b29-df47-4af0-8dc4-c0006de728b7"
-                    },
-                    {
-                        "reference": "urn:uuid:e481ab01-fad6-4944-b849-1196013eb927"
-                    }
-                ],
-                "valueQuantity": {
-                    "value": 0.8,
-                    "unit": "ng/mL"
-                },
-                "specimen": {
-                    "reference": "urn:uuid:54cf7baf-ff9f-4fe5-b711-f7d2899fc550"
-                },
-                "referenceRange": [
-                    {
-                        "low": {
-                            "value": 2.0,
-                            "unit": "nmol/L"
-                        },
-                        "high": {
-                            "value": 20.0,
-                            "unit": "nmol/L"
-                        }
-                    }
-                ],
-                "related": [
-                    {
-                        "target": {
-                            "reference": "urn:uuid:0019ca38-f87c-4d21-806f-77ad8d375f24"
-                        }
-                    }
-                ]
+                } ],
+                "system": "https://fhir.nhs.uk/Id/nhs-number",
+                "value": "9435492908"
+            } ],
+            "name": [ {
+                "use": "official",
+                "family": "AZIZ",
+                "given": [ "NISMA" ]
+            } ],
+            "gender": "female",
+            "birthDate": "1945-07-30",
+            "address": [ {
+                "line": [ "FLAT1", "59 SANDTOFT ROAD", "DONCASTER" ],
+                "postalCode": "DN9 1PJ"
+            } ]
+        }
+    }, {
+        "fullUrl": "urn:uuid:2042681c-e740-4bf5-951c-536db5e6cac2",
+        "resource": {
+            "resourceType": "Practitioner",
+            "id": "2042681c-e740-4bf5-951c-536db5e6cac2",
+            "meta": {
+                "profile": [ "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Practitioner-1" ]
+            },
+            "identifier": [ {
+                "value": "G9304284"
+            } ],
+            "name": [ {
+                "text": "DR A DOCTOR"
+            } ]
+        }
+    }, {
+        "fullUrl": "urn:uuid:39080955-69a0-48ac-80a0-2a2e23ffa0cb",
+        "resource": {
+            "resourceType": "Organization",
+            "id": "39080955-69a0-48ac-80a0-2a2e23ffa0cb",
+            "meta": {
+                "profile": [ "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1" ]
+            },
+            "identifier": [ {
+                "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+                "value": "L99999"
+            } ]
+        }
+    }, {
+        "fullUrl": "urn:uuid:9adba015-1455-4f69-861f-b09857961369",
+        "resource": {
+            "resourceType": "Practitioner",
+            "id": "9adba015-1455-4f69-861f-b09857961369",
+            "meta": {
+                "profile": [ "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Practitioner-1" ]
             }
         }
-    ]
+    }, {
+        "fullUrl": "urn:uuid:5c57ffd8-3c7f-48c5-8da3-3ed1701d46fb",
+        "resource": {
+            "resourceType": "Organization",
+            "id": "5c57ffd8-3c7f-48c5-8da3-3ed1701d46fb",
+            "meta": {
+                "profile": [ "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1" ]
+            },
+            "type": [ {
+                "coding": [ {
+                    "code": "dept",
+                    "display": "Haematology"
+                } ]
+            } ],
+            "name": "ST JAMES'S UNIVERSITY HOSPITAL"
+        }
+    }, {
+        "fullUrl": "urn:uuid:b2b27a27-3cda-4cb3-86a0-c3af4f6acdd5",
+        "resource": {
+            "resourceType": "ProcedureRequest",
+            "id": "b2b27a27-3cda-4cb3-86a0-c3af4f6acdd5",
+            "meta": {
+                "profile": [ "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-ProcedureRequest-1" ]
+            },
+            "status": "unknown",
+            "intent": "order",
+            "code": {
+                "coding": [ {
+                    "system": "http://snomed.info/sct",
+                    "code": "15220000",
+                    "display": "Laboratory test (procedure)"
+                } ]
+            },
+            "subject": {
+                "reference": "urn:uuid:bc8293ee-4fa7-4fac-bcd4-ec1281554d5b"
+            },
+            "requester": {
+                "agent": {
+                    "reference": "urn:uuid:2042681c-e740-4bf5-951c-536db5e6cac2"
+                },
+                "onBehalfOf": {
+                    "reference": "urn:uuid:39080955-69a0-48ac-80a0-2a2e23ffa0cb"
+                }
+            },
+            "performer": {
+                "reference": "urn:uuid:9adba015-1455-4f69-861f-b09857961369"
+            },
+            "note": [ {
+                "text": "TIRED ALL THE TIME, LOW Hb"
+            }, {
+                "text": "COELIAC"
+            } ]
+        }
+    }, {
+        "fullUrl": "urn:uuid:9181b424-67ed-4414-80c7-14f8090dc884",
+        "resource": {
+            "resourceType": "DiagnosticReport",
+            "id": "9181b424-67ed-4414-80c7-14f8090dc884",
+            "meta": {
+                "profile": [ "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-DiagnosticReport-1" ]
+            },
+            "identifier": [ {
+                "system": "https://tools.ietf.org/html/rfc4122",
+                "value": "15/CH000037K/200010191704"
+            } ],
+            "basedOn": [ {
+                "reference": "urn:uuid:b2b27a27-3cda-4cb3-86a0-c3af4f6acdd5"
+            } ],
+            "status": "unknown",
+            "code": {
+                "coding": [ {
+                    "system": "http://snomed.info/sct",
+                    "code": "721981007",
+                    "display": "Diagnostic studies report"
+                } ]
+            },
+            "subject": {
+                "reference": "urn:uuid:bc8293ee-4fa7-4fac-bcd4-ec1281554d5b"
+            },
+            "issued": "2010-02-25T15:41:00.000+00:00",
+            "performer": [ {
+                "actor": {
+                    "reference": "urn:uuid:5c57ffd8-3c7f-48c5-8da3-3ed1701d46fb"
+                }
+            }, {
+                "actor": {
+                    "reference": "urn:uuid:9adba015-1455-4f69-861f-b09857961369"
+                }
+            } ],
+            "specimen": [ {
+                "reference": "urn:uuid:2682acbe-a3f6-4024-a3b0-9e285f3e247f"
+            } ],
+            "result": [ {
+                "reference": "urn:uuid:b0069e91-e18e-4674-8668-49dbb88e619d"
+            } ]
+        }
+    }, {
+        "fullUrl": "urn:uuid:2682acbe-a3f6-4024-a3b0-9e285f3e247f",
+        "resource": {
+            "resourceType": "Specimen",
+            "id": "2682acbe-a3f6-4024-a3b0-9e285f3e247f",
+            "meta": {
+                "profile": [ "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Specimen-1" ]
+            },
+            "accessionIdentifier": {
+                "value": "CH000037KA"
+            },
+            "type": {
+                "coding": [ {
+                    "system": "http://snomed.info/sct",
+                    "code": "T016",
+                    "display": "VENOUS BLOOD"
+                } ]
+            },
+            "subject": {
+                "reference": "urn:uuid:bc8293ee-4fa7-4fac-bcd4-ec1281554d5b"
+            },
+            "receivedTime": "2010-02-24T15:41:00+00:00",
+            "collection": {
+                "collectedDateTime": "2010-02-23T15:41:00+00:00"
+            }
+        }
+    }, {
+        "fullUrl": "urn:uuid:b0069e91-e18e-4674-8668-49dbb88e619d",
+        "resource": {
+            "resourceType": "Observation",
+            "id": "b0069e91-e18e-4674-8668-49dbb88e619d",
+            "meta": {
+                "profile": [ "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1" ]
+            },
+            "status": "final",
+            "code": {
+                "coding": [ {
+                    "display": "B12/FOLATE"
+                } ]
+            },
+            "subject": {
+                "reference": "urn:uuid:bc8293ee-4fa7-4fac-bcd4-ec1281554d5b"
+            },
+            "performer": [ {
+                "reference": "urn:uuid:5c57ffd8-3c7f-48c5-8da3-3ed1701d46fb"
+            }, {
+                "reference": "urn:uuid:9adba015-1455-4f69-861f-b09857961369"
+            } ],
+            "comment": "Results repeated Low plasma Folate",
+            "specimen": {
+                "reference": "urn:uuid:2682acbe-a3f6-4024-a3b0-9e285f3e247f"
+            },
+            "related": [ {
+                "type": "has-member",
+                "target": {
+                    "reference": "urn:uuid:c4036f59-6529-4cab-a3bc-2c2fab15c7ea"
+                }
+            }, {
+                "type": "has-member",
+                "target": {
+                    "reference": "urn:uuid:999317bd-1028-4fac-885e-48fe9e405813"
+                }
+            } ]
+        }
+    }, {
+        "fullUrl": "urn:uuid:c4036f59-6529-4cab-a3bc-2c2fab15c7ea",
+        "resource": {
+            "resourceType": "Observation",
+            "id": "c4036f59-6529-4cab-a3bc-2c2fab15c7ea",
+            "meta": {
+                "profile": [ "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1" ]
+            },
+            "status": "final",
+            "code": {
+                "coding": [ {
+                    "system": "http://read.info/readv2",
+                    "code": "42T..",
+                    "display": "Serum vitamin B12"
+                } ]
+            },
+            "subject": {
+                "reference": "urn:uuid:bc8293ee-4fa7-4fac-bcd4-ec1281554d5b"
+            },
+            "performer": [ {
+                "reference": "urn:uuid:5c57ffd8-3c7f-48c5-8da3-3ed1701d46fb"
+            }, {
+                "reference": "urn:uuid:9adba015-1455-4f69-861f-b09857961369"
+            } ],
+            "valueQuantity": {
+                "value": 1001,
+                "unit": "ng/L"
+            },
+            "specimen": {
+                "reference": "urn:uuid:2682acbe-a3f6-4024-a3b0-9e285f3e247f"
+            },
+            "referenceRange": [ {
+                "low": {
+                    "value": 170
+                },
+                "high": {
+                    "value": 1100
+                }
+            } ],
+            "related": [ {
+                "target": {
+                    "reference": "urn:uuid:b0069e91-e18e-4674-8668-49dbb88e619d"
+                }
+            } ]
+        }
+    }, {
+        "fullUrl": "urn:uuid:999317bd-1028-4fac-885e-48fe9e405813",
+        "resource": {
+            "resourceType": "Observation",
+            "id": "999317bd-1028-4fac-885e-48fe9e405813",
+            "meta": {
+                "profile": [ "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1" ]
+            },
+            "status": "final",
+            "code": {
+                "coding": [ {
+                    "system": "http://read.info/readv2",
+                    "code": "42UE.",
+                    "display": "Plasma folate level"
+                } ]
+            },
+            "subject": {
+                "reference": "urn:uuid:bc8293ee-4fa7-4fac-bcd4-ec1281554d5b"
+            },
+            "performer": [ {
+                "reference": "urn:uuid:5c57ffd8-3c7f-48c5-8da3-3ed1701d46fb"
+            }, {
+                "reference": "urn:uuid:9adba015-1455-4f69-861f-b09857961369"
+            } ],
+            "valueQuantity": {
+                "value": 0.8,
+                "unit": "ng/mL"
+            },
+            "specimen": {
+                "reference": "urn:uuid:2682acbe-a3f6-4024-a3b0-9e285f3e247f"
+            },
+            "referenceRange": [ {
+                "low": {
+                    "value": 2.0,
+                    "unit": "nmol/L"
+                },
+                "high": {
+                    "value": 20.0,
+                    "unit": "nmol/L"
+                }
+            } ],
+            "related": [ {
+                "target": {
+                    "reference": "urn:uuid:b0069e91-e18e-4674-8668-49dbb88e619d"
+                }
+            } ]
+        }
+    } ]
 }

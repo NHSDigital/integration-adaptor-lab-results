@@ -68,7 +68,7 @@ class PractitionerMapperTest {
                 .first()
                 .satisfies(identifier -> assertAll(
                     () -> assertThat(identifier.getValue()).isEqualTo("DEF"),
-                    () -> assertThat(identifier.getSystem()).isEqualTo("https://fhir.nhs.uk/Id/sds-user-id")
+                    () -> assertThat(identifier.getSystem()).isNull()
                 ))
         );
     }
@@ -132,7 +132,7 @@ class PractitionerMapperTest {
                 .first()
                 .satisfies(identifier -> assertAll(
                     () -> assertThat(identifier.getValue()).isEqualTo("ABC"),
-                    () -> assertThat(identifier.getSystem()).isEqualTo("https://fhir.nhs.uk/Id/sds-user-id")
+                    () -> assertThat(identifier.getSystem()).isNull()
                 ))
         );
     }
