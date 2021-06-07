@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.inbound.fhir.EdifactToFhirService;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.MeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.OutboundMeshMessage;
+import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.EdifactValidationException;
 import uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Interchange;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.InterchangeHeader;
@@ -24,6 +25,7 @@ import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
@@ -68,6 +70,7 @@ class InboundMessageHandlerTest {
                 .sequenceNumber(SEQUENCE_NUMBER)
                 .translationTime(Instant.now())
                 .nhsAckRequested(true)
+                .messageType("MEDRPT")
                 .build());
     }
 
@@ -118,6 +121,26 @@ class InboundMessageHandlerTest {
             () -> verify(outboundMeshMessageBuilder, never()).buildNhsAck(any(), any(), anyList()),
             () -> verify(meshOutboundQueueService).publish(outboundMeshMessage)
         );
+    }
+
+    @Test
+    void handleInvalidMessageTypeRaisesException() throws InterchangeParsingException, MessageParsingException {
+        final MeshMessage meshMessage = new MeshMessage();
+        when(edifactParser.parse(meshMessage.getContent())).thenReturn(interchange);
+
+        when(interchange.getInterchangeHeader()).thenReturn(
+            InterchangeHeader.builder()
+                .sender("some_sender")
+                .recipient("some_recipient")
+                .sequenceNumber(SEQUENCE_NUMBER)
+                .translationTime(Instant.now())
+                .nhsAckRequested(false)
+                .messageType("NHSACK")
+                .build());
+
+        assertThatThrownBy(() -> inboundMessageHandler.handle(meshMessage))
+            .isInstanceOf(EdifactValidationException.class)
+            .hasMessage("UNB: Attribute messageType must be equal to: MEDRPT");
     }
 
     @Test
@@ -215,6 +238,7 @@ class InboundMessageHandlerTest {
                 .sequenceNumber(SEQUENCE_NUMBER)
                 .translationTime(Instant.now())
                 .nhsAckRequested(false)
+                .messageType("MEDRPT")
                 .build());
 
         final MeshMessage meshMessage = new MeshMessage();
