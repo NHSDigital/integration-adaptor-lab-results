@@ -1,8 +1,9 @@
 package uk.nhs.digital.nhsconnect.lab.results.inbound;
 
-import org.json.JSONException;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import uk.nhs.digital.nhsconnect.lab.results.IntegrationBaseTest;
@@ -16,12 +17,12 @@ import uk.nhs.digital.nhsconnect.lab.results.uat.common.SuccessArgumentsProvider
 import uk.nhs.digital.nhsconnect.lab.results.uat.common.TestData;
 import uk.nhs.digital.nhsconnect.lab.results.utils.JmsHeaders;
 
-import javax.jms.JMSException;
 import javax.jms.Message;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId.PATHOLOGY_2_ACK;
 import static uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId.PATHOLOGY_3_ACK;
 import static uk.nhs.digital.nhsconnect.lab.results.model.enums.WorkflowId.SCREENING_ACK;
@@ -58,7 +59,7 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
     @ParameterizedTest(name = "[{index}] - {0}")
     @ArgumentsSource(SuccessArgumentsProvider.class)
     void testEdifactIsSuccessfullyProcessedAndPushedToGpOutboundQueue(String testGroupName, TestData testData)
-            throws JMSException, InterchangeParsingException, MessageParsingException, JSONException {
+        throws InterchangeParsingException, MessageParsingException {
 
         final String edifact = testData.getEdifact();
 
@@ -77,16 +78,25 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
 
         getLabResultsMeshClient().sendEdifactMessage(outboundMeshMessage);
 
-        for (String expectedMessageBody : testData.getJsonList()) {
-            Message gpOutboundQueueMessage = getGpOutboundQueueMessage();
-            assertThat(gpOutboundQueueMessage).isNotNull();
+        var assertions = testData.getJsonList().stream()
+            .map(expectedMessageBody -> {
+                Message gpOutboundQueueMessage = getGpOutboundQueueMessage();
+                return Pair.of(expectedMessageBody, gpOutboundQueueMessage);
+            })
+            .map(pair -> (Executable) () -> {
+                var expectedMessageBody = pair.getKey();
+                var jmsMessage = pair.getValue();
+                assertThat(jmsMessage).isNotNull();
 
-            String correlationId = gpOutboundQueueMessage.getStringProperty(JmsHeaders.CORRELATION_ID);
-            assertThat(correlationId).isNotEmpty();
+                String correlationId = jmsMessage.getStringProperty(JmsHeaders.CORRELATION_ID);
+                assertThat(correlationId).isNotEmpty();
 
-            String messageBody = parseTextMessage(gpOutboundQueueMessage);
-            assertFhirEquals(expectedMessageBody, messageBody);
-        }
+                String messageBody = parseTextMessage(jmsMessage);
+                assertFhirEquals(expectedMessageBody, messageBody);
+            })
+            .toArray(Executable[]::new);
+
+        assertAll(assertions);
 
         if (ackRequested) {
             assertOutboundNhsAckMessage(workflowId, recipient, sender);
@@ -190,5 +200,4 @@ class InboundUserAcceptanceTest extends IntegrationBaseTest {
                 throw new IllegalArgumentException(workflowId.name() + " workflow has no corresponding ACK one");
         }
     }
-
 }

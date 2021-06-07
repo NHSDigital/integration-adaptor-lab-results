@@ -63,6 +63,7 @@ public class ProcedureRequestMapper {
             var procedureRequest = new ProcedureRequest();
             procedureRequest.getMeta().addProfile(FhirProfiles.PROCEDURE_REQUEST);
             procedureRequest.setId(uuidGenerator.generateUUID());
+            procedureRequest.setStatus(ProcedureRequestStatus.ACTIVE);
             procedureRequest.setIntent(ProcedureRequestIntent.ORDER);
             procedureRequest.setCode(new CodeableConcept().setText("unknown"));
             procedureRequest.getSubject().setReference(fullUrlGenerator.generate(this.patient));

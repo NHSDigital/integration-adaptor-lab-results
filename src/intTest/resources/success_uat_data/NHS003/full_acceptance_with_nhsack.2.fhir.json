@@ -1,23 +1,23 @@
 {
     "resourceType": "Bundle",
-    "id": "6c31ea97-971a-4fed-9f12-e1d127c8572f",
+    "id": "b802499e-fef5-4396-953f-072196790090",
     "meta": {
-        "lastUpdated": "2021-04-22T13:27:45.055+02:00",
+        "lastUpdated": "2021-04-27T13:31:57.436+01:00",
         "profile": [
             "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"
         ]
     },
     "identifier": {
         "system": "https://tools.ietf.org/html/rfc4122",
-        "value": "7b5dce94-9304-4674-b0f8-26ff92e1372b"
+        "value": "faf43dac-d1ea-4b21-84b3-95440ee0da1a"
     },
     "type": "message",
     "entry": [
         {
-            "fullUrl": "urn:uuid:7812d486-f301-4c1a-81f2-42e261b9a3df",
+            "fullUrl": "urn:uuid:df24f9de-e4a5-486e-b2f4-3c2492996762",
             "resource": {
                 "resourceType": "MessageHeader",
-                "id": "7812d486-f301-4c1a-81f2-42e261b9a3df",
+                "id": "df24f9de-e4a5-486e-b2f4-3c2492996762",
                 "meta": {
                     "profile": [
                         "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-MessageHeader-2"
@@ -60,30 +60,30 @@
                     "display": "ITK National Pathology"
                 },
                 "receiver": {
-                    "reference": "urn:uuid:bb45e891-a01d-4f03-862e-404dc702de41"
+                    "reference": "urn:uuid:8a7c1ade-8478-4c56-800c-4a330f8c1a2a"
                 },
                 "sender": {
-                    "reference": "urn:uuid:8df314f9-d8a3-43b5-ae0c-661dd9ce29fc"
+                    "reference": "urn:uuid:377ea1ea-1281-40df-8fea-8568dea55dd6"
                 },
-                "timestamp": "2010-03-01T18:51:00.000+00:00",
+                "timestamp": "2010-03-01T17:51:00.000+00:00",
                 "source": {
                     "endpoint": "lab_results_mailbox"
                 },
                 "responsible": {
-                    "reference": "urn:uuid:8df314f9-d8a3-43b5-ae0c-661dd9ce29fc"
+                    "reference": "urn:uuid:377ea1ea-1281-40df-8fea-8568dea55dd6"
                 },
                 "focus": [
                     {
-                        "reference": "urn:uuid:cd11b224-4d76-4180-8961-846801c4a95d"
+                        "reference": "urn:uuid:7e59976f-a5a2-4872-86b2-589f32632059"
                     }
                 ]
             }
         },
         {
-            "fullUrl": "urn:uuid:d06c78c4-a207-45e2-906a-09eeb741d5e2",
+            "fullUrl": "urn:uuid:94e8eba9-09e3-4823-b7a2-326ef06db1b1",
             "resource": {
                 "resourceType": "Patient",
-                "id": "d06c78c4-a207-45e2-906a-09eeb741d5e2",
+                "id": "94e8eba9-09e3-4823-b7a2-326ef06db1b1",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Patient-1"
@@ -96,6 +96,7 @@
                 ],
                 "name": [
                     {
+                        "use": "official",
                         "family": "SPRINGATE",
                         "given": [
                             "SYDNEY"
@@ -117,10 +118,10 @@
             }
         },
         {
-            "fullUrl": "urn:uuid:55c01686-d7ab-4e45-9182-a29b2aae136b",
+            "fullUrl": "urn:uuid:ffdba775-391b-4f6f-a8dc-c836127565a5",
             "resource": {
                 "resourceType": "Practitioner",
-                "id": "55c01686-d7ab-4e45-9182-a29b2aae136b",
+                "id": "ffdba775-391b-4f6f-a8dc-c836127565a5",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Practitioner-1"
@@ -140,10 +141,10 @@
             }
         },
         {
-            "fullUrl": "urn:uuid:bb45e891-a01d-4f03-862e-404dc702de41",
+            "fullUrl": "urn:uuid:8a7c1ade-8478-4c56-800c-4a330f8c1a2a",
             "resource": {
                 "resourceType": "Organization",
-                "id": "bb45e891-a01d-4f03-862e-404dc702de41",
+                "id": "8a7c1ade-8478-4c56-800c-4a330f8c1a2a",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1"
@@ -152,10 +153,10 @@
             }
         },
         {
-            "fullUrl": "urn:uuid:f12cddbc-4c08-4a9e-8c39-6433fcd93f10",
+            "fullUrl": "urn:uuid:5a56ca24-98b0-4ada-a341-2c3c0d2d250e",
             "resource": {
                 "resourceType": "Practitioner",
-                "id": "f12cddbc-4c08-4a9e-8c39-6433fcd93f10",
+                "id": "5a56ca24-98b0-4ada-a341-2c3c0d2d250e",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Practitioner-1"
@@ -164,10 +165,10 @@
             }
         },
         {
-            "fullUrl": "urn:uuid:8df314f9-d8a3-43b5-ae0c-661dd9ce29fc",
+            "fullUrl": "urn:uuid:377ea1ea-1281-40df-8fea-8568dea55dd6",
             "resource": {
                 "resourceType": "Organization",
-                "id": "8df314f9-d8a3-43b5-ae0c-661dd9ce29fc",
+                "id": "377ea1ea-1281-40df-8fea-8568dea55dd6",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1"
@@ -187,10 +188,10 @@
             }
         },
         {
-            "fullUrl": "urn:uuid:50f1e0de-dad7-4a8a-bcee-5b4bc259396c",
+            "fullUrl": "urn:uuid:f90a9dd4-f300-4c88-ac8a-2928c91fdd8c",
             "resource": {
                 "resourceType": "ProcedureRequest",
-                "id": "50f1e0de-dad7-4a8a-bcee-5b4bc259396c",
+                "id": "f90a9dd4-f300-4c88-ac8a-2928c91fdd8c",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-ProcedureRequest-1"
@@ -202,18 +203,18 @@
                     "text": "unknown"
                 },
                 "subject": {
-                    "reference": "urn:uuid:d06c78c4-a207-45e2-906a-09eeb741d5e2"
+                    "reference": "urn:uuid:94e8eba9-09e3-4823-b7a2-326ef06db1b1"
                 },
                 "requester": {
                     "agent": {
-                        "reference": "urn:uuid:55c01686-d7ab-4e45-9182-a29b2aae136b"
+                        "reference": "urn:uuid:ffdba775-391b-4f6f-a8dc-c836127565a5"
                     },
                     "onBehalfOf": {
-                        "reference": "urn:uuid:bb45e891-a01d-4f03-862e-404dc702de41"
+                        "reference": "urn:uuid:8a7c1ade-8478-4c56-800c-4a330f8c1a2a"
                     }
                 },
                 "performer": {
-                    "reference": "urn:uuid:f12cddbc-4c08-4a9e-8c39-6433fcd93f10"
+                    "reference": "urn:uuid:5a56ca24-98b0-4ada-a341-2c3c0d2d250e"
                 },
                 "note": [
                     {
@@ -223,10 +224,10 @@
             }
         },
         {
-            "fullUrl": "urn:uuid:cd11b224-4d76-4180-8961-846801c4a95d",
+            "fullUrl": "urn:uuid:7e59976f-a5a2-4872-86b2-589f32632059",
             "resource": {
                 "resourceType": "DiagnosticReport",
-                "id": "cd11b224-4d76-4180-8961-846801c4a95d",
+                "id": "7e59976f-a5a2-4872-86b2-589f32632059",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-DiagnosticReport-1"
@@ -240,7 +241,7 @@
                 ],
                 "basedOn": [
                     {
-                        "reference": "urn:uuid:50f1e0de-dad7-4a8a-bcee-5b4bc259396c"
+                        "reference": "urn:uuid:f90a9dd4-f300-4c88-ac8a-2928c91fdd8c"
                     }
                 ],
                 "status": "unknown",
@@ -254,38 +255,38 @@
                     ]
                 },
                 "subject": {
-                    "reference": "urn:uuid:d06c78c4-a207-45e2-906a-09eeb741d5e2"
+                    "reference": "urn:uuid:94e8eba9-09e3-4823-b7a2-326ef06db1b1"
                 },
                 "issued": "2010-02-25T15:41:00.000+00:00",
                 "performer": [
                     {
                         "actor": {
-                            "reference": "urn:uuid:8df314f9-d8a3-43b5-ae0c-661dd9ce29fc"
+                            "reference": "urn:uuid:377ea1ea-1281-40df-8fea-8568dea55dd6"
                         }
                     },
                     {
                         "actor": {
-                            "reference": "urn:uuid:f12cddbc-4c08-4a9e-8c39-6433fcd93f10"
+                            "reference": "urn:uuid:5a56ca24-98b0-4ada-a341-2c3c0d2d250e"
                         }
                     }
                 ],
                 "specimen": [
                     {
-                        "reference": "urn:uuid:6454a722-ed37-4ae7-ade3-fdb0b0a960d0"
+                        "reference": "urn:uuid:65e11f16-fe18-4324-9095-d2df3b7db835"
                     }
                 ],
                 "result": [
                     {
-                        "reference": "urn:uuid:6c19b2b2-8777-457f-a7dd-3c10656eee3c"
+                        "reference": "urn:uuid:3d156e00-42fd-4528-9f46-d9c7f678d683"
                     }
                 ]
             }
         },
         {
-            "fullUrl": "urn:uuid:6454a722-ed37-4ae7-ade3-fdb0b0a960d0",
+            "fullUrl": "urn:uuid:65e11f16-fe18-4324-9095-d2df3b7db835",
             "resource": {
                 "resourceType": "Specimen",
-                "id": "6454a722-ed37-4ae7-ade3-fdb0b0a960d0",
+                "id": "65e11f16-fe18-4324-9095-d2df3b7db835",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Specimen-1"
@@ -304,7 +305,7 @@
                     ]
                 },
                 "subject": {
-                    "reference": "urn:uuid:d06c78c4-a207-45e2-906a-09eeb741d5e2"
+                    "reference": "urn:uuid:94e8eba9-09e3-4823-b7a2-326ef06db1b1"
                 },
                 "collection": {
                     "collectedDateTime": "2010-02-23"
@@ -312,10 +313,10 @@
             }
         },
         {
-            "fullUrl": "urn:uuid:6c19b2b2-8777-457f-a7dd-3c10656eee3c",
+            "fullUrl": "urn:uuid:3d156e00-42fd-4528-9f46-d9c7f678d683",
             "resource": {
                 "resourceType": "Observation",
-                "id": "6c19b2b2-8777-457f-a7dd-3c10656eee3c",
+                "id": "3d156e00-42fd-4528-9f46-d9c7f678d683",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
@@ -332,106 +333,106 @@
                     ]
                 },
                 "subject": {
-                    "reference": "urn:uuid:d06c78c4-a207-45e2-906a-09eeb741d5e2"
+                    "reference": "urn:uuid:94e8eba9-09e3-4823-b7a2-326ef06db1b1"
                 },
                 "performer": [
                     {
-                        "reference": "urn:uuid:8df314f9-d8a3-43b5-ae0c-661dd9ce29fc"
+                        "reference": "urn:uuid:377ea1ea-1281-40df-8fea-8568dea55dd6"
                     },
                     {
-                        "reference": "urn:uuid:f12cddbc-4c08-4a9e-8c39-6433fcd93f10"
+                        "reference": "urn:uuid:5a56ca24-98b0-4ada-a341-2c3c0d2d250e"
                     }
                 ],
                 "specimen": {
-                    "reference": "urn:uuid:6454a722-ed37-4ae7-ade3-fdb0b0a960d0"
+                    "reference": "urn:uuid:65e11f16-fe18-4324-9095-d2df3b7db835"
                 },
                 "related": [
                     {
                         "type": "has-member",
                         "target": {
-                            "reference": "urn:uuid:0d5437ff-e8cc-41d1-a641-314033558a51"
+                            "reference": "urn:uuid:76a60436-d708-4647-80a1-13fca9bddecc"
                         }
                     },
                     {
                         "type": "has-member",
                         "target": {
-                            "reference": "urn:uuid:6fd0fdca-59c4-410d-8c38-3c595da2a830"
+                            "reference": "urn:uuid:451e1717-28d2-4a8f-8b28-207ec47b6da6"
                         }
                     },
                     {
                         "type": "has-member",
                         "target": {
-                            "reference": "urn:uuid:b3dec3d3-0eb8-47d2-bc55-c3a651e64db8"
+                            "reference": "urn:uuid:a0cececc-0ee9-4927-9cd7-afdf437c49c3"
                         }
                     },
                     {
                         "type": "has-member",
                         "target": {
-                            "reference": "urn:uuid:d00e17fd-335a-4809-b4bc-107a53628bf3"
+                            "reference": "urn:uuid:4c974b9a-5633-4300-9cb9-71b95edba7f8"
                         }
                     },
                     {
                         "type": "has-member",
                         "target": {
-                            "reference": "urn:uuid:bb343501-a9d4-4f16-aab4-c75912a45077"
+                            "reference": "urn:uuid:e05c4069-bb45-4783-8152-b2b659049728"
                         }
                     },
                     {
                         "type": "has-member",
                         "target": {
-                            "reference": "urn:uuid:edc76308-f1eb-4e51-a209-05d9aaad59d4"
+                            "reference": "urn:uuid:7ff2e82c-ad5a-49a1-9ec7-e5105dbfa95b"
                         }
                     },
                     {
                         "type": "has-member",
                         "target": {
-                            "reference": "urn:uuid:34d06eef-7c1f-4aed-8bad-a7e4255b7fdd"
+                            "reference": "urn:uuid:442bea08-a691-488c-ac66-a867b86c8172"
                         }
                     },
                     {
                         "type": "has-member",
                         "target": {
-                            "reference": "urn:uuid:c9987c65-e73f-482d-a182-aec026e967db"
+                            "reference": "urn:uuid:7411683f-2263-4e73-b52d-bc4d600f5491"
                         }
                     },
                     {
                         "type": "has-member",
                         "target": {
-                            "reference": "urn:uuid:9c598cfb-3198-4806-8060-44de83719025"
+                            "reference": "urn:uuid:a6270179-8a48-4ad6-b6a5-21eff0c69c10"
                         }
                     },
                     {
                         "type": "has-member",
                         "target": {
-                            "reference": "urn:uuid:42c41cc5-7fd7-47d1-8920-708840ee69d3"
+                            "reference": "urn:uuid:489de767-a164-4a07-81eb-647079f448a9"
                         }
                     },
                     {
                         "type": "has-member",
                         "target": {
-                            "reference": "urn:uuid:fe14ff7e-d6ff-45db-a117-714efc925edb"
+                            "reference": "urn:uuid:625cd481-9e4b-4342-a925-69c23683d533"
                         }
                     },
                     {
                         "type": "has-member",
                         "target": {
-                            "reference": "urn:uuid:d6e61107-39a0-4dd3-b1bb-993dae96682e"
+                            "reference": "urn:uuid:20fe3b54-ef0f-4866-8860-bc72d61932f1"
                         }
                     },
                     {
                         "type": "has-member",
                         "target": {
-                            "reference": "urn:uuid:c15f5147-0572-49ac-a6c6-da2f8cb69aa6"
+                            "reference": "urn:uuid:d2d45edb-0c61-44c0-8af0-2f755dd24576"
                         }
                     }
                 ]
             }
         },
         {
-            "fullUrl": "urn:uuid:0d5437ff-e8cc-41d1-a641-314033558a51",
+            "fullUrl": "urn:uuid:76a60436-d708-4647-80a1-13fca9bddecc",
             "resource": {
                 "resourceType": "Observation",
-                "id": "0d5437ff-e8cc-41d1-a641-314033558a51",
+                "id": "76a60436-d708-4647-80a1-13fca9bddecc",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
@@ -448,14 +449,14 @@
                     ]
                 },
                 "subject": {
-                    "reference": "urn:uuid:d06c78c4-a207-45e2-906a-09eeb741d5e2"
+                    "reference": "urn:uuid:94e8eba9-09e3-4823-b7a2-326ef06db1b1"
                 },
                 "performer": [
                     {
-                        "reference": "urn:uuid:8df314f9-d8a3-43b5-ae0c-661dd9ce29fc"
+                        "reference": "urn:uuid:377ea1ea-1281-40df-8fea-8568dea55dd6"
                     },
                     {
-                        "reference": "urn:uuid:f12cddbc-4c08-4a9e-8c39-6433fcd93f10"
+                        "reference": "urn:uuid:5a56ca24-98b0-4ada-a341-2c3c0d2d250e"
                     }
                 ],
                 "valueQuantity": {
@@ -463,7 +464,7 @@
                     "unit": "10*9/L"
                 },
                 "specimen": {
-                    "reference": "urn:uuid:6454a722-ed37-4ae7-ade3-fdb0b0a960d0"
+                    "reference": "urn:uuid:65e11f16-fe18-4324-9095-d2df3b7db835"
                 },
                 "referenceRange": [
                     {
@@ -478,17 +479,17 @@
                 "related": [
                     {
                         "target": {
-                            "reference": "urn:uuid:6c19b2b2-8777-457f-a7dd-3c10656eee3c"
+                            "reference": "urn:uuid:3d156e00-42fd-4528-9f46-d9c7f678d683"
                         }
                     }
                 ]
             }
         },
         {
-            "fullUrl": "urn:uuid:6fd0fdca-59c4-410d-8c38-3c595da2a830",
+            "fullUrl": "urn:uuid:451e1717-28d2-4a8f-8b28-207ec47b6da6",
             "resource": {
                 "resourceType": "Observation",
-                "id": "6fd0fdca-59c4-410d-8c38-3c595da2a830",
+                "id": "451e1717-28d2-4a8f-8b28-207ec47b6da6",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
@@ -505,14 +506,14 @@
                     ]
                 },
                 "subject": {
-                    "reference": "urn:uuid:d06c78c4-a207-45e2-906a-09eeb741d5e2"
+                    "reference": "urn:uuid:94e8eba9-09e3-4823-b7a2-326ef06db1b1"
                 },
                 "performer": [
                     {
-                        "reference": "urn:uuid:8df314f9-d8a3-43b5-ae0c-661dd9ce29fc"
+                        "reference": "urn:uuid:377ea1ea-1281-40df-8fea-8568dea55dd6"
                     },
                     {
-                        "reference": "urn:uuid:f12cddbc-4c08-4a9e-8c39-6433fcd93f10"
+                        "reference": "urn:uuid:5a56ca24-98b0-4ada-a341-2c3c0d2d250e"
                     }
                 ],
                 "valueQuantity": {
@@ -520,10 +521,16 @@
                     "unit": "10*12/L"
                 },
                 "interpretation": {
-                    "text": "LO : Below low reference limit"
+                    "coding": [
+                        {
+                            "system": "http://hl7.org/fhir/v2/0078",
+                            "code": "L",
+                            "display": "Low"
+                        }
+                    ]
                 },
                 "specimen": {
-                    "reference": "urn:uuid:6454a722-ed37-4ae7-ade3-fdb0b0a960d0"
+                    "reference": "urn:uuid:65e11f16-fe18-4324-9095-d2df3b7db835"
                 },
                 "referenceRange": [
                     {
@@ -538,17 +545,17 @@
                 "related": [
                     {
                         "target": {
-                            "reference": "urn:uuid:6c19b2b2-8777-457f-a7dd-3c10656eee3c"
+                            "reference": "urn:uuid:3d156e00-42fd-4528-9f46-d9c7f678d683"
                         }
                     }
                 ]
             }
         },
         {
-            "fullUrl": "urn:uuid:b3dec3d3-0eb8-47d2-bc55-c3a651e64db8",
+            "fullUrl": "urn:uuid:a0cececc-0ee9-4927-9cd7-afdf437c49c3",
             "resource": {
                 "resourceType": "Observation",
-                "id": "b3dec3d3-0eb8-47d2-bc55-c3a651e64db8",
+                "id": "a0cececc-0ee9-4927-9cd7-afdf437c49c3",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
@@ -565,14 +572,14 @@
                     ]
                 },
                 "subject": {
-                    "reference": "urn:uuid:d06c78c4-a207-45e2-906a-09eeb741d5e2"
+                    "reference": "urn:uuid:94e8eba9-09e3-4823-b7a2-326ef06db1b1"
                 },
                 "performer": [
                     {
-                        "reference": "urn:uuid:8df314f9-d8a3-43b5-ae0c-661dd9ce29fc"
+                        "reference": "urn:uuid:377ea1ea-1281-40df-8fea-8568dea55dd6"
                     },
                     {
-                        "reference": "urn:uuid:f12cddbc-4c08-4a9e-8c39-6433fcd93f10"
+                        "reference": "urn:uuid:5a56ca24-98b0-4ada-a341-2c3c0d2d250e"
                     }
                 ],
                 "valueQuantity": {
@@ -580,7 +587,7 @@
                     "unit": "g/dL"
                 },
                 "specimen": {
-                    "reference": "urn:uuid:6454a722-ed37-4ae7-ade3-fdb0b0a960d0"
+                    "reference": "urn:uuid:65e11f16-fe18-4324-9095-d2df3b7db835"
                 },
                 "referenceRange": [
                     {
@@ -595,17 +602,17 @@
                 "related": [
                     {
                         "target": {
-                            "reference": "urn:uuid:6c19b2b2-8777-457f-a7dd-3c10656eee3c"
+                            "reference": "urn:uuid:3d156e00-42fd-4528-9f46-d9c7f678d683"
                         }
                     }
                 ]
             }
         },
         {
-            "fullUrl": "urn:uuid:d00e17fd-335a-4809-b4bc-107a53628bf3",
+            "fullUrl": "urn:uuid:4c974b9a-5633-4300-9cb9-71b95edba7f8",
             "resource": {
                 "resourceType": "Observation",
-                "id": "d00e17fd-335a-4809-b4bc-107a53628bf3",
+                "id": "4c974b9a-5633-4300-9cb9-71b95edba7f8",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
@@ -622,14 +629,14 @@
                     ]
                 },
                 "subject": {
-                    "reference": "urn:uuid:d06c78c4-a207-45e2-906a-09eeb741d5e2"
+                    "reference": "urn:uuid:94e8eba9-09e3-4823-b7a2-326ef06db1b1"
                 },
                 "performer": [
                     {
-                        "reference": "urn:uuid:8df314f9-d8a3-43b5-ae0c-661dd9ce29fc"
+                        "reference": "urn:uuid:377ea1ea-1281-40df-8fea-8568dea55dd6"
                     },
                     {
-                        "reference": "urn:uuid:f12cddbc-4c08-4a9e-8c39-6433fcd93f10"
+                        "reference": "urn:uuid:5a56ca24-98b0-4ada-a341-2c3c0d2d250e"
                     }
                 ],
                 "valueQuantity": {
@@ -637,10 +644,16 @@
                     "unit": "%"
                 },
                 "interpretation": {
-                    "text": "LO : Below low reference limit"
+                    "coding": [
+                        {
+                            "system": "http://hl7.org/fhir/v2/0078",
+                            "code": "L",
+                            "display": "Low"
+                        }
+                    ]
                 },
                 "specimen": {
-                    "reference": "urn:uuid:6454a722-ed37-4ae7-ade3-fdb0b0a960d0"
+                    "reference": "urn:uuid:65e11f16-fe18-4324-9095-d2df3b7db835"
                 },
                 "referenceRange": [
                     {
@@ -655,17 +668,17 @@
                 "related": [
                     {
                         "target": {
-                            "reference": "urn:uuid:6c19b2b2-8777-457f-a7dd-3c10656eee3c"
+                            "reference": "urn:uuid:3d156e00-42fd-4528-9f46-d9c7f678d683"
                         }
                     }
                 ]
             }
         },
         {
-            "fullUrl": "urn:uuid:bb343501-a9d4-4f16-aab4-c75912a45077",
+            "fullUrl": "urn:uuid:e05c4069-bb45-4783-8152-b2b659049728",
             "resource": {
                 "resourceType": "Observation",
-                "id": "bb343501-a9d4-4f16-aab4-c75912a45077",
+                "id": "e05c4069-bb45-4783-8152-b2b659049728",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
@@ -682,14 +695,14 @@
                     ]
                 },
                 "subject": {
-                    "reference": "urn:uuid:d06c78c4-a207-45e2-906a-09eeb741d5e2"
+                    "reference": "urn:uuid:94e8eba9-09e3-4823-b7a2-326ef06db1b1"
                 },
                 "performer": [
                     {
-                        "reference": "urn:uuid:8df314f9-d8a3-43b5-ae0c-661dd9ce29fc"
+                        "reference": "urn:uuid:377ea1ea-1281-40df-8fea-8568dea55dd6"
                     },
                     {
-                        "reference": "urn:uuid:f12cddbc-4c08-4a9e-8c39-6433fcd93f10"
+                        "reference": "urn:uuid:5a56ca24-98b0-4ada-a341-2c3c0d2d250e"
                     }
                 ],
                 "valueQuantity": {
@@ -697,10 +710,16 @@
                     "unit": "fL"
                 },
                 "interpretation": {
-                    "text": "HI : Above high reference limit"
+                    "coding": [
+                        {
+                            "system": "http://hl7.org/fhir/v2/0078",
+                            "code": "H",
+                            "display": "High"
+                        }
+                    ]
                 },
                 "specimen": {
-                    "reference": "urn:uuid:6454a722-ed37-4ae7-ade3-fdb0b0a960d0"
+                    "reference": "urn:uuid:65e11f16-fe18-4324-9095-d2df3b7db835"
                 },
                 "referenceRange": [
                     {
@@ -715,17 +734,17 @@
                 "related": [
                     {
                         "target": {
-                            "reference": "urn:uuid:6c19b2b2-8777-457f-a7dd-3c10656eee3c"
+                            "reference": "urn:uuid:3d156e00-42fd-4528-9f46-d9c7f678d683"
                         }
                     }
                 ]
             }
         },
         {
-            "fullUrl": "urn:uuid:edc76308-f1eb-4e51-a209-05d9aaad59d4",
+            "fullUrl": "urn:uuid:7ff2e82c-ad5a-49a1-9ec7-e5105dbfa95b",
             "resource": {
                 "resourceType": "Observation",
-                "id": "edc76308-f1eb-4e51-a209-05d9aaad59d4",
+                "id": "7ff2e82c-ad5a-49a1-9ec7-e5105dbfa95b",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
@@ -742,14 +761,14 @@
                     ]
                 },
                 "subject": {
-                    "reference": "urn:uuid:d06c78c4-a207-45e2-906a-09eeb741d5e2"
+                    "reference": "urn:uuid:94e8eba9-09e3-4823-b7a2-326ef06db1b1"
                 },
                 "performer": [
                     {
-                        "reference": "urn:uuid:8df314f9-d8a3-43b5-ae0c-661dd9ce29fc"
+                        "reference": "urn:uuid:377ea1ea-1281-40df-8fea-8568dea55dd6"
                     },
                     {
-                        "reference": "urn:uuid:f12cddbc-4c08-4a9e-8c39-6433fcd93f10"
+                        "reference": "urn:uuid:5a56ca24-98b0-4ada-a341-2c3c0d2d250e"
                     }
                 ],
                 "valueQuantity": {
@@ -757,10 +776,16 @@
                     "unit": "pg"
                 },
                 "interpretation": {
-                    "text": "HI : Above high reference limit"
+                    "coding": [
+                        {
+                            "system": "http://hl7.org/fhir/v2/0078",
+                            "code": "H",
+                            "display": "High"
+                        }
+                    ]
                 },
                 "specimen": {
-                    "reference": "urn:uuid:6454a722-ed37-4ae7-ade3-fdb0b0a960d0"
+                    "reference": "urn:uuid:65e11f16-fe18-4324-9095-d2df3b7db835"
                 },
                 "referenceRange": [
                     {
@@ -775,17 +800,17 @@
                 "related": [
                     {
                         "target": {
-                            "reference": "urn:uuid:6c19b2b2-8777-457f-a7dd-3c10656eee3c"
+                            "reference": "urn:uuid:3d156e00-42fd-4528-9f46-d9c7f678d683"
                         }
                     }
                 ]
             }
         },
         {
-            "fullUrl": "urn:uuid:34d06eef-7c1f-4aed-8bad-a7e4255b7fdd",
+            "fullUrl": "urn:uuid:442bea08-a691-488c-ac66-a867b86c8172",
             "resource": {
                 "resourceType": "Observation",
-                "id": "34d06eef-7c1f-4aed-8bad-a7e4255b7fdd",
+                "id": "442bea08-a691-488c-ac66-a867b86c8172",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
@@ -802,14 +827,14 @@
                     ]
                 },
                 "subject": {
-                    "reference": "urn:uuid:d06c78c4-a207-45e2-906a-09eeb741d5e2"
+                    "reference": "urn:uuid:94e8eba9-09e3-4823-b7a2-326ef06db1b1"
                 },
                 "performer": [
                     {
-                        "reference": "urn:uuid:8df314f9-d8a3-43b5-ae0c-661dd9ce29fc"
+                        "reference": "urn:uuid:377ea1ea-1281-40df-8fea-8568dea55dd6"
                     },
                     {
-                        "reference": "urn:uuid:f12cddbc-4c08-4a9e-8c39-6433fcd93f10"
+                        "reference": "urn:uuid:5a56ca24-98b0-4ada-a341-2c3c0d2d250e"
                     }
                 ],
                 "valueQuantity": {
@@ -817,7 +842,7 @@
                     "unit": "g/dL"
                 },
                 "specimen": {
-                    "reference": "urn:uuid:6454a722-ed37-4ae7-ade3-fdb0b0a960d0"
+                    "reference": "urn:uuid:65e11f16-fe18-4324-9095-d2df3b7db835"
                 },
                 "referenceRange": [
                     {
@@ -832,17 +857,17 @@
                 "related": [
                     {
                         "target": {
-                            "reference": "urn:uuid:6c19b2b2-8777-457f-a7dd-3c10656eee3c"
+                            "reference": "urn:uuid:3d156e00-42fd-4528-9f46-d9c7f678d683"
                         }
                     }
                 ]
             }
         },
         {
-            "fullUrl": "urn:uuid:c9987c65-e73f-482d-a182-aec026e967db",
+            "fullUrl": "urn:uuid:7411683f-2263-4e73-b52d-bc4d600f5491",
             "resource": {
                 "resourceType": "Observation",
-                "id": "c9987c65-e73f-482d-a182-aec026e967db",
+                "id": "7411683f-2263-4e73-b52d-bc4d600f5491",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
@@ -859,14 +884,14 @@
                     ]
                 },
                 "subject": {
-                    "reference": "urn:uuid:d06c78c4-a207-45e2-906a-09eeb741d5e2"
+                    "reference": "urn:uuid:94e8eba9-09e3-4823-b7a2-326ef06db1b1"
                 },
                 "performer": [
                     {
-                        "reference": "urn:uuid:8df314f9-d8a3-43b5-ae0c-661dd9ce29fc"
+                        "reference": "urn:uuid:377ea1ea-1281-40df-8fea-8568dea55dd6"
                     },
                     {
-                        "reference": "urn:uuid:f12cddbc-4c08-4a9e-8c39-6433fcd93f10"
+                        "reference": "urn:uuid:5a56ca24-98b0-4ada-a341-2c3c0d2d250e"
                     }
                 ],
                 "valueQuantity": {
@@ -874,7 +899,7 @@
                     "unit": "10*9/L"
                 },
                 "specimen": {
-                    "reference": "urn:uuid:6454a722-ed37-4ae7-ade3-fdb0b0a960d0"
+                    "reference": "urn:uuid:65e11f16-fe18-4324-9095-d2df3b7db835"
                 },
                 "referenceRange": [
                     {
@@ -889,17 +914,17 @@
                 "related": [
                     {
                         "target": {
-                            "reference": "urn:uuid:6c19b2b2-8777-457f-a7dd-3c10656eee3c"
+                            "reference": "urn:uuid:3d156e00-42fd-4528-9f46-d9c7f678d683"
                         }
                     }
                 ]
             }
         },
         {
-            "fullUrl": "urn:uuid:9c598cfb-3198-4806-8060-44de83719025",
+            "fullUrl": "urn:uuid:a6270179-8a48-4ad6-b6a5-21eff0c69c10",
             "resource": {
                 "resourceType": "Observation",
-                "id": "9c598cfb-3198-4806-8060-44de83719025",
+                "id": "a6270179-8a48-4ad6-b6a5-21eff0c69c10",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
@@ -916,14 +941,14 @@
                     ]
                 },
                 "subject": {
-                    "reference": "urn:uuid:d06c78c4-a207-45e2-906a-09eeb741d5e2"
+                    "reference": "urn:uuid:94e8eba9-09e3-4823-b7a2-326ef06db1b1"
                 },
                 "performer": [
                     {
-                        "reference": "urn:uuid:8df314f9-d8a3-43b5-ae0c-661dd9ce29fc"
+                        "reference": "urn:uuid:377ea1ea-1281-40df-8fea-8568dea55dd6"
                     },
                     {
-                        "reference": "urn:uuid:f12cddbc-4c08-4a9e-8c39-6433fcd93f10"
+                        "reference": "urn:uuid:5a56ca24-98b0-4ada-a341-2c3c0d2d250e"
                     }
                 ],
                 "valueQuantity": {
@@ -931,7 +956,7 @@
                     "unit": "10*9/L"
                 },
                 "specimen": {
-                    "reference": "urn:uuid:6454a722-ed37-4ae7-ade3-fdb0b0a960d0"
+                    "reference": "urn:uuid:65e11f16-fe18-4324-9095-d2df3b7db835"
                 },
                 "referenceRange": [
                     {
@@ -946,17 +971,17 @@
                 "related": [
                     {
                         "target": {
-                            "reference": "urn:uuid:6c19b2b2-8777-457f-a7dd-3c10656eee3c"
+                            "reference": "urn:uuid:3d156e00-42fd-4528-9f46-d9c7f678d683"
                         }
                     }
                 ]
             }
         },
         {
-            "fullUrl": "urn:uuid:42c41cc5-7fd7-47d1-8920-708840ee69d3",
+            "fullUrl": "urn:uuid:489de767-a164-4a07-81eb-647079f448a9",
             "resource": {
                 "resourceType": "Observation",
-                "id": "42c41cc5-7fd7-47d1-8920-708840ee69d3",
+                "id": "489de767-a164-4a07-81eb-647079f448a9",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
@@ -973,14 +998,14 @@
                     ]
                 },
                 "subject": {
-                    "reference": "urn:uuid:d06c78c4-a207-45e2-906a-09eeb741d5e2"
+                    "reference": "urn:uuid:94e8eba9-09e3-4823-b7a2-326ef06db1b1"
                 },
                 "performer": [
                     {
-                        "reference": "urn:uuid:8df314f9-d8a3-43b5-ae0c-661dd9ce29fc"
+                        "reference": "urn:uuid:377ea1ea-1281-40df-8fea-8568dea55dd6"
                     },
                     {
-                        "reference": "urn:uuid:f12cddbc-4c08-4a9e-8c39-6433fcd93f10"
+                        "reference": "urn:uuid:5a56ca24-98b0-4ada-a341-2c3c0d2d250e"
                     }
                 ],
                 "valueQuantity": {
@@ -988,7 +1013,7 @@
                     "unit": "10*9/L"
                 },
                 "specimen": {
-                    "reference": "urn:uuid:6454a722-ed37-4ae7-ade3-fdb0b0a960d0"
+                    "reference": "urn:uuid:65e11f16-fe18-4324-9095-d2df3b7db835"
                 },
                 "referenceRange": [
                     {
@@ -1003,17 +1028,17 @@
                 "related": [
                     {
                         "target": {
-                            "reference": "urn:uuid:6c19b2b2-8777-457f-a7dd-3c10656eee3c"
+                            "reference": "urn:uuid:3d156e00-42fd-4528-9f46-d9c7f678d683"
                         }
                     }
                 ]
             }
         },
         {
-            "fullUrl": "urn:uuid:fe14ff7e-d6ff-45db-a117-714efc925edb",
+            "fullUrl": "urn:uuid:625cd481-9e4b-4342-a925-69c23683d533",
             "resource": {
                 "resourceType": "Observation",
-                "id": "fe14ff7e-d6ff-45db-a117-714efc925edb",
+                "id": "625cd481-9e4b-4342-a925-69c23683d533",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
@@ -1030,14 +1055,14 @@
                     ]
                 },
                 "subject": {
-                    "reference": "urn:uuid:d06c78c4-a207-45e2-906a-09eeb741d5e2"
+                    "reference": "urn:uuid:94e8eba9-09e3-4823-b7a2-326ef06db1b1"
                 },
                 "performer": [
                     {
-                        "reference": "urn:uuid:8df314f9-d8a3-43b5-ae0c-661dd9ce29fc"
+                        "reference": "urn:uuid:377ea1ea-1281-40df-8fea-8568dea55dd6"
                     },
                     {
-                        "reference": "urn:uuid:f12cddbc-4c08-4a9e-8c39-6433fcd93f10"
+                        "reference": "urn:uuid:5a56ca24-98b0-4ada-a341-2c3c0d2d250e"
                     }
                 ],
                 "valueQuantity": {
@@ -1045,7 +1070,7 @@
                     "unit": "10*9/L"
                 },
                 "specimen": {
-                    "reference": "urn:uuid:6454a722-ed37-4ae7-ade3-fdb0b0a960d0"
+                    "reference": "urn:uuid:65e11f16-fe18-4324-9095-d2df3b7db835"
                 },
                 "referenceRange": [
                     {
@@ -1060,17 +1085,17 @@
                 "related": [
                     {
                         "target": {
-                            "reference": "urn:uuid:6c19b2b2-8777-457f-a7dd-3c10656eee3c"
+                            "reference": "urn:uuid:3d156e00-42fd-4528-9f46-d9c7f678d683"
                         }
                     }
                 ]
             }
         },
         {
-            "fullUrl": "urn:uuid:d6e61107-39a0-4dd3-b1bb-993dae96682e",
+            "fullUrl": "urn:uuid:20fe3b54-ef0f-4866-8860-bc72d61932f1",
             "resource": {
                 "resourceType": "Observation",
-                "id": "d6e61107-39a0-4dd3-b1bb-993dae96682e",
+                "id": "20fe3b54-ef0f-4866-8860-bc72d61932f1",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
@@ -1087,14 +1112,14 @@
                     ]
                 },
                 "subject": {
-                    "reference": "urn:uuid:d06c78c4-a207-45e2-906a-09eeb741d5e2"
+                    "reference": "urn:uuid:94e8eba9-09e3-4823-b7a2-326ef06db1b1"
                 },
                 "performer": [
                     {
-                        "reference": "urn:uuid:8df314f9-d8a3-43b5-ae0c-661dd9ce29fc"
+                        "reference": "urn:uuid:377ea1ea-1281-40df-8fea-8568dea55dd6"
                     },
                     {
-                        "reference": "urn:uuid:f12cddbc-4c08-4a9e-8c39-6433fcd93f10"
+                        "reference": "urn:uuid:5a56ca24-98b0-4ada-a341-2c3c0d2d250e"
                     }
                 ],
                 "valueQuantity": {
@@ -1103,7 +1128,7 @@
                     "unit": "10*9/L"
                 },
                 "specimen": {
-                    "reference": "urn:uuid:6454a722-ed37-4ae7-ade3-fdb0b0a960d0"
+                    "reference": "urn:uuid:65e11f16-fe18-4324-9095-d2df3b7db835"
                 },
                 "referenceRange": [
                     {
@@ -1118,17 +1143,17 @@
                 "related": [
                     {
                         "target": {
-                            "reference": "urn:uuid:6c19b2b2-8777-457f-a7dd-3c10656eee3c"
+                            "reference": "urn:uuid:3d156e00-42fd-4528-9f46-d9c7f678d683"
                         }
                     }
                 ]
             }
         },
         {
-            "fullUrl": "urn:uuid:c15f5147-0572-49ac-a6c6-da2f8cb69aa6",
+            "fullUrl": "urn:uuid:d2d45edb-0c61-44c0-8af0-2f755dd24576",
             "resource": {
                 "resourceType": "Observation",
-                "id": "c15f5147-0572-49ac-a6c6-da2f8cb69aa6",
+                "id": "d2d45edb-0c61-44c0-8af0-2f755dd24576",
                 "meta": {
                     "profile": [
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Observation-1"
@@ -1145,14 +1170,14 @@
                     ]
                 },
                 "subject": {
-                    "reference": "urn:uuid:d06c78c4-a207-45e2-906a-09eeb741d5e2"
+                    "reference": "urn:uuid:94e8eba9-09e3-4823-b7a2-326ef06db1b1"
                 },
                 "performer": [
                     {
-                        "reference": "urn:uuid:8df314f9-d8a3-43b5-ae0c-661dd9ce29fc"
+                        "reference": "urn:uuid:377ea1ea-1281-40df-8fea-8568dea55dd6"
                     },
                     {
-                        "reference": "urn:uuid:f12cddbc-4c08-4a9e-8c39-6433fcd93f10"
+                        "reference": "urn:uuid:5a56ca24-98b0-4ada-a341-2c3c0d2d250e"
                     }
                 ],
                 "valueQuantity": {
@@ -1160,7 +1185,7 @@
                     "unit": "10*9/L"
                 },
                 "specimen": {
-                    "reference": "urn:uuid:6454a722-ed37-4ae7-ade3-fdb0b0a960d0"
+                    "reference": "urn:uuid:65e11f16-fe18-4324-9095-d2df3b7db835"
                 },
                 "referenceRange": [
                     {
@@ -1175,7 +1200,7 @@
                 "related": [
                     {
                         "target": {
-                            "reference": "urn:uuid:6c19b2b2-8777-457f-a7dd-3c10656eee3c"
+                            "reference": "urn:uuid:3d156e00-42fd-4528-9f46-d9c7f678d683"
                         }
                     }
                 ]
