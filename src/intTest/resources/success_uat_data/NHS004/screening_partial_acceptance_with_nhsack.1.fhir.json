@@ -300,7 +300,7 @@
                         {
                             "system": "http://snomed.info/sct",
                             "code": "368481000000103",
-                            "display": "BCS?:FOB result"
+                            "display": "BCS:FOB result"
                         }
                     ]
                 },
