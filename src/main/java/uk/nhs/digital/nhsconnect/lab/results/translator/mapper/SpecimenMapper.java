@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toMap;
-import static uk.nhs.digital.nhsconnect.lab.results.model.Constants.SNOMED_CODING_SYSTEM;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
