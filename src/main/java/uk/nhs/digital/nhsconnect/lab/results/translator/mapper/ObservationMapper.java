@@ -137,10 +137,6 @@ public class ObservationMapper {
         }
 
         private void linkWithGroup(String fhirId, Observation result) {
-            final var reference = fullUrlGenerator.generate(fhirId);
-            final var groupComponent = result.addRelated();
-            groupComponent.getTarget().setReference(reference);
-
             Optional.ofNullable(testGroupsById.get(fhirId))
                 .map(Observation::addRelated)
                 .ifPresent(resultComponent -> linkWithResult(resultComponent, result));
