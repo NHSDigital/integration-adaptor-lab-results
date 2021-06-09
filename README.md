@@ -121,6 +121,24 @@ Screening examples can be found [here](https://github.com/nhsconnect/integration
 
 [FHIR UK Core](https://digital.nhs.uk/services/fhir-uk-core)
 
+## FHIR specification discrepancies
+
+Due to the nature of EDIFACT messages, following discrepancies between FHIR profiles and actual resources have been introduced:
+
+- `DiagnosticReport.identifier.value` - EDIFACT identifier will be used which might not be an UUIDv4.
+- `DiagnosticReport.identifier.system` - field will be omitted.
+- `Practitioner.identifier.value` - EDIFACT does not provide SDS User ID. Value from EDIFACT will be used which might not be an UUIDv4.
+- `Practitioner.identifier.system` - field will be omitted.
+- `ProcedureRequest.reasonReference` - field becomes optional.
+- `Specimen.accessionIdentifier` - field becomes optional.
+- `Specimen.collection` - field becomes optional.
+- `Specimen.identifier` - EDIFACT has nothing to map from. FHIR field will be omitted.
+- `Specimen.type.coding` - EDIFACT does not give Read2 nor SNOMED. `coding.system` will be omitted. Only `coding.display` will be populated.
+- `Observation.code.coding.code` - field becomes optional.
+- `Observation.code.coding.display` - field becomes optional.
+- `Observation.identifier` - EDIFACT has nothing to map from. FHIR field will be omitted.
+- `Observation.value[x]` - can be not only `valueQuantity` but also `valueCodeableConcept`.
+
 ## Configuration
 
 All configuration options can be found in the [application.yml](/src/main/resources/application.yml) file. The adaptor reads its configuration from environment variables to override the defaults. The following sections describe the environment variables used to configure the adaptor. 
