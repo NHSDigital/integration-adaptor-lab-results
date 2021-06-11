@@ -137,7 +137,7 @@ Due to the nature of EDIFACT messages, following discrepancies between FHIR prof
 - `Observation.code.coding.code` - field becomes optional.
 - `Observation.code.coding.display` - field becomes optional.
 - `Observation.identifier` - EDIFACT has nothing to map from. FHIR field will be omitted.
-- `Observation.value[x]` - can be not only `valueQuantity` but also `valueCodeableConcept`.
+- `Observation.value[x]` - can be `valueQuantity` or `valueCodeableConcept`.
 
 ## Configuration
 
