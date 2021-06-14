@@ -89,7 +89,6 @@ class SpecimenMapperTest {
                 .hasSize(1)
                 .first()
                 .satisfies(coding -> assertAll(
-                    () -> assertThat(coding.getSystem()).isEqualTo("http://snomed.info/sct"),
                     () -> assertThat(coding.getCode()).isEqualTo("AB12"),
                     () -> assertThat(coding.getDisplay()).isEqualTo("Specimen type")
                 )))

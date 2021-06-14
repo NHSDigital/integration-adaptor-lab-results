@@ -39,12 +39,10 @@ class DeviatingResultIndicatorTest {
                 ),
                 Arguments.of(DeviatingResultIndicator.OUTSIDE_REFERENCE_LIMIT, new Coding()
                     .setCode("OR")
-                    .setSystem("https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-ExtendedInterpretationCode-1")
                     .setDisplay("Outside reference range")
                 ),
                 Arguments.of(DeviatingResultIndicator.POTENTIALLY_ABNORMAL, new Coding()
                     .setCode("PA")
-                    .setSystem("https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-ExtendedInterpretationCode-1")
                     .setDisplay("Potentially abnormal")
                 )
             );

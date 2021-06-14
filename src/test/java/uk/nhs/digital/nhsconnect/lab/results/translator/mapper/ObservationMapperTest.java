@@ -484,7 +484,7 @@ class ObservationMapperTest {
         final var uuidToUrlMap = Map.of("uuid-1", "url-1", "uuid-2", "url-2");
         when(uuidGenerator.generateUUID()).thenReturn("uuid-1", "uuid-2");
         uuidToUrlMap.forEach((uuid, url) ->
-            when(fullUrlGenerator.generate(uuid)).thenReturn(url));
+            lenient().when(fullUrlGenerator.generate(uuid)).thenReturn(url));
 
         final var observations = mapper.mapToObservations(message, mockPatient, emptyMap(), mockOrganization,
             mockPractitioner);
@@ -498,12 +498,7 @@ class ObservationMapperTest {
                 .satisfies(related -> assertAll(
                     () -> assertThat(related.getType()).isEqualTo(ObservationRelationshipType.HASMEMBER),
                     () -> assertThat(related.getTarget().getReference()).isEqualTo(uuidToUrlMap.get(result.getId()))
-                )),
-
-            () -> assertThat(result.getRelated()).as("the result references the group")
-                .hasSize(1).first()
-                .satisfies(related ->
-                    assertThat(related.getTarget().getReference()).isEqualTo(uuidToUrlMap.get(group.getId())))
+                ))
         );
     }
 

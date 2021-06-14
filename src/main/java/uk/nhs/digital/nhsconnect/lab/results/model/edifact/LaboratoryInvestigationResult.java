@@ -56,40 +56,45 @@ public class LaboratoryInvestigationResult extends Segment {
 
         final String[] keySplit = Split.byPlus(edifactString);
 
-        final LaboratoryInvestigationResultType resultType =
-            LaboratoryInvestigationResultType.fromCode(keySplit[1]);
-
         final LaboratoryInvestigationResultBuilder laboratoryInvestigationResultBuilder =
-            LaboratoryInvestigationResult.builder()
-                .resultType(resultType);
+            LaboratoryInvestigationResult.builder();
 
-        if (resultType.equals(LaboratoryInvestigationResultType.NUMERICAL_VALUE)) {
+        LaboratoryInvestigationResultType resultType = null;
+        if (StringUtils.isNotBlank(keySplit[1])) {
+            resultType = LaboratoryInvestigationResultType.fromCode(keySplit[1]);
+            laboratoryInvestigationResultBuilder.resultType(resultType);
+        }
+
+        final String deviatingResultIndicator = extractDeviatingResultIndicator(keySplit);
+        laboratoryInvestigationResultBuilder.deviatingResultIndicator(StringUtils.isNotBlank(deviatingResultIndicator)
+            ? DeviatingResultIndicator.fromEdifactCode(deviatingResultIndicator)
+            : null);
+
+        if (LaboratoryInvestigationResultType.NUMERICAL_VALUE.equals(resultType)) {
             final BigDecimal measurementValue = extractMeasurementValue(keySplit);
             final String measurementValueComparator = extractMeasurementValueComparator(keySplit);
             final String measurementUnit = extractMeasurementUnit(keySplit);
-            final String deviatingResultIndicator = extractDeviatingResultIndicator(keySplit);
 
-            return laboratoryInvestigationResultBuilder
+            laboratoryInvestigationResultBuilder
                 .measurementValue(measurementValue)
                 .measurementValueComparator(StringUtils.isNotBlank(measurementValueComparator)
                     ? MeasurementValueComparator.fromCode(measurementValueComparator)
                     : null)
-                .measurementUnit(measurementUnit)
-                .deviatingResultIndicator(StringUtils.isNotBlank(deviatingResultIndicator)
-                    ? DeviatingResultIndicator.fromEdifactCode(deviatingResultIndicator)
-                    : null)
-                .build();
+                .measurementUnit(measurementUnit);
+        } else if (keySplit.length >= 3) {
+            final String[] subFields = Split.byColon(keySplit[2]);
+            if (subFields.length >= 3) {
+                laboratoryInvestigationResultBuilder.code(subFields[2]);
+            }
+            if (subFields.length >= 4) {
+                laboratoryInvestigationResultBuilder.codingType(CodingType.fromCode(subFields[3]));
+            }
+            if (subFields.length >= 6) {
+                laboratoryInvestigationResultBuilder.description(subFields[5]);
+            }
         }
 
-        final String code = Split.byColon(keySplit[2])[2];
-        final String codeType = Split.byColon(keySplit[2])[3];
-        final String description = Split.byColon(keySplit[2])[5];
-
-        return laboratoryInvestigationResultBuilder
-            .code(code)
-            .codingType(CodingType.fromCode(codeType))
-            .description(description)
-            .build();
+        return laboratoryInvestigationResultBuilder.build();
     }
 
     private static BigDecimal extractMeasurementValue(String[] keySplit) {

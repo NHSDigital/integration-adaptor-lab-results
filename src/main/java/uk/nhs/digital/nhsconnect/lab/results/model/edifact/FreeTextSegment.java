@@ -26,6 +26,7 @@ import java.util.Arrays;
 public class FreeTextSegment extends Segment {
     public static final String KEY = "FTX";
     private static final int MAXIMUM_FREE_TEXTS = 5;
+    private static final int FREE_TEXT_COMPONENT_INDEX = 4;
 
     @NonNull
     private final FreeTextType type;
@@ -41,7 +42,8 @@ public class FreeTextSegment extends Segment {
 
         final String[] split = Split.byPlus(edifact);
         final String typeCode = split[1];
-        final String freeTextComponent = split[4];
+        final String freeTextComponent = FREE_TEXT_COMPONENT_INDEX < split.length
+            ? split[FREE_TEXT_COMPONENT_INDEX] : StringUtils.EMPTY;
 
         final String[] freeTexts = Split.byColon(freeTextComponent);
         if (freeTexts.length > MAXIMUM_FREE_TEXTS) {
