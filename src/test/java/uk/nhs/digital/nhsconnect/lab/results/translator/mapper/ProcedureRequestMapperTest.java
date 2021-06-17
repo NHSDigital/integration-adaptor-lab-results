@@ -11,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
-import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
@@ -48,37 +47,6 @@ class ProcedureRequestMapperTest {
             .isInstanceOf(FhirValidationException.class)
             .hasMessage("Unable to map message. "
                 + "The FreeText segment is mandatory in Clinical Information");
-    }
-
-    @Test
-    void when_clinicalInformationIsMissing_expect_exception() {
-        final Message message = new Message(List.of(
-            "S02+02", // ServiceReportDetails
-            "S06+06", // InvestigationSubject
-            "S10+10",
-            "FTX+CID+++COELIAC"
-        ));
-
-        assertThatThrownBy(() -> procedureRequestMapper.mapToProcedureRequest(
-            message, mock(Patient.class), mock(Practitioner.class), mock(Organization.class), mock(Practitioner.class)))
-            .isInstanceOf(MissingSegmentException.class)
-            .hasMessage("EDIFACT section is missing segment CIN");
-    }
-
-    @Test
-    void when_clinicalInformationStatusIsUnknown_expect_exception() {
-        final Message message = new Message(List.of(
-            "S02+02", // ServiceReportDetails
-            "S06+06", // InvestigationSubject
-            "S10+10",
-            "CIN+Undefined Status",
-            "FTX+CID+++COELIAC"
-        ));
-
-        assertThatThrownBy(() -> procedureRequestMapper.mapToProcedureRequest(
-            message, mock(Patient.class), mock(Practitioner.class), mock(Organization.class), mock(Practitioner.class)))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("No Report Status Code for 'Undefined Status'");
     }
 
     @Test
