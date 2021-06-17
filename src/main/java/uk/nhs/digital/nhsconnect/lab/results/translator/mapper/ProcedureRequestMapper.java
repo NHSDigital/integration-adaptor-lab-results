@@ -16,12 +16,10 @@ import uk.nhs.digital.nhsconnect.lab.results.model.FhirProfiles;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.FreeTextSegment;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.Message;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.segmentgroup.PatientClinicalInfo;
-import uk.nhs.digital.nhsconnect.lab.results.model.enums.ReportStatusCode;
 import uk.nhs.digital.nhsconnect.lab.results.utils.ResourceFullUrlGenerator;
 import uk.nhs.digital.nhsconnect.lab.results.utils.UUIDGenerator;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static uk.nhs.digital.nhsconnect.lab.results.model.Constants.SNOMED_CODING_SYSTEM;
@@ -33,9 +31,6 @@ import static uk.nhs.digital.nhsconnect.lab.results.model.Constants.SNOMED_LABOR
 public class ProcedureRequestMapper {
     private final UUIDGenerator uuidGenerator;
     private final ResourceFullUrlGenerator fullUrlGenerator;
-    private static final Map<ReportStatusCode, ProcedureRequestStatus> STATUS_CODE_MAPPING = Map.of(
-        ReportStatusCode.UNSPECIFIED, ProcedureRequestStatus.UNKNOWN
-    );
 
     public ProcedureRequest mapToProcedureRequest(
             final Message message,
@@ -86,7 +81,6 @@ public class ProcedureRequestMapper {
             this.procedureRequest = buildBareProcedureRequest();
             this.patientClinicalInfo = patientClinicalInfo;
             mapFreeText();
-            mapStatus();
 
             return procedureRequest;
         }
@@ -107,11 +101,6 @@ public class ProcedureRequestMapper {
                 .collect(Collectors.toList());
 
             procedureRequest.setNote(annotations);
-        }
-
-        private void mapStatus() {
-            procedureRequest.setStatus(STATUS_CODE_MAPPING.get(
-                ReportStatusCode.fromCode(patientClinicalInfo.getCode().getCode())));
         }
 
         private void setRequesterReference(ProcedureRequest procedureRequest) {

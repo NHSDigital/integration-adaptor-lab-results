@@ -217,7 +217,7 @@
                         "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-ProcedureRequest-1"
                     ]
                 },
-                "status": "unknown",
+                "status": "active",
                 "intent": "order",
                 "code": {
                     "coding": [
