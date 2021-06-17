@@ -471,9 +471,11 @@
                         "reference": "urn:uuid:3f281147-1c66-4a2f-9767-25750976f6ef"
                     }
                 ],
-                "valueQuantity": {
-                    "value": 0.8,
-                    "unit": "ng/mL"
+                "interpretation": {
+                    "coding": [ {
+                        "code": "PA",
+                        "display": "Potentially abnormal"
+                    } ]
                 },
                 "specimen": {
                     "reference": "urn:uuid:00daf5f4-f3fa-484c-a912-3f6ef54ac8d4"
