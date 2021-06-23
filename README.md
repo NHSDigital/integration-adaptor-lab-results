@@ -25,6 +25,11 @@ In the end, if the EDIFACT Interchange Header has requested such, an NHSACK conf
 The [Integration Adaptors Github repository](https://github.com/nhsconnect/integration-adaptors) contains an example deployment configuration into AWS infrastructure. For EDIFACT messages with size less than 1 MB, performance tests were executed on AWS Fargate with task memory (MiB)4096 and task CPU (unit)1024.
 It is recommended to have more than 1 instance of the adaptor running in a cluster for failover purposes.
 
+Autoscaling tests have been performed using min=1 and max=6 instances Fargate cluster setup and CPU threshold as scale up/down trigger.
+As expected, without any load there was only 1 instance running. After sending 200k interchanges, Fargate started to scale up until max 6 instances count has been reached.
+Processing has been distributed across all 6 instances and all interchanges have been processed without any error.
+When all messages have been processed, Fargate has dropped 5 instances leaving the configured min 1 instance running.
+
 ### Performance
 
 Adaptor's EDIFACT to FHIR translation steps are built for high performance and resiliency by applying horizontal scaling techniques. However, the MESH consumer's step performance cannot be increased this way. Due to the nature of MESH, if there are multiple adaptor instances, only one randomly chosen instance will download messages and put them on the `Inbound MESH Queue`.
