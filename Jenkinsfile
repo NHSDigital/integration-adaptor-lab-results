@@ -1,8 +1,3 @@
-String tfProject     = "nia"
-String tfEnvironment = "build1" // change for ptl, vp goes here
-String tfComponent   = "lab-results"  // this defines the application - nhais, mhs etc
-Boolean awsDeployOnlyMain = true // true: Skip AWS deployment for all branches other than 'main' ; false: Allow AWS Deployment for all branches
-
 pipeline {
     agent{
         label 'jenkins-workers'
@@ -100,40 +95,6 @@ pipeline {
                     sh label: 'Stopping containers', script: 'docker-compose down -v'
                 }
             }
-        }
-        stage('Deploy and Integration Test') {
-            when {
-                expression { currentBuild.resultIsBetterOrEqualTo('SUCCESS') && ( !awsDeployOnlyMain || GIT_BRANCH == 'main'  )  }
-            }
-            options {
-              lock("${tfProject}-${tfEnvironment}-${tfComponent}")
-            }
-            stages {
-                stage('Deploy using Terraform') {
-                    steps {
-                        script {
-                            String tfCodeBranch  = "develop"
-                            String tfCodeRepo    = "https://github.com/nhsconnect/integration-adaptors"
-                            String tfRegion      = "${TF_STATE_BUCKET_REGION}"
-                            Map<String,String> tfVariables = ["${tfComponent}_build_id": BUILD_TAG]
-                            dir ("integration-adaptors") {
-                              // Clone repository with terraform
-                              git (branch: tfCodeBranch, url: tfCodeRepo)
-                              dir ("terraform/aws") {
-                                // Run TF Init
-                                if (terraformInit(TF_STATE_BUCKET, tfProject, tfEnvironment, tfComponent, tfRegion) !=0) { error("Terraform init failed")}
-
-                                // Run TF Plan
-                                if (terraform('plan', TF_STATE_BUCKET, tfProject, tfEnvironment, tfComponent, tfRegion, tfVariables) !=0 ) { error("Terraform Plan failed")}
-
-                                //Run TF Apply
-                                if (terraform('apply', TF_STATE_BUCKET, tfProject, tfEnvironment, tfComponent, tfRegion, tfVariables) !=0 ) { error("Terraform Apply failed")}
-                              } // dir terraform/aws
-                            } // dir integration-adaptors
-                        } //script
-                    } //steps
-                } //stage
-            } //stages
         }
 
 
