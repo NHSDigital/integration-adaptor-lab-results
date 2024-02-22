@@ -6,6 +6,7 @@ pipeline {
     options {
         timestamps()
         buildDiscarder(logRotator(numToKeepStr: "10")) // keep only last 10 builds
+        timeout(time: 1, unit: 'HOURS')
     }
 
     environment {
