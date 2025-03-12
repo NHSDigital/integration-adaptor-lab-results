@@ -7,7 +7,7 @@ import org.testcontainers.containers.GenericContainer;
 public final class MongoDbContainer extends GenericContainer<MongoDbContainer> {
 
     private static final int MONGODB_PORT = 27017;
-    private static final String DEFAULT_IMAGE_AND_TAG = "mongo:3.2.4";
+    private static final String DEFAULT_IMAGE_AND_TAG = "mongo:8.0.5";
     private static MongoDbContainer container;
 
     private MongoDbContainer() {
