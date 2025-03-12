@@ -7,10 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check ticket name conforms to requirements
-        run: 'echo ${{ github.event.pull_request.title }} | grep -i -E -q "^niad-[0-9]+: [a-z]+"'
+        run: 'echo ${{ github.event.pull_request.title }} | grep -i -E -q "^niad-[0-9]+: ?[a-z]+|Bump[\s\S]+from[\s\S]+to[\s\S]+in[\s\S]+"'
 
   check-branch-name:
     runs-on: ubuntu-latest
     steps:
       - name: Check branch name conforms to requirements
-        run: 'echo ${{ github.event.pull_request.head.ref }} | grep -i -E -q "^niad-[0-9]+(-[a-z]+)*"'
+        run: 'echo ${{ github.event.pull_request.head.ref }} | grep -i -E -q "^niad-[0-9]+(-[a-z]+)*|dependabot\S+"'
