@@ -43,7 +43,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework:spring-jms:5.3.18'
     implementation 'org.apache.httpcomponents:httpclient:4.5.13'
-    implementation 'org.apache.qpid:qpid-jms-client:0.56.0'
+    implementation 'org.apache.qpid:qpid-jms-client:2.7.0'
     implementation 'com.heroku.sdk:env-keystore:1.1.6'
 	implementation 'com.amazonaws:aws-java-sdk-s3:1.11.978'
 	implementation 'ca.uhn.hapi.fhir:hapi-fhir-base:5.4.0'
