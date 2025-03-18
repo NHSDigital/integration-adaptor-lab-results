@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check ticket name conforms to requirements
-        run: 'echo ${{ github.event.pull_request.title }} | grep -i -E -q "^niad-[0-9]+: ?[a-z]+|^Bump[\s\S]+from[\s\S]+to[\s\S]+"'
+        run: 'echo ${{ github.event.pull_request.title }} | grep -i -E -q "^niad-[0-9]+: ?[a-z]+|^Bump\\s.*from\\s.*to\\s.*"'
 
   check-branch-name:
     runs-on: ubuntu-latest
