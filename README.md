@@ -152,11 +152,11 @@ Variables without a default value and not marked optional *MUST* be defined for 
 
 ### General Configuration
 
-| Environment Variable               | Default                   | Description 
-| -----------------------------------|---------------------------|-------------
-| LAB_RESULTS_OUTBOUND_SERVER_PORT   | 8080                      | The port on which the adaptor management endpoints will run
-| LAB_RESULTS_LOGGING_LEVEL          | INFO                      | Application logging level. One of: DEBUG, INFO, WARN, ERROR. The level DEBUG **MUST NOT** be used when handling live patient data.
-| LAB_RESULTS_LOGGING_FORMAT         | (*)                       | Defines how to format log events on stdout
+| Environment Variable             | Default | Description                                                                                                                        |
+|----------------------------------|---------|------------------------------------------------------------------------------------------------------------------------------------|
+| LAB_RESULTS_OUTBOUND_SERVER_PORT | 8080    | The port on which the adaptor management endpoints will run                                                                        |
+| LAB_RESULTS_LOGGING_LEVEL        | INFO    | Application logging level. One of: DEBUG, INFO, WARN, ERROR. The level DEBUG **MUST NOT** be used when handling live patient data. |
+| LAB_RESULTS_LOGGING_FORMAT       | (*)     | Defines how to format log events on stdout                                                                                         |
 
 (*) The adaptor uses logback (http://logback.qos.ch/). The built-in [logback.xml](src/main/resources/logback.xml) 
 defines the default log format. This value can be overridden using the `LAB_RESULTS_LOGGING_FORMAT` environment variable.
@@ -164,15 +164,15 @@ You can provide an external `logback.xml` file using the `-Dlogback.configuratio
 
 ### Message Queue Configuration
 
-| Environment Variable                 | Default                   | Description 
-| -------------------------------------|---------------------------|-------------
-| LAB_RESULTS_MESH_OUTBOUND_QUEUE_NAME | lab_results_mesh_outbound | The name of the internal outbound (to MESH) message queue
-| LAB_RESULTS_MESH_INBOUND_QUEUE_NAME  | lab_results_mesh_inbound  | The name of the internal inbound (from MESH) message queue
-| LAB_RESULTS_GP_OUTBOUND_QUEUE_NAME   | lab_results_gp_outbound   | The name of the outbound (to GP System) message queue
-| LAB_RESULTS_AMQP_BROKERS             | amqp://localhost:5672     | A comma-separated list of URLs to AMQP brokers (*)
-| LAB_RESULTS_AMQP_USERNAME            |                           | (Optional) username for the AMQP server
-| LAB_RESULTS_AMQP_PASSWORD            |                           | (Optional) password for the AMQP server
-| LAB_RESULTS_AMQP_MAX_REDELIVERIES    | 3                         | The number of times a message will be retried to be delivered to consumer. After exhausting all retries, it will be put on DLQ.<queue_name> dead-letter queue. The default JMS configuration is (-1) disabled.
+| Environment Variable                 | Default                   | Description                                                                                                                                                                                                    |
+|--------------------------------------|---------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| LAB_RESULTS_MESH_OUTBOUND_QUEUE_NAME | lab_results_mesh_outbound | The name of the internal outbound (to MESH) message queue                                                                                                                                                      |
+| LAB_RESULTS_MESH_INBOUND_QUEUE_NAME  | lab_results_mesh_inbound  | The name of the internal inbound (from MESH) message queue                                                                                                                                                     |
+| LAB_RESULTS_GP_OUTBOUND_QUEUE_NAME   | lab_results_gp_outbound   | The name of the outbound (to GP System) message queue                                                                                                                                                          |
+| LAB_RESULTS_AMQP_BROKERS             | amqp://localhost:5672     | A comma-separated list of URLs to AMQP brokers (*)                                                                                                                                                             |
+| LAB_RESULTS_AMQP_USERNAME            |                           | (Optional) username for the AMQP server                                                                                                                                                                        |
+| LAB_RESULTS_AMQP_PASSWORD            |                           | (Optional) password for the AMQP server                                                                                                                                                                        |
+| LAB_RESULTS_AMQP_MAX_REDELIVERIES    | 3                         | The number of times a message will be retried to be delivered to consumer. After exhausting all retries, it will be put on DLQ.<queue_name> dead-letter queue. The default JMS configuration is (-1) disabled. |
 
 (*) Active/Standby: The first broker in the list is always used unless there is an error, in which case the other URLs will be used. At least one URL is required.
 
@@ -184,33 +184,33 @@ environments.
 
 Option 1: If `LAB_RESULTS_MONGO_HOST` is defined then the adaptor forms a connection string from the following properties:
 
-| Environment Variable             | Default     | Description 
-| ---------------------------------|-------------|-------------
-| LAB_RESULTS_MONGO_DATABASE_NAME  | labresults  | Database name for MongoDB
-| LAB_RESULTS_MONGO_HOST           |             | MongoDB host
-| LAB_RESULTS_MONGO_PORT           |             | MongoDB port
-| LAB_RESULTS_MONGO_USERNAME       |             | (Optional) MongoDB username. If set then password must also be set.
-| LAB_RESULTS_MONGO_PASSWORD       |             | (Optional) MongoDB password
-| LAB_RESULTS_MONGO_OPTIONS        |             | (Optional) MongoDB URL encoded parameters for the connection string without a leading ?
-| LAB_RESULTS_MONGO_TTL            | P30D        | (Optional) Time-to-live value
+| Environment Variable            | Default    | Description                                                                             |
+|---------------------------------|------------|-----------------------------------------------------------------------------------------|
+| LAB_RESULTS_MONGO_DATABASE_NAME | labresults | Database name for MongoDB                                                               |
+| LAB_RESULTS_MONGO_HOST          |            | MongoDB host                                                                            |
+| LAB_RESULTS_MONGO_PORT          |            | MongoDB port                                                                            |
+| LAB_RESULTS_MONGO_USERNAME      |            | (Optional) MongoDB username. If set then password must also be set.                     |
+| LAB_RESULTS_MONGO_PASSWORD      |            | (Optional) MongoDB password                                                             |
+| LAB_RESULTS_MONGO_OPTIONS       |            | (Optional) MongoDB URL encoded parameters for the connection string without a leading ? |
+| LAB_RESULTS_MONGO_TTL           | P30D       | (Optional) Time-to-live value                                                           |
 
 Option 2: If `LAB_RESULTS_MONGO_HOST` is undefined then the adaptor uses the connection string provided:
 
-| Environment Variable             | Default                   | Description 
-| ---------------------------------|---------------------------|-------------
-| LAB_RESULTS_MONGO_DATABASE_NAME  | labresults                | Database name for MongoDB
-| LAB_RESULTS_MONGO_URI            | mongodb://localhost:27017 | MongoDB connection string
+| Environment Variable            | Default                   | Description               |
+|---------------------------------|---------------------------|---------------------------|
+| LAB_RESULTS_MONGO_DATABASE_NAME | labresults                | Database name for MongoDB |
+| LAB_RESULTS_MONGO_URI           | mongodb://localhost:27017 | MongoDB connection string |
 
 **Trust Store Configuration**
 
 These optional properties configure a trust store with private CA certificates. This trust store does not replace Java's
 default trust store. At runtime the application adds these additional certificates to the default trust store. See 
-[OPERATING.md - AWS DocumentDB TLS configuration](OPERATING.md#AWS DocumentDB TLS configuration) for more information.
+[OPERATING.md - AWS DocumentDB TLS configuration](OPERATING.md#AWSDocumentDBTLSconfiguration) for more information.
 
-| Environment Variable                      | Default       | Description 
-| ------------------------------------------|---------------|-------------
-| LAB_RESULTS_SSL_TRUST_STORE_URL           |               | (Optional) URL of the trust store JKS. The only scheme currently supported is `s3://`
-| LAB_RESULTS_SSL_TRUST_STORE_PASSWORD      |               | (Optional) Password used to access the trust store
+| Environment Variable                 | Default | Description                                                                           |
+|--------------------------------------|---------|---------------------------------------------------------------------------------------|
+| LAB_RESULTS_SSL_TRUST_STORE_URL      |         | (Optional) URL of the trust store JKS. The only scheme currently supported is `s3://` |
+| LAB_RESULTS_SSL_TRUST_STORE_PASSWORD |         | (Optional) Password used to access the trust store                                    |
 
 ## MESH API
 
@@ -218,18 +218,18 @@ default trust store. At runtime the application adds these additional certificat
 
 Configure the MESH API connection using the following environment variables:
 
-| Environment Variable                           | Default | Description 
-| -----------------------------------------------|---------|-------------
-| LAB_RESULTS_MESH_MAILBOX_ID                    |         | The mailbox id used by the adaptor to send and receive messages. This is the sender of outbound messages and the mailbox where inbound messages are received.
-| LAB_RESULTS_MESH_MAILBOX_PASSWORD              |         | The password for LAB_RESULTS_MESH_MAILBOX_ID
-| LAB_RESULTS_MESH_SHARED_KEY                    |         | A shared key used to generate auth token and provided by MESH operator (OpenTest, PTL, etc)
-| LAB_RESULTS_MESH_HOST                          |         | The **Complete URL** with trailing slash of the MESH service. For example: https://msg.int.spine2.ncrs.nhs.uk/messageexchange/
-| LAB_RESULTS_MESH_CERT_VALIDATION               | true    | "false" to disable certificate validation of SSL connections
-| LAB_RESULTS_MESH_ENDPOINT_CERT                 |         | The content of the PEM-formatted client endpoint certificate
-| LAB_RESULTS_MESH_ENDPOINT_PRIVATE_KEY          |         | The content of the PEM-formatted client private key
-| LAB_RESULTS_MESH_SUB_CA                        |         | The content of the PEM-formatted certificate of the issuing Sub CA. Empty if LAB_RESULTS_MESH_CERT_VALIDATION is false
-| LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS |         | (*) The mapping between each NHSACK recipient to its corresponding MESH Mailbox ID mapping. There is one mapping per line and an equals sign (=) separates the code and mailbox id. For example: "000000004400001=A6840385\000000024600002=A0047392"
-| LAB_RESULTS_SCHEDULER_ENABLED                  | true    | Enables/disables automatic MESH message downloads
+| Environment Variable                           | Default | Description                                                                                                                                                                                                                                          |
+|------------------------------------------------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| LAB_RESULTS_MESH_MAILBOX_ID                    |         | The mailbox id used by the adaptor to send and receive messages. This is the sender of outbound messages and the mailbox where inbound messages are received.                                                                                        |
+| LAB_RESULTS_MESH_MAILBOX_PASSWORD              |         | The password for LAB_RESULTS_MESH_MAILBOX_ID                                                                                                                                                                                                         |
+| LAB_RESULTS_MESH_SHARED_KEY                    |         | A shared key used to generate auth token and provided by MESH operator (OpenTest, PTL, etc)                                                                                                                                                          |
+| LAB_RESULTS_MESH_HOST                          |         | The **Complete URL** with trailing slash of the MESH service. For example: https://msg.int.spine2.ncrs.nhs.uk/messageexchange/                                                                                                                       |
+| LAB_RESULTS_MESH_CERT_VALIDATION               | true    | "false" to disable certificate validation of SSL connections                                                                                                                                                                                         |
+| LAB_RESULTS_MESH_ENDPOINT_CERT                 |         | The content of the PEM-formatted client endpoint certificate                                                                                                                                                                                         |
+| LAB_RESULTS_MESH_ENDPOINT_PRIVATE_KEY          |         | The content of the PEM-formatted client private key                                                                                                                                                                                                  |
+| LAB_RESULTS_MESH_SUB_CA                        |         | The content of the PEM-formatted certificate of the issuing Sub CA. Empty if LAB_RESULTS_MESH_CERT_VALIDATION is false                                                                                                                               |
+| LAB_RESULTS_MESH_RECIPIENT_MAILBOX_ID_MAPPINGS |         | (*) The mapping between each NHSACK recipient to its corresponding MESH Mailbox ID mapping. There is one mapping per line and an equals sign (=) separates the code and mailbox id. For example: "000000004400001=A6840385\000000024600002=A0047392" |
+| LAB_RESULTS_SCHEDULER_ENABLED                  | true    | Enables/disables automatic MESH message downloads                                                                                                                                                                                                    |
 
 (*) 15 digit NHS Sender ID required for successful NHSACK dispatch
 
@@ -241,11 +241,11 @@ and `SCRN_BCS_MEDRPT_V4`, then these messages must be downloaded and acknowledge
 The adaptor will skip messages with other workflow ids leaving them in the inbox. If more than 500 "other" messages 
 accumulate the adaptor wil no longer receive new inbound GP Links messages.
 
-| Environment Variable                                       | Default | Description 
-| -----------------------------------------------------------|---------|-------------
-| LAB_RESULTS_MESH_CLIENT_WAKEUP_INTERVAL_IN_MILLISECONDS    | 60000   | The time period (in milliseconds) between when each adaptor instance "wakes up" and attempts to obtain the lock to start a polling cycle
-| LAB_RESULTS_MESH_POLLING_CYCLE_MINIMUM_INTERVAL_IN_SECONDS | 300     | The minimum time period (in seconds) between MESH polling cycles
-| LAB_RESULTS_MESH_POLLING_CYCLE_DURATION_IN_SECONDS         | 285     | The duration (in seconds) fo the MESH polling cycle
+| Environment Variable                                       | Default | Description                                                                                                                              |
+|------------------------------------------------------------|---------|------------------------------------------------------------------------------------------------------------------------------------------|
+| LAB_RESULTS_MESH_CLIENT_WAKEUP_INTERVAL_IN_MILLISECONDS    | 60000   | The time period (in milliseconds) between when each adaptor instance "wakes up" and attempts to obtain the lock to start a polling cycle |
+| LAB_RESULTS_MESH_POLLING_CYCLE_MINIMUM_INTERVAL_IN_SECONDS | 300     | The minimum time period (in seconds) between MESH polling cycles                                                                         |
+| LAB_RESULTS_MESH_POLLING_CYCLE_DURATION_IN_SECONDS         | 285     | The duration (in seconds) fo the MESH polling cycle                                                                                      |
 
 The MESH API specifies that a MESH mailbox should be checked "a maximum of once every five minutes". The variable 
 `LAB_RESULTS_MESH_POLLING_CYCLE_MINIMUM_INTERVAL_IN_SECONDS` controls how often the adaptor will check its mailbox for new 
