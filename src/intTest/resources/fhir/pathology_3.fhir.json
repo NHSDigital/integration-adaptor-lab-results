@@ -471,6 +471,10 @@
                         "reference": "urn:uuid:3f281147-1c66-4a2f-9767-25750976f6ef"
                     }
                 ],
+                "valueQuantity": {
+                    "value": 2.0,
+                    "unit": "ng/mL"
+                },
                 "interpretation": {
                     "coding": [ {
                         "code": "PA",
