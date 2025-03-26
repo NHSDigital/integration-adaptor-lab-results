@@ -9,9 +9,11 @@ on:
       - main
 
 jobs:
-  setup-job:
-    name: Example Job
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+  tests:
+    name: "Tests"
+    uses: ./.github/workflows/test.yml
+    with:
+      name: Lab Results Adaptor
+      path: ./
+    secrets: inherit
+
