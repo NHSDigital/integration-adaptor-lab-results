@@ -1,5 +1,5 @@
 plugins {
-	id 'org.springframework.boot' version '2.5.13'
+	id 'org.springframework.boot' version '3.4.3'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 	id 'io.freefair.lombok' version '5.3.0'
@@ -44,7 +44,7 @@ dependencies {
     implementation 'org.springframework:spring-jms:5.3.18'
     implementation 'org.apache.httpcomponents:httpclient:4.5.13'
     implementation 'org.apache.qpid:qpid-jms-client:0.56.0'
-    implementation 'com.heroku.sdk:env-keystore:1.1.6'
+	implementation 'com.heroku.sdk:env-keystore:1.1.11'
 	implementation 'com.amazonaws:aws-java-sdk-s3:1.11.978'
 	implementation 'ca.uhn.hapi.fhir:hapi-fhir-base:5.4.0'
 	implementation 'ca.uhn.hapi.fhir:hapi-fhir-structures-dstu3:5.4.0'
@@ -61,7 +61,7 @@ dependencies {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 
-	testImplementation 'org.testcontainers:testcontainers:1.16.1'
+	testImplementation 'org.testcontainers:testcontainers:1.20.6'
 	testImplementation 'org.awaitility:awaitility:4.0.3'
 	testImplementation 'org.assertj:assertj-core:3.19.0'
 }
