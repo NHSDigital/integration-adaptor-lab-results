@@ -122,7 +122,7 @@ jobs:
 
   integration-tests:
     name: ${{ inputs.name }} Integration Tests
-    #needs: [ checkstyle, spotbugs, unit-tests ]
+    needs: [ checkstyle, spotbugs ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
