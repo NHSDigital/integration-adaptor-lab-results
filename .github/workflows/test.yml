@@ -150,10 +150,12 @@ jobs:
         shell: bash
 
       - name: Stop docker image for static check
+        continue-on-error: true
         run: docker container stop lab-results-static-check
         working-directory: ${{ inputs.path }}
 
       - name: Delete docker image for static check
+        continue-on-error: true
         run: docker container rm lab-results-static-check
         working-directory: ${{ inputs.path }}
 
