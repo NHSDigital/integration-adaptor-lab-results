@@ -2,13 +2,7 @@ name: Publish Workflow
 on:
   workflow_call:
     inputs:
-      directory:
-        required: true
-        type: string
       repository:
-        required: true
-        type: string
-      build-context:
         required: true
         type: string
       build-id:
@@ -41,7 +35,7 @@ jobs:
           echo "DOCKER_TAG=$DOCKER_TAG" >> $GITHUB_ENV
 
           # Build Image
-          docker build -f ./docker/${{ inputs.directory }}/Dockerfile -t $DOCKER_TAG ${{ inputs.build-context }}
+          docker build -f ./Dockerfile -t $DOCKER_TAG .
 
       - name: Login to AWS ECR
         run: |
