@@ -1,0 +1,182 @@
+name: "Test Workflow"
+on:
+  workflow_call:
+    inputs:
+      name:
+        required: true
+        type: string
+      path:
+        required: true
+        type: string
+      build-id:
+        required: true
+        type: string
+
+jobs:
+  checkstyle:
+    name: ${{ inputs.name }} Checkstyle
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java 11
+        uses: actions/setup-java@v4
+        with:
+          java-version: 11
+          distribution: 'temurin'
+
+      - name: Execute Checkstyle
+        run: ./gradlew checkStyleMain checkstyleTest checkstyleIntTest
+        working-directory: ${{ inputs.path }}
+
+      - name: Collect Artifacts
+        if: always()
+        run: |
+          mkdir -p artifacts
+          cp -r ./${{ inputs.path }}/build/reports ./artifacts
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: '${{ inputs.name }} Checkstyle Report'
+          path: ./artifacts/**
+          compression-level: 9
+
+      - name: Temporary Artifacts Cleanup
+        run: rm -rf ./artifacts
+
+  spotbugs:
+    name: ${{ inputs.name }} Spotbugs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java 11
+        uses: actions/setup-java@v4
+        with:
+          java-version: 11
+          distribution: 'temurin'
+
+      - name: Execute Spotbugs
+        run: ./gradlew spotbugsMain spotbugsTest spotbugsIntTest
+        working-directory: ${{ inputs.path }}
+
+      - name: Collect Artifacts
+        if: always()
+        run: |
+          mkdir -p artifacts
+          cp -r ./${{ inputs.path }}/build/reports ./artifacts
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: '${{ inputs.name }} Spotbugs Report'
+          path: ./artifacts/**
+          compression-level: 9
+
+      - name: Temporary Artifacts Cleanup
+        run: rm -rf ./artifacts
+
+  unit-tests:
+    name: ${{ inputs.name }} Unit Tests
+    needs: [ checkstyle, spotbugs ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java 11
+        uses: actions/setup-java@v4
+        with:
+          java-version: 11
+          distribution: 'temurin'
+
+      - name: Execute Unit Tests
+        run: ./gradlew test --parallel --build-cache
+        working-directory: ${{ inputs.path }}
+
+      - name: Collect Artifacts
+        if: always()
+        run: |
+          mkdir -p artifacts
+          cp -r ./${{ inputs.path }}/build/reports/tests/test ./artifacts
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: '${{ inputs.name }} Unit Test Report'
+          path: ./artifacts/**
+          compression-level: 9
+
+      - name: Test Job Summary
+        if: always()
+        uses: test-summary/action@v2
+        with:
+          paths: "${{ inputs.path }}/build/test-results/test/TEST-*.xml"
+
+      - name: Temporary Artifacts Cleanup
+        run: rm -rf ./artifacts
+
+  integration-tests:
+    name: ${{ inputs.name }} Integration Tests
+    needs: [ checkstyle, spotbugs ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java 11
+        uses: actions/setup-java@v4
+        with:
+          java-version: 11
+          distribution: 'temurin'
+
+      - name: Build docker image for static check
+        run: docker build -t local/lab-results-static-check:${{ inputs.build-id }} -f Dockerfile.tests .
+        working-directory: ${{ inputs.path }}
+
+      - name: Running docker image for static check
+        run: docker run -v /var/run/docker.sock:/var/run/docker.sock --name lab-results-static-check local/lab-results-static-check:${{ inputs.build-id }}
+        working-directory: ${{ inputs.path }}
+
+      - name: Execute Integration Tests
+        run: ./gradlew integrationTest --parallel --build-cache
+        working-directory: ${{ inputs.path }}
+
+      - name: Collect Artifacts
+        if: always()
+        run: |
+          mkdir -p artifacts
+          cp -r ./${{ inputs.path }}/build/reports/tests/integrationTest ./artifacts
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: '${{ inputs.name }} Integration Test Report'
+          path: ./artifacts/**
+          compression-level: 9
+
+      - name: Stop test docker image
+        continue-on-error: true
+        run: docker container stop lab-results-static-check
+        working-directory: ${{ inputs.path }}
+
+      - name: Delete test docker image
+        continue-on-error: true
+        run: docker container rm lab-results-static-check
+        working-directory: ${{ inputs.path }}
+
+      - name: Test Job Summary
+        if: always()
+        uses: test-summary/action@v2
+        with:
+          paths: "${{ inputs.path }}/build/test-results/integrationTest/TEST-*.xml"
+
+      - name: Temporary Artifacts Cleanup
+        run: rm -rf ./artifacts
