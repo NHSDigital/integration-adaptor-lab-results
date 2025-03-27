@@ -100,7 +100,7 @@ jobs:
         if: always()
         run: |
           mkdir -p artifacts
-          cp -r ./${{ inputs.path }}/build/reports ./artifacts
+          cp -r ./${{ inputs.path }}/build/reports/test ./artifacts
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
@@ -115,6 +115,47 @@ jobs:
         uses: test-summary/action@v2
         with:
           paths: "${{ inputs.path }}/build/test-results/test/TEST-*.xml"
+
+      - name: Temporary Artifacts Cleanup
+        run: rm -rf ./artifacts
+
+  integration-tests:
+    name: ${{ inputs.name }} Integration Tests
+    needs: [ checkstyle, spotbugs, unit-tests ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java 11
+        uses: actions/setup-java@v4
+        with:
+          java-version: 11
+          distribution: 'temurin'
+
+      - name: Execute Integration Tests
+        run: ./gradlew integrationTest --parallel --build-cache
+        working-directory: ${{ inputs.path }}
+
+      - name: Collect Artifacts
+        if: always()
+        run: |
+          mkdir -p artifacts
+          cp -r ./${{ inputs.path }}/build/reports/integrationTest ./artifacts
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: '${{ inputs.name }} Integration Test Report'
+          path: ./artifacts/**
+          compression-level: 9
+
+      - name: Test Job Summary
+        if: always()
+        uses: test-summary/action@v2
+        with:
+          paths: "${{ inputs.path }}/build/test-results/integrationTest/TEST-*.xml"
 
       - name: Temporary Artifacts Cleanup
         run: rm -rf ./artifacts
