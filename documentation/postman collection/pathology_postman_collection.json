@@ -1,0 +1,649 @@
+{
+	"info": {
+		"_postman_id": "911c062e-e62e-4760-affb-6eb4c32e13eb",
+		"name": "Pathology",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30536314",
+		"_collection_link": "https://planetary-spaceship-644674.postman.co/workspace/4765cacd-acf2-409e-8c8c-ea0436349e2e/collection/30536314-911c062e-e62e-4760-affb-6eb4c32e13eb?action=share&source=collection_link&creator=30536314"
+	},
+	"item": [
+		{
+			"name": "Adapter Container",
+			"item": [
+				{
+					"name": "_info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{domain}}:{{adaptor_port}}/info",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"port": "{{adaptor_port}}",
+							"path": [
+								"info"
+							]
+						},
+						"description": "Generated from cURL: curl -i --location --request GET 'http://localhost:8080/healthcheck'"
+					},
+					"response": []
+				},
+				{
+					"name": "_healthcheck",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{domain}}:{{adaptor_port}}/healthcheck",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"port": "{{adaptor_port}}",
+							"path": [
+								"healthcheck"
+							]
+						},
+						"description": "# Description\n\nThis endpoint verifies that the adaptor's healthcheck endpoint is available.\n\n# Example Response\n\n``` json\n{\n  \"status\": \"UP\"\n}\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "_metrics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{domain}}:{{adaptor_port}}/metrics",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"port": "{{adaptor_port}}",
+							"path": [
+								"metrics"
+							]
+						},
+						"description": "# Description\n\nReturns a list of available spring boot metric from the adapter.\n\n# Example Response\n\n``` json\n{\n    \"names\": [\n        \"http.server.requests\",\n        \"jvm.buffer.count\",\n        \"jvm.buffer.memory.used\",\n        \"jvm.buffer.total.capacity\",\n        \"jvm.classes.loaded\",\n        \"jvm.classes.unloaded\",\n        \"jvm.gc.live.data.size\",\n        \"jvm.gc.max.data.size\",\n        \"jvm.gc.memory.allocated\",\n        \"jvm.gc.memory.promoted\",\n        \"jvm.gc.pause\",\n        \"jvm.memory.committed\",\n        \"jvm.memory.max\",\n        \"jvm.memory.used\",\n        \"jvm.threads.daemon\",\n        \"jvm.threads.live\",\n        \"jvm.threads.peak\",\n        \"jvm.threads.states\",\n        \"logback.events\",\n        \"process.cpu.usage\",\n        \"process.files.max\",\n        \"process.files.open\",\n        \"process.start.time\",\n        \"process.uptime\",\n        \"spring.data.repository.invocations\",\n        \"system.cpu.count\",\n        \"system.cpu.usage\",\n        \"system.load.average.1m\",\n        \"tomcat.sessions.active.current\",\n        \"tomcat.sessions.active.max\",\n        \"tomcat.sessions.alive.max\",\n        \"tomcat.sessions.created\",\n        \"tomcat.sessions.expired\",\n        \"tomcat.sessions.rejected\"\n    ]\n}\n\n ```\n\n# Further Usage\n\nTo get the value of a particulat metric, paste the metric you wish to see at the end of the request.\n\nFor example:  \nTo see the `system.cpu.usage`, you must perform a GET request to `http://{{domain}}:{{adaptor_port}}/metrics/system.cpu.usage`"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Inbound Queue",
+			"item": [
+				{
+					"name": "Authorization",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const uuid = require('uuid');",
+									"const moment = require('moment');",
+									"const mailboxId = pm.environment.get(\"mailbox-id\");",
+									"const mailboxPassword = pm.environment.get(\"mailbox-password\");",
+									"const sharedKey = pm.environment.get(\"shared-key\");",
+									"",
+									"const nonce = uuid.v4();",
+									"const nonceCount = '001';",
+									"const timestamp = moment().utc().format(\"YYYYMMDDHHmm\");",
+									"const hashContent = `${mailboxId}:${nonce}:${nonceCount}:${mailboxPassword}:${timestamp}`;",
+									"",
+									"calculateHmac(sharedKey, hashContent).then(",
+									"  hashValue => {",
+									"    const token = `NHSMESH ${mailboxId}:${nonce}:${nonceCount}:${timestamp}:${hashValue}`;",
+									"    pm.variables.set(\"token\", token);",
+									"  });",
+									"",
+									"async function calculateHmac(key, message) {",
+									"  const encoder = new TextEncoder();",
+									"  const keyData = encoder.encode(key);",
+									"  const messageData = encoder.encode(message);",
+									"",
+									"  const cryptoKey = await crypto.subtle.importKey(",
+									"    'raw',",
+									"    keyData,",
+									"    { name: 'HMAC', hash: { name: 'SHA-256' } },",
+									"    false,",
+									"    ['sign']",
+									"  );",
+									"",
+									"  const signature = await crypto.subtle.sign('HMAC', cryptoKey, messageData);",
+									"  const hashArray = Array.from(new Uint8Array(signature));",
+									"  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');",
+									"  return hashHex;",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							},
+							{
+								"key": "Mex-ClientVersion",
+								"value": "1.0"
+							},
+							{
+								"key": "Mex-JavaVersion",
+								"value": "1.7.0_60"
+							},
+							{
+								"key": "Mex-OSArchitecture",
+								"value": "Windows 7"
+							},
+							{
+								"key": "Mex-OSName",
+								"value": "x86"
+							},
+							{
+								"key": "Mex-OSVersion",
+								"value": "6.1"
+							}
+						],
+						"url": {
+							"raw": "https://{{domain}}:{{mesh_port}}/messageexchange/{{mailbox-id}}",
+							"protocol": "https",
+							"host": [
+								"{{domain}}"
+							],
+							"port": "{{mesh_port}}",
+							"path": [
+								"messageexchange",
+								"{{mailbox-id}}"
+							]
+						},
+						"description": "# Description\n\nSends an authentication request to the MESH mailbox specified. Returns 200 if authorized.\n\nThis should be run before other requests, but in our experience, this is not needed.\n\n# Parameters\n\n| **Parameter** | **Explanation** |\n| --- | --- |\n| Authorization | Authorization token. This gets generated by the script attached to the request. |\n| Mex-ClientVersion | Part of required MESH headers. Denotes the version of the MESH client that is queried. |\n| Mex-JavaVersion | Part of required MESH headers. Denotes the version of Java running on the MESH client that is queried. |\n| Mex-OSArchitecture | Part of required MESH headers. Denotes the OS of the host that is queried. |\n| Mex-OSName | Part of required MESH headers. Denotes the OS type the host that is queried. Usually x86. |\n| Mex-OSVersion | Part of required MESH headers. Denotes the OS version the host that is queried. |\n\n# Example response\n\n```\nOK\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Send",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const uuid = require('uuid');",
+									"const moment = require('moment');",
+									"const mailboxId = pm.environment.get(\"mailbox-id\");",
+									"const mailboxPassword = pm.environment.get(\"mailbox-password\");",
+									"const sharedKey = pm.environment.get(\"shared-key\");",
+									"",
+									"const nonce = uuid.v4();",
+									"const nonceCount = '001';",
+									"const timestamp = moment().utc().format(\"YYYYMMDDHHmm\");",
+									"const hashContent = `${mailboxId}:${nonce}:${nonceCount}:${mailboxPassword}:${timestamp}`;",
+									"",
+									"calculateHmac(sharedKey, hashContent).then(",
+									"  hashValue => {",
+									"    const token = `NHSMESH ${mailboxId}:${nonce}:${nonceCount}:${timestamp}:${hashValue}`;",
+									"    pm.variables.set(\"token\", token);",
+									"  });",
+									"",
+									"async function calculateHmac(key, message) {",
+									"  const encoder = new TextEncoder();",
+									"  const keyData = encoder.encode(key);",
+									"  const messageData = encoder.encode(message);",
+									"",
+									"  const cryptoKey = await crypto.subtle.importKey(",
+									"    'raw',",
+									"    keyData,",
+									"    { name: 'HMAC', hash: { name: 'SHA-256' } },",
+									"    false,",
+									"    ['sign']",
+									"  );",
+									"",
+									"  const signature = await crypto.subtle.sign('HMAC', cryptoKey, messageData);",
+									"  const hashArray = Array.from(new Uint8Array(signature));",
+									"  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');",
+									"  return hashHex;",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"message-id\", JSON.parse(responseBody).messageID)",
+									"console.log(\"Message sent to Inbound Queue. MessageID set to: \" + JSON.parse(responseBody).messageID)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Mex-From",
+								"value": "{{mailbox-id}}",
+								"type": "text"
+							},
+							{
+								"key": "Mex-To",
+								"value": "{{mailbox-id}}",
+								"type": "text"
+							},
+							{
+								"key": "Mex-WorkflowID",
+								"value": "PATH_MEDRPT_V3",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/octet-stream",
+								"type": "text"
+							},
+							{
+								"key": "Mex-MessageType",
+								"value": "DATA",
+								"type": "text"
+							},
+							{
+								"key": "Mex-FileName",
+								"value": "test-filename.txt",
+								"type": "text"
+							},
+							{
+								"key": "Mex-Version",
+								"value": "1.0",
+								"type": "text"
+							},
+							{
+								"key": "Mex-ClientVersion",
+								"value": "1.0",
+								"type": "text"
+							},
+							{
+								"key": "Mex-JavaVersion",
+								"value": "1.7.0_60",
+								"type": "text"
+							},
+							{
+								"key": "Mex-OSArchitecture",
+								"value": "Windows 7",
+								"type": "text"
+							},
+							{
+								"key": "Mex-OSName",
+								"value": "x86",
+								"type": "text"
+							},
+							{
+								"key": "Mex-OSVersion",
+								"value": "6.1",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "UNA:+.? '\nUNB+UNOC:3+000000004400001:80+000000024600002:80+100301:1751+1015++MEDRPT++1'\nUNH+1+MEDRPT:0:1:RT:NHS003'\nBGM+LSR'\nDTM+137:201002261541:203'\nS01+01'\nNAD+PO+G3380314:900++SCOTT'\nSPR+PRO'\nS01+01'\nNAD+PO+++NORTH DOWN GP'\nSPR+ORG'\nS01+01'\nNAD+MR+G3380314:900++SCOTT'\nSPR+PRO'\nS01+01'\nNAD+MR+D82015:901'\nSPR+ORG'\nS01+01'\nNAD+SLA+++Haematology'\nSPR+DPT'\nS01+01'\nNAD+SLA+++ST JAMES?'S UNIVERSITY HOSPITAL'\nSPR+ORG'\nS02+02'\nGIS+N'\nRFF+SRI:15/CH000037K/200010191704'\nSTS++UN'\nDTM+ISR:201002251541:203'\nS06+06'\nADR++US:FLAT1:59 SANDTOFT ROAD:LEEDS++DN9 1PJ'\nS07+07'\nPNA+PAT+9435492908:OPI+++SU:AZIZ+FO:NISMA'\nDTM+329:19450730:102'\nPDI+2'\nS10+10'\nCIN+UN'\nFTX+CID+++TIRED ALL THE TIME, LOW Hb'\nFTX+CID+++COELIAC'\nS16+16'\nSEQ++1'\nSPC+TSP+:::VENOUS BLOOD'\nRFF+STI:CH000037KA'\nDTM+SCO:201002231541:203'\nDTM+SRI:201002241541:203'\nGIS+N'\nINV+MQ+:::B12/FOLATE'\nSEQ++1'\nSTS++FI'\nFTX+SPC+++Results repeated:Low plasma Folate'\nRFF+ASL:1'\nGIS+N'\nINV+MQ+42T..:911::Serum vitamin B12'\nRSL+NV+1001++:::ng/L'\nSTS++FI'\nRFF+ARL:1'\nS20+20'\nRND+U+170+1100'\nGIS+N'\nINV+MQ+42UE.:911::Plasma folate level'\nRSL+++++PA'\nSTS++FI'\nRFF+ARL:1'\nS20+20'\nRND+U+2.0+20.0'\nUNT+41+1'\nUNZ+1+1015'\n",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{domain}}:{{mesh_port}}/messageexchange/{{mailbox-id}}/outbox",
+							"protocol": "https",
+							"host": [
+								"{{domain}}"
+							],
+							"port": "{{mesh_port}}",
+							"path": [
+								"messageexchange",
+								"{{mailbox-id}}",
+								"outbox"
+							]
+						},
+						"description": "# Description\n\nSends a request to the inbound queue, which contains an EDIFACT bundle meant to be converted into a FHIR bundle.\n\n# Parameters\n\n| **Parameter** | **Explanation** |\n| --- | --- |\n| token | Authorization token. This gets generated by the script attached to the request. A new one will be generated each time a new request is sent. |\n| mailbox-id | Id of a MESH mailbox to send requests to and from. |\n\n# Headers\n\n| **Parameter** | **Explanation** |\n| --- | --- |\n| Authorization | Authorization token used to authorize each request. It must be different for each request. |\n| Mex-From | The MESH mailbox ID of the sender of the message. |\n| Mex-To | The MESH mailbox ID of the recipient of the message. |\n| Mex-WorkflowID | MESH workflow ID. For this adapter, the options are: `PATH_MEDRPT_V3` and `SCRN_BCS_MEDRPT_V4`. |\n| Content-Type | Type of the message. For Edifact messages, this is `application/octet-stream`. |\n| Mex-MessageType | Required MESH header. Denotes the type of the message being sent to MESH. For sending EDIFACT messages, the correct value is `DATA`. |\n| Mex-FileName | Required MESH header. Denotes the name of the file that the body contents will be placed into. |\n| Mex-ClientVersion | Part of required MESH headers. Denotes the version of the MESH client that is queried. |\n| Mex-JavaVersion | Part of required MESH headers. Denotes the version of Java running on the MESH client that is queried. |\n| Mex-OSArchitecture | Part of required MESH headers. Denotes the OS of the host that is queried. |\n| Mex-OSName | Part of required MESH headers. Denotes the OS type the host that is queried. Usually x86. |\n| Mex-OSVersion | Part of required MESH headers. Denotes the OS version the host that is queried. |\n\n# Example Body\n\n```\nUNA:+.? '\nUNB+UNOC:3+000000004400001:80+000000024600002:80+100301:1751+1015++MEDRPT++1'\nUNH+1+MEDRPT:0:1:RT:NHS003'\nBGM+LSR'\nDTM+137:201002261541:203'\nS01+01'\nNAD+PO+G3380314:900++SCOTT'\nSPR+PRO'\nS01+01'\nNAD+PO+++NORTH DOWN GP'\nSPR+ORG'\nS01+01'\nNAD+MR+G3380314:900++SCOTT'\nSPR+PRO'\nS01+01'\nNAD+MR+D82015:901'\nSPR+ORG'\nS01+01'\nNAD+SLA+++Haematology'\nSPR+DPT'\nS01+01'\nNAD+SLA+++ST JAMES?'S UNIVERSITY HOSPITAL'\nSPR+ORG'\nS02+02'\nGIS+N'\nRFF+SRI:15/CH000037K/200010191704'\nSTS++UN'\nDTM+ISR:201002251541:203'\nS06+06'\nADR++US:FLAT1:59 SANDTOFT ROAD:LEEDS++DN9 1PJ'\nS07+07'\nPNA+PAT+9435492908:OPI+++SU:AZIZ+FO:NISMA'\nDTM+329:19450730:102'\nPDI+2'\nS10+10'\nCIN+UN'\nFTX+CID+++TIRED ALL THE TIME, LOW Hb'\nFTX+CID+++COELIAC'\nS16+16'\nSEQ++1'\nSPC+TSP+:::VENOUS BLOOD'\nRFF+STI:CH000037KA'\nDTM+SCO:201002231541:203'\nDTM+SRI:201002241541:203'\nGIS+N'\nINV+MQ+:::B12/FOLATE'\nSEQ++1'\nSTS++FI'\nFTX+SPC+++Results repeated:Low plasma Folate'\nRFF+ASL:1'\nGIS+N'\nINV+MQ+42T..:911::Serum vitamin B12'\nRSL+NV+1001++:::ng/L'\nSTS++FI'\nRFF+ARL:1'\nS20+20'\nRND+U+170+1100'\nGIS+N'\nINV+MQ+42UE.:911::Plasma folate level'\nRSL+++++PA'\nSTS++FI'\nRFF+ARL:1'\nS20+20'\nRND+U+2.0+20.0'\nUNT+41+1'\nUNZ+1+1015'\n\n ```\n\n# Example Response\n\n``` json\n{\"messageID\": \"20250319221728938750_000000250\"}\n\n ```\n\nThe ID of the message created is displayed in the response."
+					},
+					"response": []
+				},
+				{
+					"name": "Inbox",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const uuid = require('uuid');",
+									"const moment = require('moment');",
+									"const mailboxId = pm.environment.get(\"mailbox-id\");",
+									"const mailboxPassword = pm.environment.get(\"mailbox-password\");",
+									"const sharedKey = pm.environment.get(\"shared-key\");",
+									"",
+									"const nonce = uuid.v4();",
+									"const nonceCount = '001';",
+									"const timestamp = moment().utc().format(\"YYYYMMDDHHmm\");",
+									"const hashContent = `${mailboxId}:${nonce}:${nonceCount}:${mailboxPassword}:${timestamp}`;",
+									"",
+									"calculateHmac(sharedKey, hashContent).then(",
+									"  hashValue => {",
+									"    const token = `NHSMESH ${mailboxId}:${nonce}:${nonceCount}:${timestamp}:${hashValue}`;",
+									"    pm.variables.set(\"token\", token);",
+									"  });",
+									"",
+									"async function calculateHmac(key, message) {",
+									"  const encoder = new TextEncoder();",
+									"  const keyData = encoder.encode(key);",
+									"  const messageData = encoder.encode(message);",
+									"",
+									"  const cryptoKey = await crypto.subtle.importKey(",
+									"    'raw',",
+									"    keyData,",
+									"    { name: 'HMAC', hash: { name: 'SHA-256' } },",
+									"    false,",
+									"    ['sign']",
+									"  );",
+									"",
+									"  const signature = await crypto.subtle.sign('HMAC', cryptoKey, messageData);",
+									"  const hashArray = Array.from(new Uint8Array(signature));",
+									"  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');",
+									"  return hashHex;",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							},
+							{
+								"key": "Mex-ClientVersion",
+								"value": "1.0"
+							},
+							{
+								"key": "Mex-JavaVersion",
+								"value": "1.7.0_60"
+							},
+							{
+								"key": "Mex-OSArchitecture",
+								"value": "Windows 7"
+							},
+							{
+								"key": "Mex-OSName",
+								"value": "x86"
+							},
+							{
+								"key": "Mex-OSVersion",
+								"value": "6.1"
+							}
+						],
+						"url": {
+							"raw": "https://{{domain}}:{{mesh_port}}/messageexchange/{{mailbox-id}}/inbox",
+							"protocol": "https",
+							"host": [
+								"{{domain}}"
+							],
+							"port": "{{mesh_port}}",
+							"path": [
+								"messageexchange",
+								"{{mailbox-id}}",
+								"inbox"
+							]
+						},
+						"description": "# Description\n\nSends a request to the inbound queue, and queries the messages currently inside a particular mailbox.\n\n# Parameters\n\n| **Parameter** | **Explanation** |\n| --- | --- |\n| token | Authorization token. This gets generated by the script attached to the request. A new one will be generated each time a new request is sent. |\n| mailbox-id | Id of a MESH mailbox to send requests to and from. |\n\n# Headers\n\n| **Parameter** | **Explanation** |\n| --- | --- |\n| Authorization | Authorization token used to authorize each request. It must be different for each request. |\n| Mex-ClientVersion | Part of required MESH headers. Denotes the version of the MESH client that is queried. |\n| Mex-JavaVersion | Part of required MESH headers. Denotes the version of Java running on the MESH client that is queried. |\n| Mex-OSArchitecture | Part of required MESH headers. Denotes the OS of the host that is queried. |\n| Mex-OSName | Part of required MESH headers. Denotes the OS type the host that is queried. Usually x86. |\n| Mex-OSVersion | Part of required MESH headers. Denotes the OS version the host that is queried. |\n\n# Example response\n\n``` json\n{\n    \"messages\": [\n        \"20250319222212666323_000000252\"\n    ]\n}\n\n ```\n\nThe response is a list of message IDs currently present in the mailbox. In the example above, the inbox contains one message, which has a message id of `20250319222212666323_000000252`."
+					},
+					"response": []
+				},
+				{
+					"name": "Ack",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const uuid = require('uuid');",
+									"const moment = require('moment');",
+									"const mailboxId = pm.environment.get(\"mailbox-id\");",
+									"const mailboxPassword = pm.environment.get(\"mailbox-password\");",
+									"const sharedKey = pm.environment.get(\"shared-key\");",
+									"",
+									"const nonce = uuid.v4();",
+									"const nonceCount = '001';",
+									"const timestamp = moment().utc().format(\"YYYYMMDDHHmm\");",
+									"const hashContent = `${mailboxId}:${nonce}:${nonceCount}:${mailboxPassword}:${timestamp}`;",
+									"",
+									"calculateHmac(sharedKey, hashContent).then(",
+									"  hashValue => {",
+									"    const token = `NHSMESH ${mailboxId}:${nonce}:${nonceCount}:${timestamp}:${hashValue}`;",
+									"    pm.variables.set(\"token\", token);",
+									"  });",
+									"",
+									"async function calculateHmac(key, message) {",
+									"  const encoder = new TextEncoder();",
+									"  const keyData = encoder.encode(key);",
+									"  const messageData = encoder.encode(message);",
+									"",
+									"  const cryptoKey = await crypto.subtle.importKey(",
+									"    'raw',",
+									"    keyData,",
+									"    { name: 'HMAC', hash: { name: 'SHA-256' } },",
+									"    false,",
+									"    ['sign']",
+									"  );",
+									"",
+									"  const signature = await crypto.subtle.sign('HMAC', cryptoKey, messageData);",
+									"  const hashArray = Array.from(new Uint8Array(signature));",
+									"  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');",
+									"  return hashHex;",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							},
+							{
+								"key": "Mex-ClientVersion",
+								"value": "1.0"
+							},
+							{
+								"key": "Mex-JavaVersion",
+								"value": "1.7.0_60"
+							},
+							{
+								"key": "Mex-OSArchitecture",
+								"value": "Windows 7"
+							},
+							{
+								"key": "Mex-OSName",
+								"value": "x86"
+							},
+							{
+								"key": "Mex-OSVersion",
+								"value": "6.1"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8829/messageexchange/{{mailbox-id}}/inbox/{{message-id}}/status/acknowledged",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8829",
+							"path": [
+								"messageexchange",
+								"{{mailbox-id}}",
+								"inbox",
+								"{{message-id}}",
+								"status",
+								"acknowledged"
+							]
+						},
+						"description": "# Description\n\nSends a request to the inbound queue, acknowleges one of the messages in a particular inbox. If a message is acknowledged, it will NOT go further in the data flow. It will be removed from the queue without anything further.\n\n# Parameters\n\n| **Parameter** | **Explanation** |\n| --- | --- |\n| token | Authorization token. This gets generated by the script attached to the request. A new one will be generated each time a new request is sent. |\n| mailbox-id | ID of a MESH mailbox to send requests to and from. |\n| message-id | ID of the message to be acknowledged. |\n\n# Headers\n\n| **Parameter** | **Explanation** |\n| --- | --- |\n| Authorization | Authorization token used to authorize each request. It must be different for each request. |\n| Mex-ClientVersion | Part of required MESH headers. Denotes the version of the MESH client that is queried. |\n| Mex-JavaVersion | Part of required MESH headers. Denotes the version of Java running on the MESH client that is queried. |\n| Mex-OSArchitecture | Part of required MESH headers. Denotes the OS of the host that is queried. |\n| Mex-OSName | Part of required MESH headers. Denotes the OS type the host that is queried. Usually x86. |\n| Mex-OSVersion | Part of required MESH headers. Denotes the OS version the host that is queried. |"
+					},
+					"response": []
+				},
+				{
+					"name": "Download",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const uuid = require('uuid');",
+									"const moment = require('moment');",
+									"const mailboxId = pm.environment.get(\"mailbox-id\");",
+									"const mailboxPassword = pm.environment.get(\"mailbox-password\");",
+									"const sharedKey = pm.environment.get(\"shared-key\");",
+									"",
+									"const nonce = uuid.v4();",
+									"const nonceCount = '001';",
+									"const timestamp = moment().utc().format(\"YYYYMMDDHHmm\");",
+									"const hashContent = `${mailboxId}:${nonce}:${nonceCount}:${mailboxPassword}:${timestamp}`;",
+									"",
+									"calculateHmac(sharedKey, hashContent).then(",
+									"  hashValue => {",
+									"    const token = `NHSMESH ${mailboxId}:${nonce}:${nonceCount}:${timestamp}:${hashValue}`;",
+									"    pm.variables.set(\"token\", token);",
+									"  });",
+									"",
+									"async function calculateHmac(key, message) {",
+									"  const encoder = new TextEncoder();",
+									"  const keyData = encoder.encode(key);",
+									"  const messageData = encoder.encode(message);",
+									"",
+									"  const cryptoKey = await crypto.subtle.importKey(",
+									"    'raw',",
+									"    keyData,",
+									"    { name: 'HMAC', hash: { name: 'SHA-256' } },",
+									"    false,",
+									"    ['sign']",
+									"  );",
+									"",
+									"  const signature = await crypto.subtle.sign('HMAC', cryptoKey, messageData);",
+									"  const hashArray = Array.from(new Uint8Array(signature));",
+									"  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');",
+									"  return hashHex;",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							},
+							{
+								"key": "Mex-ClientVersion",
+								"value": "1.0"
+							},
+							{
+								"key": "Mex-JavaVersion",
+								"value": "1.7.0_60"
+							},
+							{
+								"key": "Mex-OSArchitecture",
+								"value": "Windows 7"
+							},
+							{
+								"key": "Mex-OSName",
+								"value": "x86"
+							},
+							{
+								"key": "Mex-OSVersion",
+								"value": "6.1"
+							}
+						],
+						"url": {
+							"raw": "https://{{domain}}:{{mesh_port}}/messageexchange/{{mailbox-id}}/inbox/{{message-id}}",
+							"protocol": "https",
+							"host": [
+								"{{domain}}"
+							],
+							"port": "{{mesh_port}}",
+							"path": [
+								"messageexchange",
+								"{{mailbox-id}}",
+								"inbox",
+								"{{message-id}}"
+							]
+						},
+						"description": "# Description\n\nSends a request to the inbound queue, and downloads the specified message. THIS WILL BE THE EDIFACT MESSAGE SENT ORIGINALLY. Once a message was downloaded, it will be removed from the queue and the data flow.\n\nParameters\n\n| **Parameter** | **Explanation** |\n| --- | --- |\n| token | Authorization token. This gets generated by the script attached to the request. A new one will be generated each time a new request is sent. |\n| mailbox-id | ID of a MESH mailbox to send requests to and from. |\n| message-id | ID of the message to be downloaded. |\n\n# Headers\n\n| **Parameter** | **Explanation** |\n| --- | --- |\n| Authorization | Authorization token used to authorize each request. It must be different for each request. |\n| Mex-ClientVersion | Part of required MESH headers. Denotes the version of the MESH client that is queried. |\n| Mex-JavaVersion | Part of required MESH headers. Denotes the version of Java running on the MESH client that is queried. |\n| Mex-OSArchitecture | Part of required MESH headers. Denotes the OS of the host that is queried. |\n| Mex-OSName | Part of required MESH headers. Denotes the OS type the host that is queried. Usually x86. |\n| Mex-OSVersion | Part of required MESH headers. Denotes the OS version the host that is queried. |\n\n# Example response\n\nThe response will be an object containing the data that the message specified contains."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Outbound Queue",
+			"item": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
