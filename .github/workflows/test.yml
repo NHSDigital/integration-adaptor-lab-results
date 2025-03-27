@@ -149,16 +149,6 @@ jobs:
         working-directory: ./scripts
         shell: bash
 
-      - name: Stop docker image for static check
-        continue-on-error: true
-        run: docker container stop lab-results-static-check
-        working-directory: ${{ inputs.path }}
-
-      - name: Delete docker image for static check
-        continue-on-error: true
-        run: docker container rm lab-results-static-check
-        working-directory: ${{ inputs.path }}
-
       - name: Build docker image for static check
         run: docker build -t local/lab-results-static-check:$BUILD_ID -f Dockerfile.tests .
         working-directory: ${{ inputs.path }}
@@ -185,6 +175,16 @@ jobs:
           path: ./artifacts/**
           compression-level: 9
 
+      - name: Stop test docker image
+        continue-on-error: true
+        run: docker container stop lab-results-static-check
+        working-directory: ${{ inputs.path }}
+
+      - name: Delete test docker image
+        continue-on-error: true
+        run: docker container rm lab-results-static-check
+        working-directory: ${{ inputs.path }}
+
       - name: Test Job Summary
         if: always()
         uses: test-summary/action@v2
@@ -193,6 +193,26 @@ jobs:
 
       - name: Temporary Artifacts Cleanup
         run: rm -rf ./artifacts
+
+  build-image:
+    name: ${{ inputs.name }} Build Docker Image
+    needs: [ checkstyle, spotbugs, unit-tests, integration-tests ]
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_IMAGE: "${DOCKER_REGISTRY}/lab-results:${BUILD_TAG}"
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java 11
+        uses: actions/setup-java@v4
+        with:
+          java-version: 11
+          distribution: 'temurin'
+
+      - name: Execute Unit Tests
+        run: ./gradlew test --parallel --build-cache
+        working-directory: ${{ inputs.path }}
 
 #  integration_tests:
 #    name: ${{ inputs.name }} Integration Tests
