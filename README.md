@@ -371,6 +371,17 @@ Check [ActiveMQ admin console](http://localhost:8161/admin/queues.jsp) (user: ad
 
 Notice that depending on the `lab-result` configuration, it can take several seconds until `fake-mesh` is scanned for new messages.
 
+### Using Postman
+
+* Use Postman 11.38.4 or later
+* Go to File->Import
+* You will see a screen saying "Drop anywhere to import" then "Or select files". Click the word "files"
+* Select the `pathology_postman_collection.json` file
+* Import
+* Next, on the left side of Postman, select "Environments", then "Import"
+* Select the `pathology_postman_environment.json` file
+* Import
+
 ### Debugging
 
 #### MongoDB
