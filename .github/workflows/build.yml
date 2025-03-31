@@ -49,13 +49,9 @@ jobs:
   publish-docker-images:
     name: "Publish docker images to ECR"
     needs: [ generate-build-id, tests ]
-    strategy:
-      matrix:
-        config:
-          - repository: lab-results
     uses: ./.github/workflows/publish.yml
     with:
-      repository: ${{ matrix.config.repository }}
+      repository: lab-results
       build-id: ${{ needs.generate-build-id.outputs.build-id }}
     secrets: inherit
 
@@ -74,6 +70,6 @@ jobs:
         with:
           message: |
             Images built and published to ECR using a Build Id of ${{ needs.generate-build-id.outputs.build-id }}
-          comment_tag: images-built
+          comment-tag: images-built
           mode: upsert
 
