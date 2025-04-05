@@ -84,28 +84,6 @@ class MeshClientIntegrationTest extends IntegrationBaseTest {
             .hasMessageContaining(INVALID_WORKFLOW_ID);
     }
 
-    @SneakyThrows
-    private MeshMessageId sendLargeMessageWithWrongWorkflowId() {
-        var recipientMailbox = recipientMailboxIdMappings.getRecipientMailboxId(RECIPIENT);
-
-        try (CloseableHttpClient client = meshHttpClientBuilder.build()) {
-            var request = meshRequests.sendMessage(recipientMailbox, WorkflowId.PATHOLOGY_3);
-            request.removeHeaders("Mex-WorkflowID");
-            request.setHeader("Mex-WorkflowID", INVALID_WORKFLOW_ID);
-            request.setEntity(new StringEntity("a".repeat(MB_100))); // 100mb
-            try (CloseableHttpResponse response = client.execute(request)) {
-                assertThat(response.getStatusLine().getStatusCode()).isEqualTo(HttpStatus.ACCEPTED.value());
-                return parseInto(MeshMessageId.class, response);
-            }
-        }
-    }
-
-    private <T> T parseInto(Class<T> clazz, CloseableHttpResponse response) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonParser parser = objectMapper.reader().createParser(EntityUtils.toString(response.getEntity()));
-        return objectMapper.readValue(parser, clazz);
-    }
-
     @Test
     void when_callingMeshAcknowledgeEndpoint_expect_noExceptionIsThrown() {
         final MeshMessageId testMessageId = getMeshClient().sendEdifactMessage(OUTBOUND_MESH_MESSAGE);
@@ -147,5 +125,46 @@ class MeshClientIntegrationTest extends IntegrationBaseTest {
         assertThatExceptionOfType(MeshApiConnectionException.class).isThrownBy(
             () -> getMeshClient().getEdifactMessage(messageId)
         );
+    }
+
+    @Test
+    void when_callingGetMessageWithInvalidRecipient_expect_throw417error() {
+        final MeshMessageId testMessageId = sendMessageWithInvalidRecipient();
+
+        assertThatThrownBy(() -> getLabResultsMeshClient().getEdifactMessage(testMessageId.getMessageID()))
+            .isInstanceOf(MeshWorkflowUnknownException.class);
+    }
+
+    @SneakyThrows
+    private MeshMessageId sendLargeMessageWithWrongWorkflowId() {
+        var recipientMailbox = recipientMailboxIdMappings.getRecipientMailboxId(RECIPIENT);
+
+        try (CloseableHttpClient client = meshHttpClientBuilder.build()) {
+            var request = meshRequests.sendMessage(recipientMailbox, WorkflowId.PATHOLOGY_3);
+            request.removeHeaders("Mex-WorkflowID");
+            request.setHeader("Mex-WorkflowID", INVALID_WORKFLOW_ID);
+            request.setEntity(new StringEntity("a".repeat(MB_100))); // 100mb
+            try (CloseableHttpResponse response = client.execute(request)) {
+                assertThat(response.getStatusLine().getStatusCode()).isEqualTo(HttpStatus.ACCEPTED.value());
+                return parseInto(MeshMessageId.class, response);
+            }
+        }
+    }
+
+    private <T> T parseInto(Class<T> clazz, CloseableHttpResponse response) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonParser parser = objectMapper.reader().createParser(EntityUtils.toString(response.getEntity()));
+        return objectMapper.readValue(parser, clazz);
+    }
+
+    @SneakyThrows
+    private MeshMessageId sendMessageWithInvalidRecipient() {
+        try (CloseableHttpClient client = meshHttpClientBuilder.build()) {
+            var request = meshRequests.sendMessage("aninvalidid1234", WorkflowId.PATHOLOGY_3);
+            try (CloseableHttpResponse response = client.execute(request)) {
+                assertThat(response.getStatusLine().getStatusCode()).isEqualTo(HttpStatus.EXPECTATION_FAILED.value());
+                return parseInto(MeshMessageId.class, response);
+            }
+        }
     }
 }
