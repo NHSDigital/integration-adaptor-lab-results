@@ -381,6 +381,7 @@ Notice that depending on the `lab-result` configuration, it can take several sec
 * Next, on the left side of Postman, select "Environments", then "Import"
 * Select the `pathology_postman_environment.json` file
 * Import
+* Outbound queue folder is for sending, viewing and retrieving/consuming messages from ActiveMQ.
 
 ### Debugging
 
