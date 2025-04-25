@@ -16,17 +16,17 @@ public abstract class MessageProcessingResult {
 
         public Success(Message message, Bundle bundle) {
             super(message);
-            this.bundle = bundle;
+            this.bundle = bundle.copy();
         }
     }
 
     @Getter
     public static final class Error extends MessageProcessingResult {
-        private final Exception exception;
+        private final String exceptionMessage;
 
-        public Error(Message message, Exception exception) {
+        public Error(Message message, Exception e) {
             super(message);
-            this.exception = exception;
+            this.exceptionMessage = e.getMessage();
         }
     }
 }
