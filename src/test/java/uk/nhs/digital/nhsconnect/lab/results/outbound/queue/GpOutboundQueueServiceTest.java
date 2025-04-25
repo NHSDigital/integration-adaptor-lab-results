@@ -22,9 +22,9 @@ import uk.nhs.digital.nhsconnect.lab.results.model.enums.MessageType;
 import uk.nhs.digital.nhsconnect.lab.results.utils.CorrelationIdService;
 import uk.nhs.digital.nhsconnect.lab.results.utils.JmsHeaders;
 
-import javax.jms.JMSException;
-import javax.jms.Session;
-import javax.jms.TextMessage;
+import jakarta.jms.JMSException;
+import jakarta.jms.Session;
+import jakarta.jms.TextMessage;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.junit.jupiter.api.Assertions.assertAll;
