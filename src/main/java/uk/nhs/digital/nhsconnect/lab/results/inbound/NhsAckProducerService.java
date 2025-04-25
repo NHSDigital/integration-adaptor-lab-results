@@ -40,7 +40,7 @@ public class NhsAckProducerService {
 
     private final SequenceService sequenceService;
 
-    private Mustache nhsAckTemplate = loadTemplate("nhsAck.mustache");
+    private final Mustache nhsAckTemplate = loadTemplate("nhsAck.mustache");
 
     public String createNhsAckEdifact(Interchange interchange,
                                       List<MessageProcessingResult> messageProcessingResults) {
@@ -76,7 +76,7 @@ public class NhsAckProducerService {
                     .messageNumber(messageHeader.getSequenceNumber())
                     .messageStatus(MESSAGE_REJECTED_STATUS_CODE)
                     .messageError(true)
-                    .messageErrorDescription(currentMessageResult.getException().getMessage())
+                    .messageErrorDescription(currentMessageResult.getExceptionMessage())
                     .build();
                 rejectedMessages++;
             } else {

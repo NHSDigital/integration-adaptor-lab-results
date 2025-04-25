@@ -3,8 +3,8 @@ package uk.nhs.digital.nhsconnect.lab.results.utils;
 import org.apache.qpid.jms.message.JmsBytesMessage;
 import org.apache.qpid.jms.message.JmsTextMessage;
 
-import javax.jms.JMSException;
-import javax.jms.Message;
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
