@@ -16,7 +16,11 @@ public abstract class MessageProcessingResult {
 
         public Success(Message message, Bundle bundle) {
             super(message);
-            this.bundle = bundle.copy();
+            if (bundle == null) {
+                this.bundle = null;
+            } else {
+                this.bundle = bundle.copy();
+            }
         }
     }
 
