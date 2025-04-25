@@ -19,7 +19,7 @@ public abstract class MessageProcessingResult {
 
         public Success(Message message, Bundle bundle) {
             super(message);
-            this.bundle = bundle.copy();
+            this.bundle = bundle;
         }
     }
 
