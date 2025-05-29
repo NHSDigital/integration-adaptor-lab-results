@@ -12,11 +12,13 @@ jobs:
   generate-build-id:
     name: "Generate Build Id"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       build-id: ${{ steps.generate.outputs.buildId }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - id: generate
         working-directory: ./scripts
@@ -40,6 +42,8 @@ jobs:
     name: "Tests"
     needs: [ generate-build-id ]
     uses: ./.github/workflows/test.yml
+    permissions:
+      contents: read
     with:
       name: Lab Results Adaptor
       path: ./
@@ -49,6 +53,9 @@ jobs:
   publish-docker-images:
     name: "Publish docker images to ECR"
     needs: [ generate-build-id, tests ]
+    permissions:
+      id-token: write
+      contents: read
     strategy:
       matrix:
         config:
@@ -64,16 +71,17 @@ jobs:
     name: "Create Build ID Comment"
     needs: [ generate-build-id, publish-docker-images ]
     continue-on-error: true
-    permissions: write-all
+    permissions:
+      pull-requests: write
     runs-on: [ ubuntu-latest ]
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
       - name: Comment PR
-        uses: thollander/actions-comment-pull-request@v3
+        uses: thollander/actions-comment-pull-request@24bffb9b452ba05a4f3f77933840a6a841d1b32b # v3.0.1
         with:
           message: |
             Images built and published to ECR using a Build Id of ${{ needs.generate-build-id.outputs.build-id }}
-          comment_tag: images-built
+          comment-tag: images-built
           mode: upsert
-
