@@ -22,7 +22,7 @@ and replies with an `NHS001` (NHSACK) message if requested.
 Adaptor downloads EDIFACT messages from MESH mailbox (`PATH_MEDRPT_V3` and `SCRN_BCS_MEDRPT_V4` MESH workflows) using MESH Client component and puts them on an internal `Inbound MESH Queue`. The Message Translator component fetches messages off the queue, translates the EDIFACT into FHIR format and puts the result onto the `Outbound GP Queue` where other GP Supplier apps can consume medical reports from.
 In the end, if the EDIFACT Interchange Header has requested such, an NHSACK confirmation will be sent back to the laboratory MESH mailbox.
 
-The [Integration Adaptors Github repository](https://github.com/nhsconnect/integration-adaptors) contains an example deployment configuration into AWS infrastructure. For EDIFACT messages with size less than 1 MB, performance tests were executed on AWS Fargate with task memory (MiB)4096 and task CPU (unit)1024.
+The [Integration Adaptors Github repository](https://github.com/nhsconnect/integration-adaptors FIXME: repo link is archived, must be replaced) contains an example deployment configuration into AWS infrastructure. For EDIFACT messages with size less than 1 MB, performance tests were executed on AWS Fargate with task memory (MiB)4096 and task CPU (unit)1024.
 It is recommended to have more than 1 instance of the adaptor running in a cluster for failover purposes.
 
 Autoscaling tests have been performed using min=1 and max=6 instances Fargate cluster setup and CPU threshold as scale up/down trigger.
@@ -85,7 +85,7 @@ In rare cases, the adaptor can produce duplicate messages on the `Outbound GP Qu
 
 ## Integrating with the adaptor
 
-When using the adaptor, the GP Supplier will receive medical reports on the `Outbound GP Queue` ([AMQP 1.0](https://www.amqp.org/resources/specifications)) in the form of a [FHIR STU3](https://digital.nhs.uk/developer/guides-and-documentation/api-technologies-at-nhs-digital#fhir) Bundle resources. Examples can be found [here](#examples)
+When using the adaptor, the GP Supplier will receive medical reports on the `Outbound GP Queue` ([AMQP 1.0](https://www.amqp.org/resources/specifications) FIXME: link must be updated, triggers privacy error in Chrome) in the form of a [FHIR STU3](https://digital.nhs.uk/developer/guides-and-documentation/api-technologies-at-nhs-digital#fhir) Bundle resources. Examples can be found [here](#examples)
 
 ### Outbound GP Queue specification
 
@@ -103,10 +103,11 @@ Each example is built from 2 files:
 - `<example-id>.edifact.dat` - EDIFACT message provided by the laboratory
 - `<example-id>.fhir.json` - message translated to FHIR format
 
-Example input EDIFACT files can be found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/edifact) with the corresponding FHIR translations found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/fhir)
+Example input EDIFACT files can be found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/edifact) with the corresponding FHIR translations found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/fhir).
 
-Pathology examples can be found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/success_uat_data/NHS003)
-Screening examples can be found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/success_uat_data/NHS004)
+Pathology examples can be found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/success_uat_data/NHS003).
+
+Screening examples can be found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/success_uat_data/NHS004).
 
 ## Resources
 
@@ -116,11 +117,11 @@ Screening examples can be found [here](https://github.com/nhsconnect/integration
 
 [Bowel Cancer Screening - EDIFACT API](https://digital.nhs.uk/developer/api-catalogue/bowel-cancer-screening-edifact)
 
-[Pathology & Diagnostics Information Standards Collaboration Space](https://hscic.kahootz.com/connect.ti/PathologyandDiagnostics/groupHome)
+[Pathology & Diagnostics Information Standards Collaboration Space](https://nhsengland.kahootz.com/connect.ti/PathologyandDiagnostics/groupHome)
 
 [National Pathology FHIR Messaging Specifications](https://developer.nhs.uk/apis/itk3nationalpathology-1-1-0/index.html)
 
-[Messaging Specification](https://hscic.kahootz.com/connect.ti/PathologyandDiagnostics/view?objectId=13046960#13046960)
+[Messaging Specification](https://nhsengland.kahootz.com/connect.ti/PathologyandDiagnostics/view?objectId=13046960#13046960)
 
 [EDIFACT Specification](https://webarchive.nationalarchives.gov.uk/20150107145848/http:/www.isb.nhs.uk/documents/isb-1557/amd-39-2003)
 
@@ -146,7 +147,7 @@ Due to the nature of EDIFACT messages, following discrepancies between FHIR prof
 
 ## Configuration
 
-All configuration options can be found in the [application.yml](/src/main/resources/application.yml) file. The adaptor reads its configuration from environment variables to override the defaults. The following sections describe the environment variables used to configure the adaptor. 
+All configuration options can be found in the [application.yml](src/main/resources/application.yml) file. The adaptor reads its configuration from environment variables to override the defaults. The following sections describe the environment variables used to configure the adaptor.
 
 Variables without a default value and not marked optional *MUST* be defined for the adaptor to run.
 
