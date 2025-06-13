@@ -116,11 +116,11 @@ Screening examples can be found [here](https://github.com/nhsconnect/integration
 
 [Bowel Cancer Screening - EDIFACT API](https://digital.nhs.uk/developer/api-catalogue/bowel-cancer-screening-edifact)
 
-[Pathology & Diagnostics Information Standards Collaboration Space](https://hscic.kahootz.com/connect.ti/PathologyandDiagnostics/groupHome)
+[Pathology & Diagnostics Information Standards Collaboration Space](https://nhsengland.kahootz.com/connect.ti/PathologyandDiagnostics/groupHome)
 
 [National Pathology FHIR Messaging Specifications](https://developer.nhs.uk/apis/itk3nationalpathology-1-1-0/index.html)
 
-[Messaging Specification](https://hscic.kahootz.com/connect.ti/PathologyandDiagnostics/view?objectId=13046960#13046960)
+[Messaging Specification](https://nhsengland.kahootz.com/connect.ti/PathologyandDiagnostics/view?objectId=13046960#13046960)
 
 [EDIFACT Specification](https://webarchive.nationalarchives.gov.uk/20150107145848/http:/www.isb.nhs.uk/documents/isb-1557/amd-39-2003)
 
