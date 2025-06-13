@@ -103,10 +103,11 @@ Each example is built from 2 files:
 - `<example-id>.edifact.dat` - EDIFACT message provided by the laboratory
 - `<example-id>.fhir.json` - message translated to FHIR format
 
-Example input EDIFACT files can be found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/edifact) with the corresponding FHIR translations found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/fhir)
+Example input EDIFACT files can be found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/edifact) with the corresponding FHIR translations found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/fhir).
 
-Pathology examples can be found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/success_uat_data/NHS003)
-Screening examples can be found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/success_uat_data/NHS004)
+Pathology examples can be found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/success_uat_data/NHS003).
+
+Screening examples can be found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/success_uat_data/NHS004).
 
 ## Resources
 
@@ -146,7 +147,7 @@ Due to the nature of EDIFACT messages, following discrepancies between FHIR prof
 
 ## Configuration
 
-All configuration options can be found in the [application.yml](/src/main/resources/application.yml) file. The adaptor reads its configuration from environment variables to override the defaults. The following sections describe the environment variables used to configure the adaptor. 
+All configuration options can be found in the [application.yml](src/main/resources/application.yml) file. The adaptor reads its configuration from environment variables to override the defaults. The following sections describe the environment variables used to configure the adaptor.
 
 Variables without a default value and not marked optional *MUST* be defined for the adaptor to run.
 
