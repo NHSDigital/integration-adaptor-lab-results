@@ -22,7 +22,7 @@ and replies with an `NHS001` (NHSACK) message if requested.
 Adaptor downloads EDIFACT messages from MESH mailbox (`PATH_MEDRPT_V3` and `SCRN_BCS_MEDRPT_V4` MESH workflows) using MESH Client component and puts them on an internal `Inbound MESH Queue`. The Message Translator component fetches messages off the queue, translates the EDIFACT into FHIR format and puts the result onto the `Outbound GP Queue` where other GP Supplier apps can consume medical reports from.
 In the end, if the EDIFACT Interchange Header has requested such, an NHSACK confirmation will be sent back to the laboratory MESH mailbox.
 
-The [Integration Adaptors Github repository](https://github.com/nhsconnect/integration-adaptors) contains an example deployment configuration into AWS infrastructure. For EDIFACT messages with size less than 1 MB, performance tests were executed on AWS Fargate with task memory (MiB)4096 and task CPU (unit)1024.
+The [Integration Adaptors Github repository](https://github.com/nhsconnect/integration-adaptors FIXME: repo link is archived, must be replaced) contains an example deployment configuration into AWS infrastructure. For EDIFACT messages with size less than 1 MB, performance tests were executed on AWS Fargate with task memory (MiB)4096 and task CPU (unit)1024.
 It is recommended to have more than 1 instance of the adaptor running in a cluster for failover purposes.
 
 Autoscaling tests have been performed using min=1 and max=6 instances Fargate cluster setup and CPU threshold as scale up/down trigger.
@@ -85,7 +85,7 @@ In rare cases, the adaptor can produce duplicate messages on the `Outbound GP Qu
 
 ## Integrating with the adaptor
 
-When using the adaptor, the GP Supplier will receive medical reports on the `Outbound GP Queue` ([AMQP 1.0](https://www.amqp.org/resources/specifications)) in the form of a [FHIR STU3](https://digital.nhs.uk/developer/guides-and-documentation/api-technologies-at-nhs-digital#fhir) Bundle resources. Examples can be found [here](#examples)
+When using the adaptor, the GP Supplier will receive medical reports on the `Outbound GP Queue` ([AMQP 1.0](https://www.amqp.org/resources/specifications) FIXME: link must be updated, triggers privacy error in Chrome) in the form of a [FHIR STU3](https://digital.nhs.uk/developer/guides-and-documentation/api-technologies-at-nhs-digital#fhir) Bundle resources. Examples can be found [here](#examples)
 
 ### Outbound GP Queue specification
 
