@@ -390,8 +390,8 @@ Notice that depending on the `lab-result` configuration, it can take several sec
 
 To view data in MongoDB:
 
-* Download [Robo 3T](https://robomongo.org/)
-* Open Robo 3T -> Create new connection with details as below:
+* Download Studio 3T. Depending on your use case, you can choose between the [Professional Edition](https://studio3t.com/) and the [Community Edition](https://robomongo.org/) (formerly Robo 3T, Robomongo).
+* Open Studio 3T -> Create new connection with details as below:
     * Type: Direct Connection
     * Name: labresults
     * Address: localhost : 27017
