@@ -20,7 +20,7 @@ will send the content of a file located at `../src/intTest/resources/edifact/pat
 
 ## Sending EDIFACT to `Inbound MESH Queue`
 
-Use the ["A" application](https://github.com/fmtn/a) which is an AMQP client allowing you to send messages directly to `Inbound MESH Queue`. Java 11 required.
+Use the ["A" application](https://github.com/fmtn/a) which is an AMQP client allowing you to send messages directly to `Inbound MESH Queue`. Java 21 required.
 
 Wrap any Med Report EDIFACT message into json (example: [pathology_3.edifact.dat](`../src/intTest/resources/edifact/pathology_3.edifact.dat`)) as follows:
 ```json
