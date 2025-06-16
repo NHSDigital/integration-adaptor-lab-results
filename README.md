@@ -206,7 +206,7 @@ Option 2: If `LAB_RESULTS_MONGO_HOST` is undefined then the adaptor uses the con
 
 These optional properties configure a trust store with private CA certificates. This trust store does not replace Java's
 default trust store. At runtime the application adds these additional certificates to the default trust store. See
-[OPERATING.md - AWS DocumentDB TLS configuration](OPERATING.md#AWSDocumentDBTLSconfiguration) for more information.
+[OPERATING.md - AWS DocumentDB TLS configuration](OPERATING.md#aws-documentdb-tls-configuration) for more information.
 
 | Environment Variable                 | Default | Description                                                                           |
 |--------------------------------------|---------|---------------------------------------------------------------------------------------|
