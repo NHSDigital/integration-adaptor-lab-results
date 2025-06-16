@@ -77,7 +77,7 @@ Once the message is on the `Inbound MESH Queue` the Message Translator component
 
 ### Logging and debugging
 
-Adaptor provides detailed logs while processing each EDIFACT. Each EDIFACT that goes through the adapter is given a new randomly generated `CorrelationId`. This value is available in every log line that is created while processing that EDIFACT and also as an AMQP header (check [here](#outbound-gp-queue-specification)) on the `Outbound GP Queue`.
+Adaptor provides detailed logs while processing each EDIFACT. Each EDIFACT that goes through the adaptor is given a new randomly generated `CorrelationId`. This value is available in every log line that is created while processing that EDIFACT and also as an AMQP header (check [here](#outbound-gp-queue-specification)) on the `Outbound GP Queue`.
 
 ### Duplicates
 
