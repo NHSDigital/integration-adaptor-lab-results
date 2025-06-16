@@ -15,7 +15,7 @@ export SHARED_KEY=''
 # (optional) path to the file containing the MESH private key.
 #export MESH_ENDPOINT_PRIVATE_KEY=''
 
-# (optional) path the file containg the MESH endpoint certificate.
+# (optional) path to the file containing the MESH endpoint certificate.
 #export MESH_ENDPOINT_CERT=''
 
 # (optional) provide different flags / options for the curl command
