@@ -416,10 +416,12 @@ The `release/tests/send_message.sh` is a test script that sends an [example](htt
 
 #### Fake MESH
 
-A mock implementation of the MESH API is available for local development. The latest version is in GitHub at
-[mattd-kainos/fake-mesh](https://github.com/jamespic/fake-mesh). _It is a fork of [jamespic/fake-mesh](https://github.com/jamespic/fake-mesh)._
+A mock implementation of the MESH API is available for local development. The latest version was originally available in GitHub at
+[mattd-kainos/fake-mesh](https://github.com/mattd-kainos/fake-mesh). It was a fork of [jamespic/fake-mesh](https://github.com/jamespic/fake-mesh).
 
 The [nhsdev Docker Hub](https://hub.docker.com/repository/docker/nhsdev/fake-mesh) hosts released fake-mesh images.
+
+The fake-mesh project is no longer being actively maintained in GitHub, please see [mesh-sandbox](https://github.com/NHSDigital/mesh-sandbox) instead which provides a locally testable version of MESH and is maintained by the MESH team.
 
 ### Coding Standards
 
