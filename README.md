@@ -85,7 +85,7 @@ In rare cases, the adaptor can produce duplicate messages on the `Outbound GP Qu
 
 ## Integrating with the adaptor
 
-When using the adaptor, the GP Supplier will receive medical reports on the `Outbound GP Queue` ([AMQP 1.0](https://www.oasis-open.org/standard/amqp/)) in the form of a [FHIR STU3](https://digital.nhs.uk/developer/guides-and-documentation/api-technologies-at-nhs-digital#fhir) Bundle resources. Examples can be found [here](#examples)
+When using the adaptor, the GP Supplier will receive medical reports on the `Outbound GP Queue` ([AMQP 1.0](https://www.oasis-open.org/standard/amqp/)) in the form of a [FHIR STU3](https://digital.nhs.uk/developer/guides-and-documentation/api-technologies-at-nhs-digital#fhir) Bundle resources. Examples can be found [here](#examples).
 
 ### Outbound GP Queue specification
 
@@ -240,13 +240,13 @@ adaptor will download and acknowledge up to "the first 500 messages" (a MESH API
 Important: If the MESH mailbox uses workflows other than `PATH_MEDRPT_V3`
 and `SCRN_BCS_MEDRPT_V4`, then these messages must be downloaded and acknowledged by some other means in a timely manner.
 The adaptor will skip messages with other workflow ids leaving them in the inbox. If more than 500 "other" messages
-accumulate the adaptor wil no longer receive new inbound GP Links messages.
+accumulate, the adaptor wil no longer receive new inbound GP Links messages.
 
 | Environment Variable                                       | Default | Description                                                                                                                              |
 |------------------------------------------------------------|---------|------------------------------------------------------------------------------------------------------------------------------------------|
 | LAB_RESULTS_MESH_CLIENT_WAKEUP_INTERVAL_IN_MILLISECONDS    | 60000   | The time period (in milliseconds) between when each adaptor instance "wakes up" and attempts to obtain the lock to start a polling cycle |
 | LAB_RESULTS_MESH_POLLING_CYCLE_MINIMUM_INTERVAL_IN_SECONDS | 300     | The minimum time period (in seconds) between MESH polling cycles                                                                         |
-| LAB_RESULTS_MESH_POLLING_CYCLE_DURATION_IN_SECONDS         | 285     | The duration (in seconds) fo the MESH polling cycle                                                                                      |
+| LAB_RESULTS_MESH_POLLING_CYCLE_DURATION_IN_SECONDS         | 285     | The duration (in seconds) for the MESH polling cycle                                                                                     |
 
 The MESH API specifies that a MESH mailbox should be checked "a maximum of once every five minutes". The variable
 `LAB_RESULTS_MESH_POLLING_CYCLE_MINIMUM_INTERVAL_IN_SECONDS` controls how often the adaptor will check its mailbox for new
@@ -367,7 +367,7 @@ Run test script:
     cd ./release/tests
     ./send_message.sh
 
-that will send an [example EDIFACT message](https://github.com/nhsconnect/integration-adaptor-lab-results/blob/main/src/intTest/resources/edifact/pathology.edifact.dat) to the `fake-mesh` container. The `lab-results` container app will fetch this message and put the translated to FHIR format result on the `activemq` container's `lab_results_gp_outbound` queue.
+that will send an [example EDIFACT message](https://github.com/nhsconnect/integration-adaptor-lab-results/blob/main/src/intTest/resources/edifact/pathology_3.edifact.dat) to the `fake-mesh` container. The `lab-results` container app will fetch this message and put the translated to FHIR format result on the `activemq` container's `lab_results_gp_outbound` queue.
 Check [ActiveMQ admin console](http://localhost:8161/admin/queues.jsp) (user: admin, password: admin) to download the result which will match the [example FHIR message](https://github.com/nhsconnect/integration-adaptor-lab-results/blob/main/src/intTest/resources/fhir/pathology.fhir.json). Additionally `mesh/mesh.sh` can be used to fetch the generated NHSACK from `fake-mesh`.
 
 Notice that depending on the `lab-result` configuration, it can take several seconds until `fake-mesh` is scanned for new messages.
