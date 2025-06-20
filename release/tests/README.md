@@ -43,3 +43,7 @@ Checking mailbox for matching NHSACK
 Test passed!!! Found 1 matching NHSACK
 Sending ACK for message 20210326133339652775_000000144
 ```
+
+After setting the CURL_FLAGS variable above, always remove it using `unset CURL_FLAGS` when you're done with the specific task.
+Alternatively, you can close the terminal and open a new session.
+The -k flag allows insecure server connections and poses a security risk if left active.

@@ -1,6 +1,6 @@
 # MESH Command Line Tool
 
-A command line tool to use with [NHS Digital's MESH API](https://meshapi.docs.apiary.io/) for testing purposes.
+A command line tool to use with [NHS Digital's MESH API](https://digital.nhs.uk/developer/api-catalogue/message-exchange-for-social-care-and-health-api) for testing purposes.
 
 ## Setup
 
