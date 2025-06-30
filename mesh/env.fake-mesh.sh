@@ -16,7 +16,7 @@ export HOST='localhost:8829'
 # path to the file containing the fake-mesh private key.
 export MESH_ENDPOINT_PRIVATE_KEY="./fakemesh.ca.key.pem"
 
-# path the file containg the fake-mesh endpoint certificate.
+# path the file containing the fake-mesh endpoint certificate.
 export MESH_ENDPOINT_CERT="./fakemesh.ca.cert.pem"
 
 # (optional) provide different flags / options for the curl command

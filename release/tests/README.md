@@ -31,7 +31,7 @@ The MESH client script that runs is called `mesh_connectivity.py` and is located
 After `15` seconds (as inputted in the 4th CLI argument), the script will check the `lab_results_gp_outbound` MESH queue for expected NHSACK messages, if any.
 
 ```bash
-source /test/integration-adaptor-lab-results/mesh/env.fake-mesh.sh
+source integration-adaptor-lab-results/mesh/env.fake-mesh.sh
 export CURL_FLAGS="-s -S -k"
 cd release/tests
 python3 mesh_connectivity.py "../../mesh/" "lab_results_mailbox" "lab_results_ack_mailbox" 15 "../../src/intTest/resources/edifact/pathology_3.edifact.dat"  

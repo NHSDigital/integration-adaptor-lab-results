@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+source env.fake-mesh.sh
 MAILBOX_ID="$2"
 TO_MAILBOX=${TO_MAILBOX:-${MAILBOX_ID}}
 TOKEN=''

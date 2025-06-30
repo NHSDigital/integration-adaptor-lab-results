@@ -28,6 +28,10 @@ Predefined fake mesh values:
 
     source env.fake-mesh.sh
 
+Please note: We've added a line for sourcing predefined mesh values to both the `./mesh.sh` and `../release/tests/send_message.sh` scripts.
+
+You'll need to adjust this line to load the correct environment variables as described above.
+
 ### Authenticate
 
 MESH API docs says to do this first, but in our experience it seems that it's not needed.
@@ -48,7 +52,7 @@ Send a message with message content provided on the command line
     
 Send 3 messages with message content provided by a file
 
-    ./mesh.sh send [mailbox_id] "@../src/intTest/resources/edifact/pathology.dat" 3
+    ./mesh.sh send [mailbox_id] "@../src/intTest/resources/edifact/pathology_3.edifact.dat" 3
 
 [count] parameter indicates how many messages to send
     
