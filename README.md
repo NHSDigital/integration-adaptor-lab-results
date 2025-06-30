@@ -368,7 +368,7 @@ Run test script:
     ./send_message.sh
 
 that will send an [example EDIFACT message](https://github.com/nhsconnect/integration-adaptor-lab-results/blob/main/src/intTest/resources/edifact/pathology_3.edifact.dat) to the `fake-mesh` container. The `lab-results` container app will fetch this message and put the translated to FHIR format result on the `activemq` container's `lab_results_gp_outbound` queue.
-Check [ActiveMQ admin console](http://localhost:8161/admin/queues.jsp) (user: admin, password: admin) to download the result which will match the [example FHIR message](https://github.com/nhsconnect/integration-adaptor-lab-results/blob/main/src/intTest/resources/fhir/pathology.fhir.json). Additionally `mesh/mesh.sh` can be used to fetch the generated NHSACK from `fake-mesh`.
+Check [ActiveMQ admin console](http://localhost:8161/admin/queues.jsp) (user: admin, password: admin) to download the result which will match the [example FHIR message](https://github.com/nhsconnect/integration-adaptor-lab-results/blob/main/src/intTest/resources/fhir/pathology_3.fhir.json). Additionally `mesh/mesh.sh` can be used to fetch the generated NHSACK from `fake-mesh`.
 
 Notice that depending on the `lab-result` configuration, it can take several seconds until `fake-mesh` is scanned for new messages.
 
@@ -411,8 +411,8 @@ To view messages in the ActiveMQ Web Console:
 
 #### MESH API
 
-A `mesh.sh` bash script exists for testing or debugging MESH. For more information see: [mesh/README.md](/mesh/README.md)
-The `release/tests/send_message.sh` is a test script that sends an [example](https://github.com/nhsconnect/integration-adaptor-lab-results/blob/main/src/intTest/resources/edifact/pathology.edifact.dat) message to MESH mailbox.
+A `mesh.sh` bash script exists for testing or debugging MESH. For more information see: [mesh/README.md](./mesh/README.md).
+The `release/tests/send_message.sh` is a test script that sends an [example](https://github.com/nhsconnect/integration-adaptor-lab-results/blob/main/src/intTest/resources/edifact/pathology_3.edifact.dat) message to MESH mailbox.
 
 #### Fake MESH
 
@@ -421,7 +421,7 @@ A mock implementation of the MESH API is available for local development. The la
 
 The [nhsdev Docker Hub](https://hub.docker.com/repository/docker/nhsdev/fake-mesh) hosts released fake-mesh images.
 
-The fake-mesh project is no longer being actively maintained in GitHub, please see [mesh-sandbox](https://github.com/NHSDigital/mesh-sandbox) instead which provides a locally testable version of MESH and is maintained by the MESH team.
+Note: The fake-mesh project is no longer being actively maintained in GitHub, please see [mesh-sandbox](https://github.com/NHSDigital/mesh-sandbox) instead which provides a locally testable version of MESH and is maintained by the MESH team.
 
 ### Coding Standards
 
