@@ -105,6 +105,8 @@ Each example is built from 2 files:
 
 Example input EDIFACT files can be found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/edifact) with the corresponding FHIR translations found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/fhir).
 
+Additional example EDIFACT messages, including 14 pathology, 1 radiology, and 1 screening message, are available in the Documentation folder [here](https://github.com/NHSDigital/integration-adaptor-lab-results/tree/main/documentation/example-edifact).
+
 Pathology examples can be found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/success_uat_data/NHS003).
 
 Screening examples can be found [here](https://github.com/nhsconnect/integration-adaptor-lab-results/tree/main/src/intTest/resources/success_uat_data/NHS004).
