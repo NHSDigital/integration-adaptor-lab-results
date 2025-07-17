@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+source env.fake-mesh.sh
 MAILBOX_ID="$2"
 TO_MAILBOX=${TO_MAILBOX:-${MAILBOX_ID}}
 TOKEN=''
@@ -77,7 +77,11 @@ then
   inbox
 elif [ "$1" = "send" ]
 then
-  send "$3"
+  count=${4:-1}
+  for ((i=1; i<=count; i++)); do
+    create_token
+    send "$3"
+  done
 elif [ "$1" = "download" ]
 then
   download "$3"

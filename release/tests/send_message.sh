@@ -7,5 +7,6 @@ NC='\033[0m'
 
 cd ./../../mesh
 
+source env.fake-mesh.sh
 echo -e "${LIGHT_GREEN}Sending test edifact message to fake mesh${NC}"
 ./mesh.sh send lab_results_mailbox "@./../src/intTest/resources/edifact/pathology_3.edifact.dat"

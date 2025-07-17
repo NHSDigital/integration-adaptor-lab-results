@@ -23,8 +23,12 @@ class MeshClient:
 
     def download_message(self, mailbox, message_id):
         result = self._invoke_command('download', mailbox, message_id)
+        print("Downloading message " + message_id)
         if not result:
             raise Exception("Downloading message " + message_id + " yield no result")
+        print("Message downloaded SUCCESSFULLY!")
+        print(*result)
+
         return result
 
     def ack_message(self, mailbox, message_id):
