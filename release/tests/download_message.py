@@ -1,44 +1,53 @@
-from proton import Message, Timeout
-from proton.utils import BlockingConnection
-from proton.reactor import DurableSubscription
+from __future__ import print_function
 
+import sys
 
-class BlockingQueueAdaptor(object):
-    """
-    Allows blocking reads from an AMQP message queue
-    """
+from proton.handlers import MessagingHandler
+from proton.reactor import Container
 
-    def __init__(self):
-        self.username = 'admin'
-        self.password = 'admin'
-        self.queue_url = queue_url
-        self.queue_name = queue_name
-        print(self.get_next_message_on_queue())
+class ReceiveHandler(MessagingHandler):
+    def __init__(self, conn_url, address, desired):
+        super(ReceiveHandler, self).__init__()
 
-    def get_next_message_on_queue(self) -> Message:
-        """
-        Gets the next message from the queue
-        :return: Message read from queue
-        """
-        connection = BlockingConnection(self.queue_url, user=self.username, password=self.password)
-        receiver = connection.create_receiver(self.queue_name, options=DurableSubscription())
-        message = receiver.receive(timeout=30)
-        receiver.accept()
-        connection.close()
+        self.conn_url = conn_url
+        self.address = address
+        self.desired = desired
+        self.received = 0
 
-        return message
+    def on_start(self, event):
+        conn = event.container.connect(self.conn_url)
 
-    def drain(self):
-        """
-        Drain the queue to prevent test failures caused by previous failing tests not ack'ing all of their messages
-        """
-        connection = BlockingConnection(self.queue_url, user=self.username, password=self.password)
-        receiver = connection.create_receiver(self.queue_name, options=DurableSubscription())
-        try:
-            while True:
-                receiver.receive(timeout=1)
-                receiver.accept()
-        except Timeout:
-            pass
-        finally:
-            connection.close()
+        # To connect with a user and password:
+        # conn = event.container.connect(self.conn_url, user="<user>", password="<password>")
+
+        event.container.create_receiver(conn, self.address)
+
+    def on_link_opened(self, event):
+        print("RECEIVE: Created receiver for source address '{0}'".format
+              (self.address))
+
+    def on_message(self, event):
+        message = event.message
+        print("RECEIVE: Received message '{0}'".format(message.body))
+        quit()
+
+def main():
+    try:
+        conn_url, address = sys.argv[1:3]
+    except ValueError:
+        sys.exit("Usage: receive.py <connection-url> <address> [<message-count>]")
+
+    try:
+        desired = int(sys.argv[3])
+    except (IndexError, ValueError):
+        desired = 0
+
+    handler = ReceiveHandler(conn_url, address, desired)
+    container = Container(handler)
+    container.run()
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        pass
