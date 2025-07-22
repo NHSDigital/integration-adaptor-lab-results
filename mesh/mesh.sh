@@ -22,7 +22,6 @@ create_token() {
   hash_content="${MAILBOX_ID}:${nonce}:${nonce_count}:${MAILBOX_PASSWORD}:${timestamp}"
   hash_value=$(echo -n "${hash_content}" | openssl dgst -sha256 -hmac "${SHARED_KEY}" | sed 's/^.* //')
   TOKEN="NHSMESH ${MAILBOX_ID}:${nonce}:${nonce_count}:${timestamp}:${hash_value}"
-  echo "$TOKEN"
 }
 
 authorization() {
@@ -53,17 +52,10 @@ send() {
 download() {
   local message_id
   message_id=$1
-  test=$(curl ${CURL_FLAGS} -X GET "https://${HOST}/messageexchange/${MAILBOX_ID}/inbox/${message_id}" \
+  curl ${CURL_FLAGS} -X GET "https://${HOST}/messageexchange/${MAILBOX_ID}/inbox/${message_id}" \
     --cert "${MESH_ENDPOINT_CERT}" --key "${MESH_ENDPOINT_PRIVATE_KEY}" -H "Authorization: ${TOKEN}" \
     -H 'Mex-ClientVersion: 1.0' -H 'Mex-JavaVersion: 1.7.0_60' -H 'Mex-OSArchitecture: Windows 7' \
-    -H 'Mex-OSName: x86' -H 'Mex-OSVersion: 6.1')
-
-  echo "curl ${CURL_FLAGS} -X GET \"https://${HOST}/messageexchange/${MAILBOX_ID}/inbox/${message_id}\" \
-           --cert \"${MESH_ENDPOINT_CERT}\" --key \"${MESH_ENDPOINT_PRIVATE_KEY}\" -H \"Authorization: ${TOKEN}\" \
-           -H 'Mex-ClientVersion: 1.0' -H 'Mex-JavaVersion: 1.7.0_60' -H 'Mex-OSArchitecture: Windows 7' \
-           -H 'Mex-OSName: x86' -H 'Mex-OSVersion: 6.1'"
-  echo $test
-  create_token
+    -H 'Mex-OSName: x86' -H 'Mex-OSVersion: 6.1'
 }
 
 ack() {
