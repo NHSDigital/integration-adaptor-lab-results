@@ -25,13 +25,13 @@ After setting the CURL_FLAGS variable above, always remove it using `unset CURL_
 Alternatively, you can close the terminal and open a new session.
 
 ### Example
-This example bash script will send the test message file located at `/integration-adaptor-lab-results/src/intTest/resources/edifact/pathology_3.edifact.dat` 
+This example bash script will send the test message file located at `./src/intTest/resources/edifact/pathology_3.edifact.dat` 
 to the MESH mailbox `lab_results_ack_mailbox` found in `localhost:8161`.
-The MESH client script that runs is called `mesh_connectivity.py` and is located at `/integration-adaptor-lab-results/release/tests`.
+The MESH client script that runs is called `mesh_connectivity.py` and is located at `./release/tests`.
 After `15` seconds (as inputted in the 4th CLI argument), the script will check the `lab_results_gp_outbound` MESH queue for expected NHSACK messages, if any.
 
 ```bash
-source integration-adaptor-lab-results/mesh/env.fake-mesh.sh
+source ./mesh/env.fake-mesh.sh
 export CURL_FLAGS="-s -S -k"
 cd release/tests
 python3 mesh_connectivity.py "../../mesh/" "lab_results_mailbox" "lab_results_ack_mailbox" 15 "../../src/intTest/resources/edifact/pathology_3.edifact.dat"  
