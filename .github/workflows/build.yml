@@ -56,14 +56,10 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    strategy:
-      matrix:
-        config:
-          - repository: lab-results
     uses: ./.github/workflows/publish.yml
     with:
       repository: ${{ matrix.config.repository }}
-      build-id: ${{ needs.generate-build-id.outputs.build-id }}
+      build-id: lab-results
     secrets: inherit
 
   comment:
