@@ -19,7 +19,7 @@ management:
 spring:
   jms:
     listener:
-      acknowledge-mode: CLIENT
+      session.acknowledge-mode: client
 
 labresults:
   trustStoreUrl: ${LAB_RESULTS_SSL_TRUST_STORE_URL:}

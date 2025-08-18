@@ -1,8 +1,8 @@
 package uk.nhs.digital.nhsconnect.lab.results.mesh;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.StopWatch;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -43,7 +43,9 @@ public class MeshService {
 
     private final long pollingCycleDurationInSeconds;
 
-    @Autowired
+    // suppress this warning as it appears to be a false positive for the parameter dependency injection
+    // of MeshInboundQueueService.
+    @SuppressFBWarnings("EI_EXPOSE_REP2")
     public MeshService(
         MeshClient meshClient,
         MeshInboundQueueService meshInboundQueueService,

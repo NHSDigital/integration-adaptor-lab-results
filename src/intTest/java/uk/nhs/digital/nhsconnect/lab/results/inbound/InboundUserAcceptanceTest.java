@@ -17,7 +17,7 @@ import uk.nhs.digital.nhsconnect.lab.results.uat.common.SuccessArgumentsProvider
 import uk.nhs.digital.nhsconnect.lab.results.uat.common.TestData;
 import uk.nhs.digital.nhsconnect.lab.results.utils.JmsHeaders;
 
-import javax.jms.Message;
+import jakarta.jms.Message;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;

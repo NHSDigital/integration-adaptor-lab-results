@@ -44,7 +44,7 @@ public class ProcedureRequestMapper {
     }
 
     @RequiredArgsConstructor
-    private class InternalMapper {
+    private final class InternalMapper {
         private final Message message;
         private final Patient patient;
         private final Practitioner requestingPractitioner;
