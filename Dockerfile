@@ -11,6 +11,8 @@ EXPOSE 8080
 
 RUN mkdir /app
 
-COPY --from=build /home/gradle/src/build/libs/integration-adaptor-lab-results.jar /app/integration-adaptor-lab-results.jar
+COPY --from=build /home/gradle/src/build/libs/*.jar /app/integration-adaptor-lab-results.jar
 
-ENTRYPOINT ["java", "-cp", "/app/integration-adaptor-lab-results.jar", "-Dloader.main=uk.nhs.digital.nhsconnect.lab.results.IntegrationAdapterLabResultsApplication", "org.springframework.boot.loader.launch.PropertiesLauncher"]
+USER 65534
+
+ENTRYPOINT ["java", "-XX:+UnlockExperimentalVMOptions", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app/integration-adaptor-lab-results.jar"]
