@@ -58,8 +58,8 @@ jobs:
       contents: read
     uses: ./.github/workflows/publish.yml
     with:
-      repository: ${{ matrix.config.repository }}
-      build-id: lab-results
+      repository: lab-results
+      build-id: ${{ needs.generate-build-id.outputs.build-id }}
     secrets: inherit
 
   comment:
