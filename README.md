@@ -207,6 +207,7 @@ Option 2: If `LAB_RESULTS_MONGO_HOST` is undefined then the adaptor uses the con
 **Trust Store Configuration**
 
 These optional properties configure a trust store with private CA certificates. This trust store does not replace Java's
+
 default trust store. At runtime the application adds these additional certificates to the default trust store. See
 [OPERATING.md - AWS DocumentDB TLS configuration](OPERATING.md#aws-documentdb-tls-configuration) for more information.
 
@@ -248,7 +249,7 @@ accumulate, the adaptor wil no longer receive new inbound GP Links messages.
 |------------------------------------------------------------|---------|------------------------------------------------------------------------------------------------------------------------------------------|
 | LAB_RESULTS_MESH_CLIENT_WAKEUP_INTERVAL_IN_MILLISECONDS    | 60000   | The time period (in milliseconds) between when each adaptor instance "wakes up" and attempts to obtain the lock to start a polling cycle |
 | LAB_RESULTS_MESH_POLLING_CYCLE_MINIMUM_INTERVAL_IN_SECONDS | 300     | The minimum time period (in seconds) between MESH polling cycles                                                                         |
-| LAB_RESULTS_MESH_POLLING_CYCLE_DURATION_IN_SECONDS         | 285     | The duration (in seconds) for the MESH polling cycle                                                                                     |
+| LAB_RESULTS_MESH_POLLING_CYCLE_DURATION_IN_SECONDS         | 285     | The duration (in seconds) fo the MESH polling cycle                                                                                      |
 
 The MESH API specifies that a MESH mailbox should be checked "a maximum of once every five minutes". The variable
 `LAB_RESULTS_MESH_POLLING_CYCLE_MINIMUM_INTERVAL_IN_SECONDS` controls how often the adaptor will check its mailbox for new
