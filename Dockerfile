@@ -1,9 +1,10 @@
 FROM gradle:jdk21-jammy AS build
+
 COPY --chown=gradle:gradle . /home/gradle/src
 
 WORKDIR /home/gradle/src
 
-RUN chmod +x ./gradlew && ls -la gradle/gradle-wrapper.jar
+RUN chmod +x ./gradlew && ls -la gradle/wrapper/gradle-wrapper.jar
 
 RUN ./gradlew --build-cache bootJar
 
