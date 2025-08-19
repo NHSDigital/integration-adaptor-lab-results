@@ -38,21 +38,21 @@ jobs:
           echo "Generated the build tag: $BUILD_ID"
           echo "buildId=$BUILD_ID" >> "$GITHUB_OUTPUT" 
 
-#  tests:
-#    name: "Tests"
-#    needs: [ generate-build-id ]
-#    uses: ./.github/workflows/test.yml
-#    permissions:
-#      contents: read
-#    with:
-#      name: Lab Results Adaptor
-#      path: ./
-#      build-id: ${{ needs.generate-build-id.outputs.build-id }}
-#    secrets: inherit
+  tests:
+    name: "Tests"
+    needs: [ generate-build-id ]
+    uses: ./.github/workflows/test.yml
+    permissions:
+      contents: read
+    with:
+      name: Lab Results Adaptor
+      path: ./
+      build-id: ${{ needs.generate-build-id.outputs.build-id }}
+    secrets: inherit
 
   publish-docker-images:
     name: "Publish docker images to ECR"
-    needs: [ generate-build-id ]
+    needs: [ generate-build-id, tests ]
     permissions:
       id-token: write
       contents: read
