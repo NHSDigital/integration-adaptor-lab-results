@@ -17,6 +17,7 @@ jobs:
       id-token: write
       contents: read
 
+    if: github.actor != 'dependabot[bot]'
     steps:
       - name: Checkout Repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -30,6 +31,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
+          ls
           DOCKER_REGISTRY="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com"
           DOCKER_TAG="$DOCKER_REGISTRY/${{ inputs.repository }}:${{ inputs.build-id }}"
           echo "DOCKER_TAG=$DOCKER_TAG" >> $GITHUB_ENV
