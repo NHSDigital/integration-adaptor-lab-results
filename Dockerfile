@@ -1,19 +1,13 @@
-FROM gradle:8.5-jdk21 as cache
-RUN mkdir -p /home/gradle/cache_home
-ENV GRADLE_USER_HOME /home/gradle/cache_home
-COPY build.gradle /home/gradle/src/
+FROM gradle:8.8-jdk21-jammy AS build
+COPY --chown=gradle:gradle src /home/gradle/src
+
 WORKDIR /home/gradle/src
-RUN gradle -b build.gradle clean build -i --stacktrace
 
-FROM gradle:8.5-jdk21 AS build
-COPY --from=cache /home/gradle/cache_home /home/gradle/.gradle
-COPY --chown=gradle:gradle . /home/gradle/src
-WORKDIR /home/gradle/src
-RUN gradle --no-daemon -b build.gradle bootJar -i --stacktrace
+RUN ./gradlew --build-cache bootJar
 
-FROM amazoncorretto:21-alpine
+FROM eclipse-temurin:21-jre-jammy
 
-EXPOSE 8080
+EXPOSE 8081
 
 RUN mkdir /app
 
