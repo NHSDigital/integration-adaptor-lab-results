@@ -9,7 +9,7 @@ FROM gradle:jdk21 AS build
 COPY --from=cache /home/gradle/cache_home /home/gradle/.gradle
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
-RUN gradle --no-daemon -b bootJar -i --stacktrace
+RUN gradle --no-daemon bootJar -i --stacktrace
 
 FROM amazoncorretto:21-alpine
 
