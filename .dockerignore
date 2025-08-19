@@ -1,4 +1,5 @@
 */**
+!gradlew
 !gradle/**
 !truststore/**
 !src/**
