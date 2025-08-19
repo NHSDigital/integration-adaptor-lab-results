@@ -1,4 +1,5 @@
 */**
+!gradele/**
 !truststore/**
 !src/**
 !activemq/**
