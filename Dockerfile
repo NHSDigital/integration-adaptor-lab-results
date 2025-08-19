@@ -3,6 +3,8 @@ COPY --chown=gradle:gradle . /home/gradle/src
 
 WORKDIR /home/gradle/src
 
+RUN chmod +x ./gradlew && ls -la gradle/gradle-wrapper.jar
+
 RUN ./gradlew --build-cache bootJar
 
 FROM eclipse-temurin:21-jre-jammy
