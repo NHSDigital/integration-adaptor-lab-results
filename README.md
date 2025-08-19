@@ -4,6 +4,7 @@
 
 The main objective of the Lab Results Adaptor is to hide complex legacy standards and instead present a simple and consistent interface aligned to current NHSD national standards. The adaptor removes the requirement for a GP System to handle the complexities of EDIFACT and MESH messaging.
 
+
 At a high level, the Lab Results Adaptor exposes a queue ([AMQP 1.0](https://www.oasis-open.org/standard/amqp/)) from which the GP System can consume Pathology and Screening medical reports in [FHIR STU3](https://digital.nhs.uk/developer/guides-and-documentation/api-technologies-at-nhs-digital#fhir) format.
 
 See the [Resources](#resources) section for links to the underlying services and standards.
