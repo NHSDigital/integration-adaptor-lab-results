@@ -5,7 +5,7 @@ COPY build.gradle /home/gradle/src/
 WORKDIR /home/gradle/src
 RUN gradle -b build.gradle clean build -i --stacktrace
 
-FROM gradle:jdk21 AS build
+FROM gradle:8.5-jdk21 AS build
 COPY --from=cache /home/gradle/cache_home /home/gradle/.gradle
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
