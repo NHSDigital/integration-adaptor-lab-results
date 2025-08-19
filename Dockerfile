@@ -1,4 +1,4 @@
-FROM gradle:jdk21 as cache
+FROM gradle:8.5-jdk21 as cache
 RUN mkdir -p /home/gradle/cache_home
 ENV GRADLE_USER_HOME /home/gradle/cache_home
 COPY build.gradle /home/gradle/src/
