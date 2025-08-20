@@ -73,7 +73,7 @@ class TemplateUtilsTest {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    private class TemplateTestClass {
+    private final class TemplateTestClass {
 
         private String templateValue;
     }

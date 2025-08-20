@@ -12,9 +12,16 @@ plugins {
 
 group = 'uk.nhs.digital.nhsconnect'
 version = '0.0.5-SNAPSHOT'
-sourceCompatibility = '21'
 
-mainClassName = 'uk.nhs.digital.nhsconnect.lab.results.IntegrationAdapterLabResultsApplication'
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+application {
+    mainClass = 'uk.nhs.digital.nhsconnect.lab.results.IntegrationAdapterLabResultsApplication'
+}
 
 sourceSets {
 	intTest {
@@ -111,10 +118,4 @@ spotbugs {
 
 checkstyle {
 	configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
-}
-
-idea {
-	module {
-		testSourceDirs += file('src/intTest/java')
-	}
 }
