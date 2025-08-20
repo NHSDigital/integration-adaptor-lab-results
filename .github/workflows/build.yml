@@ -52,7 +52,7 @@ jobs:
 
   publish-docker-images:
     name: "Publish docker images to ECR"
-    needs: [ generate-build-id ]
+    needs: [ generate-build-id, tests ]
     permissions:
       id-token: write
       contents: read
