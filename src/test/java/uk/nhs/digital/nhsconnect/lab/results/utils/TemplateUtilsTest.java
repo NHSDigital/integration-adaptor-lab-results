@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static uk.nhs.digital.nhsconnect.lab.results.utils.TemplateUtils.loadTemplate;
 import static uk.nhs.digital.nhsconnect.lab.results.utils.TemplateUtils.fillTemplate;
 
-final class TemplateUtilsTest {
+class TemplateUtilsTest {
 
     private static final String TEMPLATE_FILLED_WITH_VALUES_PATH =
         "src/test/resources/templates/filled_template_with_value.txt";
@@ -73,7 +73,7 @@ final class TemplateUtilsTest {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    private class TemplateTestClass {
+    private final class TemplateTestClass {
 
         private String templateValue;
     }
