@@ -14,6 +14,9 @@ Adaptor handles the following types of EDIFACT messages:
 
 and replies with an `NHS001` (NHSACK) message if requested.
 
+
+
+
 ## Architecture
 
 ![Adaptor Component Diagram](/documentation/lab_results_diagram.png)
