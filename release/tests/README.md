@@ -20,23 +20,27 @@ but with the `CURL_FLAGS` set to `"-s -S -k"`.
 
 Run the script with required parameters.
 
-### Example
-In the following example, git repository has been cloned to `/test/integration-adaptor-lab-results` folder.
+WARNING: using the -k flag makes the transfer insecure and poses a security risk if left active.
+After setting the CURL_FLAGS variable above, always remove it using `unset CURL_FLAGS` when you're done with the specific task.
+Alternatively, you can close the terminal and open a new session.
 
-This example will send a test file located at `/test/integration-adaptor-lab-results/src/intTest/resources/edifact/pathology_3.edifact.dat` to MESH mailbox `lab_results_mailbox`
-using MESH client script located at `/test/integration-adaptor-lab-results/mesh/` and after `15` seconds, 
-it will check `lab_results_ack_mailbox` MESH mailbox for expected NHSACK presence.
+### Example
+This example bash script will send the test message file located at `./src/intTest/resources/edifact/pathology_3.edifact.dat` 
+to the MESH mailbox `lab_results_ack_mailbox` found in `localhost:8161`.
+The MESH client script that runs is called `mesh_connectivity.py` and is located at `./release/tests`.
+After `15` seconds (as inputted in the 4th CLI argument), the script will check the `lab_results_gp_outbound` MESH queue for expected NHSACK messages, if any.
 
 ```bash
-source /test/integration-adaptor-lab-results/mesh/env.fake-mesh.sh
+source ./mesh/env.fake-mesh.sh
 export CURL_FLAGS="-s -S -k"
-python3 mesh_connectivity.py "/test/integration-adaptor-lab-results/mesh/" "lab_results_mailbox" "lab_results_ack_mailbox" 15 "/test/integration-adaptor-lab-results/src/intTest/resources/edifact/pathology_3.edifact.dat" 
+cd release/tests
+python3 mesh_connectivity.py "../../mesh/" "lab_results_mailbox" "lab_results_ack_mailbox" 15 "../../src/intTest/resources/edifact/pathology_3.edifact.dat"  
 ```
 
-which will produce following output:
+which, if successful, will produce following output:
 ```
 Cleaning existing matching NHSACK
-Sending ACK for message 20210326133229659091_000000142
+Sending ACK for message 20210326133229659091_000000142          ## this line won't appear if there are no matching results, as documented on line 8.
 Sending EDIFACT
 Sleeping for 15 seconds
 Checking mailbox for matching NHSACK

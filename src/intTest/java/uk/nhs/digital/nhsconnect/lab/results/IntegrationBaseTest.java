@@ -31,10 +31,10 @@ import uk.nhs.digital.nhsconnect.lab.results.mesh.http.MeshRequests;
 import uk.nhs.digital.nhsconnect.lab.results.mesh.message.InboundMeshMessage;
 import uk.nhs.digital.nhsconnect.lab.results.utils.JmsReader;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.jms.JMSException;
-import javax.jms.Message;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;

@@ -15,8 +15,8 @@ import uk.nhs.digital.nhsconnect.lab.results.model.enums.MessageType;
 import uk.nhs.digital.nhsconnect.lab.results.utils.CorrelationIdService;
 import uk.nhs.digital.nhsconnect.lab.results.utils.JmsHeaders;
 
-import javax.jms.Session;
-import javax.jms.TextMessage;
+import jakarta.jms.Session;
+import jakarta.jms.TextMessage;
 import java.util.Map;
 import java.util.Optional;
 

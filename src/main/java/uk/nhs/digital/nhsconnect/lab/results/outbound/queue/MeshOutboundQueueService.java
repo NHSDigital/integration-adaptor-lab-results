@@ -18,8 +18,8 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.JmsHeaders;
 import uk.nhs.digital.nhsconnect.lab.results.utils.JmsReader;
 import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
 
-import javax.jms.JMSException;
-import javax.jms.Message;
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
 import java.io.IOException;
 
 @Component

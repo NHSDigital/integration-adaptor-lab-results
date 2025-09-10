@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.annotation.DirtiesContext;
 import uk.nhs.digital.nhsconnect.lab.results.IntegrationBaseTest;
 
-import javax.jms.JMSException;
-import javax.jms.Message;
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

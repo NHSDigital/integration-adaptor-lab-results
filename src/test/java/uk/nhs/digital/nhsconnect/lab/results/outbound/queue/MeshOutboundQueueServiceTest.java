@@ -21,10 +21,10 @@ import uk.nhs.digital.nhsconnect.lab.results.utils.CorrelationIdService;
 import uk.nhs.digital.nhsconnect.lab.results.utils.JmsHeaders;
 import uk.nhs.digital.nhsconnect.lab.results.utils.TimestampService;
 
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Session;
-import javax.jms.TextMessage;
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
+import jakarta.jms.Session;
+import jakarta.jms.TextMessage;
 import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.assertAll;

@@ -72,7 +72,7 @@ public class ObservationMapper {
     }
 
     @RequiredArgsConstructor
-    private class InternalMapper {
+    private final class InternalMapper {
 
         private final Map<String, String> edifactToFhirIdMap = new HashMap<>();
         private final Map<String, Observation> testGroupsById = new HashMap<>();

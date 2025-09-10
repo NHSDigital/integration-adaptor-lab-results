@@ -3,6 +3,7 @@ package uk.nhs.digital.nhsconnect.lab.results.model.edifact;
 import lombok.Getter;
 import uk.nhs.digital.nhsconnect.lab.results.model.edifact.message.MissingSegmentException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,7 +13,7 @@ public abstract class Section {
     private final List<String> edifactSegments;
 
     public Section(final List<String> edifactSegments) {
-        this.edifactSegments = edifactSegments;
+        this.edifactSegments = new ArrayList<>(edifactSegments);
     }
 
     protected List<String> extractSegments(final String key) {
