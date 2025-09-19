@@ -6,8 +6,12 @@ plugins {
 	id 'application'
 	id 'jacoco'
 	id 'checkstyle'
-	id 'com.github.spotbugs' version '6.1.9'
+	id 'com.github.spotbugs' version '6.4.2'
 	id 'idea'
+}
+
+spotbugs {
+    toolVersion = '4.9.5'
 }
 
 group = 'uk.nhs.digital.nhsconnect'
@@ -53,9 +57,11 @@ dependencies {
     implementation 'org.apache.qpid:qpid-jms-client:2.7.0'
     implementation 'com.heroku.sdk:env-keystore:1.1.11'
     implementation "commons-codec:commons-codec:1.19.0"
-	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.791'
-	implementation 'ca.uhn.hapi.fhir:hapi-fhir-base:7.6.1'
-	implementation 'ca.uhn.hapi.fhir:hapi-fhir-structures-dstu3:7.6.1'
+    implementation 'org.apache.commons:commons-lang3:3.18.0'
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.791'
+    implementation(platform('ca.uhn.hapi.fhir:hapi-fhir-bom:8.4.0'))
+    implementation 'ca.uhn.hapi.fhir:hapi-fhir-base'
+	implementation 'ca.uhn.hapi.fhir:hapi-fhir-structures-dstu3'
 	implementation 'com.github.spullara.mustache.java:compiler:0.9.14'
 	implementation 'ch.qos.logback.contrib:logback-jackson:0.1.5'
 	implementation 'ch.qos.logback.contrib:logback-json-classic:0.1.5'
@@ -75,7 +81,8 @@ dependencies {
     testImplementation 'org.assertj:assertj-core'
 	testImplementation 'org.junit.platform:junit-platform-commons'
 
-	compileOnly group: 'com.github.spotbugs', name: 'spotbugs-annotations', version: '4.9.3'
+    spotbugs 'com.github.spotbugs:spotbugs:4.9.5'
+    spotbugs 'com.github.spotbugs:spotbugs-annotations:4.9.5'
 }
 
 test {
@@ -86,15 +93,15 @@ jacocoTestReport {
 	dependsOn test // tests are required to run before generating the report
 }
 
-task integrationTest(type: Test) {
-	useJUnitPlatform() {
-		description = 'Runs integration tests.'
-		group = 'verification'
+tasks.register('integrationTest', Test) {
+    useJUnitPlatform() {
+        description = 'Runs integration tests.'
+        group = 'verification'
 
-		testClassesDirs = sourceSets.intTest.output.classesDirs
-		classpath = sourceSets.intTest.runtimeClasspath
-		shouldRunAfter test
-	}
+        testClassesDirs = sourceSets.intTest.output.classesDirs
+        classpath = sourceSets.intTest.runtimeClasspath
+    }
+    shouldRunAfter test
 }
 
 check.dependsOn integrationTest
@@ -104,10 +111,10 @@ spotbugsIntTest.enabled = false
 spotbugsMain {
 	reports {
 		html {
-			enabled = false
+			enabled(true)
 		}
 		xml {
-			enabled = true
+			enabled(true)
 		}
 	}
 }
