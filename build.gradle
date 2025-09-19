@@ -1,13 +1,17 @@
 plugins {
-	id 'org.springframework.boot' version '3.4.3'
-	id 'io.spring.dependency-management' version '1.1.7'
-	id 'java'
-	id "io.freefair.lombok" version "8.13.1"
-	id 'application'
-	id 'jacoco'
-	id 'checkstyle'
-	id 'com.github.spotbugs' version '6.1.9'
-	id 'idea'
+    id 'org.springframework.boot' version '3.4.3'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'java'
+    id "io.freefair.lombok" version "8.13.1"
+    id 'application'
+    id 'jacoco'
+    id 'checkstyle'
+    id 'com.github.spotbugs' version '6.4.2'
+    id 'idea'
+}
+
+spotbugs {
+    toolVersion = '4.9.5'
 }
 
 group = 'uk.nhs.digital.nhsconnect'
@@ -24,77 +28,80 @@ application {
 }
 
 sourceSets {
-	intTest {
-		compileClasspath += sourceSets.main.output
-		runtimeClasspath += sourceSets.main.output
-	}
+    intTest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-	intTestImplementation.extendsFrom implementation
-	intTestImplementation.extendsFrom testImplementation
-	intTestRuntimeOnly.extendsFrom runtimeOnly
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    intTestImplementation.extendsFrom implementation
+    intTestImplementation.extendsFrom testImplementation
+    intTestRuntimeOnly.extendsFrom runtimeOnly
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
-	implementation 'org.springframework:spring-jms'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework:spring-jms'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.apache.httpcomponents:httpclient:4.5.14'
     implementation 'org.apache.qpid:qpid-jms-client:2.7.0'
     implementation 'com.heroku.sdk:env-keystore:1.1.11'
     implementation "commons-codec:commons-codec:1.19.0"
-	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.791'
-	implementation 'ca.uhn.hapi.fhir:hapi-fhir-base:7.6.1'
-	implementation 'ca.uhn.hapi.fhir:hapi-fhir-structures-dstu3:7.6.1'
-	implementation 'com.github.spullara.mustache.java:compiler:0.9.14'
-	implementation 'ch.qos.logback.contrib:logback-jackson:0.1.5'
-	implementation 'ch.qos.logback.contrib:logback-json-classic:0.1.5'
+    implementation 'org.apache.commons:commons-lang3:3.18.0'
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.791'
+    implementation(platform('ca.uhn.hapi.fhir:hapi-fhir-bom:8.4.0'))
+    implementation 'ca.uhn.hapi.fhir:hapi-fhir-base'
+    implementation 'ca.uhn.hapi.fhir:hapi-fhir-structures-dstu3'
+    implementation 'com.github.spullara.mustache.java:compiler:0.9.14'
+    implementation 'ch.qos.logback.contrib:logback-jackson:0.1.5'
+    implementation 'ch.qos.logback.contrib:logback-json-classic:0.1.5'
 
-	implementation 'org.projectlombok:lombok'
-	testImplementation 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	testAnnotationProcessor 'org.projectlombok:lombok'
+    implementation 'org.projectlombok:lombok'
+    testImplementation 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-	}
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
 
-	testImplementation 'org.testcontainers:testcontainers:1.21.3'
-	testImplementation 'org.awaitility:awaitility:4.0.3'
-	testImplementation "org.junit.jupiter:junit-jupiter-params"
+    testImplementation 'org.testcontainers:testcontainers:1.21.3'
+    testImplementation 'org.awaitility:awaitility:4.0.3'
+    testImplementation "org.junit.jupiter:junit-jupiter-params"
     testImplementation 'org.assertj:assertj-core'
-	testImplementation 'org.junit.platform:junit-platform-commons'
+    testImplementation 'org.junit.platform:junit-platform-commons'
 
-	compileOnly group: 'com.github.spotbugs', name: 'spotbugs-annotations', version: '4.9.3'
+    spotbugs 'com.github.spotbugs:spotbugs:4.9.5'
+    spotbugs 'com.github.spotbugs:spotbugs-annotations:4.9.5'
 }
 
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
 
 jacocoTestReport {
-	dependsOn test // tests are required to run before generating the report
+    dependsOn test // tests are required to run before generating the report
 }
 
-task integrationTest(type: Test) {
-	useJUnitPlatform() {
-		description = 'Runs integration tests.'
-		group = 'verification'
+tasks.register('integrationTest', Test) {
+    useJUnitPlatform() {
+        description = 'Runs integration tests.'
+        group = 'verification'
 
-		testClassesDirs = sourceSets.intTest.output.classesDirs
-		classpath = sourceSets.intTest.runtimeClasspath
-		shouldRunAfter test
-	}
+        testClassesDirs = sourceSets.intTest.output.classesDirs
+        classpath = sourceSets.intTest.runtimeClasspath
+    }
+    shouldRunAfter test
 }
 
 check.dependsOn integrationTest
@@ -102,20 +109,20 @@ check.dependsOn integrationTest
 spotbugsTest.enabled = false
 spotbugsIntTest.enabled = false
 spotbugsMain {
-	reports {
-		html {
-			enabled = false
-		}
-		xml {
-			enabled = true
-		}
-	}
+    reports {
+        html {
+            enabled(true)
+        }
+        xml {
+            enabled(true)
+        }
+    }
 }
 
 spotbugs {
-	excludeFilter = file("${rootDir}/config/spotbugs/exclude.xml")
+    excludeFilter = file("${rootDir}/config/spotbugs/exclude.xml")
 }
 
 checkstyle {
-	configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
 }
