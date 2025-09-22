@@ -81,8 +81,8 @@ dependencies {
     testImplementation 'org.assertj:assertj-core'
     testImplementation 'org.junit.platform:junit-platform-commons'
 
-    spotbugs 'com.github.spotbugs:spotbugs:4.9.5'
-    spotbugs 'com.github.spotbugs:spotbugs-annotations:4.9.5'
+    spotbugs 'com.github.spotbugs:spotbugs:4.9.6'
+    spotbugs 'com.github.spotbugs:spotbugs-annotations:4.9.6'
 }
 
 test {
