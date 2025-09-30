@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         config:
-          - folder: src
+          - folder: .
             dockerhub_name: nia-lab-results-adaptor
             upload_url: ${{ github.event.release.upload_url }}
     uses: NHSDigital/integration-adaptor-actions/.github/workflows/release-adaptor-container-image.yml@main
