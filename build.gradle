@@ -54,7 +54,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.apache.httpcomponents:httpclient:4.5.14'
-    implementation 'org.apache.qpid:qpid-jms-client:2.7.0'
+    implementation 'org.apache.qpid:qpid-jms-client:2.9.0'
     implementation 'com.heroku.sdk:env-keystore:1.1.11'
     implementation "commons-codec:commons-codec:1.19.0"
     implementation 'org.apache.commons:commons-lang3:3.18.0'
