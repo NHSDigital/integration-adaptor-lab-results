@@ -8,7 +8,6 @@ import org.apache.http.conn.ssl.DefaultHostnameVerifier;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustAllStrategy;
-import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.ssl.SSLContexts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -51,7 +50,7 @@ public class SSLContextBuilder {
 
         SSLContext sslContext = SSLContexts.custom()
             .loadKeyMaterial(ks, meshConfig.getMailboxPassword().toCharArray())
-            .loadTrustMaterial(TrustSelfSignedStrategy.INSTANCE)
+            .loadTrustMaterial(ts, null)
             .build();
 
         sslContext.init(keyManagerFactory.getKeyManagers(), tmf.getTrustManagers(), new SecureRandom());
