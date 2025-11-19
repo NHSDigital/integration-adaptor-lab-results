@@ -5,7 +5,7 @@ COPY build.gradle /home/gradle/src/
 WORKDIR /home/gradle/src
 RUN gradle clean build -i --stacktrace
 
-FROM gradle:jdk21 AS build
+FROM eclipse-temurin:21-jdk AS build
 COPY --from=cache /home/gradle/cache_home /home/gradle/.gradle
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
