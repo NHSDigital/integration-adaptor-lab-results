@@ -36,7 +36,7 @@ labresults:
   mongodb:
     uri: ${LAB_RESULTS_MONGO_URI:mongodb://localhost:27017}
     database: ${LAB_RESULTS_MONGO_DATABASE_NAME:labresults}
-    host: ${nia-ptl-base-dbcluster-ver-5-0.cluster-co553fsbcrew.eu-west-2.docdb.amazonaws.com}
+    host: nia-ptl-base-dbcluster-ver-5-0.cluster-co553fsbcrew.eu-west-2.docdb.amazonaws.com
     port: ${LAB_RESULTS_MONGO_PORT:}
     username: ${LAB_RESULTS_MONGO_USERNAME:}
     password: ${LAB_RESULTS_MONGO_PASSWORD:}
