@@ -23,7 +23,7 @@ you are testing to ensure compatibility with configurations and scripts.
 
 ```bash
 git pull
-git checkout 0.0.6
+git checkout 1.0.0
 ```
 
 ## Configure the application
