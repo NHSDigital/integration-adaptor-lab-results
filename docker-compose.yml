@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   lab-results:
     image: ${LAB_RESULTS_IMAGE:-local/lab-results:latest}
