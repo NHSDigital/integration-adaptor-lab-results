@@ -53,7 +53,7 @@ dependencies {
     implementation 'org.apache.qpid:qpid-jms-client:2.9.0'
     implementation 'com.heroku.sdk:env-keystore:1.1.12'
     implementation "commons-codec:commons-codec:1.19.0"
-    implementation 'org.apache.commons:commons-lang3:3.13.0'
+    implementation 'org.apache.commons:commons-lang3:3.20.0'
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.792'
     implementation(platform('ca.uhn.hapi.fhir:hapi-fhir-bom:8.4.0'))
     implementation 'ca.uhn.hapi.fhir:hapi-fhir-base'
