@@ -22,6 +22,7 @@ This document contains requirements and tips for operating the adaptor in a prod
 
 # MongoDB Database Requirements
 
+* The Lab Results Adaptor requires a MongoDB-compatible database of at least version 5.0 to manage its internal state.
 * The Lab Results Adaptor and Lab Results system communications synchronise through a sequence number mechanism
 * The MongoDB database preserves this synchronisation
 * Deleting the MongoDB database and/or its collections will break the link with the Lab Results system
